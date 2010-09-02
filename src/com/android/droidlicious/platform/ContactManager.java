@@ -35,6 +35,8 @@ import com.android.droidlicious.Constants;
 import com.android.droidlicious.client.User;
 import com.android.droidlicious.R;
 
+import java.security.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -107,6 +109,7 @@ public class ContactManager {
             
             if(!processedUsers.contains(userName)){
 	            final long profileId = lookupProfile(resolver, userName);
+	Date t = new Date();
 	
 	            // Insert the activity into the stream
 	            if (profileId > 0) {
@@ -116,11 +119,12 @@ public class ContactManager {
 	                values.put(StatusUpdates.CUSTOM_PROTOCOL, CUSTOM_IM_PROTOCOL);
 	                values.put(StatusUpdates.IM_ACCOUNT, username);
 	                values.put(StatusUpdates.IM_HANDLE, status.getUserName());
+	                values.put(StatusUpdates.STATUS_TIMESTAMP, status.getTimeStamp().getTime());
 	                values.put(StatusUpdates.STATUS_RES_PACKAGE, context
 	                    .getPackageName());
 	                values.put(StatusUpdates.STATUS_ICON, R.drawable.icon);
 	                values.put(StatusUpdates.STATUS_LABEL, R.string.label);
-	
+
 	                batchOperation
 	                    .add(ContactOperations.newInsertCpo(
 	                        StatusUpdates.CONTENT_URI, true).withValues(values)

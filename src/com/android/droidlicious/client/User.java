@@ -16,6 +16,10 @@
 
 package com.android.droidlicious.client;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -60,6 +64,7 @@ public class User {
     public static class Status {
         private final String mUserName;
         private final String mStatus;
+        private final Date mTimestamp;
 
         public String getUserName() {
             return mUserName;
@@ -68,19 +73,32 @@ public class User {
         public String getStatus() {
             return mStatus;
         }
+        
+        public Date getTimeStamp() {
+            return mTimestamp;
+        }
 
-        public Status(String userName, String status) {
+        public Status(String userName, String status, Date timestamp) {
             mUserName = userName;
             mStatus = status;
+            mTimestamp = timestamp;
         }
 
         public static User.Status valueOf(JSONObject userStatus) {
             try {
                 final String userName = userStatus.getString("a");
                 final String status = userStatus.getString("d");
-                return new User.Status(userName, status);
+                final String date = userStatus.getString("dt");
+                
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                Date timestamp = new Date();
+                timestamp = (Date)formatter.parse(date);
+                
+                Log.d("status_timestamp", timestamp.toString());
+                return new User.Status(userName, status, timestamp);
             } catch (final Exception ex) {
                 Log.i("User.Status", "Error parsing JSON user object");
+                Log.d("User.Status", ex.toString());
             }
             return null;
         }
