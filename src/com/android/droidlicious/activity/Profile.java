@@ -23,7 +23,6 @@ public class Profile extends ActivityGroup {
 	public void onCreate(Bundle icicle){
 		
 		super.onCreate(icicle);
-		setContentView(R.layout.profile_view);
 			
 		Intent i = getIntent();
 		final ContentResolver cr = getContentResolver();
@@ -44,9 +43,10 @@ public class Profile extends ActivityGroup {
             }
         }
 		
-		mWebView = (WebView) findViewById(R.id.webview);
-		mWebView.getSettings().setJavaScriptEnabled(true);
-		mWebView.loadUrl("http://www.delicious.com/" + userName);
+		Intent tagBrowseIntent = new Intent(this, BrowseTags.class);
+		tagBrowseIntent.putExtra("username", userName);
+		
+		startActivity(tagBrowseIntent);
 		
 	}
 }

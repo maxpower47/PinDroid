@@ -54,6 +54,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -304,11 +305,11 @@ public class NetworkUtilities {
      *        account
      * @return list The list of status messages received from the server.
      */
-    public static List<User.Tag> fetchTags(Account account,
+    public static ArrayList<User.Tag> fetchTags(String userName, Account account,
         String authtoken) throws JSONException, ParseException, IOException,
         AuthenticationException {
 
-        final HttpGet post = new HttpGet(FETCH_TAGS_URI + account.name + "?count=100");
+        final HttpGet post = new HttpGet(FETCH_TAGS_URI + userName + "?count=100");
         maybeCreateHttpClient();
         
         final ArrayList<User.Tag> tagList = new ArrayList<User.Tag>();
@@ -321,6 +322,12 @@ public class NetworkUtilities {
             // authenticated.
             // Extract friends data in json format.
             final JSONObject tags = new JSONObject(response);
+            Iterator i = tags.keys();
+            while(i.hasNext()){
+            	Object e = i.next();
+            	Log.d("tag", e.toString());
+            	tagList.add(new User.Tag(e.toString(), "blah"));
+            }
             
             Log.d(TAG, response);
 
