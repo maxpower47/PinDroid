@@ -165,12 +165,12 @@ public class ContactOperations {
     public ContactOperations addProfileAction(String userName) {
         mValues.clear();
         if (userName != "") {
-            mValues.put(SampleSyncAdapterColumns.DATA_PID, userName);
-            mValues.put(SampleSyncAdapterColumns.DATA_SUMMARY, mContext
+            mValues.put(DroidliciousSyncAdapterColumns.DATA_PID, userName);
+            mValues.put(DroidliciousSyncAdapterColumns.DATA_SUMMARY, mContext
                 .getString(R.string.profile_action));
-            mValues.put(SampleSyncAdapterColumns.DATA_DETAIL, mContext
+            mValues.put(DroidliciousSyncAdapterColumns.DATA_DETAIL, mContext
                 .getString(R.string.view_profile));
-            mValues.put(Data.MIMETYPE, SampleSyncAdapterColumns.MIME_PROFILE);
+            mValues.put(Data.MIMETYPE, DroidliciousSyncAdapterColumns.MIME_PROFILE);
             addInsertOp();
             Log.d("addProfileAction", "Adding Profile for " + userName);
         }
@@ -247,7 +247,7 @@ public class ContactOperations {
      */
     public ContactOperations updateProfileAction(Integer userId, Uri uri) {
         mValues.clear();
-        mValues.put(SampleSyncAdapterColumns.DATA_PID, userId);
+        mValues.put(DroidliciousSyncAdapterColumns.DATA_PID, userId);
         addUpdateOp(uri);
         return this;
     }
