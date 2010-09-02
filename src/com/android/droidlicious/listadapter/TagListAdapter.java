@@ -30,9 +30,13 @@ public class TagListAdapter extends ArrayAdapter<User.Tag> {
             }
             User.Tag o = tags.get(position);
             if (o != null) {
-            	TextView tt = (TextView) v.findViewById(R.id.tag_name);
-                if (tt != null) {
-                  	tt.setText(o.getTagName());                            
+            	TextView tn = (TextView) v.findViewById(R.id.tag_name);
+            	TextView tc = (TextView) v.findViewById(R.id.tag_count);
+                if (tn != null) {
+                  	tn.setText(o.getTagName());                            
+                }
+                if (tc != null) {
+                  	tc.setText(Integer.toString(o.getCount()));                            
                 }
             }
             return v;

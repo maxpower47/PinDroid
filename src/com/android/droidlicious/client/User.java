@@ -43,7 +43,7 @@ public class User {
      * Creates and returns an instance of the user from the provided JSON data.
      * 
      * @param user The JSONObject containing user data
-     * @return user The new instance of Voiper user created from the JSON data.
+     * @return user The new instance of Delicious user created from the JSON data.
      */
     public static User valueOf(JSONObject user) {
         try {
@@ -110,17 +110,17 @@ public class User {
      */
     public static class Tag {
         private final String mTagName;
-        private final String mCount;
+        private final int mCount;
 
         public String getTagName() {
             return mTagName;
         }
 
-        public String getCount() {
+        public int getCount() {
             return mCount;
         }
 
-        public Tag(String tagName, String count) {
+        public Tag(String tagName, int count) {
             mTagName = tagName;
             mCount = count;
         }

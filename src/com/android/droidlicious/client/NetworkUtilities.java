@@ -326,7 +326,7 @@ public class NetworkUtilities {
             while(i.hasNext()){
             	Object e = i.next();
             	Log.d("tag", e.toString());
-            	tagList.add(new User.Tag(e.toString(), "blah"));
+            	tagList.add(new User.Tag(e.toString(), tags.getInt(e.toString())));
             }
             
             Log.d(TAG, response);

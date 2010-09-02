@@ -59,9 +59,13 @@ public class BrowseTags extends ListActivity {
 		
 			lv.setOnItemClickListener(new OnItemClickListener() {
 			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				    // When clicked, show a toast with the TextView text
-			    	Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
-			        Toast.LENGTH_SHORT).show();
+			    	String text = "";
+			    	
+			    	text += ((TextView)view.findViewById(R.id.tag_count)).getText().toString();
+			    	text += " items for ";
+			    	text += ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
+			    	
+			    	Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
 			    }
 			});
 

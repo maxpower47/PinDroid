@@ -16,6 +16,8 @@ public class Main extends Activity {
 		Intent i = new Intent(this, BrowseTags.class);
 		
 		startActivity(i);
+		
+		finish();
 	}
 
 }
