@@ -12,6 +12,7 @@ import com.android.droidlicious.listadapter.TagListAdapter;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.widget.AdapterView;
@@ -27,6 +28,7 @@ public class BrowseTags extends ListActivity {
 
 	WebView mWebView;
 	AccountManager mAccountManager;
+	String username = null;
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -35,7 +37,6 @@ public class BrowseTags extends ListActivity {
 		
 		ArrayList<User.Tag> tagList = new ArrayList<User.Tag>();
 		String authtoken = null;
-		String username = null;
 		
 		mAccountManager = AccountManager.get(this);
 		Account[] al = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
@@ -59,13 +60,14 @@ public class BrowseTags extends ListActivity {
 		
 			lv.setOnItemClickListener(new OnItemClickListener() {
 			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			    	String text = "";
+			    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
 			    	
-			    	text += ((TextView)view.findViewById(R.id.tag_count)).getText().toString();
-			    	text += " items for ";
-			    	text += ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
 			    	
-			    	Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+					Intent i = new Intent(parent.getContext(), BrowseBookmarks.class);
+					i.putExtra("tagname", tagName);
+					i.putExtra("username", username);
+					
+					startActivity(i);
 			    }
 			});
 

@@ -58,6 +58,7 @@
         	</intent-filter>
         </activity>
         <activity android:name=".activity.BrowseTags" />
+        <activity android:name=".activity.BrowseBookmarks" />
         <!-- The authenticator service -->
         <service
             android:name=".authenticator.AuthenticationService"

@@ -72,6 +72,7 @@ public class NetworkUtilities {
     public static final String FETCH_FRIEND_UPDATES_URI = "http://feeds.delicious.com/v2/json/networkmembers/";
     public static final String FETCH_STATUS_URI = "http://feeds.delicious.com/v2/json/network/";
     public static final String FETCH_TAGS_URI = "http://feeds.delicious.com/v2/json/tags/";
+    public static final String FETCH_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/";
     private static DefaultHttpClient mHttpClient;
     
     private static final String SCHEME = "https";
@@ -342,6 +343,49 @@ public class NetworkUtilities {
             }
         }
         return tagList;
+    }
+    
+    /**
+     * Fetches status messages for the user's friends from the server
+     * 
+     * @param account The account being synced.
+     * @param authtoken The authtoken stored in the AccountManager for the
+     *        account
+     * @return list The list of bookmarks received from the server.
+     */
+    public static ArrayList<User.Bookmark> fetchBookmarks(String userName, String tagName, Account account,
+        String authtoken) throws JSONException, ParseException, IOException,
+        AuthenticationException {
+
+        final HttpGet post = new HttpGet(FETCH_BOOKMARKS_URI + userName + "/" + tagName + "?count=100");
+        maybeCreateHttpClient();
+        
+        final ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+
+        final HttpResponse resp = mHttpClient.execute(post);
+        final String response = EntityUtils.toString(resp.getEntity());
+
+        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            // Succesfully connected to the samplesyncadapter server and
+            // authenticated.
+            // Extract friends data in json format.
+            final JSONArray bookmarks = new JSONArray(response);
+            Log.d(TAG, response);
+            
+            for (int i = 0; i < bookmarks.length(); i++) {
+                bookmarkList.add(User.Bookmark.valueOf(bookmarks.getJSONObject(i)));
+            }            
+        } else {
+            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+                Log.e(TAG,
+                    "Authentication exception in fetching friend status list");
+                throw new AuthenticationException();
+            } else {
+                Log.e(TAG, "Server error in fetching friend status list");
+                throw new IOException();
+            }
+        }
+        return bookmarkList;
     }
 
 }

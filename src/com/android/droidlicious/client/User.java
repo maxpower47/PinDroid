@@ -124,7 +124,42 @@ public class User {
             mTagName = tagName;
             mCount = count;
         }
+    }
+    
+    /**
+     * Represents the User's tags
+     * 
+     */
+    public static class Bookmark {
+        private final String mUrl;
+        private final String mDescription;
 
+        public String getUrl() {
+            return mUrl;
+        }
+
+        public String getDescription() {
+            return mDescription;
+        }
+
+        public Bookmark(String url, String description) {
+            mUrl = url;
+            mDescription = description;
+        }
+        
+        public static User.Bookmark valueOf(JSONObject userBookmark) {
+            try {
+                final String url = userBookmark.getString("u");
+                final String description = userBookmark.getString("d");
+                Log.d("bookmarkurl", url);
+                Log.d("bookmarkdescription", description);
+
+                return new User.Bookmark(url, description);
+            } catch (final Exception ex) {
+                Log.i("User.Bookmark", "Error parsing JSON user object");
+            }
+            return null;
+        }
 
     }
 

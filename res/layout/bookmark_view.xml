@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_width="fill_parent">
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:id="@+id/bookmark_description"
+		    android:layout_height="wrap_content"
+		    android:layout_width="wrap_content"
+		    android:scrollHorizontally="true"
+		    android:textSize="10pt"/>
+		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:id="@+id/bookmark_url"
+		    android:layout_height="wrap_content"
+		    android:layout_width="wrap_content"
+		    android:scrollHorizontally="true"
+		    android:textSize="6pt"/>
+	</LinearLayout>
+</LinearLayout>
