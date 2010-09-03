@@ -10,13 +10,14 @@
   	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   		android:orientation="horizontal"
   		android:layout_width="fill_parent"
-  		android:layout_height="wrap_content"
+  		android:layout_height="fill_parent"
   		android:gravity="right">
 		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
 		    android:id="@+id/tag_count"
 		    android:layout_height="fill_parent"
 		    android:layout_width="wrap_content"
 		    android:gravity="right"
-		    android:textSize="12pt"/>
+		    android:textSize="10pt"
+		    android:paddingRight="15px"/>
 	</LinearLayout>
 </LinearLayout>
