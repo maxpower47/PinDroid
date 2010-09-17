@@ -24,7 +24,7 @@ import android.widget.Toast;
 import android.util.Log;
 import android.view.*;
 
-public class BrowseTags extends ListActivity {
+public class BrowseTags extends DroidliciousBaseActivity {
 
 	WebView mWebView;
 	AccountManager mAccountManager;
@@ -77,5 +77,7 @@ public class BrowseTags extends ListActivity {
 			
 		}
 	}
+	
+
 	
 }

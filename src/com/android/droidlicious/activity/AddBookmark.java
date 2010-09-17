@@ -1,23 +1,24 @@
 package com.android.droidlicious.activity;
 
+import com.android.droidlicious.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.webkit.WebView;
+import android.widget.EditText;
 
-public class Main extends Activity {
+public class AddBookmark extends Activity {
 
-	WebView mWebView;
+	private EditText mEditUrl;
+
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
-		Intent i = new Intent(this, BrowseTags.class);
-		
-		startActivity(i);
-		
-		finish();
-	}
+		setContentView(R.layout.add_bookmark);
+		mEditUrl = (EditText) findViewById(R.id.add_edit_url);
 
+		
+	}
 }

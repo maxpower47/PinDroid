@@ -59,6 +59,7 @@
         </activity>
         <activity android:name=".activity.BrowseTags" />
         <activity android:name=".activity.BrowseBookmarks" />
+        <activity android:name=".activity.AddBookmark" />
         <!-- The authenticator service -->
         <service
             android:name=".authenticator.AuthenticationService"

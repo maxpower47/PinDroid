@@ -25,7 +25,6 @@ public class Profile extends ActivityGroup {
 		super.onCreate(icicle);
 			
 		Intent i = getIntent();
-		final ContentResolver cr = getContentResolver();
 		Uri u = Uri.parse(i.getDataString());
 		
 		Cursor c = managedQuery(u, null, null, null, null);
@@ -47,6 +46,8 @@ public class Profile extends ActivityGroup {
 		tagBrowseIntent.putExtra("username", userName);
 		
 		startActivity(tagBrowseIntent);
+		
+		finish();
 		
 	}
 }

@@ -20,7 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class BrowseBookmarks extends ListActivity {
+public class BrowseBookmarks extends DroidliciousBaseActivity {
 
 	AccountManager mAccountManager;
 	
