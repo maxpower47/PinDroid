@@ -17,6 +17,7 @@
 package com.android.droidlicious.client;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
@@ -73,6 +74,7 @@ public class NetworkUtilities {
     public static final String FETCH_STATUS_URI = "http://feeds.delicious.com/v2/json/network/";
     public static final String FETCH_TAGS_URI = "http://feeds.delicious.com/v2/json/tags/";
     public static final String FETCH_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/";
+    public static final String ADD_BOOKMARKS_URI = "v1/posts/add";
     private static DefaultHttpClient mHttpClient;
     
     private static final String SCHEME = "https";
@@ -386,6 +388,49 @@ public class NetworkUtilities {
             }
         }
         return bookmarkList;
+    }
+    
+    public static Boolean addBookmarks(String url, String description, Account account,
+        String authtoken) throws JSONException, ParseException, IOException,
+        AuthenticationException {
+
+    	String username = account.name;
+    	String password =  authtoken;
+    	
+		Uri.Builder builder = new Uri.Builder();
+		builder.scheme(SCHEME);
+		builder.authority(AUTHORITY);
+		builder.appendEncodedPath(ADD_BOOKMARKS_URI);
+		builder.appendQueryParameter("url", url);
+		builder.appendQueryParameter("description", description);
+	
+		Uri u = builder.build();
+		
+        final HttpGet post = new HttpGet(u.toString());
+        maybeCreateHttpClient();
+        
+        CredentialsProvider provider = mHttpClient.getCredentialsProvider();
+        Credentials credentials = new UsernamePasswordCredentials(username, password);
+        provider.setCredentials(SCOPE, credentials);
+
+        final HttpResponse resp = mHttpClient.execute(post);
+        final String response = EntityUtils.toString(resp.getEntity());
+
+        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+
+            Log.d(TAG, response);
+         
+        } else {
+            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+                Log.e(TAG,
+                    "Authentication exception in adding bookmark");
+                throw new AuthenticationException();
+            } else {
+                Log.e(TAG, "Server error in adding bookmark");
+                throw new IOException();
+            }
+        }
+        return true;
     }
 
 }

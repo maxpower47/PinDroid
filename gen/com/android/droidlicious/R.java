@@ -17,22 +17,24 @@ public final class R {
         public static final int icon=0x7f020003;
     }
     public static final class id {
-        public static final int add_edit_title=0x7f070001;
-        public static final int add_edit_url=0x7f070000;
-        public static final int bookmark_description=0x7f070002;
-        public static final int bookmark_url=0x7f070003;
-        public static final int menu_addbookmark=0x7f07000d;
-        public static final int menu_mybookmarks=0x7f07000e;
-        public static final int menu_settings=0x7f07000f;
-        public static final int message=0x7f070004;
-        public static final int message_bottom=0x7f070008;
-        public static final int ok_button=0x7f070009;
-        public static final int password_edit=0x7f070007;
-        public static final int tag_count=0x7f07000c;
-        public static final int tag_name=0x7f07000b;
-        public static final int username_edit=0x7f070005;
-        public static final int username_fixed=0x7f070006;
-        public static final int webview=0x7f07000a;
+        public static final int add_button_save=0x7f070003;
+        public static final int add_edit_description=0x7f070002;
+        public static final int add_edit_url=0x7f070001;
+        public static final int add_title_url=0x7f070000;
+        public static final int bookmark_description=0x7f070004;
+        public static final int bookmark_url=0x7f070005;
+        public static final int menu_addbookmark=0x7f07000f;
+        public static final int menu_mybookmarks=0x7f070010;
+        public static final int menu_settings=0x7f070011;
+        public static final int message=0x7f070006;
+        public static final int message_bottom=0x7f07000a;
+        public static final int ok_button=0x7f07000b;
+        public static final int password_edit=0x7f070009;
+        public static final int tag_count=0x7f07000e;
+        public static final int tag_name=0x7f07000d;
+        public static final int username_edit=0x7f070007;
+        public static final int username_fixed=0x7f070008;
+        public static final int webview=0x7f07000c;
     }
     public static final class layout {
         public static final int add_bookmark=0x7f030000;
@@ -47,6 +49,8 @@ public final class R {
         public static final int main_menu=0x7f060000;
     }
     public static final class string {
+        public static final int add_button_save=0x7f050018;
+        public static final int add_title_url=0x7f050019;
         /**  Button for going to the previous screen or step 
          */
         public static final int back_button_label=0x7f050010;
