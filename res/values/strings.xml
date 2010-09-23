@@ -73,4 +73,6 @@
     <string name="menu_settings_title">Settings</string>
     <string name="add_button_save">Save</string>
     <string name="add_title_url">URL</string>
+    <string name="add_title_description">Description</string>
+    <string name="add_title_notes">Notes</string>
 </resources>

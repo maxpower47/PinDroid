@@ -133,6 +133,7 @@ public class User {
     public static class Bookmark {
         private final String mUrl;
         private final String mDescription;
+        private final String mNotes;
 
         public String getUrl() {
             return mUrl;
@@ -141,10 +142,21 @@ public class User {
         public String getDescription() {
             return mDescription;
         }
+        
+        public String getNotes(){
+        	return mNotes;
+        }
 
         public Bookmark(String url, String description) {
             mUrl = url;
             mDescription = description;
+            mNotes = "";
+        }
+        
+        public Bookmark(String url, String description, String notes) {
+            mUrl = url;
+            mDescription = description;
+            mNotes = notes;
         }
         
         public static User.Bookmark valueOf(JSONObject userBookmark) {

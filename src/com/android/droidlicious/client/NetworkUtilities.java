@@ -17,7 +17,6 @@
 package com.android.droidlicious.client;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
@@ -30,19 +29,13 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.auth.AuthScope;
 import android.net.Uri;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.auth.AuthenticationException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
@@ -51,13 +44,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * Provides utility methods for communicating with the server.
@@ -325,7 +315,7 @@ public class NetworkUtilities {
             // authenticated.
             // Extract friends data in json format.
             final JSONObject tags = new JSONObject(response);
-            Iterator i = tags.keys();
+            Iterator<?> i = tags.keys();
             while(i.hasNext()){
             	Object e = i.next();
             	Log.d("tag", e.toString());
@@ -390,9 +380,8 @@ public class NetworkUtilities {
         return bookmarkList;
     }
     
-    public static Boolean addBookmarks(String url, String description, Account account,
-        String authtoken) throws JSONException, ParseException, IOException,
-        AuthenticationException {
+    public static Boolean addBookmarks(User.Bookmark bookmark, Account account,
+        String authtoken) throws Exception {
 
     	String username = account.name;
     	String password =  authtoken;
@@ -401,8 +390,9 @@ public class NetworkUtilities {
 		builder.scheme(SCHEME);
 		builder.authority(AUTHORITY);
 		builder.appendEncodedPath(ADD_BOOKMARKS_URI);
-		builder.appendQueryParameter("url", url);
-		builder.appendQueryParameter("description", description);
+		builder.appendQueryParameter("url", bookmark.getUrl());
+		builder.appendQueryParameter("description", bookmark.getDescription());
+		builder.appendQueryParameter("extended", bookmark.getNotes());
 	
 		Uri u = builder.build();
 		
@@ -416,7 +406,8 @@ public class NetworkUtilities {
         final HttpResponse resp = mHttpClient.execute(post);
         final String response = EntityUtils.toString(resp.getEntity());
 
-        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK 
+        		&& response.contains("<result code=\"done\" />")) {
 
             Log.d(TAG, response);
          
@@ -425,9 +416,12 @@ public class NetworkUtilities {
                 Log.e(TAG,
                     "Authentication exception in adding bookmark");
                 throw new AuthenticationException();
-            } else {
+            } else if(response.contains("<result code=\"something went wrong\" />")){
                 Log.e(TAG, "Server error in adding bookmark");
                 throw new IOException();
+            } else{
+            	Log.e(TAG, "Unknown error in adding bookmark");
+            	throw new Exception();
             }
         }
         return true;

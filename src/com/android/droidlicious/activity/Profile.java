@@ -1,18 +1,13 @@
 package com.android.droidlicious.activity;
 
 import android.app.ActivityGroup;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.provider.Contacts.People;
 import android.util.Log;
 import android.webkit.WebView;
-
-import com.android.droidlicious.platform.ContactManager;
-import com.android.droidlicious.R;
 
 
 public class Profile extends ActivityGroup {

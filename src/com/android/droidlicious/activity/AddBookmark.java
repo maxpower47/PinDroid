@@ -1,19 +1,12 @@
 package com.android.droidlicious.activity;
 
-import java.io.IOException;
-
-import org.apache.http.ParseException;
-import org.apache.http.auth.AuthenticationException;
-import org.json.JSONException;
-
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.R;
 import com.android.droidlicious.client.NetworkUtilities;
+import com.android.droidlicious.client.User;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +18,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 
 	private EditText mEditUrl;
 	private EditText mEditDescription;
+	private EditText mEditNotes;
 	private Button mButtonSave;
 	private AccountManager mAccountManager;
 
@@ -36,11 +30,10 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		setContentView(R.layout.add_bookmark);
 		mEditUrl = (EditText) findViewById(R.id.add_edit_url);
 		mEditDescription = (EditText) findViewById(R.id.add_edit_description);
+		mEditNotes = (EditText) findViewById(R.id.add_edit_notes);
 		mButtonSave = (Button) findViewById(R.id.add_button_save);
 
-		mButtonSave.setOnClickListener(this);
-
-		
+		mButtonSave.setOnClickListener(this);	
 	}
 	
     public void save() {
@@ -50,6 +43,9 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		String authtoken = null;
 		Boolean success = false;
 		
+		User.Bookmark bookmark = new User.Bookmark(mEditUrl.getText().toString(), 
+				mEditDescription.getText().toString(), mEditNotes.getText().toString());
+		
 		try {
 			authtoken = mAccountManager.blockingGetAuthToken(al[0], Constants.AUTHTOKEN_TYPE, true);
 		} catch (Exception e1) {
@@ -57,7 +53,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		}
     	
     	try {
-			success = NetworkUtilities.addBookmarks(mEditUrl.getText().toString(), mEditDescription.getText().toString(), al[0], authtoken);
+			success = NetworkUtilities.addBookmarks(bookmark, al[0], authtoken);
 		} catch (Exception e) {
 
 		}
