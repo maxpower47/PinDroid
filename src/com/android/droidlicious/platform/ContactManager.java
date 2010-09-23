@@ -21,22 +21,16 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
 import android.provider.ContactsContract.StatusUpdates;
-import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Im;
-import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.provider.ContactsContract.CommonDataKinds.StructuredName;
 import android.util.Log;
 
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.client.User;
 import com.android.droidlicious.R;
 
-import java.security.Timestamp;
-import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -62,6 +56,11 @@ public class ContactManager {
         String userName;
         long rawContactId = 0;
         final ContentResolver resolver = context.getContentResolver();
+        
+        List<Long> currentContacts = lookupAllContacts(resolver);
+      
+        Log.d("blah", currentContacts.toString());
+        
         final BatchOperation batchOperation =
             new BatchOperation(context, resolver);
         Log.d(TAG, "In SyncContacts");
@@ -69,14 +68,12 @@ public class ContactManager {
             userName = user.getUserName();
             // Check to see if the contact needs to be inserted or updated
             rawContactId = lookupRawContact(resolver, userName);
-            if (rawContactId != 0) {
-            	Log.d(TAG, "In updateContact");
-            	updateContact(context, resolver, account, user, rawContactId, batchOperation);
-
-            } else {
+            if (rawContactId == 0) {
                 // add new contact
                 Log.d(TAG, "In addContact");
                 addContact(context, account, user, batchOperation);
+            } else{
+            	currentContacts.remove(rawContactId);
             }
             // A sync adapter should batch operations on multiple contacts,
             // because it will make a dramatic performance difference.
@@ -84,6 +81,12 @@ public class ContactManager {
                 batchOperation.execute();
             }
         }
+        
+        for(final Long l : currentContacts){
+        	Log.d(TAG, "Deleting contact");
+        	deleteContact(context, l, batchOperation);
+        }
+        
         batchOperation.execute();
     }
 
@@ -109,7 +112,6 @@ public class ContactManager {
             
             if(!processedUsers.contains(userName)){
 	            final long profileId = lookupProfile(resolver, userName);
-	Date t = new Date();
 	
 	            // Insert the activity into the stream
 	            if (profileId > 0) {
@@ -156,74 +158,6 @@ public class ContactManager {
             ContactOperations.createNewContact(context, user.getUserName(),
                 accountName, batchOperation);
         contactOp.addName(user.getUserName()).addProfileAction(user.getUserName());
-    }
-
-    /**
-     * Updates a single contact to the platform contacts provider.
-     * 
-     * @param context the Authenticator Activity context
-     * @param resolver the ContentResolver to use
-     * @param accountName the account the contact belongs to
-     * @param user the sample SyncAdapter contact object.
-     * @param rawContactId the unique Id for this rawContact in contacts
-     *        provider
-     */
-    private static void updateContact(Context context,
-        ContentResolver resolver, String accountName, User user,
-        long rawContactId, BatchOperation batchOperation) {
-        Uri uri;
-        String cellPhone = null;
-        String otherPhone = null;
-        String email = null;
-
-        final Cursor c =
-            resolver.query(Data.CONTENT_URI, DataQuery.PROJECTION,
-                DataQuery.SELECTION,
-                new String[] {String.valueOf(rawContactId)}, null);
-        final ContactOperations contactOp =
-            ContactOperations.updateExistingContact(context, rawContactId,
-                batchOperation);
-
-        try {
-            while (c.moveToNext()) {
-//                final long id = c.getLong(DataQuery.COLUMN_ID);
-//                final String mimeType = c.getString(DataQuery.COLUMN_MIMETYPE);
-//                uri = ContentUris.withAppendedId(Data.CONTENT_URI, id);
-//
-//                if (mimeType.equals(StructuredName.CONTENT_ITEM_TYPE)) {
-//                    final String lastName =
-//                        c.getString(DataQuery.COLUMN_FAMILY_NAME);
-//                    final String firstName =
-//                        c.getString(DataQuery.COLUMN_GIVEN_NAME);
-//                    contactOp.updateName(uri, firstName, lastName, user
-//                        .getFirstName(), user.getLastName());
-//                }
-//
-//                else if (mimeType.equals(Phone.CONTENT_ITEM_TYPE)) {
-//                    final int type = c.getInt(DataQuery.COLUMN_PHONE_TYPE);
-//
-//                    if (type == Phone.TYPE_MOBILE) {
-//                        cellPhone = c.getString(DataQuery.COLUMN_PHONE_NUMBER);
-//                        contactOp.updatePhone(cellPhone, user.getCellPhone(),
-//                            uri);
-//                    } else if (type == Phone.TYPE_OTHER) {
-//                        otherPhone = c.getString(DataQuery.COLUMN_PHONE_NUMBER);
-//                        contactOp.updatePhone(otherPhone, user.getHomePhone(),
-//                            uri);
-//                    }
-//                }
-//
-//                else if (Data.MIMETYPE.equals(Email.CONTENT_ITEM_TYPE)) {
-//                    email = c.getString(DataQuery.COLUMN_EMAIL_ADDRESS);
-//                    contactOp.updateEmail(user.getEmail(), email, uri);
-
-//                }
-            } // while
-        } finally {
-            c.close();
-        }
-
-
     }
 
     /**
@@ -293,6 +227,31 @@ public class ContactManager {
         }
         return profileId;
     }
+    
+    /**
+     * Returns the RawContact id for a sample SyncAdapter contact, or 0 if the
+     * sample SyncAdapter user isn't found.
+     * 
+     * @param context the Authenticator Activity context
+     * @param userId the sample SyncAdapter user ID to lookup
+     * @return the RawContact id, or 0 if not found
+     */
+    private static List<Long> lookupAllContacts(ContentResolver resolver) {
+        List<Long> result = new ArrayList<Long>();
+        final Cursor c =
+            resolver.query(RawContacts.CONTENT_URI, AllUsersQuery.PROJECTION,
+            		AllUsersQuery.SELECTION, null, null);
+        try {
+            while (c.moveToNext()) {
+                result.add(c.getLong(AllUsersQuery.COLUMN_ID));
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return result;
+    }
 
     /**
      * Constants for a query to find a contact given a sample SyncAdapter user
@@ -312,8 +271,7 @@ public class ContactManager {
      * ID.
      */
     private interface UserIdQuery {
-        public final static String[] PROJECTION =
-            new String[] {RawContacts._ID};
+        public final static String[] PROJECTION = new String[] {RawContacts._ID};
 
         public final static int COLUMN_ID = 0;
 
@@ -321,27 +279,16 @@ public class ContactManager {
             RawContacts.ACCOUNT_TYPE + "='" + Constants.ACCOUNT_TYPE + "' AND "
                 + RawContacts.SOURCE_ID + "=?";
     }
-
+    
     /**
-     * Constants for a query to get contact data for a given rawContactId
+     * Constants for a query to find all Droidlicious contacts
      */
-    private interface DataQuery {
-        public static final String[] PROJECTION =
-            new String[] {Data._ID, Data.MIMETYPE, Data.DATA1, Data.DATA2,
-                Data.DATA3,};
+    private interface AllUsersQuery {
+        public final static String[] PROJECTION = new String[] {RawContacts._ID};
 
-        public static final int COLUMN_ID = 0;
-        public static final int COLUMN_MIMETYPE = 1;
-        public static final int COLUMN_DATA1 = 2;
-        public static final int COLUMN_DATA2 = 3;
-        public static final int COLUMN_DATA3 = 4;
-        public static final int COLUMN_PHONE_NUMBER = COLUMN_DATA1;
-        public static final int COLUMN_PHONE_TYPE = COLUMN_DATA2;
-        public static final int COLUMN_EMAIL_ADDRESS = COLUMN_DATA1;
-        public static final int COLUMN_EMAIL_TYPE = COLUMN_DATA2;
-        public static final int COLUMN_GIVEN_NAME = COLUMN_DATA2;
-        public static final int COLUMN_FAMILY_NAME = COLUMN_DATA3;
+        public final static int COLUMN_ID = 0;
 
-        public static final String SELECTION = Data.RAW_CONTACT_ID + "=?";
+        public static final String SELECTION =
+            RawContacts.ACCOUNT_TYPE + "='" + Constants.ACCOUNT_TYPE + "'";
     }
 }

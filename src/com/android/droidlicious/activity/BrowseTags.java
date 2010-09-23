@@ -1,7 +1,6 @@
 package com.android.droidlicious.activity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.android.droidlicious.R;
 import com.android.droidlicious.Constants;
@@ -11,17 +10,14 @@ import com.android.droidlicious.listadapter.TagListAdapter;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.util.Log;
 import android.view.*;
 
 public class BrowseTags extends DroidliciousBaseActivity {

@@ -10,7 +10,6 @@ import com.android.droidlicious.listadapter.BookmarkListAdapter;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
