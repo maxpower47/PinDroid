@@ -7,8 +7,10 @@ import com.android.droidlicious.client.User;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerFuture;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,15 +49,21 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 				mEditDescription.getText().toString(), mEditNotes.getText().toString());
 		
 		try {
-			authtoken = mAccountManager.blockingGetAuthToken(al[0], Constants.AUTHTOKEN_TYPE, true);
+			
+			AccountManagerFuture<Bundle> accountManagerFuture = 
+				mAccountManager.getAuthToken(al[0], Constants.AUTHTOKEN_TYPE, null, this, null, null);
+			Bundle authTokenBundle = accountManagerFuture.getResult(); 
+			
+			authtoken = authTokenBundle.get(AccountManager.KEY_AUTHTOKEN).toString();
 		} catch (Exception e1) {
-
+			Log.d("blash", e1.getMessage());
 		}
     	
     	try {
 			success = NetworkUtilities.addBookmarks(bookmark, al[0], authtoken);
 		} catch (Exception e) {
-
+			//Log.d("add bookmark error", e.getMessage());
+			//Log.d("add bookmark error", e.toString());
 		}
 		
 		if(success){

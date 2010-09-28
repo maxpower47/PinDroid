@@ -43,9 +43,9 @@ public class BrowseTags extends DroidliciousBaseActivity {
 			else username = al[0].name;
 			
 			try{	
-				authtoken = mAccountManager.blockingGetAuthToken(al[0], Constants.AUTHTOKEN_TYPE, true);
+				//authtoken = mAccountManager.blockingGetAuthToken(al[0], Constants.AUTHTOKEN_TYPE, true);
 			
-				tagList = NetworkUtilities.fetchTags(username, al[0], authtoken);
+				tagList = NetworkUtilities.fetchTags(username, al[0], "");
 				
 				setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
 			}

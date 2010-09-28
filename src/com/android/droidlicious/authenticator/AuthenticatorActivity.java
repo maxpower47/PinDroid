@@ -32,9 +32,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.android.droidlicious.Constants;
+import com.android.droidlicious.activity.OauthLogin;
+import com.android.droidlicious.client.LoginResult;
 import com.android.droidlicious.client.NetworkUtilities;
 import com.android.droidlicious.R;
 
@@ -71,6 +74,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
     private String mUsername;
     private EditText mUsernameEdit;
+    
+    private RadioButton mDeliciousAuth;
+    private RadioButton mYahooAuth;
+    
+    private String oauthVerifier;
+    private String oauthToken;
+    private String oauthTokenSecret;
 
     /**
      * {@inheritDoc}
@@ -100,6 +110,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
         mUsernameEdit.setText(mUsername);
         mMessage.setText(getMessage());
+        
+        mDeliciousAuth = (RadioButton) findViewById(R.id.auth_type_delicious);
+        mYahooAuth = (RadioButton) findViewById(R.id.auth_type_yahoo);
     }
 
     /*
@@ -134,13 +147,14 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             mUsername = mUsernameEdit.getText().toString();
         }
         mPassword = mPasswordEdit.getText().toString();
+        
+        int authType = mYahooAuth.isChecked() ? 1 : 0;
         if (TextUtils.isEmpty(mUsername) || TextUtils.isEmpty(mPassword)) {
             mMessage.setText(getMessage());
         } else {
             showProgress();
             // Start authenticating...
-            mAuthThread =
-                NetworkUtilities.attemptAuth(mUsername, mPassword, mHandler,
+            mAuthThread = NetworkUtilities.attemptAuth(mUsername, mPassword, authType, mHandler,
                     AuthenticatorActivity.this);
         }
     }
@@ -173,30 +187,40 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
      * @param the confirmCredentials result.
      */
 
-    protected void finishLogin() {
+    protected void finishLogin(String authToken) {
         Log.i(TAG, "finishLogin()");
         final Account account = new Account(mUsername, Constants.ACCOUNT_TYPE);
 
+        if(authToken == null || authToken == ""){
+        	mPassword = mPassword;
+        } else {
+        	mPassword = authToken;
+        }
+        
         if (mRequestNewAccount) {
             mAccountManager.addAccountExplicitly(account, mPassword, null);
             // Set contacts sync for this account.
-            ContentResolver.setSyncAutomatically(account,
-                ContactsContract.AUTHORITY, true);
+            ContentResolver.setSyncAutomatically(account, ContactsContract.AUTHORITY, true);
         } else {
             mAccountManager.setPassword(account, mPassword);
         }
         final Intent intent = new Intent();
-        mAuthtoken = mPassword;
+        
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mUsername);
-        intent
-            .putExtra(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
-        if (mAuthtokenType != null
-            && mAuthtokenType.equals(Constants.AUTHTOKEN_TYPE)) {
+        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
+        if (mAuthtokenType != null && mAuthtokenType.equals(Constants.AUTHTOKEN_TYPE)) {
             intent.putExtra(AccountManager.KEY_AUTHTOKEN, mAuthtoken);
         }
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
         finish();
+    }
+    
+    protected void getOauthAccessToken() {
+        Log.i(TAG, "getOauthAccessToken()");
+        
+        NetworkUtilities.getOauthRequestToken(oauthToken, oauthTokenSecret, oauthVerifier, mHandler, 
+        		AuthenticatorActivity.this);  
     }
 
     /**
@@ -209,28 +233,38 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     /**
      * Called when the authentication process completes (see attemptLogin()).
      */
-    public void onAuthenticationResult(boolean result) {
+    public void onAuthenticationResult(LoginResult result) {
         Log.i(TAG, "onAuthenticationResult(" + result + ")");
         // Hide the progress dialog
         hideProgress();
-        if (result) {
+        if (result.getResult() && result.getToken() == "" && result.getAccessToken() == "") {
             if (!mConfirmCredentials) {
-                finishLogin();
+                finishLogin(null);
             } else {
                 finishConfirmCredentials(true);
             }
-        } else {
+        } else if(result.getResult() && result.getToken() != "" && result.getAccessToken() == ""){
+        	oauthToken = result.getToken();
+        	oauthTokenSecret = result.getTokenSecret();
+        	
+        	Intent i = new Intent(getApplicationContext(), OauthLogin.class);
+        	i.putExtra("oauth_url", result.getRequestUrl());
+        	startActivityForResult(i, 0);
+
+        } else if(result.getResult() && result.getAccessToken() != ""){
+        	Log.d(TAG, result.getAccessToken());
+        	finishLogin("oauth:" + result.getAccessToken() + ":" + result.getTokenSecret());
+
+        }else {
             Log.e(TAG, "onAuthenticationResult: failed to authenticate");
             if (mRequestNewAccount) {
                 // "Please enter a valid username/password.
-                mMessage
-                    .setText(getText(R.string.login_activity_loginfail_text_both));
+                mMessage.setText(getText(R.string.login_activity_loginfail_text_both));
             } else {
                 // "Please enter a valid password." (Used when the
                 // account is already in the database but the password
                 // doesn't work.)
-                mMessage
-                    .setText(getText(R.string.login_activity_loginfail_text_pwonly));
+                mMessage.setText(getText(R.string.login_activity_loginfail_text_pwonly));
             }
         }
     }
@@ -252,6 +286,17 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             return getText(R.string.login_activity_loginfail_text_pwmissing);
         }
         return null;
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent){
+        super.onActivityResult(requestCode, resultCode, intent);
+        Bundle extras = intent.getExtras();
+        oauthVerifier = extras.getString("oauth_verifier");
+        Log.d("oauth_verifier", oauthVerifier);
+        
+        getOauthAccessToken();
+        
     }
 
     /**
