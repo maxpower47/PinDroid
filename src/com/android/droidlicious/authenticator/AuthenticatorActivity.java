@@ -24,6 +24,7 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
@@ -204,6 +205,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         } else {
             mAccountManager.setPassword(account, mPassword);
         }
+        
         final Intent intent = new Intent();
         
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mUsername);
@@ -253,7 +255,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
         } else if(result.getResult() && result.getAccessToken() != ""){
         	Log.d(TAG, result.getAccessToken());
-        	finishLogin("oauth:" + result.getAccessToken() + ":" + result.getTokenSecret());
+        	
+            SharedPreferences settings = getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            
+            editor.putString("oauth_token_secret", result.getTokenSecret());
+            editor.commit();
+
+        	
+        	finishLogin("oauth:" + result.getAccessToken());
 
         }else {
             Log.e(TAG, "onAuthenticationResult: failed to authenticate");
@@ -277,8 +287,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         if (TextUtils.isEmpty(mUsername)) {
             // If no username, then we ask the user to log in using an
             // appropriate service.
-            final CharSequence msg =
-                getText(R.string.login_activity_newaccount_text);
+            final CharSequence msg = getText(R.string.login_activity_newaccount_text);
             return msg;
         }
         if (TextUtils.isEmpty(mPassword)) {

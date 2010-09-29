@@ -18,6 +18,7 @@ package com.android.droidlicious.client;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 import android.util.Base64;
@@ -25,6 +26,7 @@ import android.util.Base64;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.android.droidlicious.Constants;
 import com.android.droidlicious.authenticator.AuthenticatorActivity;
 
 import org.apache.http.auth.Credentials;
@@ -603,13 +605,17 @@ public class NetworkUtilities {
     }
     
     public static Boolean addBookmarks(User.Bookmark bookmark, Account account,
-        String authtoken) throws Exception {
+        String authtoken, Context context) throws Exception {
     	
     	String username = account.name;
     	String password =  authtoken;
     	String response = null;
     	
     	if(password.startsWith("oauth:")) {
+    		
+    	   SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+    	   String tokenSecret = settings.getString("oauth_token_secret", "");
+
     	
             Random r = new Random();
             String token = Long.toString(Math.abs(r.nextLong()), 36);
@@ -622,8 +628,8 @@ public class NetworkUtilities {
     		sb.append("&http%3A%2F%2Fapi.del.icio.us%2Fv2%2Fposts%2Fadd");
     		sb.append("&description%3D");
     		sb.append(URLEncoder.encode(bookmark.getDescription()));
-    		//sb.append("%26extended%3D");
-    		//sb.append(URLEncoder.encode(bookmark.getNotes()));
+    		sb.append("%26extended%3D");
+    		sb.append(URLEncoder.encode(bookmark.getNotes()));
     		sb.append("%26oauth_consumer_key%3D");
     		sb.append(URLEncoder.encode(OAUTH_CONSUMER_KEY));
     		sb.append("%26oauth_nonce%3D");
@@ -641,7 +647,7 @@ public class NetworkUtilities {
     		
     		Log.d("base string", sb.toString());
     		
-    		String keystring = OAUTH_SHARED_SECRET + "&" + password.split(":")[2];
+    		String keystring = OAUTH_SHARED_SECRET + "&" + tokenSecret;
     	
     		Log.d("key string", keystring);
     		
@@ -661,7 +667,7 @@ public class NetworkUtilities {
 			builder.authority(DELICIOUS_AUTHORITY);
 			builder.appendEncodedPath(OAUTH_ADD_BOOKMARKS_URI);
 			builder.appendQueryParameter("description", bookmark.getDescription());
-			//builder.appendQueryParameter("extended", bookmark.getNotes());
+			builder.appendQueryParameter("extended", bookmark.getNotes());
 			builder.appendQueryParameter("url", URLEncoder.encode("www.yahoo.com"));
 		
 			Uri u = builder.build();
@@ -691,7 +697,6 @@ public class NetworkUtilities {
 
 			
 			post.setHeader("Authorization", sb2.toString());
-			//post.setHeader("Content-type", "application/x-www-form-urlencoded");
 			Log.d("header", sb2.toString());
     		
 	        maybeCreateHttpClient();

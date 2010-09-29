@@ -26,7 +26,8 @@ public class Constants {
     /**
      * Authtoken type string.
      */
-    public static final String AUTHTOKEN_TYPE =
-        "com.android.droidlicious";
+    public static final String AUTHTOKEN_TYPE = "com.android.droidlicious";
+    
+    public static final String AUTH_PREFS_NAME = "com.android.droidlicious.auth";
 
 }
