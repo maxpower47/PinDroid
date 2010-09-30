@@ -385,6 +385,89 @@ public class NetworkUtilities {
     }
 
     /**
+     * Connects to the Voiper server, authenticates the provided username and
+     * password.
+     * 
+     * @param username The user's username
+     * @param password The user's password
+     * @param handler The hander instance from the calling UI thread.
+     * @param context The context of the calling Activity.
+     * @return boolean The boolean result indicating whether the user was
+     *         successfully authenticated.
+     */
+    public static LoginResult refreshOauthRequestToken(String token, final Context context) {
+        final HttpResponse resp;
+        
+ 	   	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+ 	   	String tokenSecret = settings.getString("oauth_token_secret", "");
+ 	   	String sessionHandle = settings.getString("oauth_session_handle", "");
+        
+        Random r = new Random();
+        String nonceToken = Long.toString(Math.abs(r.nextLong()), 36);
+        
+        Log.d("old token", token);
+        
+        Date d = new Date();
+        
+		Uri.Builder builder = new Uri.Builder();
+		builder.scheme(SCHEME);
+		builder.authority(OAUTH_AUTHORITY);
+		builder.appendEncodedPath(OAUTH_GET_TOKEN_URI);
+		builder.appendQueryParameter("oauth_nonce", nonceToken);
+		builder.appendQueryParameter("oauth_timestamp", Long.toString(d.getTime()));
+		builder.appendQueryParameter("oauth_consumer_key", OAUTH_CONSUMER_KEY);
+		builder.appendQueryParameter("oauth_signature_method", OAUTH_SIGNATURE_METHOD);
+		builder.appendQueryParameter("oauth_signature", OAUTH_SHARED_SECRET + "&" + tokenSecret);
+		builder.appendQueryParameter("oauth_version", OAUTH_VERSION);
+		builder.appendQueryParameter("oauth_session_handle", sessionHandle);
+		builder.appendQueryParameter("oauth_token", token);
+	
+		Uri u = builder.build();
+
+		Log.d("Refresh Token", String.valueOf(u));
+        
+        HttpGet request = new HttpGet(String.valueOf(u));
+        maybeCreateHttpClient();
+        
+        LoginResult result = null;
+        
+        try {
+            resp = mHttpClient.execute(request);
+            final String response = EntityUtils.toString(resp.getEntity());
+            
+            Log.d("Refresh Token Response", response);
+            
+            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {      
+            	
+            	
+            	
+            	String[] responseParams = response.split("&");
+            	for(String s : responseParams){
+            		if(s.contains("oauth_token=")){
+            			token = s.split("=")[1];
+            		}
+            		if(s.contains("oauth_token_secret=")){
+            			tokenSecret = s.split("=")[1];
+            		}
+            	}
+            	
+        		Log.d("new token", token);
+        		
+        		result = new LoginResult(true, token, tokenSecret);
+
+            } else {
+
+            }
+        } catch (final IOException e) {
+
+        } finally {
+
+        }
+        return result;
+    }
+    
+    
+    /**
      * Sends the authentication response from server back to the caller main UI
      * thread through its handler.
      * 
@@ -607,14 +690,18 @@ public class NetworkUtilities {
     public static Boolean addBookmarks(User.Bookmark bookmark, Account account,
         String authtoken, Context context) throws Exception {
     	
+    	Log.d("addBookmarks()", "start");
+    	
     	String username = account.name;
     	String password =  authtoken;
     	String response = null;
     	
+    	Log.d("password", password);
+    	
     	if(password.startsWith("oauth:")) {
-    		
-    	   SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
-    	   String tokenSecret = settings.getString("oauth_token_secret", "");
+    		Log.d("addBookmarks()", "oauth");
+    		SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+    		String tokenSecret = settings.getString("oauth_token_secret", "");
 
     	
             Random r = new Random();
@@ -706,6 +793,7 @@ public class NetworkUtilities {
 	        
     		
     	} else{
+    		Log.d("addBookmarks()", "delicious");
 			Uri.Builder builder = new Uri.Builder();
 			builder.scheme(SCHEME);
 			builder.authority(DELICIOUS_AUTHORITY);
@@ -745,6 +833,9 @@ public class NetworkUtilities {
         	if(response.contains("<result code=\"something went wrong\" />")){
                 Log.e(TAG, "Server error in adding bookmark");
                 throw new IOException();
+            } else if(response.contains("token_expired")){
+            	Log.d(TAG, "Token Expired");
+            	throw new TokenRejectedException();
             } else{
             	Log.e(TAG, "Unknown error in adding bookmark");
             	throw new Exception();

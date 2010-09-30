@@ -62,6 +62,19 @@ public class LoginResult {
 		xoauth_yahoo_guid = "";
 	}
 	
+	LoginResult(Boolean r, String token, String tokenSecret){
+		result = r;
+		oauth_token_secret = tokenSecret;
+		oauth_expires_in = "";
+		xoauth_request_auth_url = "";
+		oauth_token = token;
+		oauth_callback_confirmed = "";
+		oauth_access_token = "";
+		oauth_session_handle = "";
+		oauth_authorization_expires_in = "";
+		xoauth_yahoo_guid = "";
+	}
+	
 	LoginResult(Boolean r, String accessToken, String tokenSecret, String session, String expiration, 
 			String sessionExpires, String uid){
 		result = r;

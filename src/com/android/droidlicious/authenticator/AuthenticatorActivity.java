@@ -259,7 +259,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             SharedPreferences settings = getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
             
+            editor.putString("oauth_token", result.getAccessToken());
             editor.putString("oauth_token_secret", result.getTokenSecret());
+            editor.putString("oauth_session_handle", result.getSessionHandle());
             editor.commit();
 
         	
