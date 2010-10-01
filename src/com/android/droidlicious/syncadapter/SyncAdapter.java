@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.android.droidlicious.Constants;
+import com.android.droidlicious.authenticator.AuthToken;
 import com.android.droidlicious.client.NetworkUtilities;
 import com.android.droidlicious.client.User;
 import com.android.droidlicious.client.User.Status;
@@ -67,13 +68,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         String authtoken = null;
          try {
              // use the account manager to request the credentials
-             authtoken =
-                mAccountManager.blockingGetAuthToken(account,
-                    Constants.AUTHTOKEN_TYPE, true /* notifyAuthFailure */);
+        	 AuthToken at = new AuthToken(mContext, account);
+        	 authtoken = at.getAuthToken();
+        	 
              // fetch updates from the sample service over the cloud
-             users =
-                NetworkUtilities.fetchFriendUpdates(account, authtoken,
-                    mLastUpdated);
+             users = NetworkUtilities.fetchFriendUpdates(account, authtoken, mLastUpdated);
             // update the last synced date.
             mLastUpdated = new Date();
             // update platform contacts.
@@ -82,11 +81,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             // fetch and update status messages for all the synced users.
             statuses = NetworkUtilities.fetchFriendStatuses(account, authtoken);
             ContactManager.insertStatuses(mContext, account.name, statuses);
-        } catch (final AuthenticatorException e) {
-            syncResult.stats.numParseExceptions++;
-            Log.e(TAG, "AuthenticatorException", e);
-        } catch (final OperationCanceledException e) {
-            Log.e(TAG, "OperationCanceledExcetpion", e);
         } catch (final IOException e) {
             Log.e(TAG, "IOException", e);
             syncResult.stats.numIoExceptions++;

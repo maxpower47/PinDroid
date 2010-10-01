@@ -2,6 +2,7 @@ package com.android.droidlicious.activity;
 
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.R;
+import com.android.droidlicious.authenticator.AuthToken;
 import com.android.droidlicious.client.NetworkUtilities;
 import com.android.droidlicious.client.TokenRejectedException;
 import com.android.droidlicious.client.User;
@@ -57,61 +58,23 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		bookmark = new User.Bookmark(mEditUrl.getText().toString(), 
 		mEditDescription.getText().toString(), mEditNotes.getText().toString());
 		
-		try {
-			background = new Thread(new Runnable() {
-				public void run(){
-					try{			
-						authtoken = mAccountManager.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, false);
-						mAccountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, authtoken);
-						authtoken = mAccountManager.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, false);
-						progressHandler.sendMessage(progressHandler.obtainMessage());
-					}
-					catch(Exception e){
-						Log.d("authtokene", e.getMessage());
-					}
-					
-				}	
-			});
-			
-			background.start();
-			
-			
-		} catch (Exception e1) {
-			Log.d("blash", e1.getMessage());
-		}    
+
+		AuthToken at = new AuthToken(context, account);
+		at.getAuthTokenAsync(messageHandler);
+
     }
 
-    // handler for the background updating
-    Handler progressHandler = new Handler() {
-        public void handleMessage(Message msg) {
+    // Instantiating the Handler associated with the main thread.
+    private Handler messageHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {  
         	Boolean success = false;
-        	
-        	try {
+        	authtoken = (String)msg.obj;
+    		try {
     			success = NetworkUtilities.addBookmarks(bookmark, account, authtoken, context);
-    		} 
-        	catch(TokenRejectedException t){
-        		mAccountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, authtoken);
-
-
-    			Thread background2 = new Thread(new Runnable() {
-    				public void run(){
-    					try{					
-    						authtoken = mAccountManager.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, false);
-    						progressHandler.sendMessage(progressHandler.obtainMessage());
-    					}
-    					catch(Exception e){
-    						Log.d("authtokene", e.getMessage());
-    					}
-    					
-    				}	
-    			});
-    			
-    			background2.start();
-        		
-        		
-        	}
-        	catch (Exception e) {
-
+    		} catch (Exception e) {
+    			e.printStackTrace();
     		}
     		
     		if(success){
@@ -122,6 +85,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     		
     		finish();
         }
+
     };
 	
     /**

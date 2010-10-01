@@ -58,8 +58,6 @@ public class ContactManager {
         final ContentResolver resolver = context.getContentResolver();
         
         List<Long> currentContacts = lookupAllContacts(resolver);
-      
-        Log.d("blah", currentContacts.toString());
         
         final BatchOperation batchOperation =
             new BatchOperation(context, resolver);
