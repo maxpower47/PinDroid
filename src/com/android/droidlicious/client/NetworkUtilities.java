@@ -689,21 +689,19 @@ public class NetworkUtilities {
     
     public static Boolean addBookmarks(User.Bookmark bookmark, Account account,
         String authtoken, Context context) throws Exception {
-    	
+
     	Log.d("addBookmarks()", "start");
     	
+    	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+    	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
+    	
     	String username = account.name;
-    	String password =  authtoken;
     	String response = null;
     	
-    	Log.d("password", password);
-    	
-    	if(password.startsWith("oauth:")) {
+    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
     		Log.d("addBookmarks()", "oauth");
-    		SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
     		String tokenSecret = settings.getString("oauth_token_secret", "");
 
-    	
             Random r = new Random();
             String token = Long.toString(Math.abs(r.nextLong()), 36);
             
@@ -726,7 +724,7 @@ public class NetworkUtilities {
     		sb.append("%26oauth_timestamp%3D");
     		sb.append(URLEncoder.encode(timestamp));
     		sb.append("%26oauth_token%3D");
-    		sb.append(URLEncoder.encode(password.split(":")[1]));
+    		sb.append(URLEncoder.encode(authtoken));
     		sb.append("%26oauth_version%3D");
     		sb.append(URLEncoder.encode(OAUTH_VERSION));
     		sb.append("%26url%3D");
@@ -746,8 +744,6 @@ public class NetworkUtilities {
     		String signature = Base64.encodeToString(sigBytes, Base64.NO_WRAP);
     		
     		Log.d("signature", signature);
-    		
-
     		
 			Uri.Builder builder = new Uri.Builder();
 			builder.scheme(SCHEME_HTTP);
@@ -777,7 +773,7 @@ public class NetworkUtilities {
     		sb2.append(",oauth_timestamp=");
     		sb2.append("\"" + timestamp + "\"");
     		sb2.append(",oauth_token=");
-    		sb2.append("\"" + password.split(":")[1] + "\"");
+    		sb2.append("\"" + authtoken + "\"");
     		sb2.append(",oauth_version=");
     		sb2.append("\"" + OAUTH_VERSION + "\"");
 
@@ -809,25 +805,17 @@ public class NetworkUtilities {
 	        maybeCreateHttpClient();
 	        
 	        CredentialsProvider provider = mHttpClient.getCredentialsProvider();
-	        Credentials credentials = new UsernamePasswordCredentials(username, password);
+	        Credentials credentials = new UsernamePasswordCredentials(username, authtoken);
 	        provider.setCredentials(SCOPE, credentials);
 	        
 	        final HttpResponse resp = mHttpClient.execute(post);
 	        response = EntityUtils.toString(resp.getEntity());
     	}
-		
-        
-        
 
-
-
-        
         Log.d(TAG, response);
 
         if (response.contains("<result code=\"done\" />")) {
-
             Log.d("success", "success");
-         
         } else {
 
         	if(response.contains("<result code=\"something went wrong\" />")){

@@ -29,5 +29,9 @@ public class Constants {
     public static final String AUTHTOKEN_TYPE = "com.android.droidlicious";
     
     public static final String AUTH_PREFS_NAME = "com.android.droidlicious.auth";
+    
+    public static final String PREFS_AUTH_TYPE = "authentication_type";
+    public static final String AUTH_TYPE_OAUTH = "oauth";
+    public static final String AUTH_TYPE_DELICIOUS = "delicious";
 
 }

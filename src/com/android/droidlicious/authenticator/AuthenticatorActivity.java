@@ -241,6 +241,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         hideProgress();
         if (result.getResult() && result.getToken() == "" && result.getAccessToken() == "") {
             if (!mConfirmCredentials) {
+                SharedPreferences settings = getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+            	editor.putString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
+            	editor.commit();
+            	
                 finishLogin(null);
             } else {
                 finishConfirmCredentials(true);
@@ -262,10 +267,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             editor.putString("oauth_token", result.getAccessToken());
             editor.putString("oauth_token_secret", result.getTokenSecret());
             editor.putString("oauth_session_handle", result.getSessionHandle());
+            editor.putString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_OAUTH);
             editor.commit();
 
         	
-        	finishLogin("oauth:" + result.getAccessToken());
+        	finishLogin(result.getAccessToken());
 
         }else {
             Log.e(TAG, "onAuthenticationResult: failed to authenticate");

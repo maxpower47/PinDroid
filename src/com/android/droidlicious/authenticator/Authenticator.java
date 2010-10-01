@@ -109,15 +109,16 @@ class Authenticator extends AbstractAccountAuthenticator {
     public Bundle getAuthToken(AccountAuthenticatorResponse response,
         Account account, String authTokenType, Bundle loginOptions) {
     	Log.d("getAuthToken", "blah");
+    	SharedPreferences settings = mContext.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+    	
         if (!authTokenType.equals(Constants.AUTHTOKEN_TYPE)) {
             final Bundle result = new Bundle();
-            result.putString(AccountManager.KEY_ERROR_MESSAGE,
-                "invalid authTokenType");
+            result.putString(AccountManager.KEY_ERROR_MESSAGE, "invalid authTokenType");
             return result;
         }
         final AccountManager am = AccountManager.get(mContext);
         final String password = am.getPassword(account);
-        if(!password.startsWith("oauth:")){
+        if(settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS) == Constants.AUTH_TYPE_DELICIOUS){
         	Log.d("getAuthToken", "notoauth");
         	
 	        if (password != null) {
@@ -145,8 +146,7 @@ class Authenticator extends AbstractAccountAuthenticator {
 	        return bundle;
         } else {
         	Log.d("getAuthToken", "oauth");
-    		SharedPreferences settings = mContext.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
-    		
+    			
         	String token;
         	if(!settings.getBoolean("first_time", true)) {
         		
@@ -164,12 +164,8 @@ class Authenticator extends AbstractAccountAuthenticator {
             	
             	token = lresult.getToken();
             	
-            	am.setAuthToken(account, authTokenType, "oauth:" + token);
-            	//am.setPassword(account, "oauth:" + token);
-            	Log.d("password set", am.getPassword(account));
-        		
-            	
-        		
+            	am.setAuthToken(account, authTokenType, token);
+
         	} else {
         		SharedPreferences.Editor editor = settings.edit();
         		editor.putBoolean("first_time", false);
@@ -181,7 +177,7 @@ class Authenticator extends AbstractAccountAuthenticator {
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
             result.putString(AccountManager.KEY_ACCOUNT_TYPE,
                 Constants.ACCOUNT_TYPE);
-            result.putString(AccountManager.KEY_AUTHTOKEN, "oauth:" + token);
+            result.putString(AccountManager.KEY_AUTHTOKEN, token);
             return result;
         	
         	
@@ -216,7 +212,9 @@ class Authenticator extends AbstractAccountAuthenticator {
      * Validates user's password on the server
      */
     private boolean onlineConfirmPassword(String username, String password) {
-    	if(!password.startsWith("oauth:")){
+    	SharedPreferences settings = mContext.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+    	
+    	if(settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS) == Constants.AUTH_TYPE_DELICIOUS){
     		return NetworkUtilities.deliciousAuthenticate(username, password,
     				null/* Handler */, null/* Context */);
     	} else {
