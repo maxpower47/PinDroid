@@ -150,13 +150,13 @@ class Authenticator extends AbstractAccountAuthenticator {
         	String token;
         	if(!settings.getBoolean("first_time", true)) {
         		
-        		String oldauthtoken = settings.getString("oauth_token", "");
+        		String oldauthtoken = settings.getString(Constants.OAUTH_TOKEN_PROPERTY, "");
         		
         		LoginResult lresult = NetworkUtilities.refreshOauthRequestToken(oldauthtoken, mContext);
         		
             	SharedPreferences.Editor editor = settings.edit();
-                editor.putString("oauth_token_secret", lresult.getTokenSecret());
-                editor.putString("oauth_token", lresult.getToken());
+                editor.putString(Constants.OAUTH_TOKEN_SECRET_PROPERTY, lresult.getTokenSecret());
+                editor.putString(Constants.OAUTH_TOKEN_PROPERTY, lresult.getToken());
                 editor.commit();
             	
             	Log.d("loginresult token", lresult.getToken());
@@ -179,10 +179,8 @@ class Authenticator extends AbstractAccountAuthenticator {
                 Constants.ACCOUNT_TYPE);
             result.putString(AccountManager.KEY_AUTHTOKEN, token);
             return result;
-        	
-        	
+        	   	
         }
-        
     }
 
     /**
@@ -215,8 +213,7 @@ class Authenticator extends AbstractAccountAuthenticator {
     	SharedPreferences settings = mContext.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
     	
     	if(settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS) == Constants.AUTH_TYPE_DELICIOUS){
-    		return NetworkUtilities.deliciousAuthenticate(username, password,
-    				null/* Handler */, null/* Context */);
+    		return NetworkUtilities.deliciousAuthenticate(username, password, null, null);
     	} else {
     		return true;
     	}

@@ -7,11 +7,11 @@ public class LoginResult {
 	private final String oauth_expires_in;
 	private final String xoauth_request_auth_url;
 	private final String oauth_token;
-	private final String oauth_callback_confirmed;
 	private final String oauth_access_token;
 	private final String oauth_session_handle;
 	private final String oauth_authorization_expires_in;
 	private final String xoauth_yahoo_guid;
+	private final String oauth_callback_confirmed;
 	
 	public Boolean getResult(){
 		return result;
@@ -19,6 +19,10 @@ public class LoginResult {
 	
 	public String getTokenSecret(){
 		return oauth_token_secret;
+	}
+	
+	public String getCallbackConfirmed(){
+		return oauth_callback_confirmed;
 	}
 	
 	public String getExpiration(){

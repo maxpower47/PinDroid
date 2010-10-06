@@ -21,13 +21,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
-import android.util.Base64;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.authenticator.AuthenticatorActivity;
+import com.android.droidlicious.authenticator.OauthUtilities;
 
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -58,6 +55,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.TreeMap;
 
 /**
  * Provides utility methods for communicating with the server.
@@ -86,15 +84,9 @@ public class NetworkUtilities {
     private static final AuthScope SCOPE = new AuthScope(DELICIOUS_AUTHORITY, PORT);
     
     private static final String OAUTH_AUTHORITY = "api.login.yahoo.com";
-    private static final String OAUTH_CONSUMER_KEY = "dj0yJmk9OFMyMU03NlVOYlJNJmQ9WVdrOVN6Qk5TR0ZhTjJrbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD03NA--";
-    private static final String OAUTH_SHARED_SECRET = "ba0a2f0d1ecadb6d3f79eb0e875689ea6890af27";
-    private static final String OAUTH_APPLICATION_ID = "K0MHaZ7i";
+
     private static final String OAUTH_REQUEST_TOKEN_URI = "oauth/v2/get_request_token";
     private static final String OAUTH_GET_TOKEN_URI = "oauth/v2/get_token";
-    private static final String OAUTH_VERSION = "1.0";
-    private static final String OAUTH_LANG = "en-us";
-    private static final String OAUTH_CALLBACK = "oob";
-    private static final String OAUTH_SIGNATURE_METHOD = "PLAINTEXT";
 
     /**
      * Configures the httpClient to connect to the URL provided.
@@ -152,7 +144,6 @@ public class NetworkUtilities {
         builder.appendEncodedPath("v1/tags/get");
         Uri uri = builder.build();
 
-        
         HttpGet request = new HttpGet(String.valueOf(uri));
         maybeCreateHttpClient();
         
@@ -189,8 +180,7 @@ public class NetworkUtilities {
     }
     
     /**
-     * Connects to the Voiper server, authenticates the provided username and
-     * password.
+     * Yahoo OAuth Authentication Step 1
      * 
      * @param username The user's username
      * @param password The user's password
@@ -212,14 +202,14 @@ public class NetworkUtilities {
 		builder.scheme(SCHEME);
 		builder.authority(OAUTH_AUTHORITY);
 		builder.appendEncodedPath(OAUTH_REQUEST_TOKEN_URI);
-		builder.appendQueryParameter("oauth_nonce", token);
-		builder.appendQueryParameter("oauth_timestamp", Long.toString(d.getTime()));
-		builder.appendQueryParameter("oauth_consumer_key", OAUTH_CONSUMER_KEY);
-		builder.appendQueryParameter("oauth_signature_method", OAUTH_SIGNATURE_METHOD);
-		builder.appendQueryParameter("oauth_signature", OAUTH_SHARED_SECRET + "&");
-		builder.appendQueryParameter("oauth_version", OAUTH_VERSION);
-		builder.appendQueryParameter("xoauth_lang_pref", OAUTH_LANG);
-		builder.appendQueryParameter("oauth_callback", OAUTH_CALLBACK);
+		builder.appendQueryParameter(Constants.OAUTH_NONCE_PROPERTY, token);
+		builder.appendQueryParameter(Constants.OAUTH_TIMESTAMP_PROPERTY, Long.toString(d.getTime()));
+		builder.appendQueryParameter(Constants.OAUTH_COMSUMER_KEY_PROPERTY, Constants.OAUTH_CONSUMER_KEY);
+		builder.appendQueryParameter(Constants.OAUTH_SIGNATURE_METHOD_PROPERTY, Constants.OAUTH_SIGNATURE_METHOD_PLAINTEXT);
+		builder.appendQueryParameter(Constants.OAUTH_SIGNATURE_PROPERTY, Constants.OAUTH_SHARED_SECRET + "&");
+		builder.appendQueryParameter(Constants.OAUTH_VERSION_PROPERTY, Constants.OAUTH_VERSION);
+		builder.appendQueryParameter(Constants.OAUTH_LANG_PREF_PROPERTY, Constants.OAUTH_LANG_PREF);
+		builder.appendQueryParameter(Constants.OAUTH_CALLBACK_PROPERTY, Constants.OAUTH_CALLBACK);
 	
 		Uri u = builder.build();
 
@@ -242,19 +232,19 @@ public class NetworkUtilities {
             	
             	String[] responseParams = response.split("&");
             	for(String s : responseParams){
-            		if(s.contains("oauth_token_secret=")){
+            		if(s.contains(Constants.OAUTH_TOKEN_SECRET_PROPERTY + "=")){
             			oauth_token_secret = s.split("=")[1];
             		}
-            		if(s.contains("oauth_expires_in=")){
+            		if(s.contains(Constants.OAUTH_EXPIRES_IN_PROPERTY + "=")){
             			oauth_expires_in = s.split("=")[1];
             		}
-            		if(s.contains("xoauth_request_auth_url=")){
+            		if(s.contains(Constants.OAUTH_REQUEST_AUTH_URL_PROPERTY + "=")){
             			xoauth_request_auth_url = s.split("=")[1];
             		}
-            		if(s.contains("oauth_token=")){
+            		if(s.contains(Constants.OAUTH_TOKEN_PROPERTY + "=")){
             			oauth_token = s.split("=")[1];
             		}
-            		if(s.contains("oauth_callback_confirmed=")){
+            		if(s.contains(Constants.OAUTH_CALLBACK_CONFIRMED_PROPERTY + "=")){
             			oauth_callback_confirmed = s.split("=")[1];
             		}
             	}
@@ -273,10 +263,12 @@ public class NetworkUtilities {
 		    	sendResult(lr, handler, context);
 		    	
             } else {
-
+            	sendResult(new LoginResult(false), handler, context);
+            	return false;
             }
         } catch (final IOException e) {
-
+        	sendResult(new LoginResult(false), handler, context);
+        	return false;
         } finally {
 
         }
@@ -284,8 +276,7 @@ public class NetworkUtilities {
     }
     
     /**
-     * Connects to the Voiper server, authenticates the provided username and
-     * password.
+     * Yahoo OAuth Authentication Step 2
      * 
      * @param username The user's username
      * @param password The user's password
@@ -307,16 +298,16 @@ public class NetworkUtilities {
 		builder.scheme(SCHEME);
 		builder.authority(OAUTH_AUTHORITY);
 		builder.appendEncodedPath(OAUTH_GET_TOKEN_URI);
-		builder.appendQueryParameter("oauth_nonce", nonceToken);
-		builder.appendQueryParameter("oauth_timestamp", Long.toString(d.getTime()));
-		builder.appendQueryParameter("oauth_consumer_key", OAUTH_CONSUMER_KEY);
-		builder.appendQueryParameter("oauth_signature_method", OAUTH_SIGNATURE_METHOD);
-		builder.appendQueryParameter("oauth_signature", OAUTH_SHARED_SECRET + "&" + tokenSecret);
-		builder.appendQueryParameter("oauth_version", OAUTH_VERSION);
-		builder.appendQueryParameter("xoauth_lang_pref", OAUTH_LANG);
-		builder.appendQueryParameter("oauth_callback", OAUTH_CALLBACK);
-		builder.appendQueryParameter("oauth_verifier", verifier);
-		builder.appendQueryParameter("oauth_token", token);
+		builder.appendQueryParameter(Constants.OAUTH_NONCE_PROPERTY, nonceToken);
+		builder.appendQueryParameter(Constants.OAUTH_TIMESTAMP_PROPERTY, Long.toString(d.getTime()));
+		builder.appendQueryParameter(Constants.OAUTH_COMSUMER_KEY_PROPERTY, Constants.OAUTH_CONSUMER_KEY);
+		builder.appendQueryParameter(Constants.OAUTH_SIGNATURE_METHOD_PROPERTY, Constants.OAUTH_SIGNATURE_METHOD_PLAINTEXT);
+		builder.appendQueryParameter(Constants.OAUTH_SIGNATURE_PROPERTY, Constants.OAUTH_SHARED_SECRET + "&" + tokenSecret);
+		builder.appendQueryParameter(Constants.OAUTH_VERSION_PROPERTY, Constants.OAUTH_VERSION);
+		builder.appendQueryParameter(Constants.OAUTH_LANG_PREF_PROPERTY, Constants.OAUTH_LANG_PREF);
+		builder.appendQueryParameter(Constants.OAUTH_CALLBACK_PROPERTY, Constants.OAUTH_CALLBACK);
+		builder.appendQueryParameter(Constants.OAUTH_VERIFIER_PROPERTY, verifier);
+		builder.appendQueryParameter(Constants.OAUTH_TOKEN_PROPERTY, token);
 	
 		Uri u = builder.build();
 
@@ -340,32 +331,25 @@ public class NetworkUtilities {
             	
             	String[] responseParams = response.split("&");
             	for(String s : responseParams){
-            		if(s.contains("oauth_token_secret=")){
+            		if(s.contains(Constants.OAUTH_TOKEN_SECRET_PROPERTY + "=")){
             			oauth_token_secret = s.split("=")[1];
             		}
-            		if(s.contains("oauth_expires_in=")){
+            		if(s.contains(Constants.OAUTH_EXPIRES_IN_PROPERTY + "=")){
             			oauth_expires_in = s.split("=")[1];
             		}
-            		if(s.contains("xoauth_yahoo_guid=")){
+            		if(s.contains(Constants.OAUTH_YAHOO_GUID_PROPERTY + "=")){
             			xoauth_yahoo_guid = s.split("=")[1];
             		}
-            		if(s.contains("oauth_token=")){
+            		if(s.contains(Constants.OAUTH_TOKEN_PROPERTY + "=")){
             			oauth_token = s.split("=")[1];
             		}
-            		if(s.contains("oauth_authorization_expires_in=")){
+            		if(s.contains(Constants.OAUTH_AUTHORIZATION_EXPIRES_IN_PROPERTY + "=")){
             			oauth_authorization_expires_in = s.split("=")[1];
             		}
-            		if(s.contains("oauth_session_handle=")){
+            		if(s.contains(Constants.OAUTH_SESSION_HANDLE_PROPERTY + "=")){
             			oauth_session_handle = s.split("=")[1];
             		}
             	}
-            	
-        		Log.d("oauth_token_secret", oauth_token_secret);
-        		Log.d("oauth_expires_in", oauth_expires_in);
-        		Log.d("xoauth_yahoo_guid", xoauth_yahoo_guid);
-        		Log.d("oauth_token", oauth_token);
-        		Log.d("oauth_authorization_expires_in", oauth_authorization_expires_in);
-        		Log.d("oauth_session_handle", oauth_session_handle);
         		
 		    	LoginResult lr = new LoginResult(true, oauth_token, oauth_token_secret,
 		    			oauth_session_handle, oauth_expires_in, oauth_authorization_expires_in,
@@ -374,10 +358,12 @@ public class NetworkUtilities {
 		    	sendResult(lr, handler, context);
 		    	
             } else {
-
+            	sendResult(new LoginResult(false), handler, context);
+            	return false;
             }
         } catch (final IOException e) {
-
+        	sendResult(new LoginResult(false), handler, context);
+        	return false;
         } finally {
 
         }
@@ -385,8 +371,7 @@ public class NetworkUtilities {
     }
 
     /**
-     * Connects to the Voiper server, authenticates the provided username and
-     * password.
+     * Refresh an OAuth access token
      * 
      * @param username The user's username
      * @param password The user's password
@@ -399,8 +384,8 @@ public class NetworkUtilities {
         final HttpResponse resp;
         
  	   	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
- 	   	String tokenSecret = settings.getString("oauth_token_secret", "");
- 	   	String sessionHandle = settings.getString("oauth_session_handle", "");
+ 	   	String tokenSecret = settings.getString(Constants.OAUTH_TOKEN_SECRET_PROPERTY, "");
+ 	   	String sessionHandle = settings.getString(Constants.OAUTH_SESSION_HANDLE_PROPERTY, "");
         
         Random r = new Random();
         String nonceToken = Long.toString(Math.abs(r.nextLong()), 36);
@@ -413,14 +398,14 @@ public class NetworkUtilities {
 		builder.scheme(SCHEME);
 		builder.authority(OAUTH_AUTHORITY);
 		builder.appendEncodedPath(OAUTH_GET_TOKEN_URI);
-		builder.appendQueryParameter("oauth_nonce", nonceToken);
-		builder.appendQueryParameter("oauth_timestamp", Long.toString(d.getTime()));
-		builder.appendQueryParameter("oauth_consumer_key", OAUTH_CONSUMER_KEY);
-		builder.appendQueryParameter("oauth_signature_method", OAUTH_SIGNATURE_METHOD);
-		builder.appendQueryParameter("oauth_signature", OAUTH_SHARED_SECRET + "&" + tokenSecret);
-		builder.appendQueryParameter("oauth_version", OAUTH_VERSION);
-		builder.appendQueryParameter("oauth_session_handle", sessionHandle);
-		builder.appendQueryParameter("oauth_token", token);
+		builder.appendQueryParameter(Constants.OAUTH_NONCE_PROPERTY, nonceToken);
+		builder.appendQueryParameter(Constants.OAUTH_TIMESTAMP_PROPERTY, Long.toString(d.getTime()));
+		builder.appendQueryParameter(Constants.OAUTH_COMSUMER_KEY_PROPERTY, Constants.OAUTH_CONSUMER_KEY);
+		builder.appendQueryParameter(Constants.OAUTH_SIGNATURE_METHOD_PROPERTY, Constants.OAUTH_SIGNATURE_METHOD_PLAINTEXT);
+		builder.appendQueryParameter(Constants.OAUTH_SIGNATURE_PROPERTY, Constants.OAUTH_SHARED_SECRET + "&" + tokenSecret);
+		builder.appendQueryParameter(Constants.OAUTH_VERSION_PROPERTY, Constants.OAUTH_VERSION);
+		builder.appendQueryParameter(Constants.OAUTH_SESSION_HANDLE_PROPERTY, sessionHandle);
+		builder.appendQueryParameter(Constants.OAUTH_TOKEN_PROPERTY, token);
 	
 		Uri u = builder.build();
 
@@ -438,15 +423,13 @@ public class NetworkUtilities {
             Log.d("Refresh Token Response", response);
             
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {      
-            	
-            	
-            	
+
             	String[] responseParams = response.split("&");
             	for(String s : responseParams){
-            		if(s.contains("oauth_token=")){
+            		if(s.contains(Constants.OAUTH_TOKEN_PROPERTY + "=")){
             			token = s.split("=")[1];
             		}
-            		if(s.contains("oauth_token_secret=")){
+            		if(s.contains(Constants.OAUTH_TOKEN_SECRET_PROPERTY + "=")){
             			tokenSecret = s.split("=")[1];
             		}
             	}
@@ -465,7 +448,6 @@ public class NetworkUtilities {
         }
         return result;
     }
-    
     
     /**
      * Sends the authentication response from server back to the caller main UI
@@ -534,9 +516,7 @@ public class NetworkUtilities {
         final String response = EntityUtils.toString(resp.getEntity());
 
         if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            // Succesfully connected to the samplesyncadapter server and
-            // authenticated.
-            // Extract friends data in json format.
+
             final JSONArray friends = new JSONArray(response);
             Log.d(TAG, response);
             for (int i = 0; i < friends.length(); i++) {
@@ -544,8 +524,7 @@ public class NetworkUtilities {
             }
         } else {
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-                Log.e(TAG,
-                    "Authentication exception in fetching remote contacts");
+                Log.e(TAG, "Authentication exception in fetching remote contacts");
                 throw new AuthenticationException();
             } else {
                 Log.e(TAG, "Server error in fetching remote contacts: "
@@ -576,9 +555,7 @@ public class NetworkUtilities {
         final String response = EntityUtils.toString(resp.getEntity());
 
         if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            // Succesfully connected to the samplesyncadapter server and
-            // authenticated.
-            // Extract friends data in json format.
+
             final JSONArray statuses = new JSONArray(response);
             Log.d(TAG, response);
             for (int i = 0; i < statuses.length(); i++) {
@@ -586,8 +563,7 @@ public class NetworkUtilities {
             }
         } else {
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-                Log.e(TAG,
-                    "Authentication exception in fetching friend status list");
+                Log.e(TAG, "Authentication exception in fetching friend status list");
                 throw new AuthenticationException();
             } else {
                 Log.e(TAG, "Server error in fetching friend status list");
@@ -618,9 +594,7 @@ public class NetworkUtilities {
         final String response = EntityUtils.toString(resp.getEntity());
 
         if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            // Succesfully connected to the samplesyncadapter server and
-            // authenticated.
-            // Extract friends data in json format.
+
             final JSONObject tags = new JSONObject(response);
             Iterator<?> i = tags.keys();
             while(i.hasNext()){
@@ -633,8 +607,7 @@ public class NetworkUtilities {
 
         } else {
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-                Log.e(TAG,
-                    "Authentication exception in fetching friend status list");
+                Log.e(TAG, "Authentication exception in fetching friend status list");
                 throw new AuthenticationException();
             } else {
                 Log.e(TAG, "Server error in fetching friend status list");
@@ -665,9 +638,7 @@ public class NetworkUtilities {
         final String response = EntityUtils.toString(resp.getEntity());
 
         if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            // Succesfully connected to the samplesyncadapter server and
-            // authenticated.
-            // Extract friends data in json format.
+
             final JSONArray bookmarks = new JSONArray(response);
             Log.d(TAG, response);
             
@@ -676,8 +647,7 @@ public class NetworkUtilities {
             }            
         } else {
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-                Log.e(TAG,
-                    "Authentication exception in fetching friend status list");
+                Log.e(TAG, "Authentication exception in fetching friend status list");
                 throw new AuthenticationException();
             } else {
                 Log.e(TAG, "Server error in fetching friend status list");
@@ -701,49 +671,6 @@ public class NetworkUtilities {
     	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
     		Log.d("addBookmarks()", "oauth");
     		String tokenSecret = settings.getString("oauth_token_secret", "");
-
-            Random r = new Random();
-            String token = Long.toString(Math.abs(r.nextLong()), 36);
-            
-            Date d = new Date();
-            String timestamp = Long.toString(d.getTime() / 1000);
-    		
-    		StringBuilder sb = new StringBuilder();
-    		sb.append("GET");
-    		sb.append("&http%3A%2F%2Fapi.del.icio.us%2Fv2%2Fposts%2Fadd");
-    		sb.append("&description%3D");
-    		sb.append(URLEncoder.encode(bookmark.getDescription()));
-    		sb.append("%26extended%3D");
-    		sb.append(URLEncoder.encode(bookmark.getNotes()));
-    		sb.append("%26oauth_consumer_key%3D");
-    		sb.append(URLEncoder.encode(OAUTH_CONSUMER_KEY));
-    		sb.append("%26oauth_nonce%3D");
-    		sb.append(URLEncoder.encode(token));
-    		sb.append("%26oauth_signature_method%3D");
-    		sb.append(URLEncoder.encode("HMAC-SHA1"));
-    		sb.append("%26oauth_timestamp%3D");
-    		sb.append(URLEncoder.encode(timestamp));
-    		sb.append("%26oauth_token%3D");
-    		sb.append(URLEncoder.encode(authtoken));
-    		sb.append("%26oauth_version%3D");
-    		sb.append(URLEncoder.encode(OAUTH_VERSION));
-    		sb.append("%26url%3D");
-    		sb.append(URLEncoder.encode("www.yahoo.com"));
-    		
-    		Log.d("base string", sb.toString());
-    		
-    		String keystring = OAUTH_SHARED_SECRET + "&" + tokenSecret;
-    	
-    		Log.d("key string", keystring);
-    		
-    		SecretKeySpec sha1key = new SecretKeySpec(keystring.getBytes(), "HmacSHA1");
-    		Mac mac = Mac.getInstance("HmacSHA1");
-    		mac.init(sha1key);
-    		
-    		byte[] sigBytes = mac.doFinal(sb.toString().getBytes());
-    		String signature = Base64.encodeToString(sigBytes, Base64.NO_WRAP);
-    		
-    		Log.d("signature", signature);
     		
 			Uri.Builder builder = new Uri.Builder();
 			builder.scheme(SCHEME_HTTP);
@@ -751,43 +678,28 @@ public class NetworkUtilities {
 			builder.appendEncodedPath(OAUTH_ADD_BOOKMARKS_URI);
 			builder.appendQueryParameter("description", bookmark.getDescription());
 			builder.appendQueryParameter("extended", bookmark.getNotes());
-			builder.appendQueryParameter("url", URLEncoder.encode("www.yahoo.com"));
+			builder.appendQueryParameter("url", URLEncoder.encode(bookmark.getUrl()));
 		
 			Uri u = builder.build();
 			Log.d("URI", u.toString());
 			HttpGet post = new HttpGet(u.toString());
 			HttpHost host = new HttpHost(DELICIOUS_AUTHORITY);
 			
-    		StringBuilder sb2 = new StringBuilder();
-    		sb2.append("OAuth ");
-    		sb2.append("realm=");
-    		sb2.append("\"yahooapis.com\"");
-    		sb2.append(",oauth_consumer_key=");
-    		sb2.append("\"" + OAUTH_CONSUMER_KEY + "\"");
-    		sb2.append(",oauth_nonce=");
-    		sb2.append("\"" + token + "\"");
-    		sb2.append(",oauth_signature=");
-    		sb2.append("\"" + signature + "\"");
-    		sb2.append(",oauth_signature_method=");
-    		sb2.append("\"" + "HMAC-SHA1" + "\"");
-    		sb2.append(",oauth_timestamp=");
-    		sb2.append("\"" + timestamp + "\"");
-    		sb2.append(",oauth_token=");
-    		sb2.append("\"" + authtoken + "\"");
-    		sb2.append(",oauth_version=");
-    		sb2.append("\"" + OAUTH_VERSION + "\"");
-
-
+			TreeMap<String, String> params = new TreeMap<String, String>();
+			params.put("description", bookmark.getDescription());
+			params.put("extended", bookmark.getNotes());
+			params.put("url", bookmark.getUrl());
 			
-			post.setHeader("Authorization", sb2.toString());
-			Log.d("header", sb2.toString());
+			
+			OauthUtilities.signRequest(post, params, authtoken, tokenSecret);
+
+			Log.d("header", post.getHeaders("Authorization")[0].getValue());
     		
 	        maybeCreateHttpClient();
 	        
 	        final HttpResponse resp = mHttpClient.execute(host, post);
 	        response = EntityUtils.toString(resp.getEntity());
-	        
-    		
+
     	} else{
     		Log.d("addBookmarks()", "delicious");
 			Uri.Builder builder = new Uri.Builder();

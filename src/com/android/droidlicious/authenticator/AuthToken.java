@@ -1,20 +1,12 @@
 package com.android.droidlicious.authenticator;
 
-import java.io.IOException;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.droidlicious.Constants;
-import com.android.droidlicious.client.NetworkUtilities;
-import com.android.droidlicious.client.TokenRejectedException;
 
 public class AuthToken {
 
@@ -38,7 +30,6 @@ public class AuthToken {
 			mAccountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, mToken);
 			mToken = mAccountManager.blockingGetAuthToken(mAccount, Constants.AUTHTOKEN_TYPE, false);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return mToken;
@@ -58,14 +49,12 @@ public class AuthToken {
 						mAccountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, mToken);
 						mToken = mAccountManager.blockingGetAuthToken(mAccount, Constants.AUTHTOKEN_TYPE, false);
 						
-						
 						mHandler.sendMessage(mHandler.obtainMessage(1, mToken));
 					}
 					catch(Exception e){
 						Log.d("authtokene", "blah");
 					}
 					return;
-					
 				}	
 			});
 

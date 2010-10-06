@@ -192,9 +192,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         Log.i(TAG, "finishLogin()");
         final Account account = new Account(mUsername, Constants.ACCOUNT_TYPE);
 
-        if(authToken == null || authToken == ""){
-        	mPassword = mPassword;
-        } else {
+        if(authToken != null && authToken != ""){
         	mPassword = authToken;
         }
         
@@ -264,9 +262,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             SharedPreferences settings = getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
             
-            editor.putString("oauth_token", result.getAccessToken());
-            editor.putString("oauth_token_secret", result.getTokenSecret());
-            editor.putString("oauth_session_handle", result.getSessionHandle());
+            editor.putString(Constants.OAUTH_TOKEN_PROPERTY, result.getAccessToken());
+            editor.putString(Constants.OAUTH_TOKEN_SECRET_PROPERTY, result.getTokenSecret());
+            editor.putString(Constants.OAUTH_SESSION_HANDLE_PROPERTY, result.getSessionHandle());
             editor.putString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_OAUTH);
             editor.commit();
 
@@ -309,11 +307,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent){
         super.onActivityResult(requestCode, resultCode, intent);
         Bundle extras = intent.getExtras();
-        oauthVerifier = extras.getString("oauth_verifier");
+        oauthVerifier = extras.getString(Constants.OAUTH_VERIFIER_PROPERTY);
         Log.d("oauth_verifier", oauthVerifier);
         
         getOauthAccessToken();
-        
     }
 
     /**

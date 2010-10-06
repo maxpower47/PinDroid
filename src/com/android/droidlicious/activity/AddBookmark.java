@@ -4,18 +4,15 @@ import com.android.droidlicious.Constants;
 import com.android.droidlicious.R;
 import com.android.droidlicious.authenticator.AuthToken;
 import com.android.droidlicious.client.NetworkUtilities;
-import com.android.droidlicious.client.TokenRejectedException;
 import com.android.droidlicious.client.User;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AccountManagerFuture;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;

@@ -32,7 +32,6 @@ public class BrowseTags extends DroidliciousBaseActivity {
 		setContentView(R.layout.browse_tags);
 		
 		ArrayList<User.Tag> tagList = new ArrayList<User.Tag>();
-		String authtoken = null;
 		
 		mAccountManager = AccountManager.get(this);
 		Account[] al = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
@@ -43,8 +42,6 @@ public class BrowseTags extends DroidliciousBaseActivity {
 			else username = al[0].name;
 			
 			try{	
-				//authtoken = mAccountManager.blockingGetAuthToken(al[0], Constants.AUTHTOKEN_TYPE, true);
-			
 				tagList = NetworkUtilities.fetchTags(username, al[0], "");
 				
 				setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
@@ -58,7 +55,6 @@ public class BrowseTags extends DroidliciousBaseActivity {
 			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
 			    	
-			    	
 					Intent i = new Intent(parent.getContext(), BrowseBookmarks.class);
 					i.putExtra("tagname", tagName);
 					i.putExtra("username", username);
@@ -66,14 +62,9 @@ public class BrowseTags extends DroidliciousBaseActivity {
 					startActivity(i);
 			    }
 			});
-
 		}
 		else{
 			Toast.makeText(getApplicationContext(), "blah", Toast.LENGTH_SHORT).show();
-			
 		}
 	}
-	
-
-	
 }
