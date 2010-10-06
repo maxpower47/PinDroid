@@ -224,41 +224,8 @@ public class NetworkUtilities {
             final String response = EntityUtils.toString(resp.getEntity());
             
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            	String oauth_token_secret = "";
-            	String oauth_expires_in = "";
-            	String xoauth_request_auth_url = "";
-            	String oauth_token = "";
-            	String oauth_callback_confirmed = "";
-            	
-            	String[] responseParams = response.split("&");
-            	for(String s : responseParams){
-            		if(s.contains(Constants.OAUTH_TOKEN_SECRET_PROPERTY + "=")){
-            			oauth_token_secret = s.split("=")[1];
-            		}
-            		if(s.contains(Constants.OAUTH_EXPIRES_IN_PROPERTY + "=")){
-            			oauth_expires_in = s.split("=")[1];
-            		}
-            		if(s.contains(Constants.OAUTH_REQUEST_AUTH_URL_PROPERTY + "=")){
-            			xoauth_request_auth_url = s.split("=")[1];
-            		}
-            		if(s.contains(Constants.OAUTH_TOKEN_PROPERTY + "=")){
-            			oauth_token = s.split("=")[1];
-            		}
-            		if(s.contains(Constants.OAUTH_CALLBACK_CONFIRMED_PROPERTY + "=")){
-            			oauth_callback_confirmed = s.split("=")[1];
-            		}
-            	}
-            	
-        		Log.d("oauth_token_secret", oauth_token_secret);
-        		Log.d("oauth_expires_in", oauth_expires_in);
-        		Log.d("xoauth_request_auth_url", xoauth_request_auth_url);
-        		Log.d("oauth_token", oauth_token);
-        		Log.d("oauth_callback_confirmed", oauth_callback_confirmed);
-            	
-		    	String link = URLDecoder.decode(xoauth_request_auth_url);
 
-		    	LoginResult lr = new LoginResult(true, oauth_token_secret, oauth_expires_in,
-		    			link, oauth_token, oauth_callback_confirmed);
+		    	LoginResult lr = new LoginResult(true, response);
 		    	
 		    	sendResult(lr, handler, context);
 		    	
@@ -322,38 +289,8 @@ public class NetworkUtilities {
             final String response = EntityUtils.toString(resp.getEntity());
             
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            	String oauth_token_secret = "";
-            	String oauth_expires_in = "";
-            	String xoauth_yahoo_guid = "";
-            	String oauth_token = "";
-            	String oauth_authorization_expires_in = "";
-            	String oauth_session_handle = "";
-            	
-            	String[] responseParams = response.split("&");
-            	for(String s : responseParams){
-            		if(s.contains(Constants.OAUTH_TOKEN_SECRET_PROPERTY + "=")){
-            			oauth_token_secret = s.split("=")[1];
-            		}
-            		if(s.contains(Constants.OAUTH_EXPIRES_IN_PROPERTY + "=")){
-            			oauth_expires_in = s.split("=")[1];
-            		}
-            		if(s.contains(Constants.OAUTH_YAHOO_GUID_PROPERTY + "=")){
-            			xoauth_yahoo_guid = s.split("=")[1];
-            		}
-            		if(s.contains(Constants.OAUTH_TOKEN_PROPERTY + "=")){
-            			oauth_token = s.split("=")[1];
-            		}
-            		if(s.contains(Constants.OAUTH_AUTHORIZATION_EXPIRES_IN_PROPERTY + "=")){
-            			oauth_authorization_expires_in = s.split("=")[1];
-            		}
-            		if(s.contains(Constants.OAUTH_SESSION_HANDLE_PROPERTY + "=")){
-            			oauth_session_handle = s.split("=")[1];
-            		}
-            	}
-        		
-		    	LoginResult lr = new LoginResult(true, oauth_token, oauth_token_secret,
-		    			oauth_session_handle, oauth_expires_in, oauth_authorization_expires_in,
-		    			xoauth_yahoo_guid);
+
+            	LoginResult lr = new LoginResult(true, response);
 		    	
 		    	sendResult(lr, handler, context);
 		    	
@@ -423,20 +360,10 @@ public class NetworkUtilities {
             Log.d("Refresh Token Response", response);
             
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {      
-
-            	String[] responseParams = response.split("&");
-            	for(String s : responseParams){
-            		if(s.contains(Constants.OAUTH_TOKEN_PROPERTY + "=")){
-            			token = s.split("=")[1];
-            		}
-            		if(s.contains(Constants.OAUTH_TOKEN_SECRET_PROPERTY + "=")){
-            			tokenSecret = s.split("=")[1];
-            		}
-            	}
             	
         		Log.d("new token", token);
-        		
-        		result = new LoginResult(true, token, tokenSecret);
+
+        		result = new LoginResult(true, response);
 
             } else {
 
@@ -657,7 +584,7 @@ public class NetworkUtilities {
         return bookmarkList;
     }
     
-    public static Boolean addBookmarks(User.Bookmark bookmark, Account account,
+    public static Boolean addBookmark(User.Bookmark bookmark, Account account,
         String authtoken, Context context) throws Exception {
 
     	Log.d("addBookmarks()", "start");

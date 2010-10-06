@@ -237,7 +237,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         Log.i(TAG, "onAuthenticationResult(" + result + ")");
         // Hide the progress dialog
         hideProgress();
-        if (result.getResult() && result.getToken() == "" && result.getAccessToken() == "") {
+        if (result.getResult() && result.getToken() == null && result.getSessionHandle() == null) {
             if (!mConfirmCredentials) {
                 SharedPreferences settings = getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
                 SharedPreferences.Editor editor = settings.edit();
@@ -248,7 +248,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             } else {
                 finishConfirmCredentials(true);
             }
-        } else if(result.getResult() && result.getToken() != "" && result.getAccessToken() == ""){
+        } else if(result.getResult() && result.getToken() != null && result.getSessionHandle() == null){
         	oauthToken = result.getToken();
         	oauthTokenSecret = result.getTokenSecret();
         	
@@ -256,20 +256,19 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         	i.putExtra("oauth_url", result.getRequestUrl());
         	startActivityForResult(i, 0);
 
-        } else if(result.getResult() && result.getAccessToken() != ""){
-        	Log.d(TAG, result.getAccessToken());
+        } else if(result.getResult() && result.getSessionHandle() != null){
+        	Log.d(TAG, result.getToken());
         	
             SharedPreferences settings = getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
             
-            editor.putString(Constants.OAUTH_TOKEN_PROPERTY, result.getAccessToken());
+            editor.putString(Constants.OAUTH_TOKEN_PROPERTY, result.getToken());
             editor.putString(Constants.OAUTH_TOKEN_SECRET_PROPERTY, result.getTokenSecret());
             editor.putString(Constants.OAUTH_SESSION_HANDLE_PROPERTY, result.getSessionHandle());
             editor.putString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_OAUTH);
             editor.commit();
 
-        	
-        	finishLogin(result.getAccessToken());
+        	finishLogin(result.getToken());
 
         }else {
             Log.e(TAG, "onAuthenticationResult: failed to authenticate");

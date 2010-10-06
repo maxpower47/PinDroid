@@ -71,7 +71,7 @@ public class OauthUtilities {
 		authHeader.append("OAuth realm=\"yahooapis.com\"");
 		authHeader.append("," + Constants.OAUTH_COMSUMER_KEY_PROPERTY + "=");
 		authHeader.append("\"" + Constants.OAUTH_CONSUMER_KEY + "\"");
-		authHeader.append("," + Constants.OAUTH_COMSUMER_KEY_PROPERTY + "=");
+		authHeader.append("," + Constants.OAUTH_NONCE_PROPERTY + "=");
 		authHeader.append("\"" + nonce + "\"");
 		authHeader.append("," + Constants.OAUTH_SIGNATURE_PROPERTY + "=");
 		authHeader.append("\"" + signature + "\"");

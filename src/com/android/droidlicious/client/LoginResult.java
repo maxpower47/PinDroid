@@ -1,17 +1,21 @@
 package com.android.droidlicious.client;
 
+import java.net.URLDecoder;
+
+import com.android.droidlicious.Constants;
+
 public class LoginResult {
 
 	private final Boolean result;
-	private final String oauth_token_secret;
-	private final String oauth_expires_in;
-	private final String xoauth_request_auth_url;
-	private final String oauth_token;
-	private final String oauth_access_token;
-	private final String oauth_session_handle;
-	private final String oauth_authorization_expires_in;
-	private final String xoauth_yahoo_guid;
-	private final String oauth_callback_confirmed;
+	private String oauth_token_secret = null;
+	private String oauth_expires_in = null;
+	private String xoauth_request_auth_url = null;
+	private String oauth_token = null;
+	private String oauth_access_token = null;
+	private String oauth_session_handle = null;
+	private String oauth_authorization_expires_in = null;
+	private String xoauth_yahoo_guid = null;
+	private String oauth_callback_confirmed = null;
 	
 	public Boolean getResult(){
 		return result;
@@ -55,55 +59,38 @@ public class LoginResult {
 	
 	LoginResult(Boolean r){
 		result = r;
-		oauth_token_secret = "";
-		oauth_expires_in = "";
-		xoauth_request_auth_url = "";
-		oauth_token = "";
-		oauth_callback_confirmed = "";
-		oauth_access_token = "";
-		oauth_session_handle = "";
-		oauth_authorization_expires_in = "";
-		xoauth_yahoo_guid = "";
 	}
 	
-	LoginResult(Boolean r, String token, String tokenSecret){
+	LoginResult(Boolean r, String response){
 		result = r;
-		oauth_token_secret = tokenSecret;
-		oauth_expires_in = "";
-		xoauth_request_auth_url = "";
-		oauth_token = token;
-		oauth_callback_confirmed = "";
-		oauth_access_token = "";
-		oauth_session_handle = "";
-		oauth_authorization_expires_in = "";
-		xoauth_yahoo_guid = "";
-	}
-	
-	LoginResult(Boolean r, String accessToken, String tokenSecret, String session, String expiration, 
-			String sessionExpires, String uid){
-		result = r;
-		oauth_access_token = accessToken;
-		oauth_token_secret = tokenSecret;
-		oauth_expires_in = expiration;
-		xoauth_request_auth_url = "";
-		oauth_token = "";
-		oauth_callback_confirmed = "";
-		oauth_session_handle = session;
-		oauth_authorization_expires_in = sessionExpires;
-		xoauth_yahoo_guid = uid;
-	}
-	
-	LoginResult(Boolean r, String ots, String oei, String orau, String ot, String occ){
-		result = r;
-		oauth_token_secret = ots;
-		oauth_expires_in = oei;
-		xoauth_request_auth_url = orau;
-		oauth_token = ot;
-		oauth_callback_confirmed = occ;
-		oauth_access_token = "";
-		oauth_session_handle = "";
-		oauth_authorization_expires_in = "";
-		xoauth_yahoo_guid = "";
+		
+    	String[] responseParams = response.split("&");
+    	for(String s : responseParams){
+    		if(s.contains(Constants.OAUTH_TOKEN_SECRET_PROPERTY + "=")){
+    			oauth_token_secret = s.split("=")[1];
+    		}
+    		if(s.contains(Constants.OAUTH_EXPIRES_IN_PROPERTY + "=")){
+    			oauth_expires_in = s.split("=")[1];
+    		}
+    		if(s.contains(Constants.OAUTH_REQUEST_AUTH_URL_PROPERTY + "=")){
+    			xoauth_request_auth_url = URLDecoder.decode(s.split("=")[1]);
+    		}
+    		if(s.contains(Constants.OAUTH_TOKEN_PROPERTY + "=")){
+    			oauth_token = s.split("=")[1];
+    		}
+    		if(s.contains(Constants.OAUTH_CALLBACK_CONFIRMED_PROPERTY + "=")){
+    			oauth_callback_confirmed = s.split("=")[1];
+    		}
+    		if(s.contains(Constants.OAUTH_YAHOO_GUID_PROPERTY + "=")){
+    			xoauth_yahoo_guid = s.split("=")[1];
+    		}
+    		if(s.contains(Constants.OAUTH_AUTHORIZATION_EXPIRES_IN_PROPERTY + "=")){
+    			oauth_authorization_expires_in = s.split("=")[1];
+    		}
+    		if(s.contains(Constants.OAUTH_SESSION_HANDLE_PROPERTY + "=")){
+    			oauth_session_handle = s.split("=")[1];
+    		}
+    	}
 	}
 	
 	

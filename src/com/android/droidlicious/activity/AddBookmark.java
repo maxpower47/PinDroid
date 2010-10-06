@@ -69,7 +69,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
         	Boolean success = false;
         	authtoken = (String)msg.obj;
     		try {
-    			success = NetworkUtilities.addBookmarks(bookmark, account, authtoken, context);
+    			success = NetworkUtilities.addBookmark(bookmark, account, authtoken, context);
     		} catch (Exception e) {
     			e.printStackTrace();
     		}

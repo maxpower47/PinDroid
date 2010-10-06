@@ -109,5 +109,5 @@
         	
     </application>
     <uses-sdk
-        android:minSdkVersion="5" />
+        android:minSdkVersion="8" />
 </manifest>
