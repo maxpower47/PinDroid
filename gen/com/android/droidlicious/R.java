@@ -34,9 +34,9 @@ public final class R {
         public static final int menu_settings=0x7f07001a;
         public static final int message=0x7f070009;
         public static final int message_bottom=0x7f07000d;
-        public static final int oauth_ok_button=0x7f070013;
-        public static final int oauth_token_edit_url=0x7f070012;
-        public static final int oauth_webview=0x7f070014;
+        public static final int oauth_ok_button=0x7f070014;
+        public static final int oauth_token_edit_url=0x7f070013;
+        public static final int oauth_webview=0x7f070012;
         public static final int ok_button=0x7f070011;
         public static final int password_edit=0x7f07000c;
         public static final int tag_count=0x7f070017;
