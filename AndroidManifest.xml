@@ -74,29 +74,33 @@
                 android:resource="@xml/authenticator" />
         </service>
         <service
-            android:name=".syncadapter.SyncService"
+            android:name=".syncadapter.ContactSyncService"
             android:exported="true">
             <intent-filter>
-                <action
-                    android:name="android.content.SyncAdapter" />
+                <action android:name="android.content.SyncAdapter" />
             </intent-filter>
             <meta-data
                 android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter" />
+                android:resource="@xml/contactsyncadapter" />
             <meta-data
                 android:name="android.provider.CONTACTS_STRUCTURE"
                 android:resource="@xml/contacts" />
+        </service>
+        <service
+            android:name=".syncadapter.BookmarkSyncService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/bookmarksyncadapter" />
         </service>
         <activity
             android:name=".authenticator.AuthenticatorActivity"
             android:label="@string/ui_activity_title"
             android:theme="@android:style/Theme.Dialog"
-            android:excludeFromRecents="true"
-            >
-            <!--
-                No intent-filter here! This activity is only ever launched by
-                someone who explicitly knows the class name
-            -->
+            android:excludeFromRecents="true">
         </activity>
         <activity
         	android:name=".activity.Profile">
@@ -106,7 +110,9 @@
         		<data android:mimeType="vnd.android.cursor.item/vnd.droidlicious.profile" />
         	</intent-filter>
         </activity>
-        	
+        <provider
+        	android:name="com.android.droidlicious.providers.BookmarkContentProvider"
+        	android:authorities="com.android.droidlicious.providers.BookmarkContentProvider" />
     </application>
     <uses-sdk
         android:minSdkVersion="8" />

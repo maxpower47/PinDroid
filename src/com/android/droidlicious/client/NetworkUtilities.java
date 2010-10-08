@@ -46,8 +46,13 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,6 +60,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.TreeMap;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 /**
  * Provides utility methods for communicating with the server.
@@ -68,9 +78,15 @@ public class NetworkUtilities {
     public static final int REGISTRATION_TIMEOUT = 30 * 1000; // ms
 
     public static final String FETCH_FRIEND_UPDATES_URI = "http://feeds.delicious.com/v2/json/networkmembers/";
+    public static final String FETCH_FRIEND_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/";
     public static final String FETCH_STATUS_URI = "http://feeds.delicious.com/v2/json/network/";
     public static final String FETCH_TAGS_URI = "http://feeds.delicious.com/v2/json/tags/";
-    public static final String FETCH_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/";
+    public static final String FETCH_BOOKMARKS_URI_OAUTH = "http://api.del.icio.us/v2/posts/";
+    public static final String FETCH_BOOKMARKS_URI_DELICIOUS = "https://api.del.icio.us/v1/posts/";
+    public static final String FETCH_CHANGED_BOOKMARKS_URI_OAUTH = "http://api.del.icio.us/v2/posts/all?hashes";
+    public static final String FETCH_CHANGED_BOOKMARKS_URI_DELICIOUS = "https://api.del.icio.us/v1/posts/all?hashes";
+    public static final String FETCH_BOOKMARK_URI_OAUTH = "http://api.del.icio.us/v2/posts/get";
+    public static final String FETCH_BOOKMARK_URI_DELICIOUS = "https://api.del.icio.us/v1/posts/get";
     public static final String ADD_BOOKMARKS_URI = "v1/posts/add";
     public static final String OAUTH_ADD_BOOKMARKS_URI = "v2/posts/add";
     private static DefaultHttpClient mHttpClient;
@@ -544,18 +560,17 @@ public class NetworkUtilities {
     }
     
     /**
-     * Fetches status messages for the user's friends from the server
+     * Fetches users bookmarks
      * 
      * @param account The account being synced.
      * @param authtoken The authtoken stored in the AccountManager for the
      *        account
      * @return list The list of bookmarks received from the server.
      */
-    public static ArrayList<User.Bookmark> fetchBookmarks(String userName, String tagName, Account account,
-        String authtoken) throws JSONException, ParseException, IOException,
-        AuthenticationException {
+    public static ArrayList<User.Bookmark> fetchFriendBookmarks(String userName, String tagName)
+    	throws JSONException, ParseException, IOException, AuthenticationException {
 
-        final HttpGet post = new HttpGet(FETCH_BOOKMARKS_URI + userName + "/" + tagName + "?count=100");
+        final HttpGet post = new HttpGet(FETCH_FRIEND_BOOKMARKS_URI + userName + "/" + tagName + "?count=100");
         maybeCreateHttpClient();
         
         final ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
@@ -570,13 +585,278 @@ public class NetworkUtilities {
             
             for (int i = 0; i < bookmarks.length(); i++) {
                 bookmarkList.add(User.Bookmark.valueOf(bookmarks.getJSONObject(i)));
-            }            
+            }
         } else {
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
                 Log.e(TAG, "Authentication exception in fetching friend status list");
                 throw new AuthenticationException();
             } else {
                 Log.e(TAG, "Server error in fetching friend status list");
+                throw new IOException();
+            }
+        }
+        return bookmarkList;
+    }
+    
+    /**
+     * Fetches users bookmarks
+     * 
+     * @param account The account being synced.
+     * @param authtoken The authtoken stored in the AccountManager for the
+     *        account
+     * @return list The list of bookmarks received from the server.
+     */
+    public static ArrayList<User.Bookmark> fetchMyBookmarks(String userName, String tagName, Account account,
+        String authtoken, Context context, Boolean all) throws JSONException, ParseException, IOException,
+        AuthenticationException {
+
+    	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+    	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
+    	
+    	HttpResponse resp = null;
+    	final ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+    	
+    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
+    		
+        	String bookmarkUri = FETCH_BOOKMARKS_URI_OAUTH;
+        	if(tagName != null && tagName != ""){
+        		bookmarkUri += "?tag=" + tagName;
+        	}
+        	if(all){
+        		bookmarkUri += "all?meta=yes";
+        	} else {
+        		bookmarkUri += "recent";
+        	}
+    	
+	        final HttpGet post = new HttpGet(bookmarkUri);
+	        maybeCreateHttpClient();
+
+	        resp = mHttpClient.execute(post);
+    	}
+    	else {
+    	
+        	String bookmarkUri = FETCH_BOOKMARKS_URI_DELICIOUS;
+        	if(tagName != null && tagName != ""){
+        		bookmarkUri += "?tag=" + tagName;
+        	}
+        	if(all){
+        		bookmarkUri += "all?meta=yes";
+        	} else {
+        		bookmarkUri += "recent";
+        	}
+
+	        final HttpGet post = new HttpGet(bookmarkUri);
+	        maybeCreateHttpClient();
+	        
+	        CredentialsProvider provider = mHttpClient.getCredentialsProvider();
+	        Credentials credentials = new UsernamePasswordCredentials(userName, authtoken);
+	        provider.setCredentials(SCOPE, credentials);
+
+	        resp = mHttpClient.execute(post);
+    	}
+
+    	final String response = EntityUtils.toString(resp.getEntity());
+    	
+        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+
+            XPath xpath = XPathFactory.newInstance().newXPath();
+            String expression = "/posts/post";
+            InputSource inputSource = new InputSource(new StringReader(response));
+            try {
+				NodeList nodes = (NodeList)xpath.evaluate(expression, inputSource, XPathConstants.NODESET);
+				
+				for(int i = 0; i < nodes.getLength(); i++){
+					String url = nodes.item(i).getAttributes().getNamedItem("href").getTextContent();
+					String title = nodes.item(i).getAttributes().getNamedItem("description").getTextContent();
+					String notes = nodes.item(i).getAttributes().getNamedItem("extended").getTextContent();
+					String tags = nodes.item(i).getAttributes().getNamedItem("tag").getTextContent();
+					String hash = nodes.item(i).getAttributes().getNamedItem("hash").getTextContent();
+					String meta = nodes.item(i).getAttributes().getNamedItem("meta").getTextContent();
+					bookmarkList.add(new User.Bookmark(url, title, notes, tags, hash, meta));
+					
+					Log.d("url", url);
+				}
+				
+			} catch (XPathExpressionException e) {
+				e.printStackTrace();
+			}
+         
+        } else {
+            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+                Log.e(TAG, "Authentication exception in fetching friend status list");
+                throw new AuthenticationException();
+            } else {
+                Log.e(TAG, "Server error in fetching bookmark list");
+                Log.d(TAG, Integer.toString(resp.getStatusLine().getStatusCode()));
+                throw new IOException();
+            }
+        }
+        return bookmarkList;
+    }
+    
+    /**
+     * Fetches users bookmarks
+     * 
+     * @param account The account being synced.
+     * @param authtoken The authtoken stored in the AccountManager for the
+     *        account
+     * @return list The list of bookmarks received from the server.
+     */
+    public static ArrayList<User.Bookmark> fetchChangedBookmarks(String userName, Account account,
+        String authtoken, Context context) throws JSONException, ParseException, IOException,
+        AuthenticationException {
+
+    	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+    	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
+    	
+    	HttpResponse resp = null;
+    	final ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+    	
+    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
+    		
+        	String bookmarkUri = FETCH_CHANGED_BOOKMARKS_URI_OAUTH;
+    	
+	        final HttpGet post = new HttpGet(bookmarkUri);
+	        maybeCreateHttpClient();
+
+	        resp = mHttpClient.execute(post);
+    	}
+    	else {
+    	
+        	String bookmarkUri = FETCH_CHANGED_BOOKMARKS_URI_DELICIOUS;
+
+	        final HttpGet post = new HttpGet(bookmarkUri);
+	        maybeCreateHttpClient();
+	        
+	        CredentialsProvider provider = mHttpClient.getCredentialsProvider();
+	        Credentials credentials = new UsernamePasswordCredentials(userName, authtoken);
+	        provider.setCredentials(SCOPE, credentials);
+
+	        resp = mHttpClient.execute(post);
+    	}
+
+    	final String response = EntityUtils.toString(resp.getEntity());
+    	
+        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+
+            XPath xpath = XPathFactory.newInstance().newXPath();
+            String expression = "/posts/post";
+            InputSource inputSource = new InputSource(new StringReader(response));
+            try {
+				NodeList nodes = (NodeList)xpath.evaluate(expression, inputSource, XPathConstants.NODESET);
+				
+				for(int i = 0; i < nodes.getLength(); i++){
+					String hash = nodes.item(i).getAttributes().getNamedItem("url").getTextContent();
+					String meta = nodes.item(i).getAttributes().getNamedItem("meta").getTextContent();
+					bookmarkList.add(new User.Bookmark("", "", "", "", hash, meta));
+
+				}
+				
+			} catch (XPathExpressionException e) {
+				e.printStackTrace();
+			}
+         
+        } else {
+            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+                Log.e(TAG, "Authentication exception in fetching friend status list");
+                throw new AuthenticationException();
+            } else {
+                Log.e(TAG, "Server error in fetching bookmark list");
+                Log.d(TAG, Integer.toString(resp.getStatusLine().getStatusCode()));
+                throw new IOException();
+            }
+        }
+        return bookmarkList;
+    }
+    
+    /**
+     * Fetches users bookmarks
+     * 
+     * @param account The account being synced.
+     * @param authtoken The authtoken stored in the AccountManager for the
+     *        account
+     * @return list The list of bookmarks received from the server.
+     */
+    public static ArrayList<User.Bookmark> fetchBookmark(String userName, ArrayList<String> hashes, Account account,
+        String authtoken, Context context) throws JSONException, ParseException, IOException,
+        AuthenticationException {
+
+    	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+    	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
+    	
+    	HttpResponse resp = null;
+    	final ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+    	
+    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
+    		
+        	String bookmarkUri = FETCH_BOOKMARK_URI_OAUTH;
+        	bookmarkUri += "?meta=yes&hashes=";
+        	for(String h : hashes){
+        		if(hashes.get(0) != h){
+        			bookmarkUri += "+";
+        		}
+        		bookmarkUri += h;
+        	}
+    	
+	        final HttpGet post = new HttpGet(bookmarkUri);
+	        maybeCreateHttpClient();
+
+	        resp = mHttpClient.execute(post);
+    	}
+    	else {
+    	
+        	String bookmarkUri = FETCH_BOOKMARK_URI_DELICIOUS;
+        	bookmarkUri += "?meta=yes&hashes=";
+        	for(String h : hashes){
+        		if(hashes.get(0) != h){
+        			bookmarkUri += "+";
+        		}
+        		bookmarkUri += h;
+        	}
+
+	        final HttpGet post = new HttpGet(bookmarkUri);
+	        maybeCreateHttpClient();
+	        
+	        CredentialsProvider provider = mHttpClient.getCredentialsProvider();
+	        Credentials credentials = new UsernamePasswordCredentials(userName, authtoken);
+	        provider.setCredentials(SCOPE, credentials);
+
+	        resp = mHttpClient.execute(post);
+    	}
+
+    	final String response = EntityUtils.toString(resp.getEntity());
+    	
+        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+
+            XPath xpath = XPathFactory.newInstance().newXPath();
+            String expression = "/posts/post";
+            InputSource inputSource = new InputSource(new StringReader(response));
+            try {
+				NodeList nodes = (NodeList)xpath.evaluate(expression, inputSource, XPathConstants.NODESET);
+				
+				for(int i = 0; i < nodes.getLength(); i++){
+					String url = nodes.item(i).getAttributes().getNamedItem("href").getTextContent();
+					String title = nodes.item(i).getAttributes().getNamedItem("description").getTextContent();
+					String notes = nodes.item(i).getAttributes().getNamedItem("extended").getTextContent();
+					String tags = nodes.item(i).getAttributes().getNamedItem("tag").getTextContent();
+					String hash = nodes.item(i).getAttributes().getNamedItem("hash").getTextContent();
+					String meta = nodes.item(i).getAttributes().getNamedItem("meta").getTextContent();
+					bookmarkList.add(new User.Bookmark(url, title, notes, tags, hash, meta));
+					
+					Log.d("url", meta);
+				}
+				
+			} catch (XPathExpressionException e) {
+				e.printStackTrace();
+			}
+         
+        } else {
+            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+                Log.e(TAG, "Authentication exception in fetching friend status list");
+                throw new AuthenticationException();
+            } else {
+                Log.e(TAG, "Server error in fetching bookmark list");
+                Log.d(TAG, Integer.toString(resp.getStatusLine().getStatusCode()));
                 throw new IOException();
             }
         }

@@ -25,6 +25,7 @@ public class BrowseTags extends DroidliciousBaseActivity {
 	WebView mWebView;
 	AccountManager mAccountManager;
 	String username = null;
+	Account account = null;
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -35,11 +36,12 @@ public class BrowseTags extends DroidliciousBaseActivity {
 		
 		mAccountManager = AccountManager.get(this);
 		Account[] al = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
+		account = al[0];
 		
 		if(al.length > 0){
 			if(this.getIntent().hasExtra("username"))
 				username = getIntent().getStringExtra("username");
-			else username = al[0].name;
+			else username = account.name;
 			
 			try{	
 				tagList = NetworkUtilities.fetchTags(username, al[0], "");
@@ -57,7 +59,9 @@ public class BrowseTags extends DroidliciousBaseActivity {
 			    	
 					Intent i = new Intent(parent.getContext(), BrowseBookmarks.class);
 					i.putExtra("tagname", tagName);
-					i.putExtra("username", username);
+					if(username != account.name){
+						i.putExtra("username", username);
+					}
 					
 					startActivity(i);
 			    }

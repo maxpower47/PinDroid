@@ -44,15 +44,17 @@ import java.util.List;
  * SyncAdapter implementation for syncing sample SyncAdapter contacts to the
  * platform ContactOperations provider.
  */
-public class SyncAdapter extends AbstractThreadedSyncAdapter {
+public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = "SyncAdapter";
 
     private final AccountManager mAccountManager;
     private final Context mContext;
 
     private Date mLastUpdated;
+    
+    private String authtoken = null;
 
-    public SyncAdapter(Context context, boolean autoInitialize) {
+    public ContactSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
         mContext = context;
         mAccountManager = AccountManager.get(context);
@@ -63,7 +65,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         ContentProviderClient provider, SyncResult syncResult) {
         List<User> users;
         List<Status> statuses;
-        String authtoken = null;
          try {
              // use the account manager to request the credentials
         	 AuthToken at = new AuthToken(mContext, account);

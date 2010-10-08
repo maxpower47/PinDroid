@@ -3,6 +3,7 @@ package com.android.droidlicious.authenticator;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 
@@ -26,8 +27,14 @@ public class AuthToken {
 	
 	public String getAuthToken(){
 		try {
-			mToken = mAccountManager.blockingGetAuthToken(mAccount, Constants.AUTHTOKEN_TYPE, false);
-			mAccountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, mToken);
+	    	SharedPreferences settings = mContext.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+	    	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
+	    	
+	    	if(authtype == Constants.AUTH_TYPE_OAUTH) {
+	    		mToken = mAccountManager.blockingGetAuthToken(mAccount, Constants.AUTHTOKEN_TYPE, false);
+				mAccountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, mToken);
+	    	}
+	    	
 			mToken = mAccountManager.blockingGetAuthToken(mAccount, Constants.AUTHTOKEN_TYPE, false);
 		} catch (Exception e) {
 			e.printStackTrace();

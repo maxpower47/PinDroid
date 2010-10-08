@@ -16,12 +16,16 @@
 
 package com.android.droidlicious;
 
+import android.net.Uri;
+
 public class Constants {
 
     /**
      * Account type string.
      */
     public static final String ACCOUNT_TYPE = "com.android.droidlicious";
+    
+    public static final Uri BOOKMARK_CONENT_URI = Uri.parse("content://com.android.droidlicious.bookmark");
 
     /**
      * Authtoken type string.
@@ -33,6 +37,8 @@ public class Constants {
     public static final String PREFS_AUTH_TYPE = "authentication_type";
     public static final String AUTH_TYPE_OAUTH = "oauth";
     public static final String AUTH_TYPE_DELICIOUS = "delicious";
+    
+    public static final String PREFS_INITIAL_SYNC = "initial_sync";
     
     public static final String OAUTH_CALLBACK_PROPERTY = "oauth_callback";
     public static final String OAUTH_CALLBACK = "oob";

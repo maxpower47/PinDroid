@@ -134,6 +134,9 @@ public class User {
         private final String mUrl;
         private final String mDescription;
         private final String mNotes;
+        private final String mTags;
+        private final String mHash;
+        private final String mMeta;
 
         public String getUrl() {
             return mUrl;
@@ -146,17 +149,44 @@ public class User {
         public String getNotes(){
         	return mNotes;
         }
+        
+        public String getTags(){
+        	return mTags;
+        }
+        
+        public String getHash(){
+        	return mHash;
+        }
 
+        public String getMeta(){
+        	return mMeta;
+        }
+        
         public Bookmark(String url, String description) {
             mUrl = url;
             mDescription = description;
             mNotes = "";
+            mTags = "";
+            mHash = "";
+            mMeta = "";
         }
         
         public Bookmark(String url, String description, String notes) {
             mUrl = url;
             mDescription = description;
             mNotes = notes;
+            mTags = "";
+            mHash = "";
+            mMeta = "";
+        }
+        
+        public Bookmark(String url, String description, String notes, String tags, String hash, String meta) {
+            mUrl = url;
+            mDescription = description;
+            mNotes = notes;
+            mTags = tags;
+            mHash = hash;
+            mMeta = meta;
         }
         
         public static User.Bookmark valueOf(JSONObject userBookmark) {
