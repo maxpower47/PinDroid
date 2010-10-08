@@ -16,13 +16,23 @@
 
 package com.android.droidlicious.client;
 
+import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import android.util.Log;
 
 import org.json.JSONObject;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 /**
  * Represents a sample SyncAdapter user
@@ -131,12 +141,12 @@ public class User {
      * 
      */
     public static class Bookmark {
-        private final String mUrl;
-        private final String mDescription;
-        private final String mNotes;
-        private final String mTags;
-        private final String mHash;
-        private final String mMeta;
+        private String mUrl;
+        private String mDescription;
+        private String mNotes;
+        private String mTags;
+        private String mHash;
+        private String mMeta;
 
         public String getUrl() {
             return mUrl;
@@ -160,6 +170,15 @@ public class User {
 
         public String getMeta(){
         	return mMeta;
+        }
+        
+        public Bookmark() {
+            mUrl = "";
+            mDescription = "";
+            mNotes = "";
+            mTags = "";
+            mHash = "";
+            mMeta = "";
         }
         
         public Bookmark(String url, String description) {
@@ -187,6 +206,56 @@ public class User {
             mTags = tags;
             mHash = hash;
             mMeta = meta;
+        }
+        
+        public static ArrayList<User.Bookmark> valueOf(String userBookmark){
+            XPath xpath = XPathFactory.newInstance().newXPath();
+            String expression = "/posts/post";
+            ArrayList<User.Bookmark> list = new ArrayList<User.Bookmark>();
+            
+            InputSource inputSource = new InputSource(new StringReader(userBookmark));
+            try {
+            	
+				NodeList nodes = (NodeList)xpath.evaluate(expression, inputSource, XPathConstants.NODESET);
+				
+				for(int i = 0; i < nodes.getLength(); i++){
+					Node href = nodes.item(i).getAttributes().getNamedItem("href");
+					Node title = nodes.item(i).getAttributes().getNamedItem("description");
+					Node notes = nodes.item(i).getAttributes().getNamedItem("extended");
+					Node tags = nodes.item(i).getAttributes().getNamedItem("tag");
+					Node hash = nodes.item(i).getAttributes().getNamedItem("hash");
+					Node meta = nodes.item(i).getAttributes().getNamedItem("meta");
+					Node url = nodes.item(i).getAttributes().getNamedItem("url");
+					String shref = "";
+					String stitle = "";
+					String snotes = "";
+					String stags = "";
+					String shash = "";
+					String smeta = "";
+
+					if(href != null)
+						shref = href.getTextContent();
+					if(title != null)
+						stitle = title.getTextContent();
+					if(notes != null)
+						snotes = notes.getTextContent();
+					if(tags != null)
+						stags = tags.getTextContent();
+					if(hash != null)
+						shash = hash.getTextContent();
+					if(url != null)
+						shash = url.getTextContent();
+					if(meta != null)
+						smeta = meta.getTextContent();
+					
+					list.add(new User.Bookmark(shref, stitle, snotes, stags, shash, smeta));
+
+				}
+				
+			} catch (XPathExpressionException e) {
+				e.printStackTrace();
+			}
+			return list;
         }
         
         public static User.Bookmark valueOf(JSONObject userBookmark) {

@@ -46,13 +46,8 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
@@ -61,10 +56,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.TreeMap;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
 /**
  * Provides utility methods for communicating with the server.
@@ -81,12 +72,12 @@ public class NetworkUtilities {
     public static final String FETCH_FRIEND_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/";
     public static final String FETCH_STATUS_URI = "http://feeds.delicious.com/v2/json/network/";
     public static final String FETCH_TAGS_URI = "http://feeds.delicious.com/v2/json/tags/";
-    public static final String FETCH_BOOKMARKS_URI_OAUTH = "http://api.del.icio.us/v2/posts/";
-    public static final String FETCH_BOOKMARKS_URI_DELICIOUS = "https://api.del.icio.us/v1/posts/";
-    public static final String FETCH_CHANGED_BOOKMARKS_URI_OAUTH = "http://api.del.icio.us/v2/posts/all?hashes";
-    public static final String FETCH_CHANGED_BOOKMARKS_URI_DELICIOUS = "https://api.del.icio.us/v1/posts/all?hashes";
-    public static final String FETCH_BOOKMARK_URI_OAUTH = "http://api.del.icio.us/v2/posts/get";
-    public static final String FETCH_BOOKMARK_URI_DELICIOUS = "https://api.del.icio.us/v1/posts/get";
+    public static final String FETCH_BOOKMARKS_URI_OAUTH = "v2/posts";
+    public static final String FETCH_BOOKMARKS_URI_DELICIOUS = "v1/posts";
+    public static final String FETCH_CHANGED_BOOKMARKS_URI_OAUTH = "v2/posts/all";
+    public static final String FETCH_CHANGED_BOOKMARKS_URI_DELICIOUS = "v1/posts/all";
+    public static final String FETCH_BOOKMARK_URI_OAUTH = "v2/posts/get";
+    public static final String FETCH_BOOKMARK_URI_DELICIOUS = "v1/posts/get";
     public static final String ADD_BOOKMARKS_URI = "v1/posts/add";
     public static final String OAUTH_ADD_BOOKMARKS_URI = "v2/posts/add";
     private static DefaultHttpClient mHttpClient;
@@ -613,83 +604,38 @@ public class NetworkUtilities {
     	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
     	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
     	
-    	HttpResponse resp = null;
-    	final ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+    	ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+    	String bookmarkPath = null;
+    	String bookmarkScheme = null;
+    	String response = null;
+    	TreeMap<String, String> params = new TreeMap<String, String>();
     	
     	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
-    		
-        	String bookmarkUri = FETCH_BOOKMARKS_URI_OAUTH;
-        	if(tagName != null && tagName != ""){
-        		bookmarkUri += "?tag=" + tagName;
-        	}
-        	if(all){
-        		bookmarkUri += "all?meta=yes";
-        	} else {
-        		bookmarkUri += "recent";
-        	}
-    	
-	        final HttpGet post = new HttpGet(bookmarkUri);
-	        maybeCreateHttpClient();
-
-	        resp = mHttpClient.execute(post);
+    		bookmarkPath = FETCH_BOOKMARKS_URI_OAUTH;
+    		bookmarkScheme = SCHEME_HTTP;
+    	} else {
+    		bookmarkPath = FETCH_BOOKMARKS_URI_DELICIOUS;
+    		bookmarkScheme = SCHEME;
     	}
-    	else {
-    	
-        	String bookmarkUri = FETCH_BOOKMARKS_URI_DELICIOUS;
-        	if(tagName != null && tagName != ""){
-        		bookmarkUri += "?tag=" + tagName;
-        	}
-        	if(all){
-        		bookmarkUri += "all?meta=yes";
-        	} else {
-        		bookmarkUri += "recent";
-        	}
-
-	        final HttpGet post = new HttpGet(bookmarkUri);
-	        maybeCreateHttpClient();
-	        
-	        CredentialsProvider provider = mHttpClient.getCredentialsProvider();
-	        Credentials credentials = new UsernamePasswordCredentials(userName, authtoken);
-	        provider.setCredentials(SCOPE, credentials);
-
-	        resp = mHttpClient.execute(post);
+    	if(all){
+    		bookmarkPath += "/all";
+    		params.put("meta", "yes");
+    	} else {
+    		bookmarkPath += "/recent";
+    	}
+    	if(tagName != null && tagName != ""){
+    		params.put("tag", tagName);
     	}
 
-    	final String response = EntityUtils.toString(resp.getEntity());
+    	response = DeliciousApiCall(bookmarkScheme, bookmarkPath, params, userName, authtoken, context);
     	
-        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+        if (response.contains("<?xml")) {
 
-            XPath xpath = XPathFactory.newInstance().newXPath();
-            String expression = "/posts/post";
-            InputSource inputSource = new InputSource(new StringReader(response));
-            try {
-				NodeList nodes = (NodeList)xpath.evaluate(expression, inputSource, XPathConstants.NODESET);
-				
-				for(int i = 0; i < nodes.getLength(); i++){
-					String url = nodes.item(i).getAttributes().getNamedItem("href").getTextContent();
-					String title = nodes.item(i).getAttributes().getNamedItem("description").getTextContent();
-					String notes = nodes.item(i).getAttributes().getNamedItem("extended").getTextContent();
-					String tags = nodes.item(i).getAttributes().getNamedItem("tag").getTextContent();
-					String hash = nodes.item(i).getAttributes().getNamedItem("hash").getTextContent();
-					String meta = nodes.item(i).getAttributes().getNamedItem("meta").getTextContent();
-					bookmarkList.add(new User.Bookmark(url, title, notes, tags, hash, meta));
-					
-					Log.d("url", url);
-				}
-				
-			} catch (XPathExpressionException e) {
-				e.printStackTrace();
-			}
+        	bookmarkList = User.Bookmark.valueOf(response);
          
         } else {
-            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-                Log.e(TAG, "Authentication exception in fetching friend status list");
-                throw new AuthenticationException();
-            } else {
-                Log.e(TAG, "Server error in fetching bookmark list");
-                Log.d(TAG, Integer.toString(resp.getStatusLine().getStatusCode()));
-                throw new IOException();
-            }
+            Log.e(TAG, "Server error in fetching bookmark list");
+            throw new IOException();
         }
         return bookmarkList;
     }
@@ -709,62 +655,30 @@ public class NetworkUtilities {
     	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
     	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
     	
-    	HttpResponse resp = null;
-    	final ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+    	ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+    	String bookmarkPath = null;
+    	String bookmarkScheme = null;
+    	String response = null;
+    	TreeMap<String, String> params = new TreeMap<String, String>();
     	
     	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
-    		
-        	String bookmarkUri = FETCH_CHANGED_BOOKMARKS_URI_OAUTH;
-    	
-	        final HttpGet post = new HttpGet(bookmarkUri);
-	        maybeCreateHttpClient();
-
-	        resp = mHttpClient.execute(post);
+    		bookmarkPath = FETCH_CHANGED_BOOKMARKS_URI_OAUTH;
+    		bookmarkScheme = SCHEME_HTTP;
+    	} else {
+    		bookmarkPath = FETCH_CHANGED_BOOKMARKS_URI_DELICIOUS;
+    		bookmarkScheme = SCHEME;
     	}
-    	else {
-    	
-        	String bookmarkUri = FETCH_CHANGED_BOOKMARKS_URI_DELICIOUS;
+    	params.put("hashes", "yes");
 
-	        final HttpGet post = new HttpGet(bookmarkUri);
-	        maybeCreateHttpClient();
-	        
-	        CredentialsProvider provider = mHttpClient.getCredentialsProvider();
-	        Credentials credentials = new UsernamePasswordCredentials(userName, authtoken);
-	        provider.setCredentials(SCOPE, credentials);
+    	response = DeliciousApiCall(bookmarkScheme, bookmarkPath, params, userName, authtoken, context);
 
-	        resp = mHttpClient.execute(post);
-    	}
+        if (response.contains("<?xml")) {
 
-    	final String response = EntityUtils.toString(resp.getEntity());
-    	
-        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-
-            XPath xpath = XPathFactory.newInstance().newXPath();
-            String expression = "/posts/post";
-            InputSource inputSource = new InputSource(new StringReader(response));
-            try {
-				NodeList nodes = (NodeList)xpath.evaluate(expression, inputSource, XPathConstants.NODESET);
-				
-				for(int i = 0; i < nodes.getLength(); i++){
-					String hash = nodes.item(i).getAttributes().getNamedItem("url").getTextContent();
-					String meta = nodes.item(i).getAttributes().getNamedItem("meta").getTextContent();
-					bookmarkList.add(new User.Bookmark("", "", "", "", hash, meta));
-
-				}
-				
-			} catch (XPathExpressionException e) {
-				e.printStackTrace();
-			}
+        	bookmarkList = User.Bookmark.valueOf(response);
          
         } else {
-            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-                Log.e(TAG, "Authentication exception in fetching friend status list");
-                throw new AuthenticationException();
-            } else {
-                Log.e(TAG, "Server error in fetching bookmark list");
-                Log.d(TAG, Integer.toString(resp.getStatusLine().getStatusCode()));
-                throw new IOException();
-            }
+            Log.e(TAG, "Server error in fetching bookmark list");
+            throw new IOException();
         }
         return bookmarkList;
     }
@@ -783,82 +697,38 @@ public class NetworkUtilities {
 
     	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
     	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
-    	
-    	HttpResponse resp = null;
-    	final ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+
+    	ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+    	String bookmarkPath = null;
+    	String bookmarkScheme = null;
+    	TreeMap<String, String> params = new TreeMap<String, String>();
+    	String hashString = "";
+    	String response = null;
     	
     	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
-    		
-        	String bookmarkUri = FETCH_BOOKMARK_URI_OAUTH;
-        	bookmarkUri += "?meta=yes&hashes=";
-        	for(String h : hashes){
-        		if(hashes.get(0) != h){
-        			bookmarkUri += "+";
-        		}
-        		bookmarkUri += h;
-        	}
-    	
-	        final HttpGet post = new HttpGet(bookmarkUri);
-	        maybeCreateHttpClient();
-
-	        resp = mHttpClient.execute(post);
-    	}
-    	else {
-    	
-        	String bookmarkUri = FETCH_BOOKMARK_URI_DELICIOUS;
-        	bookmarkUri += "?meta=yes&hashes=";
-        	for(String h : hashes){
-        		if(hashes.get(0) != h){
-        			bookmarkUri += "+";
-        		}
-        		bookmarkUri += h;
-        	}
-
-	        final HttpGet post = new HttpGet(bookmarkUri);
-	        maybeCreateHttpClient();
-	        
-	        CredentialsProvider provider = mHttpClient.getCredentialsProvider();
-	        Credentials credentials = new UsernamePasswordCredentials(userName, authtoken);
-	        provider.setCredentials(SCOPE, credentials);
-
-	        resp = mHttpClient.execute(post);
+    		bookmarkPath = FETCH_BOOKMARK_URI_OAUTH;
+    		bookmarkScheme = SCHEME_HTTP;
+    	} else {
+    		bookmarkPath = FETCH_BOOKMARK_URI_DELICIOUS;
+    		bookmarkScheme = SCHEME;
     	}
 
-    	final String response = EntityUtils.toString(resp.getEntity());
-    	
-        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+    	for(String h : hashes){
+    		if(hashes.get(0) != h){
+    			hashString += "+";
+    		}
+    		hashString += h;
+    	}
+    	params.put("meta", "yes");
+    	params.put("hashes", hashString);
 
-            XPath xpath = XPathFactory.newInstance().newXPath();
-            String expression = "/posts/post";
-            InputSource inputSource = new InputSource(new StringReader(response));
-            try {
-				NodeList nodes = (NodeList)xpath.evaluate(expression, inputSource, XPathConstants.NODESET);
-				
-				for(int i = 0; i < nodes.getLength(); i++){
-					String url = nodes.item(i).getAttributes().getNamedItem("href").getTextContent();
-					String title = nodes.item(i).getAttributes().getNamedItem("description").getTextContent();
-					String notes = nodes.item(i).getAttributes().getNamedItem("extended").getTextContent();
-					String tags = nodes.item(i).getAttributes().getNamedItem("tag").getTextContent();
-					String hash = nodes.item(i).getAttributes().getNamedItem("hash").getTextContent();
-					String meta = nodes.item(i).getAttributes().getNamedItem("meta").getTextContent();
-					bookmarkList.add(new User.Bookmark(url, title, notes, tags, hash, meta));
-					
-					Log.d("url", meta);
-				}
-				
-			} catch (XPathExpressionException e) {
-				e.printStackTrace();
-			}
-         
+    	response = DeliciousApiCall(bookmarkScheme, bookmarkPath, params, userName, authtoken, context);
+    	
+        if (response.contains("<?xml")) {
+            bookmarkList = User.Bookmark.valueOf(response);
         } else {
-            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-                Log.e(TAG, "Authentication exception in fetching friend status list");
-                throw new AuthenticationException();
-            } else {
-                Log.e(TAG, "Server error in fetching bookmark list");
-                Log.d(TAG, Integer.toString(resp.getStatusLine().getStatusCode()));
-                throw new IOException();
-            }
+            Log.e(TAG, "Server error in fetching bookmark list");
+            throw new IOException();
         }
         return bookmarkList;
     }
@@ -873,62 +743,23 @@ public class NetworkUtilities {
     	
     	String username = account.name;
     	String response = null;
+    	String bookmarkPath = null;
+    	String bookmarkScheme = null;
+    	TreeMap<String, String> params = new TreeMap<String, String>();
     	
     	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
-    		Log.d("addBookmarks()", "oauth");
-    		String tokenSecret = settings.getString("oauth_token_secret", "");
-    		
-			Uri.Builder builder = new Uri.Builder();
-			builder.scheme(SCHEME_HTTP);
-			builder.authority(DELICIOUS_AUTHORITY);
-			builder.appendEncodedPath(OAUTH_ADD_BOOKMARKS_URI);
-			builder.appendQueryParameter("description", bookmark.getDescription());
-			builder.appendQueryParameter("extended", bookmark.getNotes());
-			builder.appendQueryParameter("url", URLEncoder.encode(bookmark.getUrl()));
-		
-			Uri u = builder.build();
-			Log.d("URI", u.toString());
-			HttpGet post = new HttpGet(u.toString());
-			HttpHost host = new HttpHost(DELICIOUS_AUTHORITY);
-			
-			TreeMap<String, String> params = new TreeMap<String, String>();
-			params.put("description", bookmark.getDescription());
-			params.put("extended", bookmark.getNotes());
-			params.put("url", bookmark.getUrl());
-			
-			
-			OauthUtilities.signRequest(post, params, authtoken, tokenSecret);
-
-			Log.d("header", post.getHeaders("Authorization")[0].getValue());
-    		
-	        maybeCreateHttpClient();
-	        
-	        final HttpResponse resp = mHttpClient.execute(host, post);
-	        response = EntityUtils.toString(resp.getEntity());
-
-    	} else{
-    		Log.d("addBookmarks()", "delicious");
-			Uri.Builder builder = new Uri.Builder();
-			builder.scheme(SCHEME);
-			builder.authority(DELICIOUS_AUTHORITY);
-			builder.appendEncodedPath(ADD_BOOKMARKS_URI);
-			builder.appendQueryParameter("url", bookmark.getUrl());
-			builder.appendQueryParameter("description", bookmark.getDescription());
-			builder.appendQueryParameter("extended", bookmark.getNotes());
-		
-			Uri u = builder.build();
-			
-			HttpGet post = new HttpGet(u.toString());
-			
-	        maybeCreateHttpClient();
-	        
-	        CredentialsProvider provider = mHttpClient.getCredentialsProvider();
-	        Credentials credentials = new UsernamePasswordCredentials(username, authtoken);
-	        provider.setCredentials(SCOPE, credentials);
-	        
-	        final HttpResponse resp = mHttpClient.execute(post);
-	        response = EntityUtils.toString(resp.getEntity());
+    		bookmarkPath = OAUTH_ADD_BOOKMARKS_URI;
+    		bookmarkScheme = SCHEME_HTTP;
+    	} else {
+    		bookmarkPath = ADD_BOOKMARKS_URI;
+    		bookmarkScheme = SCHEME;
     	}
+    	
+		params.put("description", bookmark.getDescription());
+		params.put("extended", bookmark.getNotes());
+		params.put("url", bookmark.getUrl());
+
+    	response = DeliciousApiCall(bookmarkScheme, bookmarkPath, params, username, authtoken, context);
 
         Log.d(TAG, response);
 
@@ -949,5 +780,54 @@ public class NetworkUtilities {
         }
         return true;
     }
-
+    private static String DeliciousApiCall(String scheme, String path, TreeMap<String, String> params, 
+    		String username, String authtoken, Context context) throws IOException{
+    	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+    	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
+    	
+    	HttpResponse resp = null;
+    	HttpGet post = null;
+    	
+		Uri.Builder builder = new Uri.Builder();
+		builder.scheme(scheme);
+		builder.authority(DELICIOUS_AUTHORITY);
+		builder.appendEncodedPath(path);
+		for(String key : params.keySet()){
+			builder.appendQueryParameter(key, params.get(key));
+		}
+		
+		post = new HttpGet(builder.build().toString());
+		HttpHost host = new HttpHost(DELICIOUS_AUTHORITY);
+		maybeCreateHttpClient();
+    	
+		try{
+	    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
+	    		Log.d("addBookmarks()", "oauth");
+	    		String tokenSecret = settings.getString("oauth_token_secret", "");
+	
+				OauthUtilities.signRequest(post, params, authtoken, tokenSecret);
+	
+				Log.d("header", post.getHeaders("Authorization")[0].getValue());
+	    		
+		        maybeCreateHttpClient();
+		        
+		        resp = mHttpClient.execute(host, post);
+	
+	    	} else{ 
+		        CredentialsProvider provider = mHttpClient.getCredentialsProvider();
+		        Credentials credentials = new UsernamePasswordCredentials(username, authtoken);
+		        provider.setCredentials(SCOPE, credentials);
+		        
+		        resp = mHttpClient.execute(post);
+	    	}
+	    	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+	    		return EntityUtils.toString(resp.getEntity());
+	    	} else {
+	    		throw new IOException();
+	    	}
+		} catch(Exception e){
+			Log.e("DeliciousApiCall Error", Integer.toString(resp.getStatusLine().getStatusCode()));
+		}
+		throw new IOException();
+    }
 }
