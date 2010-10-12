@@ -113,6 +113,9 @@ public final class R {
         /**  Button that takes the user to the "sign in" screen 
          */
         public static final int sign_in_button_label=0x7f05000f;
+        public static final int tag_search_hint=0x7f05001d;
+        public static final int tag_search_label=0x7f05001c;
+        public static final int tag_search_text=0x7f05001e;
         public static final int titleMain=0x7f050014;
         /**  Message shown in progress dialog while app connects to the server 
          */
@@ -127,5 +130,6 @@ public final class R {
         public static final int bookmarksyncadapter=0x7f040001;
         public static final int contacts=0x7f040002;
         public static final int contactsyncadapter=0x7f040003;
+        public static final int searchable=0x7f040004;
     }
 }

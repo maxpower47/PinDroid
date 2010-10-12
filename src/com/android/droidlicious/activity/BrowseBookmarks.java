@@ -8,6 +8,7 @@ import com.android.droidlicious.client.User;
 import com.android.droidlicious.listadapter.BookmarkListAdapter;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -26,11 +27,19 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_bookmarks);
 		
+		Log.d("browse", "blah");
+		
 		ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
 		
-		if(!this.getIntent().hasExtra("username") && this.getIntent().hasExtra("tagname")){
+		if(Intent.ACTION_SEARCH.equals(this.getIntent().getAction()) || !this.getIntent().hasExtra("username") && this.getIntent().hasExtra("tagname")){
 
-			String tagname = getIntent().getStringExtra("tagname");
+			String tagname = null;
+			
+			if(Intent.ACTION_SEARCH.equals(this.getIntent().getAction())){
+				tagname = getIntent().getStringExtra(SearchManager.QUERY);
+			} else {
+				tagname = getIntent().getStringExtra("tagname");
+			}
 			
 			try{	
 				
