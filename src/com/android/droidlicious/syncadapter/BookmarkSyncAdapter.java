@@ -36,6 +36,7 @@ import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 
 import org.apache.http.ParseException;
 
+import java.util.Date;
 import java.util.ArrayList;
 
 /**
@@ -74,80 +75,97 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	
     	SharedPreferences settings = mContext.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
     	Boolean initialSync = settings.getBoolean(Constants.PREFS_INITIAL_SYNC, false);
+    	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
+    	long update = 1;
     	
-		ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
-		ArrayList<User.Bookmark> changeList = new ArrayList<User.Bookmark>();
-		ArrayList<User.Bookmark> addList = new ArrayList<User.Bookmark>();
-		ArrayList<User.Bookmark> updateList = new ArrayList<User.Bookmark>();
-
-		try {
-			if(!initialSync){
-				Log.d("BookmarkSync", "In Bookmark Load");
-				bookmarkList = NetworkUtilities.fetchMyBookmarks(account.name, null, account, authtoken, mContext, true);
-			} else {
-				Log.d("BookmarkSync", "In Bookmark Update");
-				changeList = NetworkUtilities.fetchChangedBookmarks(account.name, account, authtoken, mContext);
-				
-				for(User.Bookmark b : changeList){
-				
-					String[] projection = new String[] {Bookmark.Hash, Bookmark.Meta};
-					String selection = Bookmark.Hash + "=?";
-					String[] selectionArgs = new String[] {b.getHash()};
-					
-					Uri bookmarks = Bookmark.CONTENT_URI;
-					
-					Cursor c = mContext.getContentResolver().query(bookmarks, projection, selection, selectionArgs, null);
-					
-					if(c.getCount() == 0){
-						addList.add(b);
-					}
-					
-					if(c.moveToFirst()){
-						int metaColumn = c.getColumnIndex(Bookmark.Meta);
-						
-						do {							
-							if(c.getString(metaColumn) == b.getMeta()) {
-								updateList.add(b);
-							}	
-						} while(c.moveToNext());
-					}
-					
-					c.close();
-				}
-				
-				ArrayList<String> a = new ArrayList<String>();
-				for(User.Bookmark b : addList){
-					a.add(b.getHash());
-				}
-				Log.d("size", Integer.toString(a.size()));
-				if(a.size() > 0) {
-					bookmarkList = NetworkUtilities.fetchBookmark(account.name, a, account, authtoken, mContext);
-				}
-				
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+    	try {
+			update = NetworkUtilities.lastUpdate(account.name, account, authtoken, mContext);
+		} catch (Exception e1) {
+			e1.printStackTrace();
 		}
-		
-		if(!bookmarkList.isEmpty()){
-			
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean(Constants.PREFS_INITIAL_SYNC, true);
+    	
+    	if(update > lastUpdate) {
+    		Date d = new Date();
+    		
+    		SharedPreferences.Editor editor = settings.edit();
+    		editor.putLong(Constants.PREFS_LAST_SYNC, d.getTime());
             editor.commit();
+    		
+			ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+			ArrayList<User.Bookmark> changeList = new ArrayList<User.Bookmark>();
+			ArrayList<User.Bookmark> addList = new ArrayList<User.Bookmark>();
+			ArrayList<User.Bookmark> updateList = new ArrayList<User.Bookmark>();
+	
+			try {
+				if(!initialSync){
+					Log.d("BookmarkSync", "In Bookmark Load");
+					bookmarkList = NetworkUtilities.fetchMyBookmarks(account.name, null, account, authtoken, mContext, true);
+				} else {
+					Log.d("BookmarkSync", "In Bookmark Update");
+					changeList = NetworkUtilities.fetchChangedBookmarks(account.name, account, authtoken, mContext);
+					
+					for(User.Bookmark b : changeList){
+					
+						String[] projection = new String[] {Bookmark.Hash, Bookmark.Meta};
+						String selection = Bookmark.Hash + "=?";
+						String[] selectionArgs = new String[] {b.getHash()};
+						
+						Uri bookmarks = Bookmark.CONTENT_URI;
+						
+						Cursor c = mContext.getContentResolver().query(bookmarks, projection, selection, selectionArgs, null);
+						
+						if(c.getCount() == 0){
+							addList.add(b);
+						}
+						
+						if(c.moveToFirst()){
+							int metaColumn = c.getColumnIndex(Bookmark.Meta);
+							
+							do {							
+								if(c.getString(metaColumn) == b.getMeta()) {
+									updateList.add(b);
+								}	
+							} while(c.moveToNext());
+						}
+						
+						c.close();
+					}
+					
+					ArrayList<String> a = new ArrayList<String>();
+					for(User.Bookmark b : addList){
+						a.add(b.getHash());
+					}
+					Log.d("size", Integer.toString(a.size()));
+					if(a.size() > 0) {
+						bookmarkList = NetworkUtilities.fetchBookmark(account.name, a, account, authtoken, mContext);
+					}
+					
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			
-			for(User.Bookmark b : bookmarkList){
-				ContentValues values = new ContentValues();
+			if(!bookmarkList.isEmpty()){
+
+	            editor.putBoolean(Constants.PREFS_INITIAL_SYNC, true);
+	            editor.commit();
 				
-				values.put(Bookmark.Description, b.getDescription());
-				values.put(Bookmark.Url, b.getUrl());
-				values.put(Bookmark.Notes, b.getNotes());
-				values.put(Bookmark.Tags, b.getTags());
-				values.put(Bookmark.Hash, b.getHash());
-				values.put(Bookmark.Meta, b.getMeta());
-				
-				Uri uri = mContext.getContentResolver().insert(Bookmark.CONTENT_URI, values);
-				Log.d("bookmark", uri.toString());
-			}	
-		}
+				for(User.Bookmark b : bookmarkList){
+					ContentValues values = new ContentValues();
+					
+					values.put(Bookmark.Description, b.getDescription());
+					values.put(Bookmark.Url, b.getUrl());
+					values.put(Bookmark.Notes, b.getNotes());
+					values.put(Bookmark.Tags, b.getTags());
+					values.put(Bookmark.Hash, b.getHash());
+					values.put(Bookmark.Meta, b.getMeta());
+					
+					Uri uri = mContext.getContentResolver().insert(Bookmark.CONTENT_URI, values);
+					Log.d("bookmark", uri.toString());
+				}	
+			}
+    	} else {
+    		Log.d("BookmarkSync", "No update needed.  Last update time before last sync.");
+    	}
     }
 }

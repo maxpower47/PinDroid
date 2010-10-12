@@ -25,6 +25,7 @@ import android.util.Log;
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.authenticator.AuthenticatorActivity;
 import com.android.droidlicious.authenticator.OauthUtilities;
+import com.android.droidlicious.util.DateParser;
 
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -48,7 +49,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -78,6 +78,8 @@ public class NetworkUtilities {
     public static final String FETCH_CHANGED_BOOKMARKS_URI_DELICIOUS = "v1/posts/all";
     public static final String FETCH_BOOKMARK_URI_OAUTH = "v2/posts/get";
     public static final String FETCH_BOOKMARK_URI_DELICIOUS = "v1/posts/get";
+    public static final String LAST_UPDATE_URI_OAUTH = "v2/posts/update";
+    public static final String LAST_UPDATE_URI_DELICIOUS = "v1/posts/update";
     public static final String ADD_BOOKMARKS_URI = "v1/posts/add";
     public static final String OAUTH_ADD_BOOKMARKS_URI = "v2/posts/add";
     private static DefaultHttpClient mHttpClient;
@@ -731,6 +733,56 @@ public class NetworkUtilities {
             throw new IOException();
         }
         return bookmarkList;
+    }
+    
+    /**
+     * Fetches users bookmarks
+     * 
+     * @param account The account being synced.
+     * @param authtoken The authtoken stored in the AccountManager for the
+     *        account
+     * @return list The list of bookmarks received from the server.
+     */
+    public static long lastUpdate(String userName, Account account, String authtoken, Context context)
+    	throws JSONException, ParseException, IOException, AuthenticationException {
+
+    	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+    	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
+
+    	String bookmarkPath = null;
+    	String bookmarkScheme = null;
+    	String response = null;
+    	TreeMap<String, String> params = new TreeMap<String, String>();
+    	long updateTime = 0;
+    	
+    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
+    		bookmarkPath = LAST_UPDATE_URI_OAUTH;
+    		bookmarkScheme = SCHEME_HTTP;
+    	} else {
+    		bookmarkPath = LAST_UPDATE_URI_DELICIOUS;
+    		bookmarkScheme = SCHEME;
+    	}
+
+    	response = DeliciousApiCall(bookmarkScheme, bookmarkPath, params, userName, authtoken, context);
+    	
+        if (response.contains("<?xml")) {
+            try {
+            	int start = response.indexOf("<update");
+            	int end = response.indexOf("/>", start);
+            	String updateElement = response.substring(start, end);
+            	int timestart = updateElement.indexOf("time=");
+            	int timeend = updateElement.indexOf("\"", timestart + 7);
+            	String time = updateElement.substring(timestart + 6, timeend);
+
+				updateTime = DateParser.parse(time).getTime();
+			} catch (java.text.ParseException e) {
+				e.printStackTrace();
+			}
+        } else {
+            Log.e(TAG, "Server error in fetching bookmark list");
+            throw new IOException();
+        }
+        return updateTime;
     }
     
     public static Boolean addBookmark(User.Bookmark bookmark, Account account,
