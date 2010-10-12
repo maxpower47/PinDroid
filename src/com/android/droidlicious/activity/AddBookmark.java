@@ -23,6 +23,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 	private EditText mEditUrl;
 	private EditText mEditDescription;
 	private EditText mEditNotes;
+	private EditText mEditTags;
 	private Button mButtonSave;
 	private AccountManager mAccountManager;
 	private String authtoken;
@@ -39,6 +40,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		mEditUrl = (EditText) findViewById(R.id.add_edit_url);
 		mEditDescription = (EditText) findViewById(R.id.add_edit_description);
 		mEditNotes = (EditText) findViewById(R.id.add_edit_notes);
+		mEditTags = (EditText) findViewById(R.id.add_edit_tags);
 		mButtonSave = (Button) findViewById(R.id.add_button_save);
 		context = this;
 
@@ -53,7 +55,8 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		
 		
 		bookmark = new User.Bookmark(mEditUrl.getText().toString(), 
-		mEditDescription.getText().toString(), mEditNotes.getText().toString());
+			mEditDescription.getText().toString(), mEditNotes.getText().toString(),
+			mEditTags.getText().toString());
 		
 
 		AuthToken at = new AuthToken(context, account);

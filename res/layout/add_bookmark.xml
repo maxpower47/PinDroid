@@ -46,6 +46,20 @@
 	    android:layout_height="wrap_content"
 	    android:layout_weight="1"
 	    android:singleLine="true" />
+	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/add_title_tags"
+		android:layout_height="fill_parent"
+		android:layout_width="wrap_content"
+		android:scrollHorizontally="true"
+		android:textSize="10pt"
+		android:text="@string/add_title_tags"/>
+	<EditText
+	    android:id="@+id/add_edit_tags"
+	    android:inputType="text"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    android:singleLine="true" />
     <Button
         android:id="@+id/add_button_save"
         android:layout_width="fill_parent"

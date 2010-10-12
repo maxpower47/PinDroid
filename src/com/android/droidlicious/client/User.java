@@ -199,6 +199,15 @@ public class User {
             mMeta = "";
         }
         
+        public Bookmark(String url, String description, String notes, String tags) {
+            mUrl = url;
+            mDescription = description;
+            mNotes = notes;
+            mTags = tags;
+            mHash = "";
+            mMeta = "";
+        }
+        
         public Bookmark(String url, String description, String notes, String tags, String hash, String meta) {
             mUrl = url;
             mDescription = description;

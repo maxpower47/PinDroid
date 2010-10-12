@@ -757,6 +757,7 @@ public class NetworkUtilities {
     	
 		params.put("description", bookmark.getDescription());
 		params.put("extended", bookmark.getNotes());
+		params.put("tags", bookmark.getTags());
 		params.put("url", bookmark.getUrl());
 
     	response = DeliciousApiCall(bookmarkScheme, bookmarkPath, params, username, authtoken, context);
@@ -780,6 +781,7 @@ public class NetworkUtilities {
         }
         return true;
     }
+    
     private static String DeliciousApiCall(String scheme, String path, TreeMap<String, String> params, 
     		String username, String authtoken, Context context) throws IOException{
     	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);

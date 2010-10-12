@@ -75,6 +75,7 @@
     <string name="add_title_url">URL</string>
     <string name="add_title_description">Description</string>
     <string name="add_title_notes">Notes</string>
+    <string name="add_title_tags">Tags</string>
     <string name="tag_search_label">Tag</string>
     <string name="tag_search_hint">Hint</string>
     <string name="tag_search_text">Search Delicious</string>
