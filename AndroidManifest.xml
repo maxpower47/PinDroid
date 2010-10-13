@@ -57,10 +57,18 @@
         		<category android:name="android.intent.category.LAUNCHER" />
         	</intent-filter>
         </activity>
-        <activity android:name=".activity.BrowseTags" />
+        <activity android:name=".activity.BrowseTags">
+        	<intent-filter>
+        		<action android:name="android.intent.action.VIEW" />
+        		<category android:name="android.intent.category.DEFAULT" />
+        		<data android:scheme="content" android:host="com.android.droidlicious" android:path="/tags"/>
+			</intent-filter>
+        </activity>
         <activity android:name=".activity.BrowseBookmarks" >
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
+        		<category android:name="android.intent.category.DEFAULT" />
+        		<data android:scheme="content" android:host="com.android.droidlicious" android:path="/bookmarks"/>
         	</intent-filter>
             <intent-filter>
             	<action android:name="android.intent.action.SEARCH" />

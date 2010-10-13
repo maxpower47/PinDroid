@@ -77,6 +77,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	Boolean initialSync = settings.getBoolean(Constants.PREFS_INITIAL_SYNC, false);
     	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
     	long update = 1;
+    	Boolean success = true;
     	
     	try {
 			update = NetworkUtilities.lastUpdate(account.name, account, authtoken, mContext);
@@ -85,11 +86,6 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 		}
     	
     	if(update > lastUpdate) {
-    		Date d = new Date();
-    		
-    		SharedPreferences.Editor editor = settings.edit();
-    		editor.putLong(Constants.PREFS_LAST_SYNC, d.getTime());
-            editor.commit();
     		
 			ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
 			ArrayList<User.Bookmark> changeList = new ArrayList<User.Bookmark>();
@@ -142,27 +138,36 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 					
 				}
 			} catch (Exception e) {
+				success = false;
 				e.printStackTrace();
 			}
 			
-			if(!bookmarkList.isEmpty()){
-
-	            editor.putBoolean(Constants.PREFS_INITIAL_SYNC, true);
+			if(success){
+	    		Date d = new Date();
+	    		
+	    		SharedPreferences.Editor editor = settings.edit();
+	    		editor.putLong(Constants.PREFS_LAST_SYNC, d.getTime());
 	            editor.commit();
-				
-				for(User.Bookmark b : bookmarkList){
-					ContentValues values = new ContentValues();
+
+				if(!bookmarkList.isEmpty()){
+	
+		            editor.putBoolean(Constants.PREFS_INITIAL_SYNC, true);
+		            editor.commit();
 					
-					values.put(Bookmark.Description, b.getDescription());
-					values.put(Bookmark.Url, b.getUrl());
-					values.put(Bookmark.Notes, b.getNotes());
-					values.put(Bookmark.Tags, b.getTags());
-					values.put(Bookmark.Hash, b.getHash());
-					values.put(Bookmark.Meta, b.getMeta());
-					
-					Uri uri = mContext.getContentResolver().insert(Bookmark.CONTENT_URI, values);
-					Log.d("bookmark", uri.toString());
-				}	
+					for(User.Bookmark b : bookmarkList){
+						ContentValues values = new ContentValues();
+						
+						values.put(Bookmark.Description, b.getDescription());
+						values.put(Bookmark.Url, b.getUrl());
+						values.put(Bookmark.Notes, b.getNotes());
+						values.put(Bookmark.Tags, b.getTags());
+						values.put(Bookmark.Hash, b.getHash());
+						values.put(Bookmark.Meta, b.getMeta());
+						
+						Uri uri = mContext.getContentResolver().insert(Bookmark.CONTENT_URI, values);
+						Log.d("bookmark", uri.toString());
+					}
+				}
 			}
     	} else {
     		Log.d("BookmarkSync", "No update needed.  Last update time before last sync.");

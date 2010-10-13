@@ -853,6 +853,7 @@ public class NetworkUtilities {
 		post = new HttpGet(builder.build().toString());
 		HttpHost host = new HttpHost(DELICIOUS_AUTHORITY);
 		maybeCreateHttpClient();
+		post.setHeader("User-Agent", "Droidlicious");
     	
 		try{
 	    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
@@ -862,8 +863,6 @@ public class NetworkUtilities {
 				OauthUtilities.signRequest(post, params, authtoken, tokenSecret);
 	
 				Log.d("header", post.getHeaders("Authorization")[0].getValue());
-	    		
-		        maybeCreateHttpClient();
 		        
 		        resp = mHttpClient.execute(host, post);
 	

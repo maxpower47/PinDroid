@@ -11,13 +11,14 @@ import com.android.droidlicious.listadapter.TagListAdapter;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.util.Log;
 import android.view.*;
 
 public class BrowseTags extends DroidliciousBaseActivity {
@@ -25,7 +26,7 @@ public class BrowseTags extends DroidliciousBaseActivity {
 	WebView mWebView;
 	AccountManager mAccountManager;
 	String username = null;
-	Account account = null;
+	Account mAccount = null;
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -35,40 +36,37 @@ public class BrowseTags extends DroidliciousBaseActivity {
 		ArrayList<User.Tag> tagList = new ArrayList<User.Tag>();
 		
 		mAccountManager = AccountManager.get(this);
-		Account[] al = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
-		account = al[0];
+		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		
-		if(al.length > 0){
-			if(this.getIntent().hasExtra("username"))
-				username = getIntent().getStringExtra("username");
-			else username = account.name;
+		Uri data = getIntent().getData();
+		Log.d("blah", data.toString());
+		username = data.getPathSegments().get(0);
+		username = data.getQueryParameter("username");
+		
+		try{	
+			tagList = NetworkUtilities.fetchTags(username, mAccount, "");
 			
-			try{	
-				tagList = NetworkUtilities.fetchTags(username, al[0], "");
-				
-				setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
-			}
-			catch(Exception e){}
+			setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
+		}
+		catch(Exception e){}
+
+		ListView lv = getListView();
+		lv.setTextFilterEnabled(true);
 	
-			ListView lv = getListView();
-			lv.setTextFilterEnabled(true);
-		
-			lv.setOnItemClickListener(new OnItemClickListener() {
-			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
-			    	
-					Intent i = new Intent(parent.getContext(), BrowseBookmarks.class);
-					i.putExtra("tagname", tagName);
-					if(username != account.name){
-						i.putExtra("username", username);
-					}
-					
-					startActivity(i);
-			    }
-			});
-		}
-		else{
-			Toast.makeText(getApplicationContext(), "blah", Toast.LENGTH_SHORT).show();
-		}
+		lv.setOnItemClickListener(new OnItemClickListener() {
+		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
+		    	
+				Intent i = new Intent();
+
+				Uri.Builder dataBuilder = Constants.CONTENT_URI_BASE.buildUpon();
+				dataBuilder.appendEncodedPath("bookmarks");
+				dataBuilder.appendQueryParameter("username", username);
+				dataBuilder.appendQueryParameter("tagname", tagName);
+				i.setData(dataBuilder.build());
+				
+				startActivity(i);
+		    }
+		});
 	}
 }

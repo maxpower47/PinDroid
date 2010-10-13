@@ -2,12 +2,15 @@ package com.android.droidlicious.activity;
 
 import java.util.ArrayList;
 
+import com.android.droidlicious.Constants;
 import com.android.droidlicious.R;
 import com.android.droidlicious.client.NetworkUtilities;
 import com.android.droidlicious.client.User;
 import com.android.droidlicious.listadapter.BookmarkListAdapter;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,24 +25,25 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class BrowseBookmarks extends DroidliciousBaseActivity {
 	
+	private AccountManager mAccountManager;
+	private Account mAccount;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_bookmarks);
 		
-		Log.d("browse", "blah");
+		mAccountManager = AccountManager.get(this);
+		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+		
+		Log.d("browse bookmarks", getIntent().getDataString());
+		Uri data = getIntent().getData();
+		String username = data.getQueryParameter("username");
+		String tagname = data.getQueryParameter("tagname");
 		
 		ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
 		
-		if(Intent.ACTION_SEARCH.equals(this.getIntent().getAction()) || !this.getIntent().hasExtra("username") && this.getIntent().hasExtra("tagname")){
-
-			String tagname = null;
-			
-			if(Intent.ACTION_SEARCH.equals(this.getIntent().getAction())){
-				tagname = getIntent().getStringExtra(SearchManager.QUERY);
-			} else {
-				tagname = getIntent().getStringExtra("tagname");
-			}
+		if(mAccount.name.equals(username)){
 			
 			try{	
 				
@@ -92,11 +96,8 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 					startActivity(i);
 			    }
 			});
-		} else if(this.getIntent().hasExtra("username") && this.getIntent().hasExtra("tagname")){
+		} else {
 
-			String username = getIntent().getStringExtra("username");
-			String tagname = getIntent().getStringExtra("tagname");
-			
 			try{	
 				
 				 bookmarkList = NetworkUtilities.fetchFriendBookmarks(username, tagname);
@@ -117,13 +118,7 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 					
 					startActivity(i);
 			    }
-			});
-			
-			
-			
-			
-			
+			});	
 		}
-		
 	}
 }

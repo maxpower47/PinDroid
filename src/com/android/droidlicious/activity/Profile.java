@@ -1,5 +1,7 @@
 package com.android.droidlicious.activity;
 
+import com.android.droidlicious.Constants;
+
 import android.app.ActivityGroup;
 import android.content.Intent;
 import android.database.Cursor;
@@ -37,8 +39,14 @@ public class Profile extends ActivityGroup {
             }
         }
 		
-		Intent tagBrowseIntent = new Intent(this, BrowseTags.class);
-		tagBrowseIntent.putExtra("username", userName);
+		Intent tagBrowseIntent = new Intent();
+		
+		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
+		data.appendEncodedPath("tags");
+		data.appendQueryParameter("username", userName);
+		tagBrowseIntent.setData(data.build());
+		
+		Log.d("uri", data.build().toString());
 		
 		startActivity(tagBrowseIntent);
 		
