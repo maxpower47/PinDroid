@@ -36,7 +36,6 @@ import com.android.droidlicious.providers.TagContent.Tag;
 
 import org.apache.http.ParseException;
 
-import java.util.Date;
 import java.util.ArrayList;
 
 /**

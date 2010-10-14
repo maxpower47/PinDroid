@@ -10,6 +10,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -43,6 +44,14 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		mEditTags = (EditText) findViewById(R.id.add_edit_tags);
 		mButtonSave = (Button) findViewById(R.id.add_button_save);
 		context = this;
+		
+		if(savedInstanceState ==  null){
+			Intent intent = getIntent();
+			
+			if(Intent.ACTION_SEND.equals(intent.getAction())){
+				mEditUrl.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
+			}
+		}
 
 		mButtonSave.setOnClickListener(this);	
 	}
