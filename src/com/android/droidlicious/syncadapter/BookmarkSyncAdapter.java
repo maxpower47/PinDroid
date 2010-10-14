@@ -17,10 +17,14 @@
 package com.android.droidlicious.syncadapter;
 
 import android.accounts.Account;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SyncResult;
 import android.database.Cursor;
@@ -29,8 +33,11 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.android.droidlicious.Constants;
+import com.android.droidlicious.R;
+import com.android.droidlicious.activity.Main;
 import com.android.droidlicious.authenticator.AuthToken;
 import com.android.droidlicious.client.NetworkUtilities;
+import com.android.droidlicious.client.Update;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 import com.android.droidlicious.providers.TagContent.Tag;
 
@@ -75,7 +82,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	SharedPreferences settings = mContext.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
     	Boolean initialSync = settings.getBoolean(Constants.PREFS_INITIAL_SYNC, false);
     	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
-    	long update = 1;
+    	Update update = null;
     	Boolean success = true;
     	
     	try {
@@ -83,8 +90,18 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+		
+		if(update.getInboxNew() > 0) {
+			NotificationManager nm = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+			Notification n = new Notification(R.drawable.icon, "New Delicious Bookmarks", System.currentTimeMillis());
+			Intent ni = new Intent(mContext, Main.class);
+			PendingIntent ci = PendingIntent.getActivity(mContext, 0, ni, 0);
+			n.setLatestEventInfo(mContext, "New Bookmarks", "You Have " + Integer.toString(update.getInboxNew()) + " New Bookmark(s)", ci);
+			
+			nm.notify(1, n);
+		}
     	
-    	if(update > lastUpdate) {
+    	if(update.getLastUpdate() > lastUpdate) {
     		
     		
     		
@@ -158,7 +175,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			
 			if(success){
 	    		SharedPreferences.Editor editor = settings.edit();
-	    		editor.putLong(Constants.PREFS_LAST_SYNC, update);
+	    		editor.putLong(Constants.PREFS_LAST_SYNC, update.getLastUpdate());
 	            editor.commit();
 
 				if(!bookmarkList.isEmpty()){
@@ -185,7 +202,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			}
     	} else {
     		Log.d("BookmarkSync", "No update needed.  Last update time before last sync.");
-    		Log.d("update", Long.toString(update));
+    		Log.d("update", Long.toString(update.getLastUpdate()));
     		Log.d("lastupdate", Long.toString(lastUpdate));
     	}
     }

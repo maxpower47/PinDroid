@@ -27,7 +27,6 @@ import com.android.droidlicious.authenticator.AuthenticatorActivity;
 import com.android.droidlicious.authenticator.OauthUtilities;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 import com.android.droidlicious.providers.TagContent.Tag;
-import com.android.droidlicious.util.DateParser;
 
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -790,7 +789,7 @@ public class NetworkUtilities {
      *        account
      * @return list The list of bookmarks received from the server.
      */
-    public static long lastUpdate(String userName, Account account, String authtoken, Context context)
+    public static Update lastUpdate(String userName, Account account, String authtoken, Context context)
     	throws JSONException, ParseException, IOException, AuthenticationException {
 
     	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
@@ -800,7 +799,7 @@ public class NetworkUtilities {
     	String bookmarkScheme = null;
     	String response = null;
     	TreeMap<String, String> params = new TreeMap<String, String>();
-    	long updateTime = 0;
+    	Update update = null;
     	
     	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
     		bookmarkPath = LAST_UPDATE_URI_OAUTH;
@@ -813,23 +812,12 @@ public class NetworkUtilities {
     	response = DeliciousApiCall(bookmarkScheme, bookmarkPath, params, userName, authtoken, context);
     	
         if (response.contains("<?xml")) {
-            try {
-            	int start = response.indexOf("<update");
-            	int end = response.indexOf("/>", start);
-            	String updateElement = response.substring(start, end);
-            	int timestart = updateElement.indexOf("time=");
-            	int timeend = updateElement.indexOf("\"", timestart + 7);
-            	String time = updateElement.substring(timestart + 6, timeend);
-
-				updateTime = DateParser.parse(time).getTime();
-			} catch (java.text.ParseException e) {
-				e.printStackTrace();
-			}
+        	update = Update.valueOf(response);
         } else {
             Log.e(TAG, "Server error in fetching bookmark list");
             throw new IOException();
         }
-        return updateTime;
+        return update;
     }
     
     public static Boolean addBookmark(Bookmark bookmark, Account account,
