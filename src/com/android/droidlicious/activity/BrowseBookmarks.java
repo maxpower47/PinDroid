@@ -5,13 +5,11 @@ import java.util.ArrayList;
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.R;
 import com.android.droidlicious.client.NetworkUtilities;
-import com.android.droidlicious.client.User;
 import com.android.droidlicious.listadapter.BookmarkListAdapter;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.SearchManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -41,7 +39,7 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 		String username = data.getQueryParameter("username");
 		String tagname = data.getQueryParameter("tagname");
 		
-		ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 		
 		if(mAccount.name.equals(username)){
 			
@@ -67,7 +65,7 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 					
 					do {
 						
-						User.Bookmark b = new User.Bookmark(c.getString(urlColumn), 
+						Bookmark b = new Bookmark(c.getString(urlColumn), 
 								c.getString(descriptionColumn), "", c.getString(tagsColumn), "", 
 								c.getString(metaColumn));
 						

@@ -25,6 +25,8 @@ import android.util.Log;
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.authenticator.AuthenticatorActivity;
 import com.android.droidlicious.authenticator.OauthUtilities;
+import com.android.droidlicious.providers.BookmarkContent.Bookmark;
+import com.android.droidlicious.providers.TagContent.Tag;
 import com.android.droidlicious.util.DateParser;
 
 import org.apache.http.auth.Credentials;
@@ -518,14 +520,14 @@ public class NetworkUtilities {
      *        account
      * @return list The list of status messages received from the server.
      */
-    public static ArrayList<User.Tag> fetchFriendTags(String userName, Account account,
+    public static ArrayList<Tag> fetchFriendTags(String userName, Account account,
         String authtoken) throws JSONException, ParseException, IOException,
         AuthenticationException {
     	
         final HttpGet post = new HttpGet(FETCH_TAGS_URI + userName + "?count=100");
         maybeCreateHttpClient();
         
-        final ArrayList<User.Tag> tagList = new ArrayList<User.Tag>();
+        final ArrayList<Tag> tagList = new ArrayList<Tag>();
 
         final HttpResponse resp = mHttpClient.execute(post);
         final String response = EntityUtils.toString(resp.getEntity());
@@ -537,7 +539,7 @@ public class NetworkUtilities {
             while(i.hasNext()){
             	Object e = i.next();
             	Log.d("tag", e.toString());
-            	tagList.add(new User.Tag(e.toString(), tags.getInt(e.toString())));
+            	tagList.add(new Tag(e.toString(), tags.getInt(e.toString())));
             }
             
             Log.d(TAG, response);
@@ -563,14 +565,14 @@ public class NetworkUtilities {
      *        account
      * @return list The list of status messages received from the server.
      */
-    public static ArrayList<User.Tag> fetchTags(String userName, Account account,
+    public static ArrayList<Tag> fetchTags(String userName, Account account,
         String authtoken, Context context) throws JSONException, ParseException, IOException,
         AuthenticationException {
     	
     	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
     	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
     	
-    	ArrayList<User.Tag> tagList = new ArrayList<User.Tag>();
+    	ArrayList<Tag> tagList = new ArrayList<Tag>();
     	String tagPath = null;
     	String tagScheme = null;
     	String response = null;
@@ -588,7 +590,7 @@ public class NetworkUtilities {
     	Log.d("loadTagResponse", response);
     	
         if (response.contains("<?xml")) {
-        	tagList = User.Tag.valueOf(response);
+        	tagList = Tag.valueOf(response);
         } else {
             Log.e(TAG, "Server error in fetching bookmark list");
             throw new IOException();
@@ -605,13 +607,13 @@ public class NetworkUtilities {
      *        account
      * @return list The list of bookmarks received from the server.
      */
-    public static ArrayList<User.Bookmark> fetchFriendBookmarks(String userName, String tagName)
+    public static ArrayList<Bookmark> fetchFriendBookmarks(String userName, String tagName)
     	throws JSONException, ParseException, IOException, AuthenticationException {
 
         final HttpGet post = new HttpGet(FETCH_FRIEND_BOOKMARKS_URI + userName + "/" + tagName + "?count=100");
         maybeCreateHttpClient();
         
-        final ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+        final ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 
         final HttpResponse resp = mHttpClient.execute(post);
         final String response = EntityUtils.toString(resp.getEntity());
@@ -622,7 +624,7 @@ public class NetworkUtilities {
             Log.d(TAG, response);
             
             for (int i = 0; i < bookmarks.length(); i++) {
-                bookmarkList.add(User.Bookmark.valueOf(bookmarks.getJSONObject(i)));
+                bookmarkList.add(Bookmark.valueOf(bookmarks.getJSONObject(i)));
             }
         } else {
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
@@ -644,14 +646,14 @@ public class NetworkUtilities {
      *        account
      * @return list The list of bookmarks received from the server.
      */
-    public static ArrayList<User.Bookmark> fetchMyBookmarks(String userName, String tagName, Account account,
+    public static ArrayList<Bookmark> fetchMyBookmarks(String userName, String tagName, Account account,
         String authtoken, Context context, Boolean all) throws JSONException, ParseException, IOException,
         AuthenticationException {
 
     	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
     	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
     	
-    	ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+    	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
     	String bookmarkPath = null;
     	String bookmarkScheme = null;
     	String response = null;
@@ -678,7 +680,7 @@ public class NetworkUtilities {
     	
         if (response.contains("<?xml")) {
 
-        	bookmarkList = User.Bookmark.valueOf(response);
+        	bookmarkList = Bookmark.valueOf(response);
          
         } else {
             Log.e(TAG, "Server error in fetching bookmark list");
@@ -695,14 +697,14 @@ public class NetworkUtilities {
      *        account
      * @return list The list of bookmarks received from the server.
      */
-    public static ArrayList<User.Bookmark> fetchChangedBookmarks(String userName, Account account,
+    public static ArrayList<Bookmark> fetchChangedBookmarks(String userName, Account account,
         String authtoken, Context context) throws JSONException, ParseException, IOException,
         AuthenticationException {
 
     	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
     	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
     	
-    	ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+    	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
     	String bookmarkPath = null;
     	String bookmarkScheme = null;
     	String response = null;
@@ -721,7 +723,7 @@ public class NetworkUtilities {
 
         if (response.contains("<?xml")) {
 
-        	bookmarkList = User.Bookmark.valueOf(response);
+        	bookmarkList = Bookmark.valueOf(response);
          
         } else {
             Log.e(TAG, "Server error in fetching bookmark list");
@@ -738,14 +740,14 @@ public class NetworkUtilities {
      *        account
      * @return list The list of bookmarks received from the server.
      */
-    public static ArrayList<User.Bookmark> fetchBookmark(String userName, ArrayList<String> hashes, Account account,
+    public static ArrayList<Bookmark> fetchBookmark(String userName, ArrayList<String> hashes, Account account,
         String authtoken, Context context) throws JSONException, ParseException, IOException,
         AuthenticationException {
 
     	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
     	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
 
-    	ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
+    	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
     	String bookmarkPath = null;
     	String bookmarkScheme = null;
     	TreeMap<String, String> params = new TreeMap<String, String>();
@@ -772,7 +774,7 @@ public class NetworkUtilities {
     	response = DeliciousApiCall(bookmarkScheme, bookmarkPath, params, userName, authtoken, context);
     	
         if (response.contains("<?xml")) {
-            bookmarkList = User.Bookmark.valueOf(response);
+            bookmarkList = Bookmark.valueOf(response);
         } else {
             Log.e(TAG, "Server error in fetching bookmark list");
             throw new IOException();
@@ -830,7 +832,7 @@ public class NetworkUtilities {
         return updateTime;
     }
     
-    public static Boolean addBookmark(User.Bookmark bookmark, Account account,
+    public static Boolean addBookmark(Bookmark bookmark, Account account,
         String authtoken, Context context) throws Exception {
 
     	Log.d("addBookmarks()", "start");

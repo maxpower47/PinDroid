@@ -4,7 +4,7 @@ import com.android.droidlicious.Constants;
 import com.android.droidlicious.R;
 import com.android.droidlicious.authenticator.AuthToken;
 import com.android.droidlicious.client.NetworkUtilities;
-import com.android.droidlicious.client.User;
+import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -28,7 +28,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 	private AccountManager mAccountManager;
 	private String authtoken;
 	private Account account;
-	private User.Bookmark bookmark;
+	private Bookmark bookmark;
 	private Context context;
 	Thread background;
 
@@ -54,7 +54,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		account = al[0];
 		
 		
-		bookmark = new User.Bookmark(mEditUrl.getText().toString(), 
+		bookmark = new Bookmark(mEditUrl.getText().toString(), 
 			mEditDescription.getText().toString(), mEditNotes.getText().toString(),
 			mEditTags.getText().toString());
 		

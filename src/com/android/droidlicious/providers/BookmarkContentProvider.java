@@ -37,7 +37,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
 	
-	public static final String AUTHORITY = "com.android.droidlicious.providers.BookmarkContentProvider";
+	public static final String AUTHORITY = "com.android.droidlicious";
 	
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		

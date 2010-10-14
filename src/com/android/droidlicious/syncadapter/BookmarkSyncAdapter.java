@@ -31,7 +31,6 @@ import android.util.Log;
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.authenticator.AuthToken;
 import com.android.droidlicious.client.NetworkUtilities;
-import com.android.droidlicious.client.User;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 import com.android.droidlicious.providers.TagContent.Tag;
 
@@ -90,11 +89,11 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     		
     		
     		
-			ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
-			ArrayList<User.Bookmark> changeList = new ArrayList<User.Bookmark>();
-			ArrayList<User.Bookmark> addList = new ArrayList<User.Bookmark>();
-			ArrayList<User.Bookmark> updateList = new ArrayList<User.Bookmark>();
-			ArrayList<User.Tag> tagList = new ArrayList<User.Tag>();
+			ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
+			ArrayList<Bookmark> changeList = new ArrayList<Bookmark>();
+			ArrayList<Bookmark> addList = new ArrayList<Bookmark>();
+			ArrayList<Bookmark> updateList = new ArrayList<Bookmark>();
+			ArrayList<Tag> tagList = new ArrayList<Tag>();
 
 			try {
 				if(!initialSync){
@@ -105,7 +104,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 					Log.d("BookmarkSync", "In Bookmark Update");
 					changeList = NetworkUtilities.fetchChangedBookmarks(account.name, account, authtoken, mContext);
 					
-					for(User.Bookmark b : changeList){
+					for(Bookmark b : changeList){
 					
 						String[] projection = new String[] {Bookmark.Hash, Bookmark.Meta};
 						String selection = Bookmark.Hash + "=?";
@@ -133,7 +132,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 					}
 					
 					ArrayList<String> a = new ArrayList<String>();
-					for(User.Bookmark b : addList){
+					for(Bookmark b : addList){
 						a.add(b.getHash());
 					}
 					Log.d("size", Integer.toString(a.size()));
@@ -147,7 +146,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 				e.printStackTrace();
 			}
 			
-			for(User.Tag b : tagList){
+			for(Tag b : tagList){
 				ContentValues values = new ContentValues();
 				
 				values.put(Tag.Name, b.getTagName());
@@ -170,7 +169,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 		            editor.putBoolean(Constants.PREFS_INITIAL_SYNC, true);
 		            editor.commit();
 					
-					for(User.Bookmark b : bookmarkList){
+					for(Bookmark b : bookmarkList){
 						ContentValues values = new ContentValues();
 						
 						values.put(Bookmark.Description, b.getDescription());

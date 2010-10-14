@@ -27,7 +27,7 @@ public class Constants {
     
     public static final Uri BOOKMARK_CONENT_URI = Uri.parse("content://com.android.droidlicious.bookmark");
     
-    public static final Uri CONTENT_URI_BASE = Uri.parse("content://com.android.droidlicious.providers.BookmarkContentProvider");
+    public static final Uri CONTENT_URI_BASE = Uri.parse("content://com.android.droidlicious");
 
     /**
      * Authtoken type string.

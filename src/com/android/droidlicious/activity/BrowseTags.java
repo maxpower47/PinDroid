@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.android.droidlicious.R;
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.client.NetworkUtilities;
-import com.android.droidlicious.client.User;
 import com.android.droidlicious.listadapter.TagListAdapter;
 import com.android.droidlicious.providers.TagContent.Tag;
 
@@ -34,7 +33,7 @@ public class BrowseTags extends DroidliciousBaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_tags);
 		
-		ArrayList<User.Tag> tagList = new ArrayList<User.Tag>();
+		ArrayList<Tag> tagList = new ArrayList<Tag>();
 		
 		mAccountManager = AccountManager.get(this);
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
@@ -58,7 +57,7 @@ public class BrowseTags extends DroidliciousBaseActivity {
 					int countColumn = c.getColumnIndex(Tag.Count);
 
 					do {	
-						User.Tag t = new User.Tag(c.getString(nameColumn), c.getInt(countColumn));
+						Tag t = new Tag(c.getString(nameColumn), c.getInt(countColumn));
 
 						tagList.add(t);
 					} while(c.moveToNext());	

@@ -61,14 +61,14 @@
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.android.droidlicious.providers.BookmarkContentProvider" android:path="/tags"/>
+        		<data android:scheme="content" android:host="com.android.droidlicious" android:path="/tags"/>
 			</intent-filter>
         </activity>
         <activity android:name=".activity.BrowseBookmarks" >
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.android.droidlicious.providers.BookmarkContentProvider" android:path="/bookmarks"/>
+        		<data android:scheme="content" android:host="com.android.droidlicious" android:path="/bookmarks"/>
         	</intent-filter>
             <intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
@@ -128,7 +128,7 @@
         </activity>
         <provider
         	android:name="com.android.droidlicious.providers.BookmarkContentProvider"
-        	android:authorities="com.android.droidlicious.providers.BookmarkContentProvider" />
+        	android:authorities="com.android.droidlicious" />
         <meta-data android:name="android.app.default_searchable" android:value=".activity.BrowseBookmarks" />
         	
     </application>
