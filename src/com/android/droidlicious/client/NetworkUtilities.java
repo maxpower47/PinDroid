@@ -72,6 +72,8 @@ public class NetworkUtilities {
     public static final String FETCH_FRIEND_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/";
     public static final String FETCH_STATUS_URI = "http://feeds.delicious.com/v2/json/network/";
     public static final String FETCH_TAGS_URI = "http://feeds.delicious.com/v2/json/tags/";
+    public static final String FETCH_TAGS_URI_OAUTH = "v2/tags/get";
+    public static final String FETCH_TAGS_URI_DELICIOUS = "v1/tags/get";
     public static final String FETCH_BOOKMARKS_URI_OAUTH = "v2/posts";
     public static final String FETCH_BOOKMARKS_URI_DELICIOUS = "v1/posts";
     public static final String FETCH_CHANGED_BOOKMARKS_URI_OAUTH = "v2/posts/all";
@@ -516,10 +518,10 @@ public class NetworkUtilities {
      *        account
      * @return list The list of status messages received from the server.
      */
-    public static ArrayList<User.Tag> fetchTags(String userName, Account account,
+    public static ArrayList<User.Tag> fetchFriendTags(String userName, Account account,
         String authtoken) throws JSONException, ParseException, IOException,
         AuthenticationException {
-
+    	
         final HttpGet post = new HttpGet(FETCH_TAGS_URI + userName + "?count=100");
         maybeCreateHttpClient();
         
@@ -552,6 +554,49 @@ public class NetworkUtilities {
         return tagList;
     }
     
+    
+    /**
+     * Fetches status messages for the user's friends from the server
+     * 
+     * @param account The account being synced.
+     * @param authtoken The authtoken stored in the AccountManager for the
+     *        account
+     * @return list The list of status messages received from the server.
+     */
+    public static ArrayList<User.Tag> fetchTags(String userName, Account account,
+        String authtoken, Context context) throws JSONException, ParseException, IOException,
+        AuthenticationException {
+    	
+    	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+    	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
+    	
+    	ArrayList<User.Tag> tagList = new ArrayList<User.Tag>();
+    	String tagPath = null;
+    	String tagScheme = null;
+    	String response = null;
+    	TreeMap<String, String> params = new TreeMap<String, String>();
+    	
+    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
+    		tagPath = FETCH_TAGS_URI_OAUTH;
+    		tagScheme = SCHEME_HTTP;
+    	} else {
+    		tagPath = FETCH_TAGS_URI_DELICIOUS;
+    		tagScheme = SCHEME;
+    	}
+    	
+    	response = DeliciousApiCall(tagScheme, tagPath, params, userName, authtoken, context);
+    	Log.d("loadTagResponse", response);
+    	
+        if (response.contains("<?xml")) {
+        	tagList = User.Tag.valueOf(response);
+        } else {
+            Log.e(TAG, "Server error in fetching bookmark list");
+            throw new IOException();
+        }
+        return tagList;
+    }
+    
+   
     /**
      * Fetches users bookmarks
      * 

@@ -7,10 +7,12 @@ import com.android.droidlicious.Constants;
 import com.android.droidlicious.client.NetworkUtilities;
 import com.android.droidlicious.client.User;
 import com.android.droidlicious.listadapter.TagListAdapter;
+import com.android.droidlicious.providers.TagContent.Tag;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.WebView;
@@ -18,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.util.Log;
 import android.view.*;
 
 public class BrowseTags extends DroidliciousBaseActivity {
@@ -39,16 +40,44 @@ public class BrowseTags extends DroidliciousBaseActivity {
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		
 		Uri data = getIntent().getData();
-		Log.d("blah", data.toString());
 		username = data.getPathSegments().get(0);
 		username = data.getQueryParameter("username");
 		
-		try{	
-			tagList = NetworkUtilities.fetchTags(username, mAccount, "");
+		if(mAccount.name.equals(username)){
+			try{
+
+				String[] projection = new String[] {Tag.Name, Tag.Count};
+							
+				Uri tags = Tag.CONTENT_URI;
+				
+				Cursor c = managedQuery(tags, projection, null, null, null);				
+				
+				if(c.moveToFirst()){
+					
+					int nameColumn = c.getColumnIndex(Tag.Name);
+					int countColumn = c.getColumnIndex(Tag.Count);
+
+					do {	
+						User.Tag t = new User.Tag(c.getString(nameColumn), c.getInt(countColumn));
+
+						tagList.add(t);
+					} while(c.moveToNext());	
+				}
+
+				setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
+
+			} catch(Exception e) {
+				
+			}
 			
-			setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
+		} else {
+			try{	
+				tagList = NetworkUtilities.fetchFriendTags(username, mAccount, "");
+				
+				setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
+			}
+			catch(Exception e){}
 		}
-		catch(Exception e){}
 
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);

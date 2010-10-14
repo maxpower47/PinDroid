@@ -61,14 +61,14 @@
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.android.droidlicious" android:path="/tags"/>
+        		<data android:scheme="content" android:host="com.android.droidlicious.providers.BookmarkContentProvider" android:path="/tags"/>
 			</intent-filter>
         </activity>
         <activity android:name=".activity.BrowseBookmarks" >
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.android.droidlicious" android:path="/bookmarks"/>
+        		<data android:scheme="content" android:host="com.android.droidlicious.providers.BookmarkContentProvider" android:path="/bookmarks"/>
         	</intent-filter>
             <intent-filter>
             	<action android:name="android.intent.action.SEARCH" />

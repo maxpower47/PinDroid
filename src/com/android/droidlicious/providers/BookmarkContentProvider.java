@@ -3,6 +3,7 @@ package com.android.droidlicious.providers;
 
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
+import com.android.droidlicious.providers.TagContent.Tag;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -30,8 +31,9 @@ public class BookmarkContentProvider extends ContentProvider {
 	private SQLiteDatabase db;
 	private DatabaseHelper dbHelper;
 	private static final String DATABASE_NAME = "DeliciousBookmarks.db";
-	private static final int DATABASE_VERSION = 8;
+	private static final int DATABASE_VERSION = 9;
 	private static final String BOOKMARK_TABLE_NAME = "bookmark";
+	private static final String TAG_TABLE_NAME = "tag";
 	
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
 	
@@ -55,11 +57,17 @@ public class BookmarkContentProvider extends ContentProvider {
 					"HASH TEXT, " +
 					"META TEXT);");
 			
+			sqlDb.execSQL("Create table " + TAG_TABLE_NAME + 
+					" (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					"NAME TEXT, " +
+					"COUNT INTEGER);");
+			
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase sqlDb, int oldVersion, int newVersion) {
 			sqlDb.execSQL("DROP TABLE IF EXISTS " + BOOKMARK_TABLE_NAME);
+			sqlDb.execSQL("DROP TABLE IF EXISTS " + TAG_TABLE_NAME);
 			onCreate(sqlDb);	
 		}
 	}
@@ -71,12 +79,13 @@ public class BookmarkContentProvider extends ContentProvider {
 
 	@Override
 	public String getType(Uri uri) {
-		
 		switch(sURIMatcher.match(uri)){
 			case 1:
 				return Bookmark.CONTENT_TYPE;
 			case 2:
 				return SearchManager.SUGGEST_MIME_TYPE;
+			case 3:
+				return Tag.CONTENT_TYPE;
 			default:
 				throw new IllegalArgumentException("Unknown URL " + uri);
 		}
@@ -84,7 +93,17 @@ public class BookmarkContentProvider extends ContentProvider {
 
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-		
+		switch(sURIMatcher.match(uri)) {
+			case 1:
+				return insertBookmark(uri, values);
+			case 3:
+				return insertTag(uri, values);
+			default:
+				throw new IllegalArgumentException("Unknown Uri: " + uri);
+		}
+	}
+	
+	private Uri insertBookmark(Uri uri, ContentValues values){
 		db = dbHelper.getWritableDatabase();
 		long rowId = db.insert(BOOKMARK_TABLE_NAME, "", values);
 		if(rowId > 0) {
@@ -95,6 +114,17 @@ public class BookmarkContentProvider extends ContentProvider {
 		throw new SQLException("Failed to insert row into " + uri);
 	}
 
+	private Uri insertTag(Uri uri, ContentValues values){
+		db = dbHelper.getWritableDatabase();
+		long rowId = db.insert(TAG_TABLE_NAME, "", values);
+		if(rowId > 0) {
+			Uri rowUri = ContentUris.appendId(TagContent.Tag.CONTENT_URI.buildUpon(), rowId).build();
+			getContext().getContentResolver().notifyChange(rowUri, null);
+			return rowUri;
+		}
+		throw new SQLException("Failed to insert row into " + uri);
+	}
+	
 	@Override
 	public boolean onCreate() {
 
@@ -106,18 +136,17 @@ public class BookmarkContentProvider extends ContentProvider {
 
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
-		
 		switch(sURIMatcher.match(uri)) {
 			case 1:
 				return getBookmarks(projection, selection, selectionArgs, sortOrder);
 			case 2:
 				String query = uri.getLastPathSegment().toLowerCase();
 				return getSearchSuggestions(query);
+			case 3:
+				return getTags(projection, selection, selectionArgs, sortOrder);
 			default:
 				throw new IllegalArgumentException("Unknown Uri: " + uri);
 		}
-		
-
 	}
 	
 	private Cursor getBookmarks(String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
@@ -129,15 +158,24 @@ public class BookmarkContentProvider extends ContentProvider {
 		return c;
 	}
 	
+	private Cursor getTags(String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
+		qb.setTables(TAG_TABLE_NAME);
+		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder);
+		//c.setNotificationUri(getContext().getContentResolver(), uri);
+		return c;
+	}
+	
 	private Cursor getSearchSuggestions(String query) {
 		Log.d("getSearchSuggestions", query);
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
-		qb.setTables(BOOKMARK_TABLE_NAME);
+		qb.setTables(TAG_TABLE_NAME);
 		
-		String selection = Bookmark.Tags + " LIKE '%" + query + "%'";
+		String selection = Tag.Name + " LIKE '%" + query + "%'";
 		
-		String[] projection = new String[] {BaseColumns._ID, Bookmark.Description, Bookmark.Tags};
+		String[] projection = new String[] {BaseColumns._ID, Tag.Name, Tag.Count};
 
 		Cursor c = qb.query(rdb, projection, selection, null, null, null, null);
 		
@@ -146,15 +184,15 @@ public class BookmarkContentProvider extends ContentProvider {
 		int i = 0;
 		
 		if(c.moveToFirst()){
-			int descriptionColumn = c.getColumnIndex(Bookmark.Description);
-			
-			Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
-			data.appendEncodedPath("bookmarks");
-			data.appendQueryParameter("username", mAccount.name);
-			data.appendQueryParameter("tagname", query);
-			
+			int nameColumn = c.getColumnIndex(Tag.Name);
+
 			do {
-				mc.addRow(new Object[] {i++, c.getString(descriptionColumn), data.build().toString()});
+				Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
+				data.appendEncodedPath("bookmarks");
+				data.appendQueryParameter("username", mAccount.name);
+				data.appendQueryParameter("tagname", c.getString(nameColumn));
+				
+				mc.addRow(new Object[] {i++, c.getString(nameColumn), data.build().toString()});
 				
 			} while(c.moveToNext());	
 		}
@@ -172,6 +210,7 @@ public class BookmarkContentProvider extends ContentProvider {
         UriMatcher matcher =  new UriMatcher(UriMatcher.NO_MATCH);
         // to get definitions...
         matcher.addURI(AUTHORITY, "bookmark", 1);
+        matcher.addURI(AUTHORITY, "tag", 3);
         // to get suggestions...
         matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, 2);
         matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", 2);

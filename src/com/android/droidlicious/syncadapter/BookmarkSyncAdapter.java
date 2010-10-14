@@ -33,6 +33,7 @@ import com.android.droidlicious.authenticator.AuthToken;
 import com.android.droidlicious.client.NetworkUtilities;
 import com.android.droidlicious.client.User;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
+import com.android.droidlicious.providers.TagContent.Tag;
 
 import org.apache.http.ParseException;
 
@@ -87,14 +88,18 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	
     	if(update > lastUpdate) {
     		
+    		
+    		
 			ArrayList<User.Bookmark> bookmarkList = new ArrayList<User.Bookmark>();
 			ArrayList<User.Bookmark> changeList = new ArrayList<User.Bookmark>();
 			ArrayList<User.Bookmark> addList = new ArrayList<User.Bookmark>();
 			ArrayList<User.Bookmark> updateList = new ArrayList<User.Bookmark>();
-	
+			ArrayList<User.Tag> tagList = new ArrayList<User.Tag>();
+
 			try {
 				if(!initialSync){
 					Log.d("BookmarkSync", "In Bookmark Load");
+					tagList = NetworkUtilities.fetchTags(account.name, account, authtoken, mContext);
 					bookmarkList = NetworkUtilities.fetchMyBookmarks(account.name, null, account, authtoken, mContext, true);
 				} else {
 					Log.d("BookmarkSync", "In Bookmark Update");
@@ -142,6 +147,17 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 				e.printStackTrace();
 			}
 			
+			for(User.Tag b : tagList){
+				ContentValues values = new ContentValues();
+				
+				values.put(Tag.Name, b.getTagName());
+				values.put(Tag.Count, b.getCount());
+
+				
+				Uri uri = mContext.getContentResolver().insert(Tag.CONTENT_URI, values);
+				Log.d("tag", uri.toString());
+			}
+			
 			if(success){
 	    		Date d = new Date();
 	    		
@@ -167,6 +183,8 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 						Uri uri = mContext.getContentResolver().insert(Bookmark.CONTENT_URI, values);
 						Log.d("bookmark", uri.toString());
 					}
+					
+
 				}
 			}
     	} else {

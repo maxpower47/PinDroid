@@ -134,6 +134,40 @@ public class User {
             mTagName = tagName;
             mCount = count;
         }
+        
+        public static ArrayList<User.Tag> valueOf(String userTag){
+            XPath xpath = XPathFactory.newInstance().newXPath();
+            String expression = "/tags/tag";
+            ArrayList<User.Tag> list = new ArrayList<User.Tag>();
+            
+            InputSource inputSource = new InputSource(new StringReader(userTag));
+            try {
+            	
+				NodeList nodes = (NodeList)xpath.evaluate(expression, inputSource, XPathConstants.NODESET);
+				
+				for(int i = 0; i < nodes.getLength(); i++){
+					Node count = nodes.item(i).getAttributes().getNamedItem("count");
+					Node name = nodes.item(i).getAttributes().getNamedItem("tag");
+
+					String scount = "";
+					String sname = "";
+
+
+					if(count != null)
+						scount = count.getTextContent();
+					if(name != null)
+						sname = name.getTextContent();
+
+					
+					list.add(new User.Tag(sname, Integer.parseInt(scount)));
+
+				}
+				
+			} catch (XPathExpressionException e) {
+				e.printStackTrace();
+			}
+			return list;
+        }
     }
     
     /**
