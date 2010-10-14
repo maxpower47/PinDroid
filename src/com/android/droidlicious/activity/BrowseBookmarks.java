@@ -4,27 +4,40 @@ import java.util.ArrayList;
 
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.R;
+import com.android.droidlicious.authenticator.AuthToken;
 import com.android.droidlicious.client.NetworkUtilities;
 import com.android.droidlicious.listadapter.BookmarkListAdapter;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 public class BrowseBookmarks extends DroidliciousBaseActivity {
 	
 	private AccountManager mAccountManager;
 	private Account mAccount;
+	private ListView lv;
+	private String authtoken;
+	private Context mContext;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -33,6 +46,7 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 		
 		mAccountManager = AccountManager.get(this);
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+		mContext = this;
 		
 		Log.d("browse bookmarks", getIntent().getDataString());
 		Uri data = getIntent().getData();
@@ -70,7 +84,6 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 								c.getString(descriptionColumn), "", c.getString(tagsColumn), "", 
 								c.getString(metaColumn));
 						
-						
 						bookmarkList.add(b);
 						
 					} while(c.moveToNext());
@@ -82,42 +95,68 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 			}
 			catch(Exception e){}
 			
-			ListView lv = getListView();
-			lv.setTextFilterEnabled(true);
-		
-			lv.setOnItemClickListener(new OnItemClickListener() {
-			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			    	String url = ((TextView)view.findViewById(R.id.bookmark_url)).getText().toString();
-			    	Uri link = Uri.parse(url);
-			    	
-					Intent i = new Intent(Intent.ACTION_VIEW, link);
-					
-					startActivity(i);
-			    }
-			});
 		} else {
-
 			try{	
-				
-				 bookmarkList = NetworkUtilities.fetchFriendBookmarks(username, tagname);
+				bookmarkList = NetworkUtilities.fetchFriendBookmarks(username, tagname);
 
 				setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
 			}
 			catch(Exception e){}
-			
-			ListView lv = getListView();
-			lv.setTextFilterEnabled(true);
-		
-			lv.setOnItemClickListener(new OnItemClickListener() {
-			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			    	String url = ((TextView)view.findViewById(R.id.bookmark_url)).getText().toString();
-			    	Uri link = Uri.parse(url);
-			    	
-					Intent i = new Intent(Intent.ACTION_VIEW, link);
-					
-					startActivity(i);
-			    }
-			});	
 		}
+		
+		lv = getListView();
+		lv.setTextFilterEnabled(true);
+	
+		lv.setOnItemClickListener(new OnItemClickListener() {
+		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		    	String url = ((TextView)view.findViewById(R.id.bookmark_url)).getText().toString();
+		    	Uri link = Uri.parse(url);
+		    	
+				Intent i = new Intent(Intent.ACTION_VIEW, link);
+				
+				startActivity(i);
+		    }
+		});
+		
+		/* Add Context-Menu listener to the ListView. */
+		lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+				menu.setHeaderTitle("ContextMenu");
+				menu.add(0, 0, 0, "Delete");
+				
+			}
+		});
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem aItem) {
+		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem.getMenuInfo();
+		switch (aItem.getItemId()) {
+			case 0:
+				final Bookmark b = (Bookmark)lv.getItemAtPosition(menuInfo.position);
+				
+				AuthToken at = new AuthToken(this, mAccount);
+				at.getAuthTokenAsync(new Handler(){
+				    @Override
+				    public void handleMessage(Message msg) {  
+				    	Boolean success = false;
+				    	authtoken = (String)msg.obj;
+						try {
+							success = NetworkUtilities.deleteBookmark(b, mAccount, authtoken, mContext);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						
+						if(success){
+							Toast.makeText(getApplicationContext(), "Bookmark Deleted Successfully", Toast.LENGTH_SHORT).show();
+						} else {
+							Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+						}
+				    }	
+				});
+	
+				return true;
+		}
+		return false;
 	}
 }

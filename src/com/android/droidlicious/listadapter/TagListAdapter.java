@@ -3,7 +3,6 @@ package com.android.droidlicious.listadapter;
 import java.util.ArrayList;
 
 import com.android.droidlicious.R;
-import com.android.droidlicious.client.User;
 import com.android.droidlicious.providers.TagContent.Tag;
 
 import android.content.Context;

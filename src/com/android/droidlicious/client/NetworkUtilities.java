@@ -83,6 +83,8 @@ public class NetworkUtilities {
     public static final String FETCH_BOOKMARK_URI_DELICIOUS = "v1/posts/get";
     public static final String LAST_UPDATE_URI_OAUTH = "v2/posts/update";
     public static final String LAST_UPDATE_URI_DELICIOUS = "v1/posts/update";
+    public static final String DELETE_BOOKMARK_URI_OAUTH = "v2/posts/delete";
+    public static final String DELETE_BOOKMARK_URI_DELICIOUS = "v1/posts/delete";
     public static final String ADD_BOOKMARKS_URI = "v1/posts/add";
     public static final String OAUTH_ADD_BOOKMARKS_URI = "v2/posts/add";
     private static DefaultHttpClient mHttpClient;
@@ -789,6 +791,48 @@ public class NetworkUtilities {
      *        account
      * @return list The list of bookmarks received from the server.
      */
+    public static Boolean deleteBookmark(Bookmark bookmark, Account account,
+        String authtoken, Context context) throws JSONException, ParseException, IOException,
+        AuthenticationException {
+
+    	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+    	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
+
+    	Boolean result = false;
+    	String bookmarkPath = null;
+    	String bookmarkScheme = null;
+    	TreeMap<String, String> params = new TreeMap<String, String>();
+    	String response = null;
+    	
+    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
+    		bookmarkPath = DELETE_BOOKMARK_URI_OAUTH;
+    		bookmarkScheme = SCHEME_HTTP;
+    	} else {
+    		bookmarkPath = DELETE_BOOKMARK_URI_DELICIOUS;
+    		bookmarkScheme = SCHEME;
+    	}
+
+    	params.put("url", bookmark.getUrl());
+
+    	response = DeliciousApiCall(bookmarkScheme, bookmarkPath, params, account.name, authtoken, context);
+    	
+        if (response.contains("<result code=\"done\"")) {
+            result = true;
+        } else {
+            Log.e(TAG, "Server error in fetching bookmark list");
+            throw new IOException();
+        }
+        return result;
+    }
+    
+    /**
+     * Fetches users bookmarks
+     * 
+     * @param account The account being synced.
+     * @param authtoken The authtoken stored in the AccountManager for the
+     *        account
+     * @return list The list of bookmarks received from the server.
+     */
     public static Update lastUpdate(String userName, Account account, String authtoken, Context context)
     	throws JSONException, ParseException, IOException, AuthenticationException {
 
@@ -885,14 +929,15 @@ public class NetworkUtilities {
 			builder.appendQueryParameter(key, params.get(key));
 		}
 		
-		post = new HttpGet(builder.build().toString());
+		Log.d("apiCallUrl", builder.build().toString());
+		post = new HttpGet(builder.build().toString().replace("%3A", ":").replace("%2F", "/"));
 		HttpHost host = new HttpHost(DELICIOUS_AUTHORITY);
 		maybeCreateHttpClient();
 		post.setHeader("User-Agent", "Droidlicious");
     	
 		try{
 	    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
-	    		Log.d("addBookmarks()", "oauth");
+	    		Log.d("apiCall", "oauth");
 	    		String tokenSecret = settings.getString("oauth_token_secret", "");
 	
 				OauthUtilities.signRequest(post, params, authtoken, tokenSecret);
