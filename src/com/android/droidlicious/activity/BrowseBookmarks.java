@@ -48,7 +48,8 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 				String[] projection = new String[] {Bookmark.Url, Bookmark.Description, Bookmark.Meta, Bookmark.Tags};
 				String selection = Bookmark.Tags + " LIKE '% " + tagname + " %' OR " +
 					Bookmark.Tags + " LIKE '% " + tagname + "' OR " +
-					Bookmark.Tags + " LIKE '" + tagname + " %'";
+					Bookmark.Tags + " LIKE '" + tagname + " %' OR " +
+					Bookmark.Tags + " = '" + tagname + "'";
 				
 				Log.d("selection", selection);
 				

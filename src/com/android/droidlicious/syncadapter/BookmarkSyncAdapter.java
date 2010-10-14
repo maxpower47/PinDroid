@@ -158,10 +158,8 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			}
 			
 			if(success){
-	    		Date d = new Date();
-	    		
 	    		SharedPreferences.Editor editor = settings.edit();
-	    		editor.putLong(Constants.PREFS_LAST_SYNC, d.getTime());
+	    		editor.putLong(Constants.PREFS_LAST_SYNC, update);
 	            editor.commit();
 
 				if(!bookmarkList.isEmpty()){
@@ -188,6 +186,8 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			}
     	} else {
     		Log.d("BookmarkSync", "No update needed.  Last update time before last sync.");
+    		Log.d("update", Long.toString(update));
+    		Log.d("lastupdate", Long.toString(lastUpdate));
     	}
     }
 }

@@ -12,8 +12,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.android.droidlicious.client.User;
-
 import android.net.Uri;
 import android.provider.BaseColumns;
 

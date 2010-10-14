@@ -25,8 +25,8 @@ import android.util.Log;
 
 public class BookmarkContentProvider extends ContentProvider {
 	
-	private AccountManager mAccountManager;
-	private Account mAccount;
+	private AccountManager mAccountManager = null;
+	private Account mAccount = null;
 	
 	private SQLiteDatabase db;
 	private DatabaseHelper dbHelper;
@@ -37,7 +37,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
 	
-	public static final String AUTHORITY = "com.android.droidlicious";
+	public static final String AUTHORITY = "com.android.droidlicious.providers.BookmarkContentProvider";
 	
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		
@@ -93,6 +93,7 @@ public class BookmarkContentProvider extends ContentProvider {
 
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
+		
 		switch(sURIMatcher.match(uri)) {
 			case 1:
 				return insertBookmark(uri, values);
@@ -129,8 +130,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	public boolean onCreate() {
 
 		dbHelper = new DatabaseHelper(getContext());
-		mAccountManager = AccountManager.get(getContext());
-		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+		
 		return !(dbHelper == null);
 	}
 
@@ -169,6 +169,10 @@ public class BookmarkContentProvider extends ContentProvider {
 	
 	private Cursor getSearchSuggestions(String query) {
 		Log.d("getSearchSuggestions", query);
+		
+		mAccountManager = AccountManager.get(getContext());
+		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+		
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
 		qb.setTables(TAG_TABLE_NAME);

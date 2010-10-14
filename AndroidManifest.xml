@@ -128,10 +128,9 @@
         </activity>
         <provider
         	android:name="com.android.droidlicious.providers.BookmarkContentProvider"
-        	android:authorities="com.android.droidlicious" />
+        	android:authorities="com.android.droidlicious.providers.BookmarkContentProvider" />
         <meta-data android:name="android.app.default_searchable" android:value=".activity.BrowseBookmarks" />
         	
     </application>
-    <uses-sdk
-        android:minSdkVersion="8" />
+    <uses-sdk android:minSdkVersion="8" />
 </manifest>
