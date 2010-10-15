@@ -71,6 +71,7 @@ public class NetworkUtilities {
 
     public static final String FETCH_FRIEND_UPDATES_URI = "http://feeds.delicious.com/v2/json/networkmembers/";
     public static final String FETCH_FRIEND_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/";
+    public static final String FETCH_NETWORK_RECENT_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/network/";
     public static final String FETCH_STATUS_URI = "http://feeds.delicious.com/v2/json/network/";
     public static final String FETCH_TAGS_URI = "http://feeds.delicious.com/v2/json/tags/";
     public static final String FETCH_TAGS_URI_OAUTH = "v2/tags/get";
@@ -633,6 +634,45 @@ public class NetworkUtilities {
                 throw new AuthenticationException();
             } else {
                 Log.e(TAG, "Server error in fetching friend status list");
+                throw new IOException();
+            }
+        }
+        return bookmarkList;
+    }
+    
+    /**
+     * Fetches users bookmarks
+     * 
+     * @param account The account being synced.
+     * @param authtoken The authtoken stored in the AccountManager for the
+     *        account
+     * @return list The list of bookmarks received from the server.
+     */
+    public static ArrayList<Bookmark> fetchNetworkRecent(String userName)
+    	throws JSONException, ParseException, IOException, AuthenticationException {
+
+        final HttpGet post = new HttpGet(FETCH_NETWORK_RECENT_BOOKMARKS_URI + userName + "?count=30");
+        maybeCreateHttpClient();
+        
+        final ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
+
+        final HttpResponse resp = mHttpClient.execute(post);
+        final String response = EntityUtils.toString(resp.getEntity());
+
+        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+
+            final JSONArray bookmarks = new JSONArray(response);
+            Log.d(TAG, response);
+            
+            for (int i = 0; i < bookmarks.length(); i++) {
+                bookmarkList.add(Bookmark.valueOf(bookmarks.getJSONObject(i)));
+            }
+        } else {
+            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+                Log.e(TAG, "Authentication exception in fetching network recent list");
+                throw new AuthenticationException();
+            } else {
+                Log.e(TAG, "Server error in fetching network recent list");
                 throw new IOException();
             }
         }

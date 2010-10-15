@@ -24,7 +24,7 @@ public class Main extends DroidliciousBaseActivity {
 	private Account mAccount;
 	private Context mContext;
 	
-	static final String[] MENU_ITEMS = new String[] {"View My Recent", "View My Tags"};
+	static final String[] MENU_ITEMS = new String[] {"View My Recent", "View My Tags", "View Network Recent"};
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -58,6 +58,19 @@ public class Main extends DroidliciousBaseActivity {
 		    		Intent i = new Intent();
 		    		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
 		    		data.appendEncodedPath("tags");
+		    		data.appendQueryParameter("username", mAccount.name);
+		    		i.setData(data.build());
+		    		
+		    		Log.d("uri", data.build().toString());
+		    		
+		    		startActivity(i);
+		    	} else if(position == 2){
+		    		mAccountManager = AccountManager.get(mContext);
+		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+		    		
+		    		Intent i = new Intent();
+		    		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
+		    		data.appendEncodedPath("network");
 		    		data.appendQueryParameter("username", mAccount.name);
 		    		i.setData(data.build());
 		    		

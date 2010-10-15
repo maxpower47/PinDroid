@@ -50,13 +50,15 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 		
 		Log.d("browse bookmarks", getIntent().getDataString());
 		Uri data = getIntent().getData();
+		String path = data.getPath();
+		Log.d("path", path);
 		String username = data.getQueryParameter("username");
 		String tagname = data.getQueryParameter("tagname");
 		String recent = data.getQueryParameter("recent");
 		
 		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 		
-		if(mAccount.name.equals(username)){
+		if(path.equals("/bookmarks") && mAccount.name.equals(username)){
 			
 			try{	
 				
@@ -103,9 +105,16 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 			}
 			catch(Exception e){}
 			
-		} else {
+		} else if(path.equals("/bookmarks")) {
 			try{	
 				bookmarkList = NetworkUtilities.fetchFriendBookmarks(username, tagname);
+
+				setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
+			}
+			catch(Exception e){}
+		} else if(path.equals("/network")){
+			try{	
+				bookmarkList = NetworkUtilities.fetchNetworkRecent(username);
 
 				setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
 			}
