@@ -55,7 +55,8 @@ public class BookmarkContentProvider extends ContentProvider {
 					"NOTES TEXT, " +
 					"TAGS TEXT, " +
 					"HASH TEXT, " +
-					"META TEXT);");
+					"META TEXT, " +
+					"TIME INTEGER);");
 			
 			sqlDb.execSQL("Create table " + TAG_TABLE_NAME + 
 					" (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +

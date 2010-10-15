@@ -190,6 +190,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 						values.put(Bookmark.Tags, b.getTags());
 						values.put(Bookmark.Hash, b.getHash());
 						values.put(Bookmark.Meta, b.getMeta());
+						values.put(Bookmark.Time, b.getTime());
 						
 						Uri uri = mContext.getContentResolver().insert(Bookmark.CONTENT_URI, values);
 						Log.d("bookmark", uri.toString());

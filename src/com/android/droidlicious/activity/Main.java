@@ -24,7 +24,7 @@ public class Main extends DroidliciousBaseActivity {
 	private Account mAccount;
 	private Context mContext;
 	
-	static final String[] MENU_ITEMS = new String[] {"View Recent", "View Tags"};
+	static final String[] MENU_ITEMS = new String[] {"View My Recent", "View My Tags"};
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -37,7 +37,21 @@ public class Main extends DroidliciousBaseActivity {
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
 		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		    	if(position == 1){
+		    	if(position == 0){
+		    		mAccountManager = AccountManager.get(mContext);
+		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+		    		
+		    		Intent i = new Intent();
+		    		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
+		    		data.appendEncodedPath("bookmarks");
+		    		data.appendQueryParameter("username", mAccount.name);
+		    		data.appendQueryParameter("recent", "1");
+		    		i.setData(data.build());
+		    		
+		    		Log.d("uri", data.build().toString());
+		    		
+		    		startActivity(i);
+		    	} else if(position == 1){
 		    		mAccountManager = AccountManager.get(mContext);
 		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		    		
@@ -51,6 +65,7 @@ public class Main extends DroidliciousBaseActivity {
 		    		
 		    		startActivity(i);
 		    	}
+		    	
 		    }
 		});
 

@@ -1,7 +1,9 @@
 package com.android.droidlicious.providers;
 
 import java.io.StringReader;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -12,6 +14,8 @@ import org.json.JSONObject;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+
+import com.android.droidlicious.util.DateParser;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -31,6 +35,7 @@ public class BookmarkContent {
 		public static final String Tags = "TAGS";
 		public static final String Hash = "HASH";
 		public static final String Meta = "META";
+		public static final String Time = "TIME";
 		
         private String mUrl = null;
         private String mDescription = null;
@@ -38,6 +43,7 @@ public class BookmarkContent {
         private String mTags = null;
         private String mHash = null;
         private String mMeta = null;
+        private long mTime = 0;
 
         public String getUrl() {
             return mUrl;
@@ -63,6 +69,10 @@ public class BookmarkContent {
         	return mMeta;
         }
         
+        public long getTime(){
+        	return mTime;
+        }
+        
         public Bookmark() {
         }
         
@@ -84,13 +94,14 @@ public class BookmarkContent {
             mTags = tags;
         }
         
-        public Bookmark(String url, String description, String notes, String tags, String hash, String meta) {
+        public Bookmark(String url, String description, String notes, String tags, String hash, String meta, long time) {
             mUrl = url;
             mDescription = description;
             mNotes = notes;
             mTags = tags;
             mHash = hash;
             mMeta = meta;
+            mTime = time;
         }
         
         public static ArrayList<Bookmark> valueOf(String userBookmark){
@@ -111,12 +122,14 @@ public class BookmarkContent {
 					Node hash = nodes.item(i).getAttributes().getNamedItem("hash");
 					Node meta = nodes.item(i).getAttributes().getNamedItem("meta");
 					Node url = nodes.item(i).getAttributes().getNamedItem("url");
+					Node time = nodes.item(i).getAttributes().getNamedItem("time");
 					String shref = "";
 					String stitle = "";
 					String snotes = "";
 					String stags = "";
 					String shash = "";
 					String smeta = "";
+					String stime = "";
 
 					if(href != null)
 						shref = href.getTextContent();
@@ -132,8 +145,17 @@ public class BookmarkContent {
 						shash = url.getTextContent();
 					if(meta != null)
 						smeta = meta.getTextContent();
+					if(time != null)
+						stime = time.getTextContent();
 					
-					list.add(new Bookmark(shref, stitle, snotes, stags, shash, smeta));
+					Date d = null;
+					try {
+						d = DateParser.parse(stime);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					
+					list.add(new Bookmark(shref, stitle, snotes, stags, shash, smeta, d.getTime()));
 
 				}
 				

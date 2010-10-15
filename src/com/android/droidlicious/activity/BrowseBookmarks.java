@@ -52,6 +52,7 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 		Uri data = getIntent().getData();
 		String username = data.getQueryParameter("username");
 		String tagname = data.getQueryParameter("tagname");
+		String recent = data.getQueryParameter("recent");
 		
 		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 		
@@ -60,16 +61,23 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 			try{	
 				
 				String[] projection = new String[] {Bookmark.Url, Bookmark.Description, Bookmark.Meta, Bookmark.Tags};
-				String selection = Bookmark.Tags + " LIKE '% " + tagname + " %' OR " +
-					Bookmark.Tags + " LIKE '% " + tagname + "' OR " +
-					Bookmark.Tags + " LIKE '" + tagname + " %' OR " +
-					Bookmark.Tags + " = '" + tagname + "'";
+				String selection = null;
+				String sortorder = null;
 				
-				Log.d("selection", selection);
+				if(tagname != null && tagname != "") {
+					selection = Bookmark.Tags + " LIKE '% " + tagname + " %' OR " +
+						Bookmark.Tags + " LIKE '% " + tagname + "' OR " +
+						Bookmark.Tags + " LIKE '" + tagname + " %' OR " +
+						Bookmark.Tags + " = '" + tagname + "'";
+				}
+				
+				if(recent != null && recent.equals("1")){
+					sortorder = Bookmark.Time + " DESC";
+				}
 				
 				Uri bookmarks = Bookmark.CONTENT_URI;
 				
-				Cursor c = managedQuery(bookmarks, projection, selection, null, null);				
+				Cursor c = managedQuery(bookmarks, projection, selection, null, sortorder);				
 				
 				if(c.moveToFirst()){
 					
@@ -82,7 +90,7 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 						
 						Bookmark b = new Bookmark(c.getString(urlColumn), 
 								c.getString(descriptionColumn), "", c.getString(tagsColumn), "", 
-								c.getString(metaColumn));
+								c.getString(metaColumn), 0);
 						
 						bookmarkList.add(b);
 						
