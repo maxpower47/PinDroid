@@ -31,21 +31,22 @@ public final class R {
         public static final int auth_type_yahoo=0x7f070012;
         public static final int bookmark_description=0x7f070009;
         public static final int bookmark_url=0x7f07000a;
-        public static final int menu_addbookmark=0x7f07001a;
-        public static final int menu_mybookmarks=0x7f07001b;
-        public static final int menu_settings=0x7f07001c;
+        public static final int main_menu_description=0x7f070014;
+        public static final int menu_addbookmark=0x7f07001b;
+        public static final int menu_mybookmarks=0x7f07001c;
+        public static final int menu_settings=0x7f07001d;
         public static final int message=0x7f07000b;
         public static final int message_bottom=0x7f07000f;
-        public static final int oauth_ok_button=0x7f070016;
-        public static final int oauth_token_edit_url=0x7f070015;
-        public static final int oauth_webview=0x7f070014;
+        public static final int oauth_ok_button=0x7f070017;
+        public static final int oauth_token_edit_url=0x7f070016;
+        public static final int oauth_webview=0x7f070015;
         public static final int ok_button=0x7f070013;
         public static final int password_edit=0x7f07000e;
-        public static final int tag_count=0x7f070019;
-        public static final int tag_name=0x7f070018;
+        public static final int tag_count=0x7f07001a;
+        public static final int tag_name=0x7f070019;
         public static final int username_edit=0x7f07000c;
         public static final int username_fixed=0x7f07000d;
-        public static final int webview=0x7f070017;
+        public static final int webview=0x7f070018;
     }
     public static final class layout {
         public static final int add_bookmark=0x7f030000;
@@ -53,9 +54,10 @@ public final class R {
         public static final int browse_bookmarks=0x7f030002;
         public static final int browse_tags=0x7f030003;
         public static final int login_activity=0x7f030004;
-        public static final int oauth_login=0x7f030005;
-        public static final int profile_view=0x7f030006;
-        public static final int tag_view=0x7f030007;
+        public static final int main_view=0x7f030005;
+        public static final int oauth_login=0x7f030006;
+        public static final int profile_view=0x7f030007;
+        public static final int tag_view=0x7f030008;
     }
     public static final class menu {
         public static final int main_menu=0x7f060000;

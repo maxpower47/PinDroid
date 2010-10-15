@@ -32,12 +32,12 @@ public class BookmarkContent {
 		public static final String Hash = "HASH";
 		public static final String Meta = "META";
 		
-        private String mUrl;
-        private String mDescription;
-        private String mNotes;
-        private String mTags;
-        private String mHash;
-        private String mMeta;
+        private String mUrl = null;
+        private String mDescription = null;
+        private String mNotes = null;
+        private String mTags = null;
+        private String mHash = null;
+        private String mMeta = null;
 
         public String getUrl() {
             return mUrl;
@@ -64,30 +64,17 @@ public class BookmarkContent {
         }
         
         public Bookmark() {
-            mUrl = "";
-            mDescription = "";
-            mNotes = "";
-            mTags = "";
-            mHash = "";
-            mMeta = "";
         }
         
         public Bookmark(String url, String description) {
             mUrl = url;
             mDescription = description;
-            mNotes = "";
-            mTags = "";
-            mHash = "";
-            mMeta = "";
         }
         
         public Bookmark(String url, String description, String notes) {
             mUrl = url;
             mDescription = description;
             mNotes = notes;
-            mTags = "";
-            mHash = "";
-            mMeta = "";
         }
         
         public Bookmark(String url, String description, String notes, String tags) {
@@ -95,8 +82,6 @@ public class BookmarkContent {
             mDescription = description;
             mNotes = notes;
             mTags = tags;
-            mHash = "";
-            mMeta = "";
         }
         
         public Bookmark(String url, String description, String notes, String tags, String hash, String meta) {

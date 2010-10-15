@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/main_menu_description"
+	android:layout_height="wrap_content"
+	android:layout_width="fill_parent"
+	android:scrollHorizontally="true"
+	android:textSize="12pt"
+	android:padding="10dip"/>
+
