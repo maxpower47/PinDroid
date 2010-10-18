@@ -36,6 +36,7 @@ import com.android.droidlicious.Constants;
 import com.android.droidlicious.R;
 import com.android.droidlicious.activity.Main;
 import com.android.droidlicious.authenticator.AuthToken;
+import com.android.droidlicious.client.DeliciousApi;
 import com.android.droidlicious.client.NetworkUtilities;
 import com.android.droidlicious.client.Update;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
@@ -86,7 +87,8 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	Boolean success = true;
     	
     	try {
-			update = NetworkUtilities.lastUpdate(account.name, account, authtoken, mContext);
+			//update = NetworkUtilities.lastUpdate(account.name, account, authtoken, mContext);
+    		update = DeliciousApi.lastUpdate(account, mContext);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -112,11 +114,14 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			try {
 				if(!initialSync){
 					Log.d("BookmarkSync", "In Bookmark Load");
-					tagList = NetworkUtilities.fetchTags(account.name, account, authtoken, mContext);
-					bookmarkList = NetworkUtilities.fetchMyBookmarks(account.name, null, account, authtoken, mContext, true);
+					//tagList = NetworkUtilities.fetchTags(account.name, account, authtoken, mContext);
+					tagList = DeliciousApi.getTags(account, mContext);
+					//bookmarkList = NetworkUtilities.fetchMyBookmarks(account.name, null, account, authtoken, mContext, true);
+					bookmarkList = DeliciousApi.getAllBookmarks(null, account, mContext);
 				} else {
 					Log.d("BookmarkSync", "In Bookmark Update");
-					changeList = NetworkUtilities.fetchChangedBookmarks(account.name, account, authtoken, mContext);
+					//changeList = NetworkUtilities.fetchChangedBookmarks(account.name, account, authtoken, mContext);
+					changeList = DeliciousApi.getChangedBookmarks(account, mContext);
 					
 					for(Bookmark b : changeList){
 					
@@ -145,13 +150,14 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 						c.close();
 					}
 					
-					ArrayList<String> a = new ArrayList<String>();
+					ArrayList<String> hashes = new ArrayList<String>();
 					for(Bookmark b : addList){
-						a.add(b.getHash());
+						hashes.add(b.getHash());
 					}
-					Log.d("size", Integer.toString(a.size()));
-					if(a.size() > 0) {
-						bookmarkList = NetworkUtilities.fetchBookmark(account.name, a, account, authtoken, mContext);
+					Log.d("size", Integer.toString(hashes.size()));
+					if(hashes.size() > 0) {
+						//bookmarkList = NetworkUtilities.fetchBookmark(account.name, hashes, account, authtoken, mContext);
+						bookmarkList = DeliciousApi.getBookmark(hashes, account, mContext);
 					}
 					
 				}
