@@ -27,7 +27,7 @@ public class BookmarkContent {
 		public static final Uri CONTENT_URI = Uri.parse("content://" + 
 				BookmarkContentProvider.AUTHORITY + "/bookmark");
 		
-		 public static final  String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.droidlicious.bookmarks";
+		public static final  String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.droidlicious.bookmarks";
 		
 		public static final String Description = "DESCRIPTION";
 		public static final String Url = "URL";
@@ -37,6 +37,7 @@ public class BookmarkContent {
 		public static final String Meta = "META";
 		public static final String Time = "TIME";
 		
+		private int mId = 0;
         private String mUrl = null;
         private String mDescription = null;
         private String mNotes = null;
@@ -45,6 +46,10 @@ public class BookmarkContent {
         private String mMeta = null;
         private long mTime = 0;
 
+        public int getId(){
+        	return mId;
+        }
+        
         public String getUrl() {
             return mUrl;
         }
@@ -96,6 +101,17 @@ public class BookmarkContent {
         
         public Bookmark(String url, String description, String notes, String tags, String hash, String meta, long time) {
             mUrl = url;
+            mDescription = description;
+            mNotes = notes;
+            mTags = tags;
+            mHash = hash;
+            mMeta = meta;
+            mTime = time;
+        }
+        
+        public Bookmark(int id, String url, String description, String notes, String tags, String hash, String meta, long time) {
+            mId = id;
+        	mUrl = url;
             mDescription = description;
             mNotes = notes;
             mTags = tags;

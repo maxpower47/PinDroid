@@ -35,6 +35,10 @@ public class BookmarkContentProvider extends ContentProvider {
 	private static final String BOOKMARK_TABLE_NAME = "bookmark";
 	private static final String TAG_TABLE_NAME = "tag";
 	
+	private static final int Bookmarks = 1;
+	private static final int SearchSuggest = 2;
+	private static final int Tags = 3;
+	
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
 	
 	public static final String AUTHORITY = "com.android.droidlicious.providers.BookmarkContentProvider";
@@ -74,18 +78,29 @@ public class BookmarkContentProvider extends ContentProvider {
 	}
 
 	@Override
-	public int delete(Uri arg0, String arg1, String[] arg2) {
-		return 0;
+	public int delete(Uri uri, String where, String[] whereArgs) {
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		int count;
+		switch (sURIMatcher.match(uri)) {
+			case Bookmarks:
+				count = db.delete(BOOKMARK_TABLE_NAME, where, whereArgs);
+				break;
+			default:
+				throw new IllegalArgumentException("Unknown URI " + uri);
+		}
+		
+		getContext().getContentResolver().notifyChange(uri, null);
+		return count;
 	}
 
 	@Override
 	public String getType(Uri uri) {
 		switch(sURIMatcher.match(uri)){
-			case 1:
+			case Bookmarks:
 				return Bookmark.CONTENT_TYPE;
-			case 2:
+			case SearchSuggest:
 				return SearchManager.SUGGEST_MIME_TYPE;
-			case 3:
+			case Tags:
 				return Tag.CONTENT_TYPE;
 			default:
 				throw new IllegalArgumentException("Unknown URL " + uri);
@@ -96,9 +111,9 @@ public class BookmarkContentProvider extends ContentProvider {
 	public Uri insert(Uri uri, ContentValues values) {
 		
 		switch(sURIMatcher.match(uri)) {
-			case 1:
+			case Bookmarks:
 				return insertBookmark(uri, values);
-			case 3:
+			case Tags:
 				return insertTag(uri, values);
 			default:
 				throw new IllegalArgumentException("Unknown Uri: " + uri);
@@ -138,12 +153,12 @@ public class BookmarkContentProvider extends ContentProvider {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
 		switch(sURIMatcher.match(uri)) {
-			case 1:
+			case Bookmarks:
 				return getBookmarks(projection, selection, selectionArgs, sortOrder);
-			case 2:
+			case SearchSuggest:
 				String query = uri.getLastPathSegment().toLowerCase();
 				return getSearchSuggestions(query);
-			case 3:
+			case Tags:
 				return getTags(projection, selection, selectionArgs, sortOrder);
 			default:
 				throw new IllegalArgumentException("Unknown Uri: " + uri);
@@ -214,11 +229,11 @@ public class BookmarkContentProvider extends ContentProvider {
     private static UriMatcher buildUriMatcher() {
         UriMatcher matcher =  new UriMatcher(UriMatcher.NO_MATCH);
         // to get definitions...
-        matcher.addURI(AUTHORITY, "bookmark", 1);
-        matcher.addURI(AUTHORITY, "tag", 3);
+        matcher.addURI(AUTHORITY, "bookmark", Bookmarks);
+        matcher.addURI(AUTHORITY, "tag", Tags);
         // to get suggestions...
-        matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, 2);
-        matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", 2);
+        matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SearchSuggest);
+        matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SearchSuggest);
         return matcher;
     }
 

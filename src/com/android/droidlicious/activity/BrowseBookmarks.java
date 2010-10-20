@@ -8,6 +8,7 @@ import com.android.droidlicious.R;
 import com.android.droidlicious.client.DeliciousApi;
 import com.android.droidlicious.client.DeliciousFeed;
 import com.android.droidlicious.listadapter.BookmarkListAdapter;
+import com.android.droidlicious.platform.BookmarkManager;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 
 import android.accounts.Account;
@@ -61,7 +62,7 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 			
 			try{	
 				
-				String[] projection = new String[] {Bookmark.Url, Bookmark.Description, Bookmark.Meta, Bookmark.Tags};
+				String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, Bookmark.Meta, Bookmark.Tags};
 				String selection = null;
 				String sortorder = null;
 				
@@ -81,7 +82,7 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 				Cursor c = managedQuery(bookmarks, projection, selection, null, sortorder);				
 				
 				if(c.moveToFirst()){
-					
+					int idColumn = c.getColumnIndex(Bookmark._ID);
 					int urlColumn = c.getColumnIndex(Bookmark.Url);
 					int descriptionColumn = c.getColumnIndex(Bookmark.Description);
 					int tagsColumn = c.getColumnIndex(Bookmark.Tags);
@@ -89,7 +90,7 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 					
 					do {
 						
-						Bookmark b = new Bookmark(c.getString(urlColumn), 
+						Bookmark b = new Bookmark(c.getInt(idColumn), c.getString(urlColumn), 
 								c.getString(descriptionColumn), "", c.getString(tagsColumn), "", 
 								c.getString(metaColumn), 0);
 						
@@ -154,7 +155,7 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 				BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, mContext);
 				
 				new DeleteBookmarkTask().execute(args);
-	
+				
 				return true;
 		}
 		return false;
@@ -162,13 +163,20 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 	
 	private class DeleteBookmarkTask extends AsyncTask<BookmarkTaskArgs, Integer, Boolean>{
 		private Context context;
+		private Bookmark bookmark;
 		
 		@Override
 		protected Boolean doInBackground(BookmarkTaskArgs... args) {
 			context = args[0].getContext();
+			bookmark = args[0].getBookmark();
 			
 			try {
-				return DeliciousApi.deleteBookmark(args[0].getBookmark(), args[0].getAccount(), args[0].getContext());
+				Boolean success =  DeliciousApi.deleteBookmark(bookmark, args[0].getAccount(), context);
+				if(success){
+					BookmarkManager.DeleteBookmark(args[0].getBookmark(), context);
+					return true;
+				} else return false;
+					
 			} catch (IOException e) {
 				return false;
 			}
@@ -176,6 +184,9 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 
 	    protected void onPostExecute(Boolean result) {
 			if(result){
+				BookmarkListAdapter bla = (BookmarkListAdapter) lv.getAdapter();
+				bla.remove(bookmark);
+				
 				Toast.makeText(context, "Bookmark Deleted Successfully", Toast.LENGTH_SHORT).show();
 			} else {
 				Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
