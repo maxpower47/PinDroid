@@ -16,7 +16,6 @@
 
 package com.android.droidlicious.client;
 
-import android.accounts.Account;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -24,8 +23,6 @@ import android.util.Log;
 
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.authenticator.AuthenticatorActivity;
-import com.android.droidlicious.providers.BookmarkContent.Bookmark;
-import com.android.droidlicious.providers.TagContent.Tag;
 
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -35,23 +32,15 @@ import android.net.Uri;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.ParseException;
-import org.apache.http.auth.AuthenticationException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -416,205 +405,5 @@ public class NetworkUtilities {
         };
         // run on background thread.
         return NetworkUtilities.performOnBackgroundThread(runnable);
-    }
-
-    /**
-     * Fetches the list of friend data updates from the server
-     * 
-     * @param account The account being synced.
-     * @param authtoken The authtoken stored in AccountManager for this account
-     * @param lastUpdated The last time that sync was performed
-     * @return list The list of updates received from the server.
-     */
-    public static List<User> fetchFriendUpdates(Account account,
-        String authtoken, Date lastUpdated) throws JSONException,
-        ParseException, IOException, AuthenticationException {
-        final ArrayList<User> friendList = new ArrayList<User>();
-
-
-        final HttpGet post = new HttpGet(FETCH_FRIEND_UPDATES_URI + account.name);
-        maybeCreateHttpClient();
-
-        final HttpResponse resp = mHttpClient.execute(post);
-        final String response = EntityUtils.toString(resp.getEntity());
-
-        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-
-            final JSONArray friends = new JSONArray(response);
-            Log.d(TAG, response);
-            for (int i = 0; i < friends.length(); i++) {
-                friendList.add(User.valueOf(friends.getJSONObject(i)));
-            }
-        } else {
-            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-                Log.e(TAG, "Authentication exception in fetching remote contacts");
-                throw new AuthenticationException();
-            } else {
-                Log.e(TAG, "Server error in fetching remote contacts: "
-                    + resp.getStatusLine());
-                throw new IOException();
-            }
-        }
-        return friendList;
-    }
-
-    /**
-     * Fetches status messages for the user's friends from the server
-     * 
-     * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of status messages received from the server.
-     */
-    public static List<User.Status> fetchFriendStatuses(Account account,
-        String authtoken) throws JSONException, ParseException, IOException,
-        AuthenticationException {
-        final ArrayList<User.Status> statusList = new ArrayList<User.Status>();
-
-        final HttpGet post = new HttpGet(FETCH_STATUS_URI + account.name + "?count=15");
-        maybeCreateHttpClient();
-
-        final HttpResponse resp = mHttpClient.execute(post);
-        final String response = EntityUtils.toString(resp.getEntity());
-
-        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-
-            final JSONArray statuses = new JSONArray(response);
-            Log.d(TAG, response);
-            for (int i = 0; i < statuses.length(); i++) {
-                statusList.add(User.Status.valueOf(statuses.getJSONObject(i)));
-            }
-        } else {
-            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-                Log.e(TAG, "Authentication exception in fetching friend status list");
-                throw new AuthenticationException();
-            } else {
-                Log.e(TAG, "Server error in fetching friend status list");
-                throw new IOException();
-            }
-        }
-        return statusList;
-    }
-    
-    /**
-     * Fetches status messages for the user's friends from the server
-     * 
-     * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of status messages received from the server.
-     */
-    public static ArrayList<Tag> fetchFriendTags(String userName, Account account,
-        String authtoken) throws JSONException, ParseException, IOException,
-        AuthenticationException {
-    	
-        final HttpGet post = new HttpGet(FETCH_TAGS_URI + userName + "?count=100");
-        maybeCreateHttpClient();
-        
-        final ArrayList<Tag> tagList = new ArrayList<Tag>();
-
-        final HttpResponse resp = mHttpClient.execute(post);
-        final String response = EntityUtils.toString(resp.getEntity());
-
-        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-
-            final JSONObject tags = new JSONObject(response);
-            Iterator<?> i = tags.keys();
-            while(i.hasNext()){
-            	Object e = i.next();
-            	Log.d("tag", e.toString());
-            	tagList.add(new Tag(e.toString(), tags.getInt(e.toString())));
-            }
-            
-            Log.d(TAG, response);
-
-        } else {
-            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-                Log.e(TAG, "Authentication exception in fetching friend status list");
-                throw new AuthenticationException();
-            } else {
-                Log.e(TAG, "Server error in fetching friend status list");
-                throw new IOException();
-            }
-        }
-        return tagList;
-    }    
-   
-    /**
-     * Fetches users bookmarks
-     * 
-     * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of bookmarks received from the server.
-     */
-    public static ArrayList<Bookmark> fetchFriendBookmarks(String userName, String tagName)
-    	throws JSONException, ParseException, IOException, AuthenticationException {
-
-        final HttpGet post = new HttpGet(FETCH_FRIEND_BOOKMARKS_URI + userName + "/" + tagName + "?count=100");
-        maybeCreateHttpClient();
-        
-        final ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
-
-        final HttpResponse resp = mHttpClient.execute(post);
-        final String response = EntityUtils.toString(resp.getEntity());
-
-        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-
-            final JSONArray bookmarks = new JSONArray(response);
-            Log.d(TAG, response);
-            
-            for (int i = 0; i < bookmarks.length(); i++) {
-                bookmarkList.add(Bookmark.valueOf(bookmarks.getJSONObject(i)));
-            }
-        } else {
-            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-                Log.e(TAG, "Authentication exception in fetching friend status list");
-                throw new AuthenticationException();
-            } else {
-                Log.e(TAG, "Server error in fetching friend status list");
-                throw new IOException();
-            }
-        }
-        return bookmarkList;
-    }
-    
-    /**
-     * Fetches users bookmarks
-     * 
-     * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of bookmarks received from the server.
-     */
-    public static ArrayList<Bookmark> fetchNetworkRecent(String userName)
-    	throws JSONException, ParseException, IOException, AuthenticationException {
-
-        final HttpGet post = new HttpGet(FETCH_NETWORK_RECENT_BOOKMARKS_URI + userName + "?count=30");
-        maybeCreateHttpClient();
-        
-        final ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
-
-        final HttpResponse resp = mHttpClient.execute(post);
-        final String response = EntityUtils.toString(resp.getEntity());
-
-        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-
-            final JSONArray bookmarks = new JSONArray(response);
-            Log.d(TAG, response);
-            
-            for (int i = 0; i < bookmarks.length(); i++) {
-                bookmarkList.add(Bookmark.valueOf(bookmarks.getJSONObject(i)));
-            }
-        } else {
-            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-                Log.e(TAG, "Authentication exception in fetching network recent list");
-                throw new AuthenticationException();
-            } else {
-                Log.e(TAG, "Server error in fetching network recent list");
-                throw new IOException();
-            }
-        }
-        return bookmarkList;
     }
 }

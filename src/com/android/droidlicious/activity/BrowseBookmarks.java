@@ -1,11 +1,12 @@
 package com.android.droidlicious.activity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.R;
-import com.android.droidlicious.authenticator.AuthToken;
-import com.android.droidlicious.client.NetworkUtilities;
+import com.android.droidlicious.client.DeliciousApi;
+import com.android.droidlicious.client.DeliciousFeed;
 import com.android.droidlicious.listadapter.BookmarkListAdapter;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 
@@ -15,9 +16,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -36,7 +36,6 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 	private AccountManager mAccountManager;
 	private Account mAccount;
 	private ListView lv;
-	private String authtoken;
 	private Context mContext;
 	
 	@Override
@@ -107,14 +106,14 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 			
 		} else if(path.equals("/bookmarks")) {
 			try{	
-				bookmarkList = NetworkUtilities.fetchFriendBookmarks(username, tagname);
+				bookmarkList = DeliciousFeed.fetchFriendBookmarks(username, tagname);
 
 				setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
 			}
 			catch(Exception e){}
 		} else if(path.equals("/network")){
 			try{	
-				bookmarkList = NetworkUtilities.fetchNetworkRecent(username);
+				bookmarkList = DeliciousFeed.fetchNetworkRecent(username);
 
 				setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
 			}
@@ -152,28 +151,62 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 			case 0:
 				final Bookmark b = (Bookmark)lv.getItemAtPosition(menuInfo.position);
 				
-				AuthToken at = new AuthToken(this, mAccount);
-				at.getAuthTokenAsync(new Handler(){
-				    @Override
-				    public void handleMessage(Message msg) {  
-				    	Boolean success = false;
-				    	authtoken = (String)msg.obj;
-						try {
-							success = NetworkUtilities.deleteBookmark(b, mAccount, authtoken, mContext);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						
-						if(success){
-							Toast.makeText(getApplicationContext(), "Bookmark Deleted Successfully", Toast.LENGTH_SHORT).show();
-						} else {
-							Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-						}
-				    }	
-				});
+				BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, mContext);
+				
+				new DeleteBookmarkTask().execute(args);
 	
 				return true;
 		}
 		return false;
 	}
+	
+	private class DeleteBookmarkTask extends AsyncTask<BookmarkTaskArgs, Integer, Boolean>{
+		private Context context;
+		
+		@Override
+		protected Boolean doInBackground(BookmarkTaskArgs... args) {
+			context = args[0].getContext();
+			
+			try {
+				return DeliciousApi.deleteBookmark(args[0].getBookmark(), args[0].getAccount(), args[0].getContext());
+			} catch (IOException e) {
+				return false;
+			}
+		}
+
+	    protected void onPostExecute(Boolean result) {
+			if(result){
+				Toast.makeText(context, "Bookmark Deleted Successfully", Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+			}
+			
+	    }
+	}
+
+	private class BookmarkTaskArgs{
+		private Bookmark bookmark;
+		private Account account;
+		private Context context;
+		
+		public Bookmark getBookmark(){
+			return bookmark;
+		}
+		
+		public Account getAccount(){
+			return account;
+		}
+		
+		public Context getContext(){
+			return context;
+		}
+		
+		public BookmarkTaskArgs(Bookmark b, Account a, Context c){
+			bookmark = b;
+			account = a;
+			context = c;
+		}
+	}
 }
+
+

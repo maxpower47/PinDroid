@@ -27,7 +27,7 @@ import android.util.Log;
 
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.authenticator.AuthToken;
-import com.android.droidlicious.client.NetworkUtilities;
+import com.android.droidlicious.client.DeliciousFeed;
 import com.android.droidlicious.client.User;
 import com.android.droidlicious.client.User.Status;
 import com.android.droidlicious.platform.ContactManager;
@@ -37,7 +37,6 @@ import org.apache.http.auth.AuthenticationException;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,8 +48,6 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private final AccountManager mAccountManager;
     private final Context mContext;
-
-    private Date mLastUpdated;
     
     private String authtoken = null;
 
@@ -71,21 +68,18 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
         	 authtoken = at.getAuthToken();
         	 
              // fetch updates from the sample service over the cloud
-             users = NetworkUtilities.fetchFriendUpdates(account, authtoken, mLastUpdated);
-            // update the last synced date.
-            mLastUpdated = new Date();
+             users = DeliciousFeed.fetchFriendUpdates(account);
             // update platform contacts.
             Log.d(TAG, "Calling contactManager's sync contacts");
             ContactManager.syncContacts(mContext, account.name, users);
             // fetch and update status messages for all the synced users.
-            statuses = NetworkUtilities.fetchFriendStatuses(account, authtoken);
+            statuses = DeliciousFeed.fetchFriendStatuses(account);
             ContactManager.insertStatuses(mContext, account.name, statuses);
         } catch (final IOException e) {
             Log.e(TAG, "IOException", e);
             syncResult.stats.numIoExceptions++;
         } catch (final AuthenticationException e) {
-            mAccountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE,
-                authtoken);
+            mAccountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, authtoken);
             syncResult.stats.numAuthExceptions++;
             Log.e(TAG, "AuthenticationException", e);
         } catch (final ParseException e) {

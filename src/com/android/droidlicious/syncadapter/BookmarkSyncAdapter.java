@@ -35,9 +35,7 @@ import android.util.Log;
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.R;
 import com.android.droidlicious.activity.Main;
-import com.android.droidlicious.authenticator.AuthToken;
 import com.android.droidlicious.client.DeliciousApi;
-import com.android.droidlicious.client.NetworkUtilities;
 import com.android.droidlicious.client.Update;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 import com.android.droidlicious.providers.TagContent.Tag;
@@ -54,8 +52,6 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = "BookmarkSyncAdapter";
 
     private final Context mContext;
-    
-    private String authtoken = null;
 
     public BookmarkSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -67,10 +63,6 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
         ContentProviderClient provider, SyncResult syncResult) {
 
          try {
-        	 AuthToken at = new AuthToken(mContext, account);
-        	 authtoken = at.getAuthToken();
-
-            
             InsertBookmarks(account);
         }catch (final ParseException e) {
             syncResult.stats.numParseExceptions++;

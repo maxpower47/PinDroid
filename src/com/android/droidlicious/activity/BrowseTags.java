@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.android.droidlicious.R;
 import com.android.droidlicious.Constants;
-import com.android.droidlicious.client.NetworkUtilities;
+import com.android.droidlicious.client.DeliciousFeed;
 import com.android.droidlicious.listadapter.TagListAdapter;
 import com.android.droidlicious.providers.TagContent.Tag;
 
@@ -71,7 +71,7 @@ public class BrowseTags extends DroidliciousBaseActivity {
 			
 		} else {
 			try{	
-				tagList = NetworkUtilities.fetchFriendTags(username, mAccount, "");
+				tagList = DeliciousFeed.fetchFriendTags(username);
 				
 				setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
 			}

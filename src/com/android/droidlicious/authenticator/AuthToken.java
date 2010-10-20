@@ -30,13 +30,14 @@ public class AuthToken {
 	    	SharedPreferences settings = mContext.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
 	    	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
 	    	
-	    	if(authtype == Constants.AUTH_TYPE_OAUTH) {
+	    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
 	    		mToken = mAccountManager.blockingGetAuthToken(mAccount, Constants.AUTHTOKEN_TYPE, false);
 				mAccountManager.invalidateAuthToken(Constants.ACCOUNT_TYPE, mToken);
 	    	}
 	    	
 			mToken = mAccountManager.blockingGetAuthToken(mAccount, Constants.AUTHTOKEN_TYPE, false);
 		} catch (Exception e) {
+			Log.d("AuthToken Error", "blah");
 			e.printStackTrace();
 		}
 		return mToken;

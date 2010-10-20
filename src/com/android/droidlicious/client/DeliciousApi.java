@@ -314,7 +314,7 @@ public class DeliciousApi {
 			builder.appendQueryParameter(key, params.get(key));
 		}
 		
-		Log.d("apiCallUrl", builder.build().toString());
+		Log.d("apiCallUrl", builder.build().toString().replace("%3A", ":").replace("%2F", "/"));
 		post = new HttpGet(builder.build().toString().replace("%3A", ":").replace("%2F", "/"));
 		HttpHost host = new HttpHost(DELICIOUS_AUTHORITY);
 		maybeCreateHttpClient();
