@@ -13,8 +13,9 @@ public class BookmarkManager {
 	public static void AddBookmark(Bookmark bookmark, Context context){
 		String url = bookmark.getUrl();
 
-		url = url + "/";
-		Log.d("url", url);
+		if(!url.endsWith("/")){
+			url = url + "/";
+		}
 		
 		String hash = "";
 		if(bookmark.getHash() == null || bookmark.getHash() == ""){
@@ -33,6 +34,23 @@ public class BookmarkManager {
 		values.put(Bookmark.Time, bookmark.getTime());
 		
 		context.getContentResolver().insert(Bookmark.CONTENT_URI, values);
+	}
+	
+	public static void UpdateBookmark(Bookmark bookmark, Context context){
+		
+		String selection = Bookmark.Hash + "='" + bookmark.getHash() + "'";
+		
+		ContentValues values = new ContentValues();
+		
+		values.put(Bookmark.Description, bookmark.getDescription());
+		values.put(Bookmark.Url, bookmark.getUrl());
+		values.put(Bookmark.Notes, bookmark.getNotes());
+		values.put(Bookmark.Tags, bookmark.getTags());
+		values.put(Bookmark.Meta, bookmark.getMeta());
+		values.put(Bookmark.Time, bookmark.getTime());
+		
+		context.getContentResolver().update(Bookmark.CONTENT_URI, values, selection, null);
+		
 	}
 
 	public static void DeleteBookmark(Bookmark bookmark, Context context){

@@ -37,6 +37,7 @@ import com.android.droidlicious.R;
 import com.android.droidlicious.activity.Main;
 import com.android.droidlicious.client.DeliciousApi;
 import com.android.droidlicious.client.Update;
+import com.android.droidlicious.platform.BookmarkManager;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 import com.android.droidlicious.providers.TagContent.Tag;
 
@@ -73,7 +74,6 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     private void InsertBookmarks(Account account){
     	
     	SharedPreferences settings = mContext.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
-    	Boolean initialSync = settings.getBoolean(Constants.PREFS_INITIAL_SYNC, false);
     	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
     	Update update = null;
     	Boolean success = true;
@@ -97,22 +97,20 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	
     	if(update.getLastUpdate() > lastUpdate) {
 	
-			ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
+			ArrayList<Bookmark> addBookmarkList = new ArrayList<Bookmark>();
+			ArrayList<Bookmark> updateBookmarkList = new ArrayList<Bookmark>();
 			ArrayList<Bookmark> changeList = new ArrayList<Bookmark>();
 			ArrayList<Bookmark> addList = new ArrayList<Bookmark>();
 			ArrayList<Bookmark> updateList = new ArrayList<Bookmark>();
 			ArrayList<Tag> tagList = new ArrayList<Tag>();
 
 			try {
-				if(!initialSync){
+				if(lastUpdate == 0){
 					Log.d("BookmarkSync", "In Bookmark Load");
-					//tagList = NetworkUtilities.fetchTags(account.name, account, authtoken, mContext);
 					tagList = DeliciousApi.getTags(account, mContext);
-					//bookmarkList = NetworkUtilities.fetchMyBookmarks(account.name, null, account, authtoken, mContext, true);
-					bookmarkList = DeliciousApi.getAllBookmarks(null, account, mContext);
+					addBookmarkList = DeliciousApi.getAllBookmarks(null, account, mContext);
 				} else {
 					Log.d("BookmarkSync", "In Bookmark Update");
-					//changeList = NetworkUtilities.fetchChangedBookmarks(account.name, account, authtoken, mContext);
 					changeList = DeliciousApi.getChangedBookmarks(account, mContext);
 					
 					for(Bookmark b : changeList){
@@ -133,7 +131,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 							int metaColumn = c.getColumnIndex(Bookmark.Meta);
 							
 							do {							
-								if(!c.getString(metaColumn).equals(b.getMeta())) {
+								if(c.getString(metaColumn) == null || !c.getString(metaColumn).equals(b.getMeta())) {
 									updateList.add(b);
 								}	
 							} while(c.moveToNext());
@@ -142,14 +140,22 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 						c.close();
 					}
 					
-					ArrayList<String> hashes = new ArrayList<String>();
+					ArrayList<String> addHashes = new ArrayList<String>();
 					for(Bookmark b : addList){
-						hashes.add(b.getHash());
+						addHashes.add(b.getHash());
 					}
-					Log.d("size", Integer.toString(hashes.size()));
-					if(hashes.size() > 0) {
-						//bookmarkList = NetworkUtilities.fetchBookmark(account.name, hashes, account, authtoken, mContext);
-						bookmarkList = DeliciousApi.getBookmark(hashes, account, mContext);
+					Log.d("add size", Integer.toString(addHashes.size()));
+					if(addHashes.size() > 0) {
+						addBookmarkList = DeliciousApi.getBookmark(addHashes, account, mContext);
+					}
+					
+					ArrayList<String> updateHashes = new ArrayList<String>();
+					for(Bookmark b : updateList){
+						updateHashes.add(b.getHash());
+					}
+					Log.d("update size", Integer.toString(updateHashes.size()));
+					if(updateHashes.size() > 0) {
+						updateBookmarkList = DeliciousApi.getBookmark(updateHashes, account, mContext);
 					}
 					
 				}
@@ -174,27 +180,16 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 	    		editor.putLong(Constants.PREFS_LAST_SYNC, update.getLastUpdate());
 	            editor.commit();
 
-				if(!bookmarkList.isEmpty()){
-	
-		            editor.putBoolean(Constants.PREFS_INITIAL_SYNC, true);
-		            editor.commit();
-					
-					for(Bookmark b : bookmarkList){
-						ContentValues values = new ContentValues();
-						
-						values.put(Bookmark.Description, b.getDescription());
-						values.put(Bookmark.Url, b.getUrl());
-						values.put(Bookmark.Notes, b.getNotes());
-						values.put(Bookmark.Tags, b.getTags());
-						values.put(Bookmark.Hash, b.getHash());
-						values.put(Bookmark.Meta, b.getMeta());
-						values.put(Bookmark.Time, b.getTime());
-						
-						Uri uri = mContext.getContentResolver().insert(Bookmark.CONTENT_URI, values);
-						Log.d("bookmark", uri.toString());
+				if(!addBookmarkList.isEmpty()){				
+					for(Bookmark b : addBookmarkList){
+						BookmarkManager.AddBookmark(b, mContext);
 					}
-					
-
+				}
+				
+				if(!updateBookmarkList.isEmpty()){		
+					for(Bookmark b : updateBookmarkList){
+						BookmarkManager.UpdateBookmark(b, mContext);
+					}
 				}
 			}
     	} else {

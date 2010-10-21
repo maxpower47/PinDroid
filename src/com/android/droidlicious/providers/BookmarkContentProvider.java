@@ -223,7 +223,18 @@ public class BookmarkContentProvider extends ContentProvider {
 
 	@Override
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-		return 0;
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		int count;
+		switch (sURIMatcher.match(uri)) {
+			case Bookmarks:
+				count = db.update(BOOKMARK_TABLE_NAME, values, selection, selectionArgs);
+				break;
+			default:
+				throw new IllegalArgumentException("Unknown URI " + uri);
+		}
+		
+		getContext().getContentResolver().notifyChange(uri, null);
+		return count;
 	}
 	
     private static UriMatcher buildUriMatcher() {
