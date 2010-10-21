@@ -164,11 +164,14 @@ public class BookmarkContent {
 					if(time != null)
 						stime = time.getTextContent();
 					
-					Date d = null;
-					try {
-						d = DateParser.parse(stime);
-					} catch (ParseException e) {
-						e.printStackTrace();
+					Date d = new Date(0);
+					if(stime != null && stime != ""){
+						try {
+							d = DateParser.parse(stime);
+						} catch (ParseException e) {
+							Log.d("Parse error", stime);
+							e.printStackTrace();
+						}
 					}
 					
 					list.add(new Bookmark(shref, stitle, snotes, stags, shash, smeta, d.getTime()));

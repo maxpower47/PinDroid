@@ -3,6 +3,8 @@ package com.android.droidlicious.activity;
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.R;
 import com.android.droidlicious.client.DeliciousApi;
+import com.android.droidlicious.listadapter.BookmarkListAdapter;
+import com.android.droidlicious.platform.BookmarkManager;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 
 import android.accounts.Account;
@@ -59,10 +61,15 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		Account[] al = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
 		account = al[0];
 		
+		String url = mEditUrl.getText().toString();
 		
-		bookmark = new Bookmark(mEditUrl.getText().toString(), 
-			mEditDescription.getText().toString(), mEditNotes.getText().toString(),
-			mEditTags.getText().toString());
+		if(!url.startsWith("http://")){
+			url = "http://" + url;
+		}
+		
+		
+		bookmark = new Bookmark(url, mEditDescription.getText().toString(), 
+			mEditNotes.getText().toString(), mEditTags.getText().toString());
 		
 		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, account, context);
 		
@@ -80,20 +87,26 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     
     private class AddBookmarkTask extends AsyncTask<BookmarkTaskArgs, Integer, Boolean>{
     	private Context context;
+    	private Bookmark bookmark;
     	
     	@Override
     	protected Boolean doInBackground(BookmarkTaskArgs... args) {
     		context = args[0].getContext();
+    		bookmark = args[0].getBookmark();
     		
     		try {
-    			return DeliciousApi.addBookmark(args[0].getBookmark(), args[0].getAccount(), args[0].getContext());
+    			Boolean success = DeliciousApi.addBookmark(args[0].getBookmark(), args[0].getAccount(), args[0].getContext());
+    			if(success){
+    				BookmarkManager.AddBookmark(bookmark, context);
+    				return true;
+    			} else return false;
     		} catch (Exception e) {
     			return false;
     		}
     	}
 
         protected void onPostExecute(Boolean result) {
-    		if(result){
+    		if(result){  			
     			Toast.makeText(context, "Bookmark Added Successfully", Toast.LENGTH_SHORT).show();
     		} else {
     			Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();

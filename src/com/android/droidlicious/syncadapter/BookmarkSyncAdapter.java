@@ -133,7 +133,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 							int metaColumn = c.getColumnIndex(Bookmark.Meta);
 							
 							do {							
-								if(c.getString(metaColumn) == b.getMeta()) {
+								if(!c.getString(metaColumn).equals(b.getMeta())) {
 									updateList.add(b);
 								}	
 							} while(c.moveToNext());
