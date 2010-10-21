@@ -28,7 +28,12 @@ public class TagContent {
 		
         private final String mTagName;
         private final int mCount;
+        private int mId = 0;
 
+        public int getId(){
+        	return mId;
+        }
+        
         public String getTagName() {
             return mTagName;
         }

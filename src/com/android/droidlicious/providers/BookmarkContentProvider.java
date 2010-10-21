@@ -76,7 +76,7 @@ public class BookmarkContentProvider extends ContentProvider {
 			onCreate(sqlDb);	
 		}
 	}
-
+	
 	@Override
 	public int delete(Uri uri, String where, String[] whereArgs) {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -84,6 +84,9 @@ public class BookmarkContentProvider extends ContentProvider {
 		switch (sURIMatcher.match(uri)) {
 			case Bookmarks:
 				count = db.delete(BOOKMARK_TABLE_NAME, where, whereArgs);
+				break;
+			case Tags:
+				count = db.delete(TAG_TABLE_NAME, where, whereArgs);
 				break;
 			default:
 				throw new IllegalArgumentException("Unknown URI " + uri);

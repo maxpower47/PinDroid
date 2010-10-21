@@ -38,6 +38,7 @@ import com.android.droidlicious.activity.Main;
 import com.android.droidlicious.client.DeliciousApi;
 import com.android.droidlicious.client.Update;
 import com.android.droidlicious.platform.BookmarkManager;
+import com.android.droidlicious.platform.TagManager;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 import com.android.droidlicious.providers.TagContent.Tag;
 
@@ -79,7 +80,6 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	Boolean success = true;
     	
     	try {
-			//update = NetworkUtilities.lastUpdate(account.name, account, authtoken, mContext);
     		update = DeliciousApi.lastUpdate(account, mContext);
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -111,6 +111,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 					addBookmarkList = DeliciousApi.getAllBookmarks(null, account, mContext);
 				} else {
 					Log.d("BookmarkSync", "In Bookmark Update");
+					tagList = DeliciousApi.getTags(account, mContext);
 					changeList = DeliciousApi.getChangedBookmarks(account, mContext);
 					
 					for(Bookmark b : changeList){
@@ -164,15 +165,9 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 				e.printStackTrace();
 			}
 			
+			TagManager.TruncateTags(mContext);
 			for(Tag b : tagList){
-				ContentValues values = new ContentValues();
-				
-				values.put(Tag.Name, b.getTagName());
-				values.put(Tag.Count, b.getCount());
-
-				
-				Uri uri = mContext.getContentResolver().insert(Tag.CONTENT_URI, values);
-				Log.d("tag", uri.toString());
+				TagManager.AddTag(b, mContext);
 			}
 			
 			if(success){
