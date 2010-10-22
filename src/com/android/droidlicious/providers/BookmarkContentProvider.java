@@ -157,32 +157,32 @@ public class BookmarkContentProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
 		switch(sURIMatcher.match(uri)) {
 			case Bookmarks:
-				return getBookmarks(projection, selection, selectionArgs, sortOrder);
+				return getBookmarks(uri, projection, selection, selectionArgs, sortOrder);
 			case SearchSuggest:
 				String query = uri.getLastPathSegment().toLowerCase();
 				return getSearchSuggestions(query);
 			case Tags:
-				return getTags(projection, selection, selectionArgs, sortOrder);
+				return getTags(uri, projection, selection, selectionArgs, sortOrder);
 			default:
 				throw new IllegalArgumentException("Unknown Uri: " + uri);
 		}
 	}
 	
-	private Cursor getBookmarks(String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
+	private Cursor getBookmarks(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
 		qb.setTables(BOOKMARK_TABLE_NAME);
 		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder);
-		//c.setNotificationUri(getContext().getContentResolver(), uri);
+		c.setNotificationUri(getContext().getContentResolver(), uri);
 		return c;
 	}
 	
-	private Cursor getTags(String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
+	private Cursor getTags(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
 		qb.setTables(TAG_TABLE_NAME);
 		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder);
-		//c.setNotificationUri(getContext().getContentResolver(), uri);
+		c.setNotificationUri(getContext().getContentResolver(), uri);
 		return c;
 	}
 	
@@ -242,10 +242,8 @@ public class BookmarkContentProvider extends ContentProvider {
 	
     private static UriMatcher buildUriMatcher() {
         UriMatcher matcher =  new UriMatcher(UriMatcher.NO_MATCH);
-        // to get definitions...
         matcher.addURI(AUTHORITY, "bookmark", Bookmarks);
         matcher.addURI(AUTHORITY, "tag", Tags);
-        // to get suggestions...
         matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SearchSuggest);
         matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SearchSuggest);
         return matcher;

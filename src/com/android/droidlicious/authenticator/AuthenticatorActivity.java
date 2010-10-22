@@ -202,6 +202,17 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             mAccountManager.setPassword(account, mPassword);
         }
         
+        SharedPreferences settings = getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+        final String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
+        final String token = settings.getString(Constants.OAUTH_TOKEN_PROPERTY, "");
+        final String tokensecret = settings.getString(Constants.OAUTH_TOKEN_SECRET_PROPERTY, "");
+        final String sessionhandle = settings.getString(Constants.OAUTH_SESSION_HANDLE_PROPERTY, "");
+        
+        mAccountManager.setUserData(account, Constants.PREFS_AUTH_TYPE, authtype);
+        mAccountManager.setUserData(account, Constants.OAUTH_TOKEN_PROPERTY, token);
+        mAccountManager.setUserData(account, Constants.OAUTH_TOKEN_SECRET_PROPERTY, tokensecret);
+        mAccountManager.setUserData(account, Constants.OAUTH_SESSION_HANDLE_PROPERTY, sessionhandle);
+        
         final Intent intent = new Intent();
         
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mUsername);

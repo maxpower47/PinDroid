@@ -19,8 +19,8 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 
@@ -284,8 +284,9 @@ public class DeliciousApi {
     
     private static String DeliciousApiCall(String url, TreeMap<String, String> params, 
     		Account account, Context context) throws IOException{
-    	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
-    	String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
+
+    	final AccountManager am = AccountManager.get(context);
+    	String authtype = am.getUserData(account, Constants.PREFS_AUTH_TYPE);
     	
     	String username = account.name;
     	String authtoken = null;
@@ -323,7 +324,7 @@ public class DeliciousApi {
 		try{
 	    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
 	    		Log.d("apiCall", "oauth");
-	    		String tokenSecret = settings.getString("oauth_token_secret", "");
+	    		String tokenSecret = am.getUserData(account, Constants.OAUTH_TOKEN_SECRET_PROPERTY);
 	
 				OauthUtilities.signRequest(post, params, authtoken, tokenSecret);
 	

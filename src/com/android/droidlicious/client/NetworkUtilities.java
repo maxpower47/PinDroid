@@ -16,8 +16,9 @@
 
 package com.android.droidlicious.client;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 
@@ -302,12 +303,12 @@ public class NetworkUtilities {
      * @return boolean The boolean result indicating whether the user was
      *         successfully authenticated.
      */
-    public static LoginResult refreshOauthRequestToken(String token, final Context context) {
+    public static LoginResult refreshOauthRequestToken(Account account, String token, final Context context) {
         final HttpResponse resp;
         
- 	   	SharedPreferences settings = context.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
- 	   	String tokenSecret = settings.getString(Constants.OAUTH_TOKEN_SECRET_PROPERTY, "");
- 	   	String sessionHandle = settings.getString(Constants.OAUTH_SESSION_HANDLE_PROPERTY, "");
+        final AccountManager am = AccountManager.get(context);
+        String tokenSecret  = am.getUserData(account, Constants.OAUTH_TOKEN_SECRET_PROPERTY);
+        String sessionHandle = am.getUserData(account, Constants.OAUTH_SESSION_HANDLE_PROPERTY);
         
         Random r = new Random();
         String nonceToken = Long.toString(Math.abs(r.nextLong()), 36);

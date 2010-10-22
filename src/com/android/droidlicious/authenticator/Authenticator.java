@@ -49,8 +49,7 @@ class Authenticator extends AbstractAccountAuthenticator {
      */
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response,
-        String accountType, String authTokenType, String[] requiredFeatures,
-        Bundle options) {
+        String accountType, String authTokenType, String[] requiredFeatures, Bundle options) {
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AuthenticatorActivity.PARAM_AUTHTOKEN_TYPE, authTokenType);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
@@ -72,10 +71,8 @@ class Authenticator extends AbstractAccountAuthenticator {
     public Bundle confirmCredentials(AccountAuthenticatorResponse response,
         Account account, Bundle options) {
         if (options != null && options.containsKey(AccountManager.KEY_PASSWORD)) {
-            final String password =
-                options.getString(AccountManager.KEY_PASSWORD);
-            final boolean verified =
-                onlineConfirmPassword(account.name, password);
+            final String password = options.getString(AccountManager.KEY_PASSWORD);
+            final boolean verified = onlineConfirmPassword(account, password);
             final Bundle result = new Bundle();
             result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, verified);
             return result;
@@ -84,8 +81,7 @@ class Authenticator extends AbstractAccountAuthenticator {
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AuthenticatorActivity.PARAM_USERNAME, account.name);
         intent.putExtra(AuthenticatorActivity.PARAM_CONFIRMCREDENTIALS, true);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
-            response);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         final Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);
         return bundle;
@@ -107,7 +103,6 @@ class Authenticator extends AbstractAccountAuthenticator {
     public Bundle getAuthToken(AccountAuthenticatorResponse response,
         Account account, String authTokenType, Bundle loginOptions) {
     	Log.d("getAuthToken", "blah");
-    	SharedPreferences settings = mContext.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
     	
         if (!authTokenType.equals(Constants.AUTHTOKEN_TYPE)) {
             final Bundle result = new Bundle();
@@ -116,17 +111,18 @@ class Authenticator extends AbstractAccountAuthenticator {
         }
         final AccountManager am = AccountManager.get(mContext);
         final String password = am.getPassword(account);
-        if(settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS) == Constants.AUTH_TYPE_DELICIOUS){
+        final String authtype = am.getUserData(account, Constants.PREFS_AUTH_TYPE);
+        
+        if(authtype.equals(Constants.AUTH_TYPE_DELICIOUS)){
         	Log.d("getAuthToken", "notoauth");
         	
 	        if (password != null) {
 	            final boolean verified =
-	                onlineConfirmPassword(account.name, password);
+	                onlineConfirmPassword(account, password);
 	            if (verified) {
 	                final Bundle result = new Bundle();
 	                result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
-	                result.putString(AccountManager.KEY_ACCOUNT_TYPE,
-	                    Constants.ACCOUNT_TYPE);
+	                result.putString(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
 	                result.putString(AccountManager.KEY_AUTHTOKEN, password);
 	                return result;
 	            }
@@ -135,10 +131,8 @@ class Authenticator extends AbstractAccountAuthenticator {
 	        // Activity that will prompt the user for the password.
 	        final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
 	        intent.putExtra(AuthenticatorActivity.PARAM_USERNAME, account.name);
-	        intent.putExtra(AuthenticatorActivity.PARAM_AUTHTOKEN_TYPE,
-	            authTokenType);
-	        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE,
-	            response);
+	        intent.putExtra(AuthenticatorActivity.PARAM_AUTHTOKEN_TYPE, authTokenType);
+	        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
 	        final Bundle bundle = new Bundle();
 	        bundle.putParcelable(AccountManager.KEY_INTENT, intent);
 	        return bundle;
@@ -146,16 +140,15 @@ class Authenticator extends AbstractAccountAuthenticator {
         	Log.d("getAuthToken", "oauth");
     			
         	String token;
-        	if(!settings.getBoolean("first_time", true)) {
+        	final String firstTime = am.getUserData(account, "first_time");
+
+        	if(firstTime != null && firstTime.equals("false")) {	
+        		String oldauthtoken = am.getUserData(account, Constants.OAUTH_TOKEN_PROPERTY);
         		
-        		String oldauthtoken = settings.getString(Constants.OAUTH_TOKEN_PROPERTY, "");
-        		
-        		LoginResult lresult = NetworkUtilities.refreshOauthRequestToken(oldauthtoken, mContext);
-        		
-            	SharedPreferences.Editor editor = settings.edit();
-                editor.putString(Constants.OAUTH_TOKEN_SECRET_PROPERTY, lresult.getTokenSecret());
-                editor.putString(Constants.OAUTH_TOKEN_PROPERTY, lresult.getToken());
-                editor.commit();
+        		LoginResult lresult = NetworkUtilities.refreshOauthRequestToken(account, oldauthtoken, mContext);
+                
+                am.setUserData(account, Constants.OAUTH_TOKEN_SECRET_PROPERTY, lresult.getTokenSecret());
+                am.setUserData(account, Constants.OAUTH_TOKEN_PROPERTY, lresult.getToken());
             	
             	Log.d("loginresult token", lresult.getToken());
             	Log.d("loginresult token secret", lresult.getTokenSecret());
@@ -165,16 +158,13 @@ class Authenticator extends AbstractAccountAuthenticator {
             	am.setAuthToken(account, authTokenType, token);
 
         	} else {
-        		SharedPreferences.Editor editor = settings.edit();
-        		editor.putBoolean("first_time", false);
-                editor.commit();
+        		am.setUserData(account, "first_time", "false");
                 token = password;
         	}
         	
             final Bundle result = new Bundle();
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
-            result.putString(AccountManager.KEY_ACCOUNT_TYPE,
-                Constants.ACCOUNT_TYPE);
+            result.putString(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
             result.putString(AccountManager.KEY_AUTHTOKEN, token);
             return result;
         	   	
@@ -207,11 +197,12 @@ class Authenticator extends AbstractAccountAuthenticator {
     /**
      * Validates user's password on the server
      */
-    private boolean onlineConfirmPassword(String username, String password) {
-    	SharedPreferences settings = mContext.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+    private boolean onlineConfirmPassword(Account account, String password) {
+    	final AccountManager am = AccountManager.get(mContext);
+    	final String authtype = am.getUserData(account, Constants.PREFS_AUTH_TYPE);
     	
-    	if(settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS) == Constants.AUTH_TYPE_DELICIOUS){
-    		return NetworkUtilities.deliciousAuthenticate(username, password, null, null);
+    	if(authtype.equals(Constants.AUTH_TYPE_DELICIOUS)){
+    		return NetworkUtilities.deliciousAuthenticate(account.name, password, null, null);
     	} else {
     		return true;
     	}
