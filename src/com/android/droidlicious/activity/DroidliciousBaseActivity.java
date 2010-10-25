@@ -26,8 +26,8 @@ public class DroidliciousBaseActivity extends ListActivity {
 			startActivity(addBookmark);
 			return true;
 	    case R.id.menu_mybookmarks:
-			Intent myBookmarks = new Intent(this, BrowseTags.class);
-			startActivity(myBookmarks);
+			Intent main = new Intent(this, Main.class);
+			startActivity(main);
 	        return true;
 	    case R.id.menu_settings:
 	        return true;

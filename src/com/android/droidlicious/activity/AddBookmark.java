@@ -137,5 +137,3 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     	}
     }
 }
-
-
