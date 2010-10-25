@@ -24,7 +24,6 @@ public class BookmarkManager {
 		} else hash = bookmark.getHash();
 		
 		ContentValues values = new ContentValues();
-		
 		values.put(Bookmark.Description, bookmark.getDescription());
 		values.put(Bookmark.Url, url);
 		values.put(Bookmark.Notes, bookmark.getNotes());
@@ -41,7 +40,6 @@ public class BookmarkManager {
 		String selection = Bookmark.Hash + "='" + bookmark.getHash() + "'";
 		
 		ContentValues values = new ContentValues();
-		
 		values.put(Bookmark.Description, bookmark.getDescription());
 		values.put(Bookmark.Url, bookmark.getUrl());
 		values.put(Bookmark.Notes, bookmark.getNotes());
@@ -56,6 +54,24 @@ public class BookmarkManager {
 	public static void DeleteBookmark(Bookmark bookmark, Context context){
 		
 		String selection = BaseColumns._ID + "=" + bookmark.getId();
+		
+		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, null);
+	}
+	
+	public static void SetLastUpdate(Bookmark bookmark, Long lastUpdate, Context context){
+		
+		String selection = Bookmark.Hash + "='" + bookmark.getHash() + "'";
+		
+		ContentValues values = new ContentValues();	
+		values.put(Bookmark.LastUpdate, lastUpdate);
+		
+		context.getContentResolver().update(Bookmark.CONTENT_URI, values, selection, null);
+	}
+	
+	public static void DeleteOldBookmarks(Long lastUpdate, Context context){
+		String selection = Bookmark.LastUpdate + "<" + Long.toString(lastUpdate) + " OR " +
+		Bookmark.LastUpdate + " is null";
+		Log.d("DeleteOldSelection", selection);
 		
 		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, null);
 	}

@@ -3,7 +3,6 @@ package com.android.droidlicious.activity;
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.R;
 import com.android.droidlicious.client.DeliciousApi;
-import com.android.droidlicious.listadapter.BookmarkListAdapter;
 import com.android.droidlicious.platform.BookmarkManager;
 import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 

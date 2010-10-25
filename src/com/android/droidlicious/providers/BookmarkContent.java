@@ -36,6 +36,7 @@ public class BookmarkContent {
 		public static final String Hash = "HASH";
 		public static final String Meta = "META";
 		public static final String Time = "TIME";
+		public static final String LastUpdate = "LASTUPDATE";
 		
 		private int mId = 0;
         private String mUrl = null;
@@ -45,6 +46,7 @@ public class BookmarkContent {
         private String mHash = null;
         private String mMeta = null;
         private long mTime = 0;
+        private long mLastUpdate = 0;
 
         public int getId(){
         	return mId;
@@ -76,6 +78,10 @@ public class BookmarkContent {
         
         public long getTime(){
         	return mTime;
+        }
+        
+        public long getLastUpdate(){
+        	return mLastUpdate;
         }
         
         public Bookmark() {

@@ -22,7 +22,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -131,6 +130,9 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 						if(c.moveToFirst()){
 							int metaColumn = c.getColumnIndex(Bookmark.Meta);
 							
+							BookmarkManager.SetLastUpdate(b, update.getLastUpdate(), mContext);
+							Log.d(b.getHash(), Long.toString(update.getLastUpdate()));
+							
 							do {							
 								if(c.getString(metaColumn) == null || !c.getString(metaColumn).equals(b.getMeta())) {
 									updateList.add(b);
@@ -140,6 +142,8 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 						
 						c.close();
 					}
+		
+					BookmarkManager.DeleteOldBookmarks(update.getLastUpdate(), mContext);
 					
 					ArrayList<String> addHashes = new ArrayList<String>();
 					for(Bookmark b : addList){
