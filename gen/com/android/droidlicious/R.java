@@ -31,7 +31,7 @@ public final class R {
         public static final int auth_type_delicious=0x7f070012;
         public static final int auth_type_yahoo=0x7f070013;
         public static final int bookmark_description=0x7f07000a;
-        public static final int bookmark_url=0x7f07000b;
+        public static final int bookmark_tags=0x7f07000b;
         public static final int main_menu_description=0x7f070015;
         public static final int menu_addbookmark=0x7f07001c;
         public static final int menu_mybookmarks=0x7f07001d;

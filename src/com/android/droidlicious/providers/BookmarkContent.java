@@ -10,6 +10,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -101,6 +102,13 @@ public class BookmarkContent {
             mUrl = url;
             mDescription = description;
             mNotes = notes;
+        }
+        
+        public Bookmark(String url, String description, String notes, String tags) {
+            mUrl = url;
+            mDescription = description;
+            mNotes = notes;
+            mTags = tags;
         }
         
         public Bookmark(String url, String description, String notes, String tags, Boolean priv) {
@@ -200,10 +208,12 @@ public class BookmarkContent {
             try {
                 final String url = userBookmark.getString("u");
                 final String description = userBookmark.getString("d");
+                final JSONArray tags = userBookmark.getJSONArray("t");
                 Log.d("bookmarkurl", url);
                 Log.d("bookmarkdescription", description);
+                Log.d("bookmarktags", tags.join(" ").replace("\"", ""));
 
-                return new Bookmark(url, description);
+                return new Bookmark(url, description, "", tags.join(" ").replace("\"", ""));
             } catch (final Exception ex) {
                 Log.i("User.Bookmark", "Error parsing JSON user object");
             }

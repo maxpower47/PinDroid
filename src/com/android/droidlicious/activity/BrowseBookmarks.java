@@ -28,7 +28,6 @@ import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 
@@ -126,9 +125,10 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 	
 		lv.setOnItemClickListener(new OnItemClickListener() {
 		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		    	String url = ((TextView)view.findViewById(R.id.bookmark_url)).getText().toString();
-		    	Uri link = Uri.parse(url);
+		    	Bookmark b = (Bookmark)lv.getItemAtPosition(position);
 		    	
+		    	String url = b.getUrl();
+		    	Uri link = Uri.parse(url);
 				Intent i = new Intent(Intent.ACTION_VIEW, link);
 				
 				startActivity(i);

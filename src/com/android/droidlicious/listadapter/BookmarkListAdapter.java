@@ -31,12 +31,12 @@ public class BookmarkListAdapter extends ArrayAdapter<Bookmark> {
         Bookmark o = bookmarks.get(position);
         if (o != null) {
          	TextView td = (TextView) v.findViewById(R.id.bookmark_description);
-         	TextView tu = (TextView) v.findViewById(R.id.bookmark_url);
+         	TextView tu = (TextView) v.findViewById(R.id.bookmark_tags);
             if (td != null) {
                	td.setText(o.getDescription());                            
             }
             if (tu != null) {
-               	tu.setText(o.getUrl());                            
+               	tu.setText(o.getTags());                            
             }
 
         }
