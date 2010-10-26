@@ -103,6 +103,10 @@ public class DeliciousApi {
 		params.put("tags", bookmark.getTags());
 		params.put("url", bookmark.getUrl());
 		
+		if(bookmark.getPrivate()){
+			params.put("shared", "no");
+		}
+		
 		String url = ADD_BOOKMARKS_URI;
 		String response = null;
 

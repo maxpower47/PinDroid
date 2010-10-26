@@ -13,8 +13,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 	private EditText mEditDescription;
 	private EditText mEditNotes;
 	private EditText mEditTags;
+	private CheckBox mPrivate;
 	private Button mButtonSave;
 	private AccountManager mAccountManager;
 	private Account account;
@@ -40,6 +43,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		mEditDescription = (EditText) findViewById(R.id.add_edit_description);
 		mEditNotes = (EditText) findViewById(R.id.add_edit_notes);
 		mEditTags = (EditText) findViewById(R.id.add_edit_tags);
+		mPrivate = (CheckBox) findViewById(R.id.add_edit_private);
 		mButtonSave = (Button) findViewById(R.id.add_button_save);
 		context = this;
 		
@@ -66,9 +70,11 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 			url = "http://" + url;
 		}
 		
+		Log.d("private", Boolean.toString(mPrivate.isChecked()));
 		
 		bookmark = new Bookmark(url, mEditDescription.getText().toString(), 
-			mEditNotes.getText().toString(), mEditTags.getText().toString());
+			mEditNotes.getText().toString(), mEditTags.getText().toString(),
+			mPrivate.isChecked());
 		
 		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, account, context);
 		
@@ -94,7 +100,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     		bookmark = args[0].getBookmark();
     		
     		try {
-    			Boolean success = DeliciousApi.addBookmark(args[0].getBookmark(), args[0].getAccount(), args[0].getContext());
+    			Boolean success = DeliciousApi.addBookmark(bookmark, args[0].getAccount(), context);
     			if(success){
     				BookmarkManager.AddBookmark(bookmark, context);
     				return true;

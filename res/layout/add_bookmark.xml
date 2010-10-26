@@ -60,6 +60,11 @@
 	    android:layout_height="wrap_content"
 	    android:layout_weight="1"
 	    android:singleLine="true" />
+	<CheckBox 
+		android:id="@+id/add_edit_private"
+ 		android:text="Private?"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content" />  
     <Button
         android:id="@+id/add_button_save"
         android:layout_width="fill_parent"

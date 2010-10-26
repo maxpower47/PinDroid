@@ -45,6 +45,7 @@ public class BookmarkContent {
         private String mTags = null;
         private String mHash = null;
         private String mMeta = null;
+        private Boolean mPrivate = false;
         private long mTime = 0;
         private long mLastUpdate = 0;
 
@@ -84,6 +85,10 @@ public class BookmarkContent {
         	return mLastUpdate;
         }
         
+        public Boolean getPrivate(){
+        	return mPrivate;
+        }
+        
         public Bookmark() {
         }
         
@@ -98,11 +103,12 @@ public class BookmarkContent {
             mNotes = notes;
         }
         
-        public Bookmark(String url, String description, String notes, String tags) {
+        public Bookmark(String url, String description, String notes, String tags, Boolean priv) {
             mUrl = url;
             mDescription = description;
             mNotes = notes;
             mTags = tags;
+            mPrivate = priv;
         }
         
         public Bookmark(String url, String description, String notes, String tags, String hash, String meta, long time) {
