@@ -62,13 +62,13 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
         ContentProviderClient provider, SyncResult syncResult) {
         List<User> users;
         List<Status> statuses;
-         try {
-             // use the account manager to request the credentials
-        	 AuthToken at = new AuthToken(mContext, account);
-        	 authtoken = at.getAuthToken();
+        try {
+        	// use the account manager to request the credentials
+        	AuthToken at = new AuthToken(mContext, account);
+        	authtoken = at.getAuthToken();
         	 
-             // fetch updates from the sample service over the cloud
-             users = DeliciousFeed.fetchFriendUpdates(account);
+            // fetch updates from the sample service over the cloud
+            users = DeliciousFeed.fetchFriendUpdates(account);
             // update platform contacts.
             Log.d(TAG, "Calling contactManager's sync contacts");
             ContactManager.syncContacts(mContext, account.name, users);

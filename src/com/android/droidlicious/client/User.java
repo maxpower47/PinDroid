@@ -16,13 +16,13 @@
 
 package com.android.droidlicious.client;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.util.Log;
 
 import org.json.JSONObject;
+
+import com.android.droidlicious.util.DateParser;
 
 /**
  * Represents a sample SyncAdapter user
@@ -54,7 +54,6 @@ public class User {
 
         }
         return null;
-
     }
 
     /**
@@ -90,11 +89,8 @@ public class User {
                 final String status = userStatus.getString("d");
                 final String date = userStatus.getString("dt");
                 
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-                Date timestamp = new Date();
-                timestamp = (Date)formatter.parse(date);
+                Date timestamp = DateParser.parse(date);
                 
-                Log.d("status_timestamp", timestamp.toString());
                 return new User.Status(userName, status, timestamp);
             } catch (final Exception ex) {
                 Log.i("User.Status", "Error parsing JSON user object");
