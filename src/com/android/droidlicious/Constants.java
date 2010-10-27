@@ -45,7 +45,7 @@ public class Constants {
     public static final String PREFS_INITIAL_SYNC = "initial_sync";
     
     public static final String OAUTH_CALLBACK_PROPERTY = "oauth_callback";
-    public static final String OAUTH_CALLBACK = "oob";
+    public static final String OAUTH_CALLBACK = "http://droidlicious.webs.com/oauth.htm";
     
     public static final String OAUTH_SESSION_HANDLE_PROPERTY = "oauth_session_handle";
     

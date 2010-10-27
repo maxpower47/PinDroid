@@ -33,21 +33,19 @@ public final class R {
         public static final int bookmark_description=0x7f07000a;
         public static final int bookmark_tags=0x7f07000b;
         public static final int main_menu_description=0x7f070015;
-        public static final int menu_addbookmark=0x7f07001c;
-        public static final int menu_mybookmarks=0x7f07001d;
-        public static final int menu_settings=0x7f07001e;
+        public static final int menu_addbookmark=0x7f07001a;
+        public static final int menu_mybookmarks=0x7f07001b;
+        public static final int menu_settings=0x7f07001c;
         public static final int message=0x7f07000c;
         public static final int message_bottom=0x7f070010;
-        public static final int oauth_ok_button=0x7f070018;
-        public static final int oauth_token_edit_url=0x7f070017;
         public static final int oauth_webview=0x7f070016;
         public static final int ok_button=0x7f070011;
         public static final int password_edit=0x7f07000f;
-        public static final int tag_count=0x7f07001b;
-        public static final int tag_name=0x7f07001a;
+        public static final int tag_count=0x7f070019;
+        public static final int tag_name=0x7f070018;
         public static final int username_edit=0x7f07000d;
         public static final int username_fixed=0x7f07000e;
-        public static final int webview=0x7f070019;
+        public static final int webview=0x7f070017;
     }
     public static final class layout {
         public static final int add_bookmark=0x7f030000;
