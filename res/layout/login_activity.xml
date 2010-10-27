@@ -51,7 +51,7 @@
                 android:singleLine="true"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:minWidth="250dip"
+                android:minWidth="350dip"
                 android:scrollHorizontally="true"
                 android:capitalize="none"
                 android:autoText="false"
@@ -76,7 +76,7 @@
                 android:singleLine="true"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:minWidth="250dip"
+                android:minWidth="350dip"
                 android:scrollHorizontally="true"
                 android:capitalize="none"
                 android:autoText="false"
@@ -87,16 +87,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dip" />
-            <RadioGroup android:layout_width="fill_parent"
- 				android:layout_height="wrap_content"
-				android:orientation="vertical"
-				android:id="@+id/auth_type">
-				<RadioButton android:checked="false"
-					android:id="@+id/auth_type_delicious" android:text="Delicious"/>
-				<RadioButton android:checked="false"
-					android:id="@+id/auth_type_yahoo" android:text="Yahoo"/>
-			</RadioGroup>        
+                android:layout_marginBottom="5dip" />      
         </LinearLayout>
     </ScrollView>
     <FrameLayout

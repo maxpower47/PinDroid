@@ -16,6 +16,8 @@
 
 package com.android.droidlicious.authenticator;
 
+import java.io.IOException;
+
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
@@ -100,18 +102,15 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
         Log.i(TAG, "    request new: " + mRequestNewAccount);
         requestWindowFeature(Window.FEATURE_LEFT_ICON);
-        setContentView(R.layout.login_activity);
+        setContentView(R.layout.login_authtype);
         getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, android.R.drawable.ic_dialog_alert);
 
         mMessage = (TextView) findViewById(R.id.message);
-        mUsernameEdit = (EditText) findViewById(R.id.username_edit);
-        mPasswordEdit = (EditText) findViewById(R.id.password_edit);
 
-        mUsernameEdit.setText(mUsername);
-        mMessage.setText(getMessage());
         
         mDeliciousAuth = (RadioButton) findViewById(R.id.auth_type_delicious);
         mYahooAuth = (RadioButton) findViewById(R.id.auth_type_yahoo);
+        mMessage.setText(R.string.login_activity_authtype_text);
     }
 
     /*
@@ -133,6 +132,29 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             }
         });
         return dialog;
+    }
+    
+    /**
+     * Handles onClick event on the Submit button. Sends username/password to
+     * the server for authentication.
+     * 
+     * @param view The Submit button for which this method is invoked
+     */
+    public void handleAuthtype(View view) {      
+
+    	if(mYahooAuth.isChecked()){
+            mAuthThread = NetworkUtilities.attemptAuth(mUsername, mPassword, 1, mHandler,
+                    AuthenticatorActivity.this);
+    	} else if(mDeliciousAuth.isChecked()){
+    		setContentView(R.layout.login_activity);
+    		
+            mUsernameEdit = (EditText) findViewById(R.id.username_edit);
+            mPasswordEdit = (EditText) findViewById(R.id.password_edit);
+            mMessage = (TextView) findViewById(R.id.message);
+
+            mUsernameEdit.setText(mUsername);
+            mMessage.setText(getMessage());
+    	}
     }
 
     /**
@@ -185,22 +207,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
      * 
      * @param the confirmCredentials result.
      */
-
     protected void finishLogin(String authToken) {
         Log.i(TAG, "finishLogin()");
-        final Account account = new Account(mUsername, Constants.ACCOUNT_TYPE);
-
-        if(authToken != null && authToken != ""){
-        	mPassword = authToken;
-        }
-        
-        if (mRequestNewAccount) {
-            mAccountManager.addAccountExplicitly(account, mPassword, null);
-            // Set contacts sync for this account.
-            ContentResolver.setSyncAutomatically(account, ContactsContract.AUTHORITY, true);
-        } else {
-            mAccountManager.setPassword(account, mPassword);
-        }
         
         SharedPreferences settings = getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
         final String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
@@ -208,6 +216,25 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         final String tokensecret = settings.getString(Constants.OAUTH_TOKEN_SECRET_PROPERTY, "");
         final String sessionhandle = settings.getString(Constants.OAUTH_SESSION_HANDLE_PROPERTY, "");
         
+        if(authToken != null && authToken != ""){
+        	try {
+				mUsername = NetworkUtilities.getOauthUserName(authToken, tokensecret, this);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+        	mPassword = authToken;
+        }
+        
+        final Account account = new Account(mUsername, Constants.ACCOUNT_TYPE);
+
+        if (mRequestNewAccount) {
+            mAccountManager.addAccountExplicitly(account, mPassword, null);
+            // Set contacts sync for this account.
+            ContentResolver.setSyncAutomatically(account, ContactsContract.AUTHORITY, true);
+        } else {
+            mAccountManager.setPassword(account, mPassword);
+        }
+  
         mAccountManager.setUserData(account, Constants.PREFS_AUTH_TYPE, authtype);
         mAccountManager.setUserData(account, Constants.OAUTH_TOKEN_PROPERTY, token);
         mAccountManager.setUserData(account, Constants.OAUTH_TOKEN_SECRET_PROPERTY, tokensecret);
@@ -236,7 +263,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
      * Hides the progress UI for a lengthy operation.
      */
     protected void hideProgress() {
-        dismissDialog(0);
+    	try{
+    		dismissDialog(0);
+    	}
+    	catch(IllegalArgumentException e){
+    		
+    	}
     }
 
     /**
@@ -297,12 +329,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
      * Returns the message to be displayed at the top of the login dialog box.
      */
     private CharSequence getMessage() {
-        getString(R.string.label);
         if (TextUtils.isEmpty(mUsername)) {
             // If no username, then we ask the user to log in using an
             // appropriate service.
-            final CharSequence msg = getText(R.string.login_activity_newaccount_text);
-            return msg;
+            return getText(R.string.login_activity_newaccount_text);
         }
         if (TextUtils.isEmpty(mPassword)) {
             // We have an account but no password

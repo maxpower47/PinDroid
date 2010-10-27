@@ -24,6 +24,7 @@ import android.util.Log;
 
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.authenticator.AuthenticatorActivity;
+import com.android.droidlicious.authenticator.OauthUtilities;
 
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -31,6 +32,7 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.auth.AuthScope;
 import android.net.Uri;
 
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
@@ -43,6 +45,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Random;
+import java.util.TreeMap;
 
 /**
  * Provides utility methods for communicating with the server.
@@ -73,6 +76,7 @@ public class NetworkUtilities {
 
     private static final String OAUTH_REQUEST_TOKEN_URI = "oauth/v2/get_request_token";
     private static final String OAUTH_GET_TOKEN_URI = "oauth/v2/get_token";
+    private static final String OAUTH_GET_USERNAME_URI = "v2/posts/get";
 
     /**
      * Configures the httpClient to connect to the URL provided.
@@ -101,7 +105,6 @@ public class NetworkUtilities {
                 try {
                     runnable.run();
                 } finally {
-
                 }
             }
         };
@@ -175,8 +178,7 @@ public class NetworkUtilities {
      * @return boolean The boolean result indicating whether the user was
      *         successfully authenticated.
      */
-    public static boolean oauthAuthenticate(String username, String password,
-        Handler handler, final Context context) {
+    public static boolean oauthAuthenticate(Handler handler, final Context context) {
         final HttpResponse resp;
         
         Random r = new Random();
@@ -363,6 +365,65 @@ public class NetworkUtilities {
     }
     
     /**
+     * Fetches users bookmarks
+     * 
+     * @param account The account being synced.
+     * @param authtoken The authtoken stored in the AccountManager for the
+     *        account
+     * @return list The list of bookmarks received from the server.
+     */
+    public static String getOauthUserName(String authtoken, String tokensecret, Context context) 
+    	throws IOException {
+
+    	TreeMap<String, String> params = new TreeMap<String, String>();
+    	String url = OAUTH_GET_USERNAME_URI;
+
+    	params.put("count", "1");
+
+    	HttpResponse resp = null;
+    	HttpGet post = null;
+    	
+		Uri.Builder builder = new Uri.Builder();
+		builder.scheme(SCHEME_HTTP);
+		builder.authority(DELICIOUS_AUTHORITY);
+		builder.appendEncodedPath(url);
+		for(String key : params.keySet()){
+			builder.appendQueryParameter(key, params.get(key));
+		}
+		
+		Log.d("getUsername", builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+"));
+		post = new HttpGet(builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+"));
+		HttpHost host = new HttpHost(DELICIOUS_AUTHORITY);
+		maybeCreateHttpClient();
+		post.setHeader("User-Agent", "Droidlicious");
+    	
+		try{
+    		Log.d("apiCall", "oauth");
+
+			OauthUtilities.signRequest(post, params, authtoken, tokensecret);
+
+			Log.d("header", post.getHeaders("Authorization")[0].getValue());
+	        
+	        resp = mHttpClient.execute(host, post);
+
+	    	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+	    		String response = EntityUtils.toString(resp.getEntity());
+	    		Log.d("response", response);
+	    		int start = response.indexOf("user=\"") + 6;
+	    		int end = response.indexOf("\"", start + 1);
+	    		String username = response.substring(start, end);
+	    		Log.d("username", username);
+	    		return username;
+	    	} else {
+	    		throw new IOException();
+	    	}
+		} catch(Exception e){
+			Log.e("DeliciousApiCall Error", Integer.toString(resp.getStatusLine().getStatusCode()));
+		}
+		throw new IOException();
+    }
+    
+    /**
      * Sends the authentication response from server back to the caller main UI
      * thread through its handler.
      * 
@@ -400,7 +461,7 @@ public class NetworkUtilities {
             		deliciousAuthenticate(username, password, handler, context);
             	}
             	else{
-            		oauthAuthenticate(username, password, handler, context);
+            		oauthAuthenticate(handler, context);
             	}
             }
         };

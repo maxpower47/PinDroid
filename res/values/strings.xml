@@ -47,6 +47,8 @@
     <string name="login_activity_password_label">Password</string>
     <!-- Button to sign in after entering username and password -->
     <string name="login_activity_ok_button">Sign in</string>
+    
+    <string name="login_authtype_ok_button">Continue</string>
 
     <!-- Message shown in dialog if the username or password is invalid. -->
     <string name="login_activity_loginfail_text_both">The username or password isn\'t valid. A Delicious account is
@@ -58,6 +60,8 @@
     <string name="login_activity_loginfail_text_pwmissing">Type the password for this account.</string>
     <!-- Message shown if the provided account doesn't support the current activity. -->
     <string name="login_activity_newaccount_text">Sign in to your Delicious account. </string>
+    
+    <string name="login_activity_authtype_text">Choose your account type. </string>
 
     <!-- Button that takes the user to the "sign in" screen -->
     <string name="sign_in_button_label">Sign in</string>
