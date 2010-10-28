@@ -145,7 +145,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     	if(mYahooAuth.isChecked()){
             mAuthThread = NetworkUtilities.attemptAuth(mUsername, mPassword, 1, mHandler,
                     AuthenticatorActivity.this);
-    	} else if(mDeliciousAuth.isChecked()){
+    	} else {
     		setContentView(R.layout.login_activity);
     		
             mUsernameEdit = (EditText) findViewById(R.id.username_edit);

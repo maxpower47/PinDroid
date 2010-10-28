@@ -222,6 +222,7 @@ public class NetworkUtilities {
             	return false;
             }
         } catch (final IOException e) {
+        	Log.d("error", e.getStackTrace().toString());
         	sendResult(new LoginResult(false), handler, context);
         	return false;
         } finally {

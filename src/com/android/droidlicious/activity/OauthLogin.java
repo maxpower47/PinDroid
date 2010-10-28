@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.graphics.Bitmap;
 
 public class OauthLogin extends Activity{
 	
@@ -18,11 +19,10 @@ public class OauthLogin extends Activity{
 
 	    mWebView = (WebView) findViewById(R.id.oauth_webview);   
 	    
-	    mWebView.setWebViewClient(new WebViewClient() {  
-		    @Override  
-		    public boolean shouldOverrideUrlLoading(WebView view, String url)  
-		    {  
-		    	if(url.startsWith("dandroid:")){
+	    mWebView.setWebViewClient(new WebViewClient() {      
+		    @Override
+		    public void onPageStarted(WebView view, String url, Bitmap favicon){
+		    	if(url.startsWith("http://droidlicious")){
 		    		int start = url.indexOf("oauth_verifier=") + 1;
 		    		String verification = url.substring(start + 14);
 		    		
@@ -30,12 +30,8 @@ public class OauthLogin extends Activity{
 	            	resultIntent.putExtra("oauth_verifier", verification);
 	            	setResult(Activity.RESULT_OK, resultIntent);
 	            	finish();
-		    	} else {
-		    		view.loadUrl(url);
-		    		return false;
 		    	}
-			    return true;  
-		    }  
+		    }
 	    });  
   
 	    mWebView.getSettings().setJavaScriptEnabled(true);
