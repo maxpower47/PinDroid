@@ -29,6 +29,7 @@ import android.content.SyncResult;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.droidlicious.Constants;
@@ -73,8 +74,9 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     
     private void InsertBookmarks(Account account){
     	
-    	SharedPreferences settings = mContext.getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
     	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
+    	Boolean notifyPref = settings.getBoolean("pref_notification", true);
     	Update update = null;
     	Boolean success = true;
     	
@@ -84,7 +86,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			e1.printStackTrace();
 		}
 		
-		if(update.getInboxNew() > 0) {
+		if(notifyPref && update.getInboxNew() > 0) {
 			NotificationManager nm = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 			Notification n = new Notification(R.drawable.icon, "New Delicious Bookmarks", System.currentTimeMillis());
 			Intent ni = new Intent(mContext, Main.class);

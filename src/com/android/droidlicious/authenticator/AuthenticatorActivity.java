@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
@@ -106,8 +107,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, android.R.drawable.ic_dialog_alert);
 
         mMessage = (TextView) findViewById(R.id.message);
-
-        
+      
         mDeliciousAuth = (RadioButton) findViewById(R.id.auth_type_delicious);
         mYahooAuth = (RadioButton) findViewById(R.id.auth_type_yahoo);
         mMessage.setText(R.string.login_activity_authtype_text);
@@ -210,7 +210,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     protected void finishLogin(String authToken) {
         Log.i(TAG, "finishLogin()");
         
-        SharedPreferences settings = getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
         final String token = settings.getString(Constants.OAUTH_TOKEN_PROPERTY, "");
         final String tokensecret = settings.getString(Constants.OAUTH_TOKEN_SECRET_PROPERTY, "");
@@ -280,7 +280,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         hideProgress();
         if (result.getResult() && result.getToken() == null && result.getSessionHandle() == null) {
             if (!mConfirmCredentials) {
-                SharedPreferences settings = getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = settings.edit();
             	editor.putString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
             	editor.commit();
@@ -300,7 +300,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         } else if(result.getResult() && result.getSessionHandle() != null){
         	Log.d(TAG, result.getToken());
         	
-            SharedPreferences settings = getSharedPreferences(Constants.AUTH_PREFS_NAME, 0);
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = settings.edit();
             
             editor.putString(Constants.OAUTH_TOKEN_PROPERTY, result.getToken());

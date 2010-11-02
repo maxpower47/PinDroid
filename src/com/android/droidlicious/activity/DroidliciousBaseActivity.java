@@ -30,6 +30,8 @@ public class DroidliciousBaseActivity extends ListActivity {
 			startActivity(main);
 	        return true;
 	    case R.id.menu_settings:
+			Intent prefs = new Intent(this, Preferences.class);
+			startActivity(prefs);
 	        return true;
 	    default:
 	        return super.onOptionsItemSelected(item);

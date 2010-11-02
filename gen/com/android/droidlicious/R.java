@@ -116,6 +116,9 @@ public final class R {
         /**  Permission label 
          */
         public static final int permlab_samplesyncadapterAuthPassword=0x7f050001;
+        public static final int pref_notification_key=0x7f050023;
+        public static final int pref_notification_summary=0x7f050024;
+        public static final int pref_notification_title=0x7f050022;
         public static final int profile_action=0x7f050014;
         /**  Button that takes the user to the "sign in" screen 
          */
@@ -133,10 +136,12 @@ public final class R {
         public static final int view_profile=0x7f050015;
     }
     public static final class xml {
-        public static final int authenticator=0x7f040000;
-        public static final int bookmarksyncadapter=0x7f040001;
-        public static final int contacts=0x7f040002;
-        public static final int contactsyncadapter=0x7f040003;
-        public static final int searchable=0x7f040004;
+        public static final int account_preferences=0x7f040000;
+        public static final int authenticator=0x7f040001;
+        public static final int bookmarksyncadapter=0x7f040002;
+        public static final int contacts=0x7f040003;
+        public static final int contactsyncadapter=0x7f040004;
+        public static final int preferences=0x7f040005;
+        public static final int searchable=0x7f040006;
     }
 }

@@ -76,6 +76,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.OauthLogin" />
+        <activity android:name=".activity.Preferences" />
         <!-- The authenticator service -->
         <service
             android:name=".authenticator.AuthenticationService"

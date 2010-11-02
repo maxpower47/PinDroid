@@ -25,4 +25,4 @@
     android:icon="@drawable/icon"
     android:smallIcon="@drawable/icon"
     android:label="@string/label"
-/>
+    android:accountPreferences="@xml/account_preferences" />
