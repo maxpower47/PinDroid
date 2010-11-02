@@ -25,9 +25,11 @@ public class TagContent {
 		
 		public static final String Name = "NAME";
 		public static final String Count = "COUNT";
+		public static final String Account = "ACCOUNT";
 		
         private final String mTagName;
         private final int mCount;
+        private final String mAccount = null;
         private int mId = 0;
 
         public int getId(){

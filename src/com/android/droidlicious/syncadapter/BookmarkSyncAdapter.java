@@ -79,6 +79,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	Boolean notifyPref = settings.getBoolean("pref_notification", true);
     	Update update = null;
     	Boolean success = true;
+    	String username = account.name;
     	
     	try {
     		update = DeliciousApi.lastUpdate(account, mContext);
@@ -132,7 +133,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 						if(c.moveToFirst()){
 							int metaColumn = c.getColumnIndex(Bookmark.Meta);
 							
-							BookmarkManager.SetLastUpdate(b, update.getLastUpdate(), mContext);
+							BookmarkManager.SetLastUpdate(b, update.getLastUpdate(), username, mContext);
 							Log.d(b.getHash(), Long.toString(update.getLastUpdate()));
 							
 							do {							
@@ -145,7 +146,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 						c.close();
 					}
 		
-					BookmarkManager.DeleteOldBookmarks(update.getLastUpdate(), mContext);
+					BookmarkManager.DeleteOldBookmarks(update.getLastUpdate(), username, mContext);
 					
 					ArrayList<String> addHashes = new ArrayList<String>();
 					for(Bookmark b : addList){
@@ -171,9 +172,9 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 				e.printStackTrace();
 			}
 			
-			TagManager.TruncateTags(mContext);
+			TagManager.TruncateTags(username, mContext);
 			for(Tag b : tagList){
-				TagManager.AddTag(b, mContext);
+				TagManager.AddTag(b, username, mContext);
 			}
 			
 			if(success){
@@ -183,13 +184,13 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 
 				if(!addBookmarkList.isEmpty()){				
 					for(Bookmark b : addBookmarkList){
-						BookmarkManager.AddBookmark(b, mContext);
+						BookmarkManager.AddBookmark(b, username, mContext);
 					}
 				}
 				
 				if(!updateBookmarkList.isEmpty()){		
 					for(Bookmark b : updateBookmarkList){
-						BookmarkManager.UpdateBookmark(b, mContext);
+						BookmarkManager.UpdateBookmark(b, username, mContext);
 					}
 				}
 			}

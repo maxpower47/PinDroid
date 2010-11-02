@@ -66,10 +66,11 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 				String sortorder = null;
 				
 				if(tagname != null && tagname != "") {
-					selection = Bookmark.Tags + " LIKE '% " + tagname + " %' OR " +
+					selection = "(" + Bookmark.Tags + " LIKE '% " + tagname + " %' OR " +
 						Bookmark.Tags + " LIKE '% " + tagname + "' OR " +
 						Bookmark.Tags + " LIKE '" + tagname + " %' OR " +
-						Bookmark.Tags + " = '" + tagname + "'";
+						Bookmark.Tags + " = '" + tagname + "') AND " +
+						Bookmark.Account + " = '" + username + "'";
 				}
 				
 				if(recent != null && recent.equals("1")){

@@ -30,6 +30,7 @@ public class BookmarkContent {
 		
 		public static final  String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.droidlicious.bookmarks";
 		
+		public static final String Account = "ACCOUNT";
 		public static final String Description = "DESCRIPTION";
 		public static final String Url = "URL";
 		public static final String Notes = "NOTES";
@@ -40,6 +41,7 @@ public class BookmarkContent {
 		public static final String LastUpdate = "LASTUPDATE";
 		
 		private int mId = 0;
+		private String mAccount = null;
         private String mUrl = null;
         private String mDescription = null;
         private String mNotes = null;

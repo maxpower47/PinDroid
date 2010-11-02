@@ -93,16 +93,18 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     private class AddBookmarkTask extends AsyncTask<BookmarkTaskArgs, Integer, Boolean>{
     	private Context context;
     	private Bookmark bookmark;
+    	private Account account;
     	
     	@Override
     	protected Boolean doInBackground(BookmarkTaskArgs... args) {
     		context = args[0].getContext();
     		bookmark = args[0].getBookmark();
+    		account = args[0].getAccount();
     		
     		try {
-    			Boolean success = DeliciousApi.addBookmark(bookmark, args[0].getAccount(), context);
+    			Boolean success = DeliciousApi.addBookmark(bookmark, account, context);
     			if(success){
-    				BookmarkManager.AddBookmark(bookmark, context);
+    				BookmarkManager.AddBookmark(bookmark, account.name, context);
     				return true;
     			} else return false;
     		} catch (Exception e) {

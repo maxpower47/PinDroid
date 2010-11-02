@@ -8,18 +8,20 @@ import android.provider.BaseColumns;
 
 public class TagManager {
 	
-	public static void AddTag(Tag tag, Context context){
+	public static void AddTag(Tag tag, String account, Context context){
 		ContentValues values = new ContentValues();
 		
 		values.put(Tag.Name, tag.getTagName());
 		values.put(Tag.Count, tag.getCount());
+		values.put(Tag.Account, account);
 	
 		context.getContentResolver().insert(Tag.CONTENT_URI, values);
 	}
 	
-	public static void UpdateTag(Tag tag, Context context){
+	public static void UpdateTag(Tag tag, String account, Context context){
 		
-		String selection = Tag.Name + "='" + tag.getTagName() + "'";
+		String selection = Tag.Name + "='" + tag.getTagName() + "' AND " +
+							Tag.Account + " = '" + account + "'";
 		
 		ContentValues values = new ContentValues();
 		
@@ -36,7 +38,10 @@ public class TagManager {
 		context.getContentResolver().delete(Tag.CONTENT_URI, selection, null);
 	}
 	
-	public static void TruncateTags(Context context){
-		context.getContentResolver().delete(Tag.CONTENT_URI, null, null);
+	public static void TruncateTags(String account, Context context){
+		
+		String selection = Tag.Account + " = '" + account + "'";
+		
+		context.getContentResolver().delete(Tag.CONTENT_URI, selection, null);
 	}
 }

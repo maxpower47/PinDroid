@@ -10,7 +10,7 @@ import android.util.Log;
 
 public class BookmarkManager {
 	
-	public static void AddBookmark(Bookmark bookmark, Context context){
+	public static void AddBookmark(Bookmark bookmark, String account, Context context){
 		String url = bookmark.getUrl();
 
 		if(!url.endsWith("/")){
@@ -31,13 +31,15 @@ public class BookmarkManager {
 		values.put(Bookmark.Hash, hash);
 		values.put(Bookmark.Meta, bookmark.getMeta());
 		values.put(Bookmark.Time, bookmark.getTime());
+		values.put(Bookmark.Account, account);
 		
 		context.getContentResolver().insert(Bookmark.CONTENT_URI, values);
 	}
 	
-	public static void UpdateBookmark(Bookmark bookmark, Context context){
+	public static void UpdateBookmark(Bookmark bookmark, String account, Context context){
 		
-		String selection = Bookmark.Hash + "='" + bookmark.getHash() + "'";
+		String selection = Bookmark.Hash + "='" + bookmark.getHash() + "' AND " +
+							Bookmark.Account + " = '" + account + "'";
 		
 		ContentValues values = new ContentValues();
 		values.put(Bookmark.Description, bookmark.getDescription());
@@ -58,9 +60,10 @@ public class BookmarkManager {
 		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, null);
 	}
 	
-	public static void SetLastUpdate(Bookmark bookmark, Long lastUpdate, Context context){
+	public static void SetLastUpdate(Bookmark bookmark, Long lastUpdate, String account, Context context){
 		
-		String selection = Bookmark.Hash + "='" + bookmark.getHash() + "'";
+		String selection = Bookmark.Hash + "='" + bookmark.getHash() + "' AND " +
+							Bookmark.Account + " = '" + account + "'";
 		
 		ContentValues values = new ContentValues();	
 		values.put(Bookmark.LastUpdate, lastUpdate);
@@ -68,9 +71,11 @@ public class BookmarkManager {
 		context.getContentResolver().update(Bookmark.CONTENT_URI, values, selection, null);
 	}
 	
-	public static void DeleteOldBookmarks(Long lastUpdate, Context context){
-		String selection = Bookmark.LastUpdate + "<" + Long.toString(lastUpdate) + " OR " +
-		Bookmark.LastUpdate + " is null";
+	public static void DeleteOldBookmarks(Long lastUpdate, String account, Context context){
+		String selection = "(" + Bookmark.LastUpdate + "<" + Long.toString(lastUpdate) + " OR " +
+		Bookmark.LastUpdate + " is null) AND " +
+		Bookmark.Account + " = '" + account + "'";
+		
 		Log.d("DeleteOldSelection", selection);
 		
 		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, null);
