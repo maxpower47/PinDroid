@@ -3,6 +3,8 @@ package com.android.droidlicious.activity;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.http.auth.AuthenticationException;
+
 import com.android.droidlicious.Constants;
 import com.android.droidlicious.R;
 import com.android.droidlicious.client.DeliciousApi;
@@ -179,6 +181,8 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 				} else return false;
 					
 			} catch (IOException e) {
+				return false;
+			} catch (AuthenticationException e) {
 				return false;
 			}
 		}

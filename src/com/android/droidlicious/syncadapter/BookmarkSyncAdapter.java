@@ -43,7 +43,9 @@ import com.android.droidlicious.providers.BookmarkContent.Bookmark;
 import com.android.droidlicious.providers.TagContent.Tag;
 
 import org.apache.http.ParseException;
+import org.apache.http.auth.AuthenticationException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -65,27 +67,29 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
         ContentProviderClient provider, SyncResult syncResult) {
 
          try {
-            InsertBookmarks(account);
-        }catch (final ParseException e) {
+            InsertBookmarks(account, syncResult);
+        } catch (final ParseException e) {
             syncResult.stats.numParseExceptions++;
             Log.e(TAG, "ParseException", e);
+        } catch (final AuthenticationException e) {
+            syncResult.stats.numAuthExceptions++;
+            Log.e(TAG, "AuthException", e);
+        } catch (final IOException e) {
+            syncResult.stats.numIoExceptions++;
+            Log.e(TAG, "IOException", e);
         }
     }
     
-    private void InsertBookmarks(Account account){
+    private void InsertBookmarks(Account account, SyncResult syncResult) 
+    	throws AuthenticationException, IOException{
     	
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
     	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
     	Boolean notifyPref = settings.getBoolean("pref_notification", true);
     	Update update = null;
-    	Boolean success = true;
     	String username = account.name;
-    	
-    	try {
-    		update = DeliciousApi.lastUpdate(account, mContext);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
+
+    	update = DeliciousApi.lastUpdate(account, mContext);
 		
 		if(notifyPref && update.getInboxNew() > 0) {
 			NotificationManager nm = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -106,98 +110,90 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			ArrayList<Bookmark> updateList = new ArrayList<Bookmark>();
 			ArrayList<Tag> tagList = new ArrayList<Tag>();
 
-			try {
-				if(lastUpdate == 0){
-					Log.d("BookmarkSync", "In Bookmark Load");
-					tagList = DeliciousApi.getTags(account, mContext);
-					addBookmarkList = DeliciousApi.getAllBookmarks(null, account, mContext);
-				} else {
-					Log.d("BookmarkSync", "In Bookmark Update");
-					tagList = DeliciousApi.getTags(account, mContext);
-					changeList = DeliciousApi.getChangedBookmarks(account, mContext);
+			if(lastUpdate == 0){
+				Log.d("BookmarkSync", "In Bookmark Load");
+				tagList = DeliciousApi.getTags(account, mContext);
+				addBookmarkList = DeliciousApi.getAllBookmarks(null, account, mContext);
+			} else {
+				Log.d("BookmarkSync", "In Bookmark Update");
+				tagList = DeliciousApi.getTags(account, mContext);
+				changeList = DeliciousApi.getChangedBookmarks(account, mContext);
+				
+				for(Bookmark b : changeList){
+				
+					String[] projection = new String[] {Bookmark.Hash, Bookmark.Meta};
+					String selection = Bookmark.Hash + "=?";
+					String[] selectionArgs = new String[] {b.getHash()};
 					
-					for(Bookmark b : changeList){
+					Uri bookmarks = Bookmark.CONTENT_URI;
 					
-						String[] projection = new String[] {Bookmark.Hash, Bookmark.Meta};
-						String selection = Bookmark.Hash + "=?";
-						String[] selectionArgs = new String[] {b.getHash()};
-						
-						Uri bookmarks = Bookmark.CONTENT_URI;
-						
-						Cursor c = mContext.getContentResolver().query(bookmarks, projection, selection, selectionArgs, null);
-						
-						if(c.getCount() == 0){
-							addList.add(b);
-						}
-						
-						if(c.moveToFirst()){
-							int metaColumn = c.getColumnIndex(Bookmark.Meta);
-							
-							BookmarkManager.SetLastUpdate(b, update.getLastUpdate(), username, mContext);
-							Log.d(b.getHash(), Long.toString(update.getLastUpdate()));
-							
-							do {							
-								if(c.getString(metaColumn) == null || !c.getString(metaColumn).equals(b.getMeta())) {
-									updateList.add(b);
-								}	
-							} while(c.moveToNext());
-						}
-						
-						c.close();
-					}
-		
-					BookmarkManager.DeleteOldBookmarks(update.getLastUpdate(), username, mContext);
+					Cursor c = mContext.getContentResolver().query(bookmarks, projection, selection, selectionArgs, null);
 					
-					ArrayList<String> addHashes = new ArrayList<String>();
-					for(Bookmark b : addList){
-						addHashes.add(b.getHash());
-					}
-					Log.d("add size", Integer.toString(addHashes.size()));
-					if(addHashes.size() > 0) {
-						addBookmarkList = DeliciousApi.getBookmark(addHashes, account, mContext);
+					if(c.getCount() == 0){
+						addList.add(b);
 					}
 					
-					ArrayList<String> updateHashes = new ArrayList<String>();
-					for(Bookmark b : updateList){
-						updateHashes.add(b.getHash());
-					}
-					Log.d("update size", Integer.toString(updateHashes.size()));
-					if(updateHashes.size() > 0) {
-						updateBookmarkList = DeliciousApi.getBookmark(updateHashes, account, mContext);
+					if(c.moveToFirst()){
+						int metaColumn = c.getColumnIndex(Bookmark.Meta);
+						
+						BookmarkManager.SetLastUpdate(b, update.getLastUpdate(), username, mContext);
+						Log.d(b.getHash(), Long.toString(update.getLastUpdate()));
+						
+						do {							
+							if(c.getString(metaColumn) == null || !c.getString(metaColumn).equals(b.getMeta())) {
+								updateList.add(b);
+							}	
+						} while(c.moveToNext());
 					}
 					
+					c.close();
 				}
-			} catch (Exception e) {
-				success = false;
-				e.printStackTrace();
+	
+				BookmarkManager.DeleteOldBookmarks(update.getLastUpdate(), username, mContext);
+				
+				ArrayList<String> addHashes = new ArrayList<String>();
+				for(Bookmark b : addList){
+					addHashes.add(b.getHash());
+				}
+				Log.d("add size", Integer.toString(addHashes.size()));
+				syncResult.stats.numInserts = addHashes.size();
+				if(addHashes.size() > 0) {
+					addBookmarkList = DeliciousApi.getBookmark(addHashes, account, mContext);
+				}
+				
+				ArrayList<String> updateHashes = new ArrayList<String>();
+				for(Bookmark b : updateList){
+					updateHashes.add(b.getHash());
+				}
+				Log.d("update size", Integer.toString(updateHashes.size()));
+				syncResult.stats.numUpdates = updateHashes.size();
+				if(updateHashes.size() > 0) {
+					updateBookmarkList = DeliciousApi.getBookmark(updateHashes, account, mContext);
+				}
 			}
 			
 			TagManager.TruncateTags(username, mContext);
 			for(Tag b : tagList){
 				TagManager.AddTag(b, username, mContext);
 			}
-			
-			if(success){
-	    		SharedPreferences.Editor editor = settings.edit();
-	    		editor.putLong(Constants.PREFS_LAST_SYNC, update.getLastUpdate());
-	            editor.commit();
 
-				if(!addBookmarkList.isEmpty()){				
-					for(Bookmark b : addBookmarkList){
-						BookmarkManager.AddBookmark(b, username, mContext);
-					}
-				}
-				
-				if(!updateBookmarkList.isEmpty()){		
-					for(Bookmark b : updateBookmarkList){
-						BookmarkManager.UpdateBookmark(b, username, mContext);
-					}
+			if(!addBookmarkList.isEmpty()){				
+				for(Bookmark b : addBookmarkList){
+					BookmarkManager.AddBookmark(b, username, mContext);
 				}
 			}
+			
+			if(!updateBookmarkList.isEmpty()){		
+				for(Bookmark b : updateBookmarkList){
+					BookmarkManager.UpdateBookmark(b, username, mContext);
+				}
+			}
+			
+    		SharedPreferences.Editor editor = settings.edit();
+    		editor.putLong(Constants.PREFS_LAST_SYNC, update.getLastUpdate());
+            editor.commit();
     	} else {
     		Log.d("BookmarkSync", "No update needed.  Last update time before last sync.");
-    		Log.d("update", Long.toString(update.getLastUpdate()));
-    		Log.d("lastupdate", Long.toString(lastUpdate));
     	}
     }
 }

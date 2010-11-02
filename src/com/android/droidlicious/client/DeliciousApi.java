@@ -8,6 +8,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
@@ -73,9 +74,10 @@ public class DeliciousApi {
      * @param authtoken The authtoken stored in the AccountManager for the
      *        account
      * @return list The list of bookmarks received from the server.
+     * @throws AuthenticationException 
      */
     public static Update lastUpdate(Account account, Context context)
-    	throws IOException {
+    	throws IOException, AuthenticationException {
 
     	String response = null;
     	TreeMap<String, String> params = new TreeMap<String, String>();
@@ -135,9 +137,10 @@ public class DeliciousApi {
      * @param authtoken The authtoken stored in the AccountManager for the
      *        account
      * @return list The list of bookmarks received from the server.
+     * @throws AuthenticationException 
      */
     public static Boolean deleteBookmark(Bookmark bookmark, Account account, Context context) 
-    	throws IOException {
+    	throws IOException, AuthenticationException {
 
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	String response = null;
@@ -162,9 +165,10 @@ public class DeliciousApi {
      * @param authtoken The authtoken stored in the AccountManager for the
      *        account
      * @return list The list of bookmarks received from the server.
+     * @throws AuthenticationException 
      */
     public static ArrayList<Bookmark> getBookmark(ArrayList<String> hashes, Account account,
-        Context context) throws IOException {
+        Context context) throws IOException, AuthenticationException {
 
     	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
     	TreeMap<String, String> params = new TreeMap<String, String>();
@@ -199,9 +203,10 @@ public class DeliciousApi {
      * @param authtoken The authtoken stored in the AccountManager for the
      *        account
      * @return list The list of bookmarks received from the server.
+     * @throws AuthenticationException 
      */
     public static ArrayList<Bookmark> getAllBookmarks(String tagName, Account account, Context context) 
-    	throws IOException {
+    	throws IOException, AuthenticationException {
     	
     	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
     	String response = null;
@@ -234,9 +239,10 @@ public class DeliciousApi {
      * @param authtoken The authtoken stored in the AccountManager for the
      *        account
      * @return list The list of bookmarks received from the server.
+     * @throws AuthenticationException 
      */
     public static ArrayList<Bookmark> getChangedBookmarks(Account account, Context context) 
-    	throws IOException {
+    	throws IOException, AuthenticationException {
     	
     	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
     	String response = null;
@@ -265,9 +271,10 @@ public class DeliciousApi {
      * @param authtoken The authtoken stored in the AccountManager for the
      *        account
      * @return list The list of status messages received from the server.
+     * @throws AuthenticationException 
      */
     public static ArrayList<Tag> getTags(Account account, Context context) 
-    	throws IOException {
+    	throws IOException, AuthenticationException {
     	
     	ArrayList<Tag> tagList = new ArrayList<Tag>();
     	String response = null;
@@ -287,7 +294,7 @@ public class DeliciousApi {
     }
     
     private static String DeliciousApiCall(String url, TreeMap<String, String> params, 
-    		Account account, Context context) throws IOException{
+    		Account account, Context context) throws IOException, AuthenticationException{
 
     	final AccountManager am = AccountManager.get(context);
     	String authtype = am.getUserData(account, Constants.PREFS_AUTH_TYPE);
@@ -325,32 +332,31 @@ public class DeliciousApi {
 		maybeCreateHttpClient();
 		post.setHeader("User-Agent", "Droidlicious");
     	
-		try{
-	    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
-	    		Log.d("apiCall", "oauth");
-	    		String tokenSecret = am.getUserData(account, Constants.OAUTH_TOKEN_SECRET_PROPERTY);
-	
-				OauthUtilities.signRequest(post, params, authtoken, tokenSecret);
-	
-				Log.d("header", post.getHeaders("Authorization")[0].getValue());
-		        
-		        resp = mHttpClient.execute(host, post);
-	
-	    	} else{ 
-		        CredentialsProvider provider = mHttpClient.getCredentialsProvider();
-		        Credentials credentials = new UsernamePasswordCredentials(username, authtoken);
-		        provider.setCredentials(SCOPE, credentials);
-		        
-		        resp = mHttpClient.execute(post);
-	    	}
-	    	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-	    		return EntityUtils.toString(resp.getEntity());
-	    	} else {
-	    		throw new IOException();
-	    	}
-		} catch(Exception e){
-			Log.e("DeliciousApiCall Error", Integer.toString(resp.getStatusLine().getStatusCode()));
-		}
-		throw new IOException();
+
+    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
+    		Log.d("apiCall", "oauth");
+    		String tokenSecret = am.getUserData(account, Constants.OAUTH_TOKEN_SECRET_PROPERTY);
+
+			OauthUtilities.signRequest(post, params, authtoken, tokenSecret);
+
+			Log.d("header", post.getHeaders("Authorization")[0].getValue());
+	        
+	        resp = mHttpClient.execute(host, post);
+
+    	} else{ 
+	        CredentialsProvider provider = mHttpClient.getCredentialsProvider();
+	        Credentials credentials = new UsernamePasswordCredentials(username, authtoken);
+	        provider.setCredentials(SCOPE, credentials);
+	        
+	        resp = mHttpClient.execute(post);
+    	}
+    	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+    		return EntityUtils.toString(resp.getEntity());
+    	} else if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+    		throw new AuthenticationException();
+    	} else {
+    		throw new IOException();
+    	}
+
     }
 }
