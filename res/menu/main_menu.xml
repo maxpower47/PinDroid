@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-  xmlns:android="http://schemas.android.com/apk/res/android">
-<item android:id="@+id/menu_addbookmark" android:title="@string/menu_addbookmark_title" android:icon="@drawable/ic_menu_add"></item><item android:id="@+id/menu_mybookmarks" android:title="@string/menu_mybookmarks_title" android:icon="@drawable/ic_menu_view"></item>
-<item android:id="@+id/menu_settings" android:title="@string/menu_settings_title" android:icon="@drawable/ic_menu_preferences"
-></item>
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item 
+		android:id="@+id/menu_addbookmark" 
+		android:title="@string/menu_addbookmark_title" 
+		android:icon="@drawable/ic_menu_add" />
+	<item 
+		android:id="@+id/menu_mybookmarks" 
+		android:title="@string/menu_mybookmarks_title" 
+		android:icon="@drawable/ic_menu_view" />
+	<item 
+		android:id="@+id/menu_settings" 
+		android:title="@string/menu_settings_title" 
+		android:icon="@drawable/ic_menu_preferences" />
 </menu>
