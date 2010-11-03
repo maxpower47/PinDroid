@@ -11,7 +11,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.http.client.methods.HttpGet;
 
-import android.util.Base64;
+import com.android.droidlicious.util.Base64;
 import android.util.Log;
 
 import com.android.droidlicious.Constants;
@@ -61,7 +61,8 @@ public class OauthUtilities {
 			mac.init(sha1key);
 			
 			byte[] sigBytes = mac.doFinal(sb.toString().getBytes());
-			signature = Base64.encodeToString(sigBytes, Base64.NO_WRAP);
+			//signature = Base64.encodeToString(sigBytes, Base64.NO_WRAP);
+			signature = Base64.encodeBytes(sigBytes);
 		}
 		catch(Exception e){
 			Log.e("Oauth Sign Request", "Hash Error");
