@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
 /*
  * Droidlicious - http://code.google.com/p/droidlicious/
  *
@@ -20,9 +18,3 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
- -->
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@id/android:list"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
-</ListView>
