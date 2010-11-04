@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
- * Droidlicious - http://code.google.com/p/droidlicious/
+ * DeliciousDroid - http://code.google.com/p/DeliciousDroid/
  *
  * Copyright (C) 2010 Matt Schmidt
  *
- * Droidlicious is free software; you can redistribute it and/or modify
+ * DeliciousDroid is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.
  *
- * Droidlicious is distributed in the hope that it will be useful, but
+ * DeliciousDroid is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Droidlicious; if not, write to the Free Software
+ * along with DeliciousDroid; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
  -->
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.droidlicious"
+    package="com.deliciousdroid"
     android:versionCode="1"
     android:versionName="0.1.0">
     <uses-sdk android:minSdkVersion="5" />
@@ -55,19 +55,19 @@
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.android.droidlicious" android:path="/tags"/>
+        		<data android:scheme="content" android:host="com.deliciousdroid" android:path="/tags"/>
 			</intent-filter>
         </activity>
         <activity android:name=".activity.BrowseBookmarks" >
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.android.droidlicious" android:path="/bookmarks"/>
+        		<data android:scheme="content" android:host="com.deliciousdroid" android:path="/bookmarks"/>
         	</intent-filter>
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.android.droidlicious" android:path="/network"/>
+        		<data android:scheme="content" android:host="com.deliciousdroid" android:path="/network"/>
         	</intent-filter>
             <intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
@@ -129,12 +129,12 @@
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:mimeType="vnd.android.cursor.item/vnd.droidlicious.profile" />
+        		<data android:mimeType="vnd.android.cursor.item/vnd.deliciousdroid.profile" />
         	</intent-filter>
         </activity>
         <provider
-        	android:name="com.android.droidlicious.providers.BookmarkContentProvider"
-        	android:authorities="com.android.droidlicious.providers.BookmarkContentProvider" />
+        	android:name="com.deliciousdroid.providers.BookmarkContentProvider"
+        	android:authorities="com.deliciousdroid.providers.BookmarkContentProvider" />
         <meta-data android:name="android.app.default_searchable" android:value=".activity.BrowseBookmarks" />
         	
     </application>
