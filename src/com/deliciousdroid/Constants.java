@@ -91,5 +91,4 @@ public class Constants {
     
     public static final String OAUTH_SHARED_SECRET = "1985c8fea4058d3853256664cec83ed2a47143e2";
     public static final String OAUTH_APPLICATION_ID = "DFRFQW4a";
-
 }
