@@ -195,15 +195,16 @@ public class BookmarkContentProvider extends ContentProvider {
 		mAccountManager = AccountManager.get(getContext());
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		
-		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
-		qb.setTables(TAG_TABLE_NAME);
+		
+		SQLiteQueryBuilder tagqb = new SQLiteQueryBuilder();	
+		tagqb.setTables(TAG_TABLE_NAME);
 		
 		String selection = Tag.Name + " LIKE '%" + query + "%'";
 		
 		String[] projection = new String[] {BaseColumns._ID, Tag.Name, Tag.Count};
 
-		Cursor c = qb.query(rdb, projection, selection, null, null, null, null);
+		Cursor c = tagqb.query(rdb, projection, selection, null, null, null, null);
 		
 		MatrixCursor mc = new MatrixCursor(new String[] {BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_INTENT_DATA});
 
@@ -223,6 +224,28 @@ public class BookmarkContentProvider extends ContentProvider {
 			} while(c.moveToNext());	
 		}
 		c.close();
+		
+		SQLiteQueryBuilder bookmarkqb = new SQLiteQueryBuilder();	
+		bookmarkqb.setTables(BOOKMARK_TABLE_NAME);
+		
+		String bookmarkselection = Bookmark.Description + " LIKE '%" + query + "%'";
+		
+		String[] bookmarkprojection = new String[] {BaseColumns._ID, Bookmark.Description, Bookmark.Url};
+
+		Cursor bookmarkc = bookmarkqb.query(rdb, bookmarkprojection, bookmarkselection, null, null, null, null);
+
+		int j = 0;
+		
+		if(bookmarkc.moveToFirst()){
+			int descColumn = bookmarkc.getColumnIndex(Bookmark.Description);
+			int urlColumn = bookmarkc.getColumnIndex(Bookmark.Url);
+
+			do {			
+				mc.addRow(new Object[] {j++, bookmarkc.getString(descColumn), bookmarkc.getString(urlColumn)});
+				
+			} while(bookmarkc.moveToNext());	
+		}
+		bookmarkc.close();
 		
 		return mc;
 	}

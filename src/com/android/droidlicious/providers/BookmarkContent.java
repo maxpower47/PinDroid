@@ -154,7 +154,6 @@ public class BookmarkContent {
             ArrayList<Bookmark> list = new ArrayList<Bookmark>();
            
         	List<Element> nodes = document.selectNodes(expression);
-			//NodeList nodes = (NodeList)xpath.evaluate(expression, inputSource, XPathConstants.NODESET);
 			
 			for(int i = 0; i < nodes.size(); i++){
 				String shref = nodes.get(i).attributeValue("href");

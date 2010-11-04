@@ -51,6 +51,7 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 		
 		Log.d("browse bookmarks", getIntent().getDataString());
 		Uri data = getIntent().getData();
+		String scheme = data.getScheme();
 		String path = data.getPath();
 		Log.d("path", path);
 		String username = data.getQueryParameter("username");
@@ -59,7 +60,7 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 		
 		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 		
-		if(path.equals("/bookmarks") && mAccount.name.equals(username)){
+		if(scheme.equals("content") && path.equals("/bookmarks") && mAccount.name.equals(username)){
 			
 			try{	
 				
@@ -107,20 +108,26 @@ public class BrowseBookmarks extends DroidliciousBaseActivity {
 			}
 			catch(Exception e){}
 			
-		} else if(path.equals("/bookmarks")) {
+		} else if(scheme.equals("content") && path.equals("/bookmarks")) {
 			try{	
 				bookmarkList = DeliciousFeed.fetchFriendBookmarks(username, tagname);
 
 				setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
 			}
 			catch(Exception e){}
-		} else if(path.equals("/network")){
+		} else if(scheme.equals("content") && path.equals("/network")){
 			try{	
 				bookmarkList = DeliciousFeed.fetchNetworkRecent(username);
 
 				setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
 			}
 			catch(Exception e){}
+		} else if(scheme.equals("http") || scheme.equals("https")) {
+			String url = data.toString();
+			Intent i = new Intent(Intent.ACTION_VIEW);
+			i.setData(Uri.parse(url));
+			startActivity(i);
+			finish();
 		}
 		
 		lv = getListView();
