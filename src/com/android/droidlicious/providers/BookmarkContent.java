@@ -4,16 +4,14 @@ import java.io.StringReader;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.android.droidlicious.util.DateParser;
@@ -143,66 +141,44 @@ public class BookmarkContent {
         }
         
         public static ArrayList<Bookmark> valueOf(String userBookmark){
-            XPath xpath = XPathFactory.newInstance().newXPath();
+        	SAXReader reader = new SAXReader();
+        	InputSource inputSource = new InputSource(new StringReader(userBookmark));
+        	Document document = null;
+			try {
+				document = reader.read(inputSource);
+			} catch (DocumentException e1) {
+				e1.printStackTrace();
+			}   	
+        	
             String expression = "/posts/post";
             ArrayList<Bookmark> list = new ArrayList<Bookmark>();
-            
-            InputSource inputSource = new InputSource(new StringReader(userBookmark));
-            try {
-            	
-				NodeList nodes = (NodeList)xpath.evaluate(expression, inputSource, XPathConstants.NODESET);
+           
+        	List<Element> nodes = document.selectNodes(expression);
+			//NodeList nodes = (NodeList)xpath.evaluate(expression, inputSource, XPathConstants.NODESET);
+			
+			for(int i = 0; i < nodes.size(); i++){
+				String shref = nodes.get(i).attributeValue("href");
+				String stitle = nodes.get(i).attributeValue("description");
+				String snotes = nodes.get(i).attributeValue("extended");
+				String stags = nodes.get(i).attributeValue("tag");
+				String shash = nodes.get(i).attributeValue("hash");
+				String smeta = nodes.get(i).attributeValue("meta");
+				String stime = nodes.get(i).attributeValue("time");
 				
-				for(int i = 0; i < nodes.getLength(); i++){
-					Node href = nodes.item(i).getAttributes().getNamedItem("href");
-					Node title = nodes.item(i).getAttributes().getNamedItem("description");
-					Node notes = nodes.item(i).getAttributes().getNamedItem("extended");
-					Node tags = nodes.item(i).getAttributes().getNamedItem("tag");
-					Node hash = nodes.item(i).getAttributes().getNamedItem("hash");
-					Node meta = nodes.item(i).getAttributes().getNamedItem("meta");
-					Node url = nodes.item(i).getAttributes().getNamedItem("url");
-					Node time = nodes.item(i).getAttributes().getNamedItem("time");
-					String shref = "";
-					String stitle = "";
-					String snotes = "";
-					String stags = "";
-					String shash = "";
-					String smeta = "";
-					String stime = "";
-
-					if(href != null)
-						shref = href.getTextContent();
-					if(title != null)
-						stitle = title.getTextContent();
-					if(notes != null)
-						snotes = notes.getTextContent();
-					if(tags != null)
-						stags = tags.getTextContent();
-					if(hash != null)
-						shash = hash.getTextContent();
-					if(url != null)
-						shash = url.getTextContent();
-					if(meta != null)
-						smeta = meta.getTextContent();
-					if(time != null)
-						stime = time.getTextContent();
-					
-					Date d = new Date(0);
-					if(stime != null && stime != ""){
-						try {
-							d = DateParser.parse(stime);
-						} catch (ParseException e) {
-							Log.d("Parse error", stime);
-							e.printStackTrace();
-						}
+				Date d = new Date(0);
+				if(stime != null && stime != ""){
+					try {
+						d = DateParser.parse(stime);
+					} catch (ParseException e) {
+						Log.d("Parse error", stime);
+						e.printStackTrace();
 					}
-					
-					list.add(new Bookmark(shref, stitle, snotes, stags, shash, smeta, d.getTime()));
-
 				}
 				
-			} catch (XPathExpressionException e) {
-				e.printStackTrace();
+				list.add(new Bookmark(shref, stitle, snotes, stags, shash, smeta, d.getTime()));
+
 			}
+				
 			return list;
         }
         

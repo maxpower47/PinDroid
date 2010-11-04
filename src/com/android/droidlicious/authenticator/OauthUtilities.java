@@ -61,7 +61,6 @@ public class OauthUtilities {
 			mac.init(sha1key);
 			
 			byte[] sigBytes = mac.doFinal(sb.toString().getBytes());
-			//signature = Base64.encodeToString(sigBytes, Base64.NO_WRAP);
 			signature = Base64.encodeBytes(sigBytes);
 		}
 		catch(Exception e){

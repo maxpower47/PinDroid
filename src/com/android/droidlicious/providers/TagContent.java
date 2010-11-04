@@ -2,14 +2,12 @@ package com.android.droidlicious.providers;
 
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.List;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.xml.sax.InputSource;
 
 import android.net.Uri;
@@ -50,36 +48,28 @@ public class TagContent {
         }
         
         public static ArrayList<Tag> valueOf(String userTag){
-            XPath xpath = XPathFactory.newInstance().newXPath();
-            String expression = "/tags/tag";
-            ArrayList<Tag> list = new ArrayList<Tag>();
-            
-            InputSource inputSource = new InputSource(new StringReader(userTag));
-            try {
-            	
-				NodeList nodes = (NodeList)xpath.evaluate(expression, inputSource, XPathConstants.NODESET);
+        	      	
+        	SAXReader reader = new SAXReader();
+        	InputSource inputSource = new InputSource(new StringReader(userTag));
+        	Document document = null;
+			try {
+				document = reader.read(inputSource);
+			} catch (DocumentException e1) {
+				e1.printStackTrace();
+			}   	
+        	
+			String expression = "/tags/tag";
+			ArrayList<Tag> list = new ArrayList<Tag>();
+           
+        	List<Element> nodes = document.selectNodes(expression);
+			
+			for(int i = 0; i < nodes.size(); i++){
+				String scount = nodes.get(i).attributeValue("count");
+				String sname = nodes.get(i).attributeValue("tag");
 				
-				for(int i = 0; i < nodes.getLength(); i++){
-					Node count = nodes.item(i).getAttributes().getNamedItem("count");
-					Node name = nodes.item(i).getAttributes().getNamedItem("tag");
-
-					String scount = "";
-					String sname = "";
-
-
-					if(count != null)
-						scount = count.getTextContent();
-					if(name != null)
-						sname = name.getTextContent();
-
-					
-					list.add(new Tag(sname, Integer.parseInt(scount)));
-
-				}
-				
-			} catch (XPathExpressionException e) {
-				e.printStackTrace();
+				list.add(new Tag(sname, Integer.parseInt(scount)));
 			}
+
 			return list;
         }
 	}

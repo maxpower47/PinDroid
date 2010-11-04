@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.droidlicious"
     android:versionCode="1"
-    android:versionName="1.0">
+    android:versionName="0.1.0">
+    <uses-sdk android:minSdkVersion="5" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
@@ -115,5 +116,4 @@
         <meta-data android:name="android.app.default_searchable" android:value=".activity.BrowseBookmarks" />
         	
     </application>
-    <uses-sdk android:minSdkVersion="8" />
 </manifest>
