@@ -31,7 +31,7 @@ import android.util.Log;
 
 public class BookmarkManager {
 	
-	public static void AddBookmark(Bookmark bookmark, String account, Context context){
+	public static void AddBookmark(Bookmark bookmark, String account, Context context) {
 		String url = bookmark.getUrl();
 
 		if(!url.endsWith("/")){

@@ -71,7 +71,7 @@ public class OauthUtilities {
 			sb.append(URLEncoder.encode(params.get(key)));
 		}
 		
-		Log.d("base string", sb.toString());
+		Log.d("base string", sb.toString().replace("%23", "%2523"));
 		
 		String keystring = Constants.OAUTH_SHARED_SECRET + "&" + tokenSecret;
 		SecretKeySpec sha1key = new SecretKeySpec(keystring.getBytes(), "HmacSHA1");
@@ -81,7 +81,7 @@ public class OauthUtilities {
 			Mac mac = Mac.getInstance("HmacSHA1");
 			mac.init(sha1key);
 			
-			byte[] sigBytes = mac.doFinal(sb.toString().getBytes());
+			byte[] sigBytes = mac.doFinal(sb.toString().replace("%23", "%2523").getBytes());
 			signature = Base64.encodeBytes(sigBytes);
 		}
 		catch(Exception e){

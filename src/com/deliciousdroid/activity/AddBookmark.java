@@ -131,6 +131,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     				return true;
     			} else return false;
     		} catch (Exception e) {
+    			Log.d("addBookmark error", e.toString());
     			return false;
     		}
     	}
