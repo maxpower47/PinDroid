@@ -184,6 +184,10 @@ public class BookmarkContent {
 				String shash = nodes.get(i).attributeValue("hash");
 				String smeta = nodes.get(i).attributeValue("meta");
 				String stime = nodes.get(i).attributeValue("time");
+				String surl = nodes.get(i).attributeValue("url");
+				
+				if(shash == null)
+					shash = surl;
 				
 				Date d = new Date(0);
 				if(stime != null && stime != ""){
