@@ -175,29 +175,36 @@ public class BrowseBookmarks extends AppBaseActivity {
 		    }
 		});
 		
-		if(myself) {
-			/* Add Context-Menu listener to the ListView. */
-			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-				public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-					menu.setHeaderTitle("Actions");
-					menu.add(Menu.NONE, Menu.NONE, 0, "Delete");
-					
+		/* Add Context-Menu listener to the ListView. */
+		lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+				menu.setHeaderTitle("Actions");
+				if(myself){
+					menu.add(Menu.NONE, 0, Menu.NONE, "Delete");
+				} else {
+					menu.add(Menu.NONE, 1, Menu.NONE, "Add");
 				}
-			});
-		}
+				
+			}
+		});
 	}
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem aItem) {
 		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem.getMenuInfo();
+		final Bookmark b = (Bookmark)lv.getItemAtPosition(menuInfo.position);
+		
 		switch (aItem.getItemId()) {
 			case 0:
-				final Bookmark b = (Bookmark)lv.getItemAtPosition(menuInfo.position);
+				BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, mContext);	
+				new DeleteBookmarkTask().execute(args);	
+				return true;
 				
-				BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, mContext);
-				
-				new DeleteBookmarkTask().execute(args);
-				
+			case 1:				
+				Intent addBookmark = new Intent(this, AddBookmark.class);
+				addBookmark.setAction(Intent.ACTION_SEND);
+				addBookmark.putExtra(Intent.EXTRA_TEXT, b.getUrl());
+				startActivity(addBookmark);
 				return true;
 		}
 		return false;
