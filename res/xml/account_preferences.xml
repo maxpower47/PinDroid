@@ -26,7 +26,7 @@
 	<PreferenceScreen
 		android:key="account_settings"
 		android:title="Account Settings"
-		android:summary="Sync frequency, notifications, etc.">
+		android:summary="Sync and notification settings.">
 		<intent
 			android:action="android.intent.action.VIEW"
 			android:targetPackage="com.deliciousdroid"
