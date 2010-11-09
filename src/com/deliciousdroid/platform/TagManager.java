@@ -23,8 +23,11 @@ package com.deliciousdroid.platform;
 
 import com.deliciousdroid.providers.TagContent.Tag;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 public class TagManager {
@@ -37,6 +40,24 @@ public class TagManager {
 		values.put(Tag.Account, account);
 	
 		context.getContentResolver().insert(Tag.CONTENT_URI, values);
+	}
+	
+	public static void UpsertTag(Tag tag, String account, Context context){
+		String[] projection = new String[] {Tag.Name, Tag.Count};
+		String selection = Tag.Name + "='" + tag.getTagName() + "' AND " +
+			Tag.Account + " = '" + account + "'";
+		Uri tags = Tag.CONTENT_URI;
+		
+		ContentResolver cr = context.getContentResolver();
+		Cursor c = cr.query(tags, projection, selection, null, null);
+		
+		if(c.getCount() > 0){
+			tag.setCount(tag.getCount() + 1);
+			UpdateTag(tag, account, context);
+		} else {
+			AddTag(tag, account, context);
+		}
+		c.close();
 	}
 	
 	public static void UpdateTag(Tag tag, String account, Context context){

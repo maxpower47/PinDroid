@@ -25,7 +25,9 @@ import com.deliciousdroid.R;
 import com.deliciousdroid.Constants;
 import com.deliciousdroid.client.DeliciousApi;
 import com.deliciousdroid.platform.BookmarkManager;
+import com.deliciousdroid.platform.TagManager;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
+import com.deliciousdroid.providers.TagContent.Tag;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -134,7 +136,13 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     	}
 
         protected void onPostExecute(Boolean result) {
-    		if(result){  			
+    		if(result){
+    			String[] tags = bookmark.getTags().split(" ");
+    			for(String s:tags){
+    				Tag t = new Tag(s, 1);    				
+    				TagManager.UpsertTag(t, account.name, context);
+    			}
+    			
     			Toast.makeText(context, "Bookmark Added Successfully", Toast.LENGTH_SHORT).show();
     		} else {
     			Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();

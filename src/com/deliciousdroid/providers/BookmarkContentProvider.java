@@ -278,6 +278,9 @@ public class BookmarkContentProvider extends ContentProvider {
 			case Bookmarks:
 				count = db.update(BOOKMARK_TABLE_NAME, values, selection, selectionArgs);
 				break;
+			case Tags:
+				count = db.update(TAG_TABLE_NAME, values, selection, selectionArgs);
+				break;
 			default:
 				throw new IllegalArgumentException("Unknown URI " + uri);
 		}

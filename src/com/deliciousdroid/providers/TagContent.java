@@ -47,7 +47,7 @@ public class TagContent {
 		public static final String Account = "ACCOUNT";
 		
         private final String mTagName;
-        private final int mCount;
+        private int mCount;
         private final String mAccount = null;
         private int mId = 0;
 
@@ -61,6 +61,10 @@ public class TagContent {
 
         public int getCount() {
             return mCount;
+        }
+        
+        public void setCount(int count) {
+        	mCount = count;
         }
 
         public Tag(String tagName, int count) {
