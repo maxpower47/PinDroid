@@ -90,6 +90,11 @@ public class BrowseBookmarks extends AppBaseActivity {
 		if(scheme.equals("content") && path.equals("/bookmarks") && myself){
 			
 			try{	
+				if(tagname != null && tagname != "") {
+					setTitle("My Bookmarks Tagged With " + tagname);
+				} else {
+					setTitle("My Bookmarks");
+				}
 				
 				String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, Bookmark.Meta, Bookmark.Tags};
 				String selection = null;
@@ -136,7 +141,13 @@ public class BrowseBookmarks extends AppBaseActivity {
 			catch(Exception e){}
 			
 		} else if(scheme.equals("content") && path.equals("/bookmarks")) {
-			try{	
+			try{
+				if(tagname != null && tagname != "") {
+					setTitle("Bookmarks For " + username + " Tagged With " + tagname);
+				} else {
+					setTitle("Bookmarks For " + username);
+				}
+				
 		    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 		    	String bookmarkLimit = settings.getString("pref_contact_bookmark_results", "50");
 		    	
@@ -146,7 +157,9 @@ public class BrowseBookmarks extends AppBaseActivity {
 			}
 			catch(Exception e){}
 		} else if(scheme.equals("content") && path.equals("/network")){
-			try{	
+			try{
+				setTitle("My Network's Recent Bookmarks");
+				
 				bookmarkList = DeliciousFeed.fetchNetworkRecent(username);
 
 				setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	

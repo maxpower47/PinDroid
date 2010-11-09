@@ -65,6 +65,7 @@ public class BrowseTags extends AppBaseActivity {
 		
 		if(mAccount.name.equals(username)){
 			try{
+				setTitle("My Tags");
 
 				String[] projection = new String[] {Tag.Name, Tag.Count};
 							
@@ -91,7 +92,9 @@ public class BrowseTags extends AppBaseActivity {
 			}
 			
 		} else {
-			try{	
+			try{
+				setTitle("Tags For " + username);
+				
 				tagList = DeliciousFeed.fetchFriendTags(username);
 				
 				setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
