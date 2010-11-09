@@ -21,6 +21,7 @@
 
 package com.deliciousdroid.platform;
 
+import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 import com.deliciousdroid.providers.TagContent.Tag;
 
 import android.content.ContentResolver;
@@ -72,10 +73,34 @@ public class TagManager {
 		context.getContentResolver().update(Tag.CONTENT_URI, values, selection, null);
 		
 	}
-
-	public static void DeleteTag(Tag tag, Context context){
+	
+	public static void UpleteTag(Tag tag, String account, Context context){
+		String[] projection = new String[] {Tag.Name, Tag.Count};
+		String selection = Tag.Name + "='" + tag.getTagName() + "' AND " +
+			Tag.Account + " = '" + account + "'";
+		Uri tags = Tag.CONTENT_URI;
 		
-		String selection = BaseColumns._ID + "=" + tag.getId();
+		ContentResolver cr = context.getContentResolver();
+		Cursor c = cr.query(tags, projection, selection, null, null);
+		
+		if(c.moveToFirst()){
+			int countColumn = c.getColumnIndex(Tag.Count);
+			int count = c.getInt(countColumn);
+			
+			if(count > 1){
+				tag.setCount(count - 1);
+				UpdateTag(tag, account, context);
+			} else {
+				DeleteTag(tag, account, context);
+			}
+		}
+		c.close();
+	}
+
+	public static void DeleteTag(Tag tag, String account, Context context){
+		
+		String selection = Tag.Name + "='" + tag.getTagName() + "' AND " +
+			Tag.Account + " = '" + account + "'";
 		
 		context.getContentResolver().delete(Tag.CONTENT_URI, selection, null);
 	}

@@ -32,7 +32,9 @@ import com.deliciousdroid.client.DeliciousApi;
 import com.deliciousdroid.client.DeliciousFeed;
 import com.deliciousdroid.listadapter.BookmarkListAdapter;
 import com.deliciousdroid.platform.BookmarkManager;
+import com.deliciousdroid.platform.TagManager;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
+import com.deliciousdroid.providers.TagContent.Tag;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -132,8 +134,7 @@ public class BrowseBookmarks extends AppBaseActivity {
 						bookmarkList.add(b);
 						
 					} while(c.moveToNext());
-					
-					
+						
 				}
 
 				setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
@@ -226,14 +227,16 @@ public class BrowseBookmarks extends AppBaseActivity {
 	private class DeleteBookmarkTask extends AsyncTask<BookmarkTaskArgs, Integer, Boolean>{
 		private Context context;
 		private Bookmark bookmark;
+		private Account account;
 		
 		@Override
 		protected Boolean doInBackground(BookmarkTaskArgs... args) {
 			context = args[0].getContext();
 			bookmark = args[0].getBookmark();
+			account = args[0].getAccount();
 			
 			try {
-				Boolean success =  DeliciousApi.deleteBookmark(bookmark, args[0].getAccount(), context);
+				Boolean success = DeliciousApi.deleteBookmark(bookmark, account, context);
 				if(success){
 					BookmarkManager.DeleteBookmark(args[0].getBookmark(), context);
 					return true;
@@ -248,6 +251,12 @@ public class BrowseBookmarks extends AppBaseActivity {
 
 	    protected void onPostExecute(Boolean result) {
 			if(result){
+    			String[] tags = bookmark.getTags().split(" ");
+    			for(String s:tags){
+    				Tag t = new Tag(s, 1);    				
+    				TagManager.UpleteTag(t, account.name, context);
+    			}
+				
 				BookmarkListAdapter bla = (BookmarkListAdapter) lv.getAdapter();
 				bla.remove(bookmark);
 				
