@@ -70,6 +70,8 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		mButtonSave = (Button) findViewById(R.id.add_button_save);
 		context = this;
 		
+		setTitle("Add Bookmark");
+		
 		if(savedInstanceState ==  null){
 			Intent intent = getIntent();
 			
