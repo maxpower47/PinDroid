@@ -47,6 +47,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
@@ -62,6 +63,7 @@ public class BrowseBookmarks extends AppBaseActivity {
 	private Account mAccount;
 	private ListView lv;
 	private Context mContext;
+	private Boolean myself;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -81,9 +83,11 @@ public class BrowseBookmarks extends AppBaseActivity {
 		String tagname = data.getQueryParameter("tagname");
 		String recent = data.getQueryParameter("recent");
 		
+		myself = mAccount.name.equals(username);
+		
 		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 		
-		if(scheme.equals("content") && path.equals("/bookmarks") && mAccount.name.equals(username)){
+		if(scheme.equals("content") && path.equals("/bookmarks") && myself){
 			
 			try{	
 				
@@ -171,14 +175,16 @@ public class BrowseBookmarks extends AppBaseActivity {
 		    }
 		});
 		
-		/* Add Context-Menu listener to the ListView. */
-		lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-				menu.setHeaderTitle("ContextMenu");
-				menu.add(0, 0, 0, "Delete");
-				
-			}
-		});
+		if(myself) {
+			/* Add Context-Menu listener to the ListView. */
+			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+				public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+					menu.setHeaderTitle("Actions");
+					menu.add(Menu.NONE, Menu.NONE, 0, "Delete");
+					
+				}
+			});
+		}
 	}
 	
 	@Override
