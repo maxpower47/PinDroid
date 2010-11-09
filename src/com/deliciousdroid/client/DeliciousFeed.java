@@ -40,10 +40,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.deliciousdroid.Constants;
+import com.deliciousdroid.R;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 import com.deliciousdroid.providers.TagContent.Tag;
 
 import android.accounts.Account;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class DeliciousFeed {
@@ -199,14 +204,14 @@ public class DeliciousFeed {
      *        account
      * @return list The list of bookmarks received from the server.
      */
-    public static ArrayList<Bookmark> fetchFriendBookmarks(String username, String tagName)
+    public static ArrayList<Bookmark> fetchFriendBookmarks(String username, String tagName, int limit)
     	throws JSONException, ParseException, IOException, AuthenticationException {
-
+    	
     	String url = FETCH_FRIEND_BOOKMARKS_URI + username;
     	
     	if(tagName != null && tagName != "")
     		url += "/" + tagName;
-    	url += "?count=100";
+    	url += "?count=" + limit;
     	
         final HttpGet post = new HttpGet(url);
         maybeCreateHttpClient();

@@ -27,4 +27,10 @@
 		android:defaultValue="true"
 		android:summary="@string/pref_notification_summary"
 		android:key="@string/pref_notification_key" />
+	<ListPreference
+		android:title="@string/pref_contact_bookmark_results_title"
+		android:summary="@string/pref_contact_bookamrk_results_summary"
+		android:key="@string/pref_contact_bookmark_results_key"
+		android:entries="@array/pref_contact_bookmark_results_entries"
+		android:entryValues="@array/pref_contact_bookmark_results_values" />
 </PreferenceScreen>

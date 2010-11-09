@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
 /*
  * DeliciousDroid - http://code.google.com/p/DeliciousDroid/
  *
@@ -18,18 +20,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
-
-package com.deliciousdroid.activity;
- 
-import com.deliciousdroid.R;
-
-import android.os.Bundle;
-import android.preference.PreferenceActivity;
-
-public class Preferences extends PreferenceActivity {
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
-    }
-}
+ -->
+<resources>
+	<string-array name="pref_contact_bookmark_results_entries">
+        <item>10</item>
+        <item>50</item>
+        <item>100</item>
+    </string-array>
+    <string-array name="pref_contact_bookmark_results_values">
+        <item>10</item>
+        <item>50</item>
+        <item>100</item>
+    </string-array>
+</resources>

@@ -38,10 +38,12 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -131,7 +133,10 @@ public class BrowseBookmarks extends AppBaseActivity {
 			
 		} else if(scheme.equals("content") && path.equals("/bookmarks")) {
 			try{	
-				bookmarkList = DeliciousFeed.fetchFriendBookmarks(username, tagname);
+		    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		    	String bookmarkLimit = settings.getString("pref_contact_bookmark_results", "50");
+		    	
+				bookmarkList = DeliciousFeed.fetchFriendBookmarks(username, tagname, Integer.parseInt(bookmarkLimit));
 
 				setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
 			}
