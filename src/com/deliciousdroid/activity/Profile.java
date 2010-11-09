@@ -63,7 +63,7 @@ public class Profile extends ActivityGroup {
 		Intent tagBrowseIntent = new Intent();
 		
 		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
-		data.appendEncodedPath("tags");
+		data.appendEncodedPath("bookmarks");
 		data.appendQueryParameter("username", userName);
 		tagBrowseIntent.setData(data.build());
 		

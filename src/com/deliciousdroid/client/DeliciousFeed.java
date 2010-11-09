@@ -202,7 +202,13 @@ public class DeliciousFeed {
     public static ArrayList<Bookmark> fetchFriendBookmarks(String username, String tagName)
     	throws JSONException, ParseException, IOException, AuthenticationException {
 
-        final HttpGet post = new HttpGet(FETCH_FRIEND_BOOKMARKS_URI + username + "/" + tagName + "?count=100");
+    	String url = FETCH_FRIEND_BOOKMARKS_URI + username;
+    	
+    	if(tagName != null && tagName != "")
+    		url += "/" + tagName;
+    	url += "?count=100";
+    	
+        final HttpGet post = new HttpGet(url);
         maybeCreateHttpClient();
         
         final ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
