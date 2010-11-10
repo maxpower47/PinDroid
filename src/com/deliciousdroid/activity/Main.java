@@ -26,7 +26,9 @@ import com.deliciousdroid.Constants;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,6 +54,22 @@ public class Main extends AppBaseActivity {
 		super.onCreate(savedInstanceState);
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
 		mContext = this;
+		mAccountManager = AccountManager.get(mContext);
+		
+		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length < 1) {		
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("To add your account to DeliciousDroid, go to Accounts & Sync in Settings and add a new Delicious account.")
+			       .setCancelable(false)
+			       .setPositiveButton("Go", new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			   			Intent i = new Intent(android.provider.Settings.ACTION_SYNC_SETTINGS);
+						startActivity(i);
+						finish();
+			           }
+			       });
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
 		
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
@@ -59,7 +77,6 @@ public class Main extends AppBaseActivity {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		    	if(position == 0){
-		    		mAccountManager = AccountManager.get(mContext);
 		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		    		
 		    		Intent i = new Intent();
@@ -73,7 +90,6 @@ public class Main extends AppBaseActivity {
 		    		
 		    		startActivity(i);
 		    	} else if(position == 1){
-		    		mAccountManager = AccountManager.get(mContext);
 		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		    		
 		    		Intent i = new Intent();
@@ -86,7 +102,6 @@ public class Main extends AppBaseActivity {
 		    		
 		    		startActivity(i);
 		    	} else if(position == 2){
-		    		mAccountManager = AccountManager.get(mContext);
 		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		    		
 		    		Intent i = new Intent();
