@@ -49,6 +49,7 @@ import com.deliciousdroid.Constants;
 import com.deliciousdroid.activity.OauthLogin;
 import com.deliciousdroid.client.LoginResult;
 import com.deliciousdroid.client.NetworkUtilities;
+import com.deliciousdroid.providers.BookmarkContentProvider;
 
 /**
  * Activity which displays login screen to the user.
@@ -236,6 +237,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             mAccountManager.addAccountExplicitly(account, mPassword, null);
             // Set contacts sync for this account.
             ContentResolver.setSyncAutomatically(account, ContactsContract.AUTHORITY, true);
+            ContentResolver.setSyncAutomatically(account, BookmarkContentProvider.AUTHORITY, true);
         } else {
             mAccountManager.setPassword(account, mPassword);
         }
