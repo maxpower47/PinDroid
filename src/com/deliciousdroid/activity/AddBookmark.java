@@ -21,6 +21,8 @@
 
 package com.deliciousdroid.activity;
 
+import java.util.Date;
+
 import com.deliciousdroid.R;
 import com.deliciousdroid.Constants;
 import com.deliciousdroid.client.DeliciousApi;
@@ -95,11 +97,12 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 			url = "http://" + url;
 		}
 		
-		Log.d("private", Boolean.toString(mPrivate.isChecked()));
+		Date d = new Date();
+		long time = d.getTime();
 		
 		bookmark = new Bookmark(url, mEditDescription.getText().toString(), 
 			mEditNotes.getText().toString(), mEditTags.getText().toString(),
-			mPrivate.isChecked());
+			mPrivate.isChecked(), time);
 		
 		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, account, context);
 		

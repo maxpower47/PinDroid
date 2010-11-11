@@ -132,12 +132,13 @@ public class BookmarkContent {
             mTags = tags;
         }
         
-        public Bookmark(String url, String description, String notes, String tags, Boolean priv) {
+        public Bookmark(String url, String description, String notes, String tags, Boolean priv, long time) {
             mUrl = url;
             mDescription = description;
             mNotes = notes;
             mTags = tags;
             mPrivate = priv;
+            mTime = time;
         }
         
         public Bookmark(String url, String description, String notes, String tags, String hash, String meta, long time) {
