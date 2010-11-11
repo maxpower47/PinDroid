@@ -194,9 +194,10 @@ public class BrowseBookmarks extends AppBaseActivity {
 			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 				menu.setHeaderTitle("Actions");
 				if(myself){
-					menu.add(Menu.NONE, 0, Menu.NONE, "Delete");
+					menu.add(Menu.NONE, 0, Menu.NONE, "Details");
+					menu.add(Menu.NONE, 1, Menu.NONE, "Delete");
 				} else {
-					menu.add(Menu.NONE, 1, Menu.NONE, "Add");
+					menu.add(Menu.NONE, 2, Menu.NONE, "Add");
 				}
 				
 			}
@@ -209,12 +210,24 @@ public class BrowseBookmarks extends AppBaseActivity {
 		final Bookmark b = (Bookmark)lv.getItemAtPosition(menuInfo.position);
 		
 		switch (aItem.getItemId()) {
-			case 0:
+			case 0:				
+				Intent viewBookmark = new Intent(this, ViewBookmark.class);
+	    		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
+	    		data.appendEncodedPath("bookmarks");
+	    		data.appendEncodedPath(Integer.toString(b.getId()));
+	    		data.appendQueryParameter("username", mAccount.name);
+	    		viewBookmark.setData(data.build());
+	    		
+	    		Log.d("uri", data.build().toString());
+				startActivity(viewBookmark);
+				return true;
+			
+			case 1:
 				BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, mContext);	
 				new DeleteBookmarkTask().execute(args);	
 				return true;
 				
-			case 1:				
+			case 2:				
 				Intent addBookmark = new Intent(this, AddBookmark.class);
 				addBookmark.setAction(Intent.ACTION_SEND);
 				addBookmark.putExtra(Intent.EXTRA_TEXT, b.getUrl());
