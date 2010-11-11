@@ -87,7 +87,9 @@
     <string name="tag_search_label">Tag</string>
     <string name="tag_search_hint">Hint</string>
     <string name="tag_search_text">Search Delicious</string>
+    
     <string name="view_bookmark_notes_title">Notes</string>
+    <string name="view_bookmark_tags_title">Tags</string>
     
     <string name="pref_notification_title">Display Notifications</string>
     <string name="pref_notification_key">pref_notification</string>

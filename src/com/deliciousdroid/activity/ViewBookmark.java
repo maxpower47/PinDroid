@@ -42,6 +42,7 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 	private TextView mTitle;
 	private TextView mUrl;
 	private TextView mNotes;
+	private TextView mTags;
 	private AccountManager mAccountManager;
 	private Account account;
 	private Bookmark bookmark;
@@ -57,6 +58,7 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 		mTitle = (TextView) findViewById(R.id.view_bookmark_title);
 		mUrl = (TextView) findViewById(R.id.view_bookmark_url);
 		mNotes = (TextView) findViewById(R.id.view_bookmark_notes);
+		mTags = (TextView) findViewById(R.id.view_bookmark_tags);
 		
 		context = this;
 		mAccountManager = AccountManager.get(this);
@@ -98,6 +100,7 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 					mTitle.setText(c.getString(descriptionColumn));
 					mUrl.setText(c.getString(urlColumn));
 					mNotes.setText(c.getString(notesColumn));
+					mTags.setText(c.getString(tagsColumn));
 				}	
 			}
 			catch(Exception e){}
