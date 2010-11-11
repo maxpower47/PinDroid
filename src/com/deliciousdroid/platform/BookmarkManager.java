@@ -34,7 +34,7 @@ public class BookmarkManager {
 	public static void AddBookmark(Bookmark bookmark, String account, Context context) {
 		String url = bookmark.getUrl();
 
-		if(!url.endsWith("/")){
+		if(url.lastIndexOf("/") <= 7){
 			url = url + "/";
 		}
 		
