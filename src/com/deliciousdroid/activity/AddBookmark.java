@@ -153,6 +153,8 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     		} else {
     			Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
     		}
+    		
+    		finish();
         }
     }
 
