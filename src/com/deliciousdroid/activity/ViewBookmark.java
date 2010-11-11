@@ -39,18 +39,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class ViewBookmark extends Activity implements View.OnClickListener{
+public class ViewBookmark extends Activity{
 
 	private TextView mTitle;
 	private TextView mUrl;
 	private TextView mNotes;
 	private TextView mTags;
 	private TextView mTime;
-	private Button mGo;
 	private AccountManager mAccountManager;
 	private Account account;
 	private Bookmark bookmark;
@@ -68,9 +70,6 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 		mNotes = (TextView) findViewById(R.id.view_bookmark_notes);
 		mTags = (TextView) findViewById(R.id.view_bookmark_tags);
 		mTime = (TextView) findViewById(R.id.view_bookmark_time);
-		mGo = (Button) findViewById(R.id.view_bookmark_go);
-		
-		mGo.setOnClickListener(this);
 		
 		context = this;
 		mAccountManager = AccountManager.get(this);
@@ -107,6 +106,8 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 					int tagsColumn = c.getColumnIndex(Bookmark.Tags);
 					int timeColumn = c.getColumnIndex(Bookmark.Time);
 					
+					id = c.getInt(idColumn);
+					
 					long time = c.getLong(timeColumn);
 					Date d = new Date(time);
 					
@@ -120,17 +121,30 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 			catch(Exception e){}
 		} 	
 	}
-
-    /**
-     * {@inheritDoc}
-     */
-    public void onClick(View v) {
-        if (v == mGo) {
+    
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.view_menu, menu);
+	    return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	    case R.id.menu_view_openbookmark:
 	    	String url = (String) mUrl.getText();
 	    	Uri link = Uri.parse(url);
 			Intent i = new Intent(Intent.ACTION_VIEW, link);
-			
 			startActivity(i);
-        }
-    }
+			return true;
+	    case R.id.menu_view_settings:
+			Intent prefs = new Intent(this, Preferences.class);
+			startActivity(prefs);
+	        return true;
+	    default:
+	        return super.onOptionsItemSelected(item);
+	    }
+	}
 }

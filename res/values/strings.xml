@@ -76,9 +76,12 @@
     <string name="profile_action">Delicious</string>
     <string name="view_profile">View Profile</string>
     <string name="titleMain">Delicious</string>
+    
     <string name="menu_addbookmark_title">Add Bookmark</string>
     <string name="menu_mybookmarks_title">My Bookmarks</string>
     <string name="menu_settings_title">Settings</string>
+    <string name="menu_view_openbookmark_title">Open in browser</string>
+    
     <string name="add_button_save">Save</string>
     <string name="add_title_url">URL</string>
     <string name="add_title_description">Description</string>
