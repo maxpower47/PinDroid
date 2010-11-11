@@ -33,12 +33,14 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class ViewBookmark extends Activity implements View.OnClickListener{
@@ -48,6 +50,7 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 	private TextView mNotes;
 	private TextView mTags;
 	private TextView mTime;
+	private Button mGo;
 	private AccountManager mAccountManager;
 	private Account account;
 	private Bookmark bookmark;
@@ -65,6 +68,9 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 		mNotes = (TextView) findViewById(R.id.view_bookmark_notes);
 		mTags = (TextView) findViewById(R.id.view_bookmark_tags);
 		mTime = (TextView) findViewById(R.id.view_bookmark_time);
+		mGo = (Button) findViewById(R.id.view_bookmark_go);
+		
+		mGo.setOnClickListener(this);
 		
 		context = this;
 		mAccountManager = AccountManager.get(this);
@@ -119,6 +125,12 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
      * {@inheritDoc}
      */
     public void onClick(View v) {
-
+        if (v == mGo) {
+	    	String url = (String) mUrl.getText();
+	    	Uri link = Uri.parse(url);
+			Intent i = new Intent(Intent.ACTION_VIEW, link);
+			
+			startActivity(i);
+        }
     }
 }
