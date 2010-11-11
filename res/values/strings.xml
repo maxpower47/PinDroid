@@ -95,4 +95,7 @@
     <string name="pref_contact_bookmark_results_title">Contact Bookmarks</string>
     <string name="pref_contact_bookmark_results_key">pref_contact_bookmark_results</string>
     <string name="pref_contact_bookamrk_results_summary">Number of bookmarks to retrieve for network contacts.</string>
+    
+    <string name="dialog_no_account_title">No Delicious Account Found</string>
+    <string name="dialog_no_account_text">To add your Delicious account go to Accounts and Sync in Settings.</string>
 </resources>

@@ -78,6 +78,8 @@ public final class R {
         /**  Button to cancel the current operation 
          */
         public static final int cancel_button_label=0x7f060013;
+        public static final int dialog_no_account_text=0x7f060029;
+        public static final int dialog_no_account_title=0x7f060028;
         /**  Label for this package 
          */
         public static final int label=0x7f060000;

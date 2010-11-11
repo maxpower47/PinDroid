@@ -58,8 +58,9 @@ public class Main extends AppBaseActivity {
 		
 		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length < 1) {		
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("To add your account to DeliciousDroid, go to Accounts & Sync in Settings and add a new Delicious account.")
+			builder.setMessage(R.string.dialog_no_account_text)
 			       .setCancelable(false)
+			       .setTitle(R.string.dialog_no_account_title)
 			       .setPositiveButton("Go", new DialogInterface.OnClickListener() {
 			           public void onClick(DialogInterface dialog, int id) {
 			   			Intent i = new Intent(android.provider.Settings.ACTION_SYNC_SETTINGS);
@@ -67,7 +68,9 @@ public class Main extends AppBaseActivity {
 						finish();
 			           }
 			       });
+			
 			AlertDialog alert = builder.create();
+			alert.setIcon(android.R.drawable.ic_dialog_alert);
 			alert.show();
 		}
 		
