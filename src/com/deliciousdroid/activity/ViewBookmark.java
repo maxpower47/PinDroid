@@ -40,6 +40,7 @@ import android.widget.TextView;
 public class ViewBookmark extends Activity implements View.OnClickListener{
 
 	private TextView mTitle;
+	private TextView mUrl;
 	private TextView mNotes;
 	private AccountManager mAccountManager;
 	private Account account;
@@ -54,6 +55,7 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 		setContentView(R.layout.view_bookmark);
 		
 		mTitle = (TextView) findViewById(R.id.view_bookmark_title);
+		mUrl = (TextView) findViewById(R.id.view_bookmark_url);
 		mNotes = (TextView) findViewById(R.id.view_bookmark_notes);
 		
 		context = this;
@@ -94,6 +96,7 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 					int metaColumn = c.getColumnIndex(Bookmark.Meta);
 					
 					mTitle.setText(c.getString(descriptionColumn));
+					mUrl.setText(c.getString(urlColumn));
 					mNotes.setText(c.getString(notesColumn));
 				}	
 			}
