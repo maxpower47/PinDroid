@@ -21,9 +21,13 @@
 
 package com.deliciousdroid.activity;
 
+import java.text.ParseException;
+import java.util.Date;
+
 import com.deliciousdroid.Constants;
 import com.deliciousdroid.R;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
+import com.deliciousdroid.util.DateParser;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -43,6 +47,7 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 	private TextView mUrl;
 	private TextView mNotes;
 	private TextView mTags;
+	private TextView mTime;
 	private AccountManager mAccountManager;
 	private Account account;
 	private Bookmark bookmark;
@@ -59,6 +64,7 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 		mUrl = (TextView) findViewById(R.id.view_bookmark_url);
 		mNotes = (TextView) findViewById(R.id.view_bookmark_notes);
 		mTags = (TextView) findViewById(R.id.view_bookmark_tags);
+		mTime = (TextView) findViewById(R.id.view_bookmark_time);
 		
 		context = this;
 		mAccountManager = AccountManager.get(this);
@@ -74,15 +80,13 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 		String username = data.getQueryParameter("username");
 		
 		myself = account.name.equals(username);
-		
-
 	
 		if(scheme.equals("content") && path.contains("/bookmarks") && myself){
 			
 			try{		
 				int id = Integer.parseInt(data.getLastPathSegment());
 				
-				String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Meta, Bookmark.Tags};
+				String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Time, Bookmark.Tags};
 				String selection = BaseColumns._ID + "=" + id;
 				
 				Uri bookmarks = Bookmark.CONTENT_URI;
@@ -95,12 +99,16 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 					int descriptionColumn = c.getColumnIndex(Bookmark.Description);
 					int notesColumn = c.getColumnIndex(Bookmark.Notes);
 					int tagsColumn = c.getColumnIndex(Bookmark.Tags);
-					int metaColumn = c.getColumnIndex(Bookmark.Meta);
+					int timeColumn = c.getColumnIndex(Bookmark.Time);
+					
+					long time = c.getLong(timeColumn);
+					Date d = new Date(time);
 					
 					mTitle.setText(c.getString(descriptionColumn));
 					mUrl.setText(c.getString(urlColumn));
 					mNotes.setText(c.getString(notesColumn));
 					mTags.setText(c.getString(tagsColumn));
+					mTime.setText(d.toString());
 				}	
 			}
 			catch(Exception e){}

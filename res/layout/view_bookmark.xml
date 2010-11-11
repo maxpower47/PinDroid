@@ -65,4 +65,18 @@
 		android:layout_width="fill_parent"
 		android:textSize="6pt"
 		android:paddingLeft="20dip" />
+	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/view_bookmark_time_title"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:textSize="8pt"
+		android:paddingLeft="10dip" 
+		android:paddingTop="20dip"
+		android:text="@string/view_bookmark_time_title"/>
+	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/view_bookmark_time"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:textSize="6pt"
+		android:paddingLeft="20dip" />
 </LinearLayout>
