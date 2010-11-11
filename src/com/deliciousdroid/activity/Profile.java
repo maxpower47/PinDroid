@@ -60,16 +60,16 @@ public class Profile extends ActivityGroup {
             }
         }
 		
-		Intent tagBrowseIntent = new Intent();
+		Intent bookmarkBrowseIntent = new Intent(this, BrowseBookmarks.class);
 		
 		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
 		data.appendEncodedPath("bookmarks");
 		data.appendQueryParameter("username", userName);
-		tagBrowseIntent.setData(data.build());
+		bookmarkBrowseIntent.setData(data.build());
 		
 		Log.d("uri", data.build().toString());
 		
-		startActivity(tagBrowseIntent);
+		startActivity(bookmarkBrowseIntent);
 		
 		finish();
 		

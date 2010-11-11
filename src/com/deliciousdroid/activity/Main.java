@@ -79,7 +79,7 @@ public class Main extends AppBaseActivity {
 		    	if(position == 0){
 		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		    		
-		    		Intent i = new Intent();
+		    		Intent i = new Intent(mContext, BrowseBookmarks.class);
 		    		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
 		    		data.appendEncodedPath("bookmarks");
 		    		data.appendQueryParameter("username", mAccount.name);
@@ -92,7 +92,7 @@ public class Main extends AppBaseActivity {
 		    	} else if(position == 1){
 		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		    		
-		    		Intent i = new Intent();
+		    		Intent i = new Intent(mContext, BrowseTags.class);
 		    		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
 		    		data.appendEncodedPath("tags");
 		    		data.appendQueryParameter("username", mAccount.name);
@@ -104,7 +104,7 @@ public class Main extends AppBaseActivity {
 		    	} else if(position == 2){
 		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		    		
-		    		Intent i = new Intent();
+		    		Intent i = new Intent(mContext, BrowseBookmarks.class);
 		    		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
 		    		data.appendEncodedPath("network");
 		    		data.appendQueryParameter("username", mAccount.name);
@@ -114,13 +114,7 @@ public class Main extends AppBaseActivity {
 		    		
 		    		startActivity(i);
 		    	}
-		    	
 		    }
 		});
-
-		
-		
-
 	}
-
 }
