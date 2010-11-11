@@ -40,6 +40,7 @@ import android.widget.TextView;
 public class ViewBookmark extends Activity implements View.OnClickListener{
 
 	private TextView mTitle;
+	private TextView mNotes;
 	private AccountManager mAccountManager;
 	private Account account;
 	private Bookmark bookmark;
@@ -53,6 +54,7 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 		setContentView(R.layout.view_bookmark);
 		
 		mTitle = (TextView) findViewById(R.id.view_bookmark_title);
+		mNotes = (TextView) findViewById(R.id.view_bookmark_notes);
 		
 		context = this;
 		mAccountManager = AccountManager.get(this);
@@ -76,7 +78,7 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 			try{		
 				int id = Integer.parseInt(data.getLastPathSegment());
 				
-				String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, Bookmark.Meta, Bookmark.Tags};
+				String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Meta, Bookmark.Tags};
 				String selection = BaseColumns._ID + "=" + id;
 				
 				Uri bookmarks = Bookmark.CONTENT_URI;
@@ -87,12 +89,12 @@ public class ViewBookmark extends Activity implements View.OnClickListener{
 					int idColumn = c.getColumnIndex(Bookmark._ID);
 					int urlColumn = c.getColumnIndex(Bookmark.Url);
 					int descriptionColumn = c.getColumnIndex(Bookmark.Description);
+					int notesColumn = c.getColumnIndex(Bookmark.Notes);
 					int tagsColumn = c.getColumnIndex(Bookmark.Tags);
 					int metaColumn = c.getColumnIndex(Bookmark.Meta);
 					
-
 					mTitle.setText(c.getString(descriptionColumn));
-		
+					mNotes.setText(c.getString(notesColumn));
 				}	
 			}
 			catch(Exception e){}
