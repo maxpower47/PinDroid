@@ -67,6 +67,9 @@ public class BrowseBookmarks extends AppBaseActivity {
 	private Context mContext;
 	private Boolean myself;
 	
+	private String bookmarkLimit;
+	private String defaultAction;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -75,6 +78,10 @@ public class BrowseBookmarks extends AppBaseActivity {
 		mAccountManager = AccountManager.get(this);
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		mContext = this;
+		
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+    	bookmarkLimit = settings.getString("pref_contact_bookmark_results", "50");
+    	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
 		
 		Log.d("browse bookmarks", getIntent().getDataString());
 		Uri data = getIntent().getData();
@@ -148,9 +155,6 @@ public class BrowseBookmarks extends AppBaseActivity {
 				} else {
 					setTitle("Bookmarks For " + username);
 				}
-				
-		    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		    	String bookmarkLimit = settings.getString("pref_contact_bookmark_results", "50");
 		    	
 				bookmarkList = DeliciousFeed.fetchFriendBookmarks(username, tagname, Integer.parseInt(bookmarkLimit));
 
@@ -180,12 +184,12 @@ public class BrowseBookmarks extends AppBaseActivity {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		    	Bookmark b = (Bookmark)lv.getItemAtPosition(position);
-		    	
-		    	String url = b.getUrl();
-		    	Uri link = Uri.parse(url);
-				Intent i = new Intent(Intent.ACTION_VIEW, link);
-				
-				startActivity(i);
+
+		    	if(defaultAction.equals("view")) {
+		    		viewBookmark(b);
+		    	} else {
+		    		openBookmarkInBrowser(b);
+		    	}
 		    }
 		});
 		
@@ -194,12 +198,12 @@ public class BrowseBookmarks extends AppBaseActivity {
 			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 				menu.setHeaderTitle("Actions");
 				if(myself){
-					menu.add(Menu.NONE, 0, Menu.NONE, "Details");
-					menu.add(Menu.NONE, 1, Menu.NONE, "Delete");
+					menu.add(Menu.NONE, 0, Menu.NONE, "Open in browser");
+					menu.add(Menu.NONE, 1, Menu.NONE, "View Details");
+					menu.add(Menu.NONE, 2, Menu.NONE, "Delete");
 				} else {
-					menu.add(Menu.NONE, 2, Menu.NONE, "Add");
+					menu.add(Menu.NONE, 3, Menu.NONE, "Add");
 				}
-				
 			}
 		});
 	}
@@ -210,24 +214,19 @@ public class BrowseBookmarks extends AppBaseActivity {
 		final Bookmark b = (Bookmark)lv.getItemAtPosition(menuInfo.position);
 		
 		switch (aItem.getItemId()) {
-			case 0:				
-				Intent viewBookmark = new Intent(this, ViewBookmark.class);
-	    		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
-	    		data.appendEncodedPath("bookmarks");
-	    		data.appendEncodedPath(Integer.toString(b.getId()));
-	    		data.appendQueryParameter("username", mAccount.name);
-	    		viewBookmark.setData(data.build());
-	    		
-	    		Log.d("uri", data.build().toString());
-				startActivity(viewBookmark);
+			case 0:
+				openBookmarkInBrowser(b);
+				return true;
+			case 1:				
+				viewBookmark(b);
 				return true;
 			
-			case 1:
+			case 2:
 				BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, mContext);	
 				new DeleteBookmarkTask().execute(args);	
 				return true;
 				
-			case 2:				
+			case 3:				
 				Intent addBookmark = new Intent(this, AddBookmark.class);
 				addBookmark.setAction(Intent.ACTION_SEND);
 				addBookmark.putExtra(Intent.EXTRA_TEXT, b.getUrl());
@@ -235,6 +234,26 @@ public class BrowseBookmarks extends AppBaseActivity {
 				return true;
 		}
 		return false;
+	}
+	
+	private void openBookmarkInBrowser(Bookmark b) {
+    	String url = b.getUrl();
+    	Uri link = Uri.parse(url);
+		Intent i = new Intent(Intent.ACTION_VIEW, link);
+		
+		startActivity(i);
+	}
+	
+	private void viewBookmark(Bookmark b) {
+		Intent viewBookmark = new Intent(this, ViewBookmark.class);
+		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
+		data.appendEncodedPath("bookmarks");
+		data.appendEncodedPath(Integer.toString(b.getId()));
+		data.appendQueryParameter("username", mAccount.name);
+		viewBookmark.setData(data.build());
+		
+		Log.d("View Bookmark Uri", data.build().toString());
+		startActivity(viewBookmark);
 	}
 	
 	private class DeleteBookmarkTask extends AsyncTask<BookmarkTaskArgs, Integer, Boolean>{

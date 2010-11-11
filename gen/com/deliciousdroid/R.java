@@ -11,6 +11,8 @@ public final class R {
     public static final class array {
         public static final int pref_contact_bookmark_results_entries=0x7f050000;
         public static final int pref_contact_bookmark_results_values=0x7f050001;
+        public static final int pref_view_bookmark_default_action_entries=0x7f050002;
+        public static final int pref_view_bookmark_default_action_values=0x7f050003;
     }
     public static final class attr {
     }
@@ -88,8 +90,8 @@ public final class R {
         /**  Button to cancel the current operation 
          */
         public static final int cancel_button_label=0x7f060013;
-        public static final int dialog_no_account_text=0x7f06002d;
-        public static final int dialog_no_account_title=0x7f06002c;
+        public static final int dialog_no_account_text=0x7f060030;
+        public static final int dialog_no_account_title=0x7f06002f;
         /**  Label for this package 
          */
         public static final int label=0x7f060000;
@@ -132,12 +134,15 @@ public final class R {
         /**  Permission label 
          */
         public static final int permlab_samplesyncadapterAuthPassword=0x7f060001;
-        public static final int pref_contact_bookamrk_results_summary=0x7f06002b;
-        public static final int pref_contact_bookmark_results_key=0x7f06002a;
-        public static final int pref_contact_bookmark_results_title=0x7f060029;
+        public static final int pref_contact_bookamrk_results_summary=0x7f06002e;
+        public static final int pref_contact_bookmark_results_key=0x7f06002d;
+        public static final int pref_contact_bookmark_results_title=0x7f06002c;
         public static final int pref_notification_key=0x7f060027;
         public static final int pref_notification_summary=0x7f060028;
         public static final int pref_notification_title=0x7f060026;
+        public static final int pref_view_bookmark_default_action_key=0x7f06002a;
+        public static final int pref_view_bookmark_default_action_summary=0x7f06002b;
+        public static final int pref_view_bookmark_default_action_title=0x7f060029;
         public static final int profile_action=0x7f060014;
         /**  Button that takes the user to the "sign in" screen 
          */
