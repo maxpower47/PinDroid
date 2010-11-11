@@ -50,8 +50,11 @@ public class TagManager {
 		ContentResolver cr = context.getContentResolver();
 		Cursor c = cr.query(tags, projection, selection, null, null);
 		
-		if(c.getCount() > 0){
-			tag.setCount(tag.getCount() + 1);
+		if(c.moveToFirst()){
+			int countColumn = c.getColumnIndex(Tag.Count);
+			int count = c.getInt(countColumn);
+			
+			tag.setCount(count + 1);
 			UpdateTag(tag, account, context);
 		} else {
 			AddTag(tag, account, context);
