@@ -102,6 +102,8 @@ public final class R {
         public static final int cancel_button_label=0x7f060013;
         public static final int dialog_no_account_text=0x7f060036;
         public static final int dialog_no_account_title=0x7f060035;
+        public static final int dialog_yahoo_not_linked_text=0x7f060038;
+        public static final int dialog_yahoo_not_linked_title=0x7f060037;
         public static final int edit_bookmark_success_msg=0x7f060026;
         /**  Label for this package 
          */

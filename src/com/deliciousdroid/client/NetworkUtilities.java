@@ -31,6 +31,7 @@ import com.deliciousdroid.Constants;
 import com.deliciousdroid.authenticator.AuthenticatorActivity;
 import com.deliciousdroid.authenticator.OauthUtilities;
 
+import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
@@ -377,9 +378,10 @@ public class NetworkUtilities {
      * @param authtoken The authtoken stored in the AccountManager for the
      *        account
      * @return list The list of bookmarks received from the server.
+     * @throws AuthenticationException 
      */
     public static String getOauthUserName(String authtoken, String tokensecret, Context context) 
-    	throws IOException {
+    	throws IOException, AuthenticationException {
 
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	String url = OAUTH_GET_USERNAME_URI;
@@ -403,30 +405,27 @@ public class NetworkUtilities {
 		maybeCreateHttpClient();
 		post.setHeader("User-Agent", "DeliciousDroid");
     	
-		try{
-    		Log.d("apiCall", "oauth");
 
-			OauthUtilities.signRequest(post, params, authtoken, tokensecret);
+		Log.d("apiCall", "oauth");
 
-			Log.d("header", post.getHeaders("Authorization")[0].getValue());
-	        
-	        resp = mHttpClient.execute(host, post);
+		OauthUtilities.signRequest(post, params, authtoken, tokensecret);
 
-	    	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-	    		String response = EntityUtils.toString(resp.getEntity());
-	    		Log.d("response", response);
-	    		int start = response.indexOf("user=\"") + 6;
-	    		int end = response.indexOf("\"", start + 1);
-	    		String username = response.substring(start, end);
-	    		Log.d("username", username);
-	    		return username;
-	    	} else {
-	    		throw new IOException();
-	    	}
-		} catch(Exception e){
-			Log.e("DeliciousApiCall Error", Integer.toString(resp.getStatusLine().getStatusCode()));
-		}
-		throw new IOException();
+		Log.d("header", post.getHeaders("Authorization")[0].getValue());
+        
+        resp = mHttpClient.execute(host, post);
+
+    	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+    		String response = EntityUtils.toString(resp.getEntity());
+    		Log.d("response", response);
+    		int start = response.indexOf("user=\"") + 6;
+    		int end = response.indexOf("\"", start + 1);
+    		String username = response.substring(start, end);
+    		Log.d("username", username);
+    		return username;
+    	} else if(resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED){
+    		throw new AuthenticationException();
+    	} else throw new IOException();
+
     }
     
     /**

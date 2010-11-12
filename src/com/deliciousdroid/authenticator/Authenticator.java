@@ -212,7 +212,6 @@ class Authenticator extends AbstractAccountAuthenticator {
     	} else {
     		return true;
     	}
-    	
     }
 
     /**

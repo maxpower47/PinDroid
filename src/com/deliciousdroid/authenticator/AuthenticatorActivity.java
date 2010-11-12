@@ -23,9 +23,12 @@ package com.deliciousdroid.authenticator;
 
 import java.io.IOException;
 
+import org.apache.http.auth.AuthenticationException;
+
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -216,6 +219,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     protected void finishLogin(String authToken) {
         Log.i(TAG, "finishLogin()");
         
+        boolean success = false;
+        
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
         final String token = settings.getString(Constants.OAUTH_TOKEN_PROPERTY, "");
@@ -225,38 +230,57 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         if(authToken != null && authToken != ""){
         	try {
 				mUsername = NetworkUtilities.getOauthUserName(authToken, tokensecret, this);
+				success = true;
 			} catch (IOException e) {
 				e.printStackTrace();
+			} catch (AuthenticationException e) {
+
 			}
         	mPassword = authToken;
         }
         
-        final Account account = new Account(mUsername, Constants.ACCOUNT_TYPE);
-
-        if (mRequestNewAccount) {
-            mAccountManager.addAccountExplicitly(account, mPassword, null);
-            // Set contacts sync for this account.
-            ContentResolver.setSyncAutomatically(account, ContactsContract.AUTHORITY, true);
-            ContentResolver.setSyncAutomatically(account, BookmarkContentProvider.AUTHORITY, true);
+        if(success) {
+	        final Account account = new Account(mUsername, Constants.ACCOUNT_TYPE);
+	
+	        if (mRequestNewAccount) {
+	            mAccountManager.addAccountExplicitly(account, mPassword, null);
+	            // Set contacts sync for this account.
+	            ContentResolver.setSyncAutomatically(account, ContactsContract.AUTHORITY, true);
+	            ContentResolver.setSyncAutomatically(account, BookmarkContentProvider.AUTHORITY, true);
+	        } else {
+	            mAccountManager.setPassword(account, mPassword);
+	        }
+	  
+	        mAccountManager.setUserData(account, Constants.PREFS_AUTH_TYPE, authtype);
+	        mAccountManager.setUserData(account, Constants.OAUTH_TOKEN_PROPERTY, token);
+	        mAccountManager.setUserData(account, Constants.OAUTH_TOKEN_SECRET_PROPERTY, tokensecret);
+	        mAccountManager.setUserData(account, Constants.OAUTH_SESSION_HANDLE_PROPERTY, sessionhandle);
+	        
+	        final Intent intent = new Intent();
+	        
+	        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mUsername);
+	        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
+	        if (mAuthtokenType != null && mAuthtokenType.equals(Constants.AUTHTOKEN_TYPE)) {
+	            intent.putExtra(AccountManager.KEY_AUTHTOKEN, mAuthtoken);
+	        }
+	        setAccountAuthenticatorResult(intent.getExtras());
+	        setResult(RESULT_OK, intent);
+	        finish();
         } else {
-            mAccountManager.setPassword(account, mPassword);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage(R.string.dialog_yahoo_not_linked_text)
+				.setCancelable(false)
+				.setTitle(R.string.dialog_yahoo_not_linked_title)
+			    .setPositiveButton("Go", new DialogInterface.OnClickListener() {
+			    	public void onClick(DialogInterface dialog, int id) {
+			    		finish();
+			        }
+			    });
+			
+			AlertDialog alert = builder.create();
+			alert.setIcon(android.R.drawable.ic_dialog_alert);
+			alert.show();
         }
-  
-        mAccountManager.setUserData(account, Constants.PREFS_AUTH_TYPE, authtype);
-        mAccountManager.setUserData(account, Constants.OAUTH_TOKEN_PROPERTY, token);
-        mAccountManager.setUserData(account, Constants.OAUTH_TOKEN_SECRET_PROPERTY, tokensecret);
-        mAccountManager.setUserData(account, Constants.OAUTH_SESSION_HANDLE_PROPERTY, sessionhandle);
-        
-        final Intent intent = new Intent();
-        
-        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mUsername);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
-        if (mAuthtokenType != null && mAuthtokenType.equals(Constants.AUTHTOKEN_TYPE)) {
-            intent.putExtra(AccountManager.KEY_AUTHTOKEN, mAuthtoken);
-        }
-        setAccountAuthenticatorResult(intent.getExtras());
-        setResult(RESULT_OK, intent);
-        finish();
     }
     
     protected void getOauthAccessToken() {
