@@ -352,8 +352,8 @@ public class DeliciousApi {
 			builder.appendQueryParameter(key, params.get(key));
 		}
 		
-		Log.d("apiCallUrl", builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+").replace("%3F", "?").replace("%3D", "="));
-		post = new HttpGet(builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+").replace("%3F", "?").replace("%3D", "="));
+		Log.d("apiCallUrl", builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+").replace("%3F", "?").replace("%3D", "=").replace("%20", "+"));
+		post = new HttpGet(builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+").replace("%3F", "?").replace("%3D", "=").replace("%20", "+"));
 		HttpHost host = new HttpHost(DELICIOUS_AUTHORITY);
 		maybeCreateHttpClient();
 		post.setHeader("User-Agent", "DeliciousDroid");
