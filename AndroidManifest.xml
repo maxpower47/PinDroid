@@ -25,7 +25,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.deliciousdroid"
     android:versionCode="3"
-    android:versionName="0.02.00">
+    android:versionName="0.2.0">
     <uses-sdk android:minSdkVersion="5" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -55,19 +55,19 @@
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.deliciousdroid" android:path="/tags"/>
+        		<data android:scheme="content" android:host="com.deliciousdroid.providers.BookmarkContentProvider" android:path="/tags"/>
 			</intent-filter>
         </activity>
         <activity android:name=".activity.BrowseBookmarks" >
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.deliciousdroid" android:path="/bookmarks"/>
+        		<data android:scheme="content" android:host="com.deliciousdroid.providers.BookmarkContentProvider" android:path="/bookmarks"/>
         	</intent-filter>
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.deliciousdroid" android:path="/network"/>
+        		<data android:scheme="content" android:host="com.deliciousdroid.providers.BookmarkContentProvider" android:path="/network"/>
         	</intent-filter>
             <intent-filter>
             	<action android:name="android.intent.action.SEARCH" />

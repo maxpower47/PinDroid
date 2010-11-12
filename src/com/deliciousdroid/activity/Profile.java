@@ -22,6 +22,7 @@
 package com.deliciousdroid.activity;
 
 import com.deliciousdroid.Constants;
+import com.deliciousdroid.providers.BookmarkContentProvider;
 
 import android.app.ActivityGroup;
 import android.content.Intent;
@@ -43,9 +44,9 @@ public class Profile extends ActivityGroup {
 		super.onCreate(icicle);
 			
 		Intent i = getIntent();
-		Uri u = Uri.parse(i.getDataString());
+		Uri contact = Uri.parse(i.getDataString());
 		
-		Cursor c = managedQuery(u, null, null, null, null);
+		Cursor c = managedQuery(contact, null, null, null, null);
 		
 		int userNameCol = c.getColumnIndex(ContactsContract.Data.DATA1);
 		String userName = "";
@@ -62,9 +63,10 @@ public class Profile extends ActivityGroup {
 		
 		Intent bookmarkBrowseIntent = new Intent(this, BrowseBookmarks.class);
 		
-		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(userName + "@" + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("bookmarks");
-		data.appendQueryParameter("username", userName);
 		bookmarkBrowseIntent.setData(data.build());
 		
 		Log.d("uri", data.build().toString());
@@ -72,6 +74,5 @@ public class Profile extends ActivityGroup {
 		startActivity(bookmarkBrowseIntent);
 		
 		finish();
-		
 	}
 }

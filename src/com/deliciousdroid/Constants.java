@@ -30,9 +30,9 @@ public class Constants {
      */
     public static final String ACCOUNT_TYPE = "com.deliciousdroid";
     
-    public static final Uri BOOKMARK_CONENT_URI = Uri.parse("content://com.deliciousdroid.bookmark");
-    
     public static final Uri CONTENT_URI_BASE = Uri.parse("content://com.deliciousdroid");
+    
+    public static final String CONTENT_SCHEME = "content";
 
     /**
      * Authtoken type string.

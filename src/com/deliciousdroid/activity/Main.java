@@ -23,6 +23,7 @@ package com.deliciousdroid.activity;
 
 import com.deliciousdroid.R;
 import com.deliciousdroid.Constants;
+import com.deliciousdroid.providers.BookmarkContentProvider;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -83,9 +84,10 @@ public class Main extends AppBaseActivity {
 		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		    		
 		    		Intent i = new Intent(mContext, BrowseBookmarks.class);
-		    		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
+		    		Uri.Builder data = new Uri.Builder();
+		    		data.scheme(Constants.CONTENT_SCHEME);
+		    		data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
 		    		data.appendEncodedPath("bookmarks");
-		    		data.appendQueryParameter("username", mAccount.name);
 		    		data.appendQueryParameter("recent", "1");
 		    		i.setData(data.build());
 		    		
@@ -96,9 +98,10 @@ public class Main extends AppBaseActivity {
 		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		    		
 		    		Intent i = new Intent(mContext, BrowseTags.class);
-		    		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
+		    		Uri.Builder data = new Uri.Builder();
+		    		data.scheme(Constants.CONTENT_SCHEME);
+		    		data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
 		    		data.appendEncodedPath("tags");
-		    		data.appendQueryParameter("username", mAccount.name);
 		    		i.setData(data.build());
 		    		
 		    		Log.d("uri", data.build().toString());
@@ -108,9 +111,10 @@ public class Main extends AppBaseActivity {
 		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		    		
 		    		Intent i = new Intent(mContext, BrowseBookmarks.class);
-		    		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
+		    		Uri.Builder data = new Uri.Builder();
+		    		data.scheme(Constants.CONTENT_SCHEME);
+		    		data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
 		    		data.appendEncodedPath("network");
-		    		data.appendQueryParameter("username", mAccount.name);
 		    		i.setData(data.build());
 		    		
 		    		Log.d("uri", data.build().toString());

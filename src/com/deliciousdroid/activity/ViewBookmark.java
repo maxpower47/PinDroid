@@ -84,7 +84,7 @@ public class ViewBookmark extends Activity{
 		String path = data.getPath();
 		Log.d("path", path);
 		
-		String username = data.getQueryParameter("username");
+		String username = data.getUserInfo();
 		
 		myself = account.name.equals(username);
 	

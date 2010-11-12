@@ -27,6 +27,7 @@ import com.deliciousdroid.R;
 import com.deliciousdroid.Constants;
 import com.deliciousdroid.client.DeliciousFeed;
 import com.deliciousdroid.listadapter.TagListAdapter;
+import com.deliciousdroid.providers.BookmarkContentProvider;
 import com.deliciousdroid.providers.TagContent.Tag;
 
 import android.accounts.Account;
@@ -63,8 +64,7 @@ public class BrowseTags extends AppBaseActivity {
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		
 		Uri data = getIntent().getData();
-		username = data.getPathSegments().get(0);
-		username = data.getQueryParameter("username");
+		username = data.getUserInfo();
 		
 		if(mAccount.name.equals(username)){
 			try{
@@ -114,9 +114,10 @@ public class BrowseTags extends AppBaseActivity {
 		    	
 				Intent i = new Intent(mContext, BrowseBookmarks.class);
 
-				Uri.Builder dataBuilder = Constants.CONTENT_URI_BASE.buildUpon();
+				Uri.Builder dataBuilder = new Uri.Builder();
+				dataBuilder.scheme(Constants.CONTENT_SCHEME);
+				dataBuilder.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
 				dataBuilder.appendEncodedPath("bookmarks");
-				dataBuilder.appendQueryParameter("username", username);
 				dataBuilder.appendQueryParameter("tagname", tagName);
 				i.setData(dataBuilder.build());
 				

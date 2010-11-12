@@ -29,6 +29,7 @@ import com.deliciousdroid.action.BookmarkTaskArgs;
 import com.deliciousdroid.action.DeleteBookmarkTask;
 import com.deliciousdroid.client.DeliciousFeed;
 import com.deliciousdroid.listadapter.BookmarkListAdapter;
+import com.deliciousdroid.providers.BookmarkContentProvider;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 
 import android.accounts.Account;
@@ -81,7 +82,7 @@ public class BrowseBookmarks extends AppBaseActivity {
 		String scheme = data.getScheme();
 		String path = data.getPath();
 		Log.d("path", path);
-		String username = data.getQueryParameter("username");
+		String username = data.getUserInfo();
 		String tagname = data.getQueryParameter("tagname");
 		String recent = data.getQueryParameter("recent");
 		
@@ -242,10 +243,11 @@ public class BrowseBookmarks extends AppBaseActivity {
 	
 	private void viewBookmark(Bookmark b) {
 		Intent viewBookmark = new Intent(this, ViewBookmark.class);
-		Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("bookmarks");
 		data.appendEncodedPath(Integer.toString(b.getId()));
-		data.appendQueryParameter("username", mAccount.name);
 		viewBookmark.setData(data.build());
 		
 		Log.d("View Bookmark Uri", data.build().toString());
