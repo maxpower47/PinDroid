@@ -37,6 +37,7 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -60,6 +61,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 	private Context context;
 	Thread background;
 	private Boolean update = false;
+	private Resources res;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -74,7 +76,9 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		mButtonSave = (Button) findViewById(R.id.add_button_save);
 		context = this;
 		
-		setTitle("Add Bookmark");
+		res = getResources();
+		
+		
 		
 		if(savedInstanceState ==  null){
 			Intent intent = getIntent();
@@ -97,6 +101,10 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 				}
 			}
 		}
+		
+		if(update)
+			setTitle("Edit Bookmark");
+		else setTitle("Add Bookmark");
 
 		mButtonSave.setOnClickListener(this);	
 	}
@@ -169,9 +177,14 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     				TagManager.UpsertTag(t, account.name, context);
     			}
     			
-    			Toast.makeText(context, "Bookmark Added Successfully", Toast.LENGTH_SHORT).show();
+    			String msg = null;
+    			if(update)
+    				msg = res.getString(R.string.edit_bookmark_success_msg);
+    			else msg = res.getString(R.string.add_bookmark_success_msg);
+    			
+    			Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     		} else {
-    			Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+    			Toast.makeText(context, res.getString(R.string.add_bookmark_error_msg), Toast.LENGTH_SHORT).show();
     		}
     		
     		finish();

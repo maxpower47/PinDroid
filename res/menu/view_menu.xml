@@ -27,6 +27,10 @@
 		android:title="@string/menu_view_openbookmark_title" 
 		android:icon="@drawable/ic_menu_view" />
 	<item 
+		android:id="@+id/menu_view_editbookmark" 
+		android:title="@string/menu_view_editbookmark_title" 
+		android:icon="@drawable/ic_menu_edit" />
+	<item 
 		android:id="@+id/menu_view_deletebookmark" 
 		android:title="@string/menu_view_deletebookmark_title" 
 		android:icon="@drawable/ic_menu_delete" />

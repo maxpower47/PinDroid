@@ -21,7 +21,6 @@
 
 package com.deliciousdroid.activity;
 
-import java.text.ParseException;
 import java.util.Date;
 
 import com.deliciousdroid.Constants;
@@ -30,24 +29,20 @@ import com.deliciousdroid.action.BookmarkTaskArgs;
 import com.deliciousdroid.action.DeleteBookmarkTask;
 import com.deliciousdroid.platform.BookmarkManager;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
+import com.deliciousdroid.providers.BookmarkContentProvider;
 import com.deliciousdroid.providers.ContentNotFoundException;
-import com.deliciousdroid.util.DateParser;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 public class ViewBookmark extends Activity{
@@ -121,22 +116,35 @@ public class ViewBookmark extends Activity{
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle item selection
 	    switch (item.getItemId()) {
-	    case R.id.menu_view_openbookmark:
-	    	String url = (String) mUrl.getText();
-	    	Uri link = Uri.parse(url);
-			Intent i = new Intent(Intent.ACTION_VIEW, link);
-			startActivity(i);
-			return true;
-	    case R.id.menu_view_deletebookmark:
-			BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, account, this);	
-			new DeleteBookmarkTask().execute(args);
-			return true;	
-	    case R.id.menu_view_settings:
-			Intent prefs = new Intent(this, Preferences.class);
-			startActivity(prefs);
-	        return true;
-	    default:
-	        return super.onOptionsItemSelected(item);
+		    case R.id.menu_view_openbookmark:
+		    	String url = (String) mUrl.getText();
+		    	Uri link = Uri.parse(url);
+				Intent i = new Intent(Intent.ACTION_VIEW, link);
+				startActivity(i);
+				return true;
+		    case R.id.menu_view_editbookmark:
+				Intent editBookmark = new Intent(this, AddBookmark.class);
+				editBookmark.setAction(Intent.ACTION_EDIT);
+				
+				Uri.Builder data = new Uri.Builder();
+				data.scheme(Constants.CONTENT_SCHEME);
+				data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+				data.appendEncodedPath("bookmarks");
+				data.appendEncodedPath(Integer.toString(bookmark.getId()));
+				editBookmark.setData(data.build());
+
+				startActivity(editBookmark);
+		    	return true;
+		    case R.id.menu_view_deletebookmark:
+				BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, account, this);	
+				new DeleteBookmarkTask().execute(args);
+				return true;	
+		    case R.id.menu_view_settings:
+				Intent prefs = new Intent(this, Preferences.class);
+				startActivity(prefs);
+		        return true;
+		    default:
+		        return super.onOptionsItemSelected(item);
 	    }
 	}
 }

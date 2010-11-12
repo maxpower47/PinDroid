@@ -81,6 +81,7 @@
     <string name="menu_mybookmarks_title">My Bookmarks</string>
     <string name="menu_settings_title">Settings</string>
     <string name="menu_view_openbookmark_title">Open in browser</string>
+    <string name="menu_view_editbookmark_title">Edit</string>
     <string name="menu_view_deletebookmark_title">Delete</string>
     
     <string name="add_button_save">Save</string>
@@ -91,6 +92,10 @@
     <string name="tag_search_label">Tag</string>
     <string name="tag_search_hint">Hint</string>
     <string name="tag_search_text">Search Delicious</string>
+    
+    <string name="add_bookmark_success_msg">Bookmark Added Successfully</string>
+    <string name="edit_bookmark_success_msg">Bookmark Updated Successfully</string>
+    <string name="add_bookmark_error_msg">Error</string>
     
     <string name="view_bookmark_notes_title">Notes</string>
     <string name="view_bookmark_tags_title">Tags</string>
