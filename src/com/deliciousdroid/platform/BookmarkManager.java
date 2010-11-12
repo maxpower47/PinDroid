@@ -22,14 +22,53 @@
 package com.deliciousdroid.platform;
 
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
+import com.deliciousdroid.providers.ContentNotFoundException;
 import com.deliciousdroid.util.Md5Hash;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
 
 public class BookmarkManager {
+	
+	public static Bookmark GetById(int id, Context context) throws ContentNotFoundException {		
+		String[] projection = new String[] {Bookmark.Account, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Time, Bookmark.Tags, Bookmark.Hash, Bookmark.Meta};
+		String selection = BaseColumns._ID + "=" + id;
+		
+		Uri bookmarks = Bookmark.CONTENT_URI;
+		
+		Cursor c = context.getContentResolver().query(bookmarks, projection, selection, null, null);				
+		
+		if(c.moveToFirst()){
+			int accountColumn = c.getColumnIndex(Bookmark.Account);
+			int urlColumn = c.getColumnIndex(Bookmark.Url);
+			int descriptionColumn = c.getColumnIndex(Bookmark.Description);
+			int notesColumn = c.getColumnIndex(Bookmark.Notes);
+			int tagsColumn = c.getColumnIndex(Bookmark.Tags);
+			int hashColumn = c.getColumnIndex(Bookmark.Hash);
+			int metaColumn = c.getColumnIndex(Bookmark.Meta);
+			int timeColumn = c.getColumnIndex(Bookmark.Time);
+			
+			String account = c.getString(accountColumn);
+			String url = c.getString(urlColumn);
+			String description = c.getString(descriptionColumn);
+			String notes = c.getString(notesColumn);
+			String tags = c.getString(tagsColumn);
+			String hash = c.getString(hashColumn);
+			String meta = c.getString(metaColumn);
+			long time = c.getLong(timeColumn);
+			
+			c.close();
+			
+			return new Bookmark(id, account, url, description, notes, tags, hash, meta, time);
+		} else {
+			c.close();
+			throw new ContentNotFoundException();
+		}
+	}
 	
 	public static void AddBookmark(Bookmark bookmark, String account, Context context) {
 		String url = bookmark.getUrl();
@@ -58,13 +97,24 @@ public class BookmarkManager {
 	}
 	
 	public static void UpdateBookmark(Bookmark bookmark, String account, Context context){
+		String url = bookmark.getUrl();
+
+		if(url.lastIndexOf("/") <= 7){
+			url = url + "/";
+		}
 		
-		String selection = Bookmark.Hash + "='" + bookmark.getHash() + "' AND " +
+		String hash = "";
+		if(bookmark.getHash() == null || bookmark.getHash() == ""){
+			hash = Md5Hash.md5(url);
+			Log.d(url, hash);
+		} else hash = bookmark.getHash();
+		
+		String selection = Bookmark.Hash + "='" + hash + "' AND " +
 							Bookmark.Account + " = '" + account + "'";
 		
 		ContentValues values = new ContentValues();
 		values.put(Bookmark.Description, bookmark.getDescription());
-		values.put(Bookmark.Url, bookmark.getUrl());
+		values.put(Bookmark.Url, url);
 		values.put(Bookmark.Notes, bookmark.getNotes());
 		values.put(Bookmark.Tags, bookmark.getTags());
 		values.put(Bookmark.Meta, bookmark.getMeta());

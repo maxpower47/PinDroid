@@ -99,7 +99,8 @@ public class BrowseBookmarks extends AppBaseActivity {
 					setTitle("My Bookmarks");
 				}
 				
-				String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, Bookmark.Meta, Bookmark.Tags};
+				String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, 
+						Bookmark.Meta, Bookmark.Tags};
 				String selection = null;
 				String sortorder = null;
 				
@@ -128,7 +129,7 @@ public class BrowseBookmarks extends AppBaseActivity {
 					
 					do {
 						
-						Bookmark b = new Bookmark(c.getInt(idColumn), c.getString(urlColumn), 
+						Bookmark b = new Bookmark(c.getInt(idColumn), "", c.getString(urlColumn), 
 								c.getString(descriptionColumn), "", c.getString(tagsColumn), "", 
 								c.getString(metaColumn), 0);
 						
@@ -194,9 +195,10 @@ public class BrowseBookmarks extends AppBaseActivity {
 				if(myself){
 					menu.add(Menu.NONE, 0, Menu.NONE, "Open in browser");
 					menu.add(Menu.NONE, 1, Menu.NONE, "View Details");
-					menu.add(Menu.NONE, 2, Menu.NONE, "Delete");
+					menu.add(Menu.NONE, 2, Menu.NONE, "Edit");
+					menu.add(Menu.NONE, 3, Menu.NONE, "Delete");
 				} else {
-					menu.add(Menu.NONE, 3, Menu.NONE, "Add");
+					menu.add(Menu.NONE, 4, Menu.NONE, "Add");
 				}
 			}
 		});
@@ -214,8 +216,21 @@ public class BrowseBookmarks extends AppBaseActivity {
 			case 1:				
 				viewBookmark(b);
 				return true;
-			
 			case 2:
+				Intent editBookmark = new Intent(this, AddBookmark.class);
+				editBookmark.setAction(Intent.ACTION_EDIT);
+				
+				Uri.Builder data = new Uri.Builder();
+				data.scheme(Constants.CONTENT_SCHEME);
+				data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
+				data.appendEncodedPath("bookmarks");
+				data.appendEncodedPath(Integer.toString(b.getId()));
+				editBookmark.setData(data.build());
+
+				startActivity(editBookmark);
+				return true;
+			
+			case 3:
 				BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, mContext);	
 				new DeleteBookmarkTask().execute(args);
 				
@@ -223,7 +238,7 @@ public class BrowseBookmarks extends AppBaseActivity {
 				bla.remove(b);
 				return true;
 				
-			case 3:				
+			case 4:				
 				Intent addBookmark = new Intent(this, AddBookmark.class);
 				addBookmark.setAction(Intent.ACTION_SEND);
 				addBookmark.putExtra(Intent.EXTRA_TEXT, b.getUrl());

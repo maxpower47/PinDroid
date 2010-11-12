@@ -151,7 +151,7 @@ public class BookmarkContent {
             mTime = time;
         }
         
-        public Bookmark(int id, String url, String description, String notes, String tags, String hash, String meta, long time) {
+        public Bookmark(int id, String account, String url, String description, String notes, String tags, String hash, String meta, long time) {
             mId = id;
         	mUrl = url;
             mDescription = description;
@@ -160,6 +160,7 @@ public class BookmarkContent {
             mHash = hash;
             mMeta = meta;
             mTime = time;
+            mAccount = account;
         }
         
         public static ArrayList<Bookmark> valueOf(String userBookmark){

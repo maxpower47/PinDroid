@@ -28,7 +28,9 @@ import com.deliciousdroid.Constants;
 import com.deliciousdroid.R;
 import com.deliciousdroid.action.BookmarkTaskArgs;
 import com.deliciousdroid.action.DeleteBookmarkTask;
+import com.deliciousdroid.platform.BookmarkManager;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
+import com.deliciousdroid.providers.ContentNotFoundException;
 import com.deliciousdroid.util.DateParser;
 
 import android.accounts.Account;
@@ -92,43 +94,19 @@ public class ViewBookmark extends Activity{
 			
 			try{		
 				int id = Integer.parseInt(data.getLastPathSegment());
+
+				bookmark = BookmarkManager.GetById(id, context);
 				
-				String[] projection = new String[] {Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Time, Bookmark.Tags, Bookmark.Hash, Bookmark.Meta};
-				String selection = BaseColumns._ID + "=" + id;
+				Date d = new Date(bookmark.getTime());
 				
-				Uri bookmarks = Bookmark.CONTENT_URI;
-				
-				Cursor c = managedQuery(bookmarks, projection, selection, null, null);				
-				
-				if(c.moveToFirst()){
-					int urlColumn = c.getColumnIndex(Bookmark.Url);
-					int descriptionColumn = c.getColumnIndex(Bookmark.Description);
-					int notesColumn = c.getColumnIndex(Bookmark.Notes);
-					int tagsColumn = c.getColumnIndex(Bookmark.Tags);
-					int hashColumn = c.getColumnIndex(Bookmark.Hash);
-					int metaColumn = c.getColumnIndex(Bookmark.Meta);
-					int timeColumn = c.getColumnIndex(Bookmark.Time);
-					
-					String url = c.getString(urlColumn);
-					String description = c.getString(descriptionColumn);
-					String notes = c.getString(notesColumn);
-					String tags = c.getString(tagsColumn);
-					String hash = c.getString(hashColumn);
-					String meta = c.getString(metaColumn);
-					long time = c.getLong(timeColumn);
-					
-					bookmark = new Bookmark(id, url, description, notes, tags, hash, meta, time);
-					
-					Date d = new Date(time);
-					
-					mTitle.setText(bookmark.getDescription());
-					mUrl.setText(bookmark.getUrl());
-					mNotes.setText(bookmark.getNotes());
-					mTags.setText(bookmark.getTags());
-					mTime.setText(d.toString());
-				}	
+				mTitle.setText(bookmark.getDescription());
+				mUrl.setText(bookmark.getUrl());
+				mNotes.setText(bookmark.getNotes());
+				mTags.setText(bookmark.getTags());
+				mTime.setText(d.toString());
+
 			}
-			catch(Exception e){}
+			catch(ContentNotFoundException e){}
 		} 	
 	}
     

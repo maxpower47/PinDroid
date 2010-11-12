@@ -119,6 +119,11 @@ public class DeliciousApi {
     public static Boolean addBookmark(Bookmark bookmark, Account account, Context context) 
     	throws Exception {
 
+    	String url = bookmark.getUrl();
+    	if(url.endsWith("/")) {
+    		url = url.substring(0, url.lastIndexOf('/'));
+    	}
+    	
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	  	
 		params.put("description", bookmark.getDescription());
@@ -130,10 +135,10 @@ public class DeliciousApi {
 			params.put("shared", "no");
 		}
 		
-		String url = ADD_BOOKMARKS_URI;
+		String uri = ADD_BOOKMARKS_URI;
 		String response = null;
 
-    	response = DeliciousApiCall(url, params, account, context);
+    	response = DeliciousApiCall(uri, params, account, context);
 
         if (response.contains("<result code=\"done\" />")) {
             return true;

@@ -29,6 +29,7 @@ import com.deliciousdroid.client.DeliciousApi;
 import com.deliciousdroid.platform.BookmarkManager;
 import com.deliciousdroid.platform.TagManager;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
+import com.deliciousdroid.providers.ContentNotFoundException;
 import com.deliciousdroid.providers.TagContent.Tag;
 
 import android.accounts.Account;
@@ -58,6 +59,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 	private Bookmark bookmark;
 	private Context context;
 	Thread background;
+	private Boolean update = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -79,6 +81,20 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 			
 			if(Intent.ACTION_SEND.equals(intent.getAction())){
 				mEditUrl.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
+			} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
+				int id = Integer.parseInt(intent.getData().getLastPathSegment());
+				try {
+					Bookmark b = BookmarkManager.GetById(id, context);
+					
+					mEditUrl.setText(b.getUrl());
+					mEditDescription.setText(b.getDescription());
+					mEditNotes.setText(b.getNotes());
+					mEditTags.setText(b.getTags());
+					update = true;
+				} catch (ContentNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -132,7 +148,11 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     		try {
     			Boolean success = DeliciousApi.addBookmark(bookmark, account, context);
     			if(success){
-    				BookmarkManager.AddBookmark(bookmark, account.name, context);
+    				if(update){
+    					BookmarkManager.UpdateBookmark(bookmark, account.name, context);
+    				} else {
+    					BookmarkManager.AddBookmark(bookmark, account.name, context);
+    				}
     				return true;
     			} else return false;
     		} catch (Exception e) {
