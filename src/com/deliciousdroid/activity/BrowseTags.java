@@ -31,6 +31,7 @@ import com.deliciousdroid.providers.TagContent.Tag;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -48,11 +49,13 @@ public class BrowseTags extends AppBaseActivity {
 	AccountManager mAccountManager;
 	String username = null;
 	Account mAccount = null;
+	Context mContext;
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_tags);
+		mContext = this;
 		
 		ArrayList<Tag> tagList = new ArrayList<Tag>();
 		
@@ -109,7 +112,7 @@ public class BrowseTags extends AppBaseActivity {
 		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
 		    	
-				Intent i = new Intent();
+				Intent i = new Intent(mContext, BrowseBookmarks.class);
 
 				Uri.Builder dataBuilder = Constants.CONTENT_URI_BASE.buildUpon();
 				dataBuilder.appendEncodedPath("bookmarks");
