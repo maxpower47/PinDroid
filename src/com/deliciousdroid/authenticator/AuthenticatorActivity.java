@@ -237,7 +237,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
 			}
         	mPassword = authToken;
-        }
+        } else success = true;
         
         if(success) {
 	        final Account account = new Account(mUsername, Constants.ACCOUNT_TYPE);
