@@ -52,6 +52,7 @@ public class ViewBookmark extends Activity{
 	private TextView mNotes;
 	private TextView mTags;
 	private TextView mTime;
+	private TextView mAccount;
 	private AccountManager mAccountManager;
 	private Account account;
 	private Bookmark bookmark;
@@ -63,12 +64,14 @@ public class ViewBookmark extends Activity{
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.view_bookmark);
+		setTitle("View Bookmark Details");
 		
 		mTitle = (TextView) findViewById(R.id.view_bookmark_title);
 		mUrl = (TextView) findViewById(R.id.view_bookmark_url);
 		mNotes = (TextView) findViewById(R.id.view_bookmark_notes);
 		mTags = (TextView) findViewById(R.id.view_bookmark_tags);
 		mTime = (TextView) findViewById(R.id.view_bookmark_time);
+		mAccount = (TextView) findViewById(R.id.view_bookmark_account);
 		
 		context = this;
 		mAccountManager = AccountManager.get(this);
@@ -77,7 +80,6 @@ public class ViewBookmark extends Activity{
 		
 		Log.d("browse bookmarks", getIntent().getDataString());
 		Uri data = getIntent().getData();
-		String scheme = data.getScheme();
 		String path = data.getPath();
 		Log.d("path", path);
 		
@@ -85,7 +87,7 @@ public class ViewBookmark extends Activity{
 		
 		myself = account.name.equals(username);
 	
-		if(scheme.equals("content") && path.contains("/bookmarks") && myself){
+		if(path.contains("/bookmarks") && myself){
 			
 			try{		
 				int id = Integer.parseInt(data.getLastPathSegment());
@@ -99,10 +101,20 @@ public class ViewBookmark extends Activity{
 				mNotes.setText(bookmark.getNotes());
 				mTags.setText(bookmark.getTags());
 				mTime.setText(d.toString());
-
+				mAccount.setText(bookmark.getAccount());
+				
 			}
 			catch(ContentNotFoundException e){}
-		} 	
+		} else if(path.contains("/bookmarks") && !myself) {
+			Date d = new Date(Long.parseLong(data.getQueryParameter("time")));
+			
+			mTitle.setText(data.getQueryParameter("title"));
+			mUrl.setText(data.getQueryParameter("url"));
+			mNotes.setText(data.getQueryParameter("notes"));
+			mTags.setText(data.getQueryParameter("tags"));
+			mTime.setText(d.toString());
+			mAccount.setText(data.getQueryParameter("account"));
+		}
 	}
     
 	@Override
@@ -110,6 +122,15 @@ public class ViewBookmark extends Activity{
 	    MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.view_menu, menu);
 	    return true;
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		if(!myself) {
+			menu.removeItem(R.id.menu_view_editbookmark);
+			menu.removeItem(R.id.menu_view_deletebookmark);
+		}
+		return true;
 	}
 	
 	@Override

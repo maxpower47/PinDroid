@@ -64,6 +64,8 @@ public class BrowseBookmarks extends AppBaseActivity {
 	private String bookmarkLimit;
 	private String defaultAction;
 	
+	private String username;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -82,7 +84,7 @@ public class BrowseBookmarks extends AppBaseActivity {
 		String scheme = data.getScheme();
 		String path = data.getPath();
 		Log.d("path", path);
-		String username = data.getUserInfo();
+		username = data.getUserInfo();
 		String tagname = data.getQueryParameter("tagname");
 		String recent = data.getQueryParameter("recent");
 		
@@ -156,11 +158,11 @@ public class BrowseBookmarks extends AppBaseActivity {
 				setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
 			}
 			catch(Exception e){}
-		} else if(scheme.equals("content") && path.equals("/network")){
+		} else if(scheme.equals("content") && username.equals("network")){
 			try{
 				setTitle("My Network's Recent Bookmarks");
 				
-				bookmarkList = DeliciousFeed.fetchNetworkRecent(username);
+				bookmarkList = DeliciousFeed.fetchNetworkRecent(mAccount.name);
 
 				setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
 			}
@@ -198,6 +200,8 @@ public class BrowseBookmarks extends AppBaseActivity {
 					menu.add(Menu.NONE, 2, Menu.NONE, "Edit");
 					menu.add(Menu.NONE, 3, Menu.NONE, "Delete");
 				} else {
+					menu.add(Menu.NONE, 0, Menu.NONE, "Open in browser");
+					menu.add(Menu.NONE, 1, Menu.NONE, "View Details");
 					menu.add(Menu.NONE, 4, Menu.NONE, "Add");
 				}
 			}
@@ -260,9 +264,19 @@ public class BrowseBookmarks extends AppBaseActivity {
 		Intent viewBookmark = new Intent(this, ViewBookmark.class);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("bookmarks");
-		data.appendEncodedPath(Integer.toString(b.getId()));
+		
+		if(myself) {
+			data.appendEncodedPath(Integer.toString(b.getId()));
+		} else {
+			data.appendQueryParameter("url", b.getUrl());
+			data.appendQueryParameter("title", b.getDescription());
+			data.appendQueryParameter("notes", b.getNotes());
+			data.appendQueryParameter("tags", b.getTags());
+			data.appendQueryParameter("time", Long.toString(b.getTime()));
+			data.appendQueryParameter("account", b.getAccount());
+		}
 		viewBookmark.setData(data.build());
 		
 		Log.d("View Bookmark Uri", data.build().toString());

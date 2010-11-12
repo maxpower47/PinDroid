@@ -41,13 +41,13 @@ public final class R {
         public static final int bookmark_description=0x7f08000a;
         public static final int bookmark_tags=0x7f08000b;
         public static final int main_menu_description=0x7f080015;
-        public static final int menu_addbookmark=0x7f080022;
-        public static final int menu_mybookmarks=0x7f080023;
-        public static final int menu_settings=0x7f080024;
-        public static final int menu_view_deletebookmark=0x7f080027;
-        public static final int menu_view_editbookmark=0x7f080026;
-        public static final int menu_view_openbookmark=0x7f080025;
-        public static final int menu_view_settings=0x7f080028;
+        public static final int menu_addbookmark=0x7f080024;
+        public static final int menu_mybookmarks=0x7f080025;
+        public static final int menu_settings=0x7f080026;
+        public static final int menu_view_deletebookmark=0x7f080029;
+        public static final int menu_view_editbookmark=0x7f080028;
+        public static final int menu_view_openbookmark=0x7f080027;
+        public static final int menu_view_settings=0x7f08002a;
         public static final int message=0x7f08000c;
         public static final int message_bottom=0x7f080010;
         public static final int oauth_webview=0x7f080016;
@@ -57,6 +57,8 @@ public final class R {
         public static final int tag_name=0x7f080018;
         public static final int username_edit=0x7f08000d;
         public static final int username_fixed=0x7f08000e;
+        public static final int view_bookmark_account=0x7f080023;
+        public static final int view_bookmark_account_title=0x7f080022;
         public static final int view_bookmark_notes=0x7f08001d;
         public static final int view_bookmark_notes_title=0x7f08001c;
         public static final int view_bookmark_tags=0x7f08001f;
@@ -169,7 +171,7 @@ public final class R {
         /**  Title string for Login activity
          */
         public static final int ui_activity_title=0x7f060006;
-        public static final int view_bookmark_go_title=0x7f06002b;
+        public static final int view_bookmark_account_title=0x7f06002b;
         public static final int view_bookmark_notes_title=0x7f060028;
         public static final int view_bookmark_tags_title=0x7f060029;
         public static final int view_bookmark_time_title=0x7f06002a;

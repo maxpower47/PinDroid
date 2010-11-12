@@ -113,8 +113,7 @@ public class Main extends AppBaseActivity {
 		    		Intent i = new Intent(mContext, BrowseBookmarks.class);
 		    		Uri.Builder data = new Uri.Builder();
 		    		data.scheme(Constants.CONTENT_SCHEME);
-		    		data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
-		    		data.appendEncodedPath("network");
+		    		data.encodedAuthority("network@" + BookmarkContentProvider.AUTHORITY);
 		    		i.setData(data.build());
 		    		
 		    		Log.d("uri", data.build().toString());

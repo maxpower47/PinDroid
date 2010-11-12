@@ -82,5 +82,19 @@
 			android:layout_width="fill_parent"
 			android:textSize="6pt"
 			android:paddingLeft="20dip" />
+		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+id/view_bookmark_account_title"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			android:textSize="8pt"
+			android:paddingLeft="10dip" 
+			android:paddingTop="5dip"
+			android:text="@string/view_bookmark_account_title"/>
+		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+id/view_bookmark_account"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			android:textSize="6pt"
+			android:paddingLeft="20dip" />
 	</LinearLayout>
 </ScrollView>

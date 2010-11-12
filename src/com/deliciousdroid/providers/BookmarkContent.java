@@ -107,8 +107,12 @@ public class BookmarkContent {
         	return mLastUpdate;
         }
         
-        public Boolean getPrivate(){
+        public boolean getPrivate(){
         	return mPrivate;
+        }
+        
+        public String getAccount(){
+        	return mAccount;
         }
         
         public Bookmark() {
@@ -125,14 +129,16 @@ public class BookmarkContent {
             mNotes = notes;
         }
         
-        public Bookmark(String url, String description, String notes, String tags) {
+        public Bookmark(String url, String description, String notes, String tags, String account, long time) {
             mUrl = url;
             mDescription = description;
             mNotes = notes;
             mTags = tags;
+            mAccount = account;
+            mTime = time;
         }
         
-        public Bookmark(String url, String description, String notes, String tags, Boolean priv, long time) {
+        public Bookmark(String url, String description, String notes, String tags, boolean priv, long time) {
             mUrl = url;
             mDescription = description;
             mNotes = notes;
@@ -213,11 +219,21 @@ public class BookmarkContent {
                 final String url = userBookmark.getString("u");
                 final String description = userBookmark.getString("d");
                 final JSONArray tags = userBookmark.getJSONArray("t");
-                Log.d("bookmarkurl", url);
-                Log.d("bookmarkdescription", description);
-                Log.d("bookmarktags", tags.join(" ").replace("\"", ""));
+                final String notes = userBookmark.getString("n");
+                final String stime = userBookmark.getString("dt");
+                final String account = userBookmark.getString("a");
+                
+				Date d = new Date(0);
+				if(stime != null && stime != ""){
+					try {
+						d = DateParser.parse(stime);
+					} catch (ParseException e) {
+						Log.d("Parse error", stime);
+						e.printStackTrace();
+					}
+				}
 
-                return new Bookmark(url, description, "", tags.join(" ").replace("\"", ""));
+                return new Bookmark(url, description, notes, tags.join(" ").replace("\"", ""), account, d.getTime());
             } catch (final Exception ex) {
                 Log.i("User.Bookmark", "Error parsing JSON user object");
             }
