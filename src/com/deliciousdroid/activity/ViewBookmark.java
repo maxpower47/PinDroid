@@ -26,6 +26,8 @@ import java.util.Date;
 
 import com.deliciousdroid.Constants;
 import com.deliciousdroid.R;
+import com.deliciousdroid.action.BookmarkTaskArgs;
+import com.deliciousdroid.action.DeleteBookmarkTask;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 import com.deliciousdroid.util.DateParser;
 
@@ -91,7 +93,7 @@ public class ViewBookmark extends Activity{
 			try{		
 				int id = Integer.parseInt(data.getLastPathSegment());
 				
-				String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Time, Bookmark.Tags};
+				String[] projection = new String[] {Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Time, Bookmark.Tags, Bookmark.Hash, Bookmark.Meta};
 				String selection = BaseColumns._ID + "=" + id;
 				
 				Uri bookmarks = Bookmark.CONTENT_URI;
@@ -99,22 +101,30 @@ public class ViewBookmark extends Activity{
 				Cursor c = managedQuery(bookmarks, projection, selection, null, null);				
 				
 				if(c.moveToFirst()){
-					int idColumn = c.getColumnIndex(Bookmark._ID);
 					int urlColumn = c.getColumnIndex(Bookmark.Url);
 					int descriptionColumn = c.getColumnIndex(Bookmark.Description);
 					int notesColumn = c.getColumnIndex(Bookmark.Notes);
 					int tagsColumn = c.getColumnIndex(Bookmark.Tags);
+					int hashColumn = c.getColumnIndex(Bookmark.Hash);
+					int metaColumn = c.getColumnIndex(Bookmark.Meta);
 					int timeColumn = c.getColumnIndex(Bookmark.Time);
 					
-					id = c.getInt(idColumn);
-					
+					String url = c.getString(urlColumn);
+					String description = c.getString(descriptionColumn);
+					String notes = c.getString(notesColumn);
+					String tags = c.getString(tagsColumn);
+					String hash = c.getString(hashColumn);
+					String meta = c.getString(metaColumn);
 					long time = c.getLong(timeColumn);
+					
+					bookmark = new Bookmark(id, url, description, notes, tags, hash, meta, time);
+					
 					Date d = new Date(time);
 					
-					mTitle.setText(c.getString(descriptionColumn));
-					mUrl.setText(c.getString(urlColumn));
-					mNotes.setText(c.getString(notesColumn));
-					mTags.setText(c.getString(tagsColumn));
+					mTitle.setText(bookmark.getDescription());
+					mUrl.setText(bookmark.getUrl());
+					mNotes.setText(bookmark.getNotes());
+					mTags.setText(bookmark.getTags());
 					mTime.setText(d.toString());
 				}	
 			}
@@ -139,6 +149,10 @@ public class ViewBookmark extends Activity{
 			Intent i = new Intent(Intent.ACTION_VIEW, link);
 			startActivity(i);
 			return true;
+	    case R.id.menu_view_deletebookmark:
+			BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, account, this);	
+			new DeleteBookmarkTask().execute(args);
+			return true;	
 	    case R.id.menu_view_settings:
 			Intent prefs = new Intent(this, Preferences.class);
 			startActivity(prefs);

@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
 /*
  * DeliciousDroid - http://code.google.com/p/DeliciousDroid/
  *
@@ -20,18 +18,34 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
- -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item 
-		android:id="@+id/menu_view_openbookmark" 
-		android:title="@string/menu_view_openbookmark_title" 
-		android:icon="@drawable/ic_menu_view" />
-	<item 
-		android:id="@+id/menu_view_deletebookmark" 
-		android:title="@string/menu_view_deletebookmark_title" 
-		android:icon="@drawable/ic_menu_delete" />
-	<item 
-		android:id="@+id/menu_view_settings" 
-		android:title="@string/menu_settings_title" 
-		android:icon="@drawable/ic_menu_preferences" />
-</menu>
+
+package com.deliciousdroid.action;
+
+import android.accounts.Account;
+import android.content.Context;
+
+import com.deliciousdroid.providers.BookmarkContent.Bookmark;
+
+public class BookmarkTaskArgs{
+	private Bookmark bookmark;
+	private Account account;
+	private Context context;
+	
+	public Bookmark getBookmark(){
+		return bookmark;
+	}
+	
+	public Account getAccount(){
+		return account;
+	}
+	
+	public Context getContext(){
+		return context;
+	}
+	
+	public BookmarkTaskArgs(Bookmark b, Account a, Context c){
+		bookmark = b;
+		account = a;
+		context = c;
+	}
+}

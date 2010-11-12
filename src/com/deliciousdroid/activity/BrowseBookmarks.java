@@ -21,20 +21,15 @@
 
 package com.deliciousdroid.activity;
 
-import java.io.IOException;
 import java.util.ArrayList;
-
-import org.apache.http.auth.AuthenticationException;
 
 import com.deliciousdroid.R;
 import com.deliciousdroid.Constants;
-import com.deliciousdroid.client.DeliciousApi;
+import com.deliciousdroid.action.BookmarkTaskArgs;
+import com.deliciousdroid.action.DeleteBookmarkTask;
 import com.deliciousdroid.client.DeliciousFeed;
 import com.deliciousdroid.listadapter.BookmarkListAdapter;
-import com.deliciousdroid.platform.BookmarkManager;
-import com.deliciousdroid.platform.TagManager;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
-import com.deliciousdroid.providers.TagContent.Tag;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -43,7 +38,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -57,7 +51,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Toast;
 
 public class BrowseBookmarks extends AppBaseActivity {
 	
@@ -223,7 +216,10 @@ public class BrowseBookmarks extends AppBaseActivity {
 			
 			case 2:
 				BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, mContext);	
-				new DeleteBookmarkTask().execute(args);	
+				new DeleteBookmarkTask().execute(args);
+				
+				BookmarkListAdapter bla = (BookmarkListAdapter) lv.getAdapter();
+				bla.remove(b);
 				return true;
 				
 			case 3:				
@@ -254,74 +250,6 @@ public class BrowseBookmarks extends AppBaseActivity {
 		
 		Log.d("View Bookmark Uri", data.build().toString());
 		startActivity(viewBookmark);
-	}
-	
-	private class DeleteBookmarkTask extends AsyncTask<BookmarkTaskArgs, Integer, Boolean>{
-		private Context context;
-		private Bookmark bookmark;
-		private Account account;
-		
-		@Override
-		protected Boolean doInBackground(BookmarkTaskArgs... args) {
-			context = args[0].getContext();
-			bookmark = args[0].getBookmark();
-			account = args[0].getAccount();
-			
-			try {
-				Boolean success = DeliciousApi.deleteBookmark(bookmark, account, context);
-				if(success){
-					BookmarkManager.DeleteBookmark(args[0].getBookmark(), context);
-					return true;
-				} else return false;
-					
-			} catch (IOException e) {
-				return false;
-			} catch (AuthenticationException e) {
-				return false;
-			}
-		}
-
-	    protected void onPostExecute(Boolean result) {
-			if(result){
-    			String[] tags = bookmark.getTags().split(" ");
-    			for(String s:tags){
-    				Tag t = new Tag(s, 1);    				
-    				TagManager.UpleteTag(t, account.name, context);
-    			}
-				
-				BookmarkListAdapter bla = (BookmarkListAdapter) lv.getAdapter();
-				bla.remove(bookmark);
-				
-				Toast.makeText(context, "Bookmark Deleted Successfully", Toast.LENGTH_SHORT).show();
-			} else {
-				Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
-			}
-			
-	    }
-	}
-
-	private class BookmarkTaskArgs{
-		private Bookmark bookmark;
-		private Account account;
-		private Context context;
-		
-		public Bookmark getBookmark(){
-			return bookmark;
-		}
-		
-		public Account getAccount(){
-			return account;
-		}
-		
-		public Context getContext(){
-			return context;
-		}
-		
-		public BookmarkTaskArgs(Bookmark b, Account a, Context c){
-			bookmark = b;
-			account = a;
-			context = c;
-		}
 	}
 }
 
