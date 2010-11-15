@@ -34,6 +34,7 @@ import com.deliciousdroid.authenticator.OauthUtilities;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.auth.AuthScope;
 import android.net.Uri;
@@ -41,6 +42,7 @@ import android.net.Uri;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.ParseException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -426,6 +428,56 @@ public class NetworkUtilities {
     		throw new AuthenticationException();
     	} else throw new IOException();
 
+    }
+    
+    /**
+     * Fetches users bookmarks
+     * 
+     * @param account The account being synced.
+     * @param authtoken The authtoken stored in the AccountManager for the
+     *        account
+     * @return list The list of bookmarks received from the server.
+     * @throws AuthenticationException 
+     */
+    public static String getWebpageTitle(String url) {
+
+
+    	HttpResponse resp = null;
+    	HttpGet post = null;
+    		
+		post = new HttpGet(url);
+		maybeCreateHttpClient();
+		post.setHeader("User-Agent", "Mozilla/5.0");
+
+        try {
+			resp = mHttpClient.execute(post);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+    		String response;
+			try {
+				response = EntityUtils.toString(resp.getEntity());
+	    		Log.d("response", response);
+	    		int start = response.indexOf("<title>") + 7;
+	    		int end = response.indexOf("</title>", start + 1);
+	    		String title = response.substring(start, end);
+	    		Log.d("username", title);
+	    		return title;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	} 
+    	return null;
     }
     
     /**

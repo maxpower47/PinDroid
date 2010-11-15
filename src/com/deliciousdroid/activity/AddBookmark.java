@@ -25,7 +25,9 @@ import java.util.Date;
 
 import com.deliciousdroid.R;
 import com.deliciousdroid.Constants;
+import com.deliciousdroid.action.BookmarkTaskArgs;
 import com.deliciousdroid.client.DeliciousApi;
+import com.deliciousdroid.client.NetworkUtilities;
 import com.deliciousdroid.platform.BookmarkManager;
 import com.deliciousdroid.platform.TagManager;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
@@ -77,14 +79,14 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		context = this;
 		
 		res = getResources();
-		
-		
-		
+
 		if(savedInstanceState ==  null){
 			Intent intent = getIntent();
 			
 			if(Intent.ACTION_SEND.equals(intent.getAction())){
 				mEditUrl.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
+				
+				new GetWebpageTitleTask().execute(intent.getStringExtra(Intent.EXTRA_TEXT));
 			} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
 				int id = Integer.parseInt(intent.getData().getLastPathSegment());
 				try {
@@ -190,28 +192,19 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     		finish();
         }
     }
-
-    private class BookmarkTaskArgs{
-    	private Bookmark bookmark;
-    	private Account account;
-    	private Context context;
+    
+    public class GetWebpageTitleTask extends AsyncTask<String, Integer, String>{
+    	private String url;
     	
-    	public Bookmark getBookmark(){
-    		return bookmark;
+    	@Override
+    	protected String doInBackground(String... args) {
+    		url = args[0];
+	
+    		return NetworkUtilities.getWebpageTitle(url);
     	}
     	
-    	public Account getAccount(){
-    		return account;
-    	}
-    	
-    	public Context getContext(){
-    		return context;
-    	}
-    	
-    	public BookmarkTaskArgs(Bookmark b, Account a, Context c){
-    		bookmark = b;
-    		account = a;
-    		context = c;
-    	}
+        protected void onPostExecute(String result) {
+        	mEditDescription.setText(result);
+        }
     }
 }
