@@ -31,7 +31,7 @@
 		android:layout_height="fill_parent"
 		android:layout_width="wrap_content"
 		android:scrollHorizontally="true"
-		android:textSize="10pt"
+		android:textSize="24sp"
 		android:paddingLeft="10dip"
 		android:text="@string/add_title_url"/>
 	<EditText
@@ -46,7 +46,7 @@
 		android:layout_height="fill_parent"
 		android:layout_width="wrap_content"
 		android:scrollHorizontally="true"
-		android:textSize="10pt"
+		android:textSize="24sp"
 		android:paddingLeft="10dip"
 		android:text="@string/add_title_description"/>
 	<EditText
@@ -61,7 +61,7 @@
 		android:layout_height="fill_parent"
 		android:layout_width="wrap_content"
 		android:scrollHorizontally="true"
-		android:textSize="10pt"
+		android:textSize="24sp"
 		android:paddingLeft="10dip"
 		android:text="@string/add_title_notes"/>
 	<EditText
@@ -76,7 +76,7 @@
 		android:layout_height="fill_parent"
 		android:layout_width="wrap_content"
 		android:scrollHorizontally="true"
-		android:textSize="10pt"
+		android:textSize="24sp"
 		android:paddingLeft="10dip"
 		android:text="@string/add_title_tags"/>
 	<EditText

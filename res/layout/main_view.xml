@@ -26,5 +26,5 @@
 	android:layout_height="wrap_content"
 	android:layout_width="fill_parent"
 	android:scrollHorizontally="true"
-	android:textSize="12pt"
+	android:textSize="28sp"
 	android:padding="10dip"/>

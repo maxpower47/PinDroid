@@ -31,7 +31,7 @@
 	    android:paddingLeft="10dip"
 	    android:paddingTop="3dip"
 	    android:paddingBottom="5dip"
-	    android:textSize="12pt"/>
+	    android:textSize="28sp"/>
   	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   		android:orientation="horizontal"
   		android:layout_width="fill_parent"
@@ -42,7 +42,7 @@
 		    android:layout_height="fill_parent"
 		    android:layout_width="wrap_content"
 		    android:gravity="right"
-		    android:textSize="10pt"
+		    android:textSize="26sp"
 		    android:paddingTop="6dip"
 		    android:paddingRight="15dip"/>
 	</LinearLayout>

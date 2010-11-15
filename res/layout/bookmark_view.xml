@@ -36,7 +36,7 @@
 		    android:scrollHorizontally="true"
 		    android:singleLine="true"
 		    android:ellipsize="end"
-		    android:textSize="8pt"
+		    android:textSize="22sp"
 		    android:paddingLeft="5dip"
 		    android:paddingRight="10dip"/>
 		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -44,7 +44,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_width="wrap_content"
 		    android:scrollHorizontally="false"
-		    android:textSize="5pt"
+		    android:textSize="16sp"
 		    android:paddingLeft="10dip"
 		    android:paddingRight="10dip"/>
 	</LinearLayout>
