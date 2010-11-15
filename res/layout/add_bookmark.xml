@@ -21,80 +21,79 @@
  * USA
  */
  -->
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="wrap_content"
-  android:orientation="vertical">
-  	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/add_title_url"
-		android:layout_height="fill_parent"
-		android:layout_width="wrap_content"
-		android:scrollHorizontally="true"
-		android:textSize="24sp"
-		android:paddingLeft="10dip"
-		android:text="@string/add_title_url"/>
-	<EditText
-	    android:id="@+id/add_edit_url"
-	    android:inputType="textUri"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_weight="1"
-	    android:singleLine="true" /> 
-	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/add_title_description"
-		android:layout_height="fill_parent"
-		android:layout_width="wrap_content"
-		android:scrollHorizontally="true"
-		android:textSize="24sp"
-		android:paddingLeft="10dip"
-		android:text="@string/add_title_description"/>
-	<EditText
-	    android:id="@+id/add_edit_description"
-	    android:inputType="text"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_weight="1"
-	    android:singleLine="true" />
-	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/add_title_notes"
-		android:layout_height="fill_parent"
-		android:layout_width="wrap_content"
-		android:scrollHorizontally="true"
-		android:textSize="24sp"
-		android:paddingLeft="10dip"
-		android:text="@string/add_title_notes"/>
-	<EditText
-	    android:id="@+id/add_edit_notes"
-	    android:inputType="text"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_weight="1"
-	    android:singleLine="true" />
-	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/add_title_tags"
-		android:layout_height="fill_parent"
-		android:layout_width="wrap_content"
-		android:scrollHorizontally="true"
-		android:textSize="24sp"
-		android:paddingLeft="10dip"
-		android:text="@string/add_title_tags"/>
-	<EditText
-	    android:id="@+id/add_edit_tags"
-	    android:inputType="text"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_weight="1"
-	    android:singleLine="true" />
-	<CheckBox 
-		android:id="@+id/add_edit_private"
- 		android:text="Private?"
- 		android:layout_width="wrap_content"
- 		android:layout_height="wrap_content" />  
-    <Button
-        android:id="@+id/add_button_save"
-        android:layout_width="120dip"
-        android:layout_height="wrap_content"
-        android:text="@string/add_button_save"
-        android:layout_weight="1" />
-</LinearLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:layout_weight="1">
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	  	android:layout_width="fill_parent"
+	 	android:layout_height="wrap_content"
+	  	android:orientation="vertical">
+	  	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+id/add_title_url"
+			android:layout_height="fill_parent"
+			android:layout_width="wrap_content"
+			android:scrollHorizontally="true"
+			android:textSize="24sp"
+			android:paddingLeft="10dip"
+			android:text="@string/add_title_url"/>
+		<EditText
+		    android:id="@+id/add_edit_url"
+		    android:inputType="textUri"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:singleLine="true" /> 
+		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+id/add_title_description"
+			android:layout_height="fill_parent"
+			android:layout_width="wrap_content"
+			android:scrollHorizontally="true"
+			android:textSize="24sp"
+			android:paddingLeft="10dip"
+			android:text="@string/add_title_description"/>
+		<EditText
+		    android:id="@+id/add_edit_description"
+		    android:inputType="text"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:singleLine="true" />
+		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+id/add_title_notes"
+			android:layout_height="fill_parent"
+			android:layout_width="wrap_content"
+			android:scrollHorizontally="true"
+			android:textSize="24sp"
+			android:paddingLeft="10dip"
+			android:text="@string/add_title_notes"/>
+		<EditText
+		    android:id="@+id/add_edit_notes"
+		    android:inputType="text"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:singleLine="true" />
+		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+id/add_title_tags"
+			android:layout_height="fill_parent"
+			android:layout_width="wrap_content"
+			android:scrollHorizontally="true"
+			android:textSize="24sp"
+			android:paddingLeft="10dip"
+			android:text="@string/add_title_tags"/>
+		<EditText
+		    android:id="@+id/add_edit_tags"
+		    android:inputType="text"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:singleLine="true" />
+		<CheckBox 
+			android:id="@+id/add_edit_private"
+	 		android:text="Private?"
+	 		android:layout_width="wrap_content"
+	 		android:layout_height="wrap_content" />  
+	    <Button
+	        android:id="@+id/add_button_save"
+	        android:layout_width="120dip"
+	        android:layout_height="wrap_content"
+	        android:text="@string/add_button_save" />
+	</LinearLayout>
+</ScrollView>
