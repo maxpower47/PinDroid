@@ -32,6 +32,7 @@ import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.MatrixCursor;
@@ -40,6 +41,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.util.Log;
 
@@ -51,7 +53,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	private SQLiteDatabase db;
 	private DatabaseHelper dbHelper;
 	private static final String DATABASE_NAME = "DeliciousBookmarks.db";
-	private static final int DATABASE_VERSION = 15;
+	private static final int DATABASE_VERSION = 17;
 	private static final String BOOKMARK_TABLE_NAME = "bookmark";
 	private static final String TAG_TABLE_NAME = "tag";
 	
@@ -65,8 +67,11 @@ public class BookmarkContentProvider extends ContentProvider {
 	
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		
+		private Context mContext;
+		
 		DatabaseHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+			mContext = context;
 		}
 
 		@Override
@@ -96,6 +101,12 @@ public class BookmarkContentProvider extends ContentProvider {
 		public void onUpgrade(SQLiteDatabase sqlDb, int oldVersion, int newVersion) {
 			sqlDb.execSQL("DROP TABLE IF EXISTS " + BOOKMARK_TABLE_NAME);
 			sqlDb.execSQL("DROP TABLE IF EXISTS " + TAG_TABLE_NAME);
+			
+			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+    		SharedPreferences.Editor editor = settings.edit();
+    		editor.putLong(Constants.PREFS_LAST_SYNC, 0);
+            editor.commit();
+			
 			onCreate(sqlDb);	
 		}
 	}
