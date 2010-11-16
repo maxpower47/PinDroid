@@ -244,10 +244,10 @@ public class DeliciousFeed {
      *        account
      * @return list The list of bookmarks received from the server.
      */
-    public static ArrayList<Bookmark> fetchNetworkRecent(String userName)
+    public static ArrayList<Bookmark> fetchNetworkRecent(String userName, int limit)
     	throws JSONException, ParseException, IOException, AuthenticationException {
 
-        final HttpGet post = new HttpGet(FETCH_NETWORK_RECENT_BOOKMARKS_URI + userName + "?count=30");
+        final HttpGet post = new HttpGet(FETCH_NETWORK_RECENT_BOOKMARKS_URI + userName + "?count=" + limit);
         maybeCreateHttpClient();
         
         final ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();

@@ -21,7 +21,12 @@
 
 package com.deliciousdroid.activity;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.apache.http.ParseException;
+import org.apache.http.auth.AuthenticationException;
+import org.json.JSONException;
 
 import com.deliciousdroid.R;
 import com.deliciousdroid.Constants;
@@ -34,11 +39,13 @@ import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -153,18 +160,14 @@ public class BrowseBookmarks extends AppBaseActivity {
 					setTitle("Bookmarks For " + username);
 				}
 		    	
-				bookmarkList = DeliciousFeed.fetchFriendBookmarks(username, tagname, Integer.parseInt(bookmarkLimit));
-
-				setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
+				new LoadBookmarkFeedTask().execute(username, tagname);
 			}
 			catch(Exception e){}
 		} else if(scheme.equals("content") && username.equals("network")){
 			try{
 				setTitle("My Network's Recent Bookmarks");
 				
-				bookmarkList = DeliciousFeed.fetchNetworkRecent(mAccount.name);
-
-				setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
+				new LoadBookmarkFeedTask().execute("network");
 			}
 			catch(Exception e){}
 		} else if(scheme.equals("http") || scheme.equals("https")) {
@@ -282,6 +285,57 @@ public class BrowseBookmarks extends AppBaseActivity {
 		Log.d("View Bookmark Uri", data.build().toString());
 		startActivity(viewBookmark);
 	}
+	
+    public class LoadBookmarkFeedTask extends AsyncTask<String, Integer, Boolean>{
+    	private String user;
+    	private String tag = null;
+    	private ArrayList<Bookmark> bookmarkList;
+    	private ProgressDialog progress;
+    	
+    	protected void onPreExecute() {
+    		progress = ProgressDialog.show(mContext, "", "Loading. Please wait...", true);
+    	}
+    	
+    	@Override
+    	protected Boolean doInBackground(String... args) {
+    		user = args[0];
+    		
+    		if(args.length > 1)
+    			tag = args[1];
+    		
+    		bookmarkList = new ArrayList<Bookmark>();
+    		boolean result = false;
+    		
+			try {
+				if(user.equals("network")) {
+					bookmarkList = DeliciousFeed.fetchNetworkRecent(mAccount.name, Integer.parseInt(bookmarkLimit));
+				} else {
+					bookmarkList = DeliciousFeed.fetchFriendBookmarks(user, tag, Integer.parseInt(bookmarkLimit));
+				}
+				result = true;
+			} catch (AuthenticationException e) {
+				e.printStackTrace();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	
+    		return result;
+    	}
+    	
+        protected void onPostExecute(Boolean result) {
+        	progress.dismiss();
+        	
+        	if(result) {
+        		setListAdapter(new BookmarkListAdapter(mContext, R.layout.bookmark_view, bookmarkList));
+        	}
+        }
+    }
 }
+
+
 
 
