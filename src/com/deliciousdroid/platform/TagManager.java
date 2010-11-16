@@ -43,12 +43,13 @@ public class TagManager {
 	
 	public static void UpsertTag(Tag tag, String account, Context context){
 		String[] projection = new String[] {Tag.Name, Tag.Count};
-		String selection = Tag.Name + "='" + tag.getTagName() + "' AND " +
-			Tag.Account + " = '" + account + "'";
+		String selection = Tag.Name + "=? AND " +
+			Tag.Account + "=?";
+		String[] selectionargs = new String[]{tag.getTagName(), account};
 		Uri tags = Tag.CONTENT_URI;
 		
 		ContentResolver cr = context.getContentResolver();
-		Cursor c = cr.query(tags, projection, selection, null, null);
+		Cursor c = cr.query(tags, projection, selection, selectionargs, null);
 		
 		if(c.moveToFirst()){
 			int countColumn = c.getColumnIndex(Tag.Count);
@@ -64,25 +65,27 @@ public class TagManager {
 	
 	public static void UpdateTag(Tag tag, String account, Context context){
 		
-		String selection = Tag.Name + "='" + tag.getTagName() + "' AND " +
-							Tag.Account + " = '" + account + "'";
+		String selection = Tag.Name + "=? AND " +
+							Tag.Account + "=?";
+		String[] selectionargs = new String[]{tag.getTagName(), account};
 		
 		ContentValues values = new ContentValues();
 		
 		values.put(Tag.Count, tag.getCount());
 		
-		context.getContentResolver().update(Tag.CONTENT_URI, values, selection, null);
+		context.getContentResolver().update(Tag.CONTENT_URI, values, selection, selectionargs);
 		
 	}
 	
 	public static void UpleteTag(Tag tag, String account, Context context){
 		String[] projection = new String[] {Tag.Name, Tag.Count};
-		String selection = Tag.Name + "='" + tag.getTagName() + "' AND " +
-			Tag.Account + " = '" + account + "'";
+		String selection = Tag.Name + "=? AND " +
+			Tag.Account + "=?";
+		String[] selectionargs = new String[]{tag.getTagName(), account};
 		Uri tags = Tag.CONTENT_URI;
 		
 		ContentResolver cr = context.getContentResolver();
-		Cursor c = cr.query(tags, projection, selection, null, null);
+		Cursor c = cr.query(tags, projection, selection, selectionargs, null);
 		
 		if(c.moveToFirst()){
 			int countColumn = c.getColumnIndex(Tag.Count);
@@ -100,16 +103,18 @@ public class TagManager {
 
 	public static void DeleteTag(Tag tag, String account, Context context){
 		
-		String selection = Tag.Name + "='" + tag.getTagName() + "' AND " +
-			Tag.Account + " = '" + account + "'";
+		String selection = Tag.Name + "=? AND " +
+			Tag.Account + "=?";
+		String[] selectionargs = new String[]{tag.getTagName(), account};
 		
-		context.getContentResolver().delete(Tag.CONTENT_URI, selection, null);
+		context.getContentResolver().delete(Tag.CONTENT_URI, selection, selectionargs);
 	}
 	
 	public static void TruncateTags(String account, Context context){
 		
-		String selection = Tag.Account + " = '" + account + "'";
+		String selection = Tag.Account + "=?";
+		String[] selectionargs = new String[]{account};
 		
-		context.getContentResolver().delete(Tag.CONTENT_URI, selection, null);
+		context.getContentResolver().delete(Tag.CONTENT_URI, selection, selectionargs);
 	}
 }

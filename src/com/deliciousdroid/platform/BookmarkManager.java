@@ -79,16 +79,18 @@ public class BookmarkManager {
 			} while(c.moveToNext());
 				
 		}
+		c.close();
 		return bookmarkList;
 	}
 	
 	public static Bookmark GetById(int id, Context context) throws ContentNotFoundException {		
 		String[] projection = new String[] {Bookmark.Account, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Time, Bookmark.Tags, Bookmark.Hash, Bookmark.Meta};
-		String selection = BaseColumns._ID + "=" + id;
+		String selection = BaseColumns._ID + "=?";
+		String[] selectionargs = new String[]{Integer.toString(id)};
 		
 		Uri bookmarks = Bookmark.CONTENT_URI;
 		
-		Cursor c = context.getContentResolver().query(bookmarks, projection, selection, null, null);				
+		Cursor c = context.getContentResolver().query(bookmarks, projection, selection, selectionargs, null);				
 		
 		if(c.moveToFirst()){
 			int accountColumn = c.getColumnIndex(Bookmark.Account);
@@ -181,13 +183,14 @@ public class BookmarkManager {
 	
 	public static void SetLastUpdate(Bookmark bookmark, Long lastUpdate, String account, Context context){
 		
-		String selection = Bookmark.Hash + "='" + bookmark.getHash() + "' AND " +
-							Bookmark.Account + " = '" + account + "'";
+		String selection = Bookmark.Hash + "=? AND " +
+							Bookmark.Account + "=?";
+		String[] selectionargs = new String[]{bookmark.getHash(), account};
 		
 		ContentValues values = new ContentValues();	
 		values.put(Bookmark.LastUpdate, lastUpdate);
 		
-		context.getContentResolver().update(Bookmark.CONTENT_URI, values, selection, null);
+		context.getContentResolver().update(Bookmark.CONTENT_URI, values, selection, selectionargs);
 	}
 	
 	public static void DeleteOldBookmarks(Long lastUpdate, String account, Context context){
