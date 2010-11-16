@@ -272,6 +272,7 @@ public class DeliciousFeed {
                 throw new IOException();
             }
         }
+
         return bookmarkList;
     }
 }

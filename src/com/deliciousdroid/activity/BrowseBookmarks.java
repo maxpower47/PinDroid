@@ -34,6 +34,7 @@ import com.deliciousdroid.action.BookmarkTaskArgs;
 import com.deliciousdroid.action.DeleteBookmarkTask;
 import com.deliciousdroid.client.DeliciousFeed;
 import com.deliciousdroid.listadapter.BookmarkListAdapter;
+import com.deliciousdroid.platform.BookmarkManager;
 import com.deliciousdroid.providers.BookmarkContentProvider;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 
@@ -88,7 +89,6 @@ public class BrowseBookmarks extends AppBaseActivity {
 		
 		Log.d("browse bookmarks", getIntent().getDataString());
 		Uri data = getIntent().getData();
-		String scheme = data.getScheme();
 		String path = data.getPath();
 		Log.d("path", path);
 		username = data.getUserInfo();
@@ -99,60 +99,19 @@ public class BrowseBookmarks extends AppBaseActivity {
 		
 		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 		
-		if(scheme.equals("content") && path.equals("/bookmarks") && myself){
-			
-			try{	
-				if(tagname != null && tagname != "") {
-					setTitle("My Bookmarks Tagged With " + tagname);
-				} else {
-					setTitle("My Bookmarks");
-				}
-				
-				String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, 
-						Bookmark.Meta, Bookmark.Tags};
-				String selection = null;
-				String sortorder = null;
-				
-				if(tagname != null && tagname != "") {
-					selection = "(" + Bookmark.Tags + " LIKE '% " + tagname + " %' OR " +
-						Bookmark.Tags + " LIKE '% " + tagname + "' OR " +
-						Bookmark.Tags + " LIKE '" + tagname + " %' OR " +
-						Bookmark.Tags + " = '" + tagname + "') AND " +
-						Bookmark.Account + " = '" + username + "'";
-				}
-				
-				if(recent != null && recent.equals("1")){
-					sortorder = Bookmark.Time + " DESC";
-				}
-				
-				Uri bookmarks = Bookmark.CONTENT_URI;
-				
-				Cursor c = managedQuery(bookmarks, projection, selection, null, sortorder);				
-				
-				if(c.moveToFirst()){
-					int idColumn = c.getColumnIndex(Bookmark._ID);
-					int urlColumn = c.getColumnIndex(Bookmark.Url);
-					int descriptionColumn = c.getColumnIndex(Bookmark.Description);
-					int tagsColumn = c.getColumnIndex(Bookmark.Tags);
-					int metaColumn = c.getColumnIndex(Bookmark.Meta);
-					
-					do {
-						
-						Bookmark b = new Bookmark(c.getInt(idColumn), "", c.getString(urlColumn), 
-								c.getString(descriptionColumn), "", c.getString(tagsColumn), "", 
-								c.getString(metaColumn), 0);
-						
-						bookmarkList.add(b);
-						
-					} while(c.moveToNext());
-						
-				}
-
-				setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
+		if(path.equals("/bookmarks") && myself){
+			if(tagname != null && tagname != "") {
+				setTitle("My Bookmarks Tagged With " + tagname);
+			} else {
+				setTitle("My Bookmarks");
 			}
-			catch(Exception e){}
 			
-		} else if(scheme.equals("content") && path.equals("/bookmarks")) {
+			bookmarkList = BookmarkManager.GetBookmarks(username, tagname, this);
+
+			setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
+
+			
+		} else if(path.equals("/bookmarks")) {
 			try{
 				if(tagname != null && tagname != "") {
 					setTitle("Bookmarks For " + username + " Tagged With " + tagname);
@@ -163,19 +122,13 @@ public class BrowseBookmarks extends AppBaseActivity {
 				new LoadBookmarkFeedTask().execute(username, tagname);
 			}
 			catch(Exception e){}
-		} else if(scheme.equals("content") && username.equals("network")){
+		} else if(username.equals("network")){
 			try{
 				setTitle("My Network's Recent Bookmarks");
 				
 				new LoadBookmarkFeedTask().execute("network");
 			}
 			catch(Exception e){}
-		} else if(scheme.equals("http") || scheme.equals("https")) {
-			String url = data.toString();
-			Intent i = new Intent(Intent.ACTION_VIEW);
-			i.setData(Uri.parse(url));
-			startActivity(i);
-			finish();
 		}
 		
 		lv = getListView();
@@ -293,7 +246,11 @@ public class BrowseBookmarks extends AppBaseActivity {
     	private ProgressDialog progress;
     	
     	protected void onPreExecute() {
-    		progress = ProgressDialog.show(mContext, "", "Loading. Please wait...", true);
+    		progress = new ProgressDialog(mContext);
+    		progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+    		progress.setMessage("Loading. Please wait...");
+    		progress.setCancelable(true);
+    		progress.show();
     	}
     	
     	@Override
@@ -335,7 +292,3 @@ public class BrowseBookmarks extends AppBaseActivity {
         }
     }
 }
-
-
-
-

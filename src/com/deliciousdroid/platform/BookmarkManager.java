@@ -21,6 +21,8 @@
 
 package com.deliciousdroid.platform;
 
+import java.util.ArrayList;
+
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 import com.deliciousdroid.providers.ContentNotFoundException;
 import com.deliciousdroid.util.Md5Hash;
@@ -33,6 +35,52 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 public class BookmarkManager {
+	
+	public static ArrayList<Bookmark> GetBookmarks(String username, String tagname, Context context){
+		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
+		String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, 
+				Bookmark.Meta, Bookmark.Tags};
+		String selection = null;
+		String[] selectionargs = new String[]{username};
+		String sortorder = null;
+		
+		if(tagname != null && tagname != "") {
+			selection = "(" + Bookmark.Tags + " LIKE '% " + tagname + " %' OR " +
+				Bookmark.Tags + " LIKE '% " + tagname + "' OR " +
+				Bookmark.Tags + " LIKE '" + tagname + " %' OR " +
+				Bookmark.Tags + " = '" + tagname + "') AND " +
+				Bookmark.Account + "=?";
+		} else {
+			selection = Bookmark.Account + "=?";
+		}
+		
+		
+		sortorder = Bookmark.Time + " DESC";
+		
+		Uri bookmarks = Bookmark.CONTENT_URI;
+		
+		Cursor c = context.getContentResolver().query(bookmarks, projection, selection, selectionargs, sortorder);				
+		
+		if(c.moveToFirst()){
+			int idColumn = c.getColumnIndex(Bookmark._ID);
+			int urlColumn = c.getColumnIndex(Bookmark.Url);
+			int descriptionColumn = c.getColumnIndex(Bookmark.Description);
+			int tagsColumn = c.getColumnIndex(Bookmark.Tags);
+			int metaColumn = c.getColumnIndex(Bookmark.Meta);
+			
+			do {
+				
+				Bookmark b = new Bookmark(c.getInt(idColumn), "", c.getString(urlColumn), 
+						c.getString(descriptionColumn), "", c.getString(tagsColumn), "", 
+						c.getString(metaColumn), 0);
+				
+				bookmarkList.add(b);
+				
+			} while(c.moveToNext());
+				
+		}
+		return bookmarkList;
+	}
 	
 	public static Bookmark GetById(int id, Context context) throws ContentNotFoundException {		
 		String[] projection = new String[] {Bookmark.Account, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Time, Bookmark.Tags, Bookmark.Hash, Bookmark.Meta};
