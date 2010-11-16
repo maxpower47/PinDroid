@@ -74,7 +74,6 @@ public class TagManager {
 		values.put(Tag.Count, tag.getCount());
 		
 		context.getContentResolver().update(Tag.CONTENT_URI, values, selection, selectionargs);
-		
 	}
 	
 	public static void UpleteTag(Tag tag, String account, Context context){

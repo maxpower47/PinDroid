@@ -159,8 +159,9 @@ public class BookmarkManager {
 			Log.d(url, hash);
 		} else hash = bookmark.getHash();
 		
-		String selection = Bookmark.Hash + "='" + hash + "' AND " +
-							Bookmark.Account + " = '" + account + "'";
+		String selection = Bookmark.Hash + "=? AND " +
+							Bookmark.Account + "=?";
+		String[] selectionargs = new String[]{hash, account};
 		
 		ContentValues values = new ContentValues();
 		values.put(Bookmark.Description, bookmark.getDescription());
@@ -170,8 +171,7 @@ public class BookmarkManager {
 		values.put(Bookmark.Meta, bookmark.getMeta());
 		values.put(Bookmark.Time, bookmark.getTime());
 		
-		context.getContentResolver().update(Bookmark.CONTENT_URI, values, selection, null);
-		
+		context.getContentResolver().update(Bookmark.CONTENT_URI, values, selection, selectionargs);
 	}
 
 	public static void DeleteBookmark(Bookmark bookmark, Context context){
@@ -194,12 +194,11 @@ public class BookmarkManager {
 	}
 	
 	public static void DeleteOldBookmarks(Long lastUpdate, String account, Context context){
-		String selection = "(" + Bookmark.LastUpdate + "<" + Long.toString(lastUpdate) + " OR " +
-		Bookmark.LastUpdate + " is null) AND " +
-		Bookmark.Account + " = '" + account + "'";
-		
-		Log.d("DeleteOldSelection", selection);
-		
-		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, null);
+		String selection = "(" + Bookmark.LastUpdate + "<? OR " +
+			Bookmark.LastUpdate + " is null) AND " +
+			Bookmark.Account + "=?";
+		String[] selectionargs = new String[]{Long.toString(lastUpdate), account};
+
+		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, selectionargs);
 	}
 }
