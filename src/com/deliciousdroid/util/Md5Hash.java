@@ -35,8 +35,12 @@ public class Md5Hash {
 	        
 	        // Create Hex String
 	        StringBuffer hexString = new StringBuffer();
-	        for (int i=0; i<messageDigest.length; i++)
-	            hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+	        for (int i = 0; i < messageDigest.length; i++) {
+                String h = Integer.toHexString(0xFF & messageDigest[i]);
+                while (h.length() < 2) h = "0" + h;
+                    hexString.append(h);
+	        }
+
 	        return hexString.toString();
 	        
 	    } catch (NoSuchAlgorithmException e) {
