@@ -228,6 +228,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		
 		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
 		
+		// Tag search suggestions
 		SQLiteQueryBuilder tagqb = new SQLiteQueryBuilder();	
 		tagqb.setTables(TAG_TABLE_NAME);
 		
@@ -245,9 +246,10 @@ public class BookmarkContentProvider extends ContentProvider {
 			int nameColumn = c.getColumnIndex(Tag.Name);
 
 			do {
-				Uri.Builder data = Constants.CONTENT_URI_BASE.buildUpon();
+				Uri.Builder data = new Uri.Builder();
+				data.scheme(Constants.CONTENT_SCHEME);
+				data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
 				data.appendEncodedPath("bookmarks");
-				data.appendQueryParameter("username", mAccount.name);
 				data.appendQueryParameter("tagname", c.getString(nameColumn));
 				
 				mc.addRow(new Object[] {i++, c.getString(nameColumn), data.build().toString()});
@@ -256,6 +258,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		}
 		c.close();
 		
+		// Title/description search suggestions
 		SQLiteQueryBuilder bookmarkqb = new SQLiteQueryBuilder();	
 		bookmarkqb.setTables(BOOKMARK_TABLE_NAME);
 		
@@ -269,10 +272,16 @@ public class BookmarkContentProvider extends ContentProvider {
 		
 		if(bookmarkc.moveToFirst()){
 			int descColumn = bookmarkc.getColumnIndex(Bookmark.Description);
-			int urlColumn = bookmarkc.getColumnIndex(Bookmark.Url);
+			int idColumn = bookmarkc.getColumnIndex(BaseColumns._ID);
 
 			do {			
-				mc.addRow(new Object[] {j++, bookmarkc.getString(descColumn), bookmarkc.getString(urlColumn)});
+				Uri.Builder data = new Uri.Builder();
+				data.scheme(Constants.CONTENT_SCHEME);
+				data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
+				data.appendEncodedPath("bookmarks");
+				data.appendEncodedPath(bookmarkc.getString(idColumn));
+				
+				mc.addRow(new Object[] {j++, bookmarkc.getString(descColumn), data});
 				
 			} while(bookmarkc.moveToNext());	
 		}

@@ -49,6 +49,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -129,6 +130,8 @@ public class BrowseBookmarks extends AppBaseActivity {
 				new LoadBookmarkFeedTask().execute("network");
 			}
 			catch(Exception e){}
+		} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
+			viewBookmark(Integer.parseInt(data.getLastPathSegment()));	
 		}
 		
 		lv = getListView();
@@ -214,6 +217,11 @@ public class BrowseBookmarks extends AppBaseActivity {
 		Intent i = new Intent(Intent.ACTION_VIEW, link);
 		
 		startActivity(i);
+	}
+	
+	private void viewBookmark(int id) {
+		Bookmark b = new Bookmark(id);
+		viewBookmark(b);
 	}
 	
 	private void viewBookmark(Bookmark b) {
