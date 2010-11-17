@@ -24,8 +24,8 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.deliciousdroid"
-    android:versionCode="6"
-    android:versionName="0.3.0">
+    android:versionCode="7"
+    android:versionName="0.3.1">
     <uses-sdk android:minSdkVersion="5" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -72,7 +72,7 @@
             <intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
         	</intent-filter>
-        	<meta-data android:name="android.app.searchable" android:resource="@xml/searchable"/>
+        	<meta-data android:name="android.app.searchable" android:resource="@xml/bookmark_searchable"/>
         </activity>
         <activity android:name=".activity.ViewBookmark" />
         <activity android:name=".activity.AddBookmark">

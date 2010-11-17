@@ -89,8 +89,9 @@
     <string name="add_title_description">Description</string>
     <string name="add_title_notes">Notes</string>
     <string name="add_title_tags">Tags</string>
-    <string name="tag_search_label">Tag</string>
-    <string name="tag_search_hint">Hint</string>
+    <string name="bookmark_search_label">Delicious</string>
+    <string name="bookmark_search_hint">Tags, Titles, Notes</string>
+    <string name="bookmark_search_description">Tags, titles, and notes</string>
     <string name="tag_search_text">Search Delicious</string>
     
     <string name="add_bookmark_success_msg">Bookmark Added Successfully</string>

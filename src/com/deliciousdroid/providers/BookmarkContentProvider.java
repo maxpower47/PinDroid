@@ -246,6 +246,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		
 		if(c.moveToFirst()){
 			int nameColumn = c.getColumnIndex(Tag.Name);
+			int countColumn = c.getColumnIndex(Tag.Count);
 
 			do {
 				Uri.Builder data = new Uri.Builder();
@@ -254,8 +255,11 @@ public class BookmarkContentProvider extends ContentProvider {
 				data.appendEncodedPath("bookmarks");
 				data.appendQueryParameter("tagname", c.getString(nameColumn));
 				
+				int count = c.getInt(countColumn);
+				
 				suggestions.add(new SearchSuggestionContent(c.getString(nameColumn), 
-					"", R.drawable.icon, R.drawable.tag, data.build().toString()));
+					Integer.toString(count) + " bookmark" + (count > 1 ? "s" : ""),
+					R.drawable.icon, R.drawable.tag, data.build().toString()));
 				
 			} while(c.moveToNext());	
 		}

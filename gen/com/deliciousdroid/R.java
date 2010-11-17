@@ -89,8 +89,8 @@ public final class R {
         public static final int view_menu=0x7f070001;
     }
     public static final class string {
-        public static final int add_bookmark_error_msg=0x7f060027;
-        public static final int add_bookmark_success_msg=0x7f060025;
+        public static final int add_bookmark_error_msg=0x7f060028;
+        public static final int add_bookmark_success_msg=0x7f060026;
         public static final int add_button_save=0x7f06001d;
         public static final int add_title_description=0x7f06001f;
         public static final int add_title_notes=0x7f060020;
@@ -99,14 +99,17 @@ public final class R {
         /**  Button for going to the previous screen or step 
          */
         public static final int back_button_label=0x7f060012;
+        public static final int bookmark_search_description=0x7f060024;
+        public static final int bookmark_search_hint=0x7f060023;
+        public static final int bookmark_search_label=0x7f060022;
         /**  Button to cancel the current operation 
          */
         public static final int cancel_button_label=0x7f060013;
-        public static final int dialog_no_account_text=0x7f060036;
-        public static final int dialog_no_account_title=0x7f060035;
-        public static final int dialog_yahoo_not_linked_text=0x7f060038;
-        public static final int dialog_yahoo_not_linked_title=0x7f060037;
-        public static final int edit_bookmark_success_msg=0x7f060026;
+        public static final int dialog_no_account_text=0x7f060037;
+        public static final int dialog_no_account_title=0x7f060036;
+        public static final int dialog_yahoo_not_linked_text=0x7f060039;
+        public static final int dialog_yahoo_not_linked_title=0x7f060038;
+        public static final int edit_bookmark_success_msg=0x7f060027;
         /**  Label for this package 
          */
         public static final int label=0x7f060000;
@@ -152,22 +155,20 @@ public final class R {
         /**  Permission label 
          */
         public static final int permlab_samplesyncadapterAuthPassword=0x7f060001;
-        public static final int pref_contact_bookamrk_results_summary=0x7f060034;
-        public static final int pref_contact_bookmark_results_key=0x7f060033;
-        public static final int pref_contact_bookmark_results_title=0x7f060032;
-        public static final int pref_notification_key=0x7f06002d;
-        public static final int pref_notification_summary=0x7f06002e;
-        public static final int pref_notification_title=0x7f06002c;
-        public static final int pref_view_bookmark_default_action_key=0x7f060030;
-        public static final int pref_view_bookmark_default_action_summary=0x7f060031;
-        public static final int pref_view_bookmark_default_action_title=0x7f06002f;
+        public static final int pref_contact_bookamrk_results_summary=0x7f060035;
+        public static final int pref_contact_bookmark_results_key=0x7f060034;
+        public static final int pref_contact_bookmark_results_title=0x7f060033;
+        public static final int pref_notification_key=0x7f06002e;
+        public static final int pref_notification_summary=0x7f06002f;
+        public static final int pref_notification_title=0x7f06002d;
+        public static final int pref_view_bookmark_default_action_key=0x7f060031;
+        public static final int pref_view_bookmark_default_action_summary=0x7f060032;
+        public static final int pref_view_bookmark_default_action_title=0x7f060030;
         public static final int profile_action=0x7f060014;
         /**  Button that takes the user to the "sign in" screen 
          */
         public static final int sign_in_button_label=0x7f060011;
-        public static final int tag_search_hint=0x7f060023;
-        public static final int tag_search_label=0x7f060022;
-        public static final int tag_search_text=0x7f060024;
+        public static final int tag_search_text=0x7f060025;
         public static final int titleMain=0x7f060016;
         /**  Message shown in progress dialog while app connects to the server 
          */
@@ -175,19 +176,19 @@ public final class R {
         /**  Title string for Login activity
          */
         public static final int ui_activity_title=0x7f060006;
-        public static final int view_bookmark_account_title=0x7f06002b;
-        public static final int view_bookmark_notes_title=0x7f060028;
-        public static final int view_bookmark_tags_title=0x7f060029;
-        public static final int view_bookmark_time_title=0x7f06002a;
+        public static final int view_bookmark_account_title=0x7f06002c;
+        public static final int view_bookmark_notes_title=0x7f060029;
+        public static final int view_bookmark_tags_title=0x7f06002a;
+        public static final int view_bookmark_time_title=0x7f06002b;
         public static final int view_profile=0x7f060015;
     }
     public static final class xml {
         public static final int account_preferences=0x7f040000;
         public static final int authenticator=0x7f040001;
-        public static final int bookmarksyncadapter=0x7f040002;
-        public static final int contacts=0x7f040003;
-        public static final int contactsyncadapter=0x7f040004;
-        public static final int preferences=0x7f040005;
-        public static final int searchable=0x7f040006;
+        public static final int bookmark_searchable=0x7f040002;
+        public static final int bookmarksyncadapter=0x7f040003;
+        public static final int contacts=0x7f040004;
+        public static final int contactsyncadapter=0x7f040005;
+        public static final int preferences=0x7f040006;
     }
 }
