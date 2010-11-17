@@ -244,8 +244,6 @@ public class BookmarkContentProvider extends ContentProvider {
 
 		Cursor c = tagqb.query(rdb, projection, selection, null, null, null, null);
 		
-
-		
 		if(c.moveToFirst()){
 			int nameColumn = c.getColumnIndex(Tag.Name);
 
@@ -263,11 +261,12 @@ public class BookmarkContentProvider extends ContentProvider {
 		}
 		c.close();
 		
-		// Title/description search suggestions
+		// Title/description/notes search suggestions
 		SQLiteQueryBuilder bookmarkqb = new SQLiteQueryBuilder();	
 		bookmarkqb.setTables(BOOKMARK_TABLE_NAME);
 		
-		String bookmarkselection = Bookmark.Description + " LIKE '%" + query + "%'";
+		String bookmarkselection = Bookmark.Description + " LIKE '%" + query + "%' OR " + 
+			Bookmark.Notes + " LIKE '%" + query + "%'";
 		
 		String[] bookmarkprojection = new String[] {BaseColumns._ID, Bookmark.Description, Bookmark.Url};
 
