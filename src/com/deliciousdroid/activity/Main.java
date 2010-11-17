@@ -28,17 +28,21 @@ import com.deliciousdroid.providers.BookmarkContentProvider;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.view.View;
 
 public class Main extends AppBaseActivity {
@@ -57,6 +61,9 @@ public class Main extends AppBaseActivity {
 		mContext = this;
 		mAccountManager = AccountManager.get(mContext);
 		
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+    	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
+		
 		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length < 1) {		
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage(R.string.dialog_no_account_text)
@@ -73,6 +80,12 @@ public class Main extends AppBaseActivity {
 			AlertDialog alert = builder.create();
 			alert.setIcon(android.R.drawable.ic_dialog_alert);
 			alert.show();
+		} else if(lastUpdate == 0) {
+			mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+			
+			Toast.makeText(this, "Syncing...", Toast.LENGTH_LONG).show();
+			
+			ContentResolver.requestSync(mAccount, BookmarkContentProvider.AUTHORITY, Bundle.EMPTY);
 		}
 		
 		ListView lv = getListView();
