@@ -21,7 +21,11 @@
 
 package com.deliciousdroid.providers;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import com.deliciousdroid.Constants;
+import com.deliciousdroid.R;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 import com.deliciousdroid.providers.TagContent.Tag;
 
@@ -226,6 +230,8 @@ public class BookmarkContentProvider extends ContentProvider {
 		mAccountManager = AccountManager.get(getContext());
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		
+		ArrayList<SearchSuggestionContent> suggestions = new ArrayList<SearchSuggestionContent>();
+		
 		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
 		
 		// Tag search suggestions
@@ -238,9 +244,7 @@ public class BookmarkContentProvider extends ContentProvider {
 
 		Cursor c = tagqb.query(rdb, projection, selection, null, null, null, null);
 		
-		MatrixCursor mc = new MatrixCursor(new String[] {BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_INTENT_DATA});
 
-		int i = 0;
 		
 		if(c.moveToFirst()){
 			int nameColumn = c.getColumnIndex(Tag.Name);
@@ -252,7 +256,8 @@ public class BookmarkContentProvider extends ContentProvider {
 				data.appendEncodedPath("bookmarks");
 				data.appendQueryParameter("tagname", c.getString(nameColumn));
 				
-				mc.addRow(new Object[] {i++, c.getString(nameColumn), data.build().toString()});
+				suggestions.add(new SearchSuggestionContent(c.getString(nameColumn), 
+					"", R.drawable.icon, R.drawable.tag, data.build().toString()));
 				
 			} while(c.moveToNext());	
 		}
@@ -267,12 +272,11 @@ public class BookmarkContentProvider extends ContentProvider {
 		String[] bookmarkprojection = new String[] {BaseColumns._ID, Bookmark.Description, Bookmark.Url};
 
 		Cursor bookmarkc = bookmarkqb.query(rdb, bookmarkprojection, bookmarkselection, null, null, null, null);
-
-		int j = 0;
 		
 		if(bookmarkc.moveToFirst()){
 			int descColumn = bookmarkc.getColumnIndex(Bookmark.Description);
 			int idColumn = bookmarkc.getColumnIndex(BaseColumns._ID);
+			int urlColumn = bookmarkc.getColumnIndex(Bookmark.Url);
 
 			do {			
 				Uri.Builder data = new Uri.Builder();
@@ -281,11 +285,27 @@ public class BookmarkContentProvider extends ContentProvider {
 				data.appendEncodedPath("bookmarks");
 				data.appendEncodedPath(bookmarkc.getString(idColumn));
 				
-				mc.addRow(new Object[] {j++, bookmarkc.getString(descColumn), data});
+				suggestions.add(new SearchSuggestionContent(bookmarkc.getString(descColumn), 
+					bookmarkc.getString(urlColumn), R.drawable.icon, R.drawable.bookmark, 
+					data.build().toString()));
 				
 			} while(bookmarkc.moveToNext());	
 		}
 		bookmarkc.close();
+		
+		Collections.sort(suggestions, new SearchSuggestionContent.Comparer());
+		
+		MatrixCursor mc = new MatrixCursor(new String[] {BaseColumns._ID, 
+				SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, 
+				SearchManager.SUGGEST_COLUMN_INTENT_DATA, 
+				SearchManager.SUGGEST_COLUMN_ICON_1, SearchManager.SUGGEST_COLUMN_ICON_2});
+
+		int i = 0;
+		
+		for(SearchSuggestionContent s : suggestions) {
+			mc.addRow(new Object[]{ i++, s.getText1(), s.getText2(), s.getIntentData(), 
+				s.getIcon1(), s.getIcon2() });
+		}
 		
 		return mc;
 	}

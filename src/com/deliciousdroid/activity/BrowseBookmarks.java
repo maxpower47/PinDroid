@@ -94,7 +94,6 @@ public class BrowseBookmarks extends AppBaseActivity {
 		Log.d("path", path);
 		username = data.getUserInfo();
 		String tagname = data.getQueryParameter("tagname");
-		String recent = data.getQueryParameter("recent");
 		
 		myself = mAccount.name.equals(username);
 		
@@ -131,7 +130,8 @@ public class BrowseBookmarks extends AppBaseActivity {
 			}
 			catch(Exception e){}
 		} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
-			viewBookmark(Integer.parseInt(data.getLastPathSegment()));	
+			viewBookmark(Integer.parseInt(data.getLastPathSegment()));
+			finish();
 		}
 		
 		lv = getListView();
