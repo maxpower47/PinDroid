@@ -69,6 +69,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	private static final int BookmarkSearchSuggest = 5;
 	
 	private static final String SuggestionLimit = "10";
+	private static final String BookmarkLimit = "100";
 	
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
 	
@@ -218,7 +219,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	}
 	
 	private Cursor getBookmarks(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
-		return getBookmarks(uri, projection, selection, selectionArgs, sortOrder, null);
+		return getBookmarks(uri, projection, selection, selectionArgs, sortOrder, BookmarkLimit);
 	}
 	
 	private Cursor getBookmarks(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder, String limit) {
