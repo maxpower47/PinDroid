@@ -440,44 +440,38 @@ public class NetworkUtilities {
      * @throws AuthenticationException 
      */
     public static String getWebpageTitle(String url) {
-
-
-    	HttpResponse resp = null;
-    	HttpGet post = null;
+   	
+    	if(url != null && !url.equals("")) {
     		
-		post = new HttpGet(url);
-		maybeCreateHttpClient();
-		post.setHeader("User-Agent", "Mozilla/5.0");
+    		if(!url.startsWith("http")){
+    			url = "http://" + url;
+    		}
+	
+	    	HttpResponse resp = null;
+	    	HttpGet post = null;
+	    		
+			post = new HttpGet(url);
+			maybeCreateHttpClient();
+			post.setHeader("User-Agent", "Mozilla/5.0");
+	
+	        try {
+				resp = mHttpClient.execute(post);
 
-        try {
-			resp = mHttpClient.execute(post);
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		    	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+		    		String response;
 
-    	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-    		String response;
-			try {
-				response = EntityUtils.toString(resp.getEntity());
-	    		Log.d("response", response);
-	    		int start = response.indexOf("<title>") + 7;
-	    		int end = response.indexOf("</title>", start + 1);
-	    		String title = response.substring(start, end);
-	    		Log.d("username", title);
-	    		return title;
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+					response = EntityUtils.toString(resp.getEntity());
+		    		Log.d("response", response);
+		    		int start = response.indexOf("<title>") + 7;
+		    		int end = response.indexOf("</title>", start + 1);
+		    		String title = response.substring(start, end);
+		    		Log.d("username", title);
+		    		return title;
+		    	} else return "";
+			} catch (Exception e) {
+				return "";
 			}
-    	} 
-    	return null;
+    	} else return "";
     }
     
     /**

@@ -47,9 +47,10 @@ public class TagContent {
 		public static final String Account = "ACCOUNT";
 		
         private final String mTagName;
-        private int mCount;
+        private int mCount = 0;
         private final String mAccount = null;
         private int mId = 0;
+        private String mType = null;
 
         public int getId(){
         	return mId;
@@ -63,8 +64,17 @@ public class TagContent {
             return mCount;
         }
         
+        public String getType() {
+            return mType;
+        }
+        
         public void setCount(int count) {
         	mCount = count;
+        }
+        
+        public Tag(String tagName, String type) {
+            mTagName = tagName;
+            mType = type;
         }
 
         public Tag(String tagName, int count) {
@@ -93,6 +103,33 @@ public class TagContent {
 				String sname = nodes.get(i).attributeValue("tag");
 				
 				list.add(new Tag(sname, Integer.parseInt(scount)));
+			}
+
+			return list;
+        }
+        
+        public static ArrayList<Tag> suggestValueOf(String userTag){
+	      	
+        	SAXReader reader = new SAXReader();
+        	InputSource inputSource = new InputSource(new StringReader(userTag));
+        	Document document = null;
+			try {
+				document = reader.read(inputSource);
+			} catch (DocumentException e1) {
+				e1.printStackTrace();
+			}   	
+        	
+			String expression = "/suggest/recommended | /suggest/popular";
+			ArrayList<Tag> list = new ArrayList<Tag>();
+           
+        	List<Element> nodes = document.selectNodes(expression);
+			
+			for(int i = 0; i < nodes.size(); i++){
+
+				String sname = nodes.get(i).getText();
+				String stype = nodes.get(i).getName();
+				
+				list.add(new Tag(sname, stype));
 			}
 
 			return list;

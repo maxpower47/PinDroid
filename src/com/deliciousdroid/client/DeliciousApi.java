@@ -60,6 +60,7 @@ public class DeliciousApi {
     public static final int REGISTRATION_TIMEOUT = 30 * 1000; // ms
 
     public static final String FETCH_TAGS_URI = "tags/get";
+    public static final String FETCH_SUGGESTED_TAGS_URI = "posts/suggest";
     public static final String FETCH_BOOKMARKS_URI = "posts/all";
     public static final String FETCH_CHANGED_BOOKMARKS_URI = "posts/all";
     public static final String FETCH_BOOKMARK_URI = "posts/get";
@@ -288,6 +289,37 @@ public class DeliciousApi {
             throw new IOException();
         }
         return bookmarkList;
+    }
+    
+    /**
+     * Fetches status messages for the user's friends from the server
+     * 
+     * @param account The account being synced.
+     * @param authtoken The authtoken stored in the AccountManager for the
+     *        account
+     * @return list The list of status messages received from the server.
+     * @throws AuthenticationException 
+     */
+    public static ArrayList<Tag> getSuggestedTags(String suggestUrl, Account account, Context context) 
+    	throws IOException, AuthenticationException {
+    	
+    	ArrayList<Tag> tagList = new ArrayList<Tag>();
+    	String response = null;
+    	TreeMap<String, String> params = new TreeMap<String, String>();
+    	params.put("url", suggestUrl);
+    	
+    	String url = FETCH_SUGGESTED_TAGS_URI;
+    	  	
+    	response = DeliciousApiCall(url, params, account, context);
+    	Log.d("loadTagResponse", response);
+    	
+        if (response.contains("<?xml")) {
+        	tagList = Tag.suggestValueOf(response);
+        } else {
+            Log.e(TAG, "Server error in fetching bookmark list");
+            throw new IOException();
+        }
+        return tagList;
     }
     
     /**

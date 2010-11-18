@@ -21,7 +21,11 @@
 
 package com.deliciousdroid.activity;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+
+import org.apache.http.auth.AuthenticationException;
 
 import com.deliciousdroid.R;
 import com.deliciousdroid.Constants;
@@ -40,13 +44,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddBookmark extends Activity implements View.OnClickListener{
@@ -55,6 +62,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 	private EditText mEditDescription;
 	private EditText mEditNotes;
 	private EditText mEditTags;
+	private TextView mSuggestTags;
 	private CheckBox mPrivate;
 	private Button mButtonSave;
 	private AccountManager mAccountManager;
@@ -74,11 +82,16 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		mEditDescription = (EditText) findViewById(R.id.add_edit_description);
 		mEditNotes = (EditText) findViewById(R.id.add_edit_notes);
 		mEditTags = (EditText) findViewById(R.id.add_edit_tags);
+		mSuggestTags = (TextView) findViewById(R.id.add_suggest_tags);
 		mPrivate = (CheckBox) findViewById(R.id.add_edit_private);
 		mButtonSave = (Button) findViewById(R.id.add_button_save);
 		context = this;
 		
 		res = getResources();
+		
+		mAccountManager = AccountManager.get(this);
+		Account[] al = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
+		account = al[0];
 
 		if(savedInstanceState ==  null){
 			Intent intent = getIntent();
@@ -107,19 +120,26 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		if(update)
 			setTitle("Edit Bookmark");
 		else setTitle("Add Bookmark");
+		
+		mEditUrl.setOnFocusChangeListener(new OnFocusChangeListener(){
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(!hasFocus){
+					String url = mEditUrl.getText().toString();
+					
+					new GetWebpageTitleTask().execute(url);
+					new GetTagSuggestionsTask().execute(url);
+				}
+			}
+		});
 
 		mButtonSave.setOnClickListener(this);	
 	}
 	
     public void save() {
-    	
-		mAccountManager = AccountManager.get(this);
-		Account[] al = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
-		account = al[0];
-		
+
 		String url = mEditUrl.getText().toString();
 		
-		if(!url.startsWith("http://")){
+		if(!url.startsWith("http")){
 			url = "http://" + url;
 		}
 		
@@ -198,13 +218,50 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     	
     	@Override
     	protected String doInBackground(String... args) {
-    		url = args[0];
-	
-    		return NetworkUtilities.getWebpageTitle(url);
+    		
+    		if(args.length > 0) {
+	    		url = args[0];
+		
+	    		return NetworkUtilities.getWebpageTitle(url);
+    		} else return "";
+    		
     	}
     	
         protected void onPostExecute(String result) {
         	mEditDescription.setText(result);
+        }
+    }
+    
+    public class GetTagSuggestionsTask extends AsyncTask<String, Integer, ArrayList<Tag>>{
+    	private String url;
+    	
+    	@Override
+    	protected ArrayList<Tag> doInBackground(String... args) {
+    		url = args[0];
+	
+    		try {
+				return DeliciousApi.getSuggestedTags(url, account, context);
+			} catch (AuthenticationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+    	}
+    	
+        protected void onPostExecute(ArrayList<Tag> result) {
+        	
+        	StringBuilder sb = new StringBuilder();
+        	
+        	if(result != null) {
+        		for(Tag t : result) {
+        			sb.append(t.getTagName() + " ");
+        		}
+        		
+        		mSuggestTags.setText(sb.toString());
+        	} 	
         }
     }
 }
