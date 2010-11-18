@@ -68,7 +68,6 @@ public class BrowseBookmarks extends AppBaseActivity {
 	private Account mAccount;
 	private ListView lv;
 	private Context mContext;
-	private Boolean myself;
 	
 	private String bookmarkLimit;
 	private String defaultAction;
@@ -103,24 +102,25 @@ public class BrowseBookmarks extends AppBaseActivity {
 			tagname = data.getQueryParameter("tagname");
 		}
 		
-		myself = mAccount.name.equals(username);
-		
     	if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
     		Bundle searchData = intent.getBundleExtra(SearchManager.APP_DATA);
     		String tag = null;
     		if(searchData != null) {
     			tag = searchData.getString("tagname");
+    			username = searchData.getString("username");
     		}
     		
     		String query = intent.getStringExtra(SearchManager.QUERY);
     		
     		setTitle("Bookmark Search Results For \"" + query + "\"");
     		
-    		bookmarkList = BookmarkManager.SearchBookmarks(query, tag, mAccount.name, this);
+    		if(isMyself()) {
+    			bookmarkList = BookmarkManager.SearchBookmarks(query, tag, username, this);
     		
-    		setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
+    			setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));
+    		}
     		
-    	} else if(path.equals("/bookmarks") && myself) {
+    	} else if(path.equals("/bookmarks") && isMyself()) {
     		
 			if(tagname != null && tagname != "") {
 				setTitle("My Bookmarks Tagged With " + tagname);
@@ -175,7 +175,7 @@ public class BrowseBookmarks extends AppBaseActivity {
 		lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 				menu.setHeaderTitle("Actions");
-				if(myself){
+				if(isMyself()){
 					menu.add(Menu.NONE, 0, Menu.NONE, "Open in browser");
 					menu.add(Menu.NONE, 1, Menu.NONE, "View Details");
 					menu.add(Menu.NONE, 2, Menu.NONE, "Edit");
@@ -237,6 +237,7 @@ public class BrowseBookmarks extends AppBaseActivity {
 	public boolean onSearchRequested() {
 		Bundle contextData = new Bundle();
 		contextData.putString("tagname", tagname);
+		contextData.putString("username", username);
 		startSearch(null, false, contextData, false);
 		return true;
 	}
@@ -261,7 +262,7 @@ public class BrowseBookmarks extends AppBaseActivity {
 		data.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("bookmarks");
 		
-		if(myself) {
+		if(isMyself()) {
 			data.appendEncodedPath(Integer.toString(b.getId()));
 		} else {
 			data.appendQueryParameter("url", b.getUrl());
@@ -275,6 +276,10 @@ public class BrowseBookmarks extends AppBaseActivity {
 		
 		Log.d("View Bookmark Uri", data.build().toString());
 		startActivity(viewBookmark);
+	}
+	
+	private boolean isMyself() {
+		return mAccount.name.equals(username);
 	}
 	
     public class LoadBookmarkFeedTask extends AsyncTask<String, Integer, Boolean>{
