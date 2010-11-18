@@ -23,7 +23,6 @@ package com.deliciousdroid.platform;
 
 import java.util.ArrayList;
 
-import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 import com.deliciousdroid.providers.TagContent.Tag;
 
 import android.content.ContentResolver;
@@ -141,18 +140,14 @@ public class TagManager {
 		Cursor c = context.getContentResolver().query(tags, projection, selection, selectionargs, sortorder);				
 		
 		if(c.moveToFirst()){
-			int idColumn = c.getColumnIndex(Tag._ID);
 			int nameColumn = c.getColumnIndex(Tag.Name);
 			int countColumn = c.getColumnIndex(Tag.Count);
 			
 			do {
-				
 				Tag t = new Tag(c.getString(nameColumn), c.getInt(countColumn));
 				
 				tagList.add(t);
-				
-			} while(c.moveToNext());
-				
+			} while(c.moveToNext());	
 		}
 		c.close();
 		return tagList;

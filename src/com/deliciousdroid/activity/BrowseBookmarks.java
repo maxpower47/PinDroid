@@ -45,7 +45,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -114,6 +113,8 @@ public class BrowseBookmarks extends AppBaseActivity {
     		}
     		
     		String query = intent.getStringExtra(SearchManager.QUERY);
+    		
+    		setTitle("Bookmark Search Results For \"" + query + "\"");
     		
     		bookmarkList = BookmarkManager.SearchBookmarks(query, tag, mAccount.name, this);
     		

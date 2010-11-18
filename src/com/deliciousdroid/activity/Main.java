@@ -88,6 +88,13 @@ public class Main extends AppBaseActivity {
 			ContentResolver.requestSync(mAccount, BookmarkContentProvider.AUTHORITY, Bundle.EMPTY);
 		}
 		
+		if(Intent.ACTION_SEARCH.equals(getIntent().getAction())){
+			Intent i = new Intent(mContext, MainSearchResults.class);
+			i.putExtras(getIntent().getExtras());
+			startActivity(i);
+			finish();
+		}
+		
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
 

@@ -26,4 +26,6 @@
 	android:hint="@string/bookmark_search_hint"
 	android:searchSuggestAuthority="com.deliciousdroid.providers.BookmarkContentProvider"
 	android:searchSuggestIntentAction="android.Intent.action.VIEW"
-	android:searchSuggestPath="main" />
+	android:searchSuggestPath="main" 
+	android:includeInGlobalSearch="true" 
+	android:searchSettingsDescription="@string/bookmark_search_description"/>

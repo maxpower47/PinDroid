@@ -21,14 +21,9 @@
 
 package com.deliciousdroid.providers;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedMap;
-import java.util.SortedSet;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import com.deliciousdroid.Constants;
 import com.deliciousdroid.R;

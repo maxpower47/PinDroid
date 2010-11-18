@@ -75,7 +75,7 @@ public class BrowseTags extends AppBaseActivity {
   		
     		String query = intent.getStringExtra(SearchManager.QUERY);
     		
-    		setTitle("Search Results For \"" + query + "\"");
+    		setTitle("Tag Search Results For \"" + query + "\"");
     		
     		tagList = TagManager.SearchTags(query, mAccount.name, this);
     		
