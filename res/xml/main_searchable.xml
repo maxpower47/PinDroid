@@ -25,7 +25,7 @@
 	android:label="@string/main_search_label"
 	android:hint="@string/main_search_hint"
 	android:searchSuggestAuthority="com.deliciousdroid.providers.BookmarkContentProvider"
-	android:searchSuggestIntentAction="android.Intent.action.VIEW"
+	android:searchSuggestIntentAction="android.intent.action.VIEW"
 	android:searchSuggestPath="main" 
 	android:includeInGlobalSearch="true" 
 	android:searchSettingsDescription="@string/main_search_description"/>

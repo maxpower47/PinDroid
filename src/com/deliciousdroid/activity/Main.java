@@ -36,6 +36,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.WebView;
 import android.widget.AdapterView;
@@ -60,6 +61,8 @@ public class Main extends AppBaseActivity {
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
 		mContext = this;
 		mAccountManager = AccountManager.get(mContext);
+		
+		Intent intent = getIntent();
 		
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
     	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
@@ -88,11 +91,38 @@ public class Main extends AppBaseActivity {
 			ContentResolver.requestSync(mAccount, BookmarkContentProvider.AUTHORITY, Bundle.EMPTY);
 		}
 		
-		if(Intent.ACTION_SEARCH.equals(getIntent().getAction())){
+		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
 			Intent i = new Intent(mContext, MainSearchResults.class);
 			i.putExtras(getIntent().getExtras());
 			startActivity(i);
 			finish();
+		} else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
+			Uri data = intent.getData();
+			String path = null;
+			String tagname = null;
+			
+			if(data != null) {
+				path = data.getPath();
+				tagname = data.getQueryParameter("tagname");
+			}
+			
+			if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
+				Intent viewBookmark = new Intent(this, ViewBookmark.class);
+				viewBookmark.setData(data);
+				
+				Log.d("View Bookmark Uri", data.toString());
+				startActivity(viewBookmark);
+				finish();
+			} else if(tagname != null) {
+				Intent viewTags = new Intent(this, BrowseBookmarks.class);
+				viewTags.setData(data);
+				
+				Log.d("View Tags Uri", data.toString());
+				startActivity(viewTags);
+				finish();
+			}
+			
+			
 		}
 		
 		ListView lv = getListView();
