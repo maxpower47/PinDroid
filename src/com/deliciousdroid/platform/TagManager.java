@@ -21,6 +21,9 @@
 
 package com.deliciousdroid.platform;
 
+import java.util.ArrayList;
+
+import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 import com.deliciousdroid.providers.TagContent.Tag;
 
 import android.content.ContentResolver;
@@ -115,5 +118,43 @@ public class TagManager {
 		String[] selectionargs = new String[]{account};
 		
 		context.getContentResolver().delete(Tag.CONTENT_URI, selection, selectionargs);
+	}
+	
+	public static ArrayList<Tag> SearchTags(String query, String username, Context context) {
+		ArrayList<Tag> tagList = new ArrayList<Tag>();
+		String[] projection = new String[] { Tag._ID, Tag.Name, Tag.Count };
+		String selection = null;
+		String[] selectionargs = new String[]{ username };
+		String sortorder = null;
+		
+		if(query != null && query != "") {
+			selection = Tag.Name + " LIKE '%" + query + "%' AND " +
+				Tag.Account + "=?";
+		} else {
+			selection = Tag.Account + "=?";
+		}
+		
+		sortorder = Tag.Name + " ASC";
+		
+		Uri tags = Tag.CONTENT_URI;
+		
+		Cursor c = context.getContentResolver().query(tags, projection, selection, selectionargs, sortorder);				
+		
+		if(c.moveToFirst()){
+			int idColumn = c.getColumnIndex(Tag._ID);
+			int nameColumn = c.getColumnIndex(Tag.Name);
+			int countColumn = c.getColumnIndex(Tag.Count);
+			
+			do {
+				
+				Tag t = new Tag(c.getString(nameColumn), c.getInt(countColumn));
+				
+				tagList.add(t);
+				
+			} while(c.moveToNext());
+				
+		}
+		c.close();
+		return tagList;
 	}
 }

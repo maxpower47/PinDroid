@@ -57,7 +57,10 @@
         		<category android:name="android.intent.category.DEFAULT" />
         		<data android:scheme="content" android:host="com.deliciousdroid.providers.BookmarkContentProvider" android:path="/tags"/>
 			</intent-filter>
-			<meta-data android:name="android.app.searchable" android:resource="@xml/bookmark_searchable"/>
+			<intent-filter>
+            	<action android:name="android.intent.action.SEARCH" />
+        	</intent-filter>
+			<meta-data android:name="android.app.searchable" android:resource="@xml/tag_searchable"/>
         </activity>
         <activity android:name=".activity.BrowseBookmarks" >
         	<intent-filter>
@@ -136,8 +139,6 @@
         </activity>
         <provider
         	android:name="com.deliciousdroid.providers.BookmarkContentProvider"
-        	android:authorities="com.deliciousdroid.providers.BookmarkContentProvider" />
-
-        	
+        	android:authorities="com.deliciousdroid.providers.BookmarkContentProvider" />	
     </application>
 </manifest>

@@ -190,5 +190,6 @@ public final class R {
         public static final int contacts=0x7f040004;
         public static final int contactsyncadapter=0x7f040005;
         public static final int preferences=0x7f040006;
+        public static final int tag_searchable=0x7f040007;
     }
 }

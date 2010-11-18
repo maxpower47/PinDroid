@@ -27,11 +27,13 @@ import com.deliciousdroid.R;
 import com.deliciousdroid.Constants;
 import com.deliciousdroid.client.DeliciousFeed;
 import com.deliciousdroid.listadapter.TagListAdapter;
+import com.deliciousdroid.platform.TagManager;
 import com.deliciousdroid.providers.BookmarkContentProvider;
 import com.deliciousdroid.providers.TagContent.Tag;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -57,6 +59,7 @@ public class BrowseTags extends AppBaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_tags);
 		mContext = this;
+		Intent intent = getIntent();
 		
 		ArrayList<Tag> tagList = new ArrayList<Tag>();
 		
@@ -64,9 +67,21 @@ public class BrowseTags extends AppBaseActivity {
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		
 		Uri data = getIntent().getData();
-		username = data.getUserInfo();
+		if(data != null) {
+			username = data.getUserInfo();
+		} else username = mAccount.name;
 		
-		if(mAccount.name.equals(username)){
+    	if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+  		
+    		String query = intent.getStringExtra(SearchManager.QUERY);
+    		
+    		setTitle("Search Results For \"" + query + "\"");
+    		
+    		tagList = TagManager.SearchTags(query, mAccount.name, this);
+    		
+    		setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
+    		
+    	} else if(mAccount.name.equals(username)){
 			try{
 				setTitle("My Tags");
 
