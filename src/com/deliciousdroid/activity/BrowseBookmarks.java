@@ -240,11 +240,14 @@ public class BrowseBookmarks extends AppBaseActivity {
 	
 	@Override
 	public boolean onSearchRequested() {
-		Bundle contextData = new Bundle();
-		contextData.putString("tagname", tagname);
-		contextData.putString("username", username);
-		startSearch(null, false, contextData, false);
-		return true;
+		
+		if(isMyself()) {
+			Bundle contextData = new Bundle();
+			contextData.putString("tagname", tagname);
+			contextData.putString("username", username);
+			startSearch(null, false, contextData, false);
+			return true;
+		} else return false;
 	}
 	
 	private void openBookmarkInBrowser(Bookmark b) {
