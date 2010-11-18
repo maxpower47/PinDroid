@@ -156,6 +156,13 @@ public class BrowseBookmarks extends AppBaseActivity {
 				new LoadBookmarkFeedTask().execute("hotlist");
 			}
 			catch(Exception e){}
+		} else if(username.equals("popular")){
+			try{
+				setTitle("Popular Bookmarks");
+				
+				new LoadBookmarkFeedTask().execute("popular");
+			}
+			catch(Exception e){}
 		} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
 			viewBookmark(Integer.parseInt(data.getLastPathSegment()));
 			finish();
@@ -319,7 +326,9 @@ public class BrowseBookmarks extends AppBaseActivity {
 					bookmarkList = DeliciousFeed.fetchNetworkRecent(mAccount.name, Integer.parseInt(bookmarkLimit));
 				} else if(user.equals("hotlist")) {
 					bookmarkList = DeliciousFeed.fetchHotlist(Integer.parseInt(bookmarkLimit));
-				} else {
+				} else if(user.equals("popular")) {
+					bookmarkList = DeliciousFeed.fetchPopular(Integer.parseInt(bookmarkLimit));
+				}  else {
 					bookmarkList = DeliciousFeed.fetchFriendBookmarks(user, tag, Integer.parseInt(bookmarkLimit));
 				}
 				result = true;

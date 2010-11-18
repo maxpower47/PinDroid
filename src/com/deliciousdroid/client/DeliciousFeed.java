@@ -55,6 +55,7 @@ public class DeliciousFeed {
     public static final String FETCH_FRIEND_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/";
     public static final String FETCH_NETWORK_RECENT_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/network/";
     public static final String FETCH_HOTLIST_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json";
+    public static final String FETCH_POPULAR_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/popular";
     public static final String FETCH_STATUS_URI = "http://feeds.delicious.com/v2/json/network/";
     public static final String FETCH_TAGS_URI = "http://feeds.delicious.com/v2/json/tags/";
     private static DefaultHttpClient mHttpClient;
@@ -310,6 +311,46 @@ public class DeliciousFeed {
                 throw new AuthenticationException();
             } else {
                 Log.e(TAG, "Server error in fetching hotlist");
+                throw new IOException();
+            }
+        }
+
+        return bookmarkList;
+    }
+    
+    /**
+     * Fetches users bookmarks
+     * 
+     * @param account The account being synced.
+     * @param authtoken The authtoken stored in the AccountManager for the
+     *        account
+     * @return list The list of bookmarks received from the server.
+     */
+    public static ArrayList<Bookmark> fetchPopular(int limit)
+    	throws JSONException, ParseException, IOException, AuthenticationException {
+
+        final HttpGet post = new HttpGet(FETCH_POPULAR_BOOKMARKS_URI + "?count=" + limit);
+        maybeCreateHttpClient();
+        
+        final ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
+
+        final HttpResponse resp = mHttpClient.execute(post);
+        final String response = EntityUtils.toString(resp.getEntity());
+
+        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+
+            final JSONArray bookmarks = new JSONArray(response);
+            Log.d(TAG, response);
+            
+            for (int i = 0; i < bookmarks.length(); i++) {
+                bookmarkList.add(Bookmark.valueOf(bookmarks.getJSONObject(i)));
+            }
+        } else {
+            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+                Log.e(TAG, "Authentication exception in fetching popular");
+                throw new AuthenticationException();
+            } else {
+                Log.e(TAG, "Server error in fetching popular");
                 throw new IOException();
             }
         }
