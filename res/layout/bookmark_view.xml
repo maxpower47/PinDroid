@@ -24,12 +24,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="horizontal"
 	android:layout_width="fill_parent">
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	<LinearLayout
 		android:orientation="vertical"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:paddingBottom="2dip">
-		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		<TextView
 		    android:id="@+id/bookmark_description"
 		    android:layout_height="wrap_content"
 		    android:layout_width="fill_parent"
@@ -39,7 +39,7 @@
 		    android:textSize="22sp"
 		    android:paddingLeft="5dip"
 		    android:paddingRight="10dip"/>
-		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		<TextView
 		    android:id="@+id/bookmark_tags"
 		    android:layout_height="wrap_content"
 		    android:layout_width="wrap_content"

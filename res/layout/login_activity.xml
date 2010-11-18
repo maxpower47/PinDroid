@@ -30,21 +30,10 @@
         android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_weight="1">
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingTop="5dip"
-            android:paddingBottom="13dip"
-            android:paddingLeft="20dip"
-            android:paddingRight="20dip">
+        <LinearLayout style="@style/LoginFrame">
             <TextView
                 android:id="@+id/message"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dip" />
+                style="@style/LoginMessage" />
             <TextView
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textStyle="bold"
@@ -60,7 +49,7 @@
                 android:scrollHorizontally="true"
                 android:capitalize="none"
                 android:autoText="false"
-                android:inputType="textEmailAddress" />
+                android:inputType="text" />
             <TextView
                 android:id="@+id/username_fixed"
                 android:textAppearance="?android:attr/textAppearanceSmall"
@@ -95,20 +84,10 @@
                 android:layout_marginBottom="5dip" />      
         </LinearLayout>
     </ScrollView>
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#c6c3c6"
-        android:minHeight="54dip"
-        android:paddingTop="4dip"
-        android:paddingLeft="2dip"
-        android:paddingRight="2dip">
+    <FrameLayout style="@style/LoginButtonFrame">
         <Button
             android:id="@+id/ok_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:minWidth="100dip"
+            style="@style/LoginButton"
             android:text="@string/login_activity_ok_button"
             android:onClick="handleLogin" />
     </FrameLayout>

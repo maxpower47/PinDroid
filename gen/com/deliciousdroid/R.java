@@ -27,52 +27,52 @@ public final class R {
         public static final int tag=0x7f020007;
     }
     public static final class id {
-        public static final int add_button_cancel=0x7f08000c;
-        public static final int add_button_save=0x7f08000b;
-        public static final int add_edit_description=0x7f080003;
-        public static final int add_edit_notes=0x7f080005;
-        public static final int add_edit_private=0x7f08000a;
-        public static final int add_edit_tags=0x7f080007;
-        public static final int add_edit_url=0x7f080001;
-        public static final int add_suggest_tags=0x7f080009;
-        public static final int add_title_description=0x7f080002;
-        public static final int add_title_notes=0x7f080004;
-        public static final int add_title_suggest_tags=0x7f080008;
-        public static final int add_title_tags=0x7f080006;
-        public static final int add_title_url=0x7f080000;
-        public static final int auth_type=0x7f080015;
-        public static final int auth_type_delicious=0x7f080016;
-        public static final int auth_type_yahoo=0x7f080017;
-        public static final int bookmark_description=0x7f08000d;
-        public static final int bookmark_tags=0x7f08000e;
-        public static final int main_menu_description=0x7f080018;
-        public static final int menu_addbookmark=0x7f080027;
-        public static final int menu_mybookmarks=0x7f080028;
-        public static final int menu_settings=0x7f080029;
-        public static final int menu_view_deletebookmark=0x7f08002c;
-        public static final int menu_view_editbookmark=0x7f08002b;
-        public static final int menu_view_openbookmark=0x7f08002a;
-        public static final int menu_view_settings=0x7f08002d;
-        public static final int message=0x7f08000f;
-        public static final int message_bottom=0x7f080013;
-        public static final int oauth_webview=0x7f080019;
-        public static final int ok_button=0x7f080014;
-        public static final int password_edit=0x7f080012;
-        public static final int tag_count=0x7f08001c;
-        public static final int tag_name=0x7f08001b;
-        public static final int username_edit=0x7f080010;
-        public static final int username_fixed=0x7f080011;
-        public static final int view_bookmark_account=0x7f080026;
-        public static final int view_bookmark_account_title=0x7f080025;
-        public static final int view_bookmark_notes=0x7f080020;
-        public static final int view_bookmark_notes_title=0x7f08001f;
-        public static final int view_bookmark_tags=0x7f080022;
-        public static final int view_bookmark_tags_title=0x7f080021;
-        public static final int view_bookmark_time=0x7f080024;
-        public static final int view_bookmark_time_title=0x7f080023;
-        public static final int view_bookmark_title=0x7f08001d;
-        public static final int view_bookmark_url=0x7f08001e;
-        public static final int webview=0x7f08001a;
+        public static final int add_button_cancel=0x7f09000c;
+        public static final int add_button_save=0x7f09000b;
+        public static final int add_edit_description=0x7f090003;
+        public static final int add_edit_notes=0x7f090005;
+        public static final int add_edit_private=0x7f09000a;
+        public static final int add_edit_tags=0x7f090007;
+        public static final int add_edit_url=0x7f090001;
+        public static final int add_suggest_tags=0x7f090009;
+        public static final int add_title_description=0x7f090002;
+        public static final int add_title_notes=0x7f090004;
+        public static final int add_title_suggest_tags=0x7f090008;
+        public static final int add_title_tags=0x7f090006;
+        public static final int add_title_url=0x7f090000;
+        public static final int auth_type=0x7f090015;
+        public static final int auth_type_delicious=0x7f090016;
+        public static final int auth_type_yahoo=0x7f090017;
+        public static final int bookmark_description=0x7f09000d;
+        public static final int bookmark_tags=0x7f09000e;
+        public static final int main_menu_description=0x7f090018;
+        public static final int menu_addbookmark=0x7f090027;
+        public static final int menu_mybookmarks=0x7f090028;
+        public static final int menu_settings=0x7f090029;
+        public static final int menu_view_deletebookmark=0x7f09002c;
+        public static final int menu_view_editbookmark=0x7f09002b;
+        public static final int menu_view_openbookmark=0x7f09002a;
+        public static final int menu_view_settings=0x7f09002d;
+        public static final int message=0x7f09000f;
+        public static final int message_bottom=0x7f090013;
+        public static final int oauth_webview=0x7f090019;
+        public static final int ok_button=0x7f090014;
+        public static final int password_edit=0x7f090012;
+        public static final int tag_count=0x7f09001c;
+        public static final int tag_name=0x7f09001b;
+        public static final int username_edit=0x7f090010;
+        public static final int username_fixed=0x7f090011;
+        public static final int view_bookmark_account=0x7f090026;
+        public static final int view_bookmark_account_title=0x7f090025;
+        public static final int view_bookmark_notes=0x7f090020;
+        public static final int view_bookmark_notes_title=0x7f09001f;
+        public static final int view_bookmark_tags=0x7f090022;
+        public static final int view_bookmark_tags_title=0x7f090021;
+        public static final int view_bookmark_time=0x7f090024;
+        public static final int view_bookmark_time_title=0x7f090023;
+        public static final int view_bookmark_title=0x7f09001d;
+        public static final int view_bookmark_url=0x7f09001e;
+        public static final int webview=0x7f09001a;
     }
     public static final class layout {
         public static final int add_bookmark=0x7f030000;
@@ -88,37 +88,38 @@ public final class R {
         public static final int view_bookmark=0x7f03000a;
     }
     public static final class menu {
-        public static final int main_menu=0x7f070000;
-        public static final int view_menu=0x7f070001;
+        public static final int main_menu=0x7f080000;
+        public static final int view_menu=0x7f080001;
     }
     public static final class string {
-        public static final int add_bookmark_error_msg=0x7f06002a;
-        public static final int add_bookmark_success_msg=0x7f060028;
-        public static final int add_button_cancel=0x7f06001e;
-        public static final int add_button_save=0x7f06001d;
-        public static final int add_title_description=0x7f060020;
-        public static final int add_title_notes=0x7f060021;
-        public static final int add_title_suggest_tags=0x7f060023;
-        public static final int add_title_tags=0x7f060022;
-        public static final int add_title_url=0x7f06001f;
+        public static final int add_bookmark_error_msg=0x7f060030;
+        public static final int add_bookmark_success_msg=0x7f06002e;
+        public static final int add_button_cancel=0x7f060020;
+        public static final int add_button_save=0x7f06001f;
+        public static final int add_title_description=0x7f060022;
+        public static final int add_title_notes=0x7f060023;
+        public static final int add_title_suggest_tags=0x7f060025;
+        public static final int add_title_tags=0x7f060024;
+        public static final int add_title_url=0x7f060021;
         /**  Button for going to the previous screen or step 
          */
-        public static final int back_button_label=0x7f060012;
-        public static final int bookmark_search_description=0x7f060026;
-        public static final int bookmark_search_hint=0x7f060025;
-        public static final int bookmark_search_label=0x7f060024;
+        public static final int back_button_label=0x7f060014;
+        public static final int bookmark_search_hint=0x7f06002c;
+        public static final int bookmark_search_label=0x7f06002b;
         /**  Button to cancel the current operation 
          */
-        public static final int cancel_button_label=0x7f060013;
-        public static final int dialog_no_account_text=0x7f060039;
-        public static final int dialog_no_account_title=0x7f060038;
-        public static final int dialog_yahoo_not_linked_text=0x7f06003b;
-        public static final int dialog_yahoo_not_linked_title=0x7f06003a;
-        public static final int edit_bookmark_success_msg=0x7f060029;
+        public static final int cancel_button_label=0x7f060015;
+        public static final int dialog_no_account_text=0x7f06003f;
+        public static final int dialog_no_account_title=0x7f06003e;
+        public static final int dialog_yahoo_not_linked_text=0x7f060041;
+        public static final int dialog_yahoo_not_linked_title=0x7f060040;
+        public static final int edit_bookmark_success_msg=0x7f06002f;
         /**  Label for this package 
          */
         public static final int label=0x7f060000;
+        public static final int login_activity_authtype_delicious=0x7f060012;
         public static final int login_activity_authtype_text=0x7f060010;
+        public static final int login_activity_authtype_yahoo=0x7f060011;
         /**  Message shown in dialog if the username or password is invalid. 
          */
         public static final int login_activity_loginfail_text_both=0x7f06000c;
@@ -141,12 +142,15 @@ public final class R {
          */
         public static final int login_activity_username_label=0x7f060008;
         public static final int login_authtype_ok_button=0x7f06000b;
-        public static final int menu_addbookmark_title=0x7f060017;
-        public static final int menu_mybookmarks_title=0x7f060018;
-        public static final int menu_settings_title=0x7f060019;
-        public static final int menu_view_deletebookmark_title=0x7f06001c;
-        public static final int menu_view_editbookmark_title=0x7f06001b;
-        public static final int menu_view_openbookmark_title=0x7f06001a;
+        public static final int main_search_description=0x7f060028;
+        public static final int main_search_hint=0x7f060027;
+        public static final int main_search_label=0x7f060026;
+        public static final int menu_addbookmark_title=0x7f060019;
+        public static final int menu_mybookmarks_title=0x7f06001a;
+        public static final int menu_settings_title=0x7f06001b;
+        public static final int menu_view_deletebookmark_title=0x7f06001e;
+        public static final int menu_view_editbookmark_title=0x7f06001d;
+        public static final int menu_view_openbookmark_title=0x7f06001c;
         public static final int notification_login_error=0x7f060005;
         /**  Permission description 
          */
@@ -160,32 +164,47 @@ public final class R {
         /**  Permission label 
          */
         public static final int permlab_samplesyncadapterAuthPassword=0x7f060001;
-        public static final int pref_contact_bookamrk_results_summary=0x7f060037;
-        public static final int pref_contact_bookmark_results_key=0x7f060036;
-        public static final int pref_contact_bookmark_results_title=0x7f060035;
-        public static final int pref_notification_key=0x7f060030;
-        public static final int pref_notification_summary=0x7f060031;
-        public static final int pref_notification_title=0x7f06002f;
-        public static final int pref_view_bookmark_default_action_key=0x7f060033;
-        public static final int pref_view_bookmark_default_action_summary=0x7f060034;
-        public static final int pref_view_bookmark_default_action_title=0x7f060032;
-        public static final int profile_action=0x7f060014;
+        public static final int pref_contact_bookamrk_results_summary=0x7f06003d;
+        public static final int pref_contact_bookmark_results_key=0x7f06003c;
+        public static final int pref_contact_bookmark_results_title=0x7f06003b;
+        public static final int pref_notification_key=0x7f060036;
+        public static final int pref_notification_summary=0x7f060037;
+        public static final int pref_notification_title=0x7f060035;
+        public static final int pref_view_bookmark_default_action_key=0x7f060039;
+        public static final int pref_view_bookmark_default_action_summary=0x7f06003a;
+        public static final int pref_view_bookmark_default_action_title=0x7f060038;
+        public static final int profile_action=0x7f060016;
         /**  Button that takes the user to the "sign in" screen 
          */
-        public static final int sign_in_button_label=0x7f060011;
-        public static final int tag_search_text=0x7f060027;
-        public static final int titleMain=0x7f060016;
+        public static final int sign_in_button_label=0x7f060013;
+        public static final int tag_search_hint=0x7f06002a;
+        public static final int tag_search_label=0x7f060029;
+        public static final int tag_search_text=0x7f06002d;
+        public static final int titleMain=0x7f060018;
         /**  Message shown in progress dialog while app connects to the server 
          */
         public static final int ui_activity_authenticating=0x7f060007;
         /**  Title string for Login activity
          */
         public static final int ui_activity_title=0x7f060006;
-        public static final int view_bookmark_account_title=0x7f06002e;
-        public static final int view_bookmark_notes_title=0x7f06002b;
-        public static final int view_bookmark_tags_title=0x7f06002c;
-        public static final int view_bookmark_time_title=0x7f06002d;
-        public static final int view_profile=0x7f060015;
+        public static final int view_bookmark_account_title=0x7f060034;
+        public static final int view_bookmark_notes_title=0x7f060031;
+        public static final int view_bookmark_tags_title=0x7f060032;
+        public static final int view_bookmark_time_title=0x7f060033;
+        public static final int view_profile=0x7f060017;
+    }
+    public static final class style {
+        public static final int AddBookmarkButton=0x7f070005;
+        public static final int AddBookmarkButtonBar=0x7f070006;
+        public static final int AddBookmarkFieldEdit=0x7f070004;
+        public static final int AddBookmarkFieldTitle=0x7f070003;
+        public static final int LayoutRight=0x7f070000;
+        public static final int LoginButton=0x7f07000a;
+        public static final int LoginButtonFrame=0x7f070009;
+        public static final int LoginFrame=0x7f070007;
+        public static final int LoginMessage=0x7f070008;
+        public static final int ViewBookmarkFieldContent=0x7f070002;
+        public static final int ViewBookmarkFieldTitle=0x7f070001;
     }
     public static final class xml {
         public static final int account_preferences=0x7f040000;

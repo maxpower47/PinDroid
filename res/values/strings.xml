@@ -65,7 +65,9 @@
     <!-- Message shown if the provided account doesn't support the current activity. -->
     <string name="login_activity_newaccount_text">Sign in to your Delicious account. </string>
     
-    <string name="login_activity_authtype_text">Choose your account type. </string>
+    <string name="login_activity_authtype_text">Choose your account type.</string>
+    <string name="login_activity_authtype_yahoo">Yahoo</string>
+    <string name="login_activity_authtype_delicious">Delicious</string>
 
     <!-- Button that takes the user to the "sign in" screen -->
     <string name="sign_in_button_label">Sign in</string>
@@ -91,9 +93,17 @@
     <string name="add_title_notes">Notes</string>
     <string name="add_title_tags">Tags</string>
     <string name="add_title_suggest_tags">Suggested Tags</string>
-    <string name="bookmark_search_label">Delicious</string>
-    <string name="bookmark_search_hint">Tags, Titles, Notes</string>
-    <string name="bookmark_search_description">Tags, titles, and notes</string>
+    
+    <string name="main_search_label">Delicious</string>
+    <string name="main_search_hint">Tags, Titles, Notes</string>
+    <string name="main_search_description">Tags, titles, and notes</string>
+    
+    <string name="tag_search_label">Delicious Tags</string>
+    <string name="tag_search_hint">Tags</string>
+    
+    <string name="bookmark_search_label">Delicious Bookmarks</string>
+    <string name="bookmark_search_hint">Titles, Notes</string>
+    
     <string name="tag_search_text">Search Delicious</string>
     
     <string name="add_bookmark_success_msg">Bookmark Added Successfully</string>
