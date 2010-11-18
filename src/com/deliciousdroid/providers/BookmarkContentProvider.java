@@ -23,6 +23,12 @@ package com.deliciousdroid.providers;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import com.deliciousdroid.Constants;
 import com.deliciousdroid.R;
@@ -64,6 +70,8 @@ public class BookmarkContentProvider extends ContentProvider {
 	private static final int Bookmarks = 1;
 	private static final int SearchSuggest = 2;
 	private static final int Tags = 3;
+	private static final int TagSearchSuggest = 4;
+	private static final int BookmarkSearchSuggest = 5;
 	
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
 	
@@ -201,6 +209,12 @@ public class BookmarkContentProvider extends ContentProvider {
 				return getSearchSuggestions(query);
 			case Tags:
 				return getTags(uri, projection, selection, selectionArgs, sortOrder);
+			case TagSearchSuggest:
+				String tagQuery = uri.getLastPathSegment().toLowerCase();
+				return getSearchCursor(getTagSearchSuggestions(tagQuery));
+			case BookmarkSearchSuggest:
+				String bookmarkQuery = uri.getLastPathSegment().toLowerCase();
+				return getSearchCursor(getBookmarkSearchSuggestions(bookmarkQuery));
 			default:
 				throw new IllegalArgumentException("Unknown Uri: " + uri);
 		}
@@ -230,9 +244,70 @@ public class BookmarkContentProvider extends ContentProvider {
 		mAccountManager = AccountManager.get(getContext());
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		
-		ArrayList<SearchSuggestionContent> suggestions = new ArrayList<SearchSuggestionContent>();
+		Map<String, SearchSuggestionContent> tagSuggestions = new TreeMap<String, SearchSuggestionContent>();
+		Map<String, SearchSuggestionContent> bookmarkSuggestions = new TreeMap<String, SearchSuggestionContent>();
+			
+		tagSuggestions = getTagSearchSuggestions(query);
+		bookmarkSuggestions = getBookmarkSearchSuggestions(query);
+	
+		SortedMap<String, SearchSuggestionContent> s = new TreeMap<String, SearchSuggestionContent>();
+		s.putAll(tagSuggestions);
+		s.putAll(bookmarkSuggestions);
 		
-		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
+		return getSearchCursor(s);
+	}
+	
+	private Map<String, SearchSuggestionContent> getBookmarkSearchSuggestions(String query) {
+		Log.d("getBookmarkSearchSuggestions", query);
+		
+		mAccountManager = AccountManager.get(getContext());
+		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+		
+		Map<String, SearchSuggestionContent> suggestions = new TreeMap<String, SearchSuggestionContent>();
+				
+		// Title/description/notes search suggestions
+		SQLiteQueryBuilder bookmarkqb = new SQLiteQueryBuilder();	
+		bookmarkqb.setTables(BOOKMARK_TABLE_NAME);
+		
+		String selection = Bookmark.Description + " LIKE '%" + query + "%' OR " + 
+			Bookmark.Notes + " LIKE '%" + query + "%'";
+		
+		String[] projection = new String[] {BaseColumns._ID, Bookmark.Description, Bookmark.Url};
+
+		Cursor c = getBookmarks(Bookmark.CONTENT_URI, projection, selection, null, null);
+		
+		if(c.moveToFirst()){
+			int descColumn = c.getColumnIndex(Bookmark.Description);
+			int idColumn = c.getColumnIndex(BaseColumns._ID);
+			int urlColumn = c.getColumnIndex(Bookmark.Url);
+
+			do {			
+				Uri.Builder data = new Uri.Builder();
+				data.scheme(Constants.CONTENT_SCHEME);
+				data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
+				data.appendEncodedPath("bookmarks");
+				data.appendEncodedPath(c.getString(idColumn));
+				
+				String title = c.getString(descColumn);
+				
+				suggestions.put(title, new SearchSuggestionContent(title, 
+					c.getString(urlColumn), R.drawable.icon, R.drawable.bookmark, 
+					data.build().toString()));
+				
+			} while(c.moveToNext());	
+		}
+		c.close();
+
+		return suggestions;
+	}
+	
+	private Map<String, SearchSuggestionContent> getTagSearchSuggestions(String query) {
+		Log.d("getTagSearchSuggestions", query);
+		
+		mAccountManager = AccountManager.get(getContext());
+		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+		
+		Map<String, SearchSuggestionContent> suggestions = new TreeMap<String, SearchSuggestionContent>();
 		
 		// Tag search suggestions
 		SQLiteQueryBuilder tagqb = new SQLiteQueryBuilder();	
@@ -242,7 +317,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		
 		String[] projection = new String[] {BaseColumns._ID, Tag.Name, Tag.Count};
 
-		Cursor c = tagqb.query(rdb, projection, selection, null, null, null, null);
+		Cursor c = getTags(Tag.CONTENT_URI, projection, selection, null, null);
 		
 		if(c.moveToFirst()){
 			int nameColumn = c.getColumnIndex(Tag.Name);
@@ -256,48 +331,20 @@ public class BookmarkContentProvider extends ContentProvider {
 				data.appendQueryParameter("tagname", c.getString(nameColumn));
 				
 				int count = c.getInt(countColumn);
+				String name = c.getString(nameColumn);
 				
-				suggestions.add(new SearchSuggestionContent(c.getString(nameColumn), 
+				suggestions.put(name, new SearchSuggestionContent(name, 
 					Integer.toString(count) + " bookmark" + (count > 1 ? "s" : ""),
 					R.drawable.icon, R.drawable.tag, data.build().toString()));
 				
 			} while(c.moveToNext());	
 		}
 		c.close();
-		
-		// Title/description/notes search suggestions
-		SQLiteQueryBuilder bookmarkqb = new SQLiteQueryBuilder();	
-		bookmarkqb.setTables(BOOKMARK_TABLE_NAME);
-		
-		String bookmarkselection = Bookmark.Description + " LIKE '%" + query + "%' OR " + 
-			Bookmark.Notes + " LIKE '%" + query + "%'";
-		
-		String[] bookmarkprojection = new String[] {BaseColumns._ID, Bookmark.Description, Bookmark.Url};
 
-		Cursor bookmarkc = bookmarkqb.query(rdb, bookmarkprojection, bookmarkselection, null, null, null, null);
-		
-		if(bookmarkc.moveToFirst()){
-			int descColumn = bookmarkc.getColumnIndex(Bookmark.Description);
-			int idColumn = bookmarkc.getColumnIndex(BaseColumns._ID);
-			int urlColumn = bookmarkc.getColumnIndex(Bookmark.Url);
-
-			do {			
-				Uri.Builder data = new Uri.Builder();
-				data.scheme(Constants.CONTENT_SCHEME);
-				data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
-				data.appendEncodedPath("bookmarks");
-				data.appendEncodedPath(bookmarkc.getString(idColumn));
-				
-				suggestions.add(new SearchSuggestionContent(bookmarkc.getString(descColumn), 
-					bookmarkc.getString(urlColumn), R.drawable.icon, R.drawable.bookmark, 
-					data.build().toString()));
-				
-			} while(bookmarkc.moveToNext());	
-		}
-		bookmarkc.close();
-		
-		Collections.sort(suggestions, new SearchSuggestionContent.Comparer());
-		
+		return suggestions;
+	}
+	
+	private Cursor getSearchCursor(Map<String, SearchSuggestionContent> list) {
 		MatrixCursor mc = new MatrixCursor(new String[] {BaseColumns._ID, 
 				SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, 
 				SearchManager.SUGGEST_COLUMN_INTENT_DATA, 
@@ -305,7 +352,7 @@ public class BookmarkContentProvider extends ContentProvider {
 
 		int i = 0;
 		
-		for(SearchSuggestionContent s : suggestions) {
+		for(SearchSuggestionContent s : list.values()) {
 			mc.addRow(new Object[]{ i++, s.getText1(), s.getText2(), s.getIntentData(), 
 				s.getIcon1(), s.getIcon2() });
 		}
@@ -336,10 +383,12 @@ public class BookmarkContentProvider extends ContentProvider {
         UriMatcher matcher =  new UriMatcher(UriMatcher.NO_MATCH);
         matcher.addURI(AUTHORITY, "bookmark", Bookmarks);
         matcher.addURI(AUTHORITY, "tag", Tags);
-        matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SearchSuggest);
-        matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SearchSuggest);
+        matcher.addURI(AUTHORITY, "main/" + SearchManager.SUGGEST_URI_PATH_QUERY, SearchSuggest);
+        matcher.addURI(AUTHORITY, "main/" + SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SearchSuggest);
+        matcher.addURI(AUTHORITY, "tag/" + SearchManager.SUGGEST_URI_PATH_QUERY, TagSearchSuggest);
+        matcher.addURI(AUTHORITY, "tag/" + SearchManager.SUGGEST_URI_PATH_QUERY + "/*", TagSearchSuggest);
+        matcher.addURI(AUTHORITY, "bookmark/" + SearchManager.SUGGEST_URI_PATH_QUERY, BookmarkSearchSuggest);
+        matcher.addURI(AUTHORITY, "bookmark/" + SearchManager.SUGGEST_URI_PATH_QUERY + "/*", BookmarkSearchSuggest);
         return matcher;
     }
-
-
 }
