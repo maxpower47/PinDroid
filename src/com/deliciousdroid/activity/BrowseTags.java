@@ -31,15 +31,11 @@ import com.deliciousdroid.platform.TagManager;
 import com.deliciousdroid.providers.BookmarkContentProvider;
 import com.deliciousdroid.providers.TagContent.Tag;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -47,24 +43,15 @@ import android.widget.TextView;
 import android.view.*;
 
 public class BrowseTags extends AppBaseActivity {
-
-	WebView mWebView;
-	AccountManager mAccountManager;
-	String username = null;
-	Account mAccount = null;
-	Context mContext;
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_tags);
-		mContext = this;
 		Intent intent = getIntent();
 		
 		ArrayList<Tag> tagList = new ArrayList<Tag>();
 		
-		mAccountManager = AccountManager.get(this);
-		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		
 		Uri data = getIntent().getData();
 		if(data != null) {

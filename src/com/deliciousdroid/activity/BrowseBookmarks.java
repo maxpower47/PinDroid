@@ -38,11 +38,8 @@ import com.deliciousdroid.platform.BookmarkManager;
 import com.deliciousdroid.providers.BookmarkContentProvider;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -64,15 +61,11 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class BrowseBookmarks extends AppBaseActivity {
 	
-	private AccountManager mAccountManager;
-	private Account mAccount;
 	private ListView lv;
-	private Context mContext;
 	
 	private String bookmarkLimit;
 	private String defaultAction;
 	
-	private String username;
 	private String tagname = null;
 	
 	@Override
@@ -81,10 +74,6 @@ public class BrowseBookmarks extends AppBaseActivity {
 		setContentView(R.layout.browse_bookmarks);
 		
 		Intent intent = getIntent();
-		
-		mAccountManager = AccountManager.get(this);
-		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
-		mContext = this;
 		
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     	bookmarkLimit = settings.getString("pref_contact_bookmark_results", "50");
@@ -291,10 +280,6 @@ public class BrowseBookmarks extends AppBaseActivity {
 		
 		Log.d("View Bookmark Uri", data.build().toString());
 		startActivity(viewBookmark);
-	}
-	
-	private boolean isMyself() {
-		return mAccount.name.equals(username);
 	}
 	
     public class LoadBookmarkFeedTask extends AsyncTask<String, Integer, Boolean>{

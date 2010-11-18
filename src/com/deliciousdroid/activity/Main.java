@@ -25,11 +25,8 @@ import com.deliciousdroid.R;
 import com.deliciousdroid.Constants;
 import com.deliciousdroid.providers.BookmarkContentProvider;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,7 +35,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -47,11 +43,6 @@ import android.widget.Toast;
 import android.view.View;
 
 public class Main extends AppBaseActivity {
-
-	WebView mWebView;
-	private AccountManager mAccountManager;
-	private Account mAccount;
-	private Context mContext;
 	
 	static final String[] MENU_ITEMS = new String[] {"View My Recent", "View My Tags", 
 		"View Network Recent", "View Hotlist", "View Popular"};
@@ -60,11 +51,9 @@ public class Main extends AppBaseActivity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
-		mContext = this;
-		mAccountManager = AccountManager.get(mContext);
-		
+
 		Intent intent = getIntent();
-		
+
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
     	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
 		
@@ -85,19 +74,21 @@ public class Main extends AppBaseActivity {
 			alert.setIcon(android.R.drawable.ic_dialog_alert);
 			alert.show();
 		} else if(lastUpdate == 0) {
-			mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
-			
+	
 			Toast.makeText(this, "Syncing...", Toast.LENGTH_LONG).show();
 			
 			ContentResolver.requestSync(mAccount, BookmarkContentProvider.AUTHORITY, Bundle.EMPTY);
+		} else {
+			username = mAccount.name;
 		}
-		
+
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
 			Intent i = new Intent(mContext, MainSearchResults.class);
 			i.putExtras(getIntent().getExtras());
 			startActivity(i);
 			finish();
 		} else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
+			
 			Uri data = intent.getData();
 			String path = null;
 			String tagname = null;
@@ -130,7 +121,6 @@ public class Main extends AppBaseActivity {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		    	if(position == 0){
-		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		    		
 		    		Intent i = new Intent(mContext, BrowseBookmarks.class);
 		    		Uri.Builder data = new Uri.Builder();
@@ -144,7 +134,6 @@ public class Main extends AppBaseActivity {
 		    		
 		    		startActivity(i);
 		    	} else if(position == 1){
-		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		    		
 		    		Intent i = new Intent(mContext, BrowseTags.class);
 		    		Uri.Builder data = new Uri.Builder();
@@ -157,7 +146,6 @@ public class Main extends AppBaseActivity {
 		    		
 		    		startActivity(i);
 		    	} else if(position == 2){
-		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		    		
 		    		Intent i = new Intent(mContext, BrowseBookmarks.class);
 		    		Uri.Builder data = new Uri.Builder();
@@ -169,7 +157,6 @@ public class Main extends AppBaseActivity {
 		    		
 		    		startActivity(i);
 		    	} else if(position == 3){
-		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		    		
 		    		Intent i = new Intent(mContext, BrowseBookmarks.class);
 		    		Uri.Builder data = new Uri.Builder();
@@ -181,7 +168,6 @@ public class Main extends AppBaseActivity {
 		    		
 		    		startActivity(i);
 		    	} else if(position == 4){
-		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		    		
 		    		Intent i = new Intent(mContext, BrowseBookmarks.class);
 		    		Uri.Builder data = new Uri.Builder();

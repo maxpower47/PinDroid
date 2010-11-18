@@ -22,9 +22,10 @@ public final class R {
         public static final int ic_menu_delete=0x7f020002;
         public static final int ic_menu_edit=0x7f020003;
         public static final int ic_menu_preferences=0x7f020004;
-        public static final int ic_menu_view=0x7f020005;
-        public static final int icon=0x7f020006;
-        public static final int tag=0x7f020007;
+        public static final int ic_menu_search=0x7f020005;
+        public static final int ic_menu_view=0x7f020006;
+        public static final int icon=0x7f020007;
+        public static final int tag=0x7f020008;
     }
     public static final class id {
         public static final int add_button_cancel=0x7f09000c;
@@ -47,7 +48,7 @@ public final class R {
         public static final int bookmark_tags=0x7f09000e;
         public static final int main_menu_description=0x7f090018;
         public static final int menu_addbookmark=0x7f090027;
-        public static final int menu_mybookmarks=0x7f090028;
+        public static final int menu_search=0x7f090028;
         public static final int menu_settings=0x7f090029;
         public static final int menu_view_deletebookmark=0x7f09002c;
         public static final int menu_view_editbookmark=0x7f09002b;
@@ -146,7 +147,7 @@ public final class R {
         public static final int main_search_hint=0x7f060027;
         public static final int main_search_label=0x7f060026;
         public static final int menu_addbookmark_title=0x7f060019;
-        public static final int menu_mybookmarks_title=0x7f06001a;
+        public static final int menu_search_title=0x7f06001a;
         public static final int menu_settings_title=0x7f06001b;
         public static final int menu_view_deletebookmark_title=0x7f06001e;
         public static final int menu_view_editbookmark_title=0x7f06001d;

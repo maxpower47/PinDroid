@@ -80,7 +80,7 @@
     <string name="titleMain">Delicious</string>
     
     <string name="menu_addbookmark_title">Add Bookmark</string>
-    <string name="menu_mybookmarks_title">My Bookmarks</string>
+    <string name="menu_search_title">Search</string>
     <string name="menu_settings_title">Settings</string>
     <string name="menu_view_openbookmark_title">Open in browser</string>
     <string name="menu_view_editbookmark_title">Edit</string>
@@ -102,7 +102,7 @@
     <string name="tag_search_hint">Tags</string>
     
     <string name="bookmark_search_label">Delicious Bookmarks</string>
-    <string name="bookmark_search_hint">Titles, Notes</string>
+    <string name="bookmark_search_hint">Tags, Titles, Notes</string>
     
     <string name="tag_search_text">Search Delicious</string>
     

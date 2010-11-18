@@ -21,20 +21,46 @@
 
 package com.deliciousdroid.activity;
 
+import com.deliciousdroid.Constants;
 import com.deliciousdroid.R;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class AppBaseActivity extends ListActivity {
+	
+	protected AccountManager mAccountManager;
+	protected Account mAccount;
+	protected Context mContext;
+	protected String username = null;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		
+		mAccountManager = AccountManager.get(this);
+		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
+			mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+		}
+		mContext = this;
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.main_menu, menu);
+	    
+	    if(!isMyself()) {
+	    	menu.findItem(R.id.menu_search).setEnabled(false);
+	    }
+	    
 	    return true;
 	}
 	
@@ -46,9 +72,8 @@ public class AppBaseActivity extends ListActivity {
 			Intent addBookmark = new Intent(this, AddBookmark.class);
 			startActivity(addBookmark);
 			return true;
-	    case R.id.menu_mybookmarks:
-			Intent main = new Intent(this, Main.class);
-			startActivity(main);
+	    case R.id.menu_search:			
+			this.onSearchRequested();
 	        return true;
 	    case R.id.menu_settings:
 			Intent prefs = new Intent(this, Preferences.class);
@@ -57,5 +82,9 @@ public class AppBaseActivity extends ListActivity {
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }
+	}
+	
+	protected boolean isMyself() {
+		return mAccount.name.equals(username);
 	}
 }
