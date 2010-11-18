@@ -92,7 +92,6 @@ public class BrowseBookmarks extends AppBaseActivity {
 		
     	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 
-
 		Uri data = intent.getData();
 		String path = null;
 		
@@ -104,9 +103,9 @@ public class BrowseBookmarks extends AppBaseActivity {
 		
     	if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
     		Bundle searchData = intent.getBundleExtra(SearchManager.APP_DATA);
-    		String tag = null;
+
     		if(searchData != null) {
-    			tag = searchData.getString("tagname");
+    			tagname = searchData.getString("tagname");
     			username = searchData.getString("username");
     		}
     		
@@ -115,7 +114,7 @@ public class BrowseBookmarks extends AppBaseActivity {
     		setTitle("Bookmark Search Results For \"" + query + "\"");
     		
     		if(isMyself()) {
-    			bookmarkList = BookmarkManager.SearchBookmarks(query, tag, username, this);
+    			bookmarkList = BookmarkManager.SearchBookmarks(query, tagname, username, this);
     		
     			setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));
     		}
@@ -132,7 +131,6 @@ public class BrowseBookmarks extends AppBaseActivity {
 
 			setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
 
-			
 		} else if(path.equals("/bookmarks")) {
 			try{
 				if(tagname != null && tagname != "") {
@@ -149,6 +147,13 @@ public class BrowseBookmarks extends AppBaseActivity {
 				setTitle("My Network's Recent Bookmarks");
 				
 				new LoadBookmarkFeedTask().execute("network");
+			}
+			catch(Exception e){}
+		}  else if(username.equals("hotlist")){
+			try{
+				setTitle("Hotlist Bookmarks");
+				
+				new LoadBookmarkFeedTask().execute("hotlist");
 			}
 			catch(Exception e){}
 		} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
@@ -309,6 +314,8 @@ public class BrowseBookmarks extends AppBaseActivity {
 			try {
 				if(user.equals("network")) {
 					bookmarkList = DeliciousFeed.fetchNetworkRecent(mAccount.name, Integer.parseInt(bookmarkLimit));
+				} else if(user.equals("hotlist")) {
+					bookmarkList = DeliciousFeed.fetchHotlist(Integer.parseInt(bookmarkLimit));
 				} else {
 					bookmarkList = DeliciousFeed.fetchFriendBookmarks(user, tag, Integer.parseInt(bookmarkLimit));
 				}

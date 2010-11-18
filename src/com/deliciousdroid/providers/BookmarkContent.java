@@ -223,9 +223,17 @@ public class BookmarkContent {
                 final String url = userBookmark.getString("u");
                 final String description = userBookmark.getString("d");
                 final JSONArray tags = userBookmark.getJSONArray("t");
-                final String notes = userBookmark.getString("n");
                 final String stime = userBookmark.getString("dt");
-                final String account = userBookmark.getString("a");
+                
+                String notes = "";
+                String account = "";
+                
+                if(userBookmark.has("n")) {
+                	notes = userBookmark.getString("n");
+                }
+                if(userBookmark.has("a")) {
+                	account = userBookmark.getString("a");
+                }
                 
 				Date d = new Date(0);
 				if(stime != null && stime != ""){

@@ -52,7 +52,7 @@ public class Main extends AppBaseActivity {
 	private Account mAccount;
 	private Context mContext;
 	
-	static final String[] MENU_ITEMS = new String[] {"View My Recent", "View My Tags", "View Network Recent"};
+	static final String[] MENU_ITEMS = new String[] {"View My Recent", "View My Tags", "View Network Recent", "View Hotlist"};
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -134,6 +134,18 @@ public class Main extends AppBaseActivity {
 		    		Uri.Builder data = new Uri.Builder();
 		    		data.scheme(Constants.CONTENT_SCHEME);
 		    		data.encodedAuthority("network@" + BookmarkContentProvider.AUTHORITY);
+		    		i.setData(data.build());
+		    		
+		    		Log.d("uri", data.build().toString());
+		    		
+		    		startActivity(i);
+		    	}  else if(position == 3){
+		    		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+		    		
+		    		Intent i = new Intent(mContext, BrowseBookmarks.class);
+		    		Uri.Builder data = new Uri.Builder();
+		    		data.scheme(Constants.CONTENT_SCHEME);
+		    		data.encodedAuthority("hotlist@" + BookmarkContentProvider.AUTHORITY);
 		    		i.setData(data.build());
 		    		
 		    		Log.d("uri", data.build().toString());
