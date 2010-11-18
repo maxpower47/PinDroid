@@ -201,4 +201,57 @@ public class BookmarkManager {
 
 		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, selectionargs);
 	}
+	
+	public static ArrayList<Bookmark> SearchBookmarks(String query, String tagname, String username, Context context) {
+		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
+		String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, 
+				Bookmark.Meta, Bookmark.Tags};
+		String selection = null;
+		String[] selectionargs = new String[]{username};
+		String sortorder = null;
+		
+		if(query != null && query != "" && (tagname == null || tagname == "")) {
+			selection = "(" + Bookmark.Tags + " LIKE '%" + query + "%' OR " +
+				Bookmark.Description + " LIKE '%" + query + "%' OR " +
+				Bookmark.Notes + " LIKE '%" + query + "%') AND " +
+				Bookmark.Account + "=?";
+		} else if(query != null && query != ""){
+			selection = "(" + Bookmark.Description + " LIKE '%" + query + "%' OR " +
+				Bookmark.Notes + " LIKE '%" + query + "%') AND " +
+				Bookmark.Account + "=? AND " +
+				"(" + Bookmark.Tags + " LIKE '% " + tagname + " %' OR " +
+				Bookmark.Tags + " LIKE '% " + tagname + "' OR " +
+				Bookmark.Tags + " LIKE '" + tagname + " %' OR " +
+				Bookmark.Tags + " = '" + tagname + "')";
+		} else {
+			selection = Bookmark.Account + "=?";
+		}
+		
+		sortorder = Bookmark.Description + " ASC";
+		
+		Uri bookmarks = Bookmark.CONTENT_URI;
+		
+		Cursor c = context.getContentResolver().query(bookmarks, projection, selection, selectionargs, sortorder);				
+		
+		if(c.moveToFirst()){
+			int idColumn = c.getColumnIndex(Bookmark._ID);
+			int urlColumn = c.getColumnIndex(Bookmark.Url);
+			int descriptionColumn = c.getColumnIndex(Bookmark.Description);
+			int tagsColumn = c.getColumnIndex(Bookmark.Tags);
+			int metaColumn = c.getColumnIndex(Bookmark.Meta);
+			
+			do {
+				
+				Bookmark b = new Bookmark(c.getInt(idColumn), "", c.getString(urlColumn), 
+						c.getString(descriptionColumn), "", c.getString(tagsColumn), "", 
+						c.getString(metaColumn), 0);
+				
+				bookmarkList.add(b);
+				
+			} while(c.moveToNext());
+				
+		}
+		c.close();
+		return bookmarkList;
+	}
 }

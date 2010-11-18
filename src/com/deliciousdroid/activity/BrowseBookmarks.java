@@ -41,6 +41,7 @@ import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -74,11 +75,14 @@ public class BrowseBookmarks extends AppBaseActivity {
 	private String defaultAction;
 	
 	private String username;
+	private String tagname = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_bookmarks);
+		
+		Intent intent = getIntent();
 		
 		mAccountManager = AccountManager.get(this);
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
@@ -88,18 +92,35 @@ public class BrowseBookmarks extends AppBaseActivity {
     	bookmarkLimit = settings.getString("pref_contact_bookmark_results", "50");
     	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
 		
-		Log.d("browse bookmarks", getIntent().getDataString());
-		Uri data = getIntent().getData();
-		String path = data.getPath();
-		Log.d("path", path);
-		username = data.getUserInfo();
-		String tagname = data.getQueryParameter("tagname");
+    	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
+
+
+		Uri data = intent.getData();
+		String path = null;
+		
+		if(data != null) {
+			path = data.getPath();
+			username = data.getUserInfo();
+			tagname = data.getQueryParameter("tagname");
+		}
 		
 		myself = mAccount.name.equals(username);
 		
-		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
-		
-		if(path.equals("/bookmarks") && myself){
+    	if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+    		Bundle searchData = intent.getBundleExtra(SearchManager.APP_DATA);
+    		String tag = null;
+    		if(searchData != null) {
+    			tag = searchData.getString("tagname");
+    		}
+    		
+    		String query = intent.getStringExtra(SearchManager.QUERY);
+    		
+    		bookmarkList = BookmarkManager.SearchBookmarks(query, tag, mAccount.name, this);
+    		
+    		setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
+    		
+    	} else if(path.equals("/bookmarks") && myself) {
+    		
 			if(tagname != null && tagname != "") {
 				setTitle("My Bookmarks Tagged With " + tagname);
 			} else {
@@ -209,6 +230,14 @@ public class BrowseBookmarks extends AppBaseActivity {
 				return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean onSearchRequested() {
+		Bundle contextData = new Bundle();
+		contextData.putString("tagname", tagname);
+		startSearch(null, false, contextData, false);
+		return true;
 	}
 	
 	private void openBookmarkInBrowser(Bookmark b) {
