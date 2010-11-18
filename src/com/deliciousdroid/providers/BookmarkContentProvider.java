@@ -68,6 +68,8 @@ public class BookmarkContentProvider extends ContentProvider {
 	private static final int TagSearchSuggest = 4;
 	private static final int BookmarkSearchSuggest = 5;
 	
+	private static final String SuggestionLimit = "10";
+	
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
 	
 	public static final String AUTHORITY = "com.deliciousdroid.providers.BookmarkContentProvider";
@@ -216,19 +218,27 @@ public class BookmarkContentProvider extends ContentProvider {
 	}
 	
 	private Cursor getBookmarks(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
+		return getBookmarks(uri, projection, selection, selectionArgs, sortOrder, null);
+	}
+	
+	private Cursor getBookmarks(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder, String limit) {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
 		qb.setTables(BOOKMARK_TABLE_NAME);
-		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder);
+		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder, limit);
 		c.setNotificationUri(getContext().getContentResolver(), uri);
 		return c;
 	}
 	
 	private Cursor getTags(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
+		return getTags(uri, projection, selection, selectionArgs, sortOrder, null);
+	}
+	
+	private Cursor getTags(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder, String limit) {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
 		qb.setTables(TAG_TABLE_NAME);
-		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder);
+		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder, limit);
 		c.setNotificationUri(getContext().getContentResolver(), uri);
 		return c;
 	}
@@ -269,7 +279,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		
 		String[] projection = new String[] {BaseColumns._ID, Bookmark.Description, Bookmark.Url};
 
-		Cursor c = getBookmarks(Bookmark.CONTENT_URI, projection, selection, null, null);
+		Cursor c = getBookmarks(Bookmark.CONTENT_URI, projection, selection, null, null, SuggestionLimit);
 		
 		if(c.moveToFirst()){
 			int descColumn = c.getColumnIndex(Bookmark.Description);
@@ -312,7 +322,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		
 		String[] projection = new String[] {BaseColumns._ID, Tag.Name, Tag.Count};
 
-		Cursor c = getTags(Tag.CONTENT_URI, projection, selection, null, null);
+		Cursor c = getTags(Tag.CONTENT_URI, projection, selection, null, null, SuggestionLimit);
 		
 		if(c.moveToFirst()){
 			int nameColumn = c.getColumnIndex(Tag.Name);
