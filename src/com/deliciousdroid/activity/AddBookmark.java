@@ -64,6 +64,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 	private TextView mSuggestTags;
 	private CheckBox mPrivate;
 	private Button mButtonSave;
+	private Button mButtonCancel;
 	private AccountManager mAccountManager;
 	private Account account;
 	private Bookmark bookmark;
@@ -84,6 +85,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		mSuggestTags = (TextView) findViewById(R.id.add_suggest_tags);
 		mPrivate = (CheckBox) findViewById(R.id.add_edit_private);
 		mButtonSave = (Button) findViewById(R.id.add_button_save);
+		mButtonCancel = (Button) findViewById(R.id.add_button_cancel);
 		context = this;
 		
 		res = getResources();
@@ -131,7 +133,8 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 			}
 		});
 
-		mButtonSave.setOnClickListener(this);	
+		mButtonSave.setOnClickListener(this);
+		mButtonCancel.setOnClickListener(this);
 	}
 	
     public void save() {
@@ -160,6 +163,8 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     public void onClick(View v) {
         if (v == mButtonSave) {
             save();
+        } else if(v == mButtonCancel) {
+        	finish();
         }
     }
     
