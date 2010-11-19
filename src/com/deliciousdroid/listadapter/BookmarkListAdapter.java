@@ -24,6 +24,7 @@ package com.deliciousdroid.listadapter;
 import java.util.ArrayList;
 
 import com.deliciousdroid.R;
+import com.deliciousdroid.listadapter.ViewHolder.BookmarkListViewHolder;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 
 import android.content.Context;
@@ -44,23 +45,26 @@ public class BookmarkListAdapter extends ArrayAdapter<Bookmark> {
     
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-    	View v = convertView;
-        if (v == null) {
+    	BookmarkListViewHolder holder;
+    	
+        if (convertView == null) {
             LayoutInflater vi = (LayoutInflater)this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.bookmark_view, null);
+            convertView = vi.inflate(R.layout.bookmark_view, null);
+            
+            holder = new BookmarkListViewHolder();
+            holder.description = (TextView) convertView.findViewById(R.id.bookmark_description);
+            holder.tags = (TextView) convertView.findViewById(R.id.bookmark_tags);
+            
+            convertView.setTag(holder);
+        } else {
+        	holder = (BookmarkListViewHolder) convertView.getTag();
         }
+        
         Bookmark o = bookmarks.get(position);
         if (o != null) {
-         	TextView td = (TextView) v.findViewById(R.id.bookmark_description);
-         	TextView tu = (TextView) v.findViewById(R.id.bookmark_tags);
-            if (td != null) {
-               	td.setText(o.getDescription());                            
-            }
-            if (tu != null) {
-               	tu.setText(o.getTags());                            
-            }
-
+            holder.description.setText(o.getDescription());                            
+            holder.tags.setText(o.getTags());                            
         }
-        return v;
+        return convertView;
     }
 }

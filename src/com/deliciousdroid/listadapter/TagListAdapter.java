@@ -24,6 +24,8 @@ package com.deliciousdroid.listadapter;
 import java.util.ArrayList;
 
 import com.deliciousdroid.R;
+import com.deliciousdroid.listadapter.ViewHolder.BookmarkListViewHolder;
+import com.deliciousdroid.listadapter.ViewHolder.TagListViewHolder;
 import com.deliciousdroid.providers.TagContent.Tag;
 
 import android.content.Context;
@@ -44,22 +46,25 @@ public class TagListAdapter extends ArrayAdapter<Tag> {
     
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-            View v = convertView;
-            if (v == null) {
-                LayoutInflater vi = (LayoutInflater)this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = vi.inflate(R.layout.tag_view, null);
-            }
-            Tag o = tags.get(position);
-            if (o != null) {
-            	TextView tn = (TextView) v.findViewById(R.id.tag_name);
-            	TextView tc = (TextView) v.findViewById(R.id.tag_count);
-                if (tn != null) {
-                  	tn.setText(o.getTagName());                            
-                }
-                if (tc != null) {
-                  	tc.setText(Integer.toString(o.getCount()));                            
-                }
-            }
-            return v;
+    	TagListViewHolder holder;
+    	
+        if (convertView == null) {
+            LayoutInflater vi = (LayoutInflater)this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = vi.inflate(R.layout.tag_view, null);
+            
+            holder = new TagListViewHolder();
+            holder.name = (TextView) convertView.findViewById(R.id.tag_name);
+            holder.count = (TextView) convertView.findViewById(R.id.tag_count);
+            convertView.setTag(holder);
+        } else {
+        	holder = (TagListViewHolder) convertView.getTag();
+        }
+        
+        Tag o = tags.get(position);
+        if (o != null) {
+          	holder.name.setText(o.getTagName());                            
+          	holder.count.setText(Integer.toString(o.getCount()));                            
+        }
+        return convertView;
     }
 }
