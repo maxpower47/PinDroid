@@ -58,7 +58,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	private SQLiteDatabase db;
 	private DatabaseHelper dbHelper;
 	private static final String DATABASE_NAME = "DeliciousBookmarks.db";
-	private static final int DATABASE_VERSION = 18;
+	private static final int DATABASE_VERSION = 19;
 	private static final String BOOKMARK_TABLE_NAME = "bookmark";
 	private static final String TAG_TABLE_NAME = "tag";
 	
@@ -99,16 +99,36 @@ public class BookmarkContentProvider extends ContentProvider {
 					"TIME INTEGER, " +
 					"LASTUPDATE INTEGER);");
 			
+			sqlDb.execSQL("CREATE INDEX " + BOOKMARK_TABLE_NAME + 
+					"_ACCOUNT ON " + BOOKMARK_TABLE_NAME + " " +
+					"(ACCOUNT)");
+			
+			sqlDb.execSQL("CREATE INDEX " + BOOKMARK_TABLE_NAME + 
+					"_TAGS ON " + BOOKMARK_TABLE_NAME + " " +
+					"(TAGS)");
+			
+			sqlDb.execSQL("CREATE INDEX " + BOOKMARK_TABLE_NAME + 
+					"_HASH ON " + BOOKMARK_TABLE_NAME + " " +
+					"(HASH)");
+			
 			sqlDb.execSQL("Create table " + TAG_TABLE_NAME + 
 					" (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
 					"ACCOUNT TEXT, " +
 					"NAME TEXT, " +
 					"COUNT INTEGER);");
 			
+			sqlDb.execSQL("CREATE INDEX " + TAG_TABLE_NAME + 
+					"_ACCOUNT ON " + TAG_TABLE_NAME + " " +
+					"(ACCOUNT)");
+			
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase sqlDb, int oldVersion, int newVersion) {
+			sqlDb.execSQL("DROP INDEX IF EXISTS " + BOOKMARK_TABLE_NAME + "_ACCOUNT");
+			sqlDb.execSQL("DROP INDEX IF EXISTS " + BOOKMARK_TABLE_NAME + "_TAGS");
+			sqlDb.execSQL("DROP INDEX IF EXISTS " + BOOKMARK_TABLE_NAME + "_HASH");
+			sqlDb.execSQL("DROP INDEX IF EXISTS " + TAG_TABLE_NAME + "_ACCOUNT");
 			sqlDb.execSQL("DROP TABLE IF EXISTS " + BOOKMARK_TABLE_NAME);
 			sqlDb.execSQL("DROP TABLE IF EXISTS " + TAG_TABLE_NAME);
 			
