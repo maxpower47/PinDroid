@@ -21,10 +21,16 @@
 
 package com.deliciousdroid.client;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.TreeMap;
+import java.util.zip.GZIPInputStream;
 
+import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -340,7 +346,6 @@ public class DeliciousApi {
     	String url = FETCH_TAGS_URI;
     	  	
     	response = DeliciousApiCall(url, params, account, context);
-    	Log.d("loadTagResponse", response);
     	
         if (response.contains("<?xml")) {
         	tagList = Tag.valueOf(response);
@@ -388,8 +393,8 @@ public class DeliciousApi {
 		post = new HttpGet(builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+").replace("%3F", "?").replace("%3D", "=").replace("%20", "+"));
 		HttpHost host = new HttpHost(DELICIOUS_AUTHORITY);
 		maybeCreateHttpClient();
-		post.setHeader("User-Agent", "DeliciousDroid");
-    	
+		post.setHeader("User-Agent", "DeliciousDroid_0.4.1");
+		post.setHeader("Accept-Encoding", "gzip");
 
     	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
     		Log.d("apiCall", "oauth");
@@ -409,7 +414,20 @@ public class DeliciousApi {
 	        resp = mHttpClient.execute(post);
     	}
     	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-    		return EntityUtils.toString(resp.getEntity());
+    		
+    		InputStream instream = resp.getEntity().getContent();
+    		
+    		Header encoding = resp.getEntity().getContentEncoding();
+    		
+    		if(encoding != null && encoding.getValue().equalsIgnoreCase("gzip")) {
+    			instream = new GZIPInputStream(instream);
+    		}
+    		
+    		String response = convertStreamToString(instream);
+    		
+    		instream.close();
+    		
+    		return response;
     	} else if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
     		throw new AuthenticationException();
     	} else {
@@ -417,4 +435,32 @@ public class DeliciousApi {
     	}
 
     }
+    
+    private static String convertStreamToString(InputStream is) {
+        /*
+         * To convert the InputStream to String we use the BufferedReader.readLine()
+         * method. We iterate until the BufferedReader return null which means
+         * there's no more data to read. Each line will appended to a StringBuilder
+         * and returned as String.
+         */
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+ 
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
+    }
+
 }
