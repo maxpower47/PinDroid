@@ -122,12 +122,13 @@ public class Main extends AppBaseActivity {
 		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		    	if(position == 0){
 		    		
-		    		Intent i = new Intent(mContext, BrowseBookmarks.class);
+		    		Intent i = new Intent();
+		    		i.setAction(Intent.ACTION_VIEW);
+		    		i.addCategory(Intent.CATEGORY_DEFAULT);
 		    		Uri.Builder data = new Uri.Builder();
 		    		data.scheme(Constants.CONTENT_SCHEME);
 		    		data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
 		    		data.appendEncodedPath("bookmarks");
-		    		data.appendQueryParameter("recent", "1");
 		    		i.setData(data.build());
 		    		
 		    		Log.d("uri", data.build().toString());
@@ -135,7 +136,9 @@ public class Main extends AppBaseActivity {
 		    		startActivity(i);
 		    	} else if(position == 1){
 		    		
-		    		Intent i = new Intent(mContext, BrowseTags.class);
+		    		Intent i = new Intent();
+		    		i.setAction(Intent.ACTION_VIEW);
+		    		i.addCategory(Intent.CATEGORY_DEFAULT);
 		    		Uri.Builder data = new Uri.Builder();
 		    		data.scheme(Constants.CONTENT_SCHEME);
 		    		data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
@@ -147,10 +150,13 @@ public class Main extends AppBaseActivity {
 		    		startActivity(i);
 		    	} else if(position == 2){
 		    		
-		    		Intent i = new Intent(mContext, BrowseBookmarks.class);
+		    		Intent i = new Intent();
+		    		i.setAction(Intent.ACTION_VIEW);
+		    		i.addCategory(Intent.CATEGORY_DEFAULT);
 		    		Uri.Builder data = new Uri.Builder();
 		    		data.scheme(Constants.CONTENT_SCHEME);
 		    		data.encodedAuthority("network@" + BookmarkContentProvider.AUTHORITY);
+		    		data.appendEncodedPath("bookmarks");
 		    		i.setData(data.build());
 		    		
 		    		Log.d("uri", data.build().toString());
@@ -158,10 +164,13 @@ public class Main extends AppBaseActivity {
 		    		startActivity(i);
 		    	} else if(position == 3){
 		    		
-		    		Intent i = new Intent(mContext, BrowseBookmarks.class);
+		    		Intent i = new Intent();
+		    		i.setAction(Intent.ACTION_VIEW);
+		    		i.addCategory(Intent.CATEGORY_DEFAULT);
 		    		Uri.Builder data = new Uri.Builder();
 		    		data.scheme(Constants.CONTENT_SCHEME);
 		    		data.encodedAuthority("hotlist@" + BookmarkContentProvider.AUTHORITY);
+		    		data.appendEncodedPath("bookmarks");
 		    		i.setData(data.build());
 		    		
 		    		Log.d("uri", data.build().toString());
@@ -169,10 +178,13 @@ public class Main extends AppBaseActivity {
 		    		startActivity(i);
 		    	} else if(position == 4){
 		    		
-		    		Intent i = new Intent(mContext, BrowseBookmarks.class);
+		    		Intent i = new Intent();
+		    		i.setAction(Intent.ACTION_VIEW);
+		    		i.addCategory(Intent.CATEGORY_DEFAULT);
 		    		Uri.Builder data = new Uri.Builder();
 		    		data.scheme(Constants.CONTENT_SCHEME);
 		    		data.encodedAuthority("popular@" + BookmarkContentProvider.AUTHORITY);
+		    		data.appendEncodedPath("bookmarks");
 		    		i.setData(data.build());
 		    		
 		    		Log.d("uri", data.build().toString());

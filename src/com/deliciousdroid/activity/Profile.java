@@ -61,7 +61,9 @@ public class Profile extends ActivityGroup {
             }
         }
 		
-		Intent bookmarkBrowseIntent = new Intent(this, BrowseBookmarks.class);
+		Intent bookmarkBrowseIntent = new Intent();
+		bookmarkBrowseIntent.setAction(Intent.ACTION_VIEW);
+		bookmarkBrowseIntent.addCategory(Intent.CATEGORY_DEFAULT);
 		
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);

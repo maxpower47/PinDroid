@@ -27,8 +27,6 @@ import java.util.TreeMap;
 
 import com.deliciousdroid.Constants;
 import com.deliciousdroid.R;
-import com.deliciousdroid.activity.BrowseBookmarks;
-import com.deliciousdroid.activity.ViewBookmark;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 import com.deliciousdroid.providers.TagContent.Tag;
 
@@ -39,7 +37,6 @@ import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -465,12 +462,18 @@ public class BookmarkContentProvider extends ContentProvider {
 		mAccountManager = AccountManager.get(getContext());
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		
+		String tagname = uri.getQueryParameter("tagname");
+		
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
 		qb.setTables(BOOKMARK_TABLE_NAME);
 		
 		String[] projection = new String[]{Bookmark.Description, Bookmark.Url, BaseColumns._ID};
-		String selection = Bookmark.Account + "=?";
+		String selection = "(" + Bookmark.Tags + " LIKE '% " + tagname + " %' OR " +
+			Bookmark.Tags + " LIKE '% " + tagname + "' OR " +
+			Bookmark.Tags + " LIKE '" + tagname + " %' OR " +
+			Bookmark.Tags + " = '" + tagname + "') AND " +
+			Bookmark.Account + "=?";
 		String[] selectionArgs = new String[]{mAccount.name};
 		String sortOrder = Bookmark.Description + " ASC";
 		

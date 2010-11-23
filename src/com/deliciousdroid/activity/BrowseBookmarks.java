@@ -131,17 +131,6 @@ public class BrowseBookmarks extends AppBaseActivity {
 
 			setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
 
-		} else if(path.equals("/bookmarks")) {
-			try{
-				if(tagname != null && tagname != "") {
-					setTitle("Bookmarks For " + username + " Tagged With " + tagname);
-				} else {
-					setTitle("Bookmarks For " + username);
-				}
-		    	
-				new LoadBookmarkFeedTask().execute(username, tagname);
-			}
-			catch(Exception e){}
 		} else if(username.equals("network")){
 			try{
 				setTitle("My Network's Recent Bookmarks");
@@ -149,7 +138,7 @@ public class BrowseBookmarks extends AppBaseActivity {
 				new LoadBookmarkFeedTask().execute("network");
 			}
 			catch(Exception e){}
-		}  else if(username.equals("hotlist")){
+		} else if(username.equals("hotlist")){
 			try{
 				setTitle("Hotlist Bookmarks");
 				
@@ -161,6 +150,17 @@ public class BrowseBookmarks extends AppBaseActivity {
 				setTitle("Popular Bookmarks");
 				
 				new LoadBookmarkFeedTask().execute("popular");
+			}
+			catch(Exception e){}
+		} else if(path.equals("/bookmarks")) {
+			try{
+				if(tagname != null && tagname != "") {
+					setTitle("Bookmarks For " + username + " Tagged With " + tagname);
+				} else {
+					setTitle("Bookmarks For " + username);
+				}
+		    	
+				new LoadBookmarkFeedTask().execute(username, tagname);
 			}
 			catch(Exception e){}
 		} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
@@ -271,7 +271,9 @@ public class BrowseBookmarks extends AppBaseActivity {
 	}
 	
 	private void viewBookmark(Bookmark b) {
-		Intent viewBookmark = new Intent(this, ViewBookmark.class);
+		Intent viewBookmark = new Intent();
+		viewBookmark.setAction(Intent.ACTION_VIEW);
+		viewBookmark.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
 		data.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
@@ -280,6 +282,7 @@ public class BrowseBookmarks extends AppBaseActivity {
 		if(isMyself()) {
 			data.appendEncodedPath(Integer.toString(b.getId()));
 		} else {
+			data.appendEncodedPath(Integer.toString(0));
 			data.appendQueryParameter("url", b.getUrl());
 			data.appendQueryParameter("title", b.getDescription());
 			data.appendQueryParameter("notes", b.getNotes());

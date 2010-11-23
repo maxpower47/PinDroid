@@ -24,7 +24,6 @@ package com.deliciousdroid.listadapter;
 import java.util.ArrayList;
 
 import com.deliciousdroid.R;
-import com.deliciousdroid.listadapter.ViewHolder.BookmarkListViewHolder;
 import com.deliciousdroid.listadapter.ViewHolder.TagListViewHolder;
 import com.deliciousdroid.providers.TagContent.Tag;
 

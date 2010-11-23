@@ -130,7 +130,9 @@ public class BrowseTags extends AppBaseActivity {
 			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
 			    	
-					Intent i = new Intent(mContext, BrowseBookmarks.class);
+					Intent i = new Intent();
+					i.setAction(Intent.ACTION_VIEW);
+					i.addCategory(Intent.CATEGORY_DEFAULT);
 	
 					Uri.Builder dataBuilder = new Uri.Builder();
 					dataBuilder.scheme(Constants.CONTENT_SCHEME);

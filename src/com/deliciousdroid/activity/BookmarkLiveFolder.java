@@ -29,8 +29,9 @@ public class BookmarkLiveFolder extends Activity {
 			mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		}
         
-        Intent tagIntent = new Intent(this, BrowseTags.class);
+        Intent tagIntent = new Intent();
         tagIntent.setAction(Intent.ACTION_PICK);
+        tagIntent.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
 		data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
