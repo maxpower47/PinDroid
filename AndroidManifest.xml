@@ -89,7 +89,20 @@
         	</intent-filter>
         	<meta-data android:name="android.app.searchable" android:resource="@xml/bookmark_searchable"/>
         </activity>
-        <activity android:name=".activity.ViewBookmark" />
+        <activity android:name=".activity.BookmarkLiveFolder"
+        	android:label="Delicious Bookmarks">
+            <intent-filter>
+        		<action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
+        		<category android:name="android.intent.category.DEFAULT" />	
+        	</intent-filter>
+        </activity>
+        <activity android:name=".activity.ViewBookmark">
+        	<intent-filter>
+        		<action android:name="android.intent.action.VIEW" />
+        		<category android:name="android.intent.category.DEFAULT" />
+        		<data android:scheme="content" android:host="com.deliciousdroid.providers.BookmarkContentProvider" android:pathPattern="/bookmarks/.*"/>
+        	</intent-filter>
+        </activity>
         <activity android:name=".activity.MainSearchResults" />
         <activity android:name=".activity.AddBookmark">
         	<intent-filter>

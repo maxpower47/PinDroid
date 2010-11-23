@@ -49,6 +49,7 @@ public class BrowseTags extends AppBaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_tags);
 		Intent intent = getIntent();
+		String action = intent.getAction();
 		
 		ArrayList<Tag> tagList = new ArrayList<Tag>();
 		
@@ -58,7 +59,7 @@ public class BrowseTags extends AppBaseActivity {
 			username = data.getUserInfo();
 		} else username = mAccount.name;
 		
-    	if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+    	if(Intent.ACTION_SEARCH.equals(action)) {
   		
     		String query = intent.getStringExtra(SearchManager.QUERY);
     		
@@ -110,21 +111,37 @@ public class BrowseTags extends AppBaseActivity {
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
 	
-		lv.setOnItemClickListener(new OnItemClickListener() {
-		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
-		    	
-				Intent i = new Intent(mContext, BrowseBookmarks.class);
-
-				Uri.Builder dataBuilder = new Uri.Builder();
-				dataBuilder.scheme(Constants.CONTENT_SCHEME);
-				dataBuilder.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
-				dataBuilder.appendEncodedPath("bookmarks");
-				dataBuilder.appendQueryParameter("tagname", tagName);
-				i.setData(dataBuilder.build());
-				
-				startActivity(i);
-		    }
-		});
+		if(action != null && action.equals(Intent.ACTION_PICK)) {
+			
+			lv.setOnItemClickListener(new OnItemClickListener() {
+			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
+			    	
+			    	Intent i = new Intent();
+			    	i.putExtra("tagname", tagName);
+			    	
+					setResult(RESULT_OK, i);
+					finish();
+			    }
+			});
+			
+		} else {
+			lv.setOnItemClickListener(new OnItemClickListener() {
+			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
+			    	
+					Intent i = new Intent(mContext, BrowseBookmarks.class);
+	
+					Uri.Builder dataBuilder = new Uri.Builder();
+					dataBuilder.scheme(Constants.CONTENT_SCHEME);
+					dataBuilder.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
+					dataBuilder.appendEncodedPath("bookmarks");
+					dataBuilder.appendQueryParameter("tagname", tagName);
+					i.setData(dataBuilder.build());
+					
+					startActivity(i);
+			    }
+			});
+		}
 	}
 }

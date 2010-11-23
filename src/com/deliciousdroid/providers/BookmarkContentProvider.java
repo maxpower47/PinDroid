@@ -71,7 +71,8 @@ public class BookmarkContentProvider extends ContentProvider {
 	private static final int Tags = 3;
 	private static final int TagSearchSuggest = 4;
 	private static final int BookmarkSearchSuggest = 5;
-	private static final int LiveFolder = 6;
+	private static final int TagLiveFolder = 6;
+	private static final int BookmarkLiveFolder = 7;
 	
 	private static final String SuggestionLimit = "10";
 	
@@ -237,8 +238,10 @@ public class BookmarkContentProvider extends ContentProvider {
 			case BookmarkSearchSuggest:
 				String bookmarkQuery = uri.getLastPathSegment().toLowerCase();
 				return getSearchCursor(getBookmarkSearchSuggestions(bookmarkQuery));
-			case LiveFolder:
-				return getLiveFolderResults(uri, projection, selection, selectionArgs, sortOrder);
+			case TagLiveFolder:
+				return getTagLiveFolderResults(uri);
+			case BookmarkLiveFolder:
+				return getBookmarkLiveFolderResults(uri);
 			default:
 				throw new IllegalArgumentException("Unknown Uri: " + uri);
 		}
@@ -392,7 +395,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		return mc;
 	}
 	
-	private Cursor getLiveFolderResults(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
+	private Cursor getTagLiveFolderResults(Uri uri) {
 		
 		mAccountManager = AccountManager.get(getContext());
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
@@ -400,6 +403,12 @@ public class BookmarkContentProvider extends ContentProvider {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
 		qb.setTables(TAG_TABLE_NAME);
+		
+		String[] projection = new String[]{Tag.Name, Tag.Count};
+		String selection = Tag.Account + "=?";
+		String[] selectionArgs = new String[]{mAccount.name};
+		String sortOrder = Tag.Name + " ASC";
+		
 		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder);
 		c.setNotificationUri(getContext().getContentResolver(), uri);
 		
@@ -451,6 +460,52 @@ public class BookmarkContentProvider extends ContentProvider {
 		return count;
 	}
 	
+	private Cursor getBookmarkLiveFolderResults(Uri uri) {
+		
+		mAccountManager = AccountManager.get(getContext());
+		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+		
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
+		qb.setTables(BOOKMARK_TABLE_NAME);
+		
+		String[] projection = new String[]{Bookmark.Description, Bookmark.Url, BaseColumns._ID};
+		String selection = Bookmark.Account + "=?";
+		String[] selectionArgs = new String[]{mAccount.name};
+		String sortOrder = Bookmark.Description + " ASC";
+		
+		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder);
+		c.setNotificationUri(getContext().getContentResolver(), uri);
+		
+		MatrixCursor mc = new MatrixCursor(new String[] { BaseColumns._ID, LiveFolders.NAME, 
+				LiveFolders.DESCRIPTION, LiveFolders.INTENT});
+		
+		if(c.moveToFirst()){
+			int descColumn = c.getColumnIndex(Bookmark.Description);
+			int urlColumn = c.getColumnIndex(Bookmark.Url);
+			int idColumn = c.getColumnIndex(BaseColumns._ID);
+
+			int i = 0;
+			
+			do {
+				
+				Uri.Builder data = new Uri.Builder();
+				data.scheme(Constants.CONTENT_SCHEME);
+				data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
+				data.appendEncodedPath("bookmarks");
+				data.appendEncodedPath(Integer.toString(c.getInt(idColumn)));
+				
+				mc.addRow(new Object[] {i++, c.getString(descColumn), 
+					c.getString(urlColumn), data.build()});
+				
+			} while(c.moveToNext());	
+		}
+		c.close();
+		
+		
+		return mc;
+	}
+	
     private static UriMatcher buildUriMatcher() {
         UriMatcher matcher =  new UriMatcher(UriMatcher.NO_MATCH);
         matcher.addURI(AUTHORITY, "bookmark", Bookmarks);
@@ -461,7 +516,8 @@ public class BookmarkContentProvider extends ContentProvider {
         matcher.addURI(AUTHORITY, "tag/" + SearchManager.SUGGEST_URI_PATH_QUERY + "/*", TagSearchSuggest);
         matcher.addURI(AUTHORITY, "bookmark/" + SearchManager.SUGGEST_URI_PATH_QUERY, BookmarkSearchSuggest);
         matcher.addURI(AUTHORITY, "bookmark/" + SearchManager.SUGGEST_URI_PATH_QUERY + "/*", BookmarkSearchSuggest);
-        matcher.addURI(AUTHORITY, "livefolder", LiveFolder);
+        matcher.addURI(AUTHORITY, "tag/livefolder", TagLiveFolder);
+        matcher.addURI(AUTHORITY, "bookmark/livefolder", BookmarkLiveFolder);
         return matcher;
     }
 }

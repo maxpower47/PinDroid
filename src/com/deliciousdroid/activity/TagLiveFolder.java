@@ -13,7 +13,7 @@ import android.provider.LiveFolders;
 public class TagLiveFolder extends Activity {
 	
 	public static final Uri CONTENT_URI = Uri.parse("content://" + 
-			BookmarkContentProvider.AUTHORITY + "/livefolder");
+			BookmarkContentProvider.AUTHORITY + "/tag/livefolder");
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +31,7 @@ public class TagLiveFolder extends Activity {
         finish();
     }
     
-    private Intent createLiveFolder(Context context, Uri uri, String name,
-            int icon) {
+    private Intent createLiveFolder(Context context, Uri uri, String name, int icon) {
 
         final Intent intent = new Intent();
 
@@ -41,13 +40,7 @@ public class TagLiveFolder extends Activity {
         intent.putExtra(LiveFolders.EXTRA_LIVE_FOLDER_ICON,
                 Intent.ShortcutIconResource.fromContext(context, icon));
         intent.putExtra(LiveFolders.EXTRA_LIVE_FOLDER_DISPLAY_MODE, LiveFolders.DISPLAY_MODE_LIST);
-        intent.putExtra(LiveFolders.EXTRA_LIVE_FOLDER_BASE_INTENT,
-                new Intent(this, BrowseBookmarks.class));
-
 
         return intent;
     }
-
-
-	
 }
