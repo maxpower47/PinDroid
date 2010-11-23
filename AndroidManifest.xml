@@ -66,6 +66,13 @@
         	</intent-filter>
 			<meta-data android:name="android.app.searchable" android:resource="@xml/tag_searchable"/>
         </activity>
+        <activity android:name=".activity.TagLiveFolder"
+        	android:label="Delicious Tags">
+            <intent-filter>
+        		<action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
+        		<category android:name="android.intent.category.DEFAULT" />	
+        	</intent-filter>
+        </activity>
         <activity android:name=".activity.BrowseBookmarks" >
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />

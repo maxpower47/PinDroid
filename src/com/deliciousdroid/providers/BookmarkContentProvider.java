@@ -27,6 +27,8 @@ import java.util.TreeMap;
 
 import com.deliciousdroid.Constants;
 import com.deliciousdroid.R;
+import com.deliciousdroid.activity.BrowseBookmarks;
+import com.deliciousdroid.activity.ViewBookmark;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 import com.deliciousdroid.providers.TagContent.Tag;
 
@@ -37,6 +39,7 @@ import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -48,6 +51,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
+import android.provider.LiveFolders;
 import android.util.Log;
 
 public class BookmarkContentProvider extends ContentProvider {
@@ -67,6 +71,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	private static final int Tags = 3;
 	private static final int TagSearchSuggest = 4;
 	private static final int BookmarkSearchSuggest = 5;
+	private static final int LiveFolder = 6;
 	
 	private static final String SuggestionLimit = "10";
 	
@@ -232,6 +237,8 @@ public class BookmarkContentProvider extends ContentProvider {
 			case BookmarkSearchSuggest:
 				String bookmarkQuery = uri.getLastPathSegment().toLowerCase();
 				return getSearchCursor(getBookmarkSearchSuggestions(bookmarkQuery));
+			case LiveFolder:
+				return getLiveFolderResults(uri, projection, selection, selectionArgs, sortOrder);
 			default:
 				throw new IllegalArgumentException("Unknown Uri: " + uri);
 		}
@@ -384,6 +391,46 @@ public class BookmarkContentProvider extends ContentProvider {
 		
 		return mc;
 	}
+	
+	private Cursor getLiveFolderResults(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
+		
+		mAccountManager = AccountManager.get(getContext());
+		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+		
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
+		qb.setTables(TAG_TABLE_NAME);
+		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder);
+		c.setNotificationUri(getContext().getContentResolver(), uri);
+		
+		MatrixCursor mc = new MatrixCursor(new String[] { BaseColumns._ID, LiveFolders.NAME, 
+				LiveFolders.DESCRIPTION, LiveFolders.INTENT});
+		
+		if(c.moveToFirst()){
+			int nameColumn = c.getColumnIndex(Tag.Name);
+			int countColumn = c.getColumnIndex(Tag.Count);
+
+			int i = 0;
+			
+			do {
+				String name = c.getString(nameColumn);
+				
+				Uri.Builder data = new Uri.Builder();
+				data.scheme(Constants.CONTENT_SCHEME);
+				data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
+				data.appendEncodedPath("bookmarks");
+				data.appendQueryParameter("tagname", name);
+				
+				mc.addRow(new Object[] {i++, name, 
+					Integer.toString(c.getInt(countColumn)) + " bookmark(s)", data.build()});
+				
+			} while(c.moveToNext());	
+		}
+		c.close();
+		
+		
+		return mc;
+	}
 
 	@Override
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
@@ -414,6 +461,7 @@ public class BookmarkContentProvider extends ContentProvider {
         matcher.addURI(AUTHORITY, "tag/" + SearchManager.SUGGEST_URI_PATH_QUERY + "/*", TagSearchSuggest);
         matcher.addURI(AUTHORITY, "bookmark/" + SearchManager.SUGGEST_URI_PATH_QUERY, BookmarkSearchSuggest);
         matcher.addURI(AUTHORITY, "bookmark/" + SearchManager.SUGGEST_URI_PATH_QUERY + "/*", BookmarkSearchSuggest);
+        matcher.addURI(AUTHORITY, "livefolder", LiveFolder);
         return matcher;
     }
 }
