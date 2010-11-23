@@ -171,6 +171,7 @@
         </activity>
         <provider
         	android:name="com.deliciousdroid.providers.BookmarkContentProvider"
+        	android:label="Bookmarks"
         	android:authorities="com.deliciousdroid.providers.BookmarkContentProvider" />	
     </application>
 </manifest>
