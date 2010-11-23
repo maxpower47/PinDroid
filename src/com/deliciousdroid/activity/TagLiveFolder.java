@@ -22,8 +22,8 @@ public class TagLiveFolder extends Activity {
         final String action = intent.getAction();
 
         if (LiveFolders.ACTION_CREATE_LIVE_FOLDER.equals(action)) {
-            setResult(RESULT_OK, createLiveFolder(this, CONTENT_URI, "Delicious Tags",
-                    R.drawable.tag));
+            setResult(RESULT_OK, createLiveFolder(this, CONTENT_URI, "My Tags",
+                    R.drawable.ic_tag_folder));
         } else {
             setResult(RESULT_CANCELED);
         }

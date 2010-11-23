@@ -72,7 +72,8 @@
 			<meta-data android:name="android.app.searchable" android:resource="@xml/tag_searchable"/>
         </activity>
         <activity android:name=".activity.TagLiveFolder"
-        	android:label="Delicious Tags">
+        	android:label="Delicious Tags"
+        	android:icon="@drawable/ic_tag_folder">
             <intent-filter>
         		<action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
         		<category android:name="android.intent.category.DEFAULT" />	
@@ -95,7 +96,8 @@
         	<meta-data android:name="android.app.searchable" android:resource="@xml/bookmark_searchable"/>
         </activity>
         <activity android:name=".activity.BookmarkLiveFolder"
-        	android:label="Delicious Bookmarks">
+        	android:label="Delicious Bookmarks"
+        	android:icon="@drawable/ic_bookmark_folder">
             <intent-filter>
         		<action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
         		<category android:name="android.intent.category.DEFAULT" />	

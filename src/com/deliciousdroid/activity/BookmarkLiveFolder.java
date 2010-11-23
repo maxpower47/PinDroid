@@ -3,6 +3,7 @@ package com.deliciousdroid.activity;
 import com.deliciousdroid.Constants;
 import com.deliciousdroid.R;
 import com.deliciousdroid.providers.BookmarkContentProvider;
+import com.deliciousdroid.util.StringUtils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -39,8 +40,6 @@ public class BookmarkLiveFolder extends Activity {
 		tagIntent.setData(data.build());
 
         startActivityForResult(tagIntent, 1);
-
-
     }
     
     @Override
@@ -52,7 +51,7 @@ public class BookmarkLiveFolder extends Activity {
         if (LiveFolders.ACTION_CREATE_LIVE_FOLDER.equals(action)) {
             setResult(RESULT_OK, 
             	createLiveFolder(this, Uri.parse(CONTENT_URI.toString() + "?tagname=" + tag), 
-            		"Delicious Bookmarks", R.drawable.bookmark));
+            		StringUtils.capitalize(tag), R.drawable.ic_bookmark_folder));
         } else {
             setResult(RESULT_CANCELED);
         }
