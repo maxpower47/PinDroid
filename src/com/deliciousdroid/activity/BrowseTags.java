@@ -71,7 +71,11 @@ public class BrowseTags extends AppBaseActivity {
     		
     	} else if(mAccount.name.equals(username)){
 			try{
-				setTitle("My Tags");
+				if(Intent.ACTION_VIEW.equals(action)) {
+					setTitle("My Tags");
+				} else if(Intent.ACTION_PICK.equals(action)) {
+					setTitle("Choose A Tag For The Folder");
+				}
 
 				String[] projection = new String[] {Tag.Name, Tag.Count};
 							
