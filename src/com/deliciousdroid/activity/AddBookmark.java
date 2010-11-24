@@ -23,6 +23,7 @@ package com.deliciousdroid.activity;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 import org.apache.http.auth.AuthenticationException;
@@ -37,6 +38,7 @@ import com.deliciousdroid.platform.TagManager;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 import com.deliciousdroid.providers.ContentNotFoundException;
 import com.deliciousdroid.providers.TagContent.Tag;
+import com.deliciousdroid.ui.TagSpan;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -46,13 +48,15 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +66,9 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 	private EditText mEditDescription;
 	private EditText mEditNotes;
 	private EditText mEditTags;
-	private LinearLayout mSuggestTags;
+	private TextView mRecommendedTags;
+	private TextView mPopularTags;
+	private TextView mNetworkTags;
 	private CheckBox mPrivate;
 	private Button mButtonSave;
 	private Button mButtonCancel;
@@ -83,11 +89,17 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		mEditDescription = (EditText) findViewById(R.id.add_edit_description);
 		mEditNotes = (EditText) findViewById(R.id.add_edit_notes);
 		mEditTags = (EditText) findViewById(R.id.add_edit_tags);
-		mSuggestTags = (LinearLayout) findViewById(R.id.add_suggest_tags);
+		mRecommendedTags = (TextView) findViewById(R.id.add_recommended_tags);
+		mPopularTags = (TextView) findViewById(R.id.add_popular_tags);
+		mNetworkTags = (TextView) findViewById(R.id.add_network_tags);
 		mPrivate = (CheckBox) findViewById(R.id.add_edit_private);
 		mButtonSave = (Button) findViewById(R.id.add_button_save);
 		mButtonCancel = (Button) findViewById(R.id.add_button_cancel);
 		context = this;
+		
+		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
+		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
+		mNetworkTags.setMovementMethod(LinkMovementMethod.getInstance());
 		
 		res = getResources();
 		
@@ -169,9 +181,21 @@ public class AddBookmark extends Activity implements View.OnClickListener{
         }
     }
     
-    View.OnClickListener tagOnClickListener = new View.OnClickListener() {
-        public void onClick(View view) {
-            Log.d("blah", "tag: " + ((TextView)view).getText());
+    TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
+        public void onTagClick(String tag) {
+        	String currentTagString = mEditTags.getText().toString();
+        	
+        	ArrayList<String> currentTags = new ArrayList<String>();
+        	Collections.addAll(currentTags, currentTagString.split(" "));
+        	
+        	if(tag != null && tag != "") {
+        		if(!currentTags.contains(tag)) {
+		        	currentTags.add(tag);
+        		} else {
+        			currentTags.remove(tag);
+        		}
+        		mEditTags.setText(TextUtils.join(" ", currentTags.toArray()).trim());
+        	}
         }
     };
 
@@ -265,23 +289,43 @@ public class AddBookmark extends Activity implements View.OnClickListener{
         protected void onPostExecute(ArrayList<Tag> result) {
         	        	
         	if(result != null) {
-        		int i = 0;
+        		SpannableStringBuilder recommendedBuilder = new SpannableStringBuilder();
+        		SpannableStringBuilder popularBuilder = new SpannableStringBuilder();
+        		SpannableStringBuilder networkBuilder = new SpannableStringBuilder();
         		
-        		mSuggestTags.removeAllViews();
+        		
         		
         		for(Tag t : result) {
-        			
-        			TextView tagView = new TextView(context);
-        			tagView.setId(i++);
-        			tagView.setPadding(2, 0, 2, 0);
-        			tagView.setText(t.getTagName());
-        			tagView.setClickable(true);
-        			tagView.setFocusable(true);
-        			tagView.setOnClickListener(tagOnClickListener);
-        			
-        			mSuggestTags.addView(tagView);
+        			if(t.getType().equals("recommended")) {
+        				addTag(recommendedBuilder, t);
+        			} else if(t.getType().equals("popular")) {
+        				addTag(popularBuilder, t);
+        			} else if(t.getType().equals("network")) {
+        				addTag(networkBuilder, t);
+        			}
         		}
+        		
+        		mRecommendedTags.setText(recommendedBuilder);
+        		mPopularTags.setText(popularBuilder);
+        		mNetworkTags.setText(networkBuilder);
         	} 	
         }
+
+		private void addTag(SpannableStringBuilder builder, Tag t) {
+			int flags = 0;
+			
+			if (builder.length() != 0) {
+				builder.append("  ");
+			}
+			
+			int start = builder.length();
+			builder.append(t.getTagName());
+			int end = builder.length();
+			
+			TagSpan span = new TagSpan(t.getTagName());
+			span.setOnTagClickListener(tagOnClickListener);
+
+			builder.setSpan(span, start, end, flags);
+		}
     }
 }

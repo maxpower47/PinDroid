@@ -72,20 +72,41 @@
 			    android:inputType="text"
 			    android:singleLine="true" />
 			<TextView
-				android:id="@+id/add_title_suggest_tags"
+				android:id="@+id/add_title_recommended_tags"
 				style="@style/AddBookmarkFieldTitle"
-				android:text="@string/add_title_suggest_tags"/>    
-			<LinearLayout
-				android:id="@+id/add_suggest_tags"
-				android:layout_width="fill_parent"
-		 		android:layout_height="wrap_content">
-			
-			</LinearLayout>  
+				android:text="@string/add_title_recommended_tags"/>    
+			<TextView
+				android:id="@+id/add_recommended_tags"
+				android:layout_height="fill_parent"
+				android:layout_width="wrap_content"
+				android:textSize="16sp"
+				android:paddingLeft="12dip" /> 
+			<TextView
+				android:id="@+id/add_title_popular_tags"
+				style="@style/AddBookmarkFieldTitle"
+				android:text="@string/add_title_popular_tags"/>    
+			<TextView
+				android:id="@+id/add_popular_tags"
+				android:layout_height="fill_parent"
+				android:layout_width="wrap_content"
+				android:textSize="16sp"
+				android:paddingLeft="12dip" /> 
+			<TextView
+				android:id="@+id/add_title_network_tags"
+				style="@style/AddBookmarkFieldTitle"
+				android:text="@string/add_title_network_tags"/>    
+			<TextView
+				android:id="@+id/add_network_tags"
+				android:layout_height="fill_parent"
+				android:layout_width="wrap_content"
+				android:textSize="16sp"
+				android:paddingLeft="12dip" /> 
 			<CheckBox 
 				android:id="@+id/add_edit_private"
 		 		android:text="Private?"
 		 		android:layout_width="wrap_content"
-		 		android:layout_height="wrap_content" />  
+		 		android:layout_height="wrap_content"
+		 		android:paddingTop="5dip" />  
 		</LinearLayout>
 	</ScrollView>
 	<LinearLayout	
