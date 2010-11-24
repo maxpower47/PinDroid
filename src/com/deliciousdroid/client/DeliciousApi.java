@@ -39,10 +39,7 @@ import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -71,27 +68,14 @@ public class DeliciousApi {
     public static final String LAST_UPDATE_URI = "posts/update";
     public static final String DELETE_BOOKMARK_URI = "posts/delete";
     public static final String ADD_BOOKMARKS_URI = "posts/add";
-    private static DefaultHttpClient mHttpClient;
-    
+  
     private static final String SCHEME = "https";
     private static final String SCHEME_HTTP = "http";
     private static final String DELICIOUS_AUTHORITY = "api.del.icio.us";
     private static final int PORT = 443;
  
     private static final AuthScope SCOPE = new AuthScope(DELICIOUS_AUTHORITY, PORT);
-        
-    /**
-     * Configures the httpClient to connect to the URL provided.
-     */
-    public static void maybeCreateHttpClient() {
-        if (mHttpClient == null) {
-            mHttpClient = new DefaultHttpClient();
-            final HttpParams params = mHttpClient.getParams();
-            HttpConnectionParams.setConnectionTimeout(params, REGISTRATION_TIMEOUT);
-            HttpConnectionParams.setSoTimeout(params, REGISTRATION_TIMEOUT);
-            ConnManagerParams.setTimeout(params, REGISTRATION_TIMEOUT);
-        }
-    }
+
     
     /**
      * Fetches users bookmarks
@@ -390,7 +374,7 @@ public class DeliciousApi {
 		Log.d("apiCallUrl", builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+").replace("%3F", "?").replace("%3D", "=").replace("%20", "+"));
 		post = new HttpGet(builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+").replace("%3F", "?").replace("%3D", "=").replace("%20", "+"));
 		HttpHost host = new HttpHost(DELICIOUS_AUTHORITY);
-		maybeCreateHttpClient();
+
 		post.setHeader("User-Agent", "DeliciousDroid_0.4.1");
 		post.setHeader("Accept-Encoding", "gzip");
 
@@ -402,14 +386,16 @@ public class DeliciousApi {
 
 			Log.d("header", post.getHeaders("Authorization")[0].getValue());
 	        
-	        resp = mHttpClient.execute(host, post);
+	        resp = HttpClientFactory.getThreadSafeClient().execute(host, post);
 
     	} else{ 
-	        CredentialsProvider provider = mHttpClient.getCredentialsProvider();
+    		
+    		DefaultHttpClient client = HttpClientFactory.getThreadSafeClient();
+	        CredentialsProvider provider = client.getCredentialsProvider();
 	        Credentials credentials = new UsernamePasswordCredentials(username, authtoken);
 	        provider.setCredentials(SCOPE, credentials);
 	        
-	        resp = mHttpClient.execute(post);
+	        resp = client.execute(post);
     	}
     	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
     		
@@ -431,7 +417,6 @@ public class DeliciousApi {
     	} else {
     		throw new IOException();
     	}
-
     }
     
     private static String convertStreamToString(InputStream is) {

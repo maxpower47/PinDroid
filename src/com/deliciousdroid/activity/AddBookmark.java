@@ -171,12 +171,10 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     
     View.OnClickListener tagOnClickListener = new View.OnClickListener() {
         public void onClick(View view) {
-            int id = view.getId();
             Log.d("blah", "tag: " + ((TextView)view).getText());
         }
     };
 
-    
     private class AddBookmarkTask extends AsyncTask<BookmarkTaskArgs, Integer, Boolean>{
     	private Context context;
     	private Bookmark bookmark;
@@ -282,9 +280,6 @@ public class AddBookmark extends Activity implements View.OnClickListener{
         			tagView.setOnClickListener(tagOnClickListener);
         			
         			mSuggestTags.addView(tagView);
-        			
-        			
-        			
         		}
         	} 	
         }
