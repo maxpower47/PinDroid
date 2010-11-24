@@ -42,10 +42,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
@@ -62,15 +59,13 @@ public class NetworkUtilities {
     public static final String PARAM_PASSWORD = "password";
     public static final String PARAM_UPDATED = "timestamp";
     public static final String USER_AGENT = "AuthenticationService/1.0";
-    public static final int REGISTRATION_TIMEOUT = 30 * 1000; // ms
 
     public static final String FETCH_FRIEND_UPDATES_URI = "http://feeds.delicious.com/v2/json/networkmembers/";
     public static final String FETCH_FRIEND_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/";
     public static final String FETCH_NETWORK_RECENT_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/network/";
     public static final String FETCH_STATUS_URI = "http://feeds.delicious.com/v2/json/network/";
     public static final String FETCH_TAGS_URI = "http://feeds.delicious.com/v2/json/tags/";
-    private static DefaultHttpClient mHttpClient;
-    
+
     private static final String SCHEME = "https";
     private static final String SCHEME_HTTP = "http";
     private static final String DELICIOUS_AUTHORITY = "api.del.icio.us";
@@ -83,20 +78,6 @@ public class NetworkUtilities {
     private static final String OAUTH_REQUEST_TOKEN_URI = "oauth/v2/get_request_token";
     private static final String OAUTH_GET_TOKEN_URI = "oauth/v2/get_token";
     private static final String OAUTH_GET_USERNAME_URI = "v2/posts/get";
-
-    /**
-     * Configures the httpClient to connect to the URL provided.
-     */
-    public static void maybeCreateHttpClient() {
-        if (mHttpClient == null) {
-            mHttpClient = new DefaultHttpClient();
-            final HttpParams params = mHttpClient.getParams();
-            HttpConnectionParams.setConnectionTimeout(params,
-                REGISTRATION_TIMEOUT);
-            HttpConnectionParams.setSoTimeout(params, REGISTRATION_TIMEOUT);
-            ConnManagerParams.setTimeout(params, REGISTRATION_TIMEOUT);
-        }
-    }
 
     /**
      * Executes the network requests on a separate thread.
@@ -140,14 +121,15 @@ public class NetworkUtilities {
         Uri uri = builder.build();
 
         HttpGet request = new HttpGet(String.valueOf(uri));
-        maybeCreateHttpClient();
+
+        DefaultHttpClient client = HttpClientFactory.getThreadSafeClient();
         
-        CredentialsProvider provider = mHttpClient.getCredentialsProvider();
+        CredentialsProvider provider = client.getCredentialsProvider();
         Credentials credentials = new UsernamePasswordCredentials(username, password);
         provider.setCredentials(SCOPE, credentials);
 
         try {
-            resp = mHttpClient.execute(request);
+            resp = client.execute(request);
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 if (Log.isLoggable(TAG, Log.VERBOSE)) {
                     Log.v(TAG, "Successful authentication");
@@ -210,11 +192,9 @@ public class NetworkUtilities {
 		Log.d(TAG, String.valueOf(u));
         
         HttpGet request = new HttpGet(String.valueOf(u));
-        maybeCreateHttpClient();
-        
 
         try {
-            resp = mHttpClient.execute(request);
+            resp = HttpClientFactory.getThreadSafeClient().execute(request);
             final String response = EntityUtils.toString(resp.getEntity());
             
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -276,11 +256,9 @@ public class NetworkUtilities {
 		Log.d(TAG, String.valueOf(u));
         
         HttpGet request = new HttpGet(String.valueOf(u));
-        maybeCreateHttpClient();
-        
 
         try {
-            resp = mHttpClient.execute(request);
+            resp = HttpClientFactory.getThreadSafeClient().execute(request);
             final String response = EntityUtils.toString(resp.getEntity());
             
             if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -344,12 +322,11 @@ public class NetworkUtilities {
 		Log.d("Refresh Token", String.valueOf(u));
         
         HttpGet request = new HttpGet(String.valueOf(u));
-        maybeCreateHttpClient();
-        
+   
         LoginResult result = null;
         
         try {
-            resp = mHttpClient.execute(request);
+            resp = HttpClientFactory.getThreadSafeClient().execute(request);
             final String response = EntityUtils.toString(resp.getEntity());
             
             Log.d("Refresh Token Response", response);
@@ -402,7 +379,7 @@ public class NetworkUtilities {
 		Log.d("getUsername", builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+"));
 		post = new HttpGet(builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+"));
 		HttpHost host = new HttpHost(DELICIOUS_AUTHORITY);
-		maybeCreateHttpClient();
+
 		post.setHeader("User-Agent", "DeliciousDroid");
     	
 
@@ -412,7 +389,7 @@ public class NetworkUtilities {
 
 		Log.d("header", post.getHeaders("Authorization")[0].getValue());
         
-        resp = mHttpClient.execute(host, post);
+        resp = HttpClientFactory.getThreadSafeClient().execute(host, post);
 
     	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
     		String response = EntityUtils.toString(resp.getEntity());
@@ -425,7 +402,6 @@ public class NetworkUtilities {
     	} else if(resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED){
     		throw new AuthenticationException();
     	} else throw new IOException();
-
     }
     
     /**
@@ -449,11 +425,11 @@ public class NetworkUtilities {
 	    	HttpGet post = null;
 	    		
 			post = new HttpGet(url);
-			maybeCreateHttpClient();
+
 			post.setHeader("User-Agent", "Mozilla/5.0");
 	
 	        try {
-				resp = mHttpClient.execute(post);
+				resp = HttpClientFactory.getThreadSafeClient().execute(post);
 
 		    	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 		    		String response;

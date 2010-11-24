@@ -19,13 +19,19 @@
  * USA
  */
 
-package com.deliciousdroid.providers;
+package com.deliciousdroid.listadapter;
 
-public class ContentNotFoundException extends Exception {
+import android.widget.TextView;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2493195718128847571L;
+public class ViewHolder {
 
+	static class BookmarkListViewHolder {
+		TextView description;
+		TextView tags;
+	}
+	
+	static class TagListViewHolder {
+		TextView name;
+		TextView count;
+	}
 }

@@ -66,6 +66,8 @@ public class BrowseBookmarks extends AppBaseActivity {
 	private String bookmarkLimit;
 	private String defaultAction;
 	
+	private ArrayList<Bookmark> bookmarkList;
+	
 	private String tagname = null;
 	
 	@Override
@@ -73,13 +75,18 @@ public class BrowseBookmarks extends AppBaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_bookmarks);
 		
+		bookmarkList = new ArrayList<Bookmark>();
+		
+		final ArrayList<Bookmark> prevData = (ArrayList<Bookmark>) getLastNonConfigurationInstance();
+		if(prevData != null) {
+			bookmarkList = prevData;
+		}
+		
 		Intent intent = getIntent();
 		
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     	bookmarkLimit = settings.getString("pref_contact_bookmark_results", "50");
     	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
-		
-    	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 
 		Uri data = intent.getData();
 		String path = null;
@@ -103,7 +110,9 @@ public class BrowseBookmarks extends AppBaseActivity {
     		setTitle("Bookmark Search Results For \"" + query + "\"");
     		
     		if(isMyself()) {
-    			bookmarkList = BookmarkManager.SearchBookmarks(query, tagname, username, this);
+    			if(bookmarkList.isEmpty()) {
+    				bookmarkList = BookmarkManager.SearchBookmarks(query, tagname, username, this);
+    			}
     		
     			setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));
     		}
@@ -116,21 +125,12 @@ public class BrowseBookmarks extends AppBaseActivity {
 				setTitle("My Bookmarks");
 			}
 			
-			bookmarkList = BookmarkManager.GetBookmarks(username, tagname, this);
+			if(bookmarkList.isEmpty()) {
+				bookmarkList = BookmarkManager.GetBookmarks(username, tagname, this);
+			}
 
 			setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
 
-		} else if(path.equals("/bookmarks")) {
-			try{
-				if(tagname != null && tagname != "") {
-					setTitle("Bookmarks For " + username + " Tagged With " + tagname);
-				} else {
-					setTitle("Bookmarks For " + username);
-				}
-		    	
-				new LoadBookmarkFeedTask().execute(username, tagname);
-			}
-			catch(Exception e){}
 		} else if(username.equals("network")){
 			try{
 				setTitle("My Network's Recent Bookmarks");
@@ -138,7 +138,7 @@ public class BrowseBookmarks extends AppBaseActivity {
 				new LoadBookmarkFeedTask().execute("network");
 			}
 			catch(Exception e){}
-		}  else if(username.equals("hotlist")){
+		} else if(username.equals("hotlist")){
 			try{
 				setTitle("Hotlist Bookmarks");
 				
@@ -150,6 +150,17 @@ public class BrowseBookmarks extends AppBaseActivity {
 				setTitle("Popular Bookmarks");
 				
 				new LoadBookmarkFeedTask().execute("popular");
+			}
+			catch(Exception e){}
+		} else if(path.equals("/bookmarks")) {
+			try{
+				if(tagname != null && tagname != "") {
+					setTitle("Bookmarks For " + username + " Tagged With " + tagname);
+				} else {
+					setTitle("Bookmarks For " + username);
+				}
+		    	
+				new LoadBookmarkFeedTask().execute(username, tagname);
 			}
 			catch(Exception e){}
 		} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
@@ -260,7 +271,9 @@ public class BrowseBookmarks extends AppBaseActivity {
 	}
 	
 	private void viewBookmark(Bookmark b) {
-		Intent viewBookmark = new Intent(this, ViewBookmark.class);
+		Intent viewBookmark = new Intent();
+		viewBookmark.setAction(Intent.ACTION_VIEW);
+		viewBookmark.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
 		data.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
@@ -269,6 +282,7 @@ public class BrowseBookmarks extends AppBaseActivity {
 		if(isMyself()) {
 			data.appendEncodedPath(Integer.toString(b.getId()));
 		} else {
+			data.appendEncodedPath(Integer.toString(0));
 			data.appendQueryParameter("url", b.getUrl());
 			data.appendQueryParameter("title", b.getDescription());
 			data.appendQueryParameter("notes", b.getNotes());
@@ -282,10 +296,14 @@ public class BrowseBookmarks extends AppBaseActivity {
 		startActivity(viewBookmark);
 	}
 	
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		return bookmarkList;
+	}
+	
     public class LoadBookmarkFeedTask extends AsyncTask<String, Integer, Boolean>{
     	private String user;
     	private String tag = null;
-    	private ArrayList<Bookmark> bookmarkList;
     	private ProgressDialog progress;
     	
     	protected void onPreExecute() {
@@ -303,18 +321,19 @@ public class BrowseBookmarks extends AppBaseActivity {
     		if(args.length > 1)
     			tag = args[1];
     		
-    		bookmarkList = new ArrayList<Bookmark>();
     		boolean result = false;
     		
 			try {
-				if(user.equals("network")) {
-					bookmarkList = DeliciousFeed.fetchNetworkRecent(mAccount.name, Integer.parseInt(bookmarkLimit));
-				} else if(user.equals("hotlist")) {
-					bookmarkList = DeliciousFeed.fetchHotlist(Integer.parseInt(bookmarkLimit));
-				} else if(user.equals("popular")) {
-					bookmarkList = DeliciousFeed.fetchPopular(Integer.parseInt(bookmarkLimit));
-				}  else {
-					bookmarkList = DeliciousFeed.fetchFriendBookmarks(user, tag, Integer.parseInt(bookmarkLimit));
+				if(bookmarkList.isEmpty()) {
+					if(user.equals("network")) {
+						bookmarkList = DeliciousFeed.fetchNetworkRecent(mAccount.name, Integer.parseInt(bookmarkLimit));
+					} else if(user.equals("hotlist")) {
+						bookmarkList = DeliciousFeed.fetchHotlist(Integer.parseInt(bookmarkLimit));
+					} else if(user.equals("popular")) {
+						bookmarkList = DeliciousFeed.fetchPopular(Integer.parseInt(bookmarkLimit));
+					}  else {
+						bookmarkList = DeliciousFeed.fetchFriendBookmarks(user, tag, Integer.parseInt(bookmarkLimit));
+					}
 				}
 				result = true;
 			} catch (AuthenticationException e) {

@@ -119,7 +119,7 @@ public class TagContent {
 				e1.printStackTrace();
 			}   	
         	
-			String expression = "/suggest/recommended | /suggest/popular";
+			String expression = "/suggest/recommended | /suggest/popular | /suggest/network";
 			ArrayList<Tag> list = new ArrayList<Tag>();
            
         	List<Element> nodes = document.selectNodes(expression);

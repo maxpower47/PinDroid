@@ -92,7 +92,9 @@
     <string name="add_title_description">Description</string>
     <string name="add_title_notes">Notes</string>
     <string name="add_title_tags">Tags</string>
-    <string name="add_title_suggest_tags">Suggested Tags</string>
+    <string name="add_title_recommended_tags">Recommended Tags</string>
+    <string name="add_title_popular_tags">Popular Tags</string>
+    <string name="add_title_network_tags">Network Tags</string>
     
     <string name="main_search_label">Delicious</string>
     <string name="main_search_hint">Tags, Titles, Notes</string>

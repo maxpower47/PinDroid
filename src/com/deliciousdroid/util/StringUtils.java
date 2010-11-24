@@ -19,13 +19,11 @@
  * USA
  */
 
-package com.deliciousdroid.providers;
+package com.deliciousdroid.util;
 
-public class ContentNotFoundException extends Exception {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2493195718128847571L;
-
+public class StringUtils {
+    public static String capitalize(String s) {
+        if (s.length() == 0) return s;
+        return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+    }
 }

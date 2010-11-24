@@ -32,7 +32,7 @@
 			android:id="@+id/view_bookmark_title"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent"
-			android:textSize="28sp"
+			android:textSize="26sp"
 			android:paddingLeft="10dip" />
 		<TextView
 			android:id="@+id/view_bookmark_url"

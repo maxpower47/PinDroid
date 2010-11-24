@@ -24,8 +24,8 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.deliciousdroid"
-    android:versionCode="7"
-    android:versionName="0.4.0">
+    android:versionCode="8"
+    android:versionName="0.5.0">
     <uses-sdk android:minSdkVersion="5" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -62,9 +62,22 @@
         		<data android:scheme="content" android:host="com.deliciousdroid.providers.BookmarkContentProvider" android:path="/tags"/>
 			</intent-filter>
 			<intent-filter>
+        		<action android:name="android.intent.action.PICK" />
+        		<category android:name="android.intent.category.DEFAULT" />
+        		<data android:scheme="content" android:host="com.deliciousdroid.providers.BookmarkContentProvider" android:path="/tags"/>
+			</intent-filter>
+			<intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
         	</intent-filter>
 			<meta-data android:name="android.app.searchable" android:resource="@xml/tag_searchable"/>
+        </activity>
+        <activity android:name=".activity.TagLiveFolder"
+        	android:label="Delicious Tags"
+        	android:icon="@drawable/ic_tag_folder">
+            <intent-filter>
+        		<action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
+        		<category android:name="android.intent.category.DEFAULT" />	
+        	</intent-filter>
         </activity>
         <activity android:name=".activity.BrowseBookmarks" >
         	<intent-filter>
@@ -82,7 +95,21 @@
         	</intent-filter>
         	<meta-data android:name="android.app.searchable" android:resource="@xml/bookmark_searchable"/>
         </activity>
-        <activity android:name=".activity.ViewBookmark" />
+        <activity android:name=".activity.BookmarkLiveFolder"
+        	android:label="Delicious Bookmarks"
+        	android:icon="@drawable/ic_bookmark_folder">
+            <intent-filter>
+        		<action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
+        		<category android:name="android.intent.category.DEFAULT" />	
+        	</intent-filter>
+        </activity>
+        <activity android:name=".activity.ViewBookmark">
+        	<intent-filter>
+        		<action android:name="android.intent.action.VIEW" />
+        		<category android:name="android.intent.category.DEFAULT" />
+        		<data android:scheme="content" android:host="com.deliciousdroid.providers.BookmarkContentProvider" android:pathPattern="/bookmarks/.*"/>
+        	</intent-filter>
+        </activity>
         <activity android:name=".activity.MainSearchResults" />
         <activity android:name=".activity.AddBookmark">
         	<intent-filter>
@@ -144,6 +171,7 @@
         </activity>
         <provider
         	android:name="com.deliciousdroid.providers.BookmarkContentProvider"
+        	android:label="Bookmarks"
         	android:authorities="com.deliciousdroid.providers.BookmarkContentProvider" />	
     </application>
 </manifest>

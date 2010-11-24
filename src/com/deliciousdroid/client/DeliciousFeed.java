@@ -31,10 +31,6 @@ import org.apache.http.HttpStatus;
 import org.apache.http.ParseException;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.params.ConnManagerParams;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,22 +54,6 @@ public class DeliciousFeed {
     public static final String FETCH_POPULAR_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/popular";
     public static final String FETCH_STATUS_URI = "http://feeds.delicious.com/v2/json/network/";
     public static final String FETCH_TAGS_URI = "http://feeds.delicious.com/v2/json/tags/";
-    private static DefaultHttpClient mHttpClient;
-
-
-    /**
-     * Configures the httpClient to connect to the URL provided.
-     */
-    public static void maybeCreateHttpClient() {
-        if (mHttpClient == null) {
-            mHttpClient = new DefaultHttpClient();
-            final HttpParams params = mHttpClient.getParams();
-            HttpConnectionParams.setConnectionTimeout(params,
-                REGISTRATION_TIMEOUT);
-            HttpConnectionParams.setSoTimeout(params, REGISTRATION_TIMEOUT);
-            ConnManagerParams.setTimeout(params, REGISTRATION_TIMEOUT);
-        }
-    }
 	
     /**
      * Fetches the list of friend data updates from the server
@@ -88,9 +68,8 @@ public class DeliciousFeed {
         final ArrayList<User> friendList = new ArrayList<User>();
 
         final HttpGet post = new HttpGet(FETCH_FRIEND_UPDATES_URI + account.name);
-        maybeCreateHttpClient();
 
-        final HttpResponse resp = mHttpClient.execute(post);
+        final HttpResponse resp = HttpClientFactory.getThreadSafeClient().execute(post);
         final String response = EntityUtils.toString(resp.getEntity());
 
         if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -126,9 +105,8 @@ public class DeliciousFeed {
         final ArrayList<User.Status> statusList = new ArrayList<User.Status>();
 
         final HttpGet post = new HttpGet(FETCH_STATUS_URI + account.name + "?count=15");
-        maybeCreateHttpClient();
 
-        final HttpResponse resp = mHttpClient.execute(post);
+        final HttpResponse resp = HttpClientFactory.getThreadSafeClient().execute(post);
         final String response = EntityUtils.toString(resp.getEntity());
 
         if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -162,11 +140,10 @@ public class DeliciousFeed {
     	throws JSONException, ParseException, IOException, AuthenticationException {
     	
         final HttpGet post = new HttpGet(FETCH_TAGS_URI + username + "?count=100");
-        maybeCreateHttpClient();
         
         final ArrayList<Tag> tagList = new ArrayList<Tag>();
 
-        final HttpResponse resp = mHttpClient.execute(post);
+        final HttpResponse resp = HttpClientFactory.getThreadSafeClient().execute(post);
         final String response = EntityUtils.toString(resp.getEntity());
 
         if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -211,11 +188,10 @@ public class DeliciousFeed {
     	url += "?count=" + limit;
     	
         final HttpGet post = new HttpGet(url);
-        maybeCreateHttpClient();
         
         final ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 
-        final HttpResponse resp = mHttpClient.execute(post);
+        final HttpResponse resp = HttpClientFactory.getThreadSafeClient().execute(post);
         final String response = EntityUtils.toString(resp.getEntity());
 
         if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -250,11 +226,10 @@ public class DeliciousFeed {
     	throws JSONException, ParseException, IOException, AuthenticationException {
 
         final HttpGet post = new HttpGet(FETCH_NETWORK_RECENT_BOOKMARKS_URI + userName + "?count=" + limit);
-        maybeCreateHttpClient();
         
         final ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 
-        final HttpResponse resp = mHttpClient.execute(post);
+        final HttpResponse resp = HttpClientFactory.getThreadSafeClient().execute(post);
         final String response = EntityUtils.toString(resp.getEntity());
 
         if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -290,11 +265,10 @@ public class DeliciousFeed {
     	throws JSONException, ParseException, IOException, AuthenticationException {
 
         final HttpGet post = new HttpGet(FETCH_HOTLIST_BOOKMARKS_URI + "?count=" + limit);
-        maybeCreateHttpClient();
         
         final ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 
-        final HttpResponse resp = mHttpClient.execute(post);
+        final HttpResponse resp = HttpClientFactory.getThreadSafeClient().execute(post);
         final String response = EntityUtils.toString(resp.getEntity());
 
         if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
@@ -330,11 +304,10 @@ public class DeliciousFeed {
     	throws JSONException, ParseException, IOException, AuthenticationException {
 
         final HttpGet post = new HttpGet(FETCH_POPULAR_BOOKMARKS_URI + "?count=" + limit);
-        maybeCreateHttpClient();
         
         final ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 
-        final HttpResponse resp = mHttpClient.execute(post);
+        final HttpResponse resp = HttpClientFactory.getThreadSafeClient().execute(post);
         final String response = EntityUtils.toString(resp.getEntity());
 
         if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
