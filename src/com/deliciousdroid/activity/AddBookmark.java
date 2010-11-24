@@ -52,6 +52,7 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,7 +62,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 	private EditText mEditDescription;
 	private EditText mEditNotes;
 	private EditText mEditTags;
-	private TextView mSuggestTags;
+	private LinearLayout mSuggestTags;
 	private CheckBox mPrivate;
 	private Button mButtonSave;
 	private Button mButtonCancel;
@@ -82,7 +83,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		mEditDescription = (EditText) findViewById(R.id.add_edit_description);
 		mEditNotes = (EditText) findViewById(R.id.add_edit_notes);
 		mEditTags = (EditText) findViewById(R.id.add_edit_tags);
-		mSuggestTags = (TextView) findViewById(R.id.add_suggest_tags);
+		mSuggestTags = (LinearLayout) findViewById(R.id.add_suggest_tags);
 		mPrivate = (CheckBox) findViewById(R.id.add_edit_private);
 		mButtonSave = (Button) findViewById(R.id.add_button_save);
 		mButtonCancel = (Button) findViewById(R.id.add_button_cancel);
@@ -167,6 +168,14 @@ public class AddBookmark extends Activity implements View.OnClickListener{
         	finish();
         }
     }
+    
+    View.OnClickListener tagOnClickListener = new View.OnClickListener() {
+        public void onClick(View view) {
+            int id = view.getId();
+            Log.d("blah", "tag: " + ((TextView)view).getText());
+        }
+    };
+
     
     private class AddBookmarkTask extends AsyncTask<BookmarkTaskArgs, Integer, Boolean>{
     	private Context context;
@@ -256,15 +265,27 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     	}
     	
         protected void onPostExecute(ArrayList<Tag> result) {
-        	
-        	StringBuilder sb = new StringBuilder();
-        	
+        	        	
         	if(result != null) {
-        		for(Tag t : result) {
-        			sb.append(t.getTagName() + " ");
-        		}
+        		int i = 0;
         		
-        		mSuggestTags.setText(sb.toString());
+        		mSuggestTags.removeAllViews();
+        		
+        		for(Tag t : result) {
+        			
+        			TextView tagView = new TextView(context);
+        			tagView.setId(i++);
+        			tagView.setPadding(2, 0, 2, 0);
+        			tagView.setText(t.getTagName());
+        			tagView.setClickable(true);
+        			tagView.setFocusable(true);
+        			tagView.setOnClickListener(tagOnClickListener);
+        			
+        			mSuggestTags.addView(tagView);
+        			
+        			
+        			
+        		}
         	} 	
         }
     }

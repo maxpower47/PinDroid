@@ -25,17 +25,17 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:orientation="vertical">
-	<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	<ScrollView
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_weight="1">
-		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		<LinearLayout
 		  	android:layout_width="fill_parent"
 		 	android:layout_height="wrap_content"
 		 	android:paddingLeft="5dip"
 			android:paddingRight="10dip"
 		  	android:orientation="vertical">
-		  	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		  	<TextView
 				android:id="@+id/add_title_url"
 				style="@style/AddBookmarkFieldTitle"
 				android:text="@string/add_title_url"/>
@@ -44,7 +44,7 @@
 			    style="@style/AddBookmarkFieldEdit"
 			    android:inputType="textUri"
 			    android:singleLine="true" /> 
-			<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+			<TextView
 				android:id="@+id/add_title_description"
 				style="@style/AddBookmarkFieldTitle"
 				android:text="@string/add_title_description"/>
@@ -53,7 +53,7 @@
 			    style="@style/AddBookmarkFieldEdit"
 			    android:inputType="text"
 			    android:singleLine="true" />
-			<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+			<TextView
 				android:id="@+id/add_title_notes"
 				style="@style/AddBookmarkFieldTitle"
 				android:text="@string/add_title_notes"/>
@@ -62,7 +62,7 @@
 			    style="@style/AddBookmarkFieldEdit"
 			    android:inputType="textCapSentences|textMultiLine"
 			    android:minLines="2" />
-			<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+			<TextView
 				android:id="@+id/add_title_tags"
 				style="@style/AddBookmarkFieldTitle"
 				android:text="@string/add_title_tags"/>
@@ -71,16 +71,16 @@
 			    style="@style/AddBookmarkFieldEdit"
 			    android:inputType="text"
 			    android:singleLine="true" />
-			<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+			<TextView
 				android:id="@+id/add_title_suggest_tags"
 				style="@style/AddBookmarkFieldTitle"
 				android:text="@string/add_title_suggest_tags"/>    
-			<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+			<LinearLayout
 				android:id="@+id/add_suggest_tags"
-				android:layout_height="fill_parent"
-				android:layout_width="wrap_content"
-				android:textSize="16sp"
-				android:paddingLeft="12dip" />    
+				android:layout_width="fill_parent"
+		 		android:layout_height="wrap_content">
+			
+			</LinearLayout>  
 			<CheckBox 
 				android:id="@+id/add_edit_private"
 		 		android:text="Private?"
