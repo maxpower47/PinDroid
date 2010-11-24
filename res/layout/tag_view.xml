@@ -31,7 +31,7 @@
 	    android:paddingLeft="10dip"
 	    android:paddingTop="3dip"
 	    android:paddingBottom="5dip"
-	    android:textSize="28sp"/>
+	    android:textSize="26sp"/>
   	<LinearLayout
   		style="@style/LayoutRight">
 		<TextView
@@ -39,7 +39,7 @@
 		    android:layout_height="fill_parent"
 		    android:layout_width="wrap_content"
 		    android:gravity="right"
-		    android:textSize="26sp"
+		    android:textSize="24sp"
 		    android:paddingTop="6dip"
 		    android:paddingRight="15dip"/>
 	</LinearLayout>
