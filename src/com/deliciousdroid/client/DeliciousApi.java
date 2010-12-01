@@ -76,15 +76,15 @@ public class DeliciousApi {
  
     private static final AuthScope SCOPE = new AuthScope(DELICIOUS_AUTHORITY, PORT);
 
-    
     /**
-     * Fetches users bookmarks
+     * Gets timestamp of last update to data on Delicious servers.
      * 
      * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of bookmarks received from the server.
-     * @throws AuthenticationException 
+     * @param context The current application context.
+     * @return An Update object containing the timestamp and the number of new bookmarks in the
+     * inbox.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
      */
     public static Update lastUpdate(Account account, Context context)
     	throws IOException, AuthenticationException {
@@ -105,6 +105,18 @@ public class DeliciousApi {
         return update;
     }
     
+    /**
+     * Sends a request to Delicious's Add Bookmark api.
+     * 
+     * @param bookmark The bookmark to be added.
+     * @param account The account being synced.
+     * @param context The current application context.
+     * @return A boolean indicating whether or not the api call was successful.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
+     * @throws TokenRejectedException If the oauth token is reported to be expired.
+     * @throws Exception If an unknown error is encountered.
+     */
     public static Boolean addBookmark(Bookmark bookmark, Account account, Context context) 
     	throws Exception {
 
@@ -146,13 +158,14 @@ public class DeliciousApi {
     }
     
     /**
-     * Delete a Bookmark
+     * Sends a request to Delicious's Delete Bookmark api.
      * 
+     * @param bookmark The bookmark to be deleted.
      * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of bookmarks received from the server.
-     * @throws AuthenticationException 
+     * @param context The current application context.
+     * @return A boolean indicating whether or not the api call was successful.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
      */
     public static Boolean deleteBookmark(Bookmark bookmark, Account account, Context context) 
     	throws IOException, AuthenticationException {
@@ -174,13 +187,16 @@ public class DeliciousApi {
     }
     
     /**
-     * Fetches users bookmarks
+     * Retrieves a specific list of bookmarks from Delicious.
+     * 
+     * @param hashes A list of bookmark hashes to be retrieved.  
+     * 	The hashes are MD5 hashes of the URL of the bookmark.
      * 
      * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of bookmarks received from the server.
-     * @throws AuthenticationException 
+     * @param context The current application context.
+     * @return A list of bookmarks received from the server.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
      */
     public static ArrayList<Bookmark> getBookmark(ArrayList<String> hashes, Account account,
         Context context) throws IOException, AuthenticationException {
@@ -212,13 +228,15 @@ public class DeliciousApi {
     }
     
     /**
-     * Fetches users bookmarks
+     * Retrieves the entire list of bookmarks for a user from Delicious.  Warning:  Overuse of this 
+     * api call will get your account throttled.
      * 
+     * @param tagname If specified, will only retrieve bookmarks with a specific tag.
      * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of bookmarks received from the server.
-     * @throws AuthenticationException 
+     * @param context The current application context.
+     * @return A list of bookmarks received from the server.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
      */
     public static ArrayList<Bookmark> getAllBookmarks(String tagName, Account account, Context context) 
     	throws IOException, AuthenticationException {
@@ -248,13 +266,14 @@ public class DeliciousApi {
     }
     
     /**
-     * Fetches users bookmarks
+     * Retrieves a list of all bookmarks, with only their URL hash and a change (meta) hash,
+     * to determine what bookmarks have changed since the last update.
      * 
      * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of bookmarks received from the server.
-     * @throws AuthenticationException 
+     * @param context The current application context.
+     * @return A list of bookmarks received from the server with only the URL hash and meta hash.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
      */
     public static ArrayList<Bookmark> getChangedBookmarks(Account account, Context context) 
     	throws IOException, AuthenticationException {
@@ -280,13 +299,14 @@ public class DeliciousApi {
     }
     
     /**
-     * Fetches status messages for the user's friends from the server
+     * Retrieves a list of suggested tags for a URL.
      * 
+     * @param suggestUrl The URL to get suggested tags for.
      * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of status messages received from the server.
-     * @throws AuthenticationException 
+     * @param context The current application context.
+     * @return A list of tags suggested for the provided url.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
      */
     public static ArrayList<Tag> getSuggestedTags(String suggestUrl, Account account, Context context) 
     	throws IOException, AuthenticationException {
@@ -311,13 +331,13 @@ public class DeliciousApi {
     }
     
     /**
-     * Fetches status messages for the user's friends from the server
+     * Retrieves a list of all tags for a user from Delicious.
      * 
      * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of status messages received from the server.
-     * @throws AuthenticationException 
+     * @param context The current application context.
+     * @return A list of the users tags.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
      */
     public static ArrayList<Tag> getTags(Account account, Context context) 
     	throws IOException, AuthenticationException {
@@ -338,6 +358,17 @@ public class DeliciousApi {
         return tagList;
     }
     
+    /**
+     * Performs an api call to Delicious's http based api methods.
+     * 
+     * @param url URL of the api method to call.
+     * @param params Extra parameters included in the api call, as specified by different methods.
+     * @param account The account being synced.
+     * @param context The current application context.
+     * @return A String containing the response from the server.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
+     */
     private static String DeliciousApiCall(String url, TreeMap<String, String> params, 
     		Account account, Context context) throws IOException, AuthenticationException{
 
@@ -419,6 +450,12 @@ public class DeliciousApi {
     	}
     }
     
+    /**
+     * Converts an InputStream to a string.
+     * 
+     * @param is The InputStream to convert.
+     * @return The String retrieved from the InputStream.
+     */
     private static String convertStreamToString(InputStream is) {
         /*
          * To convert the InputStream to String we use the BufferedReader.readLine()
