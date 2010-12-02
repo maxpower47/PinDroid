@@ -28,7 +28,6 @@ import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.ParseException;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
@@ -56,15 +55,17 @@ public class DeliciousFeed {
     public static final String FETCH_TAGS_URI = "http://feeds.delicious.com/v2/json/tags/";
 	
     /**
-     * Fetches the list of friend data updates from the server
+     * Retrieves a list of contacts in a users network.
      * 
      * @param account The account being synced.
-     * @param authtoken The authtoken stored in AccountManager for this account
-     * @param lastUpdated The last time that sync was performed
-     * @return list The list of updates received from the server.
+     * @return The list of contacts received from the server.
+     * @throws JSONException If an error was encountered in deserializing the JSON object returned from 
+     * the server.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
      */
     public static List<User> fetchFriendUpdates(Account account) 
-    	throws JSONException, ParseException, IOException, AuthenticationException {
+    	throws JSONException, IOException, AuthenticationException {
         final ArrayList<User> friendList = new ArrayList<User>();
 
         final HttpGet post = new HttpGet(FETCH_FRIEND_UPDATES_URI + account.name);
@@ -93,15 +94,17 @@ public class DeliciousFeed {
     }
     
     /**
-     * Fetches status messages for the user's friends from the server
+     * Retrieves a list of bookmark updates for contacts in a users network.
      * 
      * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of status messages received from the server.
+     * @return The list of bookmark updates received from the server.
+     * @throws JSONException If an error was encountered in deserializing the JSON object returned from 
+     * the server.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
      */
     public static List<User.Status> fetchFriendStatuses(Account account) 
-    	throws JSONException, ParseException, IOException, AuthenticationException {
+    	throws JSONException, IOException, AuthenticationException {
         final ArrayList<User.Status> statusList = new ArrayList<User.Status>();
 
         final HttpGet post = new HttpGet(FETCH_STATUS_URI + account.name + "?count=15");
@@ -129,15 +132,17 @@ public class DeliciousFeed {
     }
     
     /**
-     * Fetches status messages for the user's friends from the server
+     * Retrieves a list of tags for a Delicious user.
      * 
-     * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of status messages received from the server.
+     * @param username Username of the Delicious user.
+     * @return The list of tags received from the server.
+     * @throws JSONException If an error was encountered in deserializing the JSON object returned from 
+     * the server.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
      */
     public static ArrayList<Tag> fetchFriendTags(String username) 
-    	throws JSONException, ParseException, IOException, AuthenticationException {
+    	throws JSONException, IOException, AuthenticationException {
     	
         final HttpGet post = new HttpGet(FETCH_TAGS_URI + username + "?count=100");
         
@@ -171,15 +176,19 @@ public class DeliciousFeed {
     }
     
     /**
-     * Fetches users bookmarks
+     * Retrieves a list of bookmarks for a Delicious user.
      * 
-     * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of bookmarks received from the server.
+     * @param username Username of the Delicious user.
+     * @param tagName If specified, retrieves only bookmarks for a particular tag.
+     * @param limit The number of bookmarks to retrieve, maximum of 100.
+     * @return The list of bookmarks received from the server.
+     * @throws JSONException If an error was encountered in deserializing the JSON object returned from 
+     * the server.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
      */
     public static ArrayList<Bookmark> fetchFriendBookmarks(String username, String tagName, int limit)
-    	throws JSONException, ParseException, IOException, AuthenticationException {
+    	throws JSONException, IOException, AuthenticationException {
     	
     	String url = FETCH_FRIEND_BOOKMARKS_URI + username;
     	
@@ -215,15 +224,18 @@ public class DeliciousFeed {
     }
     
     /**
-     * Fetches users bookmarks
+     * Retrieves a list of recent bookmarks for a Delcious user's network.
      * 
-     * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of bookmarks received from the server.
+     * @param username Username of the Delicious user.
+     * @param limit The number of bookmarks to retrieve, maximum of 100.
+     * @return The list of bookmarks received from the server.
+     * @throws JSONException If an error was encountered in deserializing the JSON object returned from 
+     * the server.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
      */
     public static ArrayList<Bookmark> fetchNetworkRecent(String userName, int limit)
-    	throws JSONException, ParseException, IOException, AuthenticationException {
+    	throws JSONException, IOException, AuthenticationException {
 
         final HttpGet post = new HttpGet(FETCH_NETWORK_RECENT_BOOKMARKS_URI + userName + "?count=" + limit);
         
@@ -254,15 +266,17 @@ public class DeliciousFeed {
     }
     
     /**
-     * Fetches users bookmarks
+     * Retrieves a list of hotlist bookmarks from Delicious.
      * 
-     * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of bookmarks received from the server.
+     * @param limit The number of bookmarks to retrieve, maximum of 100.
+     * @return The list of bookmarks received from the server.
+     * @throws JSONException If an error was encountered in deserializing the JSON object returned from 
+     * the server.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
      */
     public static ArrayList<Bookmark> fetchHotlist(int limit)
-    	throws JSONException, ParseException, IOException, AuthenticationException {
+    	throws JSONException, IOException, AuthenticationException {
 
         final HttpGet post = new HttpGet(FETCH_HOTLIST_BOOKMARKS_URI + "?count=" + limit);
         
@@ -293,15 +307,17 @@ public class DeliciousFeed {
     }
     
     /**
-     * Fetches users bookmarks
+     * Retrieves a list of popular bookmarks from Delicious.
      * 
-     * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of bookmarks received from the server.
+     * @param limit The number of bookmarks to retrieve, maximum of 100.
+     * @return The list of bookmarks received from the server.
+     * @throws JSONException If an error was encountered in deserializing the JSON object returned from 
+     * the server.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
      */
     public static ArrayList<Bookmark> fetchPopular(int limit)
-    	throws JSONException, ParseException, IOException, AuthenticationException {
+    	throws JSONException, IOException, AuthenticationException {
 
         final HttpGet post = new HttpGet(FETCH_POPULAR_BOOKMARKS_URI + "?count=" + limit);
         
