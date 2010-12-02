@@ -127,7 +127,7 @@ public class ContactManager {
 	                values.put(StatusUpdates.STATUS_TIMESTAMP, status.getTimeStamp().getTime());
 	                values.put(StatusUpdates.STATUS_RES_PACKAGE, context
 	                    .getPackageName());
-	                values.put(StatusUpdates.STATUS_ICON, R.drawable.icon);
+	                values.put(StatusUpdates.STATUS_ICON, R.drawable.ic_main);
 	                values.put(StatusUpdates.STATUS_LABEL, R.string.label);
 
 	                batchOperation

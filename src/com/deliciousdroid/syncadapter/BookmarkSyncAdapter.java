@@ -98,7 +98,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 		
 		if(notifyPref && update.getInboxNew() > 0) {
 			NotificationManager nm = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-			Notification n = new Notification(R.drawable.icon, "New Delicious Bookmarks", System.currentTimeMillis());
+			Notification n = new Notification(R.drawable.ic_main, "New Delicious Bookmarks", System.currentTimeMillis());
 			Intent ni = new Intent(mContext, Main.class);
 			PendingIntent ci = PendingIntent.getActivity(mContext, 0, ni, 0);
 			n.setLatestEventInfo(mContext, "New Bookmarks", "You Have " + Integer.toString(update.getInboxNew()) + " New Bookmark(s)", ci);

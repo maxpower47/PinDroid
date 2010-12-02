@@ -41,7 +41,7 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     
     <application
-        android:icon="@drawable/icon"
+        android:icon="@drawable/ic_main"
         android:label="@string/label">
         <activity
         	android:name=".activity.Main"
