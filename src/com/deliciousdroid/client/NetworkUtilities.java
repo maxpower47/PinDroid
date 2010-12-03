@@ -100,14 +100,13 @@ public class NetworkUtilities {
     }
 
     /**
-     * Connects to the Voiper server, authenticates the provided username and
-     * password.
+     * Attempts to authenticate to Delicious using a legacy Delicious account.
      * 
-     * @param username The user's username
-     * @param password The user's password
+     * @param username The user's username.
+     * @param password The user's password.
      * @param handler The hander instance from the calling UI thread.
      * @param context The context of the calling Activity.
-     * @return boolean The boolean result indicating whether the user was
+     * @return The boolean result indicating whether the user was
      *         successfully authenticated.
      */
     public static boolean deliciousAuthenticate(String username, String password,
@@ -157,13 +156,14 @@ public class NetworkUtilities {
     }
     
     /**
-     * Yahoo OAuth Authentication Step 1
+     * Attempts to authenticate to Delicious using Yahoo OAuth authentication.  
+     * This is the first step of the three party handshake.
      * 
      * @param username The user's username
      * @param password The user's password
      * @param handler The hander instance from the calling UI thread.
      * @param context The context of the calling Activity.
-     * @return boolean The boolean result indicating whether the user was
+     * @return The boolean result indicating whether the user was
      *         successfully authenticated.
      */
     public static boolean oauthAuthenticate(Handler handler, final Context context) {
@@ -218,13 +218,15 @@ public class NetworkUtilities {
     }
     
     /**
-     * Yahoo OAuth Authentication Step 2
+     * Get a request token as part of the Yahoo OAuth authentication.  This is step 2
+     * of the three party handshake.
      * 
-     * @param username The user's username
-     * @param password The user's password
+     * @param token Request token returned by the initial authentication step.
+     * @param tokenSecret Request token secret returned by the initial authentication step.
+     * @param verifier Verification code received after user is prompted to log in to Yahoo.
      * @param handler The hander instance from the calling UI thread.
      * @param context The context of the calling Activity.
-     * @return boolean The boolean result indicating whether the user was
+     * @return The boolean result indicating whether the user was
      *         successfully authenticated.
      */
     public static boolean getOauthRequestToken(String token, String tokenSecret, String verifier, 
@@ -281,14 +283,13 @@ public class NetworkUtilities {
     }
 
     /**
-     * Refresh an OAuth access token
+     * Refresh an OAuth access token.  A fresh (unexpired) access token is required for every 
+     * request.
      * 
-     * @param username The user's username
-     * @param password The user's password
-     * @param handler The hander instance from the calling UI thread.
+     * @param account The account to retrieve a new access token for.
+     * @param token The old acces token
      * @param context The context of the calling Activity.
-     * @return boolean The boolean result indicating whether the user was
-     *         successfully authenticated.
+     * @return The result of the api call.
      */
     public static LoginResult refreshOauthRequestToken(Account account, String token, final Context context) {
         final HttpResponse resp;
@@ -349,13 +350,14 @@ public class NetworkUtilities {
     }
     
     /**
-     * Fetches users bookmarks
+     * Retrieves the Delicious username for an account authenticated with Yahoo OAuth.
      * 
-     * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of bookmarks received from the server.
-     * @throws AuthenticationException 
+     * @param authtoken The authentication token of the account.
+     * @param tokensecret The token secret for the authentication token.
+     * @param context The context of the calling Activity.
+     * @return A String containing the Delicious username for the user.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
      */
     public static String getOauthUserName(String authtoken, String tokensecret, Context context) 
     	throws IOException, AuthenticationException {
@@ -405,13 +407,10 @@ public class NetworkUtilities {
     }
     
     /**
-     * Fetches users bookmarks
+     * Gets the title of a web page.
      * 
-     * @param account The account being synced.
-     * @param authtoken The authtoken stored in the AccountManager for the
-     *        account
-     * @return list The list of bookmarks received from the server.
-     * @throws AuthenticationException 
+     * @param url The URL of the web page.
+     * @return A String containing the title of the web page.
      */
     public static String getWebpageTitle(String url) {
    	

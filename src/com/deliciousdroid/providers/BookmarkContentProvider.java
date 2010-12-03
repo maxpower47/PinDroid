@@ -323,7 +323,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				String title = c.getString(descColumn);
 				
 				suggestions.put(title, new SearchSuggestionContent(title, 
-					c.getString(urlColumn), R.drawable.icon, R.drawable.bookmark, 
+					c.getString(urlColumn), R.drawable.ic_main, R.drawable.ic_bookmark, 
 					data.build().toString()));
 				
 			} while(c.moveToNext());	
@@ -367,7 +367,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				
 				suggestions.put(name, new SearchSuggestionContent(name, 
 					Integer.toString(count) + " bookmark" + (count > 1 ? "s" : ""),
-					R.drawable.icon, R.drawable.tag, data.build().toString()));
+					R.drawable.ic_main, R.drawable.ic_tag, data.build().toString()));
 				
 			} while(c.moveToNext());	
 		}
