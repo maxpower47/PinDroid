@@ -46,7 +46,17 @@ public class Preferences extends PreferenceActivity {
             	return true;
             }
         });
-
+        
+        Preference helpPref = (Preference) findPreference("pref_help");
+        helpPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        	public boolean onPreferenceClick(Preference preference) {
+            	Uri link = Uri.parse("http://code.google.com/p/deliciousdroid/wiki/Manual");
+        		Intent i = new Intent(Intent.ACTION_VIEW, link);
+        		
+        		startActivity(i);
+            	return true;
+            }
+        });
         
         setTitle("DeliciousDroid Settings");
     }

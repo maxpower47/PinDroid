@@ -40,6 +40,10 @@
 		android:entries="@array/pref_contact_bookmark_results_entries"
 		android:entryValues="@array/pref_contact_bookmark_results_values" />
 	<Preference
+		android:title="@string/pref_help_title"
+		android:summary="@string/pref_help_summary"
+		android:key="@string/pref_help_key" />
+	<Preference
 		android:title="@string/pref_license_title"
 		android:summary="@string/pref_license_summary"
 		android:key="@string/pref_license_key" />

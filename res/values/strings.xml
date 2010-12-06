@@ -133,6 +133,10 @@
     <string name="pref_license_key">pref_license</string>
     <string name="pref_license_summary">Licensed under the GPL v3</string>
     
+    <string name="pref_help_title">Help</string>
+    <string name="pref_help_key">pref_help</string>
+    <string name="pref_help_summary">Help on using DeliciousDroid</string>
+    
     <string name="dialog_no_account_title">No Delicious Account Found</string>
     <string name="dialog_no_account_text">To add your Delicious account go to Accounts and Sync in Settings.</string>
     
