@@ -21,10 +21,15 @@
 
 package com.deliciousdroid.activity;
 
+import java.util.ArrayList;
+
 import com.deliciousdroid.R;
 import com.deliciousdroid.Constants;
+import com.deliciousdroid.platform.BookmarkManager;
+import com.deliciousdroid.platform.TagManager;
 import com.deliciousdroid.providers.BookmarkContentProvider;
 
+import android.accounts.Account;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
@@ -81,6 +86,15 @@ public class Main extends AppBaseActivity {
 		} else {
 			username = mAccount.name;
 		}
+		
+		ArrayList<String> accounts = new ArrayList<String>();
+		
+		for(Account a : mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)) {
+			accounts.add(a.name);
+		}
+		
+		BookmarkManager.TruncateOldBookmarks(accounts, this);
+		TagManager.TruncateOldTags(accounts, this);
 
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
 			Intent i = new Intent(mContext, MainSearchResults.class);

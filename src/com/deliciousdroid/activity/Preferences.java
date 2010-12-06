@@ -23,7 +23,11 @@ package com.deliciousdroid.activity;
  
 import com.deliciousdroid.R;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 
 public class Preferences extends PreferenceActivity {
@@ -31,6 +35,28 @@ public class Preferences extends PreferenceActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+        
+        Preference licensePref = (Preference) findPreference("pref_license");
+        licensePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        	public boolean onPreferenceClick(Preference preference) {
+            	Uri link = Uri.parse("http://www.gnu.org/licenses/gpl-3.0.txt");
+        		Intent i = new Intent(Intent.ACTION_VIEW, link);
+        		
+        		startActivity(i);
+            	return true;
+            }
+        });
+        
+        Preference helpPref = (Preference) findPreference("pref_help");
+        helpPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        	public boolean onPreferenceClick(Preference preference) {
+            	Uri link = Uri.parse("http://code.google.com/p/deliciousdroid/wiki/Manual");
+        		Intent i = new Intent(Intent.ACTION_VIEW, link);
+        		
+        		startActivity(i);
+            	return true;
+            }
+        });
         
         setTitle("DeliciousDroid Settings");
     }

@@ -23,6 +23,7 @@ package com.deliciousdroid.platform;
 
 import java.util.ArrayList;
 
+import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 import com.deliciousdroid.providers.TagContent.Tag;
 
 import android.content.ContentResolver;
@@ -30,6 +31,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.text.TextUtils;
 
 public class TagManager {
 	
@@ -117,6 +119,19 @@ public class TagManager {
 		String[] selectionargs = new String[]{account};
 		
 		context.getContentResolver().delete(Tag.CONTENT_URI, selection, selectionargs);
+	}
+	
+	public static void TruncateOldTags(ArrayList<String> accounts, Context context){
+		
+		ArrayList<String> selectionList = new ArrayList<String>();
+		
+		for(String s : accounts) {
+			selectionList.add(Tag.Account + " <> '" + s + "'");
+		}
+		
+		String selection = TextUtils.join(" AND ", selectionList);
+		
+		context.getContentResolver().delete(Tag.CONTENT_URI, selection, null);
 	}
 	
 	public static ArrayList<Tag> SearchTags(String query, String username, Context context) {
