@@ -263,6 +263,11 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 	        if (mAuthtokenType != null && mAuthtokenType.equals(Constants.AUTHTOKEN_TYPE)) {
 	            intent.putExtra(AccountManager.KEY_AUTHTOKEN, mAuthtoken);
 	        }
+	        
+    		SharedPreferences.Editor editor = settings.edit();
+    		editor.putLong(Constants.PREFS_LAST_SYNC, 0);
+            editor.commit();
+	        
 	        setAccountAuthenticatorResult(intent.getExtras());
 	        setResult(RESULT_OK, intent);
 	        finish();

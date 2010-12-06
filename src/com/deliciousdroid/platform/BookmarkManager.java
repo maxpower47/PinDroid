@@ -32,6 +32,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.text.TextUtils;
 import android.util.Log;
 
 public class BookmarkManager {
@@ -177,6 +178,19 @@ public class BookmarkManager {
 	public static void DeleteBookmark(Bookmark bookmark, Context context){
 		
 		String selection = BaseColumns._ID + "=" + bookmark.getId();
+		
+		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, null);
+	}
+	
+	public static void TruncateOldBookmarks(ArrayList<String> accounts, Context context){
+		
+		ArrayList<String> selectionList = new ArrayList<String>();
+		
+		for(String s : accounts) {
+			selectionList.add(Bookmark.Account + " <> '" + s + "'");
+		}
+		
+		String selection = TextUtils.join(" AND ", selectionList);
 		
 		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, null);
 	}
