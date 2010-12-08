@@ -182,15 +182,18 @@ public class BookmarkManager {
 		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, null);
 	}
 	
-	public static void TruncateOldBookmarks(ArrayList<String> accounts, Context context){
+	public static void TruncateBookmarks(ArrayList<String> accounts, Context context, boolean inverse){
 		
 		ArrayList<String> selectionList = new ArrayList<String>();
 		
+		String operator = inverse ? "<>" : "=";
+		String logicalOp = inverse ? " AND " : " OR ";
+		
 		for(String s : accounts) {
-			selectionList.add(Bookmark.Account + " <> '" + s + "'");
+			selectionList.add(Bookmark.Account + " " + operator + " '" + s + "'");
 		}
 		
-		String selection = TextUtils.join(" AND ", selectionList);
+		String selection = TextUtils.join(logicalOp, selectionList);
 		
 		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, null);
 	}

@@ -102,7 +102,7 @@ public class Main extends AppBaseActivity {
 			accounts.add(a.name);
 		}
 		
-		BookmarkManager.TruncateOldBookmarks(accounts, this);
+		BookmarkManager.TruncateBookmarks(accounts, this, true);
 		TagManager.TruncateOldTags(accounts, this);
 
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
