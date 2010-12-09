@@ -41,6 +41,11 @@
 			android:key="@string/pref_contact_bookmark_results_key"
 			android:entries="@array/pref_contact_bookmark_results_entries"
 			android:entryValues="@array/pref_contact_bookmark_results_values" />
+		<CheckBoxPreference 
+			android:title="@string/pref_searchicons_title"
+			android:defaultValue="true"
+			android:summary="@string/pref_searchicons_summary"
+			android:key="@string/pref_searchicons_key" />
 	</PreferenceCategory>
 	<PreferenceCategory 
 		android:title="@string/pref_cat_help_title">

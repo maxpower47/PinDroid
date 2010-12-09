@@ -132,6 +132,10 @@
     <string name="pref_contact_bookmark_results_key">pref_contact_bookmark_results</string>
     <string name="pref_contact_bookamrk_results_summary">Number of bookmarks to retrieve for network contacts.</string>
     
+    <string name="pref_searchicons_title">Display Search Icons</string>
+    <string name="pref_searchicons_key">pref_searchicons</string>
+    <string name="pref_searchicons_summary">Display icons in search suggestions.</string>
+    
     <string name="pref_license_title">License</string>
     <string name="pref_license_key">pref_license</string>
     <string name="pref_license_summary">Licensed under the GPL v3</string>

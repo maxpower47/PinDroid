@@ -405,17 +405,34 @@ public class BookmarkContentProvider extends ContentProvider {
 	}
 	
 	private Cursor getSearchCursor(Map<String, SearchSuggestionContent> list) {
-		MatrixCursor mc = new MatrixCursor(new String[] {BaseColumns._ID, 
-				SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, 
-				SearchManager.SUGGEST_COLUMN_INTENT_DATA, 
-				SearchManager.SUGGEST_COLUMN_ICON_1, SearchManager.SUGGEST_COLUMN_ICON_2});
-
-		int i = 0;
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+    	Boolean icons = settings.getBoolean("pref_searchicons", true);
 		
-		for(SearchSuggestionContent s : list.values()) {
-			mc.addRow(new Object[]{ i++, s.getText1(), s.getText2(), s.getIntentData(), 
-				s.getIcon1(), s.getIcon2() });
-		}
+    	MatrixCursor mc;
+    	
+    	if(icons) {
+			mc = new MatrixCursor(new String[] {BaseColumns._ID, 
+					SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, 
+					SearchManager.SUGGEST_COLUMN_INTENT_DATA, 
+					SearchManager.SUGGEST_COLUMN_ICON_1, SearchManager.SUGGEST_COLUMN_ICON_2});
+	
+			int i = 0;
+			
+			for(SearchSuggestionContent s : list.values()) {
+				mc.addRow(new Object[]{ i++, s.getText1(), s.getText2(), s.getIntentData(), 
+					s.getIcon1(), s.getIcon2() });
+			}
+    	} else {
+			mc = new MatrixCursor(new String[] {BaseColumns._ID, 
+					SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, 
+					SearchManager.SUGGEST_COLUMN_INTENT_DATA});
+	
+			int i = 0;
+			
+			for(SearchSuggestionContent s : list.values()) {
+				mc.addRow(new Object[]{ i++, s.getText1(), s.getText2(), s.getIntentData() });
+			}
+    	}
 		
 		return mc;
 	}
