@@ -380,11 +380,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent){
         super.onActivityResult(requestCode, resultCode, intent);
-        Bundle extras = intent.getExtras();
-        oauthVerifier = extras.getString(Constants.OAUTH_VERIFIER_PROPERTY);
-        Log.d("oauth_verifier", oauthVerifier);
-        
-        getOauthAccessToken();
+        if(resultCode == RESULT_OK && intent.hasExtra(Constants.OAUTH_VERIFIER_PROPERTY)){
+	        Bundle extras = intent.getExtras();
+	        oauthVerifier = extras.getString(Constants.OAUTH_VERIFIER_PROPERTY);
+	        Log.d("oauth_verifier", oauthVerifier);
+	        
+	        getOauthAccessToken();
+        }
     }
 
     /**

@@ -117,6 +117,9 @@
     <string name="view_bookmark_time_title">Saved on</string>
     <string name="view_bookmark_account_title">By</string>
     
+    <string name="pref_cat_general_title">General Settings</string>
+    <string name="pref_cat_help_title">Help</string>
+    
     <string name="pref_notification_title">Display Notifications</string>
     <string name="pref_notification_key">pref_notification</string>
     <string name="pref_notification_summary">Display notifications when new links are received in your inbox.</string>
@@ -129,6 +132,10 @@
     <string name="pref_contact_bookmark_results_key">pref_contact_bookmark_results</string>
     <string name="pref_contact_bookamrk_results_summary">Number of bookmarks to retrieve for network contacts.</string>
     
+    <string name="pref_searchicons_title">Display Search Icons</string>
+    <string name="pref_searchicons_key">pref_searchicons</string>
+    <string name="pref_searchicons_summary">Display icons in search suggestions.</string>
+    
     <string name="pref_license_title">License</string>
     <string name="pref_license_key">pref_license</string>
     <string name="pref_license_summary">Licensed under the GPL v3</string>
@@ -136,6 +143,10 @@
     <string name="pref_help_title">Help</string>
     <string name="pref_help_key">pref_help</string>
     <string name="pref_help_summary">Help on using DeliciousDroid</string>
+    
+    <string name="pref_donate_title">Donate</string>
+    <string name="pref_donate_key">pref_donate</string>
+    <string name="pref_donate_summary">Support DeliciousDroid</string>
     
     <string name="dialog_no_account_title">No Delicious Account Found</string>
     <string name="dialog_no_account_text">To add your Delicious account go to Accounts and Sync in Settings.</string>

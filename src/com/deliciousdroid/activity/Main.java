@@ -49,12 +49,19 @@ import android.view.View;
 
 public class Main extends AppBaseActivity {
 	
-	static final String[] MENU_ITEMS = new String[] {"View My Recent", "View My Tags", 
-		"View Network Recent", "View Hotlist", "View Popular"};
+	static final String[] MENU_ITEMS = new String[] {"My Bookmarks", "My Tags", 
+		"Network Recent", "Hotlist", "Popular"};
+	
+	Bundle savedState;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
+		savedState = savedInstanceState;
+		super.onCreate(savedState);
+		init();
+	}
+	
+	private void init(){
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
 
 		Intent intent = getIntent();
@@ -70,14 +77,16 @@ public class Main extends AppBaseActivity {
 			       .setPositiveButton("Go", new DialogInterface.OnClickListener() {
 			           public void onClick(DialogInterface dialog, int id) {
 			   			Intent i = new Intent(android.provider.Settings.ACTION_SYNC_SETTINGS);
-						startActivity(i);
-						finish();
+						startActivityForResult(i, 0);
+						
 			           }
 			       });
 			
 			AlertDialog alert = builder.create();
 			alert.setIcon(android.R.drawable.ic_dialog_alert);
 			alert.show();
+			
+			return;
 		} else if(lastUpdate == 0) {
 	
 			Toast.makeText(this, "Syncing...", Toast.LENGTH_LONG).show();
@@ -93,7 +102,7 @@ public class Main extends AppBaseActivity {
 			accounts.add(a.name);
 		}
 		
-		BookmarkManager.TruncateOldBookmarks(accounts, this);
+		BookmarkManager.TruncateBookmarks(accounts, this, true);
 		TagManager.TruncateOldTags(accounts, this);
 
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
@@ -112,7 +121,12 @@ public class Main extends AppBaseActivity {
 				tagname = data.getQueryParameter("tagname");
 			}
 			
-			if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
+			if(!data.getScheme().equals("content")){
+				Intent i = new Intent(Intent.ACTION_VIEW, data);
+				
+				startActivity(i);
+				finish();				
+			} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
 				Intent viewBookmark = new Intent(this, ViewBookmark.class);
 				viewBookmark.setData(data);
 				
@@ -207,5 +221,9 @@ public class Main extends AppBaseActivity {
 		    	}
 		    }
 		});
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		this.onCreate(savedState);
 	}
 }

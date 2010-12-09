@@ -21,6 +21,7 @@
 
 package com.deliciousdroid.providers;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -49,6 +50,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.provider.LiveFolders;
+import android.text.TextUtils;
 import android.util.Log;
 
 public class BookmarkContentProvider extends ContentProvider {
@@ -292,6 +294,8 @@ public class BookmarkContentProvider extends ContentProvider {
 	private Map<String, SearchSuggestionContent> getBookmarkSearchSuggestions(String query) {
 		Log.d("getBookmarkSearchSuggestions", query);
 		
+		String[] bookmarks = query.split(" ");
+		
 		mAccountManager = AccountManager.get(getContext());
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		
@@ -301,8 +305,14 @@ public class BookmarkContentProvider extends ContentProvider {
 		SQLiteQueryBuilder bookmarkqb = new SQLiteQueryBuilder();	
 		bookmarkqb.setTables(BOOKMARK_TABLE_NAME);
 		
-		String selection = Bookmark.Description + " LIKE '%" + query + "%' OR " + 
-			Bookmark.Notes + " LIKE '%" + query + "%'";
+		ArrayList<String> bookmarkList = new ArrayList<String>();
+		
+		for(String s : bookmarks) {
+			bookmarkList.add("(" + Bookmark.Description + " LIKE '%" + s + "%' OR " + 
+					Bookmark.Notes + " LIKE '%" + s + "%')");
+		}
+		
+		String selection = TextUtils.join(" AND ", bookmarkList);
 		
 		String[] projection = new String[] {BaseColumns._ID, Bookmark.Description, Bookmark.Url};
 
@@ -313,18 +323,28 @@ public class BookmarkContentProvider extends ContentProvider {
 			int idColumn = c.getColumnIndex(BaseColumns._ID);
 			int urlColumn = c.getColumnIndex(Bookmark.Url);
 
-			do {			
-				Uri.Builder data = new Uri.Builder();
-				data.scheme(Constants.CONTENT_SCHEME);
-				data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
-				data.appendEncodedPath("bookmarks");
-				data.appendEncodedPath(c.getString(idColumn));
+			do {
+		    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+		    	String defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
+		    	
+		    	Uri data;
+		    	Uri.Builder builder = new Uri.Builder();
+		    	
+		    	if(defaultAction.equals("browser")) {
+		    		data = Uri.parse(c.getString(urlColumn));
+		    	} else {
+		    		builder.scheme(Constants.CONTENT_SCHEME);
+		    		builder.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
+		    		builder.appendEncodedPath("bookmarks");
+		    		builder.appendEncodedPath(c.getString(idColumn));
+		    		data = builder.build();
+		    	}
 				
 				String title = c.getString(descColumn);
 				
 				suggestions.put(title, new SearchSuggestionContent(title, 
 					c.getString(urlColumn), R.drawable.ic_main, R.drawable.ic_bookmark, 
-					data.build().toString()));
+					data.toString()));
 				
 			} while(c.moveToNext());	
 		}
@@ -336,6 +356,8 @@ public class BookmarkContentProvider extends ContentProvider {
 	private Map<String, SearchSuggestionContent> getTagSearchSuggestions(String query) {
 		Log.d("getTagSearchSuggestions", query);
 		
+		String[] tags = query.split(" ");
+		
 		mAccountManager = AccountManager.get(getContext());
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		
@@ -345,8 +367,14 @@ public class BookmarkContentProvider extends ContentProvider {
 		SQLiteQueryBuilder tagqb = new SQLiteQueryBuilder();	
 		tagqb.setTables(TAG_TABLE_NAME);
 		
-		String selection = Tag.Name + " LIKE '%" + query + "%'";
+		ArrayList<String> tagList = new ArrayList<String>();
 		
+		for(String s : tags){
+			tagList.add(Tag.Name + " LIKE '%" + s + "%'");
+		}
+		
+		String selection = TextUtils.join(" OR ", tagList);
+
 		String[] projection = new String[] {BaseColumns._ID, Tag.Name, Tag.Count};
 
 		Cursor c = getTags(Tag.CONTENT_URI, projection, selection, null, null, SuggestionLimit);
@@ -377,17 +405,34 @@ public class BookmarkContentProvider extends ContentProvider {
 	}
 	
 	private Cursor getSearchCursor(Map<String, SearchSuggestionContent> list) {
-		MatrixCursor mc = new MatrixCursor(new String[] {BaseColumns._ID, 
-				SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, 
-				SearchManager.SUGGEST_COLUMN_INTENT_DATA, 
-				SearchManager.SUGGEST_COLUMN_ICON_1, SearchManager.SUGGEST_COLUMN_ICON_2});
-
-		int i = 0;
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+    	Boolean icons = settings.getBoolean("pref_searchicons", true);
 		
-		for(SearchSuggestionContent s : list.values()) {
-			mc.addRow(new Object[]{ i++, s.getText1(), s.getText2(), s.getIntentData(), 
-				s.getIcon1(), s.getIcon2() });
-		}
+    	MatrixCursor mc;
+    	
+    	if(icons) {
+			mc = new MatrixCursor(new String[] {BaseColumns._ID, 
+					SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, 
+					SearchManager.SUGGEST_COLUMN_INTENT_DATA, 
+					SearchManager.SUGGEST_COLUMN_ICON_1, SearchManager.SUGGEST_COLUMN_ICON_2});
+	
+			int i = 0;
+			
+			for(SearchSuggestionContent s : list.values()) {
+				mc.addRow(new Object[]{ i++, s.getText1(), s.getText2(), s.getIntentData(), 
+					s.getIcon1(), s.getIcon2() });
+			}
+    	} else {
+			mc = new MatrixCursor(new String[] {BaseColumns._ID, 
+					SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, 
+					SearchManager.SUGGEST_COLUMN_INTENT_DATA});
+	
+			int i = 0;
+			
+			for(SearchSuggestionContent s : list.values()) {
+				mc.addRow(new Object[]{ i++, s.getText1(), s.getText2(), s.getIntentData() });
+			}
+    	}
 		
 		return mc;
 	}

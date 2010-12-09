@@ -182,15 +182,18 @@ public class BookmarkManager {
 		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, null);
 	}
 	
-	public static void TruncateOldBookmarks(ArrayList<String> accounts, Context context){
+	public static void TruncateBookmarks(ArrayList<String> accounts, Context context, boolean inverse){
 		
 		ArrayList<String> selectionList = new ArrayList<String>();
 		
+		String operator = inverse ? "<>" : "=";
+		String logicalOp = inverse ? " AND " : " OR ";
+		
 		for(String s : accounts) {
-			selectionList.add(Bookmark.Account + " <> '" + s + "'");
+			selectionList.add(Bookmark.Account + " " + operator + " '" + s + "'");
 		}
 		
-		String selection = TextUtils.join(" AND ", selectionList);
+		String selection = TextUtils.join(logicalOp, selectionList);
 		
 		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, null);
 	}
@@ -224,15 +227,27 @@ public class BookmarkManager {
 		String[] selectionargs = new String[]{username};
 		String sortorder = null;
 		
+		String[] queryBookmarks = query.split(" ");
+		
+		ArrayList<String> queryList = new ArrayList<String>();
+		
 		if(query != null && query != "" && (tagname == null || tagname == "")) {
-			selection = "(" + Bookmark.Tags + " LIKE '%" + query + "%' OR " +
-				Bookmark.Description + " LIKE '%" + query + "%' OR " +
-				Bookmark.Notes + " LIKE '%" + query + "%') AND " +
+			for(String s : queryBookmarks) {
+				queryList.add("(" + Bookmark.Tags + " LIKE '%" + s + "%' OR " +
+						Bookmark.Description + " LIKE '%" + s + "%' OR " +
+						Bookmark.Notes + " LIKE '%" + s + "%')");
+			}
+			
+			selection = TextUtils.join(" AND ", queryList) + " AND " +
 				Bookmark.Account + "=?";
 		} else if(query != null && query != ""){
-			selection = "(" + Bookmark.Description + " LIKE '%" + query + "%' OR " +
-				Bookmark.Notes + " LIKE '%" + query + "%') AND " +
-				Bookmark.Account + "=? AND " +
+			for(String s : queryBookmarks) {
+				queryList.add("(" + Bookmark.Description + " LIKE '%" + query + "%' OR " +
+						Bookmark.Notes + " LIKE '%" + query + "%')");
+			}
+
+			selection = TextUtils.join(" AND ", queryList) +
+				" AND " + Bookmark.Account + "=? AND " +
 				"(" + Bookmark.Tags + " LIKE '% " + tagname + " %' OR " +
 				Bookmark.Tags + " LIKE '% " + tagname + "' OR " +
 				Bookmark.Tags + " LIKE '" + tagname + " %' OR " +
