@@ -49,8 +49,8 @@ import android.view.View;
 
 public class Main extends AppBaseActivity {
 	
-	static final String[] MENU_ITEMS = new String[] {"View My Recent", "View My Tags", 
-		"View Network Recent", "View Hotlist", "View Popular"};
+	static final String[] MENU_ITEMS = new String[] {"My Bookmarks", "My Tags", 
+		"Network Recent", "Hotlist", "Popular"};
 	
 	Bundle savedState;
 	
