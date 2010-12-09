@@ -36,7 +36,8 @@
 			android:paddingLeft="10dip" />
 		<TextView
 			android:id="@+id/view_bookmark_url"
-			style="@style/ViewBookmarkFieldContent" />
+			style="@style/ViewBookmarkFieldContent"
+			android:autoLink="web" />
 		<TextView
 			android:id="@+id/view_bookmark_notes_title"
 			style="@style/ViewBookmarkFieldTitle"
