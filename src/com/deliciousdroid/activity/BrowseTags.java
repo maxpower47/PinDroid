@@ -59,7 +59,16 @@ public class BrowseTags extends AppBaseActivity {
 			username = data.getUserInfo();
 		} else username = mAccount.name;
 		
-    	if(Intent.ACTION_SEARCH.equals(action)) {
+		if(Intent.ACTION_VIEW.equals(action) && data.getLastPathSegment().equals("bookmarks")) {
+			Intent i = new Intent();
+			i.setAction(Intent.ACTION_VIEW);
+			i.addCategory(Intent.CATEGORY_DEFAULT);
+			i.setData(data);
+			
+			startActivity(i);
+			finish();			
+			
+		} else if(Intent.ACTION_SEARCH.equals(action)) {
   		
     		String query = intent.getStringExtra(SearchManager.QUERY);
     		
