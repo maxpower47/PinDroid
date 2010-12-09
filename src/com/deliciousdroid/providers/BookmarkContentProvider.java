@@ -294,6 +294,8 @@ public class BookmarkContentProvider extends ContentProvider {
 	private Map<String, SearchSuggestionContent> getBookmarkSearchSuggestions(String query) {
 		Log.d("getBookmarkSearchSuggestions", query);
 		
+		String[] bookmarks = query.split(" ");
+		
 		mAccountManager = AccountManager.get(getContext());
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		
@@ -303,8 +305,14 @@ public class BookmarkContentProvider extends ContentProvider {
 		SQLiteQueryBuilder bookmarkqb = new SQLiteQueryBuilder();	
 		bookmarkqb.setTables(BOOKMARK_TABLE_NAME);
 		
-		String selection = Bookmark.Description + " LIKE '%" + query + "%' OR " + 
-			Bookmark.Notes + " LIKE '%" + query + "%'";
+		ArrayList<String> bookmarkList = new ArrayList<String>();
+		
+		for(String s : bookmarks) {
+			bookmarkList.add("(" + Bookmark.Description + " LIKE '%" + s + "%' OR " + 
+					Bookmark.Notes + " LIKE '%" + s + "%')");
+		}
+		
+		String selection = TextUtils.join(" AND ", bookmarkList);
 		
 		String[] projection = new String[] {BaseColumns._ID, Bookmark.Description, Bookmark.Url};
 
