@@ -22,29 +22,35 @@
  */
  -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<CheckBoxPreference 
-		android:title="@string/pref_notification_title"
-		android:defaultValue="true"
-		android:summary="@string/pref_notification_summary"
-		android:key="@string/pref_notification_key" />
-	<ListPreference
-		android:title="@string/pref_view_bookmark_default_action_title"
-		android:summary="@string/pref_view_bookmark_default_action_summary"
-		android:key="@string/pref_view_bookmark_default_action_key"
-		android:entries="@array/pref_view_bookmark_default_action_entries"
-		android:entryValues="@array/pref_view_bookmark_default_action_values" />
-	<ListPreference
-		android:title="@string/pref_contact_bookmark_results_title"
-		android:summary="@string/pref_contact_bookamrk_results_summary"
-		android:key="@string/pref_contact_bookmark_results_key"
-		android:entries="@array/pref_contact_bookmark_results_entries"
-		android:entryValues="@array/pref_contact_bookmark_results_values" />
-	<Preference
-		android:title="@string/pref_help_title"
-		android:summary="@string/pref_help_summary"
-		android:key="@string/pref_help_key" />
-	<Preference
-		android:title="@string/pref_license_title"
-		android:summary="@string/pref_license_summary"
-		android:key="@string/pref_license_key" />
+	<PreferenceCategory 
+		android:title="@string/pref_cat_general_title">
+		<CheckBoxPreference 
+			android:title="@string/pref_notification_title"
+			android:defaultValue="true"
+			android:summary="@string/pref_notification_summary"
+			android:key="@string/pref_notification_key" />
+		<ListPreference
+			android:title="@string/pref_view_bookmark_default_action_title"
+			android:summary="@string/pref_view_bookmark_default_action_summary"
+			android:key="@string/pref_view_bookmark_default_action_key"
+			android:entries="@array/pref_view_bookmark_default_action_entries"
+			android:entryValues="@array/pref_view_bookmark_default_action_values" />
+		<ListPreference
+			android:title="@string/pref_contact_bookmark_results_title"
+			android:summary="@string/pref_contact_bookamrk_results_summary"
+			android:key="@string/pref_contact_bookmark_results_key"
+			android:entries="@array/pref_contact_bookmark_results_entries"
+			android:entryValues="@array/pref_contact_bookmark_results_values" />
+	</PreferenceCategory>
+	<PreferenceCategory 
+		android:title="@string/pref_cat_help_title">
+		<Preference
+			android:title="@string/pref_help_title"
+			android:summary="@string/pref_help_summary"
+			android:key="@string/pref_help_key" />
+		<Preference
+			android:title="@string/pref_license_title"
+			android:summary="@string/pref_license_summary"
+			android:key="@string/pref_license_key" />
+	</PreferenceCategory>	
 </PreferenceScreen>
