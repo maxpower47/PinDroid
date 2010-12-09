@@ -34,13 +34,15 @@
 			android:summary="@string/pref_view_bookmark_default_action_summary"
 			android:key="@string/pref_view_bookmark_default_action_key"
 			android:entries="@array/pref_view_bookmark_default_action_entries"
-			android:entryValues="@array/pref_view_bookmark_default_action_values" />
+			android:entryValues="@array/pref_view_bookmark_default_action_values"
+			android:defaultValue="50" />
 		<ListPreference
 			android:title="@string/pref_contact_bookmark_results_title"
 			android:summary="@string/pref_contact_bookamrk_results_summary"
 			android:key="@string/pref_contact_bookmark_results_key"
 			android:entries="@array/pref_contact_bookmark_results_entries"
-			android:entryValues="@array/pref_contact_bookmark_results_values" />
+			android:entryValues="@array/pref_contact_bookmark_results_values"
+			android:defaultValue="browser" />
 		<CheckBoxPreference 
 			android:title="@string/pref_searchicons_title"
 			android:defaultValue="true"
