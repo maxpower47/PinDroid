@@ -91,4 +91,6 @@ public class Constants {
     
     public static final String OAUTH_SHARED_SECRET = "1985c8fea4058d3853256664cec83ed2a47143e2";
     public static final String OAUTH_APPLICATION_ID = "DFRFQW4a";
+    
+    public static final String DONATION_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ERJRC6SWL9ZC";
 }

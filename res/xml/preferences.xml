@@ -59,5 +59,9 @@
 			android:title="@string/pref_license_title"
 			android:summary="@string/pref_license_summary"
 			android:key="@string/pref_license_key" />
+		<Preference
+			android:title="@string/pref_donate_title"
+			android:summary="@string/pref_donate_summary"
+			android:key="@string/pref_donate_key" />
 	</PreferenceCategory>	
 </PreferenceScreen>

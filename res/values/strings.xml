@@ -144,6 +144,10 @@
     <string name="pref_help_key">pref_help</string>
     <string name="pref_help_summary">Help on using DeliciousDroid</string>
     
+    <string name="pref_donate_title">Donate</string>
+    <string name="pref_donate_key">pref_donate</string>
+    <string name="pref_donate_summary">Support DeliciousDroid</string>
+    
     <string name="dialog_no_account_title">No Delicious Account Found</string>
     <string name="dialog_no_account_text">To add your Delicious account go to Accounts and Sync in Settings.</string>
     

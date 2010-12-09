@@ -21,6 +21,7 @@
 
 package com.deliciousdroid.activity;
  
+import com.deliciousdroid.Constants;
 import com.deliciousdroid.R;
 
 import android.content.Intent;
@@ -51,6 +52,17 @@ public class Preferences extends PreferenceActivity {
         helpPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
         	public boolean onPreferenceClick(Preference preference) {
             	Uri link = Uri.parse("http://code.google.com/p/deliciousdroid/wiki/Manual");
+        		Intent i = new Intent(Intent.ACTION_VIEW, link);
+        		
+        		startActivity(i);
+            	return true;
+            }
+        });
+        
+        Preference donatePref = (Preference) findPreference("pref_donate");
+        donatePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        	public boolean onPreferenceClick(Preference preference) {
+            	Uri link = Uri.parse(Constants.DONATION_URL);
         		Intent i = new Intent(Intent.ACTION_VIEW, link);
         		
         		startActivity(i);
