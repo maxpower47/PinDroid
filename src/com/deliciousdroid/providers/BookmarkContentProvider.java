@@ -21,6 +21,7 @@
 
 package com.deliciousdroid.providers;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -49,6 +50,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.provider.LiveFolders;
+import android.text.TextUtils;
 import android.util.Log;
 
 public class BookmarkContentProvider extends ContentProvider {
@@ -336,6 +338,8 @@ public class BookmarkContentProvider extends ContentProvider {
 	private Map<String, SearchSuggestionContent> getTagSearchSuggestions(String query) {
 		Log.d("getTagSearchSuggestions", query);
 		
+		String[] tags = query.split(" ");
+		
 		mAccountManager = AccountManager.get(getContext());
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		
@@ -345,8 +349,14 @@ public class BookmarkContentProvider extends ContentProvider {
 		SQLiteQueryBuilder tagqb = new SQLiteQueryBuilder();	
 		tagqb.setTables(TAG_TABLE_NAME);
 		
-		String selection = Tag.Name + " LIKE '%" + query + "%'";
+		ArrayList<String> tagList = new ArrayList<String>();
 		
+		for(String s : tags){
+			tagList.add(Tag.Name + " LIKE '%" + s + "%'");
+		}
+		
+		String selection = TextUtils.join(" OR ", tagList);
+
 		String[] projection = new String[] {BaseColumns._ID, Tag.Name, Tag.Count};
 
 		Cursor c = getTags(Tag.CONTENT_URI, projection, selection, null, null, SuggestionLimit);

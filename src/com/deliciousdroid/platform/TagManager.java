@@ -23,7 +23,6 @@ package com.deliciousdroid.platform;
 
 import java.util.ArrayList;
 
-import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 import com.deliciousdroid.providers.TagContent.Tag;
 
 import android.content.ContentResolver;
@@ -141,9 +140,17 @@ public class TagManager {
 		String[] selectionargs = new String[]{ username };
 		String sortorder = null;
 		
+		String[] queryTags = query.split(" ");
+		
+		ArrayList<String> queryList = new ArrayList<String>();
+		
+		for(String s : queryTags) {
+			queryList.add(Tag.Name + " LIKE '%" + s + "%'");
+		}
+		
 		if(query != null && query != "") {
-			selection = Tag.Name + " LIKE '%" + query + "%' AND " +
-				Tag.Account + "=?";
+			selection = "(" + TextUtils.join(" OR ", queryList) + ")" + 
+				" AND " + Tag.Account + "=?";
 		} else {
 			selection = Tag.Account + "=?";
 		}
