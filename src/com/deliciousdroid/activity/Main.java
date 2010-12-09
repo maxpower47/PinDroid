@@ -121,7 +121,12 @@ public class Main extends AppBaseActivity {
 				tagname = data.getQueryParameter("tagname");
 			}
 			
-			if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
+			if(!data.getScheme().equals("content")){
+				Intent i = new Intent(Intent.ACTION_VIEW, data);
+				
+				startActivity(i);
+				finish();				
+			} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
 				Intent viewBookmark = new Intent(this, ViewBookmark.class);
 				viewBookmark.setData(data);
 				

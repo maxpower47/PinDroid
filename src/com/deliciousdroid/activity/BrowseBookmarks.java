@@ -117,6 +117,11 @@ public class BrowseBookmarks extends AppBaseActivity {
     			setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));
     		}
     		
+    	} else if(!data.getScheme().equals("content")) {
+    		
+    		openBookmarkInBrowser(new Bookmark(data.toString()));
+    		finish();
+    		
     	} else if(path.equals("/bookmarks") && isMyself()) {
     		
 			if(tagname != null && tagname != "") {

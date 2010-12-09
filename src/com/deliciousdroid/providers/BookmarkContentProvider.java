@@ -323,18 +323,28 @@ public class BookmarkContentProvider extends ContentProvider {
 			int idColumn = c.getColumnIndex(BaseColumns._ID);
 			int urlColumn = c.getColumnIndex(Bookmark.Url);
 
-			do {			
-				Uri.Builder data = new Uri.Builder();
-				data.scheme(Constants.CONTENT_SCHEME);
-				data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
-				data.appendEncodedPath("bookmarks");
-				data.appendEncodedPath(c.getString(idColumn));
+			do {
+		    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+		    	String defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
+		    	
+		    	Uri data;
+		    	Uri.Builder builder = new Uri.Builder();
+		    	
+		    	if(defaultAction.equals("browser")) {
+		    		data = Uri.parse(c.getString(urlColumn));
+		    	} else {
+		    		builder.scheme(Constants.CONTENT_SCHEME);
+		    		builder.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
+		    		builder.appendEncodedPath("bookmarks");
+		    		builder.appendEncodedPath(c.getString(idColumn));
+		    		data = builder.build();
+		    	}
 				
 				String title = c.getString(descColumn);
 				
 				suggestions.put(title, new SearchSuggestionContent(title, 
 					c.getString(urlColumn), R.drawable.ic_main, R.drawable.ic_bookmark, 
-					data.build().toString()));
+					data.toString()));
 				
 			} while(c.moveToNext());	
 		}

@@ -122,6 +122,10 @@ public class BookmarkContent {
         	mId = id;
         }
         
+        public Bookmark(String url) {
+            mUrl = url;
+        }
+        
         public Bookmark(String url, String description) {
             mUrl = url;
             mDescription = description;
