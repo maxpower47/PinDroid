@@ -24,8 +24,8 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.deliciousdroid"
-    android:versionCode="12"
-    android:versionName="1.0.2">
+    android:versionCode="13"
+    android:versionName="1.0.3">
     <uses-sdk android:minSdkVersion="5" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
