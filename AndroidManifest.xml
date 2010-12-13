@@ -172,6 +172,12 @@
         <provider
         	android:name="com.deliciousdroid.providers.BookmarkContentProvider"
         	android:label="Bookmarks"
-        	android:authorities="com.deliciousdroid.providers.BookmarkContentProvider" />	
+        	android:authorities="com.deliciousdroid.providers.BookmarkContentProvider" />
+        <receiver android:name=".widget.SearchWidgetProvider" >
+    		<intent-filter>
+        		<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+    		</intent-filter>
+    		<meta-data android:name="android.appwidget.provider" android:resource="@xml/search_appwidget_info" />
+		</receiver>
     </application>
 </manifest>
