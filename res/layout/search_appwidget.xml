@@ -35,7 +35,11 @@
         android:gravity="center"
         android:text="blah"/>
     <Button
-    	android:id="@+id/button"
+    	android:id="@+id/search_widget_bookmarks_button"
+    	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <Button
+    	android:id="@+id/search_widget_tags_button"
     	android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 </LinearLayout>

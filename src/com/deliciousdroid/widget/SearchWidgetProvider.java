@@ -33,21 +33,32 @@ public class SearchWidgetProvider extends AppWidgetProvider {
         for (int i = 0; i < n; i++) {
             int appWidgetId = appWidgetIds[i];
 
-            // Create an Intent to launch ExampleActivity
-            Intent intent = new Intent(context, BrowseBookmarks.class);
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.addCategory(Intent.CATEGORY_DEFAULT);
-    		Uri.Builder data = new Uri.Builder();
-    		data.scheme(Constants.CONTENT_SCHEME);
-    		data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
-    		data.appendEncodedPath("bookmarks");
-    		intent.setData(data.build());
+
+            Intent bookmarkIntent = new Intent(context, BrowseBookmarks.class);
+            bookmarkIntent.setAction(Intent.ACTION_VIEW);
+            bookmarkIntent.addCategory(Intent.CATEGORY_DEFAULT);
+    		Uri.Builder bookmarkData = new Uri.Builder();
+    		bookmarkData.scheme(Constants.CONTENT_SCHEME);
+    		bookmarkData.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
+    		bookmarkData.appendEncodedPath("bookmarks");
+    		bookmarkIntent.setData(bookmarkData.build());
     		
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+    		Intent tagIntent = new Intent();
+    		tagIntent.setAction(Intent.ACTION_VIEW);
+    		tagIntent.addCategory(Intent.CATEGORY_DEFAULT);
+    		Uri.Builder tagData = new Uri.Builder();
+    		tagData.scheme(Constants.CONTENT_SCHEME);
+    		tagData.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
+    		tagData.appendEncodedPath("tags");
+    		tagIntent.setData(tagData.build());
+    		
+            PendingIntent bookmarkPendingIntent = PendingIntent.getActivity(context, 0, bookmarkIntent, 0);
+            PendingIntent tagPendingIntent = PendingIntent.getActivity(context, 0, tagIntent, 0);
 
             // Get the layout for the App Widget and attach an on-click listener to the button
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.search_appwidget);
-            views.setOnClickPendingIntent(R.id.button, pendingIntent);
+            views.setOnClickPendingIntent(R.id.search_widget_bookmarks_button, bookmarkPendingIntent);
+            views.setOnClickPendingIntent(R.id.search_widget_tags_button, tagPendingIntent);
 
             // Tell the AppWidgetManager to perform an update on the current App Widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
