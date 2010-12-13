@@ -25,21 +25,34 @@
     android:id="@+id/widget"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@drawable/search_widget"
     android:orientation="horizontal">
-    <TextView
-        android:id="@+id/message"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dip"
-        android:padding="10dip"
-        android:gravity="center"
-        android:text="blah"/>
-    <Button
-    	android:id="@+id/search_widget_bookmarks_button"
-    	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <Button
-    	android:id="@+id/search_widget_tags_button"
-    	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    	android:layout_height="wrap_content">
+	    <ImageButton
+	    	android:id="@+id/search_widget_bookmarks_button"
+	    	android:src="@drawable/ic_bookmark"
+	    	android:layout_width="50dp"
+	        android:layout_height="50dp"
+	        android:layout_marginTop="27dp"
+	        android:layout_marginLeft="15dp"/>
+	    <ImageButton
+	    	android:id="@+id/search_widget_tags_button"
+	    	android:src="@drawable/ic_tag"
+	    	android:layout_width="50dp"
+	        android:layout_height="50dp"
+	        android:layout_marginTop="27dp"
+	        android:layout_marginLeft="61dp"/>
+	    <TextView
+	    	android:id="@+id/search_widget_search_button"
+	    	android:layout_width="200dp"
+	        android:layout_height="50dp"
+	        android:text="Search Delicious"
+	        android:clickable="true"
+	        android:focusable="true"
+	        android:layout_marginTop="45dp"
+	        android:layout_marginLeft="115dp">
+	    </TextView>
+    </RelativeLayout>
 </LinearLayout>

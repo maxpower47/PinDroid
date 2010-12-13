@@ -34,7 +34,7 @@ public class SearchWidgetProvider extends AppWidgetProvider {
             int appWidgetId = appWidgetIds[i];
 
 
-            Intent bookmarkIntent = new Intent(context, BrowseBookmarks.class);
+            Intent bookmarkIntent = new Intent();
             bookmarkIntent.setAction(Intent.ACTION_VIEW);
             bookmarkIntent.addCategory(Intent.CATEGORY_DEFAULT);
     		Uri.Builder bookmarkData = new Uri.Builder();
@@ -52,13 +52,17 @@ public class SearchWidgetProvider extends AppWidgetProvider {
     		tagData.appendEncodedPath("tags");
     		tagIntent.setData(tagData.build());
     		
+    		Intent searchIntent = new Intent(context, Main.class);
+    		
             PendingIntent bookmarkPendingIntent = PendingIntent.getActivity(context, 0, bookmarkIntent, 0);
             PendingIntent tagPendingIntent = PendingIntent.getActivity(context, 0, tagIntent, 0);
+            PendingIntent searchPendingIntent = PendingIntent.getActivity(context, 0, searchIntent, 0);
 
             // Get the layout for the App Widget and attach an on-click listener to the button
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.search_appwidget);
             views.setOnClickPendingIntent(R.id.search_widget_bookmarks_button, bookmarkPendingIntent);
             views.setOnClickPendingIntent(R.id.search_widget_tags_button, tagPendingIntent);
+            views.setOnClickPendingIntent(R.id.search_widget_search_button, searchPendingIntent);
 
             // Tell the AppWidgetManager to perform an update on the current App Widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
