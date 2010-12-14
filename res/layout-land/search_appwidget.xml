@@ -25,7 +25,7 @@
     android:id="@+id/widget"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/search_widget_blk"
+    android:background="@drawable/search_widget_blk_land"
     android:orientation="horizontal">
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -34,33 +34,40 @@
     		android:src="@drawable/ic_main"
     		android:layout_width="32dp"
 	        android:layout_height="32dp"
-	        android:layout_marginTop="34dp"
+	        android:layout_marginTop="21dp"
 	        android:layout_marginLeft="15dp"/>
+	    <TextView
+	    	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="delicious"
+	        android:textColor="#FFF"
+	        android:textSize="13dp"
+	        android:layout_marginTop="32dp"
+	        android:layout_marginLeft="53dp"/>
 	    <ImageButton
 	    	android:id="@+id/search_widget_bookmarks_button"
 	    	android:src="@drawable/widget_bookmark_button"
-	    	style="@style/WidgetButton"
-	        android:layout_marginLeft="55dp"/>
+	    	style="@style/WidgetButtonLand"
+	        android:layout_marginLeft="115dp"/>
 	    <ImageButton
 	    	android:id="@+id/search_widget_tags_button"
 	    	android:src="@drawable/widget_tag_button"
-	    	style="@style/WidgetButton"
-	        android:layout_marginLeft="105dp"/>
+	    	style="@style/WidgetButtonLand"
+	        android:layout_marginLeft="153dp"/>
 	    <ImageButton
 	    	android:id="@+id/search_widget_search_button"
 	    	android:src="@drawable/widget_search_button"
-	    	style="@style/WidgetButton"
-	        android:layout_marginLeft="155dp"/>
+	    	style="@style/WidgetButtonLand"
+	        android:layout_marginLeft="191dp"/>
 	    <ImageButton
 	    	android:id="@+id/search_widget_add_button"
 	    	android:src="@drawable/widget_add_button"
-	    	style="@style/WidgetButton"
-	        android:layout_marginLeft="205dp"/>
+	    	style="@style/WidgetButtonLand"
+	        android:layout_marginLeft="229dp"/>
 	    <ImageButton
 	    	android:id="@+id/search_widget_network_button"
 	    	android:src="@drawable/widget_network_button"
-	    	style="@style/WidgetButton"
-	        android:layout_marginLeft="255dp"/>
-	        
+	    	style="@style/WidgetButtonLand"
+	        android:layout_marginLeft="267dp"/>   
     </RelativeLayout>
 </LinearLayout>

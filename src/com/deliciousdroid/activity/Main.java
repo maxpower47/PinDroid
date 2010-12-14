@@ -31,6 +31,7 @@ import com.deliciousdroid.providers.BookmarkContentProvider;
 
 import android.accounts.Account;
 import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -106,10 +107,14 @@ public class Main extends AppBaseActivity {
 		TagManager.TruncateOldTags(accounts, this);
 
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
-			Intent i = new Intent(mContext, MainSearchResults.class);
-			i.putExtras(getIntent().getExtras());
-			startActivity(i);
-			finish();
+			if(intent.hasExtra(SearchManager.QUERY)){
+				Intent i = new Intent(mContext, MainSearchResults.class);
+				i.putExtras(getIntent().getExtras());
+				startActivity(i);
+				finish();
+			} else {
+				onSearchRequested();
+			}
 		} else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
 			
 			Uri data = intent.getData();

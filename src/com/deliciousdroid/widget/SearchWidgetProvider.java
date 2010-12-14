@@ -3,7 +3,6 @@ package com.deliciousdroid.widget;
 import com.deliciousdroid.Constants;
 import com.deliciousdroid.R;
 import com.deliciousdroid.activity.AddBookmark;
-import com.deliciousdroid.activity.BrowseBookmarks;
 import com.deliciousdroid.activity.Main;
 import com.deliciousdroid.providers.BookmarkContentProvider;
 
@@ -54,13 +53,24 @@ public class SearchWidgetProvider extends AppWidgetProvider {
     		tagIntent.setData(tagData.build());
     		
     		Intent searchIntent = new Intent(context, Main.class);
+    		searchIntent.setAction(Intent.ACTION_SEARCH);
     		
     		Intent addIntent = new Intent(context, AddBookmark.class);
+    		
+    		Intent networkIntent = new Intent();
+    		networkIntent.setAction(Intent.ACTION_VIEW);
+    		networkIntent.addCategory(Intent.CATEGORY_DEFAULT);
+    		Uri.Builder data = new Uri.Builder();
+    		data.scheme(Constants.CONTENT_SCHEME);
+    		data.encodedAuthority("network@" + BookmarkContentProvider.AUTHORITY);
+    		data.appendEncodedPath("bookmarks");
+    		networkIntent.setData(data.build());
     		
             PendingIntent bookmarkPendingIntent = PendingIntent.getActivity(context, 0, bookmarkIntent, 0);
             PendingIntent tagPendingIntent = PendingIntent.getActivity(context, 0, tagIntent, 0);
             PendingIntent searchPendingIntent = PendingIntent.getActivity(context, 0, searchIntent, 0);
             PendingIntent addPendingIntent = PendingIntent.getActivity(context, 0, addIntent, 0);
+            PendingIntent networkPendingIntent = PendingIntent.getActivity(context, 0, networkIntent, 0);
 
             // Get the layout for the App Widget and attach an on-click listener to the button
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.search_appwidget);
@@ -68,6 +78,7 @@ public class SearchWidgetProvider extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.search_widget_tags_button, tagPendingIntent);
             views.setOnClickPendingIntent(R.id.search_widget_search_button, searchPendingIntent);
             views.setOnClickPendingIntent(R.id.search_widget_add_button, addPendingIntent);
+            views.setOnClickPendingIntent(R.id.search_widget_network_button, networkPendingIntent);
 
             // Tell the AppWidgetManager to perform an update on the current App Widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
