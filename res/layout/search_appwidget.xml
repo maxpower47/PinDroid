@@ -25,34 +25,49 @@
     android:id="@+id/widget"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/search_widget"
+    android:background="@drawable/search_widget_blk"
     android:orientation="horizontal">
     <RelativeLayout
         android:layout_width="wrap_content"
     	android:layout_height="wrap_content">
-	    <ImageButton
-	    	android:id="@+id/search_widget_bookmarks_button"
-	    	android:src="@drawable/ic_bookmark"
-	    	android:layout_width="50dp"
-	        android:layout_height="50dp"
+    	<ImageView
+    		android:src="@drawable/ic_main"
+    		android:layout_width="50dp"
+	        android:layout_height="45dp"
 	        android:layout_marginTop="27dp"
 	        android:layout_marginLeft="15dp"/>
 	    <ImageButton
+	    	android:id="@+id/search_widget_bookmarks_button"
+	    	android:src="@drawable/ic_bookmark"
+	    	android:background="@drawable/widget_button"
+	    	android:layout_width="50dp"
+	        android:layout_height="45dp"
+	        android:layout_marginTop="27dp"
+	        android:layout_marginLeft="65dp"/>
+	    <ImageButton
 	    	android:id="@+id/search_widget_tags_button"
 	    	android:src="@drawable/ic_tag"
+	    	android:background="@drawable/widget_button"
 	    	android:layout_width="50dp"
-	        android:layout_height="50dp"
+	        android:layout_height="45dp"
 	        android:layout_marginTop="27dp"
-	        android:layout_marginLeft="61dp"/>
-	    <TextView
+	        android:layout_marginLeft="117dp"/>
+	    <ImageButton
 	    	android:id="@+id/search_widget_search_button"
-	    	android:layout_width="200dp"
-	        android:layout_height="50dp"
-	        android:text="Search Delicious"
-	        android:clickable="true"
-	        android:focusable="true"
-	        android:layout_marginTop="45dp"
-	        android:layout_marginLeft="115dp">
-	    </TextView>
+	    	android:src="@drawable/ic_menu_search"
+	    	android:background="@drawable/widget_button"
+	    	android:layout_width="50dp"
+	        android:layout_height="45dp"
+	        android:layout_marginTop="27dp"
+	        android:layout_marginLeft="169dp"/>
+	    <ImageButton
+	    	android:id="@+id/search_widget_add_button"
+	    	android:src="@drawable/ic_menu_add"
+	    	android:background="@drawable/widget_button"
+	    	android:layout_width="50dp"
+	        android:layout_height="45dp"
+	        android:layout_marginTop="27dp"
+	        android:layout_marginLeft="221dp"/>
+	        
     </RelativeLayout>
 </LinearLayout>
