@@ -106,6 +106,6 @@
         <item name="android:layout_height">36dp</item>
         <item name="android:layout_marginTop">19dp</item>
         <item name="android:background">@drawable/widget_button</item>
-        <item name="android:scaleType">fitCenter</item>
+        
     </style>
 </resources>

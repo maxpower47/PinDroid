@@ -25,7 +25,7 @@
     android:id="@+id/widget"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/search_widget_blk_land"
+    android:background="@drawable/search_widget_blk"
     android:orientation="horizontal">
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -55,8 +55,8 @@
 	    	style="@style/WidgetButtonLand"
 	        android:layout_marginLeft="153dp"/>
 	    <ImageButton
-	    	android:id="@+id/search_widget_search_button"
-	    	android:src="@drawable/widget_search_button"
+	    	android:id="@+id/search_widget_network_button"
+	    	android:src="@drawable/widget_network_button"
 	    	style="@style/WidgetButtonLand"
 	        android:layout_marginLeft="191dp"/>
 	    <ImageButton
@@ -65,8 +65,8 @@
 	    	style="@style/WidgetButtonLand"
 	        android:layout_marginLeft="229dp"/>
 	    <ImageButton
-	    	android:id="@+id/search_widget_network_button"
-	    	android:src="@drawable/widget_network_button"
+	    	android:id="@+id/search_widget_search_button"
+	    	android:src="@drawable/widget_search_button"
 	    	style="@style/WidgetButtonLand"
 	        android:layout_marginLeft="267dp"/>   
     </RelativeLayout>

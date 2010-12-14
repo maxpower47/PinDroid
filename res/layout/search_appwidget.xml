@@ -47,8 +47,8 @@
 	    	style="@style/WidgetButton"
 	        android:layout_marginLeft="105dp"/>
 	    <ImageButton
-	    	android:id="@+id/search_widget_search_button"
-	    	android:src="@drawable/widget_search_button"
+	    	android:id="@+id/search_widget_network_button"
+	    	android:src="@drawable/widget_network_button"
 	    	style="@style/WidgetButton"
 	        android:layout_marginLeft="155dp"/>
 	    <ImageButton
@@ -57,8 +57,8 @@
 	    	style="@style/WidgetButton"
 	        android:layout_marginLeft="205dp"/>
 	    <ImageButton
-	    	android:id="@+id/search_widget_network_button"
-	    	android:src="@drawable/widget_network_button"
+	    	android:id="@+id/search_widget_search_button"
+	    	android:src="@drawable/widget_search_button"
 	    	style="@style/WidgetButton"
 	        android:layout_marginLeft="255dp"/>
 	        

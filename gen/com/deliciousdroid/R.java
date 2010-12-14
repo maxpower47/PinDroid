@@ -46,13 +46,12 @@ public final class R {
         public static final int search_app_icon=0x7f02001a;
         public static final int search_widget=0x7f02001b;
         public static final int search_widget_blk=0x7f02001c;
-        public static final int search_widget_blk_land=0x7f02001d;
-        public static final int widget_add_button=0x7f02001e;
-        public static final int widget_bookmark_button=0x7f02001f;
-        public static final int widget_button=0x7f020020;
-        public static final int widget_network_button=0x7f020021;
-        public static final int widget_search_button=0x7f020022;
-        public static final int widget_tag_button=0x7f020023;
+        public static final int widget_add_button=0x7f02001d;
+        public static final int widget_bookmark_button=0x7f02001e;
+        public static final int widget_button=0x7f02001f;
+        public static final int widget_network_button=0x7f020020;
+        public static final int widget_search_button=0x7f020021;
+        public static final int widget_tag_button=0x7f020022;
     }
     public static final class id {
         public static final int add_button_cancel=0x7f090010;
@@ -92,8 +91,8 @@ public final class R {
         public static final int password_edit=0x7f090016;
         public static final int search_widget_add_button=0x7f090023;
         public static final int search_widget_bookmarks_button=0x7f090020;
-        public static final int search_widget_network_button=0x7f090024;
-        public static final int search_widget_search_button=0x7f090022;
+        public static final int search_widget_network_button=0x7f090022;
+        public static final int search_widget_search_button=0x7f090024;
         public static final int search_widget_tags_button=0x7f090021;
         public static final int tag_count=0x7f090026;
         public static final int tag_name=0x7f090025;
