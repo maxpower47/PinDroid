@@ -39,6 +39,7 @@ import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 import com.deliciousdroid.providers.ContentNotFoundException;
 import com.deliciousdroid.providers.TagContent.Tag;
 import com.deliciousdroid.ui.TagSpan;
+import com.deliciousdroid.util.StringUtils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -48,6 +49,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract.Data;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -111,9 +113,13 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 			Intent intent = getIntent();
 			
 			if(Intent.ACTION_SEND.equals(intent.getAction())){
-				mEditUrl.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
+				String extraData = intent.getStringExtra(Intent.EXTRA_TEXT);
 				
-				new GetWebpageTitleTask().execute(intent.getStringExtra(Intent.EXTRA_TEXT));
+				String url = StringUtils.getUrl(extraData);
+				
+				mEditUrl.setText(url);
+				
+				new GetWebpageTitleTask().execute(url);
 			} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
 				int id = Integer.parseInt(intent.getData().getLastPathSegment());
 				try {
@@ -254,7 +260,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     	@Override
     	protected String doInBackground(String... args) {
     		
-    		if(args.length > 0) {
+    		if(args.length > 0 && args[0] != null && args[0] != "") {
 	    		url = args[0];
 		
 	    		return NetworkUtilities.getWebpageTitle(url);

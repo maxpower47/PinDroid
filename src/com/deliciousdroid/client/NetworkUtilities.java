@@ -431,14 +431,10 @@ public class NetworkUtilities {
 				resp = HttpClientFactory.getThreadSafeClient().execute(post);
 
 		    	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-		    		String response;
-
-					response = EntityUtils.toString(resp.getEntity());
-		    		Log.d("response", response);
+		    		String response = EntityUtils.toString(resp.getEntity());
 		    		int start = response.indexOf("<title>") + 7;
 		    		int end = response.indexOf("</title>", start + 1);
 		    		String title = response.substring(start, end);
-		    		Log.d("username", title);
 		    		return title;
 		    	} else return "";
 			} catch (Exception e) {

@@ -21,9 +21,26 @@
 
 package com.deliciousdroid.util;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class StringUtils {
     public static String capitalize(String s) {
         if (s.length() == 0) return s;
         return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+    }
+    
+    public static String getUrl(String s) {
+    	String result = "";
+    	
+    	Pattern pattern = Pattern.compile("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+    	
+    	Matcher matcher = pattern.matcher(s);
+    	
+    	if(matcher.find()) {
+    		result = s.substring(matcher.start(), matcher.end());    		
+    	}
+    	
+    	return result;
     }
 }
