@@ -242,8 +242,8 @@ public class BookmarkManager {
 				Bookmark.Account + "=?";
 		} else if(query != null && query != ""){
 			for(String s : queryBookmarks) {
-				queryList.add("(" + Bookmark.Description + " LIKE '%" + query + "%' OR " +
-						Bookmark.Notes + " LIKE '%" + query + "%')");
+				queryList.add("(" + Bookmark.Description + " LIKE '%" + s + "%' OR " +
+						Bookmark.Notes + " LIKE '%" + s + "%')");
 			}
 
 			selection = TextUtils.join(" AND ", queryList) +
