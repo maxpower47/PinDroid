@@ -52,6 +52,7 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
@@ -65,6 +66,15 @@ public class BrowseBookmarks extends AppBaseActivity {
 	
 	private String bookmarkLimit;
 	private String defaultAction;
+	
+	private final int sortDateAsc = 9999991;
+	private final int sortDateDesc = 9999992;
+	private final int sortDescAsc = 9999993;
+	private final int sortDescDesc = 9999994;
+	private final int sortUrlAsc = 9999995;
+	private final int sortUrlDesc = 9999996;
+	
+	private String sortfield = Bookmark.Time + " DESC";
 	
 	private ArrayList<Bookmark> bookmarkList;
 	
@@ -131,11 +141,8 @@ public class BrowseBookmarks extends AppBaseActivity {
 			}
 			
 			if(bookmarkList.isEmpty()) {
-				bookmarkList = BookmarkManager.GetBookmarks(username, tagname, this);
+				loadBookmarkList();
 			}
-
-			setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));	
-
 		} else if(username.equals("network")){
 			try{
 				setTitle("My Network's Recent Bookmarks");
@@ -260,6 +267,70 @@ public class BrowseBookmarks extends AppBaseActivity {
 			startSearch(null, false, contextData, false);
 			return true;
 		} else return false;
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		boolean result = super.onCreateOptionsMenu(menu);
+		
+		if(result && isMyself()) {
+		    SubMenu sortmenu = menu.addSubMenu(Menu.NONE, Menu.NONE, 1, R.string.menu_sortbookmark_title);
+		    sortmenu.setIcon(R.drawable.ic_menu_sort_alphabetically);
+		    sortmenu.add(Menu.NONE, sortDateAsc, 0, "Date (Oldest First)");
+		    sortmenu.add(Menu.NONE, sortDateDesc, 1, "Date (Newest First)");
+		    sortmenu.add(Menu.NONE, sortDescAsc, 2, "Description (A-Z)");
+		    sortmenu.add(Menu.NONE, sortDescDesc, 3, "Description (Z-A)");
+		    sortmenu.add(Menu.NONE, sortUrlAsc, 4, "Url (A-Z)");
+		    sortmenu.add(Menu.NONE, sortUrlDesc, 5, "Url (Z-A)");
+		}
+		
+	    return result;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		boolean result = false;
+		
+	    switch (item.getItemId()) {
+		    case sortDateAsc:
+		    	sortfield = Bookmark.Time + " ASC";
+				result = true;
+				break;
+		    case sortDateDesc:			
+		    	sortfield = Bookmark.Time + " DESC";
+		    	result = true;
+		    	break;
+		    case sortDescAsc:			
+		    	sortfield = Bookmark.Description + " ASC";
+		    	result = true;
+		    	break;
+		    case sortDescDesc:			
+		    	sortfield = Bookmark.Description + " DESC";
+		    	result = true;
+		    	break;
+		    case sortUrlAsc:			
+		    	sortfield = Bookmark.Url + " ASC";
+		    	result = true;
+		    	break;
+		    case sortUrlDesc:			
+		    	sortfield = Bookmark.Url + " DESC";
+		    	result = true;
+		    	break;
+	    }
+	    
+	    if(result) {
+	    	loadBookmarkList();
+	    } else result = super.onOptionsItemSelected(item);
+	    
+	    return result;
+	}
+	
+	private void loadBookmarkList() {
+		bookmarkList = BookmarkManager.GetBookmarks(username, tagname, sortfield, this);
+		
+		setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));
+		((BookmarkListAdapter)getListAdapter()).notifyDataSetChanged();
 	}
 	
 	private void openBookmarkInBrowser(Bookmark b) {
