@@ -189,7 +189,7 @@ public final class R {
         public static final int menu_addbookmark_title=0x7f060019;
         public static final int menu_search_title=0x7f06001b;
         public static final int menu_settings_title=0x7f06001c;
-        public static final int menu_sortbookmark_title=0x7f06001a;
+        public static final int menu_sort_title=0x7f06001a;
         public static final int menu_view_deletebookmark_title=0x7f06001f;
         public static final int menu_view_editbookmark_title=0x7f06001e;
         public static final int menu_view_openbookmark_title=0x7f06001d;

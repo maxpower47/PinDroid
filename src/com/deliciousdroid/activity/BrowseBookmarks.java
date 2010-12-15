@@ -274,7 +274,7 @@ public class BrowseBookmarks extends AppBaseActivity {
 		boolean result = super.onCreateOptionsMenu(menu);
 		
 		if(result && isMyself()) {
-		    SubMenu sortmenu = menu.addSubMenu(Menu.NONE, Menu.NONE, 1, R.string.menu_sortbookmark_title);
+		    SubMenu sortmenu = menu.addSubMenu(Menu.NONE, Menu.NONE, 1, R.string.menu_sort_title);
 		    sortmenu.setIcon(R.drawable.ic_menu_sort_alphabetically);
 		    sortmenu.add(Menu.NONE, sortDateAsc, 0, "Date (Oldest First)");
 		    sortmenu.add(Menu.NONE, sortDateDesc, 1, "Date (Newest First)");

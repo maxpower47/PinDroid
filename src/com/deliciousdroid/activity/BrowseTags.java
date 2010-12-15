@@ -33,7 +33,6 @@ import com.deliciousdroid.providers.TagContent.Tag;
 
 import android.app.SearchManager;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.AdapterView;
@@ -44,15 +43,21 @@ import android.view.*;
 
 public class BrowseTags extends AppBaseActivity {
 		
+	private String sortfield = Tag.Name + " ASC";
+	
+	private final int sortNameAsc = 99999991;
+	private final int sortNameDesc = 99999992;
+	private final int sortCountAsc = 99999993;
+	private final int sortCountDesc = 99999994;
+	
+	private ArrayList<Tag> tagList = new ArrayList<Tag>();
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_tags);
 		Intent intent = getIntent();
 		String action = intent.getAction();
-		
-		ArrayList<Tag> tagList = new ArrayList<Tag>();
-		
 		
 		Uri data = getIntent().getData();
 		if(data != null) {
@@ -74,7 +79,7 @@ public class BrowseTags extends AppBaseActivity {
     		
     		setTitle("Tag Search Results For \"" + query + "\"");
     		
-    		tagList = TagManager.SearchTags(query, mAccount.name, this);
+    		
     		
     		setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
     		
@@ -86,23 +91,7 @@ public class BrowseTags extends AppBaseActivity {
 					setTitle("Choose A Tag For The Folder");
 				}
 
-				String[] projection = new String[] {Tag.Name, Tag.Count};
-							
-				Uri tags = Tag.CONTENT_URI;
-				
-				Cursor c = managedQuery(tags, projection, null, null, null);				
-				
-				if(c.moveToFirst()){
-					
-					int nameColumn = c.getColumnIndex(Tag.Name);
-					int countColumn = c.getColumnIndex(Tag.Count);
-
-					do {	
-						Tag t = new Tag(c.getString(nameColumn), c.getInt(countColumn));
-
-						tagList.add(t);
-					} while(c.moveToNext());	
-				}
+				tagList = TagManager.GetTags(username, sortfield, this);
 
 				setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
 
@@ -158,5 +147,59 @@ public class BrowseTags extends AppBaseActivity {
 			    }
 			});
 		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		boolean result = super.onCreateOptionsMenu(menu);
+		
+		if(result && isMyself()) {
+		    SubMenu sortmenu = menu.addSubMenu(Menu.NONE, Menu.NONE, 1, R.string.menu_sort_title);
+		    sortmenu.setIcon(R.drawable.ic_menu_sort_alphabetically);
+		    sortmenu.add(Menu.NONE, sortNameAsc, 0, "Name (A-Z)");
+		    sortmenu.add(Menu.NONE, sortNameDesc, 1, "Name (Z-A)");
+		    sortmenu.add(Menu.NONE, sortCountAsc, 2, "Count (Least First)");
+		    sortmenu.add(Menu.NONE, sortCountDesc, 3, "Count (Most First)");
+		}
+		
+	    return result;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		boolean result = false;
+		
+	    switch (item.getItemId()) {
+		    case sortNameAsc:
+		    	sortfield = Tag.Name + " ASC";
+				result = true;
+				break;
+		    case sortNameDesc:			
+		    	sortfield = Tag.Name + " DESC";
+		    	result = true;
+		    	break;
+		    case sortCountAsc:			
+		    	sortfield = Tag.Count + " ASC";
+		    	result = true;
+		    	break;
+		    case sortCountDesc:			
+		    	sortfield = Tag.Count + " DESC";
+		    	result = true;
+		    	break;
+	    }
+	    
+	    if(result) {
+	    	loadTagList();
+	    } else result = super.onOptionsItemSelected(item);
+	    
+	    return result;
+	}
+	
+	private void loadTagList() {
+		tagList = TagManager.GetTags(username, sortfield, this);
+		
+		setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
+		((TagListAdapter)getListAdapter()).notifyDataSetChanged();
 	}
 }

@@ -34,6 +34,32 @@ import android.text.TextUtils;
 
 public class TagManager {
 	
+	public static ArrayList<Tag> GetTags(String account, String sortorder, Context context) {
+		ArrayList<Tag> tagList = new ArrayList<Tag>();
+		
+		String[] projection = new String[] {Tag.Name, Tag.Count};
+		String selection = Tag.Account + "=?";
+		String[] selectionargs = new String[]{account};
+		
+		Uri tags = Tag.CONTENT_URI;
+		
+		Cursor c = context.getContentResolver().query(tags, projection, selection, selectionargs, sortorder);				
+		
+		if(c.moveToFirst()){
+			
+			int nameColumn = c.getColumnIndex(Tag.Name);
+			int countColumn = c.getColumnIndex(Tag.Count);
+
+			do {	
+				Tag t = new Tag(c.getString(nameColumn), c.getInt(countColumn));
+
+				tagList.add(t);
+			} while(c.moveToNext());	
+		}
+		
+		return tagList;
+	}
+	
 	public static void AddTag(Tag tag, String account, Context context){
 		ContentValues values = new ContentValues();
 		
