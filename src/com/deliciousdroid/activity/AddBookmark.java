@@ -233,9 +233,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 
         protected void onPostExecute(Boolean result) {
     		if(result){
-    			String[] tags = bookmark.getTagString().split(" ");
-    			for(String s:tags){
-    				Tag t = new Tag(s, 1);    				
+    			for(Tag t : bookmark.getTags()){   				
     				TagManager.UpsertTag(t, account.name, context);
     			}
     			
