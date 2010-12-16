@@ -68,7 +68,7 @@ public class OauthUtilities {
 				sb.append("%26");
 			}
 			sb.append(URLEncoder.encode(key) + "%3D");
-			sb.append(URLEncoder.encode(params.get(key)).replace("+", "%2B"));
+			sb.append(URLEncoder.encode(params.get(key)).replace("+", "%2B").replace("%7C", "%257C").replace("%7B", "%257B").replace("%7D", "%257D").replace("%26", "%2526").replace("%2C", "%252C"));
 		}
 		
 		Log.d("base string", sb.toString().replace("%23", "%2523"));

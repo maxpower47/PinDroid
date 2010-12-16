@@ -129,7 +129,7 @@ public class DeliciousApi {
     	  	
 		params.put("description", bookmark.getDescription());
 		params.put("extended", bookmark.getNotes());
-		params.put("tags", bookmark.getTags());
+		params.put("tags", bookmark.getTagString());
 		params.put("url", bookmark.getUrl());
 		
 		if(bookmark.getPrivate()){

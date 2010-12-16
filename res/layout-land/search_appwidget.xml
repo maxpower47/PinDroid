@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * DeliciousDroid - http://code.google.com/p/DeliciousDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * DeliciousDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * DeliciousDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with DeliciousDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+ -->
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/search_widget_blk"
+    android:orientation="horizontal">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content">
+    	<ImageView
+    		android:src="@drawable/ic_main"
+    		android:layout_width="32dp"
+	        android:layout_height="32dp"
+	        android:layout_marginTop="21dp"
+	        android:layout_marginLeft="15dp"/>
+	    <TextView
+	    	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="delicious"
+	        android:textColor="#FFF"
+	        android:textSize="13dp"
+	        android:layout_marginTop="32dp"
+	        android:layout_marginLeft="53dp"/>
+	    <ImageButton
+	    	android:id="@+id/search_widget_bookmarks_button"
+	    	android:src="@drawable/widget_bookmark_button"
+	    	style="@style/WidgetButtonLand"
+	        android:layout_marginLeft="115dp"/>
+	    <ImageButton
+	    	android:id="@+id/search_widget_tags_button"
+	    	android:src="@drawable/widget_tag_button"
+	    	style="@style/WidgetButtonLand"
+	        android:layout_marginLeft="153dp"/>
+	    <ImageButton
+	    	android:id="@+id/search_widget_network_button"
+	    	android:src="@drawable/widget_network_button"
+	    	style="@style/WidgetButtonLand"
+	        android:layout_marginLeft="191dp"/>
+	    <ImageButton
+	    	android:id="@+id/search_widget_add_button"
+	    	android:src="@drawable/widget_add_button"
+	    	style="@style/WidgetButtonLand"
+	        android:layout_marginLeft="229dp"/>
+	    <ImageButton
+	    	android:id="@+id/search_widget_search_button"
+	    	android:src="@drawable/widget_search_button"
+	    	style="@style/WidgetButtonLand"
+	        android:layout_marginLeft="267dp"/>   
+    </RelativeLayout>
+</LinearLayout>

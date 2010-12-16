@@ -24,8 +24,8 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.deliciousdroid"
-    android:versionCode="13"
-    android:versionName="1.0.3">
+    android:versionCode="14"
+    android:versionName="1.1.0">
     <uses-sdk android:minSdkVersion="5" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -172,6 +172,14 @@
         <provider
         	android:name="com.deliciousdroid.providers.BookmarkContentProvider"
         	android:label="Bookmarks"
-        	android:authorities="com.deliciousdroid.providers.BookmarkContentProvider" />	
+        	android:authorities="com.deliciousdroid.providers.BookmarkContentProvider" />
+        <receiver 
+        	android:name=".widget.SearchWidgetProvider"
+        	android:label="DeliciousDroid">
+    		<intent-filter>
+        		<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+    		</intent-filter>
+    		<meta-data android:name="android.appwidget.provider" android:resource="@xml/search_appwidget_info" />
+		</receiver>
     </application>
 </manifest>

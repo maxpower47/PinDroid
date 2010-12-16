@@ -29,7 +29,6 @@ import java.util.Date;
 import org.apache.http.auth.AuthenticationException;
 
 import com.deliciousdroid.R;
-import com.deliciousdroid.Constants;
 import com.deliciousdroid.action.BookmarkTaskArgs;
 import com.deliciousdroid.client.DeliciousApi;
 import com.deliciousdroid.client.NetworkUtilities;
@@ -39,10 +38,9 @@ import com.deliciousdroid.providers.BookmarkContent.Bookmark;
 import com.deliciousdroid.providers.ContentNotFoundException;
 import com.deliciousdroid.providers.TagContent.Tag;
 import com.deliciousdroid.ui.TagSpan;
+import com.deliciousdroid.util.StringUtils;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -52,6 +50,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
@@ -60,7 +59,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AddBookmark extends Activity implements View.OnClickListener{
+public class AddBookmark extends AppBaseActivity implements View.OnClickListener{
 
 	private EditText mEditUrl;
 	private EditText mEditDescription;
@@ -72,10 +71,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 	private CheckBox mPrivate;
 	private Button mButtonSave;
 	private Button mButtonCancel;
-	private AccountManager mAccountManager;
-	private Account account;
 	private Bookmark bookmark;
-	private Context context;
 	Thread background;
 	private Boolean update = false;
 	private Resources res;
@@ -95,34 +91,33 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 		mPrivate = (CheckBox) findViewById(R.id.add_edit_private);
 		mButtonSave = (Button) findViewById(R.id.add_button_save);
 		mButtonCancel = (Button) findViewById(R.id.add_button_cancel);
-		context = this;
 		
 		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mNetworkTags.setMovementMethod(LinkMovementMethod.getInstance());
 		
 		res = getResources();
-		
-		mAccountManager = AccountManager.get(this);
-		Account[] al = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
-		account = al[0];
 
 		if(savedInstanceState ==  null){
 			Intent intent = getIntent();
 			
 			if(Intent.ACTION_SEND.equals(intent.getAction())){
-				mEditUrl.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
+				String extraData = intent.getStringExtra(Intent.EXTRA_TEXT);
 				
-				new GetWebpageTitleTask().execute(intent.getStringExtra(Intent.EXTRA_TEXT));
+				String url = StringUtils.getUrl(extraData);
+				
+				mEditUrl.setText(url);
+				
+				new GetWebpageTitleTask().execute(url);
 			} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
 				int id = Integer.parseInt(intent.getData().getLastPathSegment());
 				try {
-					Bookmark b = BookmarkManager.GetById(id, context);
+					Bookmark b = BookmarkManager.GetById(id, mContext);
 					
 					mEditUrl.setText(b.getUrl());
 					mEditDescription.setText(b.getDescription());
 					mEditNotes.setText(b.getNotes());
-					mEditTags.setText(b.getTags());
+					mEditTags.setText(b.getTagString());
 					update = true;
 				} catch (ContentNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -165,7 +160,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 			mEditNotes.getText().toString(), mEditTags.getText().toString(),
 			mPrivate.isChecked(), time);
 		
-		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, account, context);
+		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, mAccount, mContext);
 		
 		new AddBookmarkTask().execute(args);
     }
@@ -180,6 +175,11 @@ public class AddBookmark extends Activity implements View.OnClickListener{
         	finish();
         }
     }
+    
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    return true;
+	}
     
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {
@@ -228,9 +228,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 
         protected void onPostExecute(Boolean result) {
     		if(result){
-    			String[] tags = bookmark.getTags().split(" ");
-    			for(String s:tags){
-    				Tag t = new Tag(s, 1);    				
+    			for(Tag t : bookmark.getTags()){   				
     				TagManager.UpsertTag(t, account.name, context);
     			}
     			
@@ -254,7 +252,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     	@Override
     	protected String doInBackground(String... args) {
     		
-    		if(args.length > 0) {
+    		if(args.length > 0 && args[0] != null && args[0] != "") {
 	    		url = args[0];
 		
 	    		return NetworkUtilities.getWebpageTitle(url);
@@ -275,7 +273,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
     		url = args[0];
 	
     		try {
-				return DeliciousApi.getSuggestedTags(url, account, context);
+				return DeliciousApi.getSuggestedTags(url, mAccount, mContext);
 			} catch (AuthenticationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

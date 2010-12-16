@@ -38,12 +38,15 @@ import android.util.Log;
 public class BookmarkManager {
 	
 	public static ArrayList<Bookmark> GetBookmarks(String username, String tagname, Context context){
+		return GetBookmarks(username, tagname, Bookmark.Time + " DESC", context);
+	}
+	
+	public static ArrayList<Bookmark> GetBookmarks(String username, String tagname, String sortorder, Context context){
 		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 		String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, 
 				Bookmark.Meta, Bookmark.Tags};
 		String selection = null;
 		String[] selectionargs = new String[]{username};
-		String sortorder = null;
 		
 		if(tagname != null && tagname != "") {
 			selection = "(" + Bookmark.Tags + " LIKE '% " + tagname + " %' OR " +
@@ -54,9 +57,6 @@ public class BookmarkManager {
 		} else {
 			selection = Bookmark.Account + "=?";
 		}
-		
-		
-		sortorder = Bookmark.Time + " DESC";
 		
 		Uri bookmarks = Bookmark.CONTENT_URI;
 		
@@ -138,7 +138,7 @@ public class BookmarkManager {
 		values.put(Bookmark.Description, bookmark.getDescription());
 		values.put(Bookmark.Url, url);
 		values.put(Bookmark.Notes, bookmark.getNotes());
-		values.put(Bookmark.Tags, bookmark.getTags());
+		values.put(Bookmark.Tags, bookmark.getTagString());
 		values.put(Bookmark.Hash, hash);
 		values.put(Bookmark.Meta, bookmark.getMeta());
 		values.put(Bookmark.Time, bookmark.getTime());
@@ -168,7 +168,7 @@ public class BookmarkManager {
 		values.put(Bookmark.Description, bookmark.getDescription());
 		values.put(Bookmark.Url, url);
 		values.put(Bookmark.Notes, bookmark.getNotes());
-		values.put(Bookmark.Tags, bookmark.getTags());
+		values.put(Bookmark.Tags, bookmark.getTagString());
 		values.put(Bookmark.Meta, bookmark.getMeta());
 		values.put(Bookmark.Time, bookmark.getTime());
 		
@@ -242,8 +242,8 @@ public class BookmarkManager {
 				Bookmark.Account + "=?";
 		} else if(query != null && query != ""){
 			for(String s : queryBookmarks) {
-				queryList.add("(" + Bookmark.Description + " LIKE '%" + query + "%' OR " +
-						Bookmark.Notes + " LIKE '%" + query + "%')");
+				queryList.add("(" + Bookmark.Description + " LIKE '%" + s + "%' OR " +
+						Bookmark.Notes + " LIKE '%" + s + "%')");
 			}
 
 			selection = TextUtils.join(" AND ", queryList) +

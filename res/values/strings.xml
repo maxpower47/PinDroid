@@ -80,6 +80,7 @@
     <string name="titleMain">Delicious</string>
     
     <string name="menu_addbookmark_title">Add Bookmark</string>
+    <string name="menu_sort_title">Sort</string>
     <string name="menu_search_title">Search</string>
     <string name="menu_settings_title">Settings</string>
     <string name="menu_view_openbookmark_title">Open in browser</string>

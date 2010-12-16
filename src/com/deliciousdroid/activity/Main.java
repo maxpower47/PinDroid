@@ -21,42 +21,29 @@
 
 package com.deliciousdroid.activity;
 
-import java.util.ArrayList;
-
 import com.deliciousdroid.R;
 import com.deliciousdroid.Constants;
-import com.deliciousdroid.platform.BookmarkManager;
-import com.deliciousdroid.platform.TagManager;
 import com.deliciousdroid.providers.BookmarkContentProvider;
 
-import android.accounts.Account;
-import android.app.AlertDialog;
-import android.content.ContentResolver;
-import android.content.DialogInterface;
+import android.app.SearchManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.view.View;
 
-public class Main extends AppBaseActivity {
+public class Main extends AppBaseListActivity {
 	
 	static final String[] MENU_ITEMS = new String[] {"My Bookmarks", "My Tags", 
 		"Network Recent", "Hotlist", "Popular"};
-	
-	Bundle savedState;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState){
-		savedState = savedInstanceState;
 		super.onCreate(savedState);
 		init();
 	}
@@ -66,50 +53,15 @@ public class Main extends AppBaseActivity {
 
 		Intent intent = getIntent();
 
-    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
-    	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
-		
-		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length < 1) {		
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(R.string.dialog_no_account_text)
-			       .setCancelable(false)
-			       .setTitle(R.string.dialog_no_account_title)
-			       .setPositiveButton("Go", new DialogInterface.OnClickListener() {
-			           public void onClick(DialogInterface dialog, int id) {
-			   			Intent i = new Intent(android.provider.Settings.ACTION_SYNC_SETTINGS);
-						startActivityForResult(i, 0);
-						
-			           }
-			       });
-			
-			AlertDialog alert = builder.create();
-			alert.setIcon(android.R.drawable.ic_dialog_alert);
-			alert.show();
-			
-			return;
-		} else if(lastUpdate == 0) {
-	
-			Toast.makeText(this, "Syncing...", Toast.LENGTH_LONG).show();
-			
-			ContentResolver.requestSync(mAccount, BookmarkContentProvider.AUTHORITY, Bundle.EMPTY);
-		} else {
-			username = mAccount.name;
-		}
-		
-		ArrayList<String> accounts = new ArrayList<String>();
-		
-		for(Account a : mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)) {
-			accounts.add(a.name);
-		}
-		
-		BookmarkManager.TruncateBookmarks(accounts, this, true);
-		TagManager.TruncateOldTags(accounts, this);
-
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
-			Intent i = new Intent(mContext, MainSearchResults.class);
-			i.putExtras(getIntent().getExtras());
-			startActivity(i);
-			finish();
+			if(intent.hasExtra(SearchManager.QUERY)){
+				Intent i = new Intent(mContext, MainSearchResults.class);
+				i.putExtras(getIntent().getExtras());
+				startActivity(i);
+				finish();
+			} else {
+				onSearchRequested();
+			}
 		} else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
 			
 			Uri data = intent.getData();
@@ -223,7 +175,5 @@ public class Main extends AppBaseActivity {
 		});
 	}
 	
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		this.onCreate(savedState);
-	}
+
 }
