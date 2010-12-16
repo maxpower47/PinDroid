@@ -60,7 +60,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class BrowseBookmarks extends AppBaseActivity {
+public class BrowseBookmarks extends AppBaseListActivity {
 	
 	private ListView lv;
 	

@@ -41,7 +41,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.view.*;
 
-public class BrowseTags extends AppBaseActivity {
+public class BrowseTags extends AppBaseListActivity {
 		
 	private String sortfield = Tag.Name + " ASC";
 	

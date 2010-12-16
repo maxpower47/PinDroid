@@ -34,10 +34,6 @@ import com.deliciousdroid.providers.BookmarkContentProvider;
 import com.deliciousdroid.providers.ContentNotFoundException;
 import com.deliciousdroid.ui.TagSpan;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,18 +45,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class ViewBookmark extends Activity{
+public class ViewBookmark extends AppBaseActivity{
 
 	private TextView mTitle;
 	private TextView mUrl;
 	private TextView mNotes;
 	private TextView mTags;
 	private TextView mTime;
-	private TextView mAccount;
-	private AccountManager mAccountManager;
-	private Account account;
+	private TextView mUsername;
 	private Bookmark bookmark;
-	private Context context;
 	private Boolean myself;
 
 	@Override
@@ -75,14 +68,9 @@ public class ViewBookmark extends Activity{
 		mNotes = (TextView) findViewById(R.id.view_bookmark_notes);
 		mTags = (TextView) findViewById(R.id.view_bookmark_tags);
 		mTime = (TextView) findViewById(R.id.view_bookmark_time);
-		mAccount = (TextView) findViewById(R.id.view_bookmark_account);
+		mUsername = (TextView) findViewById(R.id.view_bookmark_account);
 		
 		mTags.setMovementMethod(LinkMovementMethod.getInstance());
-		
-		context = this;
-		mAccountManager = AccountManager.get(this);
-		Account[] al = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
-		account = al[0];
 		
 		Log.d("browse bookmarks", getIntent().getDataString());
 		Uri data = getIntent().getData();
@@ -91,14 +79,14 @@ public class ViewBookmark extends Activity{
 		
 		String username = data.getUserInfo();
 		
-		myself = account.name.equals(username);
+		myself = mAccount.name.equals(username);
 	
 		if(path.contains("/bookmarks") && myself){
 			
 			try{		
 				int id = Integer.parseInt(data.getLastPathSegment());
 
-				bookmark = BookmarkManager.GetById(id, context);
+				bookmark = BookmarkManager.GetById(id, mContext);
 				
 				Date d = new Date(bookmark.getTime());
 				
@@ -106,7 +94,7 @@ public class ViewBookmark extends Activity{
 				mUrl.setText(bookmark.getUrl());
 				mNotes.setText(bookmark.getNotes());
 				mTime.setText(d.toString());
-				mAccount.setText(bookmark.getAccount());
+				mUsername.setText(bookmark.getAccount());
 				
         		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
 
@@ -125,7 +113,7 @@ public class ViewBookmark extends Activity{
 			mNotes.setText(data.getQueryParameter("notes"));
 			mTags.setText(data.getQueryParameter("tags"));
 			mTime.setText(d.toString());
-			mAccount.setText(data.getQueryParameter("account"));
+			mUsername.setText(data.getQueryParameter("account"));
 		}
 	}
 	
@@ -137,7 +125,7 @@ public class ViewBookmark extends Activity{
     		i.addCategory(Intent.CATEGORY_DEFAULT);
     		Uri.Builder data = new Uri.Builder();
     		data.scheme(Constants.CONTENT_SCHEME);
-    		data.encodedAuthority(account.name + "@" + BookmarkContentProvider.AUTHORITY);
+    		data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
     		data.appendEncodedPath("bookmarks");
     		data.appendQueryParameter("tagname", tag);
     		i.setData(data.build());
@@ -198,7 +186,7 @@ public class ViewBookmark extends Activity{
 				
 				Uri.Builder data = new Uri.Builder();
 				data.scheme(Constants.CONTENT_SCHEME);
-				data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+				data.encodedAuthority(mAccount + "@" + BookmarkContentProvider.AUTHORITY);
 				data.appendEncodedPath("bookmarks");
 				data.appendEncodedPath(Integer.toString(bookmark.getId()));
 				editBookmark.setData(data.build());
@@ -206,7 +194,7 @@ public class ViewBookmark extends Activity{
 				startActivity(editBookmark);
 		    	return true;
 		    case R.id.menu_view_deletebookmark:
-				BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, account, this);	
+				BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, mAccount, this);	
 				new DeleteBookmarkTask().execute(args);
 				return true;	
 		    case R.id.menu_view_settings:

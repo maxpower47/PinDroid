@@ -26,7 +26,7 @@ import com.deliciousdroid.R;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,7 +34,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class AppBaseActivity extends Activity {
+public class AppBaseListActivity extends ListActivity {
 	
 	protected AccountManager mAccountManager;
 	protected Account mAccount;

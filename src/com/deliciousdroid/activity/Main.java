@@ -48,7 +48,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.view.View;
 
-public class Main extends AppBaseActivity {
+public class Main extends AppBaseListActivity {
 	
 	static final String[] MENU_ITEMS = new String[] {"My Bookmarks", "My Tags", 
 		"Network Recent", "Hotlist", "Popular"};

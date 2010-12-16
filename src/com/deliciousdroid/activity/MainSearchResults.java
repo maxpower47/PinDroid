@@ -32,7 +32,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.view.View;
 
-public class MainSearchResults extends AppBaseActivity {
+public class MainSearchResults extends AppBaseListActivity {
 
 	private Context mContext;
 	
