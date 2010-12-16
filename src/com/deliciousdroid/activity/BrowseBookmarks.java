@@ -85,132 +85,138 @@ public class BrowseBookmarks extends AppBaseListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_bookmarks);
 		
-		bookmarkList = new ArrayList<Bookmark>();
-		
-		final ArrayList<Bookmark> prevData = (ArrayList<Bookmark>) getLastNonConfigurationInstance();
-		if(prevData != null) {
-			bookmarkList = prevData;
-		}
-		
-		Intent intent = getIntent();
-		
-    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-    	bookmarkLimit = settings.getString("pref_contact_bookmark_results", "50");
-    	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
-
-		Uri data = intent.getData();
-		String path = null;
-		
-		if(data != null) {
-			path = data.getPath();
-			username = data.getUserInfo();
-			tagname = data.getQueryParameter("tagname");
-		}
-		
-    	if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
-    		Bundle searchData = intent.getBundleExtra(SearchManager.APP_DATA);
-
-    		if(searchData != null) {
-    			tagname = searchData.getString("tagname");
-    			username = searchData.getString("username");
-    		}
-    		
-    		String query = intent.getStringExtra(SearchManager.QUERY);
-    		
-    		setTitle("Bookmark Search Results For \"" + query + "\"");
-    		
-    		if(isMyself()) {
-    			if(bookmarkList.isEmpty()) {
-    				bookmarkList = BookmarkManager.SearchBookmarks(query, tagname, username, this);
-    			}
-    		
-    			setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));
-    		}
-    		
-    	} else if(!data.getScheme().equals("content")) {
-    		
-    		openBookmarkInBrowser(new Bookmark(data.toString()));
-    		finish();
-    		
-    	} else if(path.equals("/bookmarks") && isMyself()) {
-    		
-			if(tagname != null && tagname != "") {
-				setTitle("My Bookmarks Tagged With " + tagname);
-			} else {
-				setTitle("My Bookmarks");
+		if(mAccount != null) {
+			
+			bookmarkList = new ArrayList<Bookmark>();
+			
+			final ArrayList<Bookmark> prevData = (ArrayList<Bookmark>) getLastNonConfigurationInstance();
+			if(prevData != null) {
+				bookmarkList = prevData;
 			}
 			
-			if(bookmarkList.isEmpty()) {
-				loadBookmarkList();
-			}
-		} else if(username.equals("network")){
-			try{
-				setTitle("My Network's Recent Bookmarks");
-				
-				new LoadBookmarkFeedTask().execute("network");
-			}
-			catch(Exception e){}
-		} else if(username.equals("hotlist")){
-			try{
-				setTitle("Hotlist Bookmarks");
-				
-				new LoadBookmarkFeedTask().execute("hotlist");
-			}
-			catch(Exception e){}
-		} else if(username.equals("popular")){
-			try{
-				setTitle("Popular Bookmarks");
-				
-				new LoadBookmarkFeedTask().execute("popular");
-			}
-			catch(Exception e){}
-		} else if(path.equals("/bookmarks")) {
-			try{
-				if(tagname != null && tagname != "") {
-					setTitle("Bookmarks For " + username + " Tagged With " + tagname);
-				} else {
-					setTitle("Bookmarks For " + username);
-				}
-		    	
-				new LoadBookmarkFeedTask().execute(username, tagname);
-			}
-			catch(Exception e){}
-		} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
-			viewBookmark(Integer.parseInt(data.getLastPathSegment()));
-			finish();
-		}
-		
-		lv = getListView();
-		lv.setTextFilterEnabled(true);
+			Intent intent = getIntent();
+			
+	    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+	    	bookmarkLimit = settings.getString("pref_contact_bookmark_results", "50");
+	    	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
 	
-		lv.setOnItemClickListener(new OnItemClickListener() {
-		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		    	Bookmark b = (Bookmark)lv.getItemAtPosition(position);
-
-		    	if(defaultAction.equals("view")) {
-		    		viewBookmark(b);
-		    	} else {
-		    		openBookmarkInBrowser(b);
-		    	}
-		    }
-		});
-		
-		/* Add Context-Menu listener to the ListView. */
-		lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-				menu.setHeaderTitle("Actions");
-				if(isMyself()){
-					menu.add(Menu.NONE, 0, Menu.NONE, "Open in browser");
-					menu.add(Menu.NONE, 1, Menu.NONE, "View Details");
-					menu.add(Menu.NONE, 2, Menu.NONE, "Edit");
-					menu.add(Menu.NONE, 3, Menu.NONE, "Delete");
-				} else {
-					menu.add(Menu.NONE, 0, Menu.NONE, "Open in browser");
-					menu.add(Menu.NONE, 1, Menu.NONE, "View Details");
-					menu.add(Menu.NONE, 4, Menu.NONE, "Add");
-				}
+			Uri data = intent.getData();
+			String path = null;
+			
+			if(data != null) {
+				if(data.getUserInfo() != "") {
+					username = data.getUserInfo();
+				} else username = mAccount.name;
+				
+				path = data.getPath();
+				tagname = data.getQueryParameter("tagname");
 			}
-		});
+			
+	    	if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+	    		Bundle searchData = intent.getBundleExtra(SearchManager.APP_DATA);
+	
+	    		if(searchData != null) {
+	    			tagname = searchData.getString("tagname");
+	    			username = searchData.getString("username");
+	    		}
+	    		
+	    		String query = intent.getStringExtra(SearchManager.QUERY);
+	    		
+	    		setTitle("Bookmark Search Results For \"" + query + "\"");
+	    		
+	    		if(isMyself()) {
+	    			if(bookmarkList.isEmpty()) {
+	    				bookmarkList = BookmarkManager.SearchBookmarks(query, tagname, username, this);
+	    			}
+	    		
+	    			setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));
+	    		}
+	    		
+	    	} else if(!data.getScheme().equals("content")) {
+	    		
+	    		openBookmarkInBrowser(new Bookmark(data.toString()));
+	    		finish();
+	    		
+	    	} else if(path.equals("/bookmarks") && isMyself()) {
+	    		
+				if(tagname != null && tagname != "") {
+					setTitle("My Bookmarks Tagged With " + tagname);
+				} else {
+					setTitle("My Bookmarks");
+				}
+				
+				if(bookmarkList.isEmpty()) {
+					loadBookmarkList();
+				}
+			} else if(username.equals("network")){
+				try{
+					setTitle("My Network's Recent Bookmarks");
+					
+					new LoadBookmarkFeedTask().execute("network");
+				}
+				catch(Exception e){}
+			} else if(username.equals("hotlist")){
+				try{
+					setTitle("Hotlist Bookmarks");
+					
+					new LoadBookmarkFeedTask().execute("hotlist");
+				}
+				catch(Exception e){}
+			} else if(username.equals("popular")){
+				try{
+					setTitle("Popular Bookmarks");
+					
+					new LoadBookmarkFeedTask().execute("popular");
+				}
+				catch(Exception e){}
+			} else if(path.equals("/bookmarks")) {
+				try{
+					if(tagname != null && tagname != "") {
+						setTitle("Bookmarks For " + username + " Tagged With " + tagname);
+					} else {
+						setTitle("Bookmarks For " + username);
+					}
+			    	
+					new LoadBookmarkFeedTask().execute(username, tagname);
+				}
+				catch(Exception e){}
+			} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
+				viewBookmark(Integer.parseInt(data.getLastPathSegment()));
+				finish();
+			}
+			
+			lv = getListView();
+			lv.setTextFilterEnabled(true);
+		
+			lv.setOnItemClickListener(new OnItemClickListener() {
+			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			    	Bookmark b = (Bookmark)lv.getItemAtPosition(position);
+	
+			    	if(defaultAction.equals("view")) {
+			    		viewBookmark(b);
+			    	} else {
+			    		openBookmarkInBrowser(b);
+			    	}
+			    }
+			});
+			
+			/* Add Context-Menu listener to the ListView. */
+			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+				public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+					menu.setHeaderTitle("Actions");
+					if(isMyself()){
+						menu.add(Menu.NONE, 0, Menu.NONE, "Open in browser");
+						menu.add(Menu.NONE, 1, Menu.NONE, "View Details");
+						menu.add(Menu.NONE, 2, Menu.NONE, "Edit");
+						menu.add(Menu.NONE, 3, Menu.NONE, "Delete");
+					} else {
+						menu.add(Menu.NONE, 0, Menu.NONE, "Open in browser");
+						menu.add(Menu.NONE, 1, Menu.NONE, "View Details");
+						menu.add(Menu.NONE, 4, Menu.NONE, "Add");
+					}
+				}
+			});
+		}
 	}
 	
 	@Override

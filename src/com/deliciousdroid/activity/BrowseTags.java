@@ -56,96 +56,100 @@ public class BrowseTags extends AppBaseListActivity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_tags);
-		Intent intent = getIntent();
-		String action = intent.getAction();
 		
-		Uri data = getIntent().getData();
-		if(data != null) {
-			username = data.getUserInfo();
-		} else username = mAccount.name;
-		
-		if(Intent.ACTION_VIEW.equals(action) && data.getLastPathSegment().equals("bookmarks")) {
-			Intent i = new Intent();
-			i.setAction(Intent.ACTION_VIEW);
-			i.addCategory(Intent.CATEGORY_DEFAULT);
-			i.setData(data);
+		if(mAccount != null) {
 			
-			startActivity(i);
-			finish();			
+			Intent intent = getIntent();
+			String action = intent.getAction();
 			
-		} else if(Intent.ACTION_SEARCH.equals(action)) {
-  		
-    		String query = intent.getStringExtra(SearchManager.QUERY);
-    		
-    		setTitle("Tag Search Results For \"" + query + "\"");
-    		
-    		
-    		
-    		setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
-    		
-    	} else if(mAccount.name.equals(username)){
-			try{
-				if(Intent.ACTION_VIEW.equals(action)) {
-					setTitle("My Tags");
-				} else if(Intent.ACTION_PICK.equals(action)) {
-					setTitle("Choose A Tag For The Folder");
-				}
-
-				tagList = TagManager.GetTags(username, sortfield, this);
-
-				setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
-
-			} catch(Exception e) {
-				
-			}
+			Uri data = getIntent().getData();
+			if(data != null) {
+				username = data.getUserInfo();
+			} else username = mAccount.name;
 			
-		} else {
-			try{
-				setTitle("Tags For " + username);
+			if(Intent.ACTION_VIEW.equals(action) && data.getLastPathSegment().equals("bookmarks")) {
+				Intent i = new Intent();
+				i.setAction(Intent.ACTION_VIEW);
+				i.addCategory(Intent.CATEGORY_DEFAULT);
+				i.setData(data);
 				
-				tagList = DeliciousFeed.fetchFriendTags(username);
+				startActivity(i);
+				finish();			
 				
-				setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
-			}
-			catch(Exception e){}
-		}
-
-		ListView lv = getListView();
-		lv.setTextFilterEnabled(true);
+			} else if(Intent.ACTION_SEARCH.equals(action)) {
+	  		
+	    		String query = intent.getStringExtra(SearchManager.QUERY);
+	    		
+	    		setTitle("Tag Search Results For \"" + query + "\"");
+	    		
+	    		
+	    		
+	    		setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
+	    		
+	    	} else if(mAccount.name.equals(username)){
+				try{
+					if(Intent.ACTION_VIEW.equals(action)) {
+						setTitle("My Tags");
+					} else if(Intent.ACTION_PICK.equals(action)) {
+						setTitle("Choose A Tag For The Folder");
+					}
 	
-		if(action != null && action.equals(Intent.ACTION_PICK)) {
-			
-			lv.setOnItemClickListener(new OnItemClickListener() {
-			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
-			    	
-			    	Intent i = new Intent();
-			    	i.putExtra("tagname", tagName);
-			    	
-					setResult(RESULT_OK, i);
-					finish();
-			    }
-			});
-			
-		} else {
-			lv.setOnItemClickListener(new OnItemClickListener() {
-			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
-			    	
-					Intent i = new Intent();
-					i.setAction(Intent.ACTION_VIEW);
-					i.addCategory(Intent.CATEGORY_DEFAULT);
+					tagList = TagManager.GetTags(username, sortfield, this);
 	
-					Uri.Builder dataBuilder = new Uri.Builder();
-					dataBuilder.scheme(Constants.CONTENT_SCHEME);
-					dataBuilder.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
-					dataBuilder.appendEncodedPath("bookmarks");
-					dataBuilder.appendQueryParameter("tagname", tagName);
-					i.setData(dataBuilder.build());
+					setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
+	
+				} catch(Exception e) {
 					
-					startActivity(i);
-			    }
-			});
+				}
+				
+			} else {
+				try{
+					setTitle("Tags For " + username);
+					
+					tagList = DeliciousFeed.fetchFriendTags(username);
+					
+					setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
+				}
+				catch(Exception e){}
+			}
+	
+			ListView lv = getListView();
+			lv.setTextFilterEnabled(true);
+		
+			if(action != null && action.equals(Intent.ACTION_PICK)) {
+				
+				lv.setOnItemClickListener(new OnItemClickListener() {
+				    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
+				    	
+				    	Intent i = new Intent();
+				    	i.putExtra("tagname", tagName);
+				    	
+						setResult(RESULT_OK, i);
+						finish();
+				    }
+				});
+				
+			} else {
+				lv.setOnItemClickListener(new OnItemClickListener() {
+				    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
+				    	
+						Intent i = new Intent();
+						i.setAction(Intent.ACTION_VIEW);
+						i.addCategory(Intent.CATEGORY_DEFAULT);
+		
+						Uri.Builder dataBuilder = new Uri.Builder();
+						dataBuilder.scheme(Constants.CONTENT_SCHEME);
+						dataBuilder.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
+						dataBuilder.appendEncodedPath("bookmarks");
+						dataBuilder.appendQueryParameter("tagname", tagName);
+						i.setData(dataBuilder.build());
+						
+						startActivity(i);
+				    }
+				});
+			}
 		}
 	}
 	

@@ -24,9 +24,11 @@ public class SearchWidgetProvider extends AppWidgetProvider {
         
 		AccountManager mAccountManager = AccountManager.get(context);
 		Account mAccount = null;
+		String username = "";
 		
 		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
 			mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+			username = mAccount.name;
 		}
 
         // Perform this loop procedure for each App Widget that belongs to this provider
@@ -39,7 +41,7 @@ public class SearchWidgetProvider extends AppWidgetProvider {
             bookmarkIntent.addCategory(Intent.CATEGORY_DEFAULT);
     		Uri.Builder bookmarkData = new Uri.Builder();
     		bookmarkData.scheme(Constants.CONTENT_SCHEME);
-    		bookmarkData.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
+    		bookmarkData.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
     		bookmarkData.appendEncodedPath("bookmarks");
     		bookmarkIntent.setData(bookmarkData.build());
     		
@@ -48,7 +50,7 @@ public class SearchWidgetProvider extends AppWidgetProvider {
     		tagIntent.addCategory(Intent.CATEGORY_DEFAULT);
     		Uri.Builder tagData = new Uri.Builder();
     		tagData.scheme(Constants.CONTENT_SCHEME);
-    		tagData.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
+    		tagData.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
     		tagData.appendEncodedPath("tags");
     		tagIntent.setData(tagData.build());
     		
