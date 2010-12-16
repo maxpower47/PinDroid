@@ -138,7 +138,7 @@ public class BookmarkManager {
 		values.put(Bookmark.Description, bookmark.getDescription());
 		values.put(Bookmark.Url, url);
 		values.put(Bookmark.Notes, bookmark.getNotes());
-		values.put(Bookmark.Tags, bookmark.getTags());
+		values.put(Bookmark.Tags, bookmark.getTagString());
 		values.put(Bookmark.Hash, hash);
 		values.put(Bookmark.Meta, bookmark.getMeta());
 		values.put(Bookmark.Time, bookmark.getTime());
@@ -168,7 +168,7 @@ public class BookmarkManager {
 		values.put(Bookmark.Description, bookmark.getDescription());
 		values.put(Bookmark.Url, url);
 		values.put(Bookmark.Notes, bookmark.getNotes());
-		values.put(Bookmark.Tags, bookmark.getTags());
+		values.put(Bookmark.Tags, bookmark.getTagString());
 		values.put(Bookmark.Meta, bookmark.getMeta());
 		values.put(Bookmark.Time, bookmark.getTime());
 		

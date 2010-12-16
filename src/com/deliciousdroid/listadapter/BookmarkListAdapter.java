@@ -63,7 +63,7 @@ public class BookmarkListAdapter extends ArrayAdapter<Bookmark> {
         Bookmark o = bookmarks.get(position);
         if (o != null) {
             holder.description.setText(o.getDescription());                            
-            holder.tags.setText(o.getTags());                            
+            holder.tags.setText(o.getTagString());                            
         }
         return convertView;
     }

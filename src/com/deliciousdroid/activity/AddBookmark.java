@@ -49,7 +49,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract.Data;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -128,7 +127,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 					mEditUrl.setText(b.getUrl());
 					mEditDescription.setText(b.getDescription());
 					mEditNotes.setText(b.getNotes());
-					mEditTags.setText(b.getTags());
+					mEditTags.setText(b.getTagString());
 					update = true;
 				} catch (ContentNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -234,7 +233,7 @@ public class AddBookmark extends Activity implements View.OnClickListener{
 
         protected void onPostExecute(Boolean result) {
     		if(result){
-    			String[] tags = bookmark.getTags().split(" ");
+    			String[] tags = bookmark.getTagString().split(" ");
     			for(String s:tags){
     				Tag t = new Tag(s, 1);    				
     				TagManager.UpsertTag(t, account.name, context);

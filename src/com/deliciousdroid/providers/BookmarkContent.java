@@ -35,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.xml.sax.InputSource;
 
+import com.deliciousdroid.providers.TagContent.Tag;
 import com.deliciousdroid.util.DateParser;
 
 import android.net.Uri;
@@ -87,8 +88,17 @@ public class BookmarkContent {
         	return mNotes;
         }
         
-        public String getTags(){
+        public String getTagString(){
         	return mTags;
+        }
+        
+        public ArrayList<Tag> getTags(){
+			ArrayList<Tag> result = new ArrayList<Tag>();
+			for(String s : this.getTagString().split(" ")) {
+				result.add(new Tag(s));
+			}
+			
+			return result;
         }
         
         public String getHash(){

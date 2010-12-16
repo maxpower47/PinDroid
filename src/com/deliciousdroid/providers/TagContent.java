@@ -48,7 +48,6 @@ public class TagContent {
 		
         private final String mTagName;
         private int mCount = 0;
-        private final String mAccount = null;
         private int mId = 0;
         private String mType = null;
 
@@ -70,6 +69,10 @@ public class TagContent {
         
         public void setCount(int count) {
         	mCount = count;
+        }
+        
+        public Tag(String tagName) {
+            mTagName = tagName;
         }
         
         public Tag(String tagName, String type) {

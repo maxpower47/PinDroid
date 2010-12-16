@@ -362,7 +362,7 @@ public class BrowseBookmarks extends AppBaseActivity {
 			data.appendQueryParameter("url", b.getUrl());
 			data.appendQueryParameter("title", b.getDescription());
 			data.appendQueryParameter("notes", b.getNotes());
-			data.appendQueryParameter("tags", b.getTags());
+			data.appendQueryParameter("tags", b.getTagString());
 			data.appendQueryParameter("time", Long.toString(b.getTime()));
 			data.appendQueryParameter("account", b.getAccount());
 		}

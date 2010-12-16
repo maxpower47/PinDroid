@@ -29,8 +29,10 @@ import com.deliciousdroid.action.BookmarkTaskArgs;
 import com.deliciousdroid.action.DeleteBookmarkTask;
 import com.deliciousdroid.platform.BookmarkManager;
 import com.deliciousdroid.providers.BookmarkContent.Bookmark;
+import com.deliciousdroid.providers.TagContent.Tag;
 import com.deliciousdroid.providers.BookmarkContentProvider;
 import com.deliciousdroid.providers.ContentNotFoundException;
+import com.deliciousdroid.ui.TagSpan;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -39,6 +41,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -73,6 +77,8 @@ public class ViewBookmark extends Activity{
 		mTime = (TextView) findViewById(R.id.view_bookmark_time);
 		mAccount = (TextView) findViewById(R.id.view_bookmark_account);
 		
+		mTags.setMovementMethod(LinkMovementMethod.getInstance());
+		
 		context = this;
 		mAccountManager = AccountManager.get(this);
 		Account[] al = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
@@ -99,10 +105,16 @@ public class ViewBookmark extends Activity{
 				mTitle.setText(bookmark.getDescription());
 				mUrl.setText(bookmark.getUrl());
 				mNotes.setText(bookmark.getNotes());
-				mTags.setText(bookmark.getTags());
 				mTime.setText(d.toString());
 				mAccount.setText(bookmark.getAccount());
 				
+        		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
+
+        		for(Tag t : bookmark.getTags()) {
+        			addTag(tagBuilder, t);
+        		}
+        		
+        		mTags.setText(tagBuilder);
 			}
 			catch(ContentNotFoundException e){}
 		} else if(path.contains("/bookmarks") && !myself) {
@@ -115,6 +127,43 @@ public class ViewBookmark extends Activity{
 			mTime.setText(d.toString());
 			mAccount.setText(data.getQueryParameter("account"));
 		}
+	}
+	
+    TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
+        public void onTagClick(String tag) {
+
+    		Intent i = new Intent();
+    		i.setAction(Intent.ACTION_VIEW);
+    		i.addCategory(Intent.CATEGORY_DEFAULT);
+    		Uri.Builder data = new Uri.Builder();
+    		data.scheme(Constants.CONTENT_SCHEME);
+    		data.encodedAuthority(account.name + "@" + BookmarkContentProvider.AUTHORITY);
+    		data.appendEncodedPath("bookmarks");
+    		data.appendQueryParameter("tagname", tag);
+    		i.setData(data.build());
+    		
+    		Log.d("uri", data.build().toString());
+    		
+    		startActivity(i);
+        	
+        }
+    };
+    
+	private void addTag(SpannableStringBuilder builder, Tag t) {
+		int flags = 0;
+		
+		if (builder.length() != 0) {
+			builder.append("  ");
+		}
+		
+		int start = builder.length();
+		builder.append(t.getTagName());
+		int end = builder.length();
+		
+		TagSpan span = new TagSpan(t.getTagName());
+		span.setOnTagClickListener(tagOnClickListener);
+
+		builder.setSpan(span, start, end, flags);
 	}
     
 	@Override

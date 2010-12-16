@@ -63,7 +63,7 @@ public class DeleteBookmarkTask extends AsyncTask<BookmarkTaskArgs, Integer, Boo
 
     protected void onPostExecute(Boolean result) {
 		if(result){
-			String[] tags = bookmark.getTags().split(" ");
+			String[] tags = bookmark.getTagString().split(" ");
 			for(String s:tags){
 				Tag t = new Tag(s, 1);    				
 				TagManager.UpleteTag(t, account.name, context);
