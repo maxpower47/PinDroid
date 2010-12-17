@@ -123,10 +123,6 @@ public class BookmarkManager {
 	
 	public static void AddBookmark(Bookmark bookmark, String account, Context context) {
 		String url = bookmark.getUrl();
-
-		if(url.lastIndexOf("/") <= 7){
-			url = url + "/";
-		}
 		
 		String hash = "";
 		if(bookmark.getHash() == null || bookmark.getHash() == ""){
@@ -149,10 +145,6 @@ public class BookmarkManager {
 	
 	public static void UpdateBookmark(Bookmark bookmark, String account, Context context){
 		String url = bookmark.getUrl();
-
-		if(url.lastIndexOf("/") <= 7){
-			url = url + "/";
-		}
 		
 		String hash = "";
 		if(bookmark.getHash() == null || bookmark.getHash() == ""){

@@ -341,6 +341,11 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	
 	private void openBookmarkInBrowser(Bookmark b) {
     	String url = b.getUrl();
+    	
+    	if(!url.startsWith("http")) {
+    		url = "http://" + url;
+    	}
+    	
     	Uri link = Uri.parse(url);
 		Intent i = new Intent(Intent.ACTION_VIEW, link);
 		
