@@ -135,7 +135,9 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 				if(!hasFocus){
 					String url = mEditUrl.getText().toString();
 					
-					new GetWebpageTitleTask().execute(url);
+					if(mEditDescription.getText().toString() == "") {
+						new GetWebpageTitleTask().execute(url);
+					}
 					new GetTagSuggestionsTask().execute(url);
 				}
 			}
