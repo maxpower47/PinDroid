@@ -160,7 +160,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		
 		bookmark = new Bookmark(url, mEditDescription.getText().toString(), 
 			mEditNotes.getText().toString(), mEditTags.getText().toString(),
-			mPrivate.isChecked(), time);
+			!mPrivate.isChecked(), time);
 		
 		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, mAccount, mContext);
 		
