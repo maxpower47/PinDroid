@@ -1,20 +1,20 @@
 /*
- * DeliciousDroid - http://code.google.com/p/DeliciousDroid/
+ * PinDroid - http://code.google.com/p/PinDroid/
  *
  * Copyright (C) 2010 Matt Schmidt
  *
- * DeliciousDroid is free software; you can redistribute it and/or modify
+ * PinDroid is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 3 of the License,
  * or (at your option) any later version.
  *
- * DeliciousDroid is distributed in the hope that it will be useful, but
+ * PinDroid is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with DeliciousDroid; if not, write to the Free Software
+ * along with PinDroid; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
@@ -60,18 +60,18 @@ public class NetworkUtilities {
     public static final String PARAM_UPDATED = "timestamp";
     public static final String USER_AGENT = "AuthenticationService/1.0";
 
-    public static final String FETCH_FRIEND_UPDATES_URI = "http://feeds.delicious.com/v2/json/networkmembers/";
-    public static final String FETCH_FRIEND_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/";
-    public static final String FETCH_NETWORK_RECENT_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/network/";
-    public static final String FETCH_STATUS_URI = "http://feeds.delicious.com/v2/json/network/";
-    public static final String FETCH_TAGS_URI = "http://feeds.delicious.com/v2/json/tags/";
+    public static final String FETCH_FRIEND_UPDATES_URI = "http://feeds.pinboard.com/v2/json/networkmembers/";
+    public static final String FETCH_FRIEND_BOOKMARKS_URI = "http://feeds.pinboard.com/v2/json/";
+    public static final String FETCH_NETWORK_RECENT_BOOKMARKS_URI = "http://feeds.pinboard.com/v2/json/network/";
+    public static final String FETCH_STATUS_URI = "http://feeds.pinboard.com/v2/json/network/";
+    public static final String FETCH_TAGS_URI = "http://feeds.pinboard.com/v2/json/tags/";
 
     private static final String SCHEME = "https";
     private static final String SCHEME_HTTP = "http";
-    private static final String DELICIOUS_AUTHORITY = "api.del.icio.us";
+    private static final String PINBOARD_AUTHORITY = "api.pinboard.in";
     private static final int PORT = 443;
  
-    private static final AuthScope SCOPE = new AuthScope(DELICIOUS_AUTHORITY, PORT);
+    private static final AuthScope SCOPE = new AuthScope(PINBOARD_AUTHORITY, PORT);
     
     private static final String OAUTH_AUTHORITY = "api.login.yahoo.com";
 
@@ -100,7 +100,7 @@ public class NetworkUtilities {
     }
 
     /**
-     * Attempts to authenticate to Delicious using a legacy Delicious account.
+     * Attempts to authenticate to Pinboard using a legacy Pinboard account.
      * 
      * @param username The user's username.
      * @param password The user's password.
@@ -109,13 +109,13 @@ public class NetworkUtilities {
      * @return The boolean result indicating whether the user was
      *         successfully authenticated.
      */
-    public static boolean deliciousAuthenticate(String username, String password,
+    public static boolean pinboardAuthenticate(String username, String password,
         Handler handler, final Context context) {
         final HttpResponse resp;
         
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(SCHEME);
-        builder.authority(DELICIOUS_AUTHORITY);
+        builder.authority(PINBOARD_AUTHORITY);
         builder.appendEncodedPath("v1/tags/get");
         Uri uri = builder.build();
 
@@ -156,7 +156,7 @@ public class NetworkUtilities {
     }
     
     /**
-     * Attempts to authenticate to Delicious using Yahoo OAuth authentication.  
+     * Attempts to authenticate to Pinboard using Yahoo OAuth authentication.  
      * This is the first step of the three party handshake.
      * 
      * @param username The user's username
@@ -350,12 +350,12 @@ public class NetworkUtilities {
     }
     
     /**
-     * Retrieves the Delicious username for an account authenticated with Yahoo OAuth.
+     * Retrieves the Pinboard username for an account authenticated with Yahoo OAuth.
      * 
      * @param authtoken The authentication token of the account.
      * @param tokensecret The token secret for the authentication token.
      * @param context The context of the calling Activity.
-     * @return A String containing the Delicious username for the user.
+     * @return A String containing the Pinboard username for the user.
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      */
@@ -372,7 +372,7 @@ public class NetworkUtilities {
     	
 		Uri.Builder builder = new Uri.Builder();
 		builder.scheme(SCHEME_HTTP);
-		builder.authority(DELICIOUS_AUTHORITY);
+		builder.authority(PINBOARD_AUTHORITY);
 		builder.appendEncodedPath(url);
 		for(String key : params.keySet()){
 			builder.appendQueryParameter(key, params.get(key));
@@ -380,9 +380,9 @@ public class NetworkUtilities {
 		
 		Log.d("getUsername", builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+"));
 		post = new HttpGet(builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+"));
-		HttpHost host = new HttpHost(DELICIOUS_AUTHORITY);
+		HttpHost host = new HttpHost(PINBOARD_AUTHORITY);
 
-		post.setHeader("User-Agent", "DeliciousDroid");
+		post.setHeader("User-Agent", "PinDroid");
     	
 
 		Log.d("apiCall", "oauth");
@@ -478,7 +478,7 @@ public class NetworkUtilities {
         final Runnable runnable = new Runnable() {
             public void run() {
             	if(authType == 0){
-            		deliciousAuthenticate(username, password, handler, context);
+            		pinboardAuthenticate(username, password, handler, context);
             	}
             	else{
             		oauthAuthenticate(handler, context);

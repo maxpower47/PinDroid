@@ -1,20 +1,20 @@
 /*
- * DeliciousDroid - http://code.google.com/p/DeliciousDroid/
+ * PinDroid - http://code.google.com/p/PinDroid/
  *
  * Copyright (C) 2010 Matt Schmidt
  *
- * DeliciousDroid is free software; you can redistribute it and/or modify
+ * PinDroid is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 3 of the License,
  * or (at your option) any later version.
  *
- * DeliciousDroid is distributed in the hope that it will be useful, but
+ * PinDroid is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with DeliciousDroid; if not, write to the Free Software
+ * along with PinDroid; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
@@ -37,10 +37,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.deliciousdroid.R;
+import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.activity.Main;
-import com.pindroid.client.DeliciousApi;
+import com.pindroid.client.PinboardApi;
 import com.pindroid.client.Update;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
@@ -94,11 +94,11 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	Update update = null;
     	String username = account.name;
 
-    	update = DeliciousApi.lastUpdate(account, mContext);
+    	update = PinboardApi.lastUpdate(account, mContext);
 		
 		if(notifyPref && update.getInboxNew() > 0) {
 			NotificationManager nm = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-			Notification n = new Notification(R.drawable.ic_main, "New Delicious Bookmarks", System.currentTimeMillis());
+			Notification n = new Notification(R.drawable.ic_main, "New Pinboard Bookmarks", System.currentTimeMillis());
 			Intent ni = new Intent(mContext, Main.class);
 			PendingIntent ci = PendingIntent.getActivity(mContext, 0, ni, 0);
 			n.setLatestEventInfo(mContext, "New Bookmarks", "You Have " + Integer.toString(update.getInboxNew()) + " New Bookmark(s)", ci);
@@ -117,15 +117,15 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 
 			if(lastUpdate == 0){
 				Log.d("BookmarkSync", "In Bookmark Load");
-				tagList = DeliciousApi.getTags(account, mContext);
+				tagList = PinboardApi.getTags(account, mContext);
 				ArrayList<String> accounts = new ArrayList<String>();
 				accounts.add(account.name);
 				BookmarkManager.TruncateBookmarks(accounts, mContext, false);
-				addBookmarkList = DeliciousApi.getAllBookmarks(null, account, mContext);
+				addBookmarkList = PinboardApi.getAllBookmarks(null, account, mContext);
 			} else {
 				Log.d("BookmarkSync", "In Bookmark Update");
-				tagList = DeliciousApi.getTags(account, mContext);
-				changeList = DeliciousApi.getChangedBookmarks(account, mContext);
+				tagList = PinboardApi.getTags(account, mContext);
+				changeList = PinboardApi.getChangedBookmarks(account, mContext);
 				
 				for(Bookmark b : changeList){
 				
@@ -166,7 +166,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 				Log.d("add size", Integer.toString(addHashes.size()));
 				syncResult.stats.numInserts = addHashes.size();
 				if(addHashes.size() > 0) {
-					addBookmarkList = DeliciousApi.getBookmark(addHashes, account, mContext);
+					addBookmarkList = PinboardApi.getBookmark(addHashes, account, mContext);
 				}
 				
 				ArrayList<String> updateHashes = new ArrayList<String>();
@@ -176,7 +176,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 				Log.d("update size", Integer.toString(updateHashes.size()));
 				syncResult.stats.numUpdates = updateHashes.size();
 				if(updateHashes.size() > 0) {
-					updateBookmarkList = DeliciousApi.getBookmark(updateHashes, account, mContext);
+					updateBookmarkList = PinboardApi.getBookmark(updateHashes, account, mContext);
 				}
 			}
 			

@@ -1,20 +1,20 @@
 /*
- * DeliciousDroid - http://code.google.com/p/DeliciousDroid/
+ * PinDroid - http://code.google.com/p/PinDroid/
  *
  * Copyright (C) 2010 Matt Schmidt
  *
- * DeliciousDroid is free software; you can redistribute it and/or modify
+ * PinDroid is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 3 of the License,
  * or (at your option) any later version.
  *
- * DeliciousDroid is distributed in the hope that it will be useful, but
+ * PinDroid is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with DeliciousDroid; if not, write to the Free Software
+ * along with PinDroid; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
@@ -41,18 +41,18 @@ import com.pindroid.providers.TagContent.Tag;
 import android.accounts.Account;
 import android.util.Log;
 
-public class DeliciousFeed {
-    private static final String TAG = "DeliciousFeed";
+public class PinboardFeed {
+    private static final String TAG = "PinboardFeed";
     public static final String USER_AGENT = "AuthenticationService/1.0";
     public static final int REGISTRATION_TIMEOUT = 30 * 1000; // ms
 
-    public static final String FETCH_FRIEND_UPDATES_URI = "http://feeds.delicious.com/v2/json/networkmembers/";
-    public static final String FETCH_FRIEND_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/";
-    public static final String FETCH_NETWORK_RECENT_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/network/";
-    public static final String FETCH_HOTLIST_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json";
-    public static final String FETCH_POPULAR_BOOKMARKS_URI = "http://feeds.delicious.com/v2/json/popular";
-    public static final String FETCH_STATUS_URI = "http://feeds.delicious.com/v2/json/network/";
-    public static final String FETCH_TAGS_URI = "http://feeds.delicious.com/v2/json/tags/";
+    public static final String FETCH_FRIEND_UPDATES_URI = "http://feeds.pinboard.com/v2/json/networkmembers/";
+    public static final String FETCH_FRIEND_BOOKMARKS_URI = "http://feeds.pinboard.com/v2/json/";
+    public static final String FETCH_NETWORK_RECENT_BOOKMARKS_URI = "http://feeds.pinboard.com/v2/json/network/";
+    public static final String FETCH_HOTLIST_BOOKMARKS_URI = "http://feeds.pinboard.com/v2/json";
+    public static final String FETCH_POPULAR_BOOKMARKS_URI = "http://feeds.pinboard.com/v2/json/popular";
+    public static final String FETCH_STATUS_URI = "http://feeds.pinboard.com/v2/json/network/";
+    public static final String FETCH_TAGS_URI = "http://feeds.pinboard.com/v2/json/tags/";
 	
     /**
      * Retrieves a list of contacts in a users network.
@@ -132,9 +132,9 @@ public class DeliciousFeed {
     }
     
     /**
-     * Retrieves a list of tags for a Delicious user.
+     * Retrieves a list of tags for a Pinboard user.
      * 
-     * @param username Username of the Delicious user.
+     * @param username Username of the Pinboard user.
      * @return The list of tags received from the server.
      * @throws JSONException If an error was encountered in deserializing the JSON object returned from 
      * the server.
@@ -176,9 +176,9 @@ public class DeliciousFeed {
     }
     
     /**
-     * Retrieves a list of bookmarks for a Delicious user.
+     * Retrieves a list of bookmarks for a Pinboard user.
      * 
-     * @param username Username of the Delicious user.
+     * @param username Username of the Pinboard user.
      * @param tagName If specified, retrieves only bookmarks for a particular tag.
      * @param limit The number of bookmarks to retrieve, maximum of 100.
      * @return The list of bookmarks received from the server.
@@ -226,7 +226,7 @@ public class DeliciousFeed {
     /**
      * Retrieves a list of recent bookmarks for a Delcious user's network.
      * 
-     * @param username Username of the Delicious user.
+     * @param username Username of the Pinboard user.
      * @param limit The number of bookmarks to retrieve, maximum of 100.
      * @return The list of bookmarks received from the server.
      * @throws JSONException If an error was encountered in deserializing the JSON object returned from 
@@ -266,7 +266,7 @@ public class DeliciousFeed {
     }
     
     /**
-     * Retrieves a list of hotlist bookmarks from Delicious.
+     * Retrieves a list of hotlist bookmarks from Pinboard.
      * 
      * @param limit The number of bookmarks to retrieve, maximum of 100.
      * @return The list of bookmarks received from the server.
@@ -307,7 +307,7 @@ public class DeliciousFeed {
     }
     
     /**
-     * Retrieves a list of popular bookmarks from Delicious.
+     * Retrieves a list of popular bookmarks from Pinboard.
      * 
      * @param limit The number of bookmarks to retrieve, maximum of 100.
      * @return The list of bookmarks received from the server.

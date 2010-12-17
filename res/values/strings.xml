@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
- * DeliciousDroid - http://code.google.com/p/DeliciousDroid/
+ * PinDroid - http://code.google.com/p/PinDroid/
  *
  * Copyright (C) 2010 Matt Schmidt
  *
- * DeliciousDroid is free software; you can redistribute it and/or modify
+ * PinDroid is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 3 of the License,
  * or (at your option) any later version.
  *
- * DeliciousDroid is distributed in the hope that it will be useful, but
+ * PinDroid is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with DeliciousDroid; if not, write to the Free Software
+ * along with PinDroid; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
  -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Label for this package -->
-    <string name="label">Delicious</string>
+    <string name="label">Pinboard</string>
 
     <!-- Permission label -->
-    <string name="permlab_samplesyncadapterAuthPassword">access to passwords for Delicious accounts</string>
+    <string name="permlab_samplesyncadapterAuthPassword">access to passwords for Pinboard accounts</string>
     <!-- Permission description -->
     <string name="permdesc_samplesyncadapterAuthPassword">Allows applications direct access to the passwords for the
-        Delicious account(s) you have configured.</string>
+        Pinboard account(s) you have configured.</string>
 
     <!-- Permission label -->
     <string name="permlab_samplesyncadapterAuth">view configured accounts</string>
     <!-- Permission description -->
     <string name="permdesc_samplesyncadapterAuth">Allows applications to see the usernames (email addresses) of
-        the Delicious account(s) you have configured.</string>
-    <string name="notification_login_error">Touch to sign into your Delicious account.</string>
+        the Pinboard account(s) you have configured.</string>
+    <string name="notification_login_error">Touch to sign into your Pinboard account.</string>
 
     <!-- Title string for Login activity-->
     <string name="ui_activity_title">Sign-in</string>
@@ -55,7 +55,7 @@
     <string name="login_authtype_ok_button">Continue</string>
 
     <!-- Message shown in dialog if the username or password is invalid. -->
-    <string name="login_activity_loginfail_text_both">The username or password isn\'t valid. A Delicious account is
+    <string name="login_activity_loginfail_text_both">The username or password isn\'t valid. A Pinboard account is
         required. Please try again. </string>
     <!-- Message shown in dialog if the password is invalid -->
     <string name="login_activity_loginfail_text_pwonly">You entered the wrong password or your account has changed.
@@ -63,11 +63,11 @@
     <!-- Message shown in dialog to prompt the user for their password -->
     <string name="login_activity_loginfail_text_pwmissing">Type the password for this account.</string>
     <!-- Message shown if the provided account doesn't support the current activity. -->
-    <string name="login_activity_newaccount_text">Sign in to your Delicious account. </string>
+    <string name="login_activity_newaccount_text">Sign in to your Pinboard account. </string>
     
     <string name="login_activity_authtype_text">Choose your account type.</string>
     <string name="login_activity_authtype_yahoo">Yahoo</string>
-    <string name="login_activity_authtype_delicious">Delicious</string>
+    <string name="login_activity_authtype_pinboard">Pinboard</string>
 
     <!-- Button that takes the user to the "sign in" screen -->
     <string name="sign_in_button_label">Sign in</string>
@@ -75,9 +75,9 @@
     <string name="back_button_label">Back</string>
     <!-- Button to cancel the current operation -->
     <string name="cancel_button_label">Cancel</string>
-    <string name="profile_action">Delicious</string>
+    <string name="profile_action">Pinboard</string>
     <string name="view_profile">View Profile</string>
-    <string name="titleMain">Delicious</string>
+    <string name="titleMain">Pinboard</string>
     
     <string name="menu_addbookmark_title">Add Bookmark</string>
     <string name="menu_sort_title">Sort</string>
@@ -97,17 +97,17 @@
     <string name="add_title_popular_tags">Popular Tags</string>
     <string name="add_title_network_tags">Network Tags</string>
     
-    <string name="main_search_label">Delicious</string>
+    <string name="main_search_label">Pinboard</string>
     <string name="main_search_hint">Tags, Titles, Notes</string>
     <string name="main_search_description">Tags, titles, and notes</string>
     
-    <string name="tag_search_label">Delicious Tags</string>
+    <string name="tag_search_label">Pinboard Tags</string>
     <string name="tag_search_hint">Tags</string>
     
-    <string name="bookmark_search_label">Delicious Bookmarks</string>
+    <string name="bookmark_search_label">Pinboard Bookmarks</string>
     <string name="bookmark_search_hint">Tags, Titles, Notes</string>
     
-    <string name="tag_search_text">Search Delicious</string>
+    <string name="tag_search_text">Search Pinboard</string>
     
     <string name="add_bookmark_success_msg">Bookmark Added Successfully</string>
     <string name="edit_bookmark_success_msg">Bookmark Updated Successfully</string>
@@ -143,15 +143,15 @@
     
     <string name="pref_help_title">Help</string>
     <string name="pref_help_key">pref_help</string>
-    <string name="pref_help_summary">Help on using DeliciousDroid</string>
+    <string name="pref_help_summary">Help on using PinDroid</string>
     
     <string name="pref_donate_title">Donate</string>
     <string name="pref_donate_key">pref_donate</string>
-    <string name="pref_donate_summary">Support DeliciousDroid</string>
+    <string name="pref_donate_summary">Support PinDroid</string>
     
-    <string name="dialog_no_account_title">No Delicious Account Found</string>
-    <string name="dialog_no_account_text">To add your Delicious account go to Accounts and Sync in Settings.</string>
+    <string name="dialog_no_account_title">No Pinboard Account Found</string>
+    <string name="dialog_no_account_text">To add your Pinboard account go to Accounts and Sync in Settings.</string>
     
     <string name="dialog_yahoo_not_linked_title">Account Error</string>
-    <string name="dialog_yahoo_not_linked_text">You may not have a Delicious account linked to that Yahoo ID.  Go to the main Delicious site and create an account first.</string>
+    <string name="dialog_yahoo_not_linked_text">You may not have a Pinboard account linked to that Yahoo ID.  Go to the main Pinboard site and create an account first.</string>
 </resources>

@@ -1,6 +1,6 @@
 package com.pindroid.widget;
 
-import com.deliciousdroid.R;
+import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.activity.AddBookmark;
 import com.pindroid.activity.Main;

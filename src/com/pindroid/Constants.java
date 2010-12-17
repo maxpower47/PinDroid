@@ -1,20 +1,20 @@
 /*
- * DeliciousDroid - http://code.google.com/p/DeliciousDroid/
+ * PinDroid - http://code.google.com/p/PinDroid/
  *
  * Copyright (C) 2010 Matt Schmidt
  *
- * DeliciousDroid is free software; you can redistribute it and/or modify
+ * PinDroid is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 3 of the License,
  * or (at your option) any later version.
  *
- * DeliciousDroid is distributed in the hope that it will be useful, but
+ * PinDroid is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with DeliciousDroid; if not, write to the Free Software
+ * along with PinDroid; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
@@ -28,29 +28,29 @@ public class Constants {
     /**
      * Account type string.
      */
-    public static final String ACCOUNT_TYPE = "com.deliciousdroid";
+    public static final String ACCOUNT_TYPE = "com.pindroid";
     
-    public static final Uri CONTENT_URI_BASE = Uri.parse("content://com.deliciousdroid");
+    public static final Uri CONTENT_URI_BASE = Uri.parse("content://com.pindroid");
     
     public static final String CONTENT_SCHEME = "content";
 
     /**
      * Authtoken type string.
      */
-    public static final String AUTHTOKEN_TYPE = "com.deliciousdroid";
+    public static final String AUTHTOKEN_TYPE = "com.pindroid";
     
-    public static final String AUTH_PREFS_NAME = "com.deliciousdroid.auth";
+    public static final String AUTH_PREFS_NAME = "com.pindroid.auth";
     
     public static final String PREFS_LAST_SYNC = "last_sync";
     
     public static final String PREFS_AUTH_TYPE = "authentication_type";
     public static final String AUTH_TYPE_OAUTH = "oauth";
-    public static final String AUTH_TYPE_DELICIOUS = "delicious";
+    public static final String AUTH_TYPE_PINBOARD = "pinboard";
     
     public static final String PREFS_INITIAL_SYNC = "initial_sync";
     
     public static final String OAUTH_CALLBACK_PROPERTY = "oauth_callback";
-    public static final String OAUTH_CALLBACK = "http://deliciousdroid.com/oauth.htm";
+    public static final String OAUTH_CALLBACK = "http://PinDroid.com/oauth.htm";
     
     public static final String OAUTH_SESSION_HANDLE_PROPERTY = "oauth_session_handle";
     

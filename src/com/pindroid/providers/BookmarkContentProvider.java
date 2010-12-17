@@ -1,20 +1,20 @@
 /*
- * DeliciousDroid - http://code.google.com/p/DeliciousDroid/
+ * PinDroid - http://code.google.com/p/PinDroid/
  *
  * Copyright (C) 2010 Matt Schmidt
  *
- * DeliciousDroid is free software; you can redistribute it and/or modify
+ * PinDroid is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 3 of the License,
  * or (at your option) any later version.
  *
- * DeliciousDroid is distributed in the hope that it will be useful, but
+ * PinDroid is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with DeliciousDroid; if not, write to the Free Software
+ * along with PinDroid; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.deliciousdroid.R;
+import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
@@ -60,7 +60,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	
 	private SQLiteDatabase db;
 	private DatabaseHelper dbHelper;
-	private static final String DATABASE_NAME = "DeliciousBookmarks.db";
+	private static final String DATABASE_NAME = "PinboardBookmarks.db";
 	private static final int DATABASE_VERSION = 19;
 	private static final String BOOKMARK_TABLE_NAME = "bookmark";
 	private static final String TAG_TABLE_NAME = "tag";
@@ -77,7 +77,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
 	
-	public static final String AUTHORITY = "com.deliciousdroid.providers.BookmarkContentProvider";
+	public static final String AUTHORITY = "com.pindroid.providers.BookmarkContentProvider";
 	
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		

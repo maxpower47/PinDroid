@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
- * DeliciousDroid - http://code.google.com/p/DeliciousDroid/
+ * PinDroid - http://code.google.com/p/PinDroid/
  *
  * Copyright (C) 2010 Matt Schmidt
  *
- * DeliciousDroid is free software; you can redistribute it and/or modify
+ * PinDroid is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 3 of the License,
  * or (at your option) any later version.
  *
- * DeliciousDroid is distributed in the hope that it will be useful, but
+ * PinDroid is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with DeliciousDroid; if not, write to the Free Software
+ * along with PinDroid; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
  -->
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.deliciousdroid"
+    package="com.pindroid"
     android:versionCode="14"
     android:versionName="1.1.0">
     <uses-sdk android:minSdkVersion="5" />
@@ -59,12 +59,12 @@
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.deliciousdroid.providers.BookmarkContentProvider" android:path="/tags"/>
+        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/tags"/>
 			</intent-filter>
 			<intent-filter>
         		<action android:name="android.intent.action.PICK" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.deliciousdroid.providers.BookmarkContentProvider" android:path="/tags"/>
+        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/tags"/>
 			</intent-filter>
 			<intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
@@ -72,7 +72,7 @@
 			<meta-data android:name="android.app.searchable" android:resource="@xml/tag_searchable"/>
         </activity>
         <activity android:name=".activity.TagLiveFolder"
-        	android:label="Delicious Tags"
+        	android:label="Pinboard Tags"
         	android:icon="@drawable/ic_tag_folder">
             <intent-filter>
         		<action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
@@ -83,12 +83,12 @@
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.deliciousdroid.providers.BookmarkContentProvider" android:path="/bookmarks"/>
+        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/bookmarks"/>
         	</intent-filter>
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.deliciousdroid.providers.BookmarkContentProvider" android:path="/network"/>
+        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/network"/>
         	</intent-filter>
             <intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
@@ -96,7 +96,7 @@
         	<meta-data android:name="android.app.searchable" android:resource="@xml/bookmark_searchable"/>
         </activity>
         <activity android:name=".activity.BookmarkLiveFolder"
-        	android:label="Delicious Bookmarks"
+        	android:label="Pinboard Bookmarks"
         	android:icon="@drawable/ic_bookmark_folder">
             <intent-filter>
         		<action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
@@ -107,7 +107,7 @@
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.deliciousdroid.providers.BookmarkContentProvider" android:pathPattern="/bookmarks/.*"/>
+        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:pathPattern="/bookmarks/.*"/>
         	</intent-filter>
         </activity>
         <activity android:name=".activity.MainSearchResults" />
@@ -166,16 +166,16 @@
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:mimeType="vnd.android.cursor.item/vnd.deliciousdroid.profile" />
+        		<data android:mimeType="vnd.android.cursor.item/vnd.PinDroid.profile" />
         	</intent-filter>
         </activity>
         <provider
-        	android:name="com.deliciousdroid.providers.BookmarkContentProvider"
+        	android:name="com.pindroid.providers.BookmarkContentProvider"
         	android:label="Bookmarks"
-        	android:authorities="com.deliciousdroid.providers.BookmarkContentProvider" />
+        	android:authorities="com.pindroid.providers.BookmarkContentProvider" />
         <receiver 
         	android:name=".widget.SearchWidgetProvider"
-        	android:label="DeliciousDroid">
+        	android:label="PinDroid">
     		<intent-filter>
         		<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
     		</intent-filter>

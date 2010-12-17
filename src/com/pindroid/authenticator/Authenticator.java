@@ -1,20 +1,20 @@
 /*
- * DeliciousDroid - http://code.google.com/p/DeliciousDroid/
+ * PinDroid - http://code.google.com/p/PinDroid/
  *
  * Copyright (C) 2010 Matt Schmidt
  *
- * DeliciousDroid is free software; you can redistribute it and/or modify
+ * PinDroid is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 3 of the License,
  * or (at your option) any later version.
  *
- * DeliciousDroid is distributed in the hope that it will be useful, but
+ * PinDroid is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with DeliciousDroid; if not, write to the Free Software
+ * along with PinDroid; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
@@ -32,14 +32,14 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.deliciousdroid.R;
+import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.client.LoginResult;
 import com.pindroid.client.NetworkUtilities;
 
 /**
  * This class is an implementation of AbstractAccountAuthenticator for
- * authenticating accounts in the com.deliciousdroid domain.
+ * authenticating accounts in the com.pindroid domain.
  */
 class Authenticator extends AbstractAccountAuthenticator {
     // Authentication Service context
@@ -119,7 +119,7 @@ class Authenticator extends AbstractAccountAuthenticator {
         final String password = am.getPassword(account);
         final String authtype = am.getUserData(account, Constants.PREFS_AUTH_TYPE);
         
-        if(authtype.equals(Constants.AUTH_TYPE_DELICIOUS)){
+        if(authtype.equals(Constants.AUTH_TYPE_PINBOARD)){
         	Log.d("getAuthToken", "notoauth");
         	
 	        if (password != null) {
@@ -207,8 +207,8 @@ class Authenticator extends AbstractAccountAuthenticator {
     	final AccountManager am = AccountManager.get(mContext);
     	final String authtype = am.getUserData(account, Constants.PREFS_AUTH_TYPE);
     	
-    	if(authtype.equals(Constants.AUTH_TYPE_DELICIOUS)){
-    		return NetworkUtilities.deliciousAuthenticate(account.name, password, null, null);
+    	if(authtype.equals(Constants.AUTH_TYPE_PINBOARD)){
+    		return NetworkUtilities.pinboardAuthenticate(account.name, password, null, null);
     	} else {
     		return true;
     	}

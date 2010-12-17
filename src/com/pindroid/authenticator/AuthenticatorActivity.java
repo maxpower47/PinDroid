@@ -1,20 +1,20 @@
 /*
- * DeliciousDroid - http://code.google.com/p/DeliciousDroid/
+ * PinDroid - http://code.google.com/p/PinDroid/
  *
  * Copyright (C) 2010 Matt Schmidt
  *
- * DeliciousDroid is free software; you can redistribute it and/or modify
+ * PinDroid is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 3 of the License,
  * or (at your option) any later version.
  *
- * DeliciousDroid is distributed in the hope that it will be useful, but
+ * PinDroid is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with DeliciousDroid; if not, write to the Free Software
+ * along with PinDroid; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
@@ -47,7 +47,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.deliciousdroid.R;
+import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.activity.OauthLogin;
 import com.pindroid.client.LoginResult;
@@ -88,7 +88,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     private String mUsername;
     private EditText mUsernameEdit;
     
-    private RadioButton mDeliciousAuth;
+    private RadioButton mPinboardAuth;
     private RadioButton mYahooAuth;
     
     private String oauthVerifier;
@@ -117,7 +117,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
         mMessage = (TextView) findViewById(R.id.message);
       
-        mDeliciousAuth = (RadioButton) findViewById(R.id.auth_type_delicious);
+        mPinboardAuth = (RadioButton) findViewById(R.id.auth_type_pinboard);
         mYahooAuth = (RadioButton) findViewById(R.id.auth_type_yahoo);
         mMessage.setText(R.string.login_activity_authtype_text);
     }
@@ -222,7 +222,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         boolean success = false;
         
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        final String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
+        final String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_PINBOARD);
         final String token = settings.getString(Constants.OAUTH_TOKEN_PROPERTY, "");
         final String tokensecret = settings.getString(Constants.OAUTH_TOKEN_SECRET_PROPERTY, "");
         final String sessionhandle = settings.getString(Constants.OAUTH_SESSION_HANDLE_PROPERTY, "");
@@ -318,7 +318,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             if (!mConfirmCredentials) {
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = settings.edit();
-            	editor.putString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_DELICIOUS);
+            	editor.putString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_PINBOARD);
             	editor.commit();
             	
                 finishLogin(null);

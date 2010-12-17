@@ -1,20 +1,20 @@
 /*
- * DeliciousDroid - http://code.google.com/p/DeliciousDroid/
+ * PinDroid - http://code.google.com/p/PinDroid/
  *
  * Copyright (C) 2010 Matt Schmidt
  *
- * DeliciousDroid is free software; you can redistribute it and/or modify
+ * PinDroid is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 3 of the License,
  * or (at your option) any later version.
  *
- * DeliciousDroid is distributed in the hope that it will be useful, but
+ * PinDroid is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with DeliciousDroid; if not, write to the Free Software
+ * along with PinDroid; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
@@ -53,9 +53,9 @@ import com.pindroid.authenticator.OauthUtilities;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 
-public class DeliciousApi {
+public class PinboardApi {
 	
-    private static final String TAG = "DeliciousApi";
+    private static final String TAG = "PinboardApi";
 
     public static final String USER_AGENT = "AuthenticationService/1.0";
     public static final int REGISTRATION_TIMEOUT = 30 * 1000; // ms
@@ -71,13 +71,13 @@ public class DeliciousApi {
   
     private static final String SCHEME = "https";
     private static final String SCHEME_HTTP = "http";
-    private static final String DELICIOUS_AUTHORITY = "api.del.icio.us";
+    private static final String PINBOARD_AUTHORITY = "api.pinboard.in";
     private static final int PORT = 443;
  
-    private static final AuthScope SCOPE = new AuthScope(DELICIOUS_AUTHORITY, PORT);
+    private static final AuthScope SCOPE = new AuthScope(PINBOARD_AUTHORITY, PORT);
 
     /**
-     * Gets timestamp of last update to data on Delicious servers.
+     * Gets timestamp of last update to data on Pinboard servers.
      * 
      * @param account The account being synced.
      * @param context The current application context.
@@ -94,7 +94,7 @@ public class DeliciousApi {
     	Update update = null;
     	String url = LAST_UPDATE_URI;
     	
-    	response = DeliciousApiCall(url, params, account, context);
+    	response = PinboardApiCall(url, params, account, context);
     	
         if (response.contains("<?xml")) {
         	update = Update.valueOf(response);
@@ -106,7 +106,7 @@ public class DeliciousApi {
     }
     
     /**
-     * Sends a request to Delicious's Add Bookmark api.
+     * Sends a request to Pinboard's Add Bookmark api.
      * 
      * @param bookmark The bookmark to be added.
      * @param account The account being synced.
@@ -139,7 +139,7 @@ public class DeliciousApi {
 		String uri = ADD_BOOKMARKS_URI;
 		String response = null;
 
-    	response = DeliciousApiCall(uri, params, account, context);
+    	response = PinboardApiCall(uri, params, account, context);
 
         if (response.contains("<result code=\"done\" />")) {
             return true;
@@ -158,7 +158,7 @@ public class DeliciousApi {
     }
     
     /**
-     * Sends a request to Delicious's Delete Bookmark api.
+     * Sends a request to Pinboard's Delete Bookmark api.
      * 
      * @param bookmark The bookmark to be deleted.
      * @param account The account being synced.
@@ -176,7 +176,7 @@ public class DeliciousApi {
 
     	params.put("url", bookmark.getUrl());
 
-    	response = DeliciousApiCall(url, params, account, context);
+    	response = PinboardApiCall(url, params, account, context);
     	
         if (response.contains("<result code=\"done\"")) {
             return true;
@@ -187,7 +187,7 @@ public class DeliciousApi {
     }
     
     /**
-     * Retrieves a specific list of bookmarks from Delicious.
+     * Retrieves a specific list of bookmarks from Pinboard.
      * 
      * @param hashes A list of bookmark hashes to be retrieved.  
      * 	The hashes are MD5 hashes of the URL of the bookmark.
@@ -216,7 +216,7 @@ public class DeliciousApi {
     	params.put("meta", "yes");
     	params.put("hashes", hashString);
 
-    	response = DeliciousApiCall(url, params, account, context);
+    	response = PinboardApiCall(url, params, account, context);
     	
         if (response.contains("<?xml")) {
             bookmarkList = Bookmark.valueOf(response);
@@ -228,7 +228,7 @@ public class DeliciousApi {
     }
     
     /**
-     * Retrieves the entire list of bookmarks for a user from Delicious.  Warning:  Overuse of this 
+     * Retrieves the entire list of bookmarks for a user from Pinboard.  Warning:  Overuse of this 
      * api call will get your account throttled.
      * 
      * @param tagname If specified, will only retrieve bookmarks with a specific tag.
@@ -252,7 +252,7 @@ public class DeliciousApi {
     	
     	params.put("meta", "yes");
 
-    	response = DeliciousApiCall(url, params, account, context);
+    	response = PinboardApiCall(url, params, account, context);
     	
         if (response.contains("<?xml")) {
 
@@ -285,7 +285,7 @@ public class DeliciousApi {
 
     	params.put("hashes", "yes");
 
-    	response = DeliciousApiCall(url, params, account, context);
+    	response = PinboardApiCall(url, params, account, context);
 
         if (response.contains("<?xml")) {
 
@@ -318,7 +318,7 @@ public class DeliciousApi {
     	
     	String url = FETCH_SUGGESTED_TAGS_URI;
     	  	
-    	response = DeliciousApiCall(url, params, account, context);
+    	response = PinboardApiCall(url, params, account, context);
     	Log.d("loadTagResponse", response);
     	
         if (response.contains("<?xml")) {
@@ -331,7 +331,7 @@ public class DeliciousApi {
     }
     
     /**
-     * Retrieves a list of all tags for a user from Delicious.
+     * Retrieves a list of all tags for a user from Pinboard.
      * 
      * @param account The account being synced.
      * @param context The current application context.
@@ -347,7 +347,7 @@ public class DeliciousApi {
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	String url = FETCH_TAGS_URI;
     	  	
-    	response = DeliciousApiCall(url, params, account, context);
+    	response = PinboardApiCall(url, params, account, context);
     	
         if (response.contains("<?xml")) {
         	tagList = Tag.valueOf(response);
@@ -359,7 +359,7 @@ public class DeliciousApi {
     }
     
     /**
-     * Performs an api call to Delicious's http based api methods.
+     * Performs an api call to Pinboard's http based api methods.
      * 
      * @param url URL of the api method to call.
      * @param params Extra parameters included in the api call, as specified by different methods.
@@ -369,7 +369,7 @@ public class DeliciousApi {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      */
-    private static String DeliciousApiCall(String url, TreeMap<String, String> params, 
+    private static String PinboardApiCall(String url, TreeMap<String, String> params, 
     		Account account, Context context) throws IOException, AuthenticationException{
 
     	final AccountManager am = AccountManager.get(context);
@@ -396,7 +396,7 @@ public class DeliciousApi {
     	
 		Uri.Builder builder = new Uri.Builder();
 		builder.scheme(scheme);
-		builder.authority(DELICIOUS_AUTHORITY);
+		builder.authority(PINBOARD_AUTHORITY);
 		builder.appendEncodedPath(path);
 		for(String key : params.keySet()){
 			builder.appendQueryParameter(key, params.get(key));
@@ -404,9 +404,9 @@ public class DeliciousApi {
 		
 		Log.d("apiCallUrl", builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+").replace("%3F", "?").replace("%3D", "=").replace("%20", "+"));
 		post = new HttpGet(builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+").replace("%3F", "?").replace("%3D", "=").replace("%20", "+"));
-		HttpHost host = new HttpHost(DELICIOUS_AUTHORITY);
+		HttpHost host = new HttpHost(PINBOARD_AUTHORITY);
 
-		post.setHeader("User-Agent", "DeliciousDroid_0.4.1");
+		post.setHeader("User-Agent", "PinDroid_0.4.1");
 		post.setHeader("Accept-Encoding", "gzip");
 
     	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {

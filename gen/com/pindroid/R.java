@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.deliciousdroid;
+package com.pindroid;
 
 public final class R {
     public static final class array {
@@ -47,12 +47,27 @@ public final class R {
         public static final int search_app_icon=0x7f02001b;
         public static final int search_widget=0x7f02001c;
         public static final int search_widget_blk=0x7f02001d;
-        public static final int widget_add_button=0x7f02001e;
-        public static final int widget_bookmark_button=0x7f02001f;
-        public static final int widget_button=0x7f020020;
-        public static final int widget_network_button=0x7f020021;
-        public static final int widget_search_button=0x7f020022;
-        public static final int widget_tag_button=0x7f020023;
+        public static final int widget_add=0x7f02001e;
+        public static final int widget_add_button=0x7f02001f;
+        public static final int widget_add_orange=0x7f020020;
+        public static final int widget_add_orange_inv=0x7f020021;
+        public static final int widget_bookmark=0x7f020022;
+        public static final int widget_bookmark_button=0x7f020023;
+        public static final int widget_bookmark_orange=0x7f020024;
+        public static final int widget_bookmark_orange_inv=0x7f020025;
+        public static final int widget_button=0x7f020026;
+        public static final int widget_network=0x7f020027;
+        public static final int widget_network_button=0x7f020028;
+        public static final int widget_network_orange=0x7f020029;
+        public static final int widget_network_orange_inv=0x7f02002a;
+        public static final int widget_search=0x7f02002b;
+        public static final int widget_search_button=0x7f02002c;
+        public static final int widget_search_orange=0x7f02002d;
+        public static final int widget_search_orange_inv=0x7f02002e;
+        public static final int widget_tag=0x7f02002f;
+        public static final int widget_tag_button=0x7f020030;
+        public static final int widget_tag_orange=0x7f020031;
+        public static final int widget_tag_orange_inv=0x7f020032;
     }
     public static final class id {
         public static final int add_button_cancel=0x7f090010;
@@ -73,7 +88,7 @@ public final class R {
         public static final int add_title_tags=0x7f090006;
         public static final int add_title_url=0x7f090000;
         public static final int auth_type=0x7f090019;
-        public static final int auth_type_delicious=0x7f09001a;
+        public static final int auth_type_pinboard=0x7f09001a;
         public static final int auth_type_yahoo=0x7f09001b;
         public static final int bookmark_description=0x7f090011;
         public static final int bookmark_tags=0x7f090012;
@@ -158,7 +173,7 @@ public final class R {
         /**  Label for this package 
          */
         public static final int label=0x7f060000;
-        public static final int login_activity_authtype_delicious=0x7f060012;
+        public static final int login_activity_authtype_pinboard=0x7f060012;
         public static final int login_activity_authtype_text=0x7f060010;
         public static final int login_activity_authtype_yahoo=0x7f060011;
         /**  Message shown in dialog if the username or password is invalid. 

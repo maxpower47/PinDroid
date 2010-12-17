@@ -1,20 +1,20 @@
 /*
- * DeliciousDroid - http://code.google.com/p/DeliciousDroid/
+ * PinDroid - http://code.google.com/p/PinDroid/
  *
  * Copyright (C) 2010 Matt Schmidt
  *
- * DeliciousDroid is free software; you can redistribute it and/or modify
+ * PinDroid is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published
  * by the Free Software Foundation; either version 3 of the License,
  * or (at your option) any later version.
  *
- * DeliciousDroid is distributed in the hope that it will be useful, but
+ * PinDroid is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with DeliciousDroid; if not, write to the Free Software
+ * along with PinDroid; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
@@ -32,7 +32,7 @@ import android.util.Log;
 
 import com.pindroid.Constants;
 import com.pindroid.authenticator.AuthToken;
-import com.pindroid.client.DeliciousFeed;
+import com.pindroid.client.PinboardFeed;
 import com.pindroid.client.User;
 import com.pindroid.client.User.Status;
 import com.pindroid.platform.ContactManager;
@@ -73,12 +73,12 @@ public class ContactSyncAdapter extends AbstractThreadedSyncAdapter {
         	authtoken = at.getAuthToken();
         	 
             // fetch updates from the sample service over the cloud
-            users = DeliciousFeed.fetchFriendUpdates(account);
+            users = PinboardFeed.fetchFriendUpdates(account);
             // update platform contacts.
             Log.d(TAG, "Calling contactManager's sync contacts");
             ContactManager.syncContacts(mContext, account.name, users);
             // fetch and update status messages for all the synced users.
-            statuses = DeliciousFeed.fetchFriendStatuses(account);
+            statuses = PinboardFeed.fetchFriendStatuses(account);
             ContactManager.insertStatuses(mContext, account.name, statuses);
         } catch (final IOException e) {
             Log.e(TAG, "IOException", e);
