@@ -43,6 +43,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ViewBookmark extends AppBaseActivity{
@@ -53,8 +54,7 @@ public class ViewBookmark extends AppBaseActivity{
 	private TextView mTags;
 	private TextView mTime;
 	private TextView mUsername;
-	private TextView mRead;
-	private TextView mShared;
+	private ImageView mIcon;
 	private Bookmark bookmark;
 	private Boolean myself;
 
@@ -71,8 +71,7 @@ public class ViewBookmark extends AppBaseActivity{
 		mTags = (TextView) findViewById(R.id.view_bookmark_tags);
 		mTime = (TextView) findViewById(R.id.view_bookmark_time);
 		mUsername = (TextView) findViewById(R.id.view_bookmark_account);
-		mRead = (TextView) findViewById(R.id.view_bookmark_toread);
-		mShared = (TextView) findViewById(R.id.view_bookmark_shared);
+		mIcon = (ImageView) findViewById(R.id.view_bookmark_icon);
 		
 		mTags.setMovementMethod(LinkMovementMethod.getInstance());
 		
@@ -99,8 +98,12 @@ public class ViewBookmark extends AppBaseActivity{
 				mNotes.setText(bookmark.getNotes());
 				mTime.setText(d.toString());
 				mUsername.setText(bookmark.getAccount());
-				mRead.setText(bookmark.getToRead() ? "to read" : "not to read");
-				mShared.setText(bookmark.getShared() ? "shared" : "private");
+				
+				if(!bookmark.getShared()) {
+					mIcon.setImageResource(R.drawable.padlock);
+				} else if(bookmark.getToRead()) {
+					mIcon.setImageResource(R.drawable.book_open);
+				}
 				
         		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
 
