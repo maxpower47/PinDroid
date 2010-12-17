@@ -44,7 +44,7 @@ public class BookmarkManager {
 	public static ArrayList<Bookmark> GetBookmarks(String username, String tagname, String sortorder, Context context){
 		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 		String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, 
-				Bookmark.Meta, Bookmark.Tags};
+				Bookmark.Meta, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared};
 		String selection = null;
 		String[] selectionargs = new String[]{username};
 		
@@ -68,12 +68,15 @@ public class BookmarkManager {
 			int descriptionColumn = c.getColumnIndex(Bookmark.Description);
 			int tagsColumn = c.getColumnIndex(Bookmark.Tags);
 			int metaColumn = c.getColumnIndex(Bookmark.Meta);
+			int readColumn = c.getColumnIndex(Bookmark.ToRead);
+			int shareColumn = c.getColumnIndex(Bookmark.Shared);
 			
 			do {
 				
 				Bookmark b = new Bookmark(c.getInt(idColumn), "", c.getString(urlColumn), 
 						c.getString(descriptionColumn), "", c.getString(tagsColumn), "", 
-						c.getString(metaColumn), 0);
+						c.getString(metaColumn), 0, c.getInt(readColumn) == 0 ? false : true,
+						c.getInt(shareColumn) == 0 ? false : true);
 				
 				bookmarkList.add(b);
 				
@@ -85,7 +88,7 @@ public class BookmarkManager {
 	}
 	
 	public static Bookmark GetById(int id, Context context) throws ContentNotFoundException {		
-		String[] projection = new String[] {Bookmark.Account, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Time, Bookmark.Tags, Bookmark.Hash, Bookmark.Meta};
+		String[] projection = new String[] {Bookmark.Account, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Time, Bookmark.Tags, Bookmark.Hash, Bookmark.Meta, Bookmark.ToRead, Bookmark.Shared};
 		String selection = BaseColumns._ID + "=?";
 		String[] selectionargs = new String[]{Integer.toString(id)};
 		
@@ -102,6 +105,8 @@ public class BookmarkManager {
 			int hashColumn = c.getColumnIndex(Bookmark.Hash);
 			int metaColumn = c.getColumnIndex(Bookmark.Meta);
 			int timeColumn = c.getColumnIndex(Bookmark.Time);
+			int readColumn = c.getColumnIndex(Bookmark.ToRead);
+			int shareColumn = c.getColumnIndex(Bookmark.Shared);
 			
 			String account = c.getString(accountColumn);
 			String url = c.getString(urlColumn);
@@ -111,10 +116,12 @@ public class BookmarkManager {
 			String hash = c.getString(hashColumn);
 			String meta = c.getString(metaColumn);
 			long time = c.getLong(timeColumn);
+			boolean read = c.getInt(readColumn) == 0 ? false : true;
+			boolean share = c.getInt(shareColumn) == 0 ? false : true;
 			
 			c.close();
 			
-			return new Bookmark(id, account, url, description, notes, tags, hash, meta, time);
+			return new Bookmark(id, account, url, description, notes, tags, hash, meta, time, read, share);
 		} else {
 			c.close();
 			throw new ContentNotFoundException();
@@ -139,6 +146,8 @@ public class BookmarkManager {
 		values.put(Bookmark.Meta, bookmark.getMeta());
 		values.put(Bookmark.Time, bookmark.getTime());
 		values.put(Bookmark.Account, account);
+		values.put(Bookmark.ToRead, bookmark.getToRead() ? 1 : 0);
+		values.put(Bookmark.Shared, bookmark.getShared() ? 1 : 0);
 		
 		context.getContentResolver().insert(Bookmark.CONTENT_URI, values);
 	}
@@ -163,6 +172,8 @@ public class BookmarkManager {
 		values.put(Bookmark.Tags, bookmark.getTagString());
 		values.put(Bookmark.Meta, bookmark.getMeta());
 		values.put(Bookmark.Time, bookmark.getTime());
+		values.put(Bookmark.ToRead, bookmark.getToRead() ? 1 : 0);
+		values.put(Bookmark.Shared, bookmark.getShared() ? 1 : 0);
 		
 		context.getContentResolver().update(Bookmark.CONTENT_URI, values, selection, selectionargs);
 	}
@@ -260,12 +271,15 @@ public class BookmarkManager {
 			int descriptionColumn = c.getColumnIndex(Bookmark.Description);
 			int tagsColumn = c.getColumnIndex(Bookmark.Tags);
 			int metaColumn = c.getColumnIndex(Bookmark.Meta);
+			int readColumn = c.getColumnIndex(Bookmark.ToRead);
+			int shareColumn = c.getColumnIndex(Bookmark.Shared);
 			
 			do {
 				
 				Bookmark b = new Bookmark(c.getInt(idColumn), "", c.getString(urlColumn), 
 						c.getString(descriptionColumn), "", c.getString(tagsColumn), "", 
-						c.getString(metaColumn), 0);
+						c.getString(metaColumn), 0, c.getInt(readColumn) == 0 ? false : true,
+						c.getInt(shareColumn) == 0 ? false : true);
 				
 				bookmarkList.add(b);
 				

@@ -67,5 +67,11 @@
 		<TextView
 			android:id="@+id/view_bookmark_account"
 			style="@style/ViewBookmarkFieldContent" />
+		<TextView
+			android:id="@+id/view_bookmark_toread"
+			style="@style/ViewBookmarkFieldContent" />
+		<TextView
+			android:id="@+id/view_bookmark_shared"
+			style="@style/ViewBookmarkFieldContent" />
 	</LinearLayout>
 </ScrollView>

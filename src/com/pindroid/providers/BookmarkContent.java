@@ -48,7 +48,7 @@ public class BookmarkContent {
 		public static final Uri CONTENT_URI = Uri.parse("content://" + 
 				BookmarkContentProvider.AUTHORITY + "/bookmark");
 		
-		public static final  String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.PinDroid.bookmarks";
+		public static final  String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.pindroid.bookmarks";
 		
 		public static final String Account = "ACCOUNT";
 		public static final String Description = "DESCRIPTION";
@@ -58,6 +58,8 @@ public class BookmarkContent {
 		public static final String Hash = "HASH";
 		public static final String Meta = "META";
 		public static final String Time = "TIME";
+		public static final String ToRead = "TOREAD";
+		public static final String Shared = "SHARED";
 		public static final String LastUpdate = "LASTUPDATE";
 		
 		private int mId = 0;
@@ -68,7 +70,8 @@ public class BookmarkContent {
         private String mTags = null;
         private String mHash = null;
         private String mMeta = null;
-        private Boolean mPrivate = false;
+        private Boolean mShared = true;
+        private Boolean mRead = false;
         private long mTime = 0;
         private long mLastUpdate = 0;
 
@@ -117,8 +120,12 @@ public class BookmarkContent {
         	return mLastUpdate;
         }
         
-        public boolean getPrivate(){
-        	return mPrivate;
+        public boolean getShared(){
+        	return mShared;
+        }
+        
+        public boolean getToRead(){
+        	return mRead;
         }
         
         public String getAccount(){
@@ -161,11 +168,11 @@ public class BookmarkContent {
             mDescription = description;
             mNotes = notes;
             mTags = tags;
-            mPrivate = priv;
+            mShared = priv;
             mTime = time;
         }
         
-        public Bookmark(String url, String description, String notes, String tags, String hash, String meta, long time) {
+        public Bookmark(String url, String description, String notes, String tags, String hash, String meta, long time, boolean read, boolean share) {
             mUrl = url;
             mDescription = description;
             mNotes = notes;
@@ -173,9 +180,11 @@ public class BookmarkContent {
             mHash = hash;
             mMeta = meta;
             mTime = time;
+            mRead = read;
+            mShared = share;
         }
         
-        public Bookmark(int id, String account, String url, String description, String notes, String tags, String hash, String meta, long time) {
+        public Bookmark(int id, String account, String url, String description, String notes, String tags, String hash, String meta, long time, boolean read, boolean share) {
             mId = id;
         	mUrl = url;
             mDescription = description;
@@ -185,6 +194,8 @@ public class BookmarkContent {
             mMeta = meta;
             mTime = time;
             mAccount = account;
+            mRead = read;
+            mShared = share;
         }
         
         public static ArrayList<Bookmark> valueOf(String userBookmark){
@@ -211,6 +222,8 @@ public class BookmarkContent {
 				String smeta = nodes.get(i).attributeValue("meta");
 				String stime = nodes.get(i).attributeValue("time");
 				String surl = nodes.get(i).attributeValue("url");
+				String sread = nodes.get(i).attributeValue("toread", "no");
+				String sshared = nodes.get(i).attributeValue("shared", "yes");
 				
 				if(shash == null)
 					shash = surl;
@@ -225,7 +238,10 @@ public class BookmarkContent {
 					}
 				}
 				
-				list.add(new Bookmark(shref, stitle, snotes, stags, shash, smeta, d.getTime()));
+				boolean toread = sread != null && sread.equals("yes");
+				boolean share = !(sshared != null && sshared.equals("no"));
+				
+				list.add(new Bookmark(shref, stitle, snotes, stags, shash, smeta, d.getTime(), toread, share));
 
 			}
 				

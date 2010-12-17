@@ -53,6 +53,8 @@ public class ViewBookmark extends AppBaseActivity{
 	private TextView mTags;
 	private TextView mTime;
 	private TextView mUsername;
+	private TextView mRead;
+	private TextView mShared;
 	private Bookmark bookmark;
 	private Boolean myself;
 
@@ -69,6 +71,8 @@ public class ViewBookmark extends AppBaseActivity{
 		mTags = (TextView) findViewById(R.id.view_bookmark_tags);
 		mTime = (TextView) findViewById(R.id.view_bookmark_time);
 		mUsername = (TextView) findViewById(R.id.view_bookmark_account);
+		mRead = (TextView) findViewById(R.id.view_bookmark_toread);
+		mShared = (TextView) findViewById(R.id.view_bookmark_shared);
 		
 		mTags.setMovementMethod(LinkMovementMethod.getInstance());
 		
@@ -95,6 +99,8 @@ public class ViewBookmark extends AppBaseActivity{
 				mNotes.setText(bookmark.getNotes());
 				mTime.setText(d.toString());
 				mUsername.setText(bookmark.getAccount());
+				mRead.setText(bookmark.getToRead() ? "to read" : "not to read");
+				mShared.setText(bookmark.getShared() ? "shared" : "private");
 				
         		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
 
