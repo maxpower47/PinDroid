@@ -132,7 +132,7 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
-        <service
+        <!--<service
             android:name=".syncadapter.ContactSyncService"
             android:exported="true">
             <intent-filter>
@@ -144,7 +144,7 @@
             <meta-data
                 android:name="android.provider.CONTACTS_STRUCTURE"
                 android:resource="@xml/contacts" />
-        </service>
+        </service>-->
         <service
             android:name=".syncadapter.BookmarkSyncService"
             android:exported="true">
