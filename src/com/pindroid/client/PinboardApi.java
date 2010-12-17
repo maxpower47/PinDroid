@@ -49,7 +49,6 @@ import android.util.Log;
 
 import com.pindroid.Constants;
 import com.pindroid.authenticator.AuthToken;
-import com.pindroid.authenticator.OauthUtilities;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 
@@ -409,25 +408,13 @@ public class PinboardApi {
 		post.setHeader("User-Agent", "PinDroid_0.4.1");
 		post.setHeader("Accept-Encoding", "gzip");
 
-    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
-    		Log.d("apiCall", "oauth");
-    		String tokenSecret = am.getUserData(account, Constants.OAUTH_TOKEN_SECRET_PROPERTY);
+		DefaultHttpClient client = HttpClientFactory.getThreadSafeClient();
+        CredentialsProvider provider = client.getCredentialsProvider();
+        Credentials credentials = new UsernamePasswordCredentials(username, authtoken);
+        provider.setCredentials(SCOPE, credentials);
+        
+        resp = client.execute(post);
 
-			OauthUtilities.signRequest(post, params, authtoken, tokenSecret);
-
-			Log.d("header", post.getHeaders("Authorization")[0].getValue());
-	        
-	        resp = HttpClientFactory.getThreadSafeClient().execute(host, post);
-
-    	} else{ 
-    		
-    		DefaultHttpClient client = HttpClientFactory.getThreadSafeClient();
-	        CredentialsProvider provider = client.getCredentialsProvider();
-	        Credentials credentials = new UsernamePasswordCredentials(username, authtoken);
-	        provider.setCredentials(SCOPE, credentials);
-	        
-	        resp = client.execute(post);
-    	}
     	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
     		
     		InputStream instream = resp.getEntity().getContent();

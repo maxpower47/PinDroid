@@ -51,11 +51,7 @@ public class Update {
 
 			long updateTime = DateParser.parse(time).getTime();
 			
-			int inboxstart = updateElement.indexOf("inboxnew");
-			int inboxend = updateElement.indexOf("\"", inboxstart + 10);
-			int inbox = Integer.parseInt(updateElement.substring(inboxstart + 10, inboxend));
-			
-			return new Update(updateTime, inbox);
+			return new Update(updateTime, 0);
 		} catch (java.text.ParseException e) {
 			e.printStackTrace();
 		}
