@@ -35,7 +35,7 @@
     		android:layout_width="32dp"
 	        android:layout_height="32dp"
 	        android:layout_marginTop="21dp"
-	        android:layout_marginLeft="15dp"/>
+	        android:layout_marginLeft="20dp"/>
 	    <TextView
 	    	android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -43,31 +43,31 @@
 	        android:textColor="#FFF"
 	        android:textSize="13dp"
 	        android:layout_marginTop="32dp"
-	        android:layout_marginLeft="53dp"/>
+	        android:layout_marginLeft="58dp"/>
 	    <ImageButton
 	    	android:id="@+id/search_widget_bookmarks_button"
 	    	android:src="@drawable/widget_bookmark_button"
 	    	style="@style/WidgetButtonLand"
-	        android:layout_marginLeft="115dp"/>
+	        android:layout_marginLeft="128dp"/>
 	    <ImageButton
 	    	android:id="@+id/search_widget_tags_button"
 	    	android:src="@drawable/widget_tag_button"
 	    	style="@style/WidgetButtonLand"
-	        android:layout_marginLeft="153dp"/>
-	    <ImageButton
+	        android:layout_marginLeft="171dp"/>
+	    <!--<ImageButton
 	    	android:id="@+id/search_widget_network_button"
 	    	android:src="@drawable/widget_network_button"
 	    	style="@style/WidgetButtonLand"
-	        android:layout_marginLeft="191dp"/>
+	        android:layout_marginLeft="191dp"/>-->
 	    <ImageButton
 	    	android:id="@+id/search_widget_add_button"
 	    	android:src="@drawable/widget_add_button"
 	    	style="@style/WidgetButtonLand"
-	        android:layout_marginLeft="229dp"/>
+	        android:layout_marginLeft="214dp"/>
 	    <ImageButton
 	    	android:id="@+id/search_widget_search_button"
 	    	android:src="@drawable/widget_search_button"
 	    	style="@style/WidgetButtonLand"
-	        android:layout_marginLeft="267dp"/>   
+	        android:layout_marginLeft="257dp"/>   
     </RelativeLayout>
 </LinearLayout>
