@@ -73,7 +73,7 @@ public class Main extends AppBaseListActivity {
 				tagname = data.getQueryParameter("tagname");
 			}
 			
-			if(!data.getScheme().equals("content")){
+			if(data.getScheme() == null || !data.getScheme().equals("content")){
 				Intent i = new Intent(Intent.ACTION_VIEW, data);
 				
 				startActivity(i);

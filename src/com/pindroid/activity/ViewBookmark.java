@@ -37,6 +37,7 @@ import com.pindroid.ui.TagSpan;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -184,7 +185,7 @@ public class ViewBookmark extends AppBaseActivity{
 	    // Handle item selection
 	    switch (item.getItemId()) {
 		    case R.id.menu_view_openbookmark:
-		    	String url = (String) mUrl.getText();
+		    	String url = ((Spannable) mUrl.getText()).toString();
 		    	Uri link = Uri.parse(url);
 				Intent i = new Intent(Intent.ACTION_VIEW, link);
 				startActivity(i);
