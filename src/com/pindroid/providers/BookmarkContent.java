@@ -163,12 +163,13 @@ public class BookmarkContent {
             mTime = time;
         }
         
-        public Bookmark(String url, String description, String notes, String tags, boolean priv, long time) {
+        public Bookmark(String url, String description, String notes, String tags, boolean priv, boolean toread, long time) {
             mUrl = url;
             mDescription = description;
             mNotes = notes;
             mTags = tags;
             mShared = priv;
+            mRead = toread;
             mTime = time;
         }
         

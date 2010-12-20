@@ -69,6 +69,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 	private TextView mPopularTags;
 	private TextView mNetworkTags;
 	private CheckBox mPrivate;
+	private CheckBox mToRead;
 	private Button mButtonSave;
 	private Button mButtonCancel;
 	private Bookmark bookmark;
@@ -89,6 +90,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		mPopularTags = (TextView) findViewById(R.id.add_popular_tags);
 		mNetworkTags = (TextView) findViewById(R.id.add_network_tags);
 		mPrivate = (CheckBox) findViewById(R.id.add_edit_private);
+		mToRead = (CheckBox) findViewById(R.id.add_edit_toread);
 		mButtonSave = (Button) findViewById(R.id.add_button_save);
 		mButtonCancel = (Button) findViewById(R.id.add_button_cancel);
 		
@@ -118,6 +120,9 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 					mEditDescription.setText(b.getDescription());
 					mEditNotes.setText(b.getNotes());
 					mEditTags.setText(b.getTagString());
+					mPrivate.setChecked(!b.getShared());
+					mToRead.setChecked(b.getToRead());
+					
 					update = true;
 				} catch (ContentNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -160,7 +165,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		
 		bookmark = new Bookmark(url, mEditDescription.getText().toString(), 
 			mEditNotes.getText().toString(), mEditTags.getText().toString(),
-			!mPrivate.isChecked(), time);
+			!mPrivate.isChecked(), mToRead.isChecked(), time);
 		
 		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, mAccount, mContext);
 		

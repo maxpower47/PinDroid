@@ -135,6 +135,10 @@ public class PinboardApi {
 			params.put("shared", "no");
 		}
 		
+		if(bookmark.getToRead()){
+			params.put("toread", "yes");
+		}
+		
 		String uri = ADD_BOOKMARKS_URI;
 		String response = null;
 
