@@ -40,7 +40,7 @@ public class Preferences extends PreferenceActivity {
         Preference licensePref = (Preference) findPreference("pref_license");
         licensePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
         	public boolean onPreferenceClick(Preference preference) {
-            	Uri link = Uri.parse("http://www.gnu.org/licenses/gpl-3.0.txt");
+            	Uri link = Uri.parse(Constants.GPL_URL);
         		Intent i = new Intent(Intent.ACTION_VIEW, link);
         		
         		startActivity(i);
@@ -51,7 +51,7 @@ public class Preferences extends PreferenceActivity {
         Preference helpPref = (Preference) findPreference("pref_help");
         helpPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
         	public boolean onPreferenceClick(Preference preference) {
-            	Uri link = Uri.parse("http://code.google.com/p/PinDroid/wiki/Manual");
+            	Uri link = Uri.parse(Constants.MANUAL_URL);
         		Intent i = new Intent(Intent.ACTION_VIEW, link);
         		
         		startActivity(i);
