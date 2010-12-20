@@ -91,18 +91,27 @@
 				android:layout_width="wrap_content"
 				android:textSize="16sp"
 				android:paddingLeft="12dip" /> 
-			<CheckBox 
-				android:id="@+id/add_edit_private"
-		 		android:text="Private?"
-		 		android:layout_width="wrap_content"
-		 		android:layout_height="wrap_content"
-		 		android:paddingTop="5dip" />
-		 	<CheckBox 
-				android:id="@+id/add_edit_toread"
-		 		android:text="To Read?"
-		 		android:layout_width="wrap_content"
-		 		android:layout_height="wrap_content"
-		 		android:paddingTop="5dip" />  
+			<LinearLayout
+				android:layout_width="fill_parent"
+			 	android:layout_height="wrap_content"
+			 	android:orientation="horizontal" >
+				<CheckBox 
+					android:id="@+id/add_edit_private"
+			 		android:text="Private?"
+			 		android:layout_width="wrap_content"
+			 		android:layout_height="wrap_content"
+			 		android:paddingTop="5dip" />
+			 	<LinearLayout
+  					style="@style/LayoutRight">
+				 	<CheckBox 
+						android:id="@+id/add_edit_toread"
+				 		android:text="To Read?"
+				 		android:layout_width="wrap_content"
+				 		android:layout_height="wrap_content"
+				 		android:paddingTop="5dip"
+				 		 />
+			 	</LinearLayout>
+		 	</LinearLayout>
 		</LinearLayout>
 	</ScrollView>
 	<LinearLayout	
