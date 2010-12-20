@@ -24,11 +24,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<PreferenceCategory 
 		android:title="@string/pref_cat_general_title">
-		<CheckBoxPreference 
-			android:title="@string/pref_notification_title"
-			android:defaultValue="true"
-			android:summary="@string/pref_notification_summary"
-			android:key="@string/pref_notification_key" />
 		<ListPreference
 			android:title="@string/pref_view_bookmark_default_action_title"
 			android:summary="@string/pref_view_bookmark_default_action_summary"
@@ -36,13 +31,6 @@
 			android:entries="@array/pref_view_bookmark_default_action_entries"
 			android:entryValues="@array/pref_view_bookmark_default_action_values"
 			android:defaultValue="browser" />
-		<ListPreference
-			android:title="@string/pref_contact_bookmark_results_title"
-			android:summary="@string/pref_contact_bookamrk_results_summary"
-			android:key="@string/pref_contact_bookmark_results_key"
-			android:entries="@array/pref_contact_bookmark_results_entries"
-			android:entryValues="@array/pref_contact_bookmark_results_values"
-			android:defaultValue="50" />
 		<CheckBoxPreference 
 			android:title="@string/pref_searchicons_title"
 			android:defaultValue="true"
