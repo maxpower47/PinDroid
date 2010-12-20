@@ -112,6 +112,11 @@
         </activity>
         <activity android:name=".activity.MainSearchResults" />
         <activity android:name=".activity.AddBookmark">
+            <intent-filter android:priority="100">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="geo" />
+            </intent-filter>
         	<intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />

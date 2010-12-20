@@ -38,6 +38,7 @@ import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.TagSpan;
+import com.pindroid.util.GeoHash;
 import com.pindroid.util.StringUtils;
 
 import android.accounts.Account;
@@ -105,12 +106,16 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 			
 			if(Intent.ACTION_SEND.equals(intent.getAction())){
 				String extraData = intent.getStringExtra(Intent.EXTRA_TEXT);
-				
+
 				String url = StringUtils.getUrl(extraData);
 				
-				mEditUrl.setText(url);
-				
-				new GetWebpageTitleTask().execute(url);
+				if(url.startsWith("http://m.google.com/u/m/")){
+					new GetWebpageTitleTask().execute(url, "geo");
+				} else {
+					mEditUrl.setText(url);
+					
+					new GetWebpageTitleTask().execute(url);
+				}
 			} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
 				int id = Integer.parseInt(intent.getData().getLastPathSegment());
 				try {
@@ -255,12 +260,16 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
     
     public class GetWebpageTitleTask extends AsyncTask<String, Integer, String>{
     	private String url;
+    	private boolean geo = false;
     	
     	@Override
     	protected String doInBackground(String... args) {
     		
     		if(args.length > 0 && args[0] != null && args[0] != "") {
 	    		url = args[0];
+	    		
+		    	if(args.length > 1 && args[1] != null && args[1] == "geo")
+			    	geo = true;
 		
 	    		return NetworkUtilities.getWebpageTitle(url);
     		} else return "";
@@ -268,7 +277,17 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
     	}
     	
         protected void onPostExecute(String result) {
-        	mEditDescription.setText(result);
+        	if(!geo) {
+        		mEditDescription.setText(result);
+        	} else {
+        		
+        		double latitude = Double.parseDouble(result.split("\\(")[0].split(",")[0]);
+        		double longitude = Double.parseDouble(result.split("\\(")[0].split(",")[1]);
+        		GeoHash gh = new GeoHash();
+        		gh.encode(latitude, longitude);
+        		
+        		mEditUrl.setText("http://pinboard.in/place/u:" + username + "/geo:" + "dp4dmc6qtbb42pm1tgtpcz" + "/zoom:13/");
+        	}
         }
     }
     
