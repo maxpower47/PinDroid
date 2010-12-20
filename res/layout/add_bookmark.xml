@@ -91,16 +91,6 @@
 				android:layout_width="wrap_content"
 				android:textSize="16sp"
 				android:paddingLeft="12dip" /> 
-			<TextView
-				android:id="@+id/add_title_network_tags"
-				style="@style/AddBookmarkFieldTitle"
-				android:text="@string/add_title_network_tags"/>    
-			<TextView
-				android:id="@+id/add_network_tags"
-				android:layout_height="fill_parent"
-				android:layout_width="wrap_content"
-				android:textSize="16sp"
-				android:paddingLeft="12dip" /> 
 			<CheckBox 
 				android:id="@+id/add_edit_private"
 		 		android:text="Private?"

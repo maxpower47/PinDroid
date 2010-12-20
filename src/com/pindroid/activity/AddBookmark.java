@@ -67,7 +67,6 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 	private EditText mEditTags;
 	private TextView mRecommendedTags;
 	private TextView mPopularTags;
-	private TextView mNetworkTags;
 	private CheckBox mPrivate;
 	private CheckBox mToRead;
 	private Button mButtonSave;
@@ -88,7 +87,6 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		mEditTags = (EditText) findViewById(R.id.add_edit_tags);
 		mRecommendedTags = (TextView) findViewById(R.id.add_recommended_tags);
 		mPopularTags = (TextView) findViewById(R.id.add_popular_tags);
-		mNetworkTags = (TextView) findViewById(R.id.add_network_tags);
 		mPrivate = (CheckBox) findViewById(R.id.add_edit_private);
 		mToRead = (CheckBox) findViewById(R.id.add_edit_toread);
 		mButtonSave = (Button) findViewById(R.id.add_button_save);
@@ -96,7 +94,6 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		
 		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
-		mNetworkTags.setMovementMethod(LinkMovementMethod.getInstance());
 		
 		res = getResources();
 
@@ -296,23 +293,17 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
         	if(result != null) {
         		SpannableStringBuilder recommendedBuilder = new SpannableStringBuilder();
         		SpannableStringBuilder popularBuilder = new SpannableStringBuilder();
-        		SpannableStringBuilder networkBuilder = new SpannableStringBuilder();
-        		
-        		
-        		
+
         		for(Tag t : result) {
         			if(t.getType().equals("recommended")) {
         				addTag(recommendedBuilder, t);
         			} else if(t.getType().equals("popular")) {
         				addTag(popularBuilder, t);
-        			} else if(t.getType().equals("network")) {
-        				addTag(networkBuilder, t);
         			}
         		}
         		
         		mRecommendedTags.setText(recommendedBuilder);
         		mPopularTags.setText(popularBuilder);
-        		mNetworkTags.setText(networkBuilder);
         	} 	
         }
 
