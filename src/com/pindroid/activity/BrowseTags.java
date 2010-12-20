@@ -82,7 +82,7 @@ public class BrowseTags extends AppBaseListActivity {
 	    		
 	    		setTitle("Tag Search Results For \"" + query + "\"");
 	    		
-	    		
+	    		tagList = TagManager.SearchTags(query, username, this);
 	    		
 	    		setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
 	    		

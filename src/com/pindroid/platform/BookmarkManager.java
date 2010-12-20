@@ -225,7 +225,7 @@ public class BookmarkManager {
 	public static ArrayList<Bookmark> SearchBookmarks(String query, String tagname, String username, Context context) {
 		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 		String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, 
-				Bookmark.Meta, Bookmark.Tags};
+				Bookmark.Meta, Bookmark.Tags, Bookmark.Shared, Bookmark.ToRead};
 		String selection = null;
 		String[] selectionargs = new String[]{username};
 		String sortorder = null;
