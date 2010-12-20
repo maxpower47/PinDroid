@@ -22,24 +22,16 @@
 package com.pindroid.syncadapter;
 
 import android.accounts.Account;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SyncResult;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.pindroid.R;
 import com.pindroid.Constants;
-import com.pindroid.activity.Main;
 import com.pindroid.client.PinboardApi;
 import com.pindroid.client.Update;
 import com.pindroid.platform.BookmarkManager;
@@ -90,95 +82,22 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
     	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
-    	Boolean notifyPref = settings.getBoolean("pref_notification", true);
     	Update update = null;
     	String username = account.name;
 
     	update = PinboardApi.lastUpdate(account, mContext);
-		
-		if(notifyPref && update.getInboxNew() > 0) {
-			NotificationManager nm = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-			Notification n = new Notification(R.drawable.ic_main, "New Pinboard Bookmarks", System.currentTimeMillis());
-			Intent ni = new Intent(mContext, Main.class);
-			PendingIntent ci = PendingIntent.getActivity(mContext, 0, ni, 0);
-			n.setLatestEventInfo(mContext, "New Bookmarks", "You Have " + Integer.toString(update.getInboxNew()) + " New Bookmark(s)", ci);
-			
-			nm.notify(1, n);
-		}
     	
     	if(update.getLastUpdate() > lastUpdate) {
 	
 			ArrayList<Bookmark> addBookmarkList = new ArrayList<Bookmark>();
-			ArrayList<Bookmark> updateBookmarkList = new ArrayList<Bookmark>();
-			ArrayList<Bookmark> changeList = new ArrayList<Bookmark>();
-			ArrayList<Bookmark> addList = new ArrayList<Bookmark>();
-			ArrayList<Bookmark> updateList = new ArrayList<Bookmark>();
 			ArrayList<Tag> tagList = new ArrayList<Tag>();
 
-			if(lastUpdate == 0){
-				Log.d("BookmarkSync", "In Bookmark Load");
-				tagList = PinboardApi.getTags(account, mContext);
-				ArrayList<String> accounts = new ArrayList<String>();
-				accounts.add(account.name);
-				BookmarkManager.TruncateBookmarks(accounts, mContext, false);
-				addBookmarkList = PinboardApi.getAllBookmarks(null, account, mContext);
-			} else {
-				Log.d("BookmarkSync", "In Bookmark Update");
-				tagList = PinboardApi.getTags(account, mContext);
-				changeList = PinboardApi.getChangedBookmarks(account, mContext);
-				
-				for(Bookmark b : changeList){
-				
-					String[] projection = new String[] {Bookmark.Hash, Bookmark.Meta};
-					String selection = Bookmark.Hash + "=?";
-					String[] selectionArgs = new String[] {b.getHash()};
-					
-					Uri bookmarks = Bookmark.CONTENT_URI;
-					
-					Cursor c = mContext.getContentResolver().query(bookmarks, projection, selection, selectionArgs, null);
-					
-					if(c.getCount() == 0){
-						addList.add(b);
-					}
-					
-					if(c.moveToFirst()){
-						int metaColumn = c.getColumnIndex(Bookmark.Meta);
-						
-						BookmarkManager.SetLastUpdate(b, update.getLastUpdate(), username, mContext);
-						Log.d(b.getHash(), Long.toString(update.getLastUpdate()));
-						
-						do {							
-							if(c.getString(metaColumn) == null || !c.getString(metaColumn).equals(b.getMeta())) {
-								updateList.add(b);
-							}	
-						} while(c.moveToNext());
-					}
-					
-					c.close();
-				}
-	
-				BookmarkManager.DeleteOldBookmarks(update.getLastUpdate(), username, mContext);
-				
-				ArrayList<String> addHashes = new ArrayList<String>();
-				for(Bookmark b : addList){
-					addHashes.add(b.getHash());
-				}
-				Log.d("add size", Integer.toString(addHashes.size()));
-				syncResult.stats.numInserts = addHashes.size();
-				if(addHashes.size() > 0) {
-					addBookmarkList = PinboardApi.getBookmark(addHashes, account, mContext);
-				}
-				
-				ArrayList<String> updateHashes = new ArrayList<String>();
-				for(Bookmark b : updateList){
-					updateHashes.add(b.getHash());
-				}
-				Log.d("update size", Integer.toString(updateHashes.size()));
-				syncResult.stats.numUpdates = updateHashes.size();
-				if(updateHashes.size() > 0) {
-					updateBookmarkList = PinboardApi.getBookmark(updateHashes, account, mContext);
-				}
-			}
+			Log.d("BookmarkSync", "In Bookmark Load");
+			tagList = PinboardApi.getTags(account, mContext);
+			ArrayList<String> accounts = new ArrayList<String>();
+			accounts.add(account.name);
+			BookmarkManager.TruncateBookmarks(accounts, mContext, false);
+			addBookmarkList = PinboardApi.getAllBookmarks(null, account, mContext);
 			
 			TagManager.TruncateTags(username, mContext);
 			for(Tag b : tagList){
@@ -188,12 +107,6 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			if(!addBookmarkList.isEmpty()){				
 				for(Bookmark b : addBookmarkList){
 					BookmarkManager.AddBookmark(b, username, mContext);
-				}
-			}
-			
-			if(!updateBookmarkList.isEmpty()){		
-				for(Bookmark b : updateBookmarkList){
-					BookmarkManager.UpdateBookmark(b, username, mContext);
 				}
 			}
 			
