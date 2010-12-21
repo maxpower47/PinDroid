@@ -93,24 +93,31 @@ public class AppBaseListActivity extends ListActivity {
 	
 			Toast.makeText(this, "Syncing...", Toast.LENGTH_LONG).show();
 			
+			if(mAccount == null || username == null)
+				init();
+			
 			ContentResolver.requestSync(mAccount, BookmarkContentProvider.AUTHORITY, Bundle.EMPTY);
 		} else {
-			if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
-				mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
-			}
-			
-			
-			ArrayList<String> accounts = new ArrayList<String>();
-			
-			for(Account a : mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)) {
-				accounts.add(a.name);
-			}
-			
-			BookmarkManager.TruncateBookmarks(accounts, this, true);
-			TagManager.TruncateOldTags(accounts, this);
-			
-			username = mAccount.name;
+			init();
 		}
+	}
+	
+	private void init(){
+		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
+			mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+		}
+		
+		
+		ArrayList<String> accounts = new ArrayList<String>();
+		
+		for(Account a : mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)) {
+			accounts.add(a.name);
+		}
+		
+		BookmarkManager.TruncateBookmarks(accounts, this, true);
+		TagManager.TruncateOldTags(accounts, this);
+		
+		username = mAccount.name;
 	}
 
 	@Override
