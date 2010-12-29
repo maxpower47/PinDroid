@@ -27,6 +27,7 @@ import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.util.Md5Hash;
 
+import android.content.ContentProviderOperation;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -150,6 +151,30 @@ public class BookmarkManager {
 		values.put(Bookmark.Shared, bookmark.getShared() ? 1 : 0);
 		
 		context.getContentResolver().insert(Bookmark.CONTENT_URI, values);
+	}
+	
+	public static ContentProviderOperation AddBookmarkBatch(Bookmark bookmark, String account, Context context) {
+		String url = bookmark.getUrl();
+		
+		String hash = "";
+		if(bookmark.getHash() == null || bookmark.getHash() == ""){
+			hash = Md5Hash.md5(url);
+			Log.d(url, hash);
+		} else hash = bookmark.getHash();
+		
+		ContentValues values = new ContentValues();
+		values.put(Bookmark.Description, bookmark.getDescription());
+		values.put(Bookmark.Url, url);
+		values.put(Bookmark.Notes, bookmark.getNotes());
+		values.put(Bookmark.Tags, bookmark.getTagString());
+		values.put(Bookmark.Hash, hash);
+		values.put(Bookmark.Meta, bookmark.getMeta());
+		values.put(Bookmark.Time, bookmark.getTime());
+		values.put(Bookmark.Account, account);
+		values.put(Bookmark.ToRead, bookmark.getToRead() ? 1 : 0);
+		values.put(Bookmark.Shared, bookmark.getShared() ? 1 : 0);
+		
+		return ContentProviderOperation.newInsert(Bookmark.CONTENT_URI).withValues(values).build();
 	}
 	
 	public static void UpdateBookmark(Bookmark bookmark, String account, Context context){

@@ -40,10 +40,12 @@ public class BatchOperation {
     private final ContentResolver mResolver;
     // List for storing the batch mOperations
     ArrayList<ContentProviderOperation> mOperations;
+    String auth;
 
-    public BatchOperation(Context context, ContentResolver resolver) {
+    public BatchOperation(Context context, ContentResolver resolver, String authority) {
         mResolver = resolver;
         mOperations = new ArrayList<ContentProviderOperation>();
+        auth = authority;
     }
 
     public int size() {
@@ -60,7 +62,7 @@ public class BatchOperation {
         }
         // Apply the mOperations to the content provider
         try {
-            mResolver.applyBatch(ContactsContract.AUTHORITY, mOperations);
+            mResolver.applyBatch(auth, mOperations);
         } catch (final OperationApplicationException e1) {
             Log.e(TAG, "storing contact data failed", e1);
         } catch (final RemoteException e2) {

@@ -24,6 +24,7 @@ package com.pindroid.syncadapter;
 import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SyncResult;
@@ -34,8 +35,10 @@ import android.util.Log;
 import com.pindroid.Constants;
 import com.pindroid.client.PinboardApi;
 import com.pindroid.client.Update;
+import com.pindroid.platform.BatchOperation;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
+import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 
@@ -79,6 +82,8 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     
     private void InsertBookmarks(Account account, SyncResult syncResult) 
     	throws AuthenticationException, IOException{
+    	
+
 
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
     	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
@@ -99,16 +104,24 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			BookmarkManager.TruncateBookmarks(accounts, mContext, false);
 			addBookmarkList = PinboardApi.getAllBookmarks(null, account, mContext);
 			
+	    	long start = System.currentTimeMillis();
+	    	Log.d("sync start", Long.toString(start));
+			
+			final ContentResolver resolver = mContext.getContentResolver();
+			final BatchOperation batch = new BatchOperation(mContext, resolver, BookmarkContentProvider.AUTHORITY);
+			
 			TagManager.TruncateTags(username, mContext);
-			for(Tag b : tagList){
-				TagManager.AddTag(b, username, mContext);
+			for(Tag t : tagList){
+				batch.add(TagManager.AddTagBatch(t, username, mContext));
 			}
 
 			if(!addBookmarkList.isEmpty()){				
 				for(Bookmark b : addBookmarkList){
-					BookmarkManager.AddBookmark(b, username, mContext);
+					batch.add(BookmarkManager.AddBookmarkBatch(b, username, mContext));
 				}
 			}
+			
+			batch.execute();
 			
     		SharedPreferences.Editor editor = settings.edit();
     		editor.putLong(Constants.PREFS_LAST_SYNC, update.getLastUpdate());
@@ -116,5 +129,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	} else {
     		Log.d("BookmarkSync", "No update needed.  Last update time before last sync.");
     	}
+    	
+
     }
 }

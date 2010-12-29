@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import com.pindroid.providers.TagContent.Tag;
 
+import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -68,6 +69,16 @@ public class TagManager {
 		values.put(Tag.Account, account);
 	
 		context.getContentResolver().insert(Tag.CONTENT_URI, values);
+	}
+	
+	public static ContentProviderOperation AddTagBatch(Tag tag, String account, Context context){
+		ContentValues values = new ContentValues();
+		
+		values.put(Tag.Name, tag.getTagName());
+		values.put(Tag.Count, tag.getCount());
+		values.put(Tag.Account, account);
+		
+		return ContentProviderOperation.newInsert(Tag.CONTENT_URI).withValues(values).build();
 	}
 	
 	public static void UpsertTag(Tag tag, String account, Context context){
