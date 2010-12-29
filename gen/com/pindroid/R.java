@@ -285,11 +285,9 @@ public final class R {
         public static final int authenticator=0x7f040001;
         public static final int bookmark_searchable=0x7f040002;
         public static final int bookmarksyncadapter=0x7f040003;
-        public static final int contacts=0x7f040004;
-        public static final int contactsyncadapter=0x7f040005;
-        public static final int main_searchable=0x7f040006;
-        public static final int preferences=0x7f040007;
-        public static final int search_appwidget_info=0x7f040008;
-        public static final int tag_searchable=0x7f040009;
+        public static final int main_searchable=0x7f040004;
+        public static final int preferences=0x7f040005;
+        public static final int search_appwidget_info=0x7f040006;
+        public static final int tag_searchable=0x7f040007;
     }
 }

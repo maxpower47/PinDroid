@@ -30,7 +30,6 @@ import java.util.TreeMap;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.http.Header;
-import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
@@ -43,12 +42,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
 import com.pindroid.Constants;
-import com.pindroid.authenticator.AuthToken;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 
@@ -231,8 +231,7 @@ public class PinboardApi {
     }
     
     /**
-     * Retrieves the entire list of bookmarks for a user from Pinboard.  Warning:  Overuse of this 
-     * api call will get your account throttled.
+     * Retrieves the entire list of bookmarks for a user from Pinboard.
      * 
      * @param tagname If specified, will only retrieve bookmarks with a specific tag.
      * @param account The account being synced.
@@ -257,39 +256,6 @@ public class PinboardApi {
 
     	response = PinboardApiCall(url, params, account, context);
     	
-        if (response.contains("<?xml")) {
-
-        	bookmarkList = Bookmark.valueOf(response);
-         
-        } else {
-            Log.e(TAG, "Server error in fetching bookmark list");
-            throw new IOException();
-        }
-        return bookmarkList;
-    }
-    
-    /**
-     * Retrieves a list of all bookmarks, with only their URL hash and a change (meta) hash,
-     * to determine what bookmarks have changed since the last update.
-     * 
-     * @param account The account being synced.
-     * @param context The current application context.
-     * @return A list of bookmarks received from the server with only the URL hash and meta hash.
-     * @throws IOException If a server error was encountered.
-     * @throws AuthenticationException If an authentication error was encountered.
-     */
-    public static ArrayList<Bookmark> getChangedBookmarks(Account account, Context context) 
-    	throws IOException, AuthenticationException {
-    	
-    	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
-    	String response = null;
-    	TreeMap<String, String> params = new TreeMap<String, String>();
-    	String url = FETCH_CHANGED_BOOKMARKS_URI;
-
-    	params.put("hashes", "yes");
-
-    	response = PinboardApiCall(url, params, account, context);
-
         if (response.contains("<?xml")) {
 
         	bookmarkList = Bookmark.valueOf(response);
@@ -383,8 +349,15 @@ public class PinboardApi {
     	String path = null;
     	String scheme = null;
     	
-    	AuthToken at = new AuthToken(context, account);
-    	authtoken = at.getAuthToken();
+    	try {
+			authtoken = am.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, false);
+		} catch (OperationCanceledException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AuthenticatorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	
     	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
     		path = "v2/" + url;
@@ -407,7 +380,6 @@ public class PinboardApi {
 		
 		Log.d("apiCallUrl", builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+").replace("%3F", "?").replace("%3D", "=").replace("%20", "+"));
 		post = new HttpGet(builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+").replace("%3F", "?").replace("%3D", "=").replace("%20", "+"));
-		HttpHost host = new HttpHost(PINBOARD_AUTHORITY);
 
 		post.setHeader("User-Agent", "PinDroid_0.4.1");
 		post.setHeader("Accept-Encoding", "gzip");

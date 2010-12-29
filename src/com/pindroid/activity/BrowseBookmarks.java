@@ -21,29 +21,21 @@
 
 package com.pindroid.activity;
 
-import java.io.IOException;
 import java.util.ArrayList;
-
-import org.apache.http.ParseException;
-import org.apache.http.auth.AuthenticationException;
-import org.json.JSONException;
 
 import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.DeleteBookmarkTask;
-import com.pindroid.client.PinboardFeed;
 import com.pindroid.listadapter.BookmarkListAdapter;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -64,7 +56,6 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	
 	private ListView lv;
 	
-	private String bookmarkLimit;
 	private String defaultAction;
 	
 	private final int sortDateAsc = 9999991;
@@ -97,7 +88,6 @@ public class BrowseBookmarks extends AppBaseListActivity {
 			Intent intent = getIntent();
 			
 	    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-	    	bookmarkLimit = settings.getString("pref_contact_bookmark_results", "50");
 	    	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
 	
 			Uri data = intent.getData();
@@ -148,38 +138,6 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				if(bookmarkList.isEmpty()) {
 					loadBookmarkList();
 				}
-			} else if(username.equals("network")){
-				try{
-					setTitle("My Network's Recent Bookmarks");
-					
-					new LoadBookmarkFeedTask().execute("network");
-				}
-				catch(Exception e){}
-			} else if(username.equals("hotlist")){
-				try{
-					setTitle("Hotlist Bookmarks");
-					
-					new LoadBookmarkFeedTask().execute("hotlist");
-				}
-				catch(Exception e){}
-			} else if(username.equals("popular")){
-				try{
-					setTitle("Popular Bookmarks");
-					
-					new LoadBookmarkFeedTask().execute("popular");
-				}
-				catch(Exception e){}
-			} else if(path.equals("/bookmarks")) {
-				try{
-					if(tagname != null && tagname != "") {
-						setTitle("Bookmarks For " + username + " Tagged With " + tagname);
-					} else {
-						setTitle("Bookmarks For " + username);
-					}
-			    	
-					new LoadBookmarkFeedTask().execute(username, tagname);
-				}
-				catch(Exception e){}
 			} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
 				viewBookmark(Integer.parseInt(data.getLastPathSegment()));
 				finish();
@@ -387,61 +345,4 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	public Object onRetainNonConfigurationInstance() {
 		return bookmarkList;
 	}
-	
-    public class LoadBookmarkFeedTask extends AsyncTask<String, Integer, Boolean>{
-    	private String user;
-    	private String tag = null;
-    	private ProgressDialog progress;
-    	
-    	protected void onPreExecute() {
-    		progress = new ProgressDialog(mContext);
-    		progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-    		progress.setMessage("Loading. Please wait...");
-    		progress.setCancelable(true);
-    		progress.show();
-    	}
-    	
-    	@Override
-    	protected Boolean doInBackground(String... args) {
-    		user = args[0];
-    		
-    		if(args.length > 1)
-    			tag = args[1];
-    		
-    		boolean result = false;
-    		
-			try {
-				if(bookmarkList.isEmpty()) {
-					if(user.equals("network")) {
-						bookmarkList = PinboardFeed.fetchNetworkRecent(mAccount.name, Integer.parseInt(bookmarkLimit));
-					} else if(user.equals("hotlist")) {
-						bookmarkList = PinboardFeed.fetchHotlist(Integer.parseInt(bookmarkLimit));
-					} else if(user.equals("popular")) {
-						bookmarkList = PinboardFeed.fetchPopular(Integer.parseInt(bookmarkLimit));
-					}  else {
-						bookmarkList = PinboardFeed.fetchFriendBookmarks(user, tag, Integer.parseInt(bookmarkLimit));
-					}
-				}
-				result = true;
-			} catch (AuthenticationException e) {
-				e.printStackTrace();
-			} catch (ParseException e) {
-				e.printStackTrace();
-			} catch (JSONException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	
-    		return result;
-    	}
-    	
-        protected void onPostExecute(Boolean result) {
-        	progress.dismiss();
-        	
-        	if(result) {
-        		setListAdapter(new BookmarkListAdapter(mContext, R.layout.bookmark_view, bookmarkList));
-        	}
-        }
-    }
 }

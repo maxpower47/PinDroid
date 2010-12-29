@@ -25,19 +25,13 @@ import com.pindroid.util.DateParser;
 
 public class Update {
 	private long lastUpdate;
-	private int inboxNew;
 	
 	public long getLastUpdate(){
 		return lastUpdate;
 	}
 	
-	public int getInboxNew(){
-		return inboxNew;
-	}
-	
-	public Update(long update, int inbox){
+	public Update(long update){
 		lastUpdate = update;
-		inboxNew = inbox;
 	}
 	
 	public static Update valueOf(String updateResponse){
@@ -51,7 +45,7 @@ public class Update {
 
 			long updateTime = DateParser.parse(time).getTime();
 			
-			return new Update(updateTime, 0);
+			return new Update(updateTime);
 		} catch (java.text.ParseException e) {
 			e.printStackTrace();
 		}

@@ -64,7 +64,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
         ContentProviderClient provider, SyncResult syncResult) {
 
          try {
-            InsertBookmarks(account, syncResult);
+            InsertBookmarks(account, syncResult); 
         } catch (final ParseException e) {
             syncResult.stats.numParseExceptions++;
             Log.e(TAG, "ParseException", e);
@@ -79,7 +79,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     
     private void InsertBookmarks(Account account, SyncResult syncResult) 
     	throws AuthenticationException, IOException{
-    	
+
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
     	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
     	Update update = null;

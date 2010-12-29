@@ -248,39 +248,5 @@ public class BookmarkContent {
 				
 			return list;
         }
-        
-        public static Bookmark valueOf(JSONObject userBookmark) {
-            try {
-                final String url = userBookmark.getString("u");
-                final String description = userBookmark.getString("d");
-                final JSONArray tags = userBookmark.getJSONArray("t");
-                final String stime = userBookmark.getString("dt");
-                
-                String notes = "";
-                String account = "";
-                
-                if(userBookmark.has("n")) {
-                	notes = userBookmark.getString("n");
-                }
-                if(userBookmark.has("a")) {
-                	account = userBookmark.getString("a");
-                }
-                
-				Date d = new Date(0);
-				if(stime != null && stime != ""){
-					try {
-						d = DateParser.parse(stime);
-					} catch (ParseException e) {
-						Log.d("Parse error", stime);
-						e.printStackTrace();
-					}
-				}
-
-                return new Bookmark(url, description, notes, tags.join(" ").replace("\"", ""), account, d.getTime());
-            } catch (final Exception ex) {
-                Log.i("User.Bookmark", "Error parsing JSON user object");
-            }
-            return null;
-        }
 	}
 }

@@ -25,7 +25,6 @@ import java.util.ArrayList;
 
 import com.pindroid.R;
 import com.pindroid.Constants;
-import com.pindroid.client.PinboardFeed;
 import com.pindroid.listadapter.TagListAdapter;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContentProvider;
@@ -102,15 +101,6 @@ public class BrowseTags extends AppBaseListActivity {
 					
 				}
 				
-			} else {
-				try{
-					setTitle("Tags For " + username);
-					
-					tagList = PinboardFeed.fetchFriendTags(username);
-					
-					setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
-				}
-				catch(Exception e){}
 			}
 	
 			ListView lv = getListView();
