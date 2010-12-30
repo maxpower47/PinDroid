@@ -22,6 +22,7 @@
 package com.pindroid.util;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -48,6 +49,19 @@ public class DateParser {
         
         return df.parse( input );
         
+    }
+    
+    public static long parseTime( String input ) throws java.text.ParseException {
+
+        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        c.set(Integer.parseInt(input.substring(0, 4)), 
+        		Integer.parseInt(input.substring(5, 7)) - 1, 
+        		Integer.parseInt(input.substring(8, 10)), 
+        		Integer.parseInt(input.substring(11, 13)), 
+        		Integer.parseInt(input.substring(14, 16)), 
+        		Integer.parseInt(input.substring(17, 19)));
+
+        return c.getTimeInMillis();  
     }
     
     public static String toString( Date date ) {

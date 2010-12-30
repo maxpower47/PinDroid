@@ -64,7 +64,7 @@ public class SaxBookmarkParser {
             	}
             	if(time != null) {
             		try {
-						currentBookmark.setTime(DateParser.parse(time).getTime());
+						currentBookmark.setTime(DateParser.parseTime(time));
 					} catch (ParseException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
