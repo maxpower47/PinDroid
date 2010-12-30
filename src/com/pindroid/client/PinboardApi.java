@@ -51,6 +51,7 @@ import android.util.Log;
 import com.pindroid.Constants;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
+import com.pindroid.xml.SaxBookmarkParser;
 
 public class PinboardApi {
 	
@@ -89,11 +90,14 @@ public class PinboardApi {
     	throws IOException, AuthenticationException {
 
     	String response = null;
+    	InputStream responseStream = null;
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	Update update = null;
     	String url = LAST_UPDATE_URI;
     	
-    	response = PinboardApiCall(url, params, account, context);
+    	responseStream = PinboardApiCall(url, params, account, context);
+    	response = convertStreamToString(responseStream);
+    	responseStream.close();
     	
         if (response.contains("<?xml")) {
         	update = Update.valueOf(response);
@@ -141,8 +145,11 @@ public class PinboardApi {
 		
 		String uri = ADD_BOOKMARKS_URI;
 		String response = null;
+		InputStream responseStream = null;
 
-    	response = PinboardApiCall(uri, params, account, context);
+    	responseStream = PinboardApiCall(uri, params, account, context);
+    	response = convertStreamToString(responseStream);
+    	responseStream.close();
 
         if (response.contains("<result code=\"done\" />")) {
             return true;
@@ -175,11 +182,14 @@ public class PinboardApi {
 
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	String response = null;
+    	InputStream responseStream = null;
     	String url = DELETE_BOOKMARK_URI;
 
     	params.put("url", bookmark.getUrl());
 
-    	response = PinboardApiCall(url, params, account, context);
+    	responseStream = PinboardApiCall(url, params, account, context);
+    	response = convertStreamToString(responseStream);
+    	responseStream.close();
     	
         if (response.contains("<result code=\"done\"")) {
             return true;
@@ -208,6 +218,7 @@ public class PinboardApi {
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	String hashString = "";
     	String response = null;
+    	InputStream responseStream = null;
     	String url = FETCH_BOOKMARK_URI;
 
     	for(String h : hashes){
@@ -219,7 +230,9 @@ public class PinboardApi {
     	params.put("meta", "yes");
     	params.put("hashes", hashString);
 
-    	response = PinboardApiCall(url, params, account, context);
+    	responseStream = PinboardApiCall(url, params, account, context);
+    	response = convertStreamToString(responseStream);
+    	responseStream.close();
     	
         if (response.contains("<?xml")) {
             bookmarkList = Bookmark.valueOf(response);
@@ -245,6 +258,7 @@ public class PinboardApi {
     	
     	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
     	String response = null;
+    	InputStream responseStream = null;
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	String url = FETCH_BOOKMARKS_URI;
 
@@ -254,16 +268,29 @@ public class PinboardApi {
     	
     	params.put("meta", "yes");
 
-    	response = PinboardApiCall(url, params, account, context);
+    	responseStream = PinboardApiCall(url, params, account, context);
+    	SaxBookmarkParser parser = new SaxBookmarkParser(responseStream);
+    	//response = convertStreamToString(responseStream);
     	
-        if (response.contains("<?xml")) {
+    	
+        if (true) {
 
-        	bookmarkList = Bookmark.valueOf(response);
+	    	long start = System.currentTimeMillis();
+	    	Log.d("parse start", Long.toString(start));
+	    	
+        	bookmarkList = parser.parse();
+	    	//bookmarkList = Bookmark.valueOf(response);
+        	
+	    	long stop = System.currentTimeMillis();
+	    	Log.d("parse stop", Long.toString(stop));
+	    	Log.d("parse total", Long.toString(stop - start));
          
         } else {
             Log.e(TAG, "Server error in fetching bookmark list");
             throw new IOException();
         }
+        responseStream.close();
+        
         return bookmarkList;
     }
     
@@ -282,13 +309,15 @@ public class PinboardApi {
     	
     	ArrayList<Tag> tagList = new ArrayList<Tag>();
     	String response = null;
+    	InputStream responseStream = null;
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	params.put("url", suggestUrl);
     	
     	String url = FETCH_SUGGESTED_TAGS_URI;
     	  	
-    	response = PinboardApiCall(url, params, account, context);
-    	Log.d("loadTagResponse", response);
+    	responseStream = PinboardApiCall(url, params, account, context);
+    	response = convertStreamToString(responseStream);
+    	responseStream.close();
     	
         if (response.contains("<?xml")) {
         	tagList = Tag.suggestValueOf(response);
@@ -313,10 +342,13 @@ public class PinboardApi {
     	
     	ArrayList<Tag> tagList = new ArrayList<Tag>();
     	String response = null;
+    	InputStream responseStream = null;
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	String url = FETCH_TAGS_URI;
     	  	
-    	response = PinboardApiCall(url, params, account, context);
+    	responseStream = PinboardApiCall(url, params, account, context);
+    	response = convertStreamToString(responseStream);
+    	responseStream.close();
     	
         if (response.contains("<?xml")) {
         	tagList = Tag.valueOf(response);
@@ -338,7 +370,7 @@ public class PinboardApi {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      */
-    private static String PinboardApiCall(String url, TreeMap<String, String> params, 
+    private static InputStream PinboardApiCall(String url, TreeMap<String, String> params, 
     		Account account, Context context) throws IOException, AuthenticationException{
 
     	final AccountManager am = AccountManager.get(context);
@@ -401,11 +433,11 @@ public class PinboardApi {
     			instream = new GZIPInputStream(instream);
     		}
     		
-    		String response = convertStreamToString(instream);
+    		//String response = convertStreamToString(instream);
     		
-    		instream.close();
+    		//instream.close();
     		
-    		return response;
+    		return instream;
     	} else if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
     		throw new AuthenticationException();
     	} else {

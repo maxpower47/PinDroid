@@ -80,17 +80,33 @@ public class BookmarkContent {
         public String getUrl() {
             return mUrl;
         }
+        
+        public void setUrl(String url) {
+        	mUrl = url;
+        }
 
         public String getDescription() {
             return mDescription;
+        }
+        
+        public void setDescription(String desc) {
+        	mDescription = desc;
         }
         
         public String getNotes(){
         	return mNotes;
         }
         
+        public void setNotes(String notes) {
+        	mNotes = notes;
+        }
+        
         public String getTagString(){
         	return mTags;
+        }
+        
+        public void setTagString(String tags){
+        	mTags = tags;
         }
         
         public ArrayList<Tag> getTags(){
@@ -105,13 +121,25 @@ public class BookmarkContent {
         public String getHash(){
         	return mHash;
         }
+        
+        public void setHash(String hash) {
+        	mHash = hash;
+        }
 
         public String getMeta(){
         	return mMeta;
         }
         
+        public void setMeta(String meta) {
+        	mMeta = meta;
+        }
+        
         public long getTime(){
         	return mTime;
+        }
+        
+        public void setTime(long time) {
+        	mTime = time;
         }
         
         public long getLastUpdate(){
@@ -122,8 +150,16 @@ public class BookmarkContent {
         	return mShared;
         }
         
+        public void setShared(boolean shared) {
+        	mShared = shared;
+        }
+        
         public boolean getToRead(){
         	return mRead;
+        }
+        
+        public void setToRead(boolean toread) {
+        	mRead = toread;
         }
         
         public String getAccount(){
@@ -195,6 +231,23 @@ public class BookmarkContent {
             mAccount = account;
             mRead = read;
             mShared = share;
+        }
+        
+        public Bookmark copy() {
+        	Bookmark b = new Bookmark();
+        	b.mAccount = this.mAccount;
+        	b.mDescription = this.mDescription;
+        	b.mHash = this.mHash;
+        	b.mId = this.mId;
+        	b.mLastUpdate = this.mLastUpdate;
+        	b.mMeta = this.mMeta;
+        	b.mNotes = this.mNotes;
+        	b.mRead = this.mRead;
+        	b.mShared = this.mShared;
+        	b.mTags = this.mTags;
+        	b.mTime = this.mTime;
+        	b.mUrl = this.mUrl;
+        	return b;
         }
         
         public static ArrayList<Bookmark> valueOf(String userBookmark){

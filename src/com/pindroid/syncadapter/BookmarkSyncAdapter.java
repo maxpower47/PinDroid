@@ -105,7 +105,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			addBookmarkList = PinboardApi.getAllBookmarks(null, account, mContext);
 			
 	    	long start = System.currentTimeMillis();
-	    	Log.d("sync start", Long.toString(start));
+	    	Log.d("load start", Long.toString(start));
 			
 			final ContentResolver resolver = mContext.getContentResolver();
 			final BatchOperation batch = new BatchOperation(mContext, resolver, BookmarkContentProvider.AUTHORITY);
@@ -122,6 +122,10 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			}
 			
 			batch.execute();
+			
+	    	long stop = System.currentTimeMillis();
+	    	Log.d("load stop", Long.toString(stop));
+	    	Log.d("load total", Long.toString(stop - start));
 			
     		SharedPreferences.Editor editor = settings.edit();
     		editor.putLong(Constants.PREFS_LAST_SYNC, update.getLastUpdate());
