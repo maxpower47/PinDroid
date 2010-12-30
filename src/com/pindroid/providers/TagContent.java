@@ -75,6 +75,10 @@ public class TagContent {
             return mType;
         }
         
+        public void setType(String type) {
+        	mType = type;
+        }
+        
         public void setCount(int count) {
         	mCount = count;
         }

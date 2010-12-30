@@ -27,8 +27,10 @@ import java.util.ArrayList;
 
 import org.xml.sax.Attributes;
 
+import android.sax.EndTextElementListener;
 import android.sax.RootElement;
 import android.sax.StartElementListener;
+import android.util.Log;
 import android.util.Xml;
 
 import com.pindroid.providers.TagContent.Tag;
@@ -64,6 +66,36 @@ public class SaxTagParser {
         try {
             Xml.parse(is, Xml.Encoding.UTF_8, root.getContentHandler());
         } catch (Exception e) {
+            throw new ParseException(e.getMessage(), 0);
+        }
+        return tags;
+    }
+    
+    public ArrayList<Tag> parseSuggested() throws ParseException {
+        final Tag currentTag = new Tag();
+        RootElement root = new RootElement("suggested");
+        final ArrayList<Tag> tags = new ArrayList<Tag>();
+
+        root.getChild("popular").setEndTextElementListener(new EndTextElementListener(){
+            public void end(String body) {
+            	currentTag.setTagName(body);
+            	currentTag.setType("popular");
+
+            	tags.add(currentTag.copy());
+            }
+        });
+        root.getChild("recommended").setEndTextElementListener(new EndTextElementListener(){
+            public void end(String body) {
+            	currentTag.setTagName(body);
+            	currentTag.setType("recommended");
+
+            	tags.add(currentTag.copy());
+            }
+        });
+        try {
+            Xml.parse(is, Xml.Encoding.UTF_8, root.getContentHandler());
+        } catch (Exception e) {
+        	Log.d("parse error", e.getMessage());
             throw new ParseException(e.getMessage(), 0);
         }
         return tags;
