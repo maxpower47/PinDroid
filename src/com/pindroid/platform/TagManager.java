@@ -57,6 +57,7 @@ public class TagManager {
 				tagList.add(t);
 			} while(c.moveToNext());	
 		}
+		c.close();
 		
 		return tagList;
 	}
