@@ -25,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.zip.GZIPInputStream;
@@ -217,7 +218,6 @@ public class PinboardApi {
     	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	String hashString = "";
-    	String response = null;
     	InputStream responseStream = null;
     	String url = FETCH_BOOKMARK_URI;
 
@@ -231,15 +231,16 @@ public class PinboardApi {
     	params.put("hashes", hashString);
 
     	responseStream = PinboardApiCall(url, params, account, context);
-    	response = convertStreamToString(responseStream);
-    	responseStream.close();
+    	SaxBookmarkParser parser = new SaxBookmarkParser(responseStream);
     	
-        if (response.contains("<?xml")) {
-            bookmarkList = Bookmark.valueOf(response);
-        } else {
+    	try {
+			bookmarkList = parser.parse();
+		} catch (ParseException e) {
             Log.e(TAG, "Server error in fetching bookmark list");
             throw new IOException();
-        }
+		}
+
+        responseStream.close();
         return bookmarkList;
     }
     
@@ -257,7 +258,7 @@ public class PinboardApi {
     	throws IOException, AuthenticationException {
     	
     	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
-    	String response = null;
+
     	InputStream responseStream = null;
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	String url = FETCH_BOOKMARKS_URI;
@@ -270,25 +271,14 @@ public class PinboardApi {
 
     	responseStream = PinboardApiCall(url, params, account, context);
     	SaxBookmarkParser parser = new SaxBookmarkParser(responseStream);
-    	//response = convertStreamToString(responseStream);
     	
-    	
-        if (true) {
-
-	    	long start = System.currentTimeMillis();
-	    	Log.d("parse start", Long.toString(start));
-	    	
-        	bookmarkList = parser.parse();
-	    	//bookmarkList = Bookmark.valueOf(response);
-        	
-	    	long stop = System.currentTimeMillis();
-	    	Log.d("parse stop", Long.toString(stop));
-	    	Log.d("parse total", Long.toString(stop - start));
-         
-        } else {
+    	try {
+			bookmarkList = parser.parse();
+		} catch (ParseException e) {
             Log.e(TAG, "Server error in fetching bookmark list");
             throw new IOException();
-        }
+		}
+
         responseStream.close();
         
         return bookmarkList;
@@ -432,10 +422,6 @@ public class PinboardApi {
     		if(encoding != null && encoding.getValue().equalsIgnoreCase("gzip")) {
     			instream = new GZIPInputStream(instream);
     		}
-    		
-    		//String response = convertStreamToString(instream);
-    		
-    		//instream.close();
     		
     		return instream;
     	} else if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {

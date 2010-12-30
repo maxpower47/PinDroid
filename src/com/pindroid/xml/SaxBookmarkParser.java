@@ -42,7 +42,7 @@ public class SaxBookmarkParser {
     	is = stream;
     }
 
-    public ArrayList<Bookmark> parse() {
+    public ArrayList<Bookmark> parse() throws ParseException {
         final Bookmark currentBookmark = new Bookmark();
         RootElement root = new RootElement("posts");
         final ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
@@ -87,9 +87,7 @@ public class SaxBookmarkParser {
             	}
 
             	currentBookmark.setToRead(toread != null && toread.equals("yes"));
-
             	currentBookmark.setShared(!(shared != null && shared.equals("no")));
-
             	
             	bookmarks.add(currentBookmark.copy());
             }
@@ -97,7 +95,7 @@ public class SaxBookmarkParser {
         try {
             Xml.parse(is, Xml.Encoding.UTF_8, root.getContentHandler());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ParseException(e.getMessage(), 0);
         }
         return bookmarks;
     }
