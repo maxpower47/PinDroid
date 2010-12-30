@@ -46,7 +46,7 @@ public class TagContent {
 		public static final String Count = "COUNT";
 		public static final String Account = "ACCOUNT";
 		
-        private final String mTagName;
+        private String mTagName;
         private int mCount = 0;
         private int mId = 0;
         private String mType = null;
@@ -59,8 +59,16 @@ public class TagContent {
             return mTagName;
         }
 
+        public void setTagName(String tag) {
+        	mTagName = tag;
+        }
+        
         public int getCount() {
             return mCount;
+        }
+        
+        public void setTagCount(int count) {
+        	mCount = count;
         }
         
         public String getType() {
@@ -69,6 +77,10 @@ public class TagContent {
         
         public void setCount(int count) {
         	mCount = count;
+        }
+        
+        public Tag() {
+        	mTagName = "";
         }
         
         public Tag(String tagName) {
@@ -83,6 +95,15 @@ public class TagContent {
         public Tag(String tagName, int count) {
             mTagName = tagName;
             mCount = count;
+        }
+        
+        public Tag copy() {
+        	Tag t = new Tag();
+        	t.mCount = this.mCount;
+        	t.mId = this.mId;
+        	t.mTagName = this.mTagName;
+        	t.mType = this.mType;
+        	return t;
         }
         
         public static ArrayList<Tag> valueOf(String userTag){

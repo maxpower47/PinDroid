@@ -53,6 +53,7 @@ import com.pindroid.Constants;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.xml.SaxBookmarkParser;
+import com.pindroid.xml.SaxTagParser;
 
 public class PinboardApi {
 	
@@ -331,21 +332,22 @@ public class PinboardApi {
     	throws IOException, AuthenticationException {
     	
     	ArrayList<Tag> tagList = new ArrayList<Tag>();
-    	String response = null;
+
     	InputStream responseStream = null;
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	String url = FETCH_TAGS_URI;
     	  	
     	responseStream = PinboardApiCall(url, params, account, context);
-    	response = convertStreamToString(responseStream);
-    	responseStream.close();
+    	SaxTagParser parser = new SaxTagParser(responseStream);
     	
-        if (response.contains("<?xml")) {
-        	tagList = Tag.valueOf(response);
-        } else {
+    	try {
+			tagList = parser.parse();
+		} catch (ParseException e) {
             Log.e(TAG, "Server error in fetching bookmark list");
             throw new IOException();
-        }
+		}
+
+        responseStream.close();
         return tagList;
     }
     
