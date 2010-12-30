@@ -21,16 +21,6 @@
 
 package com.pindroid.providers;
 
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-import org.xml.sax.InputSource;
-
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -90,11 +80,6 @@ public class TagContent {
         public Tag(String tagName) {
             mTagName = tagName;
         }
-        
-        public Tag(String tagName, String type) {
-            mTagName = tagName;
-            mType = type;
-        }
 
         public Tag(String tagName, int count) {
             mTagName = tagName;
@@ -108,59 +93,6 @@ public class TagContent {
         	t.mTagName = this.mTagName;
         	t.mType = this.mType;
         	return t;
-        }
-        
-        public static ArrayList<Tag> valueOf(String userTag){
-        	      	
-        	SAXReader reader = new SAXReader();
-        	InputSource inputSource = new InputSource(new StringReader(userTag));
-        	Document document = null;
-			try {
-				document = reader.read(inputSource);
-			} catch (DocumentException e1) {
-				e1.printStackTrace();
-			}   	
-        	
-			String expression = "/tags/tag";
-			ArrayList<Tag> list = new ArrayList<Tag>();
-           
-        	List<Element> nodes = document.selectNodes(expression);
-			
-			for(int i = 0; i < nodes.size(); i++){
-				String scount = nodes.get(i).attributeValue("count");
-				String sname = nodes.get(i).attributeValue("tag");
-				
-				list.add(new Tag(sname, Integer.parseInt(scount)));
-			}
-
-			return list;
-        }
-        
-        public static ArrayList<Tag> suggestValueOf(String userTag){
-	      	
-        	SAXReader reader = new SAXReader();
-        	InputSource inputSource = new InputSource(new StringReader(userTag));
-        	Document document = null;
-			try {
-				document = reader.read(inputSource);
-			} catch (DocumentException e1) {
-				e1.printStackTrace();
-			}   	
-        	
-			String expression = "/suggested/recommended | /suggested/popular";
-			ArrayList<Tag> list = new ArrayList<Tag>();
-           
-        	List<Element> nodes = document.selectNodes(expression);
-			
-			for(int i = 0; i < nodes.size(); i++){
-
-				String sname = nodes.get(i).getText();
-				String stype = nodes.get(i).getName();
-				
-				list.add(new Tag(sname, stype));
-			}
-
-			return list;
         }
 	}
 }

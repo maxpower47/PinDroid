@@ -58,7 +58,6 @@ public class NetworkUtilities {
     public static final String FETCH_TAGS_URI = "http://feeds.pinboard.com/v2/json/tags/";
 
     private static final String SCHEME = "https";
-    private static final String SCHEME_HTTP = "http";
     private static final String PINBOARD_AUTHORITY = "api.pinboard.in";
     private static final int PORT = 443;
  

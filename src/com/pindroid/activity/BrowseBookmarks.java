@@ -80,6 +80,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 			
 			bookmarkList = new ArrayList<Bookmark>();
 			
+			@SuppressWarnings("unchecked")
 			final ArrayList<Bookmark> prevData = (ArrayList<Bookmark>) getLastNonConfigurationInstance();
 			if(prevData != null) {
 				bookmarkList = prevData;

@@ -21,24 +21,12 @@
 
 package com.pindroid.providers;
 
-import java.io.StringReader;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-import org.xml.sax.InputSource;
 
 import com.pindroid.providers.TagContent.Tag;
-import com.pindroid.util.DateParser;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 public class BookmarkContent {
 
@@ -58,7 +46,6 @@ public class BookmarkContent {
 		public static final String Time = "TIME";
 		public static final String ToRead = "TOREAD";
 		public static final String Shared = "SHARED";
-		public static final String LastUpdate = "LASTUPDATE";
 		
 		private int mId = 0;
 		private String mAccount = null;
@@ -71,7 +58,6 @@ public class BookmarkContent {
         private Boolean mShared = true;
         private Boolean mRead = false;
         private long mTime = 0;
-        private long mLastUpdate = 0;
 
         public int getId(){
         	return mId;
@@ -142,10 +128,6 @@ public class BookmarkContent {
         	mTime = time;
         }
         
-        public long getLastUpdate(){
-        	return mLastUpdate;
-        }
-        
         public boolean getShared(){
         	return mShared;
         }
@@ -177,26 +159,6 @@ public class BookmarkContent {
             mUrl = url;
         }
         
-        public Bookmark(String url, String description) {
-            mUrl = url;
-            mDescription = description;
-        }
-        
-        public Bookmark(String url, String description, String notes) {
-            mUrl = url;
-            mDescription = description;
-            mNotes = notes;
-        }
-        
-        public Bookmark(String url, String description, String notes, String tags, String account, long time) {
-            mUrl = url;
-            mDescription = description;
-            mNotes = notes;
-            mTags = tags;
-            mAccount = account;
-            mTime = time;
-        }
-        
         public Bookmark(String url, String description, String notes, String tags, boolean priv, boolean toread, long time) {
             mUrl = url;
             mDescription = description;
@@ -205,18 +167,6 @@ public class BookmarkContent {
             mShared = priv;
             mRead = toread;
             mTime = time;
-        }
-        
-        public Bookmark(String url, String description, String notes, String tags, String hash, String meta, long time, boolean read, boolean share) {
-            mUrl = url;
-            mDescription = description;
-            mNotes = notes;
-            mTags = tags;
-            mHash = hash;
-            mMeta = meta;
-            mTime = time;
-            mRead = read;
-            mShared = share;
         }
         
         public Bookmark(int id, String account, String url, String description, String notes, String tags, String hash, String meta, long time, boolean read, boolean share) {
@@ -239,7 +189,6 @@ public class BookmarkContent {
         	b.mDescription = this.mDescription;
         	b.mHash = this.mHash;
         	b.mId = this.mId;
-        	b.mLastUpdate = this.mLastUpdate;
         	b.mMeta = this.mMeta;
         	b.mNotes = this.mNotes;
         	b.mRead = this.mRead;
@@ -248,56 +197,6 @@ public class BookmarkContent {
         	b.mTime = this.mTime;
         	b.mUrl = this.mUrl;
         	return b;
-        }
-        
-        public static ArrayList<Bookmark> valueOf(String userBookmark){
-        	SAXReader reader = new SAXReader();
-        	InputSource inputSource = new InputSource(new StringReader(userBookmark));
-        	Document document = null;
-			try {
-				document = reader.read(inputSource);
-			} catch (DocumentException e1) {
-				e1.printStackTrace();
-			}   	
-        	
-            String expression = "/posts/post";
-            ArrayList<Bookmark> list = new ArrayList<Bookmark>();
-           
-        	List<Element> nodes = document.selectNodes(expression);
-			
-			for(int i = 0; i < nodes.size(); i++){
-				String shref = nodes.get(i).attributeValue("href");
-				String stitle = nodes.get(i).attributeValue("description");
-				String snotes = nodes.get(i).attributeValue("extended");
-				String stags = nodes.get(i).attributeValue("tag");
-				String shash = nodes.get(i).attributeValue("hash");
-				String smeta = nodes.get(i).attributeValue("meta");
-				String stime = nodes.get(i).attributeValue("time");
-				String surl = nodes.get(i).attributeValue("url");
-				String sread = nodes.get(i).attributeValue("toread", "no");
-				String sshared = nodes.get(i).attributeValue("shared", "yes");
-				
-				if(shash == null)
-					shash = surl;
-				
-				Date d = new Date(0);
-				if(stime != null && stime != ""){
-					try {
-						d = DateParser.parse(stime);
-					} catch (ParseException e) {
-						Log.d("Parse error", stime);
-						e.printStackTrace();
-					}
-				}
-				
-				boolean toread = sread != null && sread.equals("yes");
-				boolean share = !(sshared != null && sshared.equals("no"));
-				
-				list.add(new Bookmark(shref, stitle, snotes, stags, shash, smeta, d.getTime(), toread, share));
-
-			}
-				
-			return list;
         }
 	}
 }

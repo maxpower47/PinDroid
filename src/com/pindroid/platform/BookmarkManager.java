@@ -226,27 +226,6 @@ public class BookmarkManager {
 		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, null);
 	}
 	
-	public static void SetLastUpdate(Bookmark bookmark, Long lastUpdate, String account, Context context){
-		
-		String selection = Bookmark.Hash + "=? AND " +
-							Bookmark.Account + "=?";
-		String[] selectionargs = new String[]{bookmark.getHash(), account};
-		
-		ContentValues values = new ContentValues();	
-		values.put(Bookmark.LastUpdate, lastUpdate);
-		
-		context.getContentResolver().update(Bookmark.CONTENT_URI, values, selection, selectionargs);
-	}
-	
-	public static void DeleteOldBookmarks(Long lastUpdate, String account, Context context){
-		String selection = "(" + Bookmark.LastUpdate + "<? OR " +
-			Bookmark.LastUpdate + " is null) AND " +
-			Bookmark.Account + "=?";
-		String[] selectionargs = new String[]{Long.toString(lastUpdate), account};
-
-		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, selectionargs);
-	}
-	
 	public static ArrayList<Bookmark> SearchBookmarks(String query, String tagname, String username, Context context) {
 		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 		String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, 

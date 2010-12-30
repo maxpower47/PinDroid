@@ -61,7 +61,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	private SQLiteDatabase db;
 	private DatabaseHelper dbHelper;
 	private static final String DATABASE_NAME = "PinboardBookmarks.db";
-	private static final int DATABASE_VERSION = 20;
+	private static final int DATABASE_VERSION = 21;
 	private static final String BOOKMARK_TABLE_NAME = "bookmark";
 	private static final String TAG_TABLE_NAME = "tag";
 	
@@ -102,8 +102,7 @@ public class BookmarkContentProvider extends ContentProvider {
 					"META TEXT, " +
 					"TIME INTEGER, " +
 					"TOREAD INTEGER, " +
-					"SHARED INTEGER, " +
-					"LASTUPDATE INTEGER);");
+					"SHARED INTEGER);");
 			
 			sqlDb.execSQL("CREATE INDEX " + BOOKMARK_TABLE_NAME + 
 					"_ACCOUNT ON " + BOOKMARK_TABLE_NAME + " " +
