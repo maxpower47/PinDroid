@@ -41,7 +41,7 @@
 				android:id="@+id/view_bookmark_title"
 				android:layout_height="wrap_content"
 				android:layout_width="fill_parent"
-				android:textSize="26sp"
+				android:textSize="24sp"
 				android:paddingLeft="10dip" />
 		</LinearLayout>
 		<TextView
