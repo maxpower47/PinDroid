@@ -40,6 +40,7 @@ public class PinboardFeed {
     private static final String TAG = "PinboardFeed";
 
     public static final String FETCH_RECENT_URI = "http://feeds.pinboard.in/rss/recent/";
+    public static final String FETCH_RECENT_USER_URI = "http://feeds.pinboard.in/rss/u:";
     
     /**
      * Retrieves a list of recent bookmarks for Pinboard.
@@ -54,6 +55,38 @@ public class PinboardFeed {
     	throws IOException, ParseException {
 
         final HttpGet post = new HttpGet(FETCH_RECENT_URI);
+        
+        ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
+
+        final HttpResponse resp = HttpClientFactory.getThreadSafeClient().execute(post);
+        InputStream responseStream = resp.getEntity().getContent();
+
+        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+        	SaxFeedParser parser = new SaxFeedParser(responseStream);
+
+			bookmarkList = parser.parse();
+
+        } else {
+        	Log.e(TAG, "Server error in fetching network recent list");
+            throw new IOException();
+        }
+
+        return bookmarkList;
+    }
+    
+    /**
+     * Retrieves a list of recent bookmarks for a Pinboard user.
+     * 
+     * @return The list of bookmarks received from the server.
+     * @throws JSONException If an error was encountered in deserializing the JSON object returned from 
+     * the server.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
+     */
+    public static ArrayList<Bookmark> fetchUserRecent(String username)
+    	throws IOException, ParseException {
+
+        final HttpGet post = new HttpGet(FETCH_RECENT_USER_URI + username);
         
         ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 

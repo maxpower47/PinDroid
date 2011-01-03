@@ -162,6 +162,13 @@ public class BrowseBookmarks extends AppBaseListActivity {
 			} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
 				viewBookmark(Integer.parseInt(data.getLastPathSegment()));
 				finish();
+			} else {
+				try{
+					setTitle("Recent Bookmarks For " + username);
+
+					new LoadBookmarkFeedTask().execute(username);
+				}
+				catch(Exception e){}
 			}
 			
 			lv = getListView();
@@ -389,6 +396,8 @@ public class BrowseBookmarks extends AppBaseListActivity {
 			   if(bookmarkList.isEmpty()) {
 				   if(user.equals("recent")) {
 					   bookmarkList = PinboardFeed.fetchRecent();
+				   } else {
+					   bookmarkList = PinboardFeed.fetchUserRecent(user);
 				   }
 			   }
 			   result = true;

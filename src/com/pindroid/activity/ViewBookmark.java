@@ -32,18 +32,24 @@ import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
+import com.pindroid.ui.AccountSpan;
 import com.pindroid.ui.TagSpan;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -74,14 +80,12 @@ public class ViewBookmark extends AppBaseActivity{
 		mUsername = (TextView) findViewById(R.id.view_bookmark_account);
 		mIcon = (ImageView) findViewById(R.id.view_bookmark_icon);
 		
-		mTags.setMovementMethod(LinkMovementMethod.getInstance());
-		
 		Log.d("browse bookmarks", getIntent().getDataString());
 		Uri data = getIntent().getData();
 		String path = data.getPath();
 		Log.d("path", path);
 		
-		String username = data.getUserInfo();
+		final String username = data.getUserInfo();
 		
 		myself = mAccount.name.equals(username);
 	
@@ -113,6 +117,7 @@ public class ViewBookmark extends AppBaseActivity{
         		}
         		
         		mTags.setText(tagBuilder);
+        		mTags.setMovementMethod(LinkMovementMethod.getInstance());
 			}
 			catch(ContentNotFoundException e){}
 		} else if(path.contains("/bookmarks") && !myself) {
@@ -123,13 +128,24 @@ public class ViewBookmark extends AppBaseActivity{
 			mNotes.setText(data.getQueryParameter("notes"));
 			mTags.setText(data.getQueryParameter("tags"));
 			mTime.setText(d.toString());
-			mUsername.setText(data.getQueryParameter("account"));
+
+			SpannableStringBuilder builder = new SpannableStringBuilder();
+			int start = builder.length();
+			builder.append(data.getQueryParameter("account"));
+			int end = builder.length();
+			
+			AccountSpan span = new AccountSpan(data.getQueryParameter("account"));
+			span.setOnAccountClickListener(accountOnClickListener);
+
+			builder.setSpan(span, start, end, 0);
+			
+			mUsername.setText(builder);
+			mUsername.setMovementMethod(LinkMovementMethod.getInstance());
 		}
 	}
 	
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {
-
     		Intent i = new Intent();
     		i.setAction(Intent.ACTION_VIEW);
     		i.addCategory(Intent.CATEGORY_DEFAULT);
@@ -142,8 +158,24 @@ public class ViewBookmark extends AppBaseActivity{
     		
     		Log.d("uri", data.build().toString());
     		
+    		startActivity(i);	
+        }
+    };
+    
+    AccountSpan.OnAccountClickListener accountOnClickListener = new AccountSpan.OnAccountClickListener() {
+        public void onAccountClick(String account) {
+    		Intent i = new Intent();
+    		i.setAction(Intent.ACTION_VIEW);
+    		i.addCategory(Intent.CATEGORY_DEFAULT);
+    		Uri.Builder data = new Uri.Builder();
+    		data.scheme(Constants.CONTENT_SCHEME);
+    		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+    		data.appendEncodedPath("bookmarks");
+    		i.setData(data.build());
+    		
+    		Log.d("uri", data.build().toString());
+    		
     		startActivity(i);
-        	
         }
     };
     
