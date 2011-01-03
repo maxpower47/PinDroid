@@ -25,7 +25,7 @@
 	<item 
 		android:id="@+id/menu_view_markasread" 
 		android:title="@string/menu_view_markasread_title" 
-		android:icon="@drawable/ic_menu_view" />
+		android:icon="@drawable/ic_menu_mark" />
 	<item 
 		android:id="@+id/menu_view_openbookmark" 
 		android:title="@string/menu_view_openbookmark_title" 
