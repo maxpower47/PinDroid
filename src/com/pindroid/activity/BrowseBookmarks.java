@@ -21,21 +21,26 @@
 
 package com.pindroid.activity;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.DeleteBookmarkTask;
+import com.pindroid.client.PinboardFeed;
 import com.pindroid.listadapter.BookmarkListAdapter;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -147,6 +152,13 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				if(bookmarkList.isEmpty()) {
 					loadBookmarkList();
 				}
+			}  else if(username.equals("recent")){
+				try{
+					setTitle("Recent Bookmarks");
+
+					new LoadBookmarkFeedTask().execute("recent");
+				}
+				catch(Exception e){}
 			} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
 				viewBookmark(Integer.parseInt(data.getLastPathSegment()));
 				finish();
@@ -354,4 +366,47 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	public Object onRetainNonConfigurationInstance() {
 		return bookmarkList;
 	}
+	
+    public class LoadBookmarkFeedTask extends AsyncTask<String, Integer, Boolean>{
+        private String user;
+        private ProgressDialog progress;
+       
+        protected void onPreExecute() {
+	        progress = new ProgressDialog(mContext);
+	        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+	        progress.setMessage("Loading. Please wait...");
+	        progress.setCancelable(true);
+	        progress.show();
+        }
+       
+        @Override
+        protected Boolean doInBackground(String... args) {
+	       user = args[0];
+	       
+	       boolean result = false;
+       
+		   try {
+			   if(bookmarkList.isEmpty()) {
+				   if(user.equals("recent")) {
+					   bookmarkList = PinboardFeed.fetchRecent();
+				   }
+			   }
+			   result = true;
+		   }catch (ParseException e) {
+			   e.printStackTrace();
+		   }catch (IOException e) {
+			   e.printStackTrace();
+		   }
+
+		   return result;
+        }
+       
+        protected void onPostExecute(Boolean result) {
+        	progress.dismiss();
+
+        	if(result) {
+        		setListAdapter(new BookmarkListAdapter(mContext, R.layout.bookmark_view, bookmarkList));
+        	}
+        }
+    }
 }

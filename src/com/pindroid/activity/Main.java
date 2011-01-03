@@ -40,7 +40,7 @@ import android.view.View;
 public class Main extends AppBaseListActivity {
 	
 	//static final String[] MENU_ITEMS = new String[] {"My Bookmarks", "My Tags", "Network Recent", "Hotlist", "Popular"};
-	static final String[] MENU_ITEMS = new String[] {"My Bookmarks", "My Unread", "My Tags"};
+	static final String[] MENU_ITEMS = new String[] {"My Bookmarks", "My Unread", "My Tags", "Recent Bookmarks"};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -148,7 +148,7 @@ public class Main extends AppBaseListActivity {
 		    		i.addCategory(Intent.CATEGORY_DEFAULT);
 		    		Uri.Builder data = new Uri.Builder();
 		    		data.scheme(Constants.CONTENT_SCHEME);
-		    		data.encodedAuthority("hotlist@" + BookmarkContentProvider.AUTHORITY);
+		    		data.encodedAuthority("recent@" + BookmarkContentProvider.AUTHORITY);
 		    		data.appendEncodedPath("bookmarks");
 		    		i.setData(data.build());
 		    		

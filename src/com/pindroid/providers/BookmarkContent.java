@@ -148,6 +148,10 @@ public class BookmarkContent {
         	return mAccount;
         }
         
+        public void setAccount(String account) {
+        	mAccount = account;
+        }
+        
         public Bookmark() {
         }
         
