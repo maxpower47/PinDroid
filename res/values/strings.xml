@@ -83,6 +83,7 @@
     <string name="menu_sort_title">Sort</string>
     <string name="menu_search_title">Search</string>
     <string name="menu_settings_title">Settings</string>
+    <string name="menu_view_markasread_title">Mark as read</string>
     <string name="menu_view_openbookmark_title">Open in browser</string>
     <string name="menu_view_editbookmark_title">Edit</string>
     <string name="menu_view_deletebookmark_title">Delete</string>

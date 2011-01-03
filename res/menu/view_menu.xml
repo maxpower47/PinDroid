@@ -23,6 +23,10 @@
  -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item 
+		android:id="@+id/menu_view_markasread" 
+		android:title="@string/menu_view_markasread_title" 
+		android:icon="@drawable/ic_menu_view" />
+	<item 
 		android:id="@+id/menu_view_openbookmark" 
 		android:title="@string/menu_view_openbookmark_title" 
 		android:icon="@drawable/ic_menu_view" />

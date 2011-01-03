@@ -28,6 +28,7 @@ import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.DeleteBookmarkTask;
+import com.pindroid.action.MarkReadBookmarkTask;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.ContentNotFoundException;
@@ -238,6 +239,9 @@ public class ViewBookmark extends AppBaseActivity{
 		if(!myself) {
 			menu.removeItem(R.id.menu_view_editbookmark);
 			menu.removeItem(R.id.menu_view_deletebookmark);
+			menu.removeItem(R.id.menu_view_markasread);
+		} else if(!bookmark.getToRead()) {
+			menu.removeItem(R.id.menu_view_markasread);
 		}
 		return true;
 	}
@@ -246,6 +250,10 @@ public class ViewBookmark extends AppBaseActivity{
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle item selection
 	    switch (item.getItemId()) {
+		    case R.id.menu_view_markasread:
+				BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, mAccount, this);	
+				new MarkReadBookmarkTask().execute(args);
+				return true;
 		    case R.id.menu_view_openbookmark:
 		    	String url = ((Spannable) mUrl.getText()).toString();
 		    	Uri link = Uri.parse(url);
@@ -266,8 +274,8 @@ public class ViewBookmark extends AppBaseActivity{
 				startActivity(editBookmark);
 		    	return true;
 		    case R.id.menu_view_deletebookmark:
-				BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, mAccount, this);	
-				new DeleteBookmarkTask().execute(args);
+				BookmarkTaskArgs deleteargs = new BookmarkTaskArgs(bookmark, mAccount, this);	
+				new DeleteBookmarkTask().execute(deleteargs);
 				return true;	
 		    case R.id.menu_view_settings:
 				Intent prefs = new Intent(this, Preferences.class);
