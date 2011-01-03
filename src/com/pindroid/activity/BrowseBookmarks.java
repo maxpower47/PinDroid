@@ -164,9 +164,16 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				finish();
 			} else {
 				try{
-					setTitle("Recent Bookmarks For " + username);
+					String title = "Bookmarks ";
+					
+					if(tagname != null && tagname != "") {
+						title += "For " + username + " Tagged With " + tagname;
+					} else {
+						title += "For " + username;
+					}
+					setTitle(title);
 
-					new LoadBookmarkFeedTask().execute(username);
+					new LoadBookmarkFeedTask().execute(username, tagname);
 				}
 				catch(Exception e){}
 			}
@@ -376,6 +383,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	
     public class LoadBookmarkFeedTask extends AsyncTask<String, Integer, Boolean>{
         private String user;
+        private String tag;
         private ProgressDialog progress;
        
         protected void onPreExecute() {
@@ -390,6 +398,10 @@ public class BrowseBookmarks extends AppBaseListActivity {
         protected Boolean doInBackground(String... args) {
 	       user = args[0];
 	       
+	       if(args.length > 1) {
+	    	   tag = args[1];
+	       }
+	       
 	       boolean result = false;
        
 		   try {
@@ -397,7 +409,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				   if(user.equals("recent")) {
 					   bookmarkList = PinboardFeed.fetchRecent();
 				   } else {
-					   bookmarkList = PinboardFeed.fetchUserRecent(user);
+					   bookmarkList = PinboardFeed.fetchUserRecent(user, tag);
 				   }
 			   }
 			   result = true;

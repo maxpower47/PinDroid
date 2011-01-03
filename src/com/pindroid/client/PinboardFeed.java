@@ -83,10 +83,15 @@ public class PinboardFeed {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      */
-    public static ArrayList<Bookmark> fetchUserRecent(String username)
+    public static ArrayList<Bookmark> fetchUserRecent(String username, String tagname)
     	throws IOException, ParseException {
+    	
+    	String url = FETCH_RECENT_USER_URI + username;
+    	if(tagname != null && tagname != "") {
+    		url += "/t:" + tagname;
+    	}
 
-        final HttpGet post = new HttpGet(FETCH_RECENT_USER_URI + username);
+        final HttpGet post = new HttpGet(url);
         
         ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 

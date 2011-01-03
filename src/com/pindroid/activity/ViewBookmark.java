@@ -21,6 +21,7 @@
 
 package com.pindroid.activity;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import com.pindroid.R;
@@ -64,6 +65,8 @@ public class ViewBookmark extends AppBaseActivity{
 	private ImageView mIcon;
 	private Bookmark bookmark;
 	private Boolean myself;
+	
+	private String user;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -86,6 +89,7 @@ public class ViewBookmark extends AppBaseActivity{
 		Log.d("path", path);
 		
 		final String username = data.getUserInfo();
+		user = data.getQueryParameter("account");
 		
 		myself = mAccount.name.equals(username);
 	
@@ -113,7 +117,7 @@ public class ViewBookmark extends AppBaseActivity{
         		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
 
         		for(Tag t : bookmark.getTags()) {
-        			addTag(tagBuilder, t);
+        			addTag(tagBuilder, t, tagOnClickListener);
         		}
         		
         		mTags.setText(tagBuilder);
@@ -126,8 +130,21 @@ public class ViewBookmark extends AppBaseActivity{
 			mTitle.setText(data.getQueryParameter("title"));
 			mUrl.setText(data.getQueryParameter("url"));
 			mNotes.setText(data.getQueryParameter("notes"));
-			mTags.setText(data.getQueryParameter("tags"));
 			mTime.setText(d.toString());
+			
+			ArrayList<Tag> taglist = new ArrayList<Tag>();
+			for(String s : data.getQueryParameter("tags").split(" ")) {
+				taglist.add(new Tag(s));
+			}
+			
+    		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
+
+    		for(Tag t : taglist) {
+    			addTag(tagBuilder, t, userTagOnClickListener);
+    		}
+    		
+    		mTags.setText(tagBuilder);
+    		mTags.setMovementMethod(LinkMovementMethod.getInstance());
 
 			SpannableStringBuilder builder = new SpannableStringBuilder();
 			int start = builder.length();
@@ -162,6 +179,24 @@ public class ViewBookmark extends AppBaseActivity{
         }
     };
     
+    TagSpan.OnTagClickListener userTagOnClickListener = new TagSpan.OnTagClickListener() {
+        public void onTagClick(String tag) {
+    		Intent i = new Intent();
+    		i.setAction(Intent.ACTION_VIEW);
+    		i.addCategory(Intent.CATEGORY_DEFAULT);
+    		Uri.Builder data = new Uri.Builder();
+    		data.scheme(Constants.CONTENT_SCHEME);
+    		data.encodedAuthority(user + "@" + BookmarkContentProvider.AUTHORITY);
+    		data.appendEncodedPath("bookmarks");
+    		data.appendQueryParameter("tagname", tag);
+    		i.setData(data.build());
+    		
+    		Log.d("uri", data.build().toString());
+    		
+    		startActivity(i);	
+        }
+    };
+    
     AccountSpan.OnAccountClickListener accountOnClickListener = new AccountSpan.OnAccountClickListener() {
         public void onAccountClick(String account) {
     		Intent i = new Intent();
@@ -179,7 +214,7 @@ public class ViewBookmark extends AppBaseActivity{
         }
     };
     
-	private void addTag(SpannableStringBuilder builder, Tag t) {
+	private void addTag(SpannableStringBuilder builder, Tag t, TagSpan.OnTagClickListener listener) {
 		int flags = 0;
 		
 		if (builder.length() != 0) {
@@ -191,7 +226,7 @@ public class ViewBookmark extends AppBaseActivity{
 		int end = builder.length();
 		
 		TagSpan span = new TagSpan(t.getTagName());
-		span.setOnTagClickListener(tagOnClickListener);
+		span.setOnTagClickListener(listener);
 
 		builder.setSpan(span, start, end, flags);
 	}
