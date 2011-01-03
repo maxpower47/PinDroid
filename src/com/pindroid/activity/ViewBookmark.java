@@ -39,18 +39,13 @@ import com.pindroid.ui.TagSpan;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
