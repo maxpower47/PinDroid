@@ -70,6 +70,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	private ArrayList<Bookmark> bookmarkList;
 	
 	private String tagname = null;
+	private boolean unread = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -101,6 +102,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				
 				path = data.getPath();
 				tagname = data.getQueryParameter("tagname");
+				unread = data.getQueryParameter("unread") != null;
 			}
 			
 	    	if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -129,12 +131,18 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	    		finish();
 	    		
 	    	} else if(path.equals("/bookmarks") && isMyself()) {
+	    		String title = "My ";
+	    		
+	    		if(unread) {
+	    			title += "Unread ";
+	    		}
 	    		
 				if(tagname != null && tagname != "") {
-					setTitle("My Bookmarks Tagged With " + tagname);
+					title += "Bookmarks Tagged With " + tagname;
 				} else {
-					setTitle("My Bookmarks");
+					title += "Bookmarks";
 				}
+				setTitle(title);
 				
 				if(bookmarkList.isEmpty()) {
 					loadBookmarkList();
@@ -292,7 +300,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	}
 	
 	private void loadBookmarkList() {
-		bookmarkList = BookmarkManager.GetBookmarks(username, tagname, sortfield, this);
+		bookmarkList = BookmarkManager.GetBookmarks(username, tagname, unread, sortfield, this);
 		
 		setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));
 		((BookmarkListAdapter)getListAdapter()).notifyDataSetChanged();

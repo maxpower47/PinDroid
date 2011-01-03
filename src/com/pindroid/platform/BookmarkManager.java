@@ -38,11 +38,7 @@ import android.util.Log;
 
 public class BookmarkManager {
 	
-	public static ArrayList<Bookmark> GetBookmarks(String username, String tagname, Context context){
-		return GetBookmarks(username, tagname, Bookmark.Time + " DESC", context);
-	}
-	
-	public static ArrayList<Bookmark> GetBookmarks(String username, String tagname, String sortorder, Context context){
+	public static ArrayList<Bookmark> GetBookmarks(String username, String tagname, boolean unread, String sortorder, Context context){
 		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 		String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, 
 				Bookmark.Meta, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared};
@@ -57,6 +53,9 @@ public class BookmarkManager {
 				Bookmark.Account + "=?";
 		} else {
 			selection = Bookmark.Account + "=?";
+		}
+		if(unread) {
+			selection += " AND " + Bookmark.ToRead + "=1";
 		}
 		
 		Uri bookmarks = Bookmark.CONTENT_URI;
