@@ -75,6 +75,8 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 	Thread background;
 	private Boolean update = false;
 	private Resources res;
+	
+	private long updateTime = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -119,6 +121,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 					mEditTags.setText(b.getTagString());
 					mPrivate.setChecked(!b.getShared());
 					mToRead.setChecked(b.getToRead());
+					updateTime = b.getTime();
 					
 					update = true;
 				} catch (ContentNotFoundException e) {
@@ -156,13 +159,15 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		if(!url.startsWith("http")){
 			url = "http://" + url;
 		}
-		
-		Date d = new Date();
-		long time = d.getTime();
+
+		if(!update) {
+			Date d = new Date();
+			updateTime = d.getTime();
+		}
 		
 		bookmark = new Bookmark(url, mEditDescription.getText().toString(), 
-			mEditNotes.getText().toString(), mEditTags.getText().toString(),
-			!mPrivate.isChecked(), mToRead.isChecked(), time);
+				mEditNotes.getText().toString(), mEditTags.getText().toString(),
+				!mPrivate.isChecked(), mToRead.isChecked(), updateTime);
 		
 		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, mAccount, mContext);
 		
