@@ -138,6 +138,10 @@
     <string name="pref_searchicons_key">pref_searchicons</string>
     <string name="pref_searchicons_summary">Display icons in search suggestions.</string>
     
+    <string name="pref_forcesync_title">Sync Now</string>
+    <string name="pref_forcesync_key">pref_forcesync</string>
+    <string name="pref_forcesync_summary">Start a bookmark sync</string>
+    
     <string name="pref_license_title">License</string>
     <string name="pref_license_key">pref_license</string>
     <string name="pref_license_summary">Licensed under the GPL v3</string>

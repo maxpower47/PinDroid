@@ -23,19 +23,38 @@ package com.pindroid.activity;
  
 import com.pindroid.R;
 import com.pindroid.Constants;
+import com.pindroid.providers.BookmarkContentProvider;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.widget.Toast;
 
 public class Preferences extends PreferenceActivity {
+	
+	private Context mContext;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+        mContext = this;
+        
+        Preference syncPref = (Preference) findPreference("pref_forcesync");
+        syncPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        	public boolean onPreferenceClick(Preference preference) {
+            	
+        		Toast.makeText(mContext, "Syncing...", Toast.LENGTH_LONG).show();
+        		ContentResolver.requestSync(null, BookmarkContentProvider.AUTHORITY, Bundle.EMPTY);
+        		
+            	return true;
+            }
+        });
         
         Preference licensePref = (Preference) findPreference("pref_license");
         licensePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
