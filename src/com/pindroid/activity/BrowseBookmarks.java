@@ -116,15 +116,18 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	    		if(searchData != null) {
 	    			tagname = searchData.getString("tagname");
 	    			username = searchData.getString("username");
+	    			unread = searchData.getBoolean("unread");
 	    		}
 	    		
 	    		String query = intent.getStringExtra(SearchManager.QUERY);
 	    		
-	    		setTitle("Bookmark Search Results For \"" + query + "\"");
+	    		if(unread) {
+	    			setTitle("Unread Search Results For \"" + query + "\"");
+	    		} else setTitle("Bookmark Search Results For \"" + query + "\"");
 	    		
 	    		if(isMyself()) {
 	    			if(bookmarkList.isEmpty()) {
-	    				bookmarkList = BookmarkManager.SearchBookmarks(query, tagname, username, this);
+	    				bookmarkList = BookmarkManager.SearchBookmarks(query, tagname, unread, username, this);
 	    			}
 	    		
 	    			setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));
@@ -263,6 +266,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 			Bundle contextData = new Bundle();
 			contextData.putString("tagname", tagname);
 			contextData.putString("username", username);
+			contextData.putBoolean("unread", unread);
 			startSearch(null, false, contextData, false);
 			return true;
 		} else return false;

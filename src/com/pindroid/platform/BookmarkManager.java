@@ -225,7 +225,7 @@ public class BookmarkManager {
 		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, null);
 	}
 	
-	public static ArrayList<Bookmark> SearchBookmarks(String query, String tagname, String username, Context context) {
+	public static ArrayList<Bookmark> SearchBookmarks(String query, String tagname, boolean unread, String username, Context context) {
 		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 		String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, 
 				Bookmark.Meta, Bookmark.Tags, Bookmark.Shared, Bookmark.ToRead};
@@ -260,6 +260,10 @@ public class BookmarkManager {
 				Bookmark.Tags + " = '" + tagname + "')";
 		} else {
 			selection = Bookmark.Account + "=?";
+		}
+		
+		if(unread) {
+			selection += " AND " + Bookmark.ToRead + "=1";
 		}
 		
 		sortorder = Bookmark.Description + " ASC";
