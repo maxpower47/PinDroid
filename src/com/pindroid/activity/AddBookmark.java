@@ -76,6 +76,8 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 	private Boolean update = false;
 	private Resources res;
 	
+	private Bookmark oldBookmark;
+	
 	private long updateTime = 0;
 
 	@Override
@@ -114,6 +116,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 				int id = Integer.parseInt(intent.getData().getLastPathSegment());
 				try {
 					Bookmark b = BookmarkManager.GetById(id, mContext);
+					oldBookmark = b.copy();
 					
 					mEditUrl.setText(b.getUrl());
 					mEditDescription.setText(b.getDescription());
@@ -239,6 +242,14 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
     		if(result){
     			for(Tag t : bookmark.getTags()){   				
     				TagManager.UpsertTag(t, account.name, context);
+    			}
+    			
+    			if(update) {
+        			for(Tag t : oldBookmark.getTags()){
+        				if(!bookmark.getTags().contains(t)) {
+        					TagManager.UpleteTag(t, account.name, context);
+        				}
+        			}
     			}
     			
     			String msg = null;
