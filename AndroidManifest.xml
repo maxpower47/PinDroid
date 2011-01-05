@@ -26,7 +26,7 @@
     package="com.pindroid"
     android:versionCode="5"
     android:versionName="1.1.1">
-    <uses-sdk android:minSdkVersion="5" />
+    <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="8" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
