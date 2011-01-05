@@ -77,6 +77,8 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	private String tagname = null;
 	private boolean unread = false;
 	
+	private boolean loaded = false;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -155,6 +157,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				if(bookmarkList.isEmpty()) {
 					loadBookmarkList();
 				}
+				loaded = true;
 			}  else if(username.equals("recent")){
 				try{
 					setTitle("Recent Bookmarks");
@@ -212,6 +215,14 @@ public class BrowseBookmarks extends AppBaseListActivity {
 					}
 				}
 			});
+		}
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		if(loaded) {
+			loadBookmarkList();
 		}
 	}
 	

@@ -63,6 +63,9 @@ public class ViewBookmark extends AppBaseActivity{
 	private Boolean myself;
 	
 	private String user;
+	private String path;
+	private Uri data;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -80,8 +83,8 @@ public class ViewBookmark extends AppBaseActivity{
 		mIcon = (ImageView) findViewById(R.id.view_bookmark_icon);
 		
 		Log.d("browse bookmarks", getIntent().getDataString());
-		Uri data = getIntent().getData();
-		String path = data.getPath();
+		data = getIntent().getData();
+		path = data.getPath();
 		Log.d("path", path);
 		
 		final String username = data.getUserInfo();
@@ -89,6 +92,13 @@ public class ViewBookmark extends AppBaseActivity{
 		
 		myself = mAccount.name.equals(username);
 	
+
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		
 		if(path.contains("/bookmarks") && myself){
 			
 			try{		
