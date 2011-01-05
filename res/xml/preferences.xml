@@ -36,6 +36,9 @@
 			android:defaultValue="true"
 			android:summary="@string/pref_searchicons_summary"
 			android:key="@string/pref_searchicons_key" />
+	</PreferenceCategory>
+	<PreferenceCategory 
+		android:title="@string/pref_cat_sync_title">
 		<Preference
 			android:title="@string/pref_forcesync_title"
 			android:summary="@string/pref_forcesync_summary"

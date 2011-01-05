@@ -41,17 +41,19 @@
         <item>view</item>
     </string-array>
     <string-array name="pref_synctime_entries">
-    	<item>Auto</item>
         <item>5 mins</item>
         <item>15 mins</item>
+        <item>30 mins</item>
         <item>1 hour</item>
-        <item>6 hours</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
     </string-array>
     <string-array name="pref_synctime_values">
-        <item>0</item>
         <item>5</item>
         <item>15</item>
+        <item>30</item>
         <item>60</item>
-        <item>360</item>
+        <item>720</item>
+        <item>0</item>
     </string-array>
 </resources>

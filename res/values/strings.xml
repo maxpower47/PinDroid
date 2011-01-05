@@ -120,6 +120,7 @@
     <string name="view_bookmark_account_title">By</string>
     
     <string name="pref_cat_general_title">General Settings</string>
+    <string name="pref_cat_sync_title">Sync Settings</string>
     <string name="pref_cat_help_title">Help</string>
     
     <string name="pref_synctime_title">Sync Frequency</string>
