@@ -40,6 +40,13 @@
 			android:title="@string/pref_forcesync_title"
 			android:summary="@string/pref_forcesync_summary"
 			android:key="@string/pref_forcesync_key" />
+		<ListPreference
+			android:title="@string/pref_synctime_title"
+			android:summary="@string/pref_synctime_summary"
+			android:key="@string/pref_synctime_key"
+			android:entries="@array/pref_synctime_entries"
+			android:entryValues="@array/pref_synctime_values"
+			android:defaultValue="0" />
 	</PreferenceCategory>
 	<PreferenceCategory 
 		android:title="@string/pref_cat_help_title">

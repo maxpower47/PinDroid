@@ -166,5 +166,9 @@
     		</intent-filter>
     		<meta-data android:name="android.appwidget.provider" android:resource="@xml/search_appwidget_info" />
 		</receiver>
+		<receiver 
+        	android:name=".syncadapter.PeriodicSyncReceiver"
+        	android:label="PinDroid Bookmark Sync">
+		</receiver>
     </application>
 </manifest>

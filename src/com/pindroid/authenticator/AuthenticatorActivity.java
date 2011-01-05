@@ -45,6 +45,7 @@ import com.pindroid.Constants;
 import com.pindroid.client.LoginResult;
 import com.pindroid.client.NetworkUtilities;
 import com.pindroid.providers.BookmarkContentProvider;
+import com.pindroid.util.SyncUtils;
 
 /**
  * Activity which displays login screen to the user.
@@ -185,6 +186,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_PINBOARD);
+        final int synctime = Integer.parseInt(settings.getString("pref_synctime", "0"));
         
         final Account account = new Account(mUsername, Constants.ACCOUNT_TYPE);
 
@@ -192,6 +194,9 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             mAccountManager.addAccountExplicitly(account, mPassword, null);
 
             ContentResolver.setSyncAutomatically(account, BookmarkContentProvider.AUTHORITY, true);
+            if(synctime != 0) {
+            	SyncUtils.addPeriodicSync(BookmarkContentProvider.AUTHORITY, Bundle.EMPTY, synctime, this);
+            }
         } else {
             mAccountManager.setPassword(account, mPassword);
         }

@@ -24,6 +24,7 @@ package com.pindroid.activity;
 import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.providers.BookmarkContentProvider;
+import com.pindroid.util.SyncUtils;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -31,6 +32,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.widget.Toast;
@@ -44,6 +46,21 @@ public class Preferences extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
         mContext = this;
+        
+        Preference synctimePref = (Preference) findPreference("pref_synctime");
+        synctimePref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(Preference preference, Object value) {
+				long time = Long.parseLong((String)value);
+				
+				SyncUtils.removePeriodicSync(BookmarkContentProvider.AUTHORITY, Bundle.EMPTY, mContext);
+				
+				if(time != 0) {
+					SyncUtils.addPeriodicSync(BookmarkContentProvider.AUTHORITY, Bundle.EMPTY, time, mContext);
+				}
+				
+				return true;
+			}
+        });
         
         Preference syncPref = (Preference) findPreference("pref_forcesync");
         syncPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
