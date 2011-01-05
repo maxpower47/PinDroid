@@ -51,6 +51,8 @@ public class BrowseTags extends AppBaseListActivity {
 	
 	private ArrayList<Tag> tagList = new ArrayList<Tag>();
 	
+	private boolean loaded = false;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -93,9 +95,8 @@ public class BrowseTags extends AppBaseListActivity {
 						setTitle("Choose A Tag For The Folder");
 					}
 	
-					tagList = TagManager.GetTags(username, sortfield, this);
-	
-					setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
+					loadTagList();
+					loaded = true;
 	
 				} catch(Exception e) {
 					
@@ -141,6 +142,15 @@ public class BrowseTags extends AppBaseListActivity {
 				});
 			}
 		}
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		
+		if(loaded) {
+			loadTagList();
+		}	
 	}
 	
 	@Override
