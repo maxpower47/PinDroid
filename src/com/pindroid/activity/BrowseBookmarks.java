@@ -222,7 +222,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	public void onResume(){
 		super.onResume();
 		if(loaded) {
-			loadBookmarkList();
+			refreshBookmarkList();
 		}
 	}
 	
@@ -345,6 +345,14 @@ public class BrowseBookmarks extends AppBaseListActivity {
 		
 		setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));
 		((BookmarkListAdapter)getListAdapter()).notifyDataSetChanged();
+	}
+	
+	private void refreshBookmarkList() {
+		bookmarkList = BookmarkManager.GetBookmarks(username, tagname, unread, sortfield, this);
+		BookmarkListAdapter adapter = (BookmarkListAdapter)getListAdapter();
+		
+		adapter.update(bookmarkList);
+		adapter.notifyDataSetChanged();
 	}
 	
 	private void openBookmarkInBrowser(Bookmark b) {

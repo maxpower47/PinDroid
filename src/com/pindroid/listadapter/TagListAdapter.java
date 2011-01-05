@@ -43,6 +43,10 @@ public class TagListAdapter extends ArrayAdapter<Tag> {
         this.tags = tags;
     }
     
+    public void update(ArrayList<Tag> t) {
+    	tags = t;
+    }
+    
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
     	TagListViewHolder holder;
@@ -59,10 +63,14 @@ public class TagListAdapter extends ArrayAdapter<Tag> {
         	holder = (TagListViewHolder) convertView.getTag();
         }
         
-        Tag o = tags.get(position);
-        if (o != null) {
-          	holder.name.setText(o.getTagName());                            
-          	holder.count.setText(Integer.toString(o.getCount()));                            
+        if(tags.size() > 0) {
+	        Tag o = tags.get(position);
+	        if (o != null) {
+	          	holder.name.setText(o.getTagName());                            
+	          	holder.count.setText(Integer.toString(o.getCount()));                            
+	        }
+        } else {
+        	return new View(this.getContext());
         }
         return convertView;
     }

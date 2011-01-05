@@ -149,7 +149,7 @@ public class BrowseTags extends AppBaseListActivity {
 		super.onResume();
 		
 		if(loaded) {
-			loadTagList();
+			refreshTagList();
 		}	
 	}
 	
@@ -205,5 +205,13 @@ public class BrowseTags extends AppBaseListActivity {
 		
 		setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
 		((TagListAdapter)getListAdapter()).notifyDataSetChanged();
+	}
+	
+	private void refreshTagList() {
+		tagList = TagManager.GetTags(username, sortfield, this);
+		TagListAdapter adapter = (TagListAdapter)getListAdapter();
+		
+		adapter.update(tagList);
+		adapter.notifyDataSetChanged();
 	}
 }
