@@ -39,6 +39,10 @@
 		android:title="@string/menu_view_deletebookmark_title" 
 		android:icon="@drawable/ic_menu_delete" />
 	<item 
+		android:id="@+id/menu_view_sendbookmark" 
+		android:title="@string/menu_view_sendbookmark_title" 
+		android:icon="@drawable/ic_menu_share" />
+	<item 
 		android:id="@+id/menu_view_settings" 
 		android:title="@string/menu_settings_title" 
 		android:icon="@drawable/ic_menu_preferences" />

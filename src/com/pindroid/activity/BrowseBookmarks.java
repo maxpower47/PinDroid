@@ -209,10 +209,12 @@ public class BrowseBookmarks extends AppBaseListActivity {
 						menu.add(Menu.NONE, 1, Menu.NONE, "View Details");
 						menu.add(Menu.NONE, 2, Menu.NONE, "Edit");
 						menu.add(Menu.NONE, 3, Menu.NONE, "Delete");
+						menu.add(Menu.NONE, 5, Menu.NONE, "Share");
 					} else {
+						menu.add(Menu.NONE, 4, Menu.NONE, "Add");
 						menu.add(Menu.NONE, 0, Menu.NONE, "Open in browser");
 						menu.add(Menu.NONE, 1, Menu.NONE, "View Details");
-						menu.add(Menu.NONE, 4, Menu.NONE, "Add");
+						menu.add(Menu.NONE, 5, Menu.NONE, "Share");
 					}
 				}
 			});
@@ -266,6 +268,16 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				addBookmark.setAction(Intent.ACTION_SEND);
 				addBookmark.putExtra(Intent.EXTRA_TEXT, b.getUrl());
 				startActivity(addBookmark);
+				return true;
+				
+			case 5:
+		    	Intent sendIntent = new Intent(Intent.ACTION_SEND);
+		    	sendIntent.setType("text/plain");
+		    	sendIntent.putExtra(Intent.EXTRA_TEXT, b.getUrl());
+		    	sendIntent.putExtra(Intent.EXTRA_SUBJECT, b.getDescription());
+		    	sendIntent.putExtra(Intent.EXTRA_TITLE, b.getDescription());
+		    	startActivity(Intent.createChooser(sendIntent, "Share link"));
+				
 				return true;
 		}
 		return false;

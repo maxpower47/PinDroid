@@ -87,6 +87,7 @@
     <string name="menu_view_openbookmark_title">Open in browser</string>
     <string name="menu_view_editbookmark_title">Edit</string>
     <string name="menu_view_deletebookmark_title">Delete</string>
+    <string name="menu_view_sendbookmark_title">Share</string>
     
     <string name="add_button_save">Save</string>
     <string name="add_button_cancel">Cancel</string>

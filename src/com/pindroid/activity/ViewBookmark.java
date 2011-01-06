@@ -286,7 +286,17 @@ public class ViewBookmark extends AppBaseActivity{
 		    case R.id.menu_view_deletebookmark:
 				BookmarkTaskArgs deleteargs = new BookmarkTaskArgs(bookmark, mAccount, this);	
 				new DeleteBookmarkTask().execute(deleteargs);
-				return true;	
+				return true;
+		    case R.id.menu_view_sendbookmark:
+		    	String sendUrl = ((Spannable) mUrl.getText()).toString();
+		    	String sendTitle = mTitle.getText().toString();
+		    	Intent sendIntent = new Intent(Intent.ACTION_SEND);
+		    	sendIntent.setType("text/plain");
+		    	sendIntent.putExtra(Intent.EXTRA_TEXT, sendUrl);
+		    	sendIntent.putExtra(Intent.EXTRA_SUBJECT, sendTitle);
+		    	sendIntent.putExtra(Intent.EXTRA_TITLE, sendTitle);
+		    	startActivity(Intent.createChooser(sendIntent, "Share link"));
+		    	return true;
 		    case R.id.menu_view_settings:
 				Intent prefs = new Intent(this, Preferences.class);
 				startActivity(prefs);
