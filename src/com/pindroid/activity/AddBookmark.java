@@ -41,6 +41,7 @@ import com.pindroid.ui.TagSpan;
 import com.pindroid.util.StringUtils;
 
 import android.accounts.Account;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -215,6 +216,15 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
     	private Context context;
     	private Bookmark bookmark;
     	private Account account;
+    	private ProgressDialog progress;
+    	
+        protected void onPreExecute() {
+	        progress = new ProgressDialog(mContext);
+	        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+	        progress.setMessage("Working...");
+	        progress.setCancelable(true);
+	        progress.show();
+        }
     	
     	@Override
     	protected Boolean doInBackground(BookmarkTaskArgs... args) {
@@ -239,6 +249,8 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
     	}
 
         protected void onPostExecute(Boolean result) {
+        	progress.dismiss();
+        	
     		if(result){
     			for(Tag t : bookmark.getTags()){   				
     				TagManager.UpsertTag(t, account.name, context);
