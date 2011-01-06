@@ -186,6 +186,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 			
 			lv = getListView();
 			lv.setTextFilterEnabled(true);
+			lv.setFastScrollEnabled(true);
 		
 			lv.setOnItemClickListener(new OnItemClickListener() {
 			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

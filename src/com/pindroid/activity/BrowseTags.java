@@ -106,6 +106,7 @@ public class BrowseTags extends AppBaseListActivity {
 	
 			ListView lv = getListView();
 			lv.setTextFilterEnabled(true);
+			lv.setFastScrollEnabled(true);
 		
 			if(action != null && action.equals(Intent.ACTION_PICK)) {
 				
