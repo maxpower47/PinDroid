@@ -82,8 +82,6 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     
     private void InsertBookmarks(Account account, SyncResult syncResult) 
     	throws AuthenticationException, IOException{
-    	
-
 
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
     	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
@@ -104,9 +102,6 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			BookmarkManager.TruncateBookmarks(accounts, mContext, false);
 			addBookmarkList = PinboardApi.getAllBookmarks(null, account, mContext);
 			
-	    	long start = System.currentTimeMillis();
-	    	Log.d("load start", Long.toString(start));
-			
 			final ContentResolver resolver = mContext.getContentResolver();
 			final BatchOperation batch = new BatchOperation(mContext, resolver, BookmarkContentProvider.AUTHORITY);
 			
@@ -123,17 +118,11 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			
 			batch.execute();
 			
-	    	long stop = System.currentTimeMillis();
-	    	Log.d("load stop", Long.toString(stop));
-	    	Log.d("load total", Long.toString(stop - start));
-			
     		SharedPreferences.Editor editor = settings.edit();
     		editor.putLong(Constants.PREFS_LAST_SYNC, update.getLastUpdate());
             editor.commit();
     	} else {
     		Log.d("BookmarkSync", "No update needed.  Last update time before last sync.");
     	}
-    	
-
     }
 }
