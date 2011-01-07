@@ -31,6 +31,7 @@ import java.util.TreeMap;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
@@ -62,17 +63,16 @@ public class PinboardApi {
     public static final String USER_AGENT = "AuthenticationService/1.0";
     public static final int REGISTRATION_TIMEOUT = 30 * 1000; // ms
 
-    public static final String FETCH_TAGS_URI = "tags/get";
-    public static final String FETCH_SUGGESTED_TAGS_URI = "posts/suggest";
-    public static final String FETCH_BOOKMARKS_URI = "posts/all";
-    public static final String FETCH_CHANGED_BOOKMARKS_URI = "posts/all";
-    public static final String FETCH_BOOKMARK_URI = "posts/get";
-    public static final String LAST_UPDATE_URI = "posts/update";
-    public static final String DELETE_BOOKMARK_URI = "posts/delete";
-    public static final String ADD_BOOKMARKS_URI = "posts/add";
+    public static final String FETCH_TAGS_URI = "v1/tags/get";
+    public static final String FETCH_SUGGESTED_TAGS_URI = "v1/posts/suggest";
+    public static final String FETCH_BOOKMARKS_URI = "v1/posts/all";
+    public static final String FETCH_CHANGED_BOOKMARKS_URI = "v1/posts/all";
+    public static final String FETCH_BOOKMARK_URI = "v1/posts/get";
+    public static final String LAST_UPDATE_URI = "v1/posts/update";
+    public static final String DELETE_BOOKMARK_URI = "v1/posts/delete";
+    public static final String ADD_BOOKMARKS_URI = "v1/posts/add";
   
     private static final String SCHEME = "https";
-    private static final String SCHEME_HTTP = "http";
     private static final String PINBOARD_AUTHORITY = "api.pinboard.in";
     private static final int PORT = 443;
  
@@ -367,11 +367,9 @@ public class PinboardApi {
     		Account account, Context context) throws IOException, AuthenticationException{
 
     	final AccountManager am = AccountManager.get(context);
-    	String authtype = am.getUserData(account, Constants.PREFS_AUTH_TYPE);
     	
     	String username = account.name;
     	String authtoken = null;
-    	String path = null;
     	String scheme = null;
     	
     	try {
@@ -383,14 +381,8 @@ public class PinboardApi {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
-    	if(authtype.equals(Constants.AUTH_TYPE_OAUTH)) {
-    		path = "v2/" + url;
-    		scheme = SCHEME_HTTP;
-    	} else {
-    		path = "v1/" + url;
-    		scheme = SCHEME;
-    	}
+
+		scheme = SCHEME;
     	
     	HttpResponse resp = null;
     	HttpGet post = null;
@@ -398,15 +390,17 @@ public class PinboardApi {
 		Uri.Builder builder = new Uri.Builder();
 		builder.scheme(scheme);
 		builder.authority(PINBOARD_AUTHORITY);
-		builder.appendEncodedPath(path);
+		builder.appendEncodedPath(url);
 		for(String key : params.keySet()){
 			builder.appendQueryParameter(key, params.get(key));
 		}
 		
-		Log.d("apiCallUrl", builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+").replace("%3F", "?").replace("%3D", "=").replace("%20", "+"));
-		post = new HttpGet(builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+").replace("%3F", "?").replace("%3D", "=").replace("%20", "+"));
+		String apiCallUrl = builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+").replace("%3F", "?").replace("%3D", "=").replace("%20", "+");
+		
+		Log.d("apiCallUrl", apiCallUrl);
+		post = new HttpGet(apiCallUrl);
 
-		post.setHeader("User-Agent", "PinDroid_0.4.1");
+		post.setHeader("User-Agent", "PinDroid");
 		post.setHeader("Accept-Encoding", "gzip");
 
 		DefaultHttpClient client = HttpClientFactory.getThreadSafeClient();
@@ -415,19 +409,23 @@ public class PinboardApi {
         provider.setCredentials(SCOPE, credentials);
         
         resp = client.execute(post);
+        
+        int statusCode = resp.getStatusLine().getStatusCode();
 
-    	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+    	if (statusCode == HttpStatus.SC_OK) {
     		
-    		InputStream instream = resp.getEntity().getContent();
+    		HttpEntity entity = resp.getEntity();
     		
-    		Header encoding = resp.getEntity().getContentEncoding();
+    		InputStream instream = entity.getContent();
+    		
+    		Header encoding = entity.getContentEncoding();
     		
     		if(encoding != null && encoding.getValue().equalsIgnoreCase("gzip")) {
     			instream = new GZIPInputStream(instream);
     		}
     		
     		return instream;
-    	} else if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+    	} else if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
     		throw new AuthenticationException();
     	} else {
     		throw new IOException();
@@ -466,5 +464,4 @@ public class PinboardApi {
         }
         return sb.toString();
     }
-
 }
