@@ -64,6 +64,5 @@ public class SearchSuggestionContent {
 		public int compare(SearchSuggestionContent a, SearchSuggestionContent b) {
 			return a.text1.compareToIgnoreCase(b.text1);
 		}
-		
 	}
 }

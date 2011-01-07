@@ -35,7 +35,6 @@ public class SearchWidgetProvider extends AppWidgetProvider {
         for (int i = 0; i < n; i++) {
             int appWidgetId = appWidgetIds[i];
 
-
             Intent bookmarkIntent = new Intent();
             bookmarkIntent.setAction(Intent.ACTION_VIEW);
             bookmarkIntent.addCategory(Intent.CATEGORY_DEFAULT);

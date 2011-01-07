@@ -69,5 +69,4 @@ public class BatchOperation {
         }
         mOperations.clear();
     }
-
 }

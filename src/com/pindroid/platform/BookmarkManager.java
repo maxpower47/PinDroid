@@ -134,7 +134,6 @@ public class BookmarkManager {
 		String hash = "";
 		if(bookmark.getHash() == null || bookmark.getHash() == ""){
 			hash = Md5Hash.md5(url);
-			Log.d(url, hash);
 		} else hash = bookmark.getHash();
 		
 		ContentValues values = new ContentValues();
@@ -158,7 +157,6 @@ public class BookmarkManager {
 		String hash = "";
 		if(bookmark.getHash() == null || bookmark.getHash() == ""){
 			hash = Md5Hash.md5(url);
-			Log.d(url, hash);
 		} else hash = bookmark.getHash();
 		
 		ContentValues values = new ContentValues();

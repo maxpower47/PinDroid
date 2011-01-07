@@ -60,9 +60,6 @@ public class PinboardApi {
 	
     private static final String TAG = "PinboardApi";
 
-    public static final String USER_AGENT = "AuthenticationService/1.0";
-    public static final int REGISTRATION_TIMEOUT = 30 * 1000; // ms
-
     public static final String FETCH_TAGS_URI = "v1/tags/get";
     public static final String FETCH_SUGGESTED_TAGS_URI = "v1/posts/suggest";
     public static final String FETCH_BOOKMARKS_URI = "v1/posts/all";

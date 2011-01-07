@@ -46,16 +46,6 @@ import java.io.IOException;
  */
 public class NetworkUtilities {
     private static final String TAG = "NetworkUtilities";
-    public static final String PARAM_USERNAME = "username";
-    public static final String PARAM_PASSWORD = "password";
-    public static final String PARAM_UPDATED = "timestamp";
-    public static final String USER_AGENT = "AuthenticationService/1.0";
-
-    public static final String FETCH_FRIEND_UPDATES_URI = "http://feeds.pinboard.com/v2/json/networkmembers/";
-    public static final String FETCH_FRIEND_BOOKMARKS_URI = "http://feeds.pinboard.com/v2/json/";
-    public static final String FETCH_NETWORK_RECENT_BOOKMARKS_URI = "http://feeds.pinboard.com/v2/json/network/";
-    public static final String FETCH_STATUS_URI = "http://feeds.pinboard.com/v2/json/network/";
-    public static final String FETCH_TAGS_URI = "http://feeds.pinboard.com/v2/json/tags/";
 
     private static final String SCHEME = "https";
     private static final String PINBOARD_AUTHORITY = "api.pinboard.in";
@@ -117,20 +107,20 @@ public class NetworkUtilities {
                 if (Log.isLoggable(TAG, Log.VERBOSE)) {
                     Log.v(TAG, "Successful authentication");
                 }
-                sendResult(new LoginResult(true), handler, context);
+                sendResult(true, handler, context);
                 return true;
             } else {
                 if (Log.isLoggable(TAG, Log.VERBOSE)) {
                     Log.v(TAG, "Error authenticating" + resp.getStatusLine());
                 }
-                sendResult(new LoginResult(false), handler, context);
+                sendResult(false, handler, context);
                 return false;
             }
         } catch (final IOException e) {
             if (Log.isLoggable(TAG, Log.VERBOSE)) {
                 Log.v(TAG, "IOException when getting authtoken", e);
             }
-            sendResult(new LoginResult(false), handler, context);
+            sendResult(false, handler, context);
             return false;
         } finally {
             if (Log.isLoggable(TAG, Log.VERBOSE)) {
@@ -184,7 +174,7 @@ public class NetworkUtilities {
      * @param handler The main UI thread's handler instance.
      * @param context The caller Activity's context.
      */
-    private static void sendResult(final LoginResult result, final Handler handler,
+    private static void sendResult(final boolean result, final Handler handler,
         final Context context) {
         if (handler == null || context == null) {
             return;

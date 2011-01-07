@@ -92,22 +92,22 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	
     	if(update.getLastUpdate() > lastUpdate) {
 	
-			ArrayList<Bookmark> addBookmarkList = new ArrayList<Bookmark>();
-			ArrayList<Tag> tagList = new ArrayList<Tag>();
-
 			Log.d("BookmarkSync", "In Bookmark Load");
-			tagList = PinboardApi.getTags(account, mContext);
 			ArrayList<String> accounts = new ArrayList<String>();
 			accounts.add(account.name);
 			BookmarkManager.TruncateBookmarks(accounts, mContext, false);
-			addBookmarkList = PinboardApi.getAllBookmarks(null, account, mContext);
+			TagManager.TruncateTags(username, mContext);
+			
+			ArrayList<Tag> tagList = PinboardApi.getTags(account, mContext);
+			ArrayList<Bookmark> addBookmarkList = PinboardApi.getAllBookmarks(null, account, mContext);
 			
 			final ContentResolver resolver = mContext.getContentResolver();
 			final BatchOperation batch = new BatchOperation(mContext, resolver, BookmarkContentProvider.AUTHORITY);
 			
-			TagManager.TruncateTags(username, mContext);
-			for(Tag t : tagList){
-				batch.add(TagManager.AddTagBatch(t, username, mContext));
+			if(!tagList.isEmpty()){		
+				for(Tag t : tagList){
+					batch.add(TagManager.AddTagBatch(t, username, mContext));
+				}
 			}
 
 			if(!addBookmarkList.isEmpty()){				

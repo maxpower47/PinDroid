@@ -480,7 +480,6 @@ public class BookmarkContentProvider extends ContentProvider {
 		}
 		c.close();
 		
-		
 		return mc;
 	}
 

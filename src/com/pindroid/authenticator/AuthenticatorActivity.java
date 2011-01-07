@@ -42,7 +42,6 @@ import android.widget.TextView;
 
 import com.pindroid.R;
 import com.pindroid.Constants;
-import com.pindroid.client.LoginResult;
 import com.pindroid.client.NetworkUtilities;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.util.SyncUtils;
@@ -235,11 +234,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     /**
      * Called when the authentication process completes (see attemptLogin()).
      */
-    public void onAuthenticationResult(LoginResult result) {
-        Log.i(TAG, "onAuthenticationResult(" + result + ")");
+    public void onAuthenticationResult(boolean result) {
         // Hide the progress dialog
         hideProgress();
-        if (result.getResult()) {
+        if (result) {
             if (!mConfirmCredentials) {
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = settings.edit();

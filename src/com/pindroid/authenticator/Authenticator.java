@@ -30,7 +30,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.pindroid.R;
 import com.pindroid.Constants;
@@ -107,7 +106,6 @@ class Authenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response,
         Account account, String authTokenType, Bundle loginOptions) {
-    	Log.d("getAuthToken", "blah");
     	
         if (!authTokenType.equals(Constants.AUTHTOKEN_TYPE)) {
             final Bundle result = new Bundle();
@@ -115,9 +113,7 @@ class Authenticator extends AbstractAccountAuthenticator {
             return result;
         }
         final AccountManager am = AccountManager.get(mContext);
-        final String password = am.getPassword(account);
-        
-    	Log.d("getAuthToken", "notoauth");
+        final String password = am.getPassword(account);     
     	
         if (password != null) {
             final boolean verified =
@@ -139,7 +135,6 @@ class Authenticator extends AbstractAccountAuthenticator {
         final Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);
         return bundle;
-
     }
 
     /**
@@ -151,7 +146,6 @@ class Authenticator extends AbstractAccountAuthenticator {
             return mContext.getString(R.string.label);
         }
         return null;
-
     }
 
     /**
@@ -169,14 +163,8 @@ class Authenticator extends AbstractAccountAuthenticator {
      * Validates user's password on the server
      */
     private boolean onlineConfirmPassword(Account account, String password) {
-    	final AccountManager am = AccountManager.get(mContext);
-    	final String authtype = am.getUserData(account, Constants.PREFS_AUTH_TYPE);
     	
-    	if(authtype.equals(Constants.AUTH_TYPE_PINBOARD)){
-    		return NetworkUtilities.pinboardAuthenticate(account.name, password, null, null);
-    	} else {
-    		return true;
-    	}
+    	return NetworkUtilities.pinboardAuthenticate(account.name, password, null, null);
     }
 
     /**
@@ -193,5 +181,4 @@ class Authenticator extends AbstractAccountAuthenticator {
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);
         return bundle;
     }
-
 }

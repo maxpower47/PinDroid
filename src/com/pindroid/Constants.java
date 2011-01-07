@@ -39,15 +39,10 @@ public class Constants {
      */
     public static final String AUTHTOKEN_TYPE = "com.pindroid";
     
-    public static final String AUTH_PREFS_NAME = "com.pindroid.auth";
-    
     public static final String PREFS_LAST_SYNC = "last_sync";
     
     public static final String PREFS_AUTH_TYPE = "authentication_type";
-    public static final String AUTH_TYPE_OAUTH = "oauth";
     public static final String AUTH_TYPE_PINBOARD = "pinboard";
-    
-    public static final String PREFS_INITIAL_SYNC = "initial_sync";
     
     public static final String GPL_URL = "http://www.gnu.org/licenses/gpl-3.0.txt";
     public static final String MANUAL_URL = "http://code.google.com/p/pindroid/wiki/Manual";
