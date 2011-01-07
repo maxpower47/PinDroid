@@ -21,6 +21,7 @@
 
 package com.pindroid.listadapter;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ViewHolder {
@@ -28,6 +29,7 @@ public class ViewHolder {
 	static class BookmarkListViewHolder {
 		TextView description;
 		TextView tags;
+		ImageView unread;
 	}
 	
 	static class TagListViewHolder {

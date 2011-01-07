@@ -32,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class BookmarkListAdapter extends ArrayAdapter<Bookmark> {
@@ -58,6 +59,7 @@ public class BookmarkListAdapter extends ArrayAdapter<Bookmark> {
             holder = new BookmarkListViewHolder();
             holder.description = (TextView) convertView.findViewById(R.id.bookmark_description);
             holder.tags = (TextView) convertView.findViewById(R.id.bookmark_tags);
+            holder.unread = (ImageView) convertView.findViewById(R.id.bookmark_unread);
             
             convertView.setTag(holder);
         } else {
@@ -68,7 +70,11 @@ public class BookmarkListAdapter extends ArrayAdapter<Bookmark> {
 	        Bookmark o = bookmarks.get(position);
 	        if (o != null) {
 	            holder.description.setText(o.getDescription());                            
-	            holder.tags.setText(o.getTagString());                            
+	            holder.tags.setText(o.getTagString());
+	            
+	            if(o.getToRead()) {
+	            	holder.unread.setVisibility(View.VISIBLE);
+	            } else holder.unread.setVisibility(View.GONE);
 	        }
         } else {
         	return new View(this.getContext());

@@ -24,6 +24,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="horizontal"
 	android:layout_width="fill_parent">
+	<ImageView   
+		android:layout_width="4dip"
+		android:layout_height="fill_parent"
+		android:id="@+id/bookmark_unread"
+		android:visibility="gone"
+		android:src="@drawable/unread_indicator"/>
 	<LinearLayout
 		android:orientation="vertical"
 		android:layout_width="fill_parent"
