@@ -364,8 +364,10 @@ public class BrowseBookmarks extends AppBaseListActivity {
 		bookmarkList = BookmarkManager.GetBookmarks(username, tagname, unread, sortfield, this);
 		BookmarkListAdapter adapter = (BookmarkListAdapter)getListAdapter();
 		
-		adapter.update(bookmarkList);
-		adapter.notifyDataSetChanged();
+		if(adapter != null) {
+			adapter.update(bookmarkList);
+			adapter.notifyDataSetChanged();
+		}
 	}
 	
 	private void openBookmarkInBrowser(Bookmark b) {

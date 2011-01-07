@@ -212,7 +212,9 @@ public class BrowseTags extends AppBaseListActivity {
 		tagList = TagManager.GetTags(username, sortfield, this);
 		TagListAdapter adapter = (TagListAdapter)getListAdapter();
 		
-		adapter.update(tagList);
-		adapter.notifyDataSetChanged();
+		if(adapter != null) {
+			adapter.update(tagList);
+			adapter.notifyDataSetChanged();
+		}
 	}
 }
