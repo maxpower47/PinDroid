@@ -74,7 +74,14 @@
 			<TextView
 				android:id="@+id/add_title_recommended_tags"
 				style="@style/AddBookmarkFieldTitle"
-				android:text="@string/add_title_recommended_tags"/>    
+				android:text="@string/add_title_recommended_tags"/>
+            <ProgressBar
+                android:id="@+id/add_recommended_tags_progress"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
 			<TextView
 				android:id="@+id/add_recommended_tags"
 				android:layout_height="fill_parent"
@@ -84,7 +91,14 @@
 			<TextView
 				android:id="@+id/add_title_popular_tags"
 				style="@style/AddBookmarkFieldTitle"
-				android:text="@string/add_title_popular_tags"/>    
+				android:text="@string/add_title_popular_tags"/>
+			<ProgressBar
+			    android:id="@+id/add_popular_tags_progress"
+			    style="?android:attr/progressBarStyleSmall"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="center"
+			    android:visibility="gone" />
 			<TextView
 				android:id="@+id/add_popular_tags"
 				android:layout_height="fill_parent"

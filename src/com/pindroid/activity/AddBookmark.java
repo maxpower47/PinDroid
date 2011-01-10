@@ -57,6 +57,7 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,7 +68,9 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 	private EditText mEditNotes;
 	private EditText mEditTags;
 	private TextView mRecommendedTags;
+	private ProgressBar mRecommendedProgress;
 	private TextView mPopularTags;
+	private ProgressBar mPopularProgress;
 	private CheckBox mPrivate;
 	private CheckBox mToRead;
 	private Button mButtonSave;
@@ -91,7 +94,9 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		mEditNotes = (EditText) findViewById(R.id.add_edit_notes);
 		mEditTags = (EditText) findViewById(R.id.add_edit_tags);
 		mRecommendedTags = (TextView) findViewById(R.id.add_recommended_tags);
+		mRecommendedProgress = (ProgressBar) findViewById(R.id.add_recommended_tags_progress);
 		mPopularTags = (TextView) findViewById(R.id.add_popular_tags);
+		mPopularProgress = (ProgressBar) findViewById(R.id.add_popular_tags_progress);
 		mPrivate = (CheckBox) findViewById(R.id.add_edit_private);
 		mToRead = (CheckBox) findViewById(R.id.add_edit_toread);
 		mButtonSave = (Button) findViewById(R.id.add_button_save);
@@ -316,6 +321,13 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 			return null;
     	}
     	
+    	protected void onPreExecute() {
+    		mRecommendedTags.setVisibility(View.GONE);
+    		mPopularTags.setVisibility(View.GONE);
+    		mRecommendedProgress.setVisibility(View.VISIBLE);
+    		mPopularProgress.setVisibility(View.VISIBLE);
+    	}
+    	
         protected void onPostExecute(ArrayList<Tag> result) {
         	        	
         	if(result != null) {
@@ -332,6 +344,11 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
         		
         		mRecommendedTags.setText(recommendedBuilder);
         		mPopularTags.setText(popularBuilder);
+        		
+        		mRecommendedTags.setVisibility(View.VISIBLE);
+        		mPopularTags.setVisibility(View.VISIBLE);
+        		mRecommendedProgress.setVisibility(View.GONE);
+        		mPopularProgress.setVisibility(View.GONE);
         	} 	
         }
 
