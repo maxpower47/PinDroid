@@ -59,6 +59,11 @@ public class BookmarkListAdapter extends ArrayAdapter<Bookmark> {
     }
     
     @Override
+    public void remove(Bookmark b) {
+    	bookmarks.remove(b);
+    }
+    
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
     	BookmarkListViewHolder holder;
     	

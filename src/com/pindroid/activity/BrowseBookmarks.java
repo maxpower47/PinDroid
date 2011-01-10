@@ -261,6 +261,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				
 				BookmarkListAdapter bla = (BookmarkListAdapter) lv.getAdapter();
 				bla.remove(b);
+				bla.notifyDataSetChanged();
 				return true;
 				
 			case 4:				
