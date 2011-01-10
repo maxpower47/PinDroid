@@ -48,6 +48,16 @@ public class TagListAdapter extends ArrayAdapter<Tag> {
     }
     
     @Override
+    public int getCount() {
+    	return tags.size();
+    }
+    
+    @Override
+    public Tag getItem(int position) {
+		return tags.get(position);   	
+    }
+    
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
     	TagListViewHolder holder;
     	
