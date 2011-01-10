@@ -296,6 +296,10 @@ public class PinboardApi {
     	throws IOException, AuthenticationException {
     	
     	ArrayList<Tag> tagList = new ArrayList<Tag>();
+    	
+		if(!suggestUrl.startsWith("http")){
+			suggestUrl = "http://" + suggestUrl;
+		}
 
     	InputStream responseStream = null;
     	TreeMap<String, String> params = new TreeMap<String, String>();
