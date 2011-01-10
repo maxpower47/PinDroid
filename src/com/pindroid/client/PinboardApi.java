@@ -392,7 +392,7 @@ public class PinboardApi {
 			builder.appendQueryParameter(key, params.get(key));
 		}
 		
-		String apiCallUrl = builder.build().toString().replace("%3A", ":").replace("%2F", "/").replace("%2B", "+").replace("%3F", "?").replace("%3D", "=").replace("%20", "+");
+		String apiCallUrl = builder.build().toString();
 		
 		Log.d("apiCallUrl", apiCallUrl);
 		post = new HttpGet(apiCallUrl);
