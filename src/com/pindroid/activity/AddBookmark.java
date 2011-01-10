@@ -65,6 +65,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 
 	private EditText mEditUrl;
 	private EditText mEditDescription;
+	private ProgressBar mDescriptionProgress;
 	private EditText mEditNotes;
 	private EditText mEditTags;
 	private TextView mRecommendedTags;
@@ -91,6 +92,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		setContentView(R.layout.add_bookmark);
 		mEditUrl = (EditText) findViewById(R.id.add_edit_url);
 		mEditDescription = (EditText) findViewById(R.id.add_edit_description);
+		mDescriptionProgress = (ProgressBar) findViewById(R.id.add_description_progress);
 		mEditNotes = (EditText) findViewById(R.id.add_edit_notes);
 		mEditTags = (EditText) findViewById(R.id.add_edit_tags);
 		mRecommendedTags = (TextView) findViewById(R.id.add_recommended_tags);
@@ -297,8 +299,13 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
     		
     	}
     	
+    	protected void onPreExecute(){
+    		mDescriptionProgress.setVisibility(View.VISIBLE);
+    	}
+    	
         protected void onPostExecute(String result) {
         	mEditDescription.setText(result);
+        	mDescriptionProgress.setVisibility(View.GONE);
         }
     }
     
