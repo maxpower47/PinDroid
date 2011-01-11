@@ -67,6 +67,10 @@
 	<PreferenceCategory 
 		android:title="@string/pref_cat_help_title">
 		<Preference
+			android:title="@string/pref_about_title"
+			android:summary="@string/pref_about_summary"
+			android:key="@string/pref_about_key" />
+		<Preference
 			android:title="@string/pref_help_title"
 			android:summary="@string/pref_help_summary"
 			android:key="@string/pref_help_key" />

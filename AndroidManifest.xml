@@ -118,6 +118,7 @@
         </activity>
         <activity android:name=".activity.OauthLogin" />
         <activity android:name=".activity.Preferences" />
+        <activity android:name=".activity.AboutActivity" />
         <!-- The authenticator service -->
         <service
             android:name=".authenticator.AuthenticationService"

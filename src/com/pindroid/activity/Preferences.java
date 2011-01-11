@@ -95,6 +95,16 @@ public class Preferences extends PreferenceActivity {
             }
         });
         
+        Preference aboutPref = (Preference) findPreference("pref_about");
+        aboutPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        	public boolean onPreferenceClick(Preference preference) {
+        		Intent i = new Intent(mContext, AboutActivity.class);
+        		
+        		startActivity(i);
+            	return true;
+            }
+        });
+        
         Preference donatePref = (Preference) findPreference("pref_donate");
         donatePref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
         	public boolean onPreferenceClick(Preference preference) {

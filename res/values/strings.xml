@@ -165,6 +165,10 @@
     <string name="pref_help_key">pref_help</string>
     <string name="pref_help_summary">Help on using PinDroid</string>
     
+    <string name="pref_about_title">About</string>
+    <string name="pref_about_key">pref_about</string>
+    <string name="pref_about_summary">About PinDroid</string>
+    
     <string name="pref_donate_title">Donate</string>
     <string name="pref_donate_key">pref_donate</string>
     <string name="pref_donate_summary">Support PinDroid</string>
@@ -174,4 +178,14 @@
     
     <string name="dialog_yahoo_not_linked_title">Account Error</string>
     <string name="dialog_yahoo_not_linked_text">You may not have a Pinboard account linked to that Yahoo ID.  Go to the main Pinboard site and create an account first.</string>
+    
+    <string name="about_title">PinDroid</string>
+    <string name="about_text"> PinDroid is a port of DeliciousDroid for the Pinboard bookmarking system.\n\n
+    						Developed, maintained, and supported by Matt Schmidt\n\n
+    						Find a bug or have a suggestion for a new feature?  Open an issue at http://code.google.com/p/pindroid/issues \n\n
+    						Or, drop me a line on Twitter @PinDroid\n\n
+     						<b>Known Issues:</b>\n\n
+     						<li>Only a single Pinboard account is currently supported. </li>\n
+     						<li>Certain features from DeliciousDroid have not been ported yet due to limitations in Pinboards API, including contact syncing and viewing network bookmark lists. </li>
+    </string>
 </resources>
