@@ -122,6 +122,7 @@
     
     <string name="pref_cat_general_title">General Settings</string>
     <string name="pref_cat_sync_title">Sync Settings</string>
+    <string name="pref_cat_save_title">Save Settings</string>
     <string name="pref_cat_help_title">Help</string>
     
     <string name="pref_synctime_title">Sync Frequency</string>
@@ -143,6 +144,14 @@
     <string name="pref_searchicons_title">Display Search Icons</string>
     <string name="pref_searchicons_key">pref_searchicons</string>
     <string name="pref_searchicons_summary">Display icons in search suggestions.</string>
+    
+    <string name="pref_save_private_default_title">Private Default</string>
+    <string name="pref_save_private_default_key">pref_save_private_default</string>
+    <string name="pref_save_private_default_summary">Set new bookmarks as private by default.</string>
+    
+    <string name="pref_save_toread_default_title">Unread Default</string>
+    <string name="pref_save_toread_default_key">pref_save_toread_default</string>
+    <string name="pref_save_toread_default_summary">Set new bookmarks as unread by default.</string>
     
     <string name="pref_forcesync_title">Sync Now</string>
     <string name="pref_forcesync_key">pref_forcesync</string>

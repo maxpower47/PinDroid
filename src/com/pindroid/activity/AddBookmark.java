@@ -44,9 +44,11 @@ import android.accounts.Account;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -120,6 +122,8 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 				mEditUrl.setText(url);
 				
 				new GetWebpageTitleTask().execute(url);
+				
+				setDefaultValues();
 			} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
 				int id = Integer.parseInt(intent.getData().getLastPathSegment());
 				try {
@@ -139,6 +143,8 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			} else {
+				setDefaultValues();
 			}
 		}
 		
@@ -163,7 +169,16 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		mButtonCancel.setOnClickListener(this);
 	}
 	
-    public void save() {
+	private void setDefaultValues(){
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+    	boolean privateDefault = settings.getBoolean("pref_save_private_default", false);
+    	boolean toreadDefault = settings.getBoolean("pref_save_toread_default", false);
+    	
+    	mPrivate.setChecked(privateDefault);
+    	mToRead.setChecked(toreadDefault);
+	}
+	
+    private void save() {
 
 		String url = mEditUrl.getText().toString();
 		

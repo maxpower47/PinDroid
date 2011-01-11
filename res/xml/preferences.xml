@@ -52,6 +52,19 @@
 			android:defaultValue="0" />
 	</PreferenceCategory>
 	<PreferenceCategory 
+		android:title="@string/pref_cat_save_title">
+		<CheckBoxPreference 
+			android:title="@string/pref_save_private_default_title"
+			android:defaultValue="false"
+			android:summary="@string/pref_save_private_default_summary"
+			android:key="@string/pref_save_private_default_key" />
+		<CheckBoxPreference 
+			android:title="@string/pref_save_toread_default_title"
+			android:defaultValue="false"
+			android:summary="@string/pref_save_toread_default_summary"
+			android:key="@string/pref_save_toread_default_key" />
+	</PreferenceCategory>
+	<PreferenceCategory 
 		android:title="@string/pref_cat_help_title">
 		<Preference
 			android:title="@string/pref_help_title"
