@@ -49,6 +49,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -324,7 +325,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
     	}
     	
         protected void onPostExecute(String result) {
-        	mEditDescription.setText(result);
+        	mEditDescription.setText(Html.fromHtml(result));
         	mDescriptionProgress.setVisibility(View.GONE);
         }
     }
