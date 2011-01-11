@@ -144,6 +144,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 					e.printStackTrace();
 				}
 			} else {
+				mEditUrl.requestFocus();
 				setDefaultValues();
 			}
 		}
