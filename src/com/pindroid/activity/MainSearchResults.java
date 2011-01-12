@@ -36,17 +36,17 @@ public class MainSearchResults extends AppBaseListActivity {
 
 	private Context mContext;
 	
-	static final String[] MENU_ITEMS = new String[] {"Bookmark Results", "Tag Results"};
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		
+		String[] MENU_ITEMS = new String[] {res.getString(R.string.search_results_bookmark),
+				res.getString(R.string.search_results_tag)};
+		
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
 		mContext = this;
 
 		final Intent intent = getIntent();
-		
-		setTitle("Search Results");
 		
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);

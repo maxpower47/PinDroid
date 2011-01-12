@@ -40,6 +40,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.UriMatcher;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.SQLException;
@@ -357,6 +358,8 @@ public class BookmarkContentProvider extends ContentProvider {
 	private Map<String, SearchSuggestionContent> getTagSearchSuggestions(String query) {
 		Log.d("getTagSearchSuggestions", query);
 		
+		Resources res = getContext().getResources();
+		
 		String[] tags = query.split(" ");
 		
 		mAccountManager = AccountManager.get(getContext());
@@ -394,8 +397,10 @@ public class BookmarkContentProvider extends ContentProvider {
 				int count = c.getInt(countColumn);
 				String name = c.getString(nameColumn);
 				
+				String tagCount = Integer.toString(count) + " " + res.getString(R.string.bookmark_count);
+				
 				suggestions.put(name, new SearchSuggestionContent(name, 
-					Integer.toString(count) + " bookmark" + (count > 1 ? "s" : ""),
+					tagCount,
 					R.drawable.ic_main, R.drawable.ic_tag, data.build().toString()));
 				
 			} while(c.moveToNext());	
@@ -443,6 +448,8 @@ public class BookmarkContentProvider extends ContentProvider {
 		mAccountManager = AccountManager.get(getContext());
 		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		
+		Resources res = this.getContext().getResources();
+		
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
 		qb.setTables(TAG_TABLE_NAME);
@@ -474,7 +481,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				data.appendQueryParameter("tagname", name);
 				
 				mc.addRow(new Object[] {i++, name, 
-					Integer.toString(c.getInt(countColumn)) + " bookmark(s)", data.build()});
+					Integer.toString(c.getInt(countColumn)) + " " + res.getString(R.string.bookmark_count), data.build()});
 				
 			} while(c.moveToNext());	
 		}

@@ -38,16 +38,16 @@ import android.widget.ListView;
 import android.view.View;
 
 public class Main extends AppBaseListActivity {
-	
-	static final String[] MENU_ITEMS = new String[] {"My Bookmarks", "My Unread", "My Tags", "Recent Bookmarks"};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedState);
-		init();
-	}
-	
-	private void init(){
+		
+		String[] MENU_ITEMS = new String[] {res.getString(R.string.main_menu_my_bookmarks),
+				res.getString(R.string.main_menu_my_unread_bookmarks),
+				res.getString(R.string.main_menu_my_tags),
+				res.getString(R.string.main_menu_recent_bookmarks)};
+
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
 
 		Intent intent = getIntent();

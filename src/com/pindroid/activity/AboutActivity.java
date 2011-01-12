@@ -32,7 +32,6 @@ public class AboutActivity extends AppBaseActivity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.about_view);
-		setTitle("About PinDroid");
 	}
 
 }

@@ -45,7 +45,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -82,7 +81,6 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 	private Bookmark bookmark;
 	Thread background;
 	private Boolean update = false;
-	private Resources res;
 	
 	private Bookmark oldBookmark;
 	
@@ -109,8 +107,6 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		
 		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
-		
-		res = getResources();
 
 		if(savedInstanceState ==  null){
 			Intent intent = getIntent();
@@ -151,8 +147,8 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		}
 		
 		if(update)
-			setTitle("Edit Bookmark");
-		else setTitle("Add Bookmark");
+			setTitle(res.getString(R.string.add_bookmark_edit_title));
+		else setTitle(res.getString(R.string.add_bookmark_add_title));
 		
 		mEditUrl.setOnFocusChangeListener(new OnFocusChangeListener(){
 			public void onFocusChange(View v, boolean hasFocus) {
@@ -249,7 +245,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
         protected void onPreExecute() {
 	        progress = new ProgressDialog(mContext);
 	        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-	        progress.setMessage("Working...");
+	        progress.setMessage(res.getString(R.string.add_bookmark_task_progress));
 	        progress.setCancelable(true);
 	        progress.show();
         }

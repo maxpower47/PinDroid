@@ -29,6 +29,7 @@ import com.pindroid.util.SyncUtils;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -40,12 +41,15 @@ import android.widget.Toast;
 public class Preferences extends PreferenceActivity {
 	
 	private Context mContext;
+	private Resources res;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
         mContext = this;
+        
+        res = getResources();
         
         Preference synctimePref = (Preference) findPreference("pref_synctime");
         synctimePref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -66,7 +70,7 @@ public class Preferences extends PreferenceActivity {
         syncPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
         	public boolean onPreferenceClick(Preference preference) {
             	
-        		Toast.makeText(mContext, "Syncing...", Toast.LENGTH_LONG).show();
+        		Toast.makeText(mContext, res.getString(R.string.syncing_toast), Toast.LENGTH_LONG).show();
         		ContentResolver.requestSync(null, BookmarkContentProvider.AUTHORITY, Bundle.EMPTY);
         		
             	return true;
@@ -115,7 +119,5 @@ public class Preferences extends PreferenceActivity {
             	return true;
             }
         });
-        
-        setTitle("PinDroid Settings");
     }
 }

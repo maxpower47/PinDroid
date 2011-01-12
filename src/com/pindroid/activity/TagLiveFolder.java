@@ -27,6 +27,7 @@ import com.pindroid.providers.BookmarkContentProvider;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.LiveFolders;
@@ -38,12 +39,14 @@ public class TagLiveFolder extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        Resources res = getResources();
 
         final Intent intent = getIntent();
         final String action = intent.getAction();
 
         if (LiveFolders.ACTION_CREATE_LIVE_FOLDER.equals(action)) {
-            setResult(RESULT_OK, createLiveFolder(this, CONTENT_URI, "My Tags",
+            setResult(RESULT_OK, createLiveFolder(this, CONTENT_URI, res.getString(R.string.tag_live_folder_name),
                     R.drawable.ic_tag_folder));
         } else {
             setResult(RESULT_CANCELED);

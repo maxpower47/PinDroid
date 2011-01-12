@@ -27,9 +27,11 @@ import org.apache.http.auth.AuthenticationException;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.pindroid.R;
 import com.pindroid.client.PinboardApi;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -64,10 +66,12 @@ public class MarkReadBookmarkTask extends AsyncTask<BookmarkTaskArgs, Integer, B
 	}
 
     protected void onPostExecute(Boolean result) {
+    	Resources res = context.getResources();
+    	
 		if(result){
-			Toast.makeText(context, "Bookmark Updated Successfully", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, res.getString(R.string.edit_bookmark_success_msg), Toast.LENGTH_SHORT).show();
 		} else {
-			Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, res.getString(R.string.add_bookmark_error_msg), Toast.LENGTH_SHORT).show();
 		}
     }
 }

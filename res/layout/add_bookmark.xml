@@ -126,7 +126,7 @@
 			 	android:orientation="horizontal" >
 				<CheckBox 
 					android:id="@+id/add_edit_private"
-			 		android:text="Private?"
+			 		android:text="@string/add_title_private"
 			 		android:layout_width="wrap_content"
 			 		android:layout_height="wrap_content"
 			 		android:paddingTop="5dip" />
@@ -134,7 +134,7 @@
   					style="@style/LayoutRight">
 				 	<CheckBox 
 						android:id="@+id/add_edit_toread"
-				 		android:text="To Read?"
+				 		android:text="@string/add_title_toread"
 				 		android:layout_width="wrap_content"
 				 		android:layout_height="wrap_content"
 				 		android:paddingTop="5dip"

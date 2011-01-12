@@ -27,9 +27,11 @@ import org.apache.http.auth.AuthenticationException;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.pindroid.R;
 import com.pindroid.client.PinboardApi;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
@@ -62,15 +64,17 @@ public class DeleteBookmarkTask extends AsyncTask<BookmarkTaskArgs, Integer, Boo
 	}
 
     protected void onPostExecute(Boolean result) {
+    	Resources res = context.getResources();
+    	
 		if(result){
 
 			for(Tag t : bookmark.getTags()){  				
 				TagManager.UpleteTag(t, account.name, context);
 			}
 
-			Toast.makeText(context, "Bookmark Deleted Successfully", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, res.getString(R.string.delete_bookmark_success_msg), Toast.LENGTH_SHORT).show();
 		} else {
-			Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, res.getString(R.string.delete_bookmark_error_msg), Toast.LENGTH_SHORT).show();
 		}
     }
 }

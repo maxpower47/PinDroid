@@ -72,7 +72,6 @@ public class ViewBookmark extends AppBaseActivity{
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.view_bookmark);
-		setTitle("View Bookmark Details");
 		
 		mTitle = (TextView) findViewById(R.id.view_bookmark_title);
 		mUrl = (TextView) findViewById(R.id.view_bookmark_url);
@@ -91,8 +90,6 @@ public class ViewBookmark extends AppBaseActivity{
 		user = data.getQueryParameter("account");
 		
 		myself = mAccount.name.equals(username);
-	
-
 	}
 	
 	@Override
@@ -295,7 +292,7 @@ public class ViewBookmark extends AppBaseActivity{
 		    	sendIntent.putExtra(Intent.EXTRA_TEXT, sendUrl);
 		    	sendIntent.putExtra(Intent.EXTRA_SUBJECT, sendTitle);
 		    	sendIntent.putExtra(Intent.EXTRA_TITLE, sendTitle);
-		    	startActivity(Intent.createChooser(sendIntent, "Share link"));
+		    	startActivity(Intent.createChooser(sendIntent, res.getString(R.string.share_chooser_title)));
 		    	return true;
 		    case R.id.menu_view_settings:
 				Intent prefs = new Intent(this, Preferences.class);

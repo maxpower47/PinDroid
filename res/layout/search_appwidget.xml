@@ -61,6 +61,5 @@
 	    	android:src="@drawable/widget_search_button"
 	    	style="@style/WidgetButton"
 	        android:layout_marginLeft="235dp"/>
-	        
     </RelativeLayout>
 </LinearLayout>

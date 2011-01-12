@@ -70,7 +70,7 @@
 			<meta-data android:name="android.app.searchable" android:resource="@xml/tag_searchable"/>
         </activity>
         <activity android:name=".activity.TagLiveFolder"
-        	android:label="Pinboard Tags"
+        	android:label="@string/tag_live_folder_label"
         	android:icon="@drawable/ic_tag_folder">
             <intent-filter>
         		<action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
@@ -94,21 +94,23 @@
         	<meta-data android:name="android.app.searchable" android:resource="@xml/bookmark_searchable"/>
         </activity>
         <activity android:name=".activity.BookmarkLiveFolder"
-        	android:label="Pinboard Bookmarks"
+        	android:label="@string/bookmark_live_folder_label"
         	android:icon="@drawable/ic_bookmark_folder">
             <intent-filter>
         		<action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
         		<category android:name="android.intent.category.DEFAULT" />	
         	</intent-filter>
         </activity>
-        <activity android:name=".activity.ViewBookmark">
+        <activity android:name=".activity.ViewBookmark"
+        	android:label="@string/view_bookmark_title">
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
         		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:pathPattern="/bookmarks/.*"/>
         	</intent-filter>
         </activity>
-        <activity android:name=".activity.MainSearchResults" />
+        <activity android:name=".activity.MainSearchResults"
+        	android:label="@string/main_search_results_title" />
         <activity android:name=".activity.AddBookmark">
         	<intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -116,9 +118,10 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.OauthLogin" />
-        <activity android:name=".activity.Preferences" />
-        <activity android:name=".activity.AboutActivity" />
+        <activity android:name=".activity.Preferences"
+        	android:label="@string/preferences_title" />
+        <activity android:name=".activity.AboutActivity" 
+        	android:label="@string/about_activity_title"/>
         <!-- The authenticator service -->
         <service
             android:name=".authenticator.AuthenticationService"
@@ -147,21 +150,13 @@
             android:theme="@android:style/Theme.Dialog"
             android:excludeFromRecents="true">
         </activity>
-        <activity
-        	android:name=".activity.Profile">
-        	<intent-filter>
-        		<action android:name="android.intent.action.VIEW" />
-        		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:mimeType="vnd.android.cursor.item/vnd.PinDroid.profile" />
-        	</intent-filter>
-        </activity>
         <provider
         	android:name="com.pindroid.providers.BookmarkContentProvider"
-        	android:label="Bookmarks"
+        	android:label="@string/bookmark_content_provider_label"
         	android:authorities="com.pindroid.providers.BookmarkContentProvider" />
         <receiver 
         	android:name=".widget.SearchWidgetProvider"
-        	android:label="PinDroid">
+        	android:label="@string/search_widget_label">
     		<intent-filter>
         		<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
     		</intent-filter>
@@ -169,7 +164,7 @@
 		</receiver>
 		<receiver 
         	android:name=".syncadapter.PeriodicSyncReceiver"
-        	android:label="PinDroid Bookmark Sync">
+        	android:label="@string/sync_receiver_label">
 		</receiver>
     </application>
 </manifest>
