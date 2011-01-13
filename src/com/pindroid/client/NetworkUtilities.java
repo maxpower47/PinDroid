@@ -145,12 +145,12 @@ public class NetworkUtilities {
 	
 	    	HttpResponse resp = null;
 	    	HttpGet post = null;
-	    		
-			post = new HttpGet(url);
-
-			post.setHeader("User-Agent", "Mozilla/5.0");
+	    	
+	    	try {
+				post = new HttpGet(url.replace("|", "%7C"));
 	
-	        try {
+				post.setHeader("User-Agent", "Mozilla/5.0");
+	
 				resp = HttpClientFactory.getThreadSafeClient().execute(post);
 
 		    	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {

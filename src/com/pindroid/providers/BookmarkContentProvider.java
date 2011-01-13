@@ -29,8 +29,6 @@ import java.util.TreeMap;
 
 import com.pindroid.R;
 import com.pindroid.Constants;
-import com.pindroid.action.BookmarkTaskArgs;
-import com.pindroid.action.MarkReadBookmarkTask;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 
@@ -41,7 +39,6 @@ import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.UriMatcher;
 import android.content.res.Resources;
