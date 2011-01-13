@@ -22,6 +22,7 @@
 package com.pindroid.activity;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -29,6 +30,7 @@ import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.DeleteBookmarkTask;
+import com.pindroid.action.MarkReadBookmarkTask;
 import com.pindroid.client.PinboardFeed;
 import com.pindroid.listadapter.BookmarkListAdapter;
 import com.pindroid.platform.BookmarkManager;
@@ -62,6 +64,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	private ListView lv;
 	
 	private String defaultAction;
+	private boolean markAsRead;
 	
 	private final int sortDateAsc = 9999991;
 	private final int sortDateDesc = 9999992;
@@ -73,6 +76,8 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	private String sortfield = Bookmark.Time + " DESC";
 	
 	private ArrayList<Bookmark> bookmarkList;
+	
+	private SharedPreferences settings;
 	
 	private String tagname = null;
 	private boolean unread = false;
@@ -96,8 +101,9 @@ public class BrowseBookmarks extends AppBaseListActivity {
 			
 			Intent intent = getIntent();
 			
-	    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+	    	settings = PreferenceManager.getDefaultSharedPreferences(this);
 	    	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
+	    	markAsRead = settings.getBoolean("pref_markasread", false);
 	
 			Uri data = intent.getData();
 			String path = null;
@@ -195,9 +201,12 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	
 			    	if(defaultAction.equals("view")) {
 			    		viewBookmark(b);
+			    	} else if(defaultAction.equals("read")) {
+			    		readBookmark(b);
 			    	} else {
 			    		openBookmarkInBrowser(b);
 			    	}
+			    	
 			    }
 			});
 			
@@ -208,6 +217,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 					if(isMyself()){
 						menu.add(Menu.NONE, 0, Menu.NONE, res.getString(R.string.bookmark_context_open));
 						menu.add(Menu.NONE, 1, Menu.NONE, res.getString(R.string.bookmark_context_view));
+						menu.add(Menu.NONE, 6, Menu.NONE, res.getString(R.string.bookmark_context_read));
 						menu.add(Menu.NONE, 2, Menu.NONE, res.getString(R.string.bookmark_context_edit));
 						menu.add(Menu.NONE, 3, Menu.NONE, res.getString(R.string.bookmark_context_delete));
 						menu.add(Menu.NONE, 5, Menu.NONE, res.getString(R.string.bookmark_context_share));
@@ -215,6 +225,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 						menu.add(Menu.NONE, 4, Menu.NONE, res.getString(R.string.bookmark_context_add));
 						menu.add(Menu.NONE, 0, Menu.NONE, res.getString(R.string.bookmark_context_open));
 						menu.add(Menu.NONE, 1, Menu.NONE, res.getString(R.string.bookmark_context_view));
+						menu.add(Menu.NONE, 6, Menu.NONE, res.getString(R.string.bookmark_context_read));
 						menu.add(Menu.NONE, 5, Menu.NONE, res.getString(R.string.bookmark_context_share));
 					}
 				}
@@ -280,6 +291,9 @@ public class BrowseBookmarks extends AppBaseListActivity {
 		    	sendIntent.putExtra(Intent.EXTRA_TITLE, b.getDescription());
 		    	startActivity(Intent.createChooser(sendIntent, res.getString(R.string.share_chooser_title)));
 				
+				return true;
+			case 6:
+				readBookmark(b);
 				return true;
 		}
 		return false;
@@ -388,6 +402,17 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	private void viewBookmark(int id) {
 		Bookmark b = new Bookmark(id);
 		viewBookmark(b);
+	}
+	
+	private void readBookmark(Bookmark b){
+    	if(isMyself() && b.getToRead() && markAsRead) {
+    		BookmarkTaskArgs unreadArgs = new BookmarkTaskArgs(b, mAccount, this);
+    		new MarkReadBookmarkTask().execute(unreadArgs);
+    	}
+    	String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(b.getUrl());
+    	Uri readLink = Uri.parse(readUrl);
+		Intent readIntent = new Intent(Intent.ACTION_VIEW, readLink);
+		startActivity(readIntent);
 	}
 	
 	private void viewBookmark(Bookmark b) {

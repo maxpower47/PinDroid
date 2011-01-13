@@ -36,6 +36,11 @@
 			android:defaultValue="true"
 			android:summary="@string/pref_searchicons_summary"
 			android:key="@string/pref_searchicons_key" />
+		<CheckBoxPreference 
+			android:title="@string/pref_markasread_title"
+			android:defaultValue="false"
+			android:summary="@string/pref_markasread_summary"
+			android:key="@string/pref_markasread_key" />
 	</PreferenceCategory>
 	<PreferenceCategory 
 		android:title="@string/pref_cat_sync_title">

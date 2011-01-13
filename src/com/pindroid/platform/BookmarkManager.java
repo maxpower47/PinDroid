@@ -193,7 +193,10 @@ public class BookmarkManager {
 		values.put(Bookmark.Notes, bookmark.getNotes());
 		values.put(Bookmark.Tags, bookmark.getTagString());
 		values.put(Bookmark.Meta, bookmark.getMeta());
-		values.put(Bookmark.Time, bookmark.getTime());
+		
+		if(bookmark.getTime() > 0)
+			values.put(Bookmark.Time, bookmark.getTime());
+		
 		values.put(Bookmark.ToRead, bookmark.getToRead() ? 1 : 0);
 		values.put(Bookmark.Shared, bookmark.getShared() ? 1 : 0);
 		

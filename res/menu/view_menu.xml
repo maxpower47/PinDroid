@@ -23,9 +23,9 @@
  -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item 
-		android:id="@+id/menu_view_markasread" 
-		android:title="@string/menu_view_markasread_title" 
-		android:icon="@drawable/ic_menu_mark" />
+		android:id="@+id/menu_view_read" 
+		android:title="@string/menu_view_read_title" 
+		android:icon="@drawable/ic_menu_read" />
 	<item 
 		android:id="@+id/menu_view_openbookmark" 
 		android:title="@string/menu_view_openbookmark_title" 

@@ -21,6 +21,7 @@
 
 package com.pindroid.providers;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.SortedMap;
@@ -28,6 +29,8 @@ import java.util.TreeMap;
 
 import com.pindroid.R;
 import com.pindroid.Constants;
+import com.pindroid.action.BookmarkTaskArgs;
+import com.pindroid.action.MarkReadBookmarkTask;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 
@@ -38,6 +41,7 @@ import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.UriMatcher;
 import android.content.res.Resources;
@@ -334,7 +338,11 @@ public class BookmarkContentProvider extends ContentProvider {
 		    	
 		    	if(defaultAction.equals("browser")) {
 		    		data = Uri.parse(c.getString(urlColumn));
+		    	} else if(defaultAction.equals("read")){
+		        	String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(c.getString(urlColumn));
+		        	data = Uri.parse(readUrl);
 		    	} else {
+		    	
 		    		builder.scheme(Constants.CONTENT_SCHEME);
 		    		builder.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
 		    		builder.appendEncodedPath("bookmarks");

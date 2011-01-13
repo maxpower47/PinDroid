@@ -21,7 +21,7 @@
 
 package com.pindroid.activity;
 
-import java.util.ArrayList;
+import java.net.URLEncoder;
 import java.util.Date;
 
 import com.pindroid.R;
@@ -38,8 +38,10 @@ import com.pindroid.ui.AccountSpan;
 import com.pindroid.ui.TagSpan;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
@@ -66,12 +68,18 @@ public class ViewBookmark extends AppBaseActivity{
 	private String path;
 	private Uri data;
 	
+	private boolean markAsRead;
+	private SharedPreferences settings;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.view_bookmark);
+		
+    	settings = PreferenceManager.getDefaultSharedPreferences(this);
+    	markAsRead = settings.getBoolean("pref_markasread", false);
 		
 		mTitle = (TextView) findViewById(R.id.view_bookmark_title);
 		mUrl = (TextView) findViewById(R.id.view_bookmark_url);
@@ -128,21 +136,25 @@ public class ViewBookmark extends AppBaseActivity{
 			}
 			catch(ContentNotFoundException e){}
 		} else if(path.contains("/bookmarks") && !myself) {
-			Date d = new Date(Long.parseLong(data.getQueryParameter("time")));
+
+			bookmark = new Bookmark();
+			bookmark.setDescription(data.getQueryParameter("title"));
+			bookmark.setUrl(data.getQueryParameter("url"));
+			bookmark.setNotes(data.getQueryParameter("notes"));
+			bookmark.setTime(Long.parseLong(data.getQueryParameter("time")));
+			bookmark.setTagString(data.getQueryParameter("tags"));
+			bookmark.setAccount(data.getQueryParameter("account"));
 			
-			mTitle.setText(data.getQueryParameter("title"));
-			mUrl.setText(data.getQueryParameter("url"));
-			mNotes.setText(data.getQueryParameter("notes"));
+			Date d = new Date(bookmark.getTime());
+			
+			mTitle.setText(bookmark.getDescription());
+			mUrl.setText(bookmark.getUrl());
+			mNotes.setText(bookmark.getNotes());
 			mTime.setText(d.toString());
-			
-			ArrayList<Tag> taglist = new ArrayList<Tag>();
-			for(String s : data.getQueryParameter("tags").split(" ")) {
-				taglist.add(new Tag(s));
-			}
 			
     		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
 
-    		for(Tag t : taglist) {
+    		for(Tag t : bookmark.getTags()) {
     			addTag(tagBuilder, t, userTagOnClickListener);
     		}
     		
@@ -151,10 +163,10 @@ public class ViewBookmark extends AppBaseActivity{
 
 			SpannableStringBuilder builder = new SpannableStringBuilder();
 			int start = builder.length();
-			builder.append(data.getQueryParameter("account"));
+			builder.append(bookmark.getAccount());
 			int end = builder.length();
 			
-			AccountSpan span = new AccountSpan(data.getQueryParameter("account"));
+			AccountSpan span = new AccountSpan(bookmark.getAccount());
 			span.setOnAccountClickListener(accountOnClickListener);
 
 			builder.setSpan(span, start, end, 0);
@@ -246,9 +258,6 @@ public class ViewBookmark extends AppBaseActivity{
 		if(!myself) {
 			menu.removeItem(R.id.menu_view_editbookmark);
 			menu.removeItem(R.id.menu_view_deletebookmark);
-			menu.removeItem(R.id.menu_view_markasread);
-		} else if(!bookmark.getToRead()) {
-			menu.removeItem(R.id.menu_view_markasread);
 		}
 		return true;
 	}
@@ -257,9 +266,15 @@ public class ViewBookmark extends AppBaseActivity{
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle item selection
 	    switch (item.getItemId()) {
-		    case R.id.menu_view_markasread:
-				BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, mAccount, this);	
-				new MarkReadBookmarkTask().execute(args);
+		    case R.id.menu_view_read:
+		    	if(isMyself() && bookmark.getToRead() && markAsRead) {
+		    		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, mAccount, this);
+		    		new MarkReadBookmarkTask().execute(args);
+		    	}
+		    	String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(((Spannable) mUrl.getText()).toString());
+		    	Uri readLink = Uri.parse(readUrl);
+				Intent readIntent = new Intent(Intent.ACTION_VIEW, readLink);
+				startActivity(readIntent);
 				return true;
 		    case R.id.menu_view_openbookmark:
 		    	String url = ((Spannable) mUrl.getText()).toString();

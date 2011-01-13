@@ -80,6 +80,7 @@
     
     <string name="bookmark_context_open">Open in browser</string>
     <string name="bookmark_context_view">View Details</string>
+    <string name="bookmark_context_read">Read</string>
     <string name="bookmark_context_edit">Edit</string>
     <string name="bookmark_context_delete">Delete</string>
     <string name="bookmark_context_share">Share</string>
@@ -175,7 +176,7 @@
     <string name="view_bookmark_time_title">Saved on</string>
     <string name="view_bookmark_account_title">By</string>
     
-    <string name="menu_view_markasread_title">Mark as read</string>
+    <string name="menu_view_read_title">Read</string>
     <string name="menu_view_openbookmark_title">Open in browser</string>
     <string name="menu_view_editbookmark_title">Edit</string>
     <string name="menu_view_deletebookmark_title">Delete</string>
@@ -217,6 +218,10 @@
     <string name="pref_save_toread_default_key">pref_save_toread_default</string>
     <string name="pref_save_toread_default_summary">Set new bookmarks as unread by default.</string>
     
+    <string name="pref_markasread_title">Mark as Read</string>
+    <string name="pref_markasread_key">pref_markasread</string>
+    <string name="pref_markasread_summary">Mark unread bookmarks as read when you read them.</string>
+    
     <string name="pref_forcesync_title">Sync Now</string>
     <string name="pref_forcesync_key">pref_forcesync</string>
     <string name="pref_forcesync_summary">Start a bookmark sync.</string>
@@ -251,7 +256,8 @@
     	&lt;ul&gt;
      		&lt;li&gt;Only a single Pinboard account is currently supported. &lt;/li&gt;
      		&lt;li&gt;Certain features from DeliciousDroid have not been ported yet due to limitations in Pinboards API, including contact syncing and viewing network bookmark lists. &lt;/li&gt;
-    	&lt;/ul&gt;
+    	&lt;/ul&gt;&lt;br/&gt;
+    	Read view powered by Instapaper
     &lt;/body&gt;
     &lt;/html&gt;
     </string>
