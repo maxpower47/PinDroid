@@ -45,7 +45,7 @@
     <string name="login_activity_loginfail_text_pwonly">You entered the wrong password or your account has changed.
         Please re-enter your password.</string>
     <!-- Message shown in dialog to prompt the user for their password -->
-    <string name="login_activity_loginfail_text_pwmissing">Type the password for this account.</string>
+    <string name="login_activity_loginfail_text_pwmissing">Enter the password for this account.</string>
     <!-- Message shown if the provided account doesn't support the current activity. -->
     <string name="login_activity_newaccount_text">Sign in to your Pinboard account.</string>
 
@@ -100,11 +100,6 @@
     <string name="menu_sort_title">Sort</string>
     <string name="menu_search_title">Search</string>
     <string name="menu_settings_title">Settings</string>
-    <string name="menu_view_markasread_title">Mark as read</string>
-    <string name="menu_view_openbookmark_title">Open in browser</string>
-    <string name="menu_view_editbookmark_title">Edit</string>
-    <string name="menu_view_deletebookmark_title">Delete</string>
-    <string name="menu_view_sendbookmark_title">Share</string>
     
     <!-- BrowseTags -->
     <string name="browse_my_tags_title">My Tags</string>
@@ -180,6 +175,12 @@
     <string name="view_bookmark_time_title">Saved on</string>
     <string name="view_bookmark_account_title">By</string>
     
+    <string name="menu_view_markasread_title">Mark as read</string>
+    <string name="menu_view_openbookmark_title">Open in browser</string>
+    <string name="menu_view_editbookmark_title">Edit</string>
+    <string name="menu_view_deletebookmark_title">Delete</string>
+    <string name="menu_view_sendbookmark_title">Share</string>
+    
     <!-- Widget -->
     <string name="search_widget_label">PinDroid</string>
     
@@ -200,17 +201,9 @@
     <string name="pref_synctime_key">pref_synctime</string>
     <string name="pref_synctime_summary">How often to sync bookmarks.</string>
     
-    <string name="pref_notification_title">Display Notifications</string>
-    <string name="pref_notification_key">pref_notification</string>
-    <string name="pref_notification_summary">Display notifications when new links are received in your inbox.</string>
- 
     <string name="pref_view_bookmark_default_action_title">Bookmark Action</string>
     <string name="pref_view_bookmark_default_action_key">pref_view_bookmark_default_action</string>
     <string name="pref_view_bookmark_default_action_summary">Default action for bookmarks.</string>
-    
-    <string name="pref_contact_bookmark_results_title">Contact Bookmarks</string>
-    <string name="pref_contact_bookmark_results_key">pref_contact_bookmark_results</string>
-    <string name="pref_contact_bookamrk_results_summary">Number of bookmarks to retrieve for network contacts.</string>
     
     <string name="pref_searchicons_title">Display Search Icons</string>
     <string name="pref_searchicons_key">pref_searchicons</string>
@@ -226,7 +219,7 @@
     
     <string name="pref_forcesync_title">Sync Now</string>
     <string name="pref_forcesync_key">pref_forcesync</string>
-    <string name="pref_forcesync_summary">Start a bookmark sync</string>
+    <string name="pref_forcesync_summary">Start a bookmark sync.</string>
     
     <string name="pref_license_title">License</string>
     <string name="pref_license_key">pref_license</string>
@@ -247,12 +240,19 @@
     <!-- AboutActivity -->
     <string name="about_activity_title">About PinDroid</string>
     <string name="about_title">PinDroid</string>
-    <string name="about_text"> PinDroid is a port of DeliciousDroid for the Pinboard bookmarking system.\n\n
-    						Developed, maintained, and supported by Matt Schmidt\n\n
-    						Find a bug or have a suggestion for a new feature?  Open an issue at http://code.google.com/p/pindroid/issues \n\n
-    						Or, drop me a line on Twitter @PinDroid\n\n
-     						<b>Known Issues:</b>\n\n
-     						<li>Only a single Pinboard account is currently supported. </li>\n
-     						<li>Certain features from DeliciousDroid have not been ported yet due to limitations in Pinboards API, including contact syncing and viewing network bookmark lists. </li>
+    <string name="about_text">
+    &lt;html&gt; 
+    &lt;body style="background-color:#000000;color:#BEBEBE"&gt;
+    	PinDroid is a port of DeliciousDroid for the Pinboard bookmarking system.&lt;br/&gt;&lt;br/&gt;
+    	Developed, maintained, and supported by Matt Schmidt&lt;br/&gt;&lt;br/&gt;
+    	Find a bug or have a suggestion for a new feature?  Open an issue at &lt;a href=\'http://code.google.com/p/pindroid/issues\'&gt;http://code.google.com/p/pindroid/issues&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;
+    	Or, drop me a line on Twitter @PinDroid&lt;br/&gt;&lt;br/&gt;
+    	&lt;b&gt;Known Issues:&lt;/b&gt;
+    	&lt;ul&gt;
+     		&lt;li&gt;Only a single Pinboard account is currently supported. &lt;/li&gt;
+     		&lt;li&gt;Certain features from DeliciousDroid have not been ported yet due to limitations in Pinboards API, including contact syncing and viewing network bookmark lists. &lt;/li&gt;
+    	&lt;/ul&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;
     </string>
 </resources>

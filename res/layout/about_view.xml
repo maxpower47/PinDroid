@@ -29,7 +29,8 @@
 		android:layout_width="fill_parent" 
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
-		android:paddingTop="10dip">
+		android:paddingTop="10dip"
+		android:paddingBottom="10dip">
 		<ImageView
 			android:id="@+id/about_icon"
 			android:layout_width="wrap_content"
@@ -46,14 +47,12 @@
 			android:layout_marginLeft="20dip"
 			android:text="@string/about_title"/>
 	</LinearLayout>
-	<TextView
+	<WebView
 		android:id="@+id/about_text_view"
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"
 		android:textSize="14sp"
-		android:text="@string/about_text"
-		android:autoLink="all"
-		android:linksClickable="true"
+		android:background="#000000"
 		android:paddingLeft="10dip"
 		android:paddingTop="20dip" />
 </LinearLayout>

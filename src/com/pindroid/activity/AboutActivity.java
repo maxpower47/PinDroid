@@ -22,6 +22,7 @@
 package com.pindroid.activity;
 
 import android.os.Bundle;
+import android.webkit.WebView;
 
 import com.pindroid.R;
 
@@ -32,6 +33,8 @@ public class AboutActivity extends AppBaseActivity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.about_view);
+		
+		WebView content = (WebView) findViewById(R.id.about_text_view);
+		content.loadData(res.getString(R.string.about_text), "text/html", "utf-8");
 	}
-
 }
