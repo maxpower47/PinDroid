@@ -4,6 +4,7 @@ import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.activity.AddBookmark;
 import com.pindroid.activity.Main;
+import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContentProvider;
 
 import android.accounts.Account;
@@ -15,10 +16,11 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.View;
 import android.widget.RemoteViews;
 
 public class SearchWidgetProvider extends AppWidgetProvider {
-
+	
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         final int n = appWidgetIds.length;
         
@@ -58,20 +60,21 @@ public class SearchWidgetProvider extends AppWidgetProvider {
     		
     		Intent addIntent = new Intent(context, AddBookmark.class);
     		
-    		//Intent networkIntent = new Intent();
-    		//networkIntent.setAction(Intent.ACTION_VIEW);
-    		//networkIntent.addCategory(Intent.CATEGORY_DEFAULT);
-    		//Uri.Builder data = new Uri.Builder();
-    		//data.scheme(Constants.CONTENT_SCHEME);
-    		//data.encodedAuthority("network@" + BookmarkContentProvider.AUTHORITY);
-    		//data.appendEncodedPath("bookmarks");
-    		//networkIntent.setData(data.build());
+    		Intent unreadIntent = new Intent();
+    		unreadIntent.setAction(Intent.ACTION_VIEW);
+    		unreadIntent.addCategory(Intent.CATEGORY_DEFAULT);
+    		Uri.Builder data = new Uri.Builder();
+    		data.scheme(Constants.CONTENT_SCHEME);
+    		data.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
+    		data.appendEncodedPath("bookmarks");
+    		data.appendQueryParameter("unread", "1");
+    		unreadIntent.setData(data.build());
     		
             PendingIntent bookmarkPendingIntent = PendingIntent.getActivity(context, 0, bookmarkIntent, 0);
             PendingIntent tagPendingIntent = PendingIntent.getActivity(context, 0, tagIntent, 0);
             PendingIntent searchPendingIntent = PendingIntent.getActivity(context, 0, searchIntent, 0);
             PendingIntent addPendingIntent = PendingIntent.getActivity(context, 0, addIntent, 0);
-            //PendingIntent networkPendingIntent = PendingIntent.getActivity(context, 0, networkIntent, 0);
+            PendingIntent unreadPendingIntent = PendingIntent.getActivity(context, 0, unreadIntent, 0);
 
             // Get the layout for the App Widget and attach an on-click listener to the button
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.search_appwidget);
@@ -79,7 +82,24 @@ public class SearchWidgetProvider extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.search_widget_tags_button, tagPendingIntent);
             views.setOnClickPendingIntent(R.id.search_widget_search_button, searchPendingIntent);
             views.setOnClickPendingIntent(R.id.search_widget_add_button, addPendingIntent);
-            //views.setOnClickPendingIntent(R.id.search_widget_network_button, networkPendingIntent);
+            views.setOnClickPendingIntent(R.id.search_widget_unread_button, unreadPendingIntent);
+            
+            int count = BookmarkManager.GetUnreadCount(username, context);
+
+            String countText = Integer.toString(count);
+            if(count > 99) {
+            	countText = "+";
+            }
+
+            if(count > 0) {
+            	views.setViewVisibility(R.id.search_widget_unread_count, View.VISIBLE);
+                views.setViewVisibility(R.id.search_widget_unread_count_background, View.VISIBLE);
+            	
+            	views.setTextViewText(R.id.search_widget_unread_count, countText);
+            } else {
+            	views.setViewVisibility(R.id.search_widget_unread_count, View.GONE);
+            	views.setViewVisibility(R.id.search_widget_unread_count_background, View.GONE);
+            }
 
             // Tell the AppWidgetManager to perform an update on the current App Widget
             appWidgetManager.updateAppWidget(appWidgetId, views);

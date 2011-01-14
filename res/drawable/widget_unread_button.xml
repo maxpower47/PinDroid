@@ -21,9 +21,10 @@
  * USA
  */
  -->
-<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minWidth="294dp"
-    android:minHeight="72dp"
-    android:updatePeriodMillis="1800000"
-    android:initialLayout="@layout/search_appwidget" >
-</appwidget-provider>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:drawable="@drawable/widget_unread_orange"
+    	android:state_pressed="true" />
+    <item android:drawable="@drawable/widget_unread_orange_inv"
+        android:state_focused="true" />
+    <item android:drawable="@drawable/widget_unread" />
+</selector>

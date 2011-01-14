@@ -297,4 +297,22 @@ public class BookmarkManager {
 		c.close();
 		return bookmarkList;
 	}
+	
+	public static int GetUnreadCount(String username, Context context){
+		int count = 0;
+		
+		String[] projection = new String[] {Bookmark._ID};
+		String selection = Bookmark.Account + "=? AND " + Bookmark.ToRead + "=1";
+		String[] selectionargs = new String[]{username};
+
+		
+		Uri bookmarks = Bookmark.CONTENT_URI;
+		
+		Cursor c = context.getContentResolver().query(bookmarks, projection, selection, selectionargs, null);				
+		
+		count = c.getCount();
+		
+		c.close();
+		return count;
+	}
 }
