@@ -38,10 +38,8 @@ import com.pindroid.ui.AccountSpan;
 import com.pindroid.ui.TagSpan;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
@@ -66,20 +64,13 @@ public class ViewBookmark extends AppBaseActivity{
 	
 	private String user;
 	private String path;
-	private Uri data;
-	
-	private boolean markAsRead;
-	private SharedPreferences settings;
-	
+	private Uri data;	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.view_bookmark);
-		
-    	settings = PreferenceManager.getDefaultSharedPreferences(this);
-    	markAsRead = settings.getBoolean("pref_markasread", false);
 		
 		mTitle = (TextView) findViewById(R.id.view_bookmark_title);
 		mUrl = (TextView) findViewById(R.id.view_bookmark_url);

@@ -44,10 +44,8 @@ import android.accounts.Account;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -167,11 +165,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		mButtonCancel.setOnClickListener(this);
 	}
 	
-	private void setDefaultValues(){
-    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-    	boolean privateDefault = settings.getBoolean("pref_save_private_default", false);
-    	boolean toreadDefault = settings.getBoolean("pref_save_toread_default", false);
-    	
+	private void setDefaultValues(){   	
     	mPrivate.setChecked(privateDefault);
     	mToRead.setChecked(toreadDefault);
 	}

@@ -53,6 +53,13 @@ public class AppBaseActivity extends Activity {
 	protected Context mContext;
 	protected String username = null;
 	protected Resources res;
+	protected SharedPreferences settings;
+	
+	protected long lastUpdate;
+	protected boolean privateDefault;
+	protected boolean toreadDefault;
+	protected String defaultAction;
+	protected boolean markAsRead;
 	
 	Bundle savedState;
 	
@@ -65,9 +72,8 @@ public class AppBaseActivity extends Activity {
 		
 		mContext = this;
 		mAccountManager = AccountManager.get(this);
-
-    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
-    	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
+		
+		loadSettings();
 		
 		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length < 1) {		
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -122,6 +128,21 @@ public class AppBaseActivity extends Activity {
 		TagManager.TruncateOldTags(accounts, this);
 		
 		username = mAccount.name;
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		loadSettings();
+	}
+	
+	private void loadSettings(){
+		settings = PreferenceManager.getDefaultSharedPreferences(this);
+    	lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
+    	privateDefault = settings.getBoolean("pref_save_private_default", false);
+    	toreadDefault = settings.getBoolean("pref_save_toread_default", false);
+    	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
+    	markAsRead = settings.getBoolean("pref_markasread", false);	
 	}
 
 	@Override

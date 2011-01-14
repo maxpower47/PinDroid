@@ -53,6 +53,13 @@ public class AppBaseListActivity extends ListActivity {
 	protected Context mContext;
 	protected String username = null;
 	protected Resources res;
+	protected SharedPreferences settings;
+	
+	protected long lastUpdate;
+	protected boolean privateDefault;
+	protected boolean toreadDefault;
+	protected String defaultAction;
+	protected boolean markAsRead;
 	
 	Bundle savedState;
 	
@@ -122,6 +129,21 @@ public class AppBaseListActivity extends ListActivity {
 		TagManager.TruncateOldTags(accounts, this);
 		
 		username = mAccount.name;
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		loadSettings();
+	}
+	
+	private void loadSettings(){
+		settings = PreferenceManager.getDefaultSharedPreferences(this);
+    	lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
+    	privateDefault = settings.getBoolean("pref_save_private_default", false);
+    	toreadDefault = settings.getBoolean("pref_save_toread_default", false);
+    	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
+    	markAsRead = settings.getBoolean("pref_markasread", false);	
 	}
 
 	@Override

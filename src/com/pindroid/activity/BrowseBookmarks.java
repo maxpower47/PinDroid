@@ -40,11 +40,9 @@ import com.pindroid.providers.BookmarkContent.Bookmark;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -63,9 +61,6 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	
 	private ListView lv;
 	
-	private String defaultAction;
-	private boolean markAsRead;
-	
 	private final int sortDateAsc = 9999991;
 	private final int sortDateDesc = 9999992;
 	private final int sortDescAsc = 9999993;
@@ -76,8 +71,6 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	private String sortfield = Bookmark.Time + " DESC";
 	
 	private ArrayList<Bookmark> bookmarkList;
-	
-	private SharedPreferences settings;
 	
 	private String tagname = null;
 	private boolean unread = false;
@@ -100,11 +93,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 			}
 			
 			Intent intent = getIntent();
-			
-	    	settings = PreferenceManager.getDefaultSharedPreferences(this);
-	    	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
-	    	markAsRead = settings.getBoolean("pref_markasread", false);
-	
+				
 			Uri data = intent.getData();
 			String path = null;
 			
