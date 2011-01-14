@@ -37,6 +37,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
@@ -154,10 +155,11 @@ public class NetworkUtilities {
 				resp = HttpClientFactory.getThreadSafeClient().execute(post);
 
 		    	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-		    		String response = EntityUtils.toString(resp.getEntity());
+		    		String response = EntityUtils.toString(resp.getEntity(), HTTP.UTF_8);
 		    		int start = response.indexOf("<title>") + 7;
 		    		int end = response.indexOf("</title>", start + 1);
 		    		String title = response.substring(start, end);
+		    		title = title + "";
 		    		return title;
 		    	} else return "";
 			} catch (Exception e) {
