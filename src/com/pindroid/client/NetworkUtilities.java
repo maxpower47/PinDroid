@@ -159,7 +159,6 @@ public class NetworkUtilities {
 		    		int start = response.indexOf("<title>") + 7;
 		    		int end = response.indexOf("</title>", start + 1);
 		    		String title = response.substring(start, end);
-		    		title = title + "";
 		    		return title;
 		    	} else return "";
 			} catch (Exception e) {
