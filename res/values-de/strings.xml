@@ -39,15 +39,15 @@
     <string name="login_activity_ok_button">Anmelden</string>
 
     <!-- Message shown in dialog if the username or password is invalid. -->
-    <string name="login_activity_loginfail_text_both">Der Benutzername oder das Passwort ist nicht korrekt. Es wird ein Pinboard Account
+    <string name="login_activity_loginfail_text_both">Der Benutzername oder das Passwort ist nicht korrekt. Es wird ein Pinboard Konto
         benötigt. Bitte noch einmal versuchen. </string>
     <!-- Message shown in dialog if the password is invalid -->
     <string name="login_activity_loginfail_text_pwonly">Du hast ein falsches Passwort eingegeben oder dein Account hat sich geändert.
         Bitte das Passwort noch einmal eingeben.</string>
     <!-- Message shown in dialog to prompt the user for their password -->
-    <string name="login_activity_loginfail_text_pwmissing">Passwort für diesen Account eingeben.</string>
+    <string name="login_activity_loginfail_text_pwmissing">Passwort für dieses Konto eingeben.</string>
     <!-- Message shown if the provided account doesn't support the current activity. -->
-    <string name="login_activity_newaccount_text">Deinen Pinboard Account anmelden.</string>
+    <string name="login_activity_newaccount_text">Dein Pinboard Konto anmelden.</string>
 
     <!-- Button that takes the user to the "sign in" screen -->
     <string name="sign_in_button_label">Anmelden</string>
@@ -57,23 +57,23 @@
     <string name="cancel_button_label">Abbrechen</string>
     <string name="titleMain">Pinboard</string>
     
-    <string name="dialog_no_account_title">Es wurde kein Pinboard Account gefunden</string>
-    <string name="dialog_no_account_text"> Um deinen Pinboard Account hinzuzufügen gehe in "Account und Synchronisierung" in den Einstellungen.</string>
+    <string name="dialog_no_account_title">Es wurde kein Pinboard Konto gefunden</string>
+    <string name="dialog_no_account_text"> Um deinen Pinboard Konto hinzuzufügen gehe in "Konten und Synchronisierung" in den Einstellungen.</string>
     
     <!-- Main -->
     <string name="main_menu_my_bookmarks">Meine Lesezeichen</string>
-    <string name="main_menu_my_unread_bookmarks">Meine ungelesenen Lesezeichen</string>
+    <string name="main_menu_my_unread_bookmarks">Meine Ungelesenen</string>
     <string name="main_menu_my_tags">Meine Tags</string>
     <string name="main_menu_recent_bookmarks">Neue Lesezeichen</string>
 
 	<!-- MainSearchResults -->
-    <string name="main_search_results_title">Such Ergebnisse</string>
+    <string name="main_search_results_title">Suchergebnisse</string>
       
     <!-- BrowseBookmarks -->
     <string name="browse_my_bookmarks_title">Meine Lesezeichen</string>
     <string name="browse_my_unread_bookmarks_title">Meine ungelesenen Lesezeichen</string>
     <string name="browse_my_bookmarks_tagged_title">Meine Lesezeichen markiert mit Tag %1$s</string>
-    <string name="browse_my_unread_bookmarks_tagged_title">meine ungelesenen Lesezeichen markiert mit %1$s</string>
+    <string name="browse_my_unread_bookmarks_tagged_title">Meine ungelesenen Lesezeichen markiert mit %1$s</string>
     <string name="browse_recent_bookmarks_title">Neue Lesezeichen</string>
     <string name="browse_user_bookmarks_title">Lesezeichen für %1$s</string>
     <string name="browse_user_bookmarks_tagged_title">Lesezeichen für %1$s markiert mit %2$s</string>
@@ -195,10 +195,10 @@
     
     <string name="pref_cat_general_title">Allgemeine Einstellungen</string>
     <string name="pref_cat_sync_title">Synchronisierungseinstellungen</string>
-    <string name="pref_cat_save_title">Einstellungen speichern</string>
+    <string name="pref_cat_save_title">Speichereinstellungen</string>
     <string name="pref_cat_help_title">Hilfe</string>
     
-    <string name="pref_synctime_title">Synchronisierungs Frequenz</string>
+    <string name="pref_synctime_title">Synchronis. Frequenz</string>
     <string name="pref_synctime_key">pref_synctime</string>
     <string name="pref_synctime_summary">Wie oft sollen die Lesezeichen synchronisiert werden?</string>
     
@@ -212,11 +212,11 @@
     
     <string name="pref_save_private_default_title">Privat als Standard</string>
     <string name="pref_save_private_default_key">pref_save_private_default</string>
-    <string name="pref_save_private_default_summary">Setze neue Lesezeichen standardmässig auf privat.</string>
+    <string name="pref_save_private_default_summary">Setze neue Lesezeichen standardmäßig auf privat.</string>
     
     <string name="pref_save_toread_default_title">Ungelesen als Standard</string>
     <string name="pref_save_toread_default_key">pref_save_toread_default</string>
-    <string name="pref_save_toread_default_summary">Setze neue Lesezeichen standardmäßig auf ungelsen.</string>
+    <string name="pref_save_toread_default_summary">Setze neue Lesezeichen standardmäßig auf ungelesen.</string>
     
     <string name="pref_markasread_title">Als gelesen markieren</string>
     <string name="pref_markasread_key">pref_markasread</string>
@@ -247,14 +247,14 @@
     <string name="about_title">PinDroid</string>
     <string name="about_text">
     &lt;html&gt; 
-    &lt;body style="background-color:#000000;color:#BEBEBE"&gt;
-    	PinDroid ist eine Prtierung von DeliciousDroid für das Pinboard Lesezeichen System (bookmarking system).&lt;br/&gt;&lt;br/&gt;
+    &lt;body style=&quot;background-color:#000000;color:#BEBEBE&quot;&gt;
+    	PinDroid ist eine Portierung von DeliciousDroid fuer das Pinboard Lesezeichen System (bookmarking system).&lt;br/&gt;&lt;br/&gt;
     	Entwickelt, verwaltet und unterhalten von Matt Schmidt&lt;br/&gt;&lt;br/&gt;
-    	Einen Fehler gefunfen oder einen Vorschlag für eine neue Funktion?  Stelle dies unter &lt;a href=\'http://code.google.com/p/pindroid/issues\'&gt;http://code.google.com/p/pindroid/issues&lt;/a&gt;&lt;br/&gt;&lt;br/&gt; ein.
+    	Einen Fehler gefunden oder einen Vorschlag fuer eine neue Funktion?  Stelle dies unter &lt;a href=\'http://code.google.com/p/pindroid/issues\'&gt;http://code.google.com/p/pindroid/issues&lt;/a&gt;&lt;br/&gt;&lt;br/&gt; ein.
     	Oder sende mir eine kurze Mitteilung auf Twitter @PinDroid&lt;br/&gt;&lt;br/&gt;
     	&lt;b&gt;Bekannte Probleme:&lt;/b&gt;
     	&lt;ul&gt;
-     		&lt;li&gt;Derzeit wird nur ein Pinboard Account unterstützt. &lt;/li&gt;
+     		&lt;li&gt;Derzeit wird nur ein Pinboard Account unterstuetzt. &lt;/li&gt;
      		&lt;li&gt;Einige Funktionen von DeliciousDroid wurden aufgrund des derzeit noch limitierten Funktionsumfangs der Pinboard API noch nicht portiert. Dies umfasst die Synchronisierung von Kontakten und die Anzeige von Lesezeichen des eigenen Netzwerks. &lt;/li&gt;
     	&lt;/ul&gt;&lt;br/&gt;
     	Lese Ansicht wird bereitgestellt durch Instapaper
