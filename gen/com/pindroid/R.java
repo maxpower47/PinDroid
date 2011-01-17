@@ -163,6 +163,7 @@ public final class R {
     }
     public static final class string {
         /**  AboutActivity 
+ AboutActivity 
          */
         public static final int about_activity_title=0x7f060090;
         public static final int about_text=0x7f060092;
@@ -172,6 +173,7 @@ public final class R {
         public static final int account_preferences_summary=0x7f06006a;
         public static final int account_preferences_title=0x7f060069;
         /**  AddBookmark 
+ AddBookmark 
          */
         public static final int add_bookmark_add_title=0x7f060034;
         public static final int add_bookmark_edit_title=0x7f060035;
@@ -189,9 +191,11 @@ public final class R {
         public static final int add_title_toread=0x7f060040;
         public static final int add_title_url=0x7f060039;
         /**  Button for going to the previous screen or step 
+ Button for going to the previous screen or step 
          */
         public static final int back_button_label=0x7f06000b;
         /**  Content Provider 
+ Content Provider 
          */
         public static final int bookmark_content_provider_label=0x7f060058;
         public static final int bookmark_context_add=0x7f060022;
@@ -215,9 +219,11 @@ public final class R {
         public static final int bookmark_sort_url_desc=0x7f060029;
         public static final int browse_my_bookmarks_tagged_title=0x7f060017;
         /**  BrowseBookmarks 
+ BrowseBookmarks 
          */
         public static final int browse_my_bookmarks_title=0x7f060015;
         /**  BrowseTags 
+ BrowseTags 
          */
         public static final int browse_my_tags_title=0x7f06002f;
         public static final int browse_my_unread_bookmarks_tagged_title=0x7f060018;
@@ -226,6 +232,7 @@ public final class R {
         public static final int browse_user_bookmarks_tagged_title=0x7f06001b;
         public static final int browse_user_bookmarks_title=0x7f06001a;
         /**  Button to cancel the current operation 
+ Button to cancel the current operation 
          */
         public static final int cancel_button_label=0x7f06000c;
         public static final int delete_bookmark_error_msg=0x7f060045;
@@ -234,31 +241,41 @@ public final class R {
         public static final int dialog_no_account_title=0x7f06000e;
         public static final int edit_bookmark_success_msg=0x7f060042;
         /**  Label for this package 
+ Label for this package 
          */
         public static final int label=0x7f060000;
         /**  Message shown in dialog if the username or password is invalid. 
+ Message shown in dialog if the username or password is invalid. 
          */
         public static final int login_activity_loginfail_text_both=0x7f060006;
         /**  Message shown in dialog to prompt the user for their password 
+ Message shown in dialog to prompt the user for their password 
          */
         public static final int login_activity_loginfail_text_pwmissing=0x7f060008;
         /**  Message shown in dialog if the password is invalid 
+ Message shown in dialog if the password is invalid 
          */
         public static final int login_activity_loginfail_text_pwonly=0x7f060007;
         /**  Message shown if the provided account doesn't support the current activity. 
+ Message shown if the provided account doesn't support the current activity. 
          */
         public static final int login_activity_newaccount_text=0x7f060009;
         /**  Button to sign in after entering username and password 
+ Button to sign in after entering username and password 
          */
         public static final int login_activity_ok_button=0x7f060005;
         /**  Label above password EditText 
+ Label above password EditText 
          */
         public static final int login_activity_password_label=0x7f060004;
         /**  AuthenticatorActivity 
  Label above username EditText 
+ AuthenticatorActivity 
+ Label above username EditText 
          */
         public static final int login_activity_username_label=0x7f060003;
         /**  Main 
+ Main 
          */
         public static final int main_menu_my_bookmarks=0x7f060010;
         public static final int main_menu_my_tags=0x7f060012;
@@ -267,9 +284,11 @@ public final class R {
         public static final int main_search_description=0x7f060048;
         public static final int main_search_hint=0x7f060047;
         /**  Searching 
+ Searching 
          */
         public static final int main_search_label=0x7f060046;
         /**  MainSearchResults 
+ MainSearchResults 
          */
         public static final int main_search_results_title=0x7f060014;
         public static final int menu_addbookmark_title=0x7f06002b;
@@ -319,15 +338,18 @@ public final class R {
         public static final int pref_view_bookmark_default_action_summary=0x7f060074;
         public static final int pref_view_bookmark_default_action_title=0x7f060072;
         /**  Preferences 
+ Preferences 
          */
         public static final int preferences_title=0x7f060066;
         public static final int search_results_bookmark=0x7f06004d;
         public static final int search_results_tag=0x7f06004e;
         /**  Widget 
+ Widget 
          */
         public static final int search_widget_label=0x7f060065;
         public static final int share_chooser_title=0x7f060023;
         /**  Button that takes the user to the "sign in" screen 
+ Button that takes the user to the "sign in" screen 
          */
         public static final int sign_in_button_label=0x7f06000a;
         public static final int sync_receiver_label=0x7f060059;
@@ -335,6 +357,7 @@ public final class R {
         public static final int tag_live_folder_chooser_title=0x7f060057;
         public static final int tag_live_folder_label=0x7f060055;
         /**  Live Folders 
+ Live Folders 
          */
         public static final int tag_live_folder_name=0x7f060054;
         public static final int tag_search_hint=0x7f06004a;
@@ -347,9 +370,11 @@ public final class R {
         public static final int tag_sort_name_desc=0x7f060031;
         public static final int titleMain=0x7f06000d;
         /**  Message shown in progress dialog while app connects to the server 
+ Message shown in progress dialog while app connects to the server 
          */
         public static final int ui_activity_authenticating=0x7f060002;
         /**  Title string for Login activity
+ Title string for Login activity
          */
         public static final int ui_activity_title=0x7f060001;
         public static final int unread_search_results_title=0x7f060051;
@@ -358,6 +383,7 @@ public final class R {
         public static final int view_bookmark_tags_title=0x7f06005d;
         public static final int view_bookmark_time_title=0x7f06005e;
         /**  ViewBookmark 
+ ViewBookmark 
          */
         public static final int view_bookmark_title=0x7f06005b;
     }

@@ -38,9 +38,9 @@
         <item>Lesen</item>
     </string-array>
     <string-array name="pref_view_bookmark_default_action_values">
-        <item>Browser</item>
-        <item>Anzeigen</item>
-        <item>Lesen</item>
+        <item>browser</item>
+        <item>view</item>
+        <item>read</item>
     </string-array>
     <string-array name="pref_synctime_entries">
         <item>5 Minuten</item>
