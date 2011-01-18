@@ -99,8 +99,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         requestWindowFeature(Window.FEATURE_LEFT_ICON);
         setContentView(R.layout.login_activity);
         getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, android.R.drawable.ic_dialog_alert);
-
-        mMessage = (TextView) findViewById(R.id.message);
       
         mUsernameEdit = (EditText) findViewById(R.id.username_edit);
         mPasswordEdit = (EditText) findViewById(R.id.password_edit);
