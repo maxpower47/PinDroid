@@ -28,11 +28,17 @@ import com.pindroid.providers.BookmarkContent.Bookmark;
 
 public class BookmarkTaskArgs{
 	private Bookmark bookmark;
+	private Bookmark oldBookmark;
 	private Account account;
 	private Context context;
+	private Boolean update;
 	
 	public Bookmark getBookmark(){
 		return bookmark;
+	}
+	
+	public Bookmark getOldBookmark(){
+		return oldBookmark;
 	}
 	
 	public Account getAccount(){
@@ -43,9 +49,21 @@ public class BookmarkTaskArgs{
 		return context;
 	}
 	
+	public Boolean getUpdate(){
+		return update;
+	}
+	
 	public BookmarkTaskArgs(Bookmark b, Account a, Context c){
 		bookmark = b;
 		account = a;
 		context = c;
+	}
+	
+	public BookmarkTaskArgs(Bookmark b, Bookmark ob, Account a, Context c, Boolean u){
+		bookmark = b;
+		oldBookmark = ob;
+		account = a;
+		context = c;
+		update = u;
 	}
 }

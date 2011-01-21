@@ -28,21 +28,18 @@ import java.util.Date;
 
 import org.apache.http.auth.AuthenticationException;
 
+import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.client.PinboardApi;
 import com.pindroid.client.NetworkUtilities;
 import com.pindroid.platform.BookmarkManager;
-import com.pindroid.platform.TagManager;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.TagSpan;
 import com.pindroid.util.StringUtils;
 
-import android.accounts.Account;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -50,7 +47,6 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
@@ -59,7 +55,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.pindroid.action.AddBookmarkTask;
 
 public class AddBookmark extends AppBaseActivity implements View.OnClickListener{
 
@@ -110,13 +107,30 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 			Intent intent = getIntent();
 			
 			if(Intent.ACTION_SEND.equals(intent.getAction())){
-				String extraData = intent.getStringExtra(Intent.EXTRA_TEXT);
+				String extraUrl = intent.getStringExtra(Intent.EXTRA_TEXT);
+				String extraDescription = intent.getStringExtra(Constants.EXTRA_DESCRIPTION);
+				String extraNotes = intent.getStringExtra(Constants.EXTRA_NOTES);
+				String extraTags = intent.getStringExtra(Constants.EXTRA_TAGS);
+				Boolean extraPrivate = intent.getBooleanExtra(Constants.EXTRA_PRIVATE, privateDefault);
+				Boolean extraToRead = intent.getBooleanExtra(Constants.EXTRA_TOREAD, toreadDefault);
 				
-				String url = StringUtils.getUrl(extraData);
-				
+				String url = StringUtils.getUrl(extraUrl);
 				mEditUrl.setText(url);
 				
-				new GetWebpageTitleTask().execute(url);
+				if(extraDescription != null)
+					mEditDescription.setText(extraDescription);
+				
+				if(extraNotes != null)
+					mEditNotes.setText(extraNotes);
+				
+				if(extraTags != null)
+					mEditTags.setText(extraTags);
+				
+				mPrivate.setChecked(extraPrivate);
+				mToRead.setChecked(extraToRead);
+				
+				if(mEditDescription.getText().equals(""))
+					new GetWebpageTitleTask().execute(url);
 				
 				setDefaultValues();
 			} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
@@ -191,9 +205,11 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 				mEditNotes.getText().toString(), mEditTags.getText().toString(),
 				!mPrivate.isChecked(), mToRead.isChecked(), updateTime);
 		
-		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, mAccount, mContext);
+		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, oldBookmark, mAccount, mContext, update);
 		
 		new AddBookmarkTask().execute(args);
+		
+		finish();
     }
 
     /**
@@ -229,72 +245,6 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
         	}
         }
     };
-
-    private class AddBookmarkTask extends AsyncTask<BookmarkTaskArgs, Integer, Boolean>{
-    	private Context context;
-    	private Bookmark bookmark;
-    	private Account account;
-    	private ProgressDialog progress;
-    	
-        protected void onPreExecute() {
-	        progress = new ProgressDialog(mContext);
-	        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-	        progress.setMessage(res.getString(R.string.add_bookmark_task_progress));
-	        progress.setCancelable(true);
-	        progress.show();
-        }
-    	
-    	@Override
-    	protected Boolean doInBackground(BookmarkTaskArgs... args) {
-    		context = args[0].getContext();
-    		bookmark = args[0].getBookmark();
-    		account = args[0].getAccount();
-    		
-    		try {
-    			Boolean success = PinboardApi.addBookmark(bookmark, account, context);
-    			if(success){
-    				if(update){
-    					BookmarkManager.UpdateBookmark(bookmark, account.name, context);
-    				} else {
-    					BookmarkManager.AddBookmark(bookmark, account.name, context);
-    				}
-    				return true;
-    			} else return false;
-    		} catch (Exception e) {
-    			Log.d("addBookmark error", e.toString());
-    			return false;
-    		}
-    	}
-
-        protected void onPostExecute(Boolean result) {
-        	progress.dismiss();
-        	
-    		if(result){
-    			for(Tag t : bookmark.getTags()){   				
-    				TagManager.UpsertTag(t, account.name, context);
-    			}
-    			
-    			if(update) {
-        			for(Tag t : oldBookmark.getTags()){
-        				if(!bookmark.getTags().contains(t)) {
-        					TagManager.UpleteTag(t, account.name, context);
-        				}
-        			}
-    			}
-    			
-    			String msg = null;
-    			if(update)
-    				msg = res.getString(R.string.edit_bookmark_success_msg);
-    			else msg = res.getString(R.string.add_bookmark_success_msg);
-    			
-    			Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-    		} else {
-    			Toast.makeText(context, res.getString(R.string.add_bookmark_error_msg), Toast.LENGTH_SHORT).show();
-    		}
-    		
-    		finish();
-        }
-    }
     
     public class GetWebpageTitleTask extends AsyncTask<String, Integer, String>{
     	private String url;

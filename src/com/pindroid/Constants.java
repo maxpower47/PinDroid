@@ -33,6 +33,13 @@ public class Constants {
     public static final Uri CONTENT_URI_BASE = Uri.parse("content://com.pindroid");
     
     public static final String CONTENT_SCHEME = "content";
+    
+    public static final String EXTRA_DESCRIPTION = "com.pindroid.bookmark.description";
+    public static final String EXTRA_NOTES = "com.pindroid.bookmark.notes";
+    public static final String EXTRA_TAGS = "com.pindroid.bookmark.tags";
+    public static final String EXTRA_PRIVATE = "com.pindroid.bookmark.private";
+    public static final String EXTRA_TOREAD = "com.pindroid.bookmark.toread";
+    
 
     /**
      * Authtoken type string.
