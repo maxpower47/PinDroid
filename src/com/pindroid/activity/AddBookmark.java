@@ -132,7 +132,6 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 				if(mEditDescription.getText().equals(""))
 					new GetWebpageTitleTask().execute(url);
 				
-				setDefaultValues();
 			} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
 				int id = Integer.parseInt(intent.getData().getLastPathSegment());
 				try {
