@@ -34,6 +34,7 @@ import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.client.PinboardApi;
 import com.pindroid.client.NetworkUtilities;
 import com.pindroid.platform.BookmarkManager;
+import com.pindroid.platform.TagManager;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
@@ -76,6 +77,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 	private Bookmark bookmark;
 	Thread background;
 	private Boolean update = false;
+	private Boolean error = false;
 	
 	private Bookmark oldBookmark;
 	
@@ -113,6 +115,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 				String extraTags = intent.getStringExtra(Constants.EXTRA_TAGS);
 				Boolean extraPrivate = intent.getBooleanExtra(Constants.EXTRA_PRIVATE, privateDefault);
 				Boolean extraToRead = intent.getBooleanExtra(Constants.EXTRA_TOREAD, toreadDefault);
+				error = intent.getBooleanExtra(Constants.EXTRA_ERROR, false);
 				
 				String url = StringUtils.getUrl(extraUrl);
 				mEditUrl.setText(url);
@@ -131,6 +134,30 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 				
 				if(mEditDescription.getText().equals(""))
 					new GetWebpageTitleTask().execute(url);
+				
+				bookmark = new Bookmark();
+				bookmark.setUrl(url);
+				bookmark.setDescription(extraDescription);
+				bookmark.setNotes(extraNotes);
+				bookmark.setShared(!extraPrivate);
+				bookmark.setTagString(extraTags);
+				bookmark.setToRead(extraToRead);
+				
+				if(error){
+					update = intent.getBooleanExtra(Constants.EXTRA_UPDATE, false);
+					
+					if(update) {
+						oldBookmark = new Bookmark();
+						oldBookmark.setAccount(mAccount.name);
+						oldBookmark.setDescription(intent.getStringExtra(Constants.EXTRA_DESCRIPTION + ".old"));
+						oldBookmark.setNotes(intent.getStringExtra(Constants.EXTRA_NOTES + ".old"));
+						oldBookmark.setUrl(intent.getStringExtra(Intent.EXTRA_TEXT + ".old"));
+						oldBookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE + ".old", false));
+						oldBookmark.setTagString(intent.getStringExtra(Constants.EXTRA_TAGS + ".old"));
+						oldBookmark.setTime(intent.getLongExtra(Constants.EXTRA_TIME + ".old", 0));
+						oldBookmark.setToRead(intent.getBooleanExtra(Constants.EXTRA_TOREAD + ".old", false));
+					}
+				}
 				
 			} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
 				int id = Integer.parseInt(intent.getData().getLastPathSegment());
@@ -208,7 +235,46 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		
 		new AddBookmarkTask().execute(args);
 		
+		if(update){
+			BookmarkManager.UpdateBookmark(bookmark, mAccount.name, this);
+			
+			for(Tag t : oldBookmark.getTags()){
+				if(!bookmark.getTags().contains(t)) {
+					TagManager.UpleteTag(t, mAccount.name, this);
+				}
+			}
+		} else {
+			BookmarkManager.AddBookmark(bookmark, mAccount.name, this);
+		}
+		
+		for(Tag t : bookmark.getTags()){   				
+			TagManager.UpsertTag(t, mAccount.name, this);
+		}
+		
 		finish();
+    }
+    
+    private void revertBookmark(){
+    	
+    	if(update) {
+			BookmarkManager.UpdateBookmark(oldBookmark, mAccount.name, this);
+			
+			for(Tag t : bookmark.getTags()){
+				if(!oldBookmark.getTags().contains(t)) {
+					TagManager.UpleteTag(t, mAccount.name, this);
+				}
+			}
+			
+			for(Tag t : oldBookmark.getTags()){   				
+				TagManager.UpsertTag(t, mAccount.name, this);
+			}
+    	} else {
+    		BookmarkManager.DeleteBookmark(bookmark, this);
+    		
+			for(Tag t : bookmark.getTags()){
+				TagManager.UpleteTag(t, mAccount.name, this);
+			}
+    	}
     }
 
     /**
@@ -218,8 +284,20 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
         if (v == mButtonSave) {
             save();
         } else if(v == mButtonCancel) {
+        	if(error) {
+        		revertBookmark();
+        	}
+        	
         	finish();
         }
+    }
+    
+    public void onBackPressed(){
+    	if(error) {
+    		revertBookmark();
+    	}
+    	
+    	super.onBackPressed();
     }
     
 	@Override

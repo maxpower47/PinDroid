@@ -425,7 +425,9 @@ public class PinboardApi {
     			instream = new GZIPInputStream(instream);
     		}
     		
-    		return instream;
+    		throw new IOException();
+    		
+    		//return instream;
     	} else if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
     		throw new AuthenticationException();
     	} else {
