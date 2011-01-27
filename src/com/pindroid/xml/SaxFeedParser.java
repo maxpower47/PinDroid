@@ -91,6 +91,11 @@ public class SaxFeedParser {
             	currentBookmark.setTagString(body.trim());
             }
         });
+        item.getChild(nsDc, "source").setEndTextElementListener(new EndTextElementListener(){
+            public void end(String body) {
+            	currentBookmark.setSource(body.trim());
+            }
+        });
 
         try {
             Xml.parse(is, Xml.Encoding.UTF_8, root.getContentHandler());

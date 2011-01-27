@@ -75,6 +75,7 @@ public class BookmarkListAdapter extends ArrayAdapter<Bookmark> {
             holder.description = (TextView) convertView.findViewById(R.id.bookmark_description);
             holder.tags = (TextView) convertView.findViewById(R.id.bookmark_tags);
             holder.unread = (ImageView) convertView.findViewById(R.id.bookmark_unread);
+            holder.source = (ImageView) convertView.findViewById(R.id.bookmark_source);
             
             convertView.setTag(holder);
         } else {
@@ -90,6 +91,19 @@ public class BookmarkListAdapter extends ArrayAdapter<Bookmark> {
 	            if(o.getToRead()) {
 	            	holder.unread.setVisibility(View.VISIBLE);
 	            } else holder.unread.setVisibility(View.GONE);
+	            
+	            String src = o.getSource();
+	            
+	            if(src != null && src.contains("twitter")) {
+	            	holder.source.setVisibility(View.VISIBLE);
+	            	holder.source.setImageResource(R.drawable.twitter);
+	            } else if(src != null && src.contains("instapaper")) {
+	            	holder.source.setVisibility(View.VISIBLE);
+	            	holder.source.setImageResource(R.drawable.instapaper);
+	            } else if(src != null && src.contains("apple")) {
+	            	holder.source.setVisibility(View.VISIBLE);
+	            	holder.source.setImageResource(R.drawable.apple);
+	            } else holder.source.setVisibility(View.GONE);
 	        }
         } else {
         	return new View(this.getContext());

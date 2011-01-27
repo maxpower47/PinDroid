@@ -45,13 +45,23 @@
 		    android:textSize="20sp"
 		    android:paddingLeft="5dip"
 		    android:paddingRight="10dip"/>
-		<TextView
-		    android:id="@+id/bookmark_tags"
-		    android:layout_height="wrap_content"
-		    android:layout_width="wrap_content"
-		    android:scrollHorizontally="false"
-		    android:textSize="12sp"
-		    android:paddingLeft="10dip"
-		    android:paddingRight="10dip"/>
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent">
+			<TextView
+			    android:id="@+id/bookmark_tags"
+			    android:layout_height="wrap_content"
+			    android:layout_width="wrap_content"
+			    android:scrollHorizontally="false"
+			    android:textSize="12sp"
+			    android:paddingLeft="10dip"
+			    android:paddingRight="10dip"/>
+		    <ImageView
+				android:layout_width="16dip"
+				android:layout_height="16dip"
+				android:id="@+id/bookmark_source"
+				android:visibility="gone"/>
+		</LinearLayout>
 	</LinearLayout>
 </LinearLayout>

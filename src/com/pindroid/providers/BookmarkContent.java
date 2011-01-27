@@ -58,6 +58,7 @@ public class BookmarkContent {
         private Boolean mShared = true;
         private Boolean mRead = false;
         private long mTime = 0;
+        private String mSource = null;
 
         public int getId(){
         	return mId;
@@ -152,6 +153,14 @@ public class BookmarkContent {
         	mAccount = account;
         }
         
+        public String getSource(){
+        	return mSource;
+        }
+        
+        public void setSource(String source){
+        	mSource = source;
+        }
+        
         public Bookmark() {
         }
         
@@ -200,6 +209,7 @@ public class BookmarkContent {
         	b.mTags = this.mTags;
         	b.mTime = this.mTime;
         	b.mUrl = this.mUrl;
+        	b.mSource = this.mSource;
         	return b;
         }
 	}
