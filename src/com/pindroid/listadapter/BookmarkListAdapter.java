@@ -76,6 +76,7 @@ public class BookmarkListAdapter extends ArrayAdapter<Bookmark> {
             holder.tags = (TextView) convertView.findViewById(R.id.bookmark_tags);
             holder.unread = (ImageView) convertView.findViewById(R.id.bookmark_unread);
             holder.source = (ImageView) convertView.findViewById(R.id.bookmark_source);
+            holder.priv = (ImageView) convertView.findViewById(R.id.bookmark_private);
             
             convertView.setTag(holder);
         } else {
@@ -91,6 +92,11 @@ public class BookmarkListAdapter extends ArrayAdapter<Bookmark> {
 	            if(o.getToRead()) {
 	            	holder.unread.setVisibility(View.VISIBLE);
 	            } else holder.unread.setVisibility(View.GONE);
+	            
+	            if(!o.getShared()){
+	            	holder.priv.setVisibility(View.VISIBLE);
+	            	holder.priv.setImageResource(R.drawable.padlock);
+	            } else holder.priv.setVisibility(View.GONE);
 	            
 	            String src = o.getSource();
 	            

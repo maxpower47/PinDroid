@@ -31,6 +31,7 @@ public class ViewHolder {
 		TextView tags;
 		ImageView unread;
 		ImageView source;
+		ImageView priv;
 	}
 	
 	static class TagListViewHolder {

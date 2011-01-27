@@ -62,6 +62,11 @@
 				android:layout_height="16dip"
 				android:id="@+id/bookmark_source"
 				android:visibility="gone"/>
+			<ImageView
+				android:layout_width="16dip"
+				android:layout_height="16dip"
+				android:id="@+id/bookmark_private"
+				android:visibility="gone"/>
 		</LinearLayout>
 	</LinearLayout>
 </LinearLayout>
