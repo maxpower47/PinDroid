@@ -109,6 +109,15 @@ public class BookmarkListAdapter extends ArrayAdapter<Bookmark> {
 	            } else if(src != null && src.contains("apple")) {
 	            	holder.source.setVisibility(View.VISIBLE);
 	            	holder.source.setImageResource(R.drawable.apple);
+	            } else if(src != null && src.contains("google")) {
+	            	holder.source.setVisibility(View.VISIBLE);
+	            	holder.source.setImageResource(R.drawable.google);
+	            } else if(src != null && src.contains("readitlater")) {
+	            	holder.source.setVisibility(View.VISIBLE);
+	            	holder.source.setImageResource(R.drawable.ril);
+	            } else if(src != null && src.contains("delicious")) {
+	            	holder.source.setVisibility(View.VISIBLE);
+	            	holder.source.setImageResource(R.drawable.delicious);
 	            } else holder.source.setVisibility(View.GONE);
 	        }
         } else {
