@@ -92,7 +92,9 @@ public class PinboardFeed {
     		url += "/u:" + username;
     	}
     	if(tagname != null && tagname != "") {
-    		url += "/t:" + tagname;
+    		for(String s : tagname.split(" ")) {
+    			url += "/t:" + s;
+    		}	
     	}
 
         final HttpGet post = new HttpGet(url);
