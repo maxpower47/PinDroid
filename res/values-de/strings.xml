@@ -131,6 +131,9 @@
     <string name="edit_bookmark_success_msg">Lesezeichen erfolgreich aktualisiert</string>
     <string name="add_bookmark_error_msg">Fehler</string>
     
+    <string name="add_bookmark_notification_error_title">PinDroid Fehler</string>
+    <string name="add_bookmark_notification_error_message">Fehler beim Speichern Lesezeichen</string>
+    
     <string name="delete_bookmark_success_msg">Lesezeichen erfolgreich gelöscht</string>
     <string name="delete_bookmark_error_msg">Fehler</string>
     
