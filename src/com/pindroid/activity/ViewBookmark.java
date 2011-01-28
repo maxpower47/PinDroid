@@ -133,14 +133,20 @@ public class ViewBookmark extends AppBaseActivity{
 			bookmark.setUrl(data.getQueryParameter("url"));
 			bookmark.setNotes(data.getQueryParameter("notes"));
 			bookmark.setTime(Long.parseLong(data.getQueryParameter("time")));
-			bookmark.setTagString(data.getQueryParameter("tags"));
+			if(!data.getQueryParameter("tags").equals("null"))
+				bookmark.setTagString(data.getQueryParameter("tags"));
 			bookmark.setAccount(data.getQueryParameter("account"));
 			
 			Date d = new Date(bookmark.getTime());
 			
-			mTitle.setText(bookmark.getDescription());
+			if(!bookmark.getDescription().equals("null"))
+				mTitle.setText(bookmark.getDescription());
+			
 			mUrl.setText(bookmark.getUrl());
-			mNotes.setText(bookmark.getNotes());
+			
+			if(!bookmark.getNotes().equals("null"))
+					mNotes.setText(bookmark.getNotes());
+			
 			mTime.setText(d.toString());
 			
     		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();

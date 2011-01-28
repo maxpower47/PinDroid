@@ -98,8 +98,11 @@ public class BookmarkContent {
         
         public ArrayList<Tag> getTags(){
 			ArrayList<Tag> result = new ArrayList<Tag>();
-			for(String s : this.getTagString().split(" ")) {
-				result.add(new Tag(s));
+			
+			if(this.getTagString() != null){
+				for(String s : this.getTagString().split(" ")) {
+					result.add(new Tag(s));
+				}
 			}
 			
 			return result;
