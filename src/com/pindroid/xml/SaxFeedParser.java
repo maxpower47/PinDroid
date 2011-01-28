@@ -54,6 +54,7 @@ public class SaxFeedParser {
         item.setEndElementListener(new EndElementListener(){
             public void end() {
                 bookmarks.add(currentBookmark.copy());
+                currentBookmark.clear();
             }
         });
         item.getChild(ns, "title").setEndTextElementListener(new EndTextElementListener(){

@@ -225,6 +225,12 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	@Override
 	public void onResume(){
 		super.onResume();
+		
+		Uri data = getIntent().getData();
+		if(data.getUserInfo() != "") {
+			username = data.getUserInfo();
+		} else username = mAccount.name;
+		
 		if(loaded) {
 			refreshBookmarkList();
 		}

@@ -212,5 +212,20 @@ public class BookmarkContent {
         	b.mSource = this.mSource;
         	return b;
         }
+        
+        public void clear() {
+        	this.mAccount = null;
+        	this.mDescription = null;
+        	this.mHash = null;
+        	this.mId = 0;
+        	this.mMeta = null;
+        	this.mNotes = null;
+        	this.mRead = false;
+        	this.mShared = true;
+        	this.mTags = null;
+        	this.mTime = 0;
+        	this.mUrl = null;
+        	this.mSource = null;
+        }
 	}
 }
