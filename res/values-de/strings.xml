@@ -151,6 +151,7 @@
     
     <string name="search_results_bookmark">Lesezeichen Ergebnisse</string>
     <string name="search_results_tag">Tag Ergebnisse</string>
+    <string name="search_results_global_tag">Weltweit Tag Ergebnisse</string>
 
     <string name="tag_search_text">Pinboard durchsuchen</string>
     

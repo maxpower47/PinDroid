@@ -41,7 +41,7 @@ public class MainSearchResults extends AppBaseListActivity {
 		super.onCreate(savedInstanceState);
 		
 		String[] MENU_ITEMS = new String[] {res.getString(R.string.search_results_bookmark),
-				res.getString(R.string.search_results_tag)};
+				res.getString(R.string.search_results_tag), res.getString(R.string.search_results_global_tag)};
 		
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
 		mContext = this;
@@ -65,6 +65,14 @@ public class MainSearchResults extends AppBaseListActivity {
 		    		Intent i = new Intent(mContext, BrowseTags.class);
 		    		i.setAction(Intent.ACTION_SEARCH);
 		    		i.putExtras(intent.getExtras());
+		    		
+		    		startActivity(i);
+		    	} else if(position == 2){
+		    		
+		    		Intent i = new Intent(mContext, BrowseBookmarks.class);
+		    		i.setAction(Intent.ACTION_SEARCH);
+		    		i.putExtras(intent.getExtras());
+		    		i.putExtra("username", "global");
 		    		
 		    		startActivity(i);
 		    	}

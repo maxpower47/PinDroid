@@ -151,6 +151,7 @@
     
     <string name="search_results_bookmark">Bookmark Results</string>
     <string name="search_results_tag">Tag Results</string>
+    <string name="search_results_global_tag">Global Tag Results</string>
 
     <string name="tag_search_text">Search Pinboard</string>
     

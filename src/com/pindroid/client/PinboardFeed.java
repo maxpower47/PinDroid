@@ -40,7 +40,7 @@ public class PinboardFeed {
     private static final String TAG = "PinboardFeed";
 
     public static final String FETCH_RECENT_URI = "http://feeds.pinboard.in/rss/recent/";
-    public static final String FETCH_RECENT_USER_URI = "http://feeds.pinboard.in/rss/u:";
+    public static final String FETCH_RECENT_USER_URI = "http://feeds.pinboard.in/rss";
     
     /**
      * Retrieves a list of recent bookmarks for Pinboard.
@@ -86,7 +86,11 @@ public class PinboardFeed {
     public static ArrayList<Bookmark> fetchUserRecent(String username, String tagname)
     	throws IOException, ParseException {
     	
-    	String url = FETCH_RECENT_USER_URI + username;
+    	String url = FETCH_RECENT_USER_URI;
+    	
+    	if(username != null && username != ""){
+    		url += "/u:" + username;
+    	}
     	if(tagname != null && tagname != "") {
     		url += "/t:" + tagname;
     	}

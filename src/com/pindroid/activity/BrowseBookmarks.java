@@ -118,6 +118,10 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	    		
 	    		String query = intent.getStringExtra(SearchManager.QUERY);
 	    		
+	    		if(intent.hasExtra("username")) {
+	    			username = intent.getStringExtra("username");
+	    		}
+	    		
 	    		if(unread) {
 	    			setTitle(String.format(res.getString(R.string.unread_search_results_title), query));
 	    		} else setTitle(String.format(res.getString(R.string.bookmark_search_results_title), query));
@@ -128,6 +132,8 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	    			}
 	    		
 	    			setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));
+	    		} else {
+	    			new LoadBookmarkFeedTask().execute("global", query);
 	    		}
 	    		
 	    	} else if(!data.getScheme().equals("content")) {
@@ -227,8 +233,10 @@ public class BrowseBookmarks extends AppBaseListActivity {
 		super.onResume();
 		
 		Uri data = getIntent().getData();
-		if(data.getUserInfo() != "") {
+		if(data != null && data.getUserInfo() != null && data.getUserInfo() != "") {
 			username = data.getUserInfo();
+		} else if(getIntent().hasExtra("username")){
+			username = getIntent().getStringExtra("username");
 		} else username = mAccount.name;
 		
 		if(loaded) {
@@ -457,6 +465,9 @@ public class BrowseBookmarks extends AppBaseListActivity {
         @Override
         protected Boolean doInBackground(String... args) {
 	       user = args[0];
+	       
+	       if(user.equals("global"))
+	    	   user = "";
 	       
 	       if(args.length > 1) {
 	    	   tag = args[1];
