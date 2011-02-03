@@ -45,13 +45,13 @@ public class SaxTagParser {
 
     public ArrayList<Tag> parse() throws ParseException {
         final Tag currentTag = new Tag();
-        RootElement root = new RootElement("tags");
+        final RootElement root = new RootElement("tags");
         final ArrayList<Tag> tags = new ArrayList<Tag>();
 
         root.getChild("tag").setStartElementListener(new StartElementListener(){
             public void start(Attributes attributes) {
-            	String count = attributes.getValue("", "count");
-            	String tag = attributes.getValue("", "tag");
+            	final String count = attributes.getValue("", "count");
+            	final String tag = attributes.getValue("", "tag");
             	
             	if(count != null) {
             		currentTag.setCount(Integer.parseInt(count));

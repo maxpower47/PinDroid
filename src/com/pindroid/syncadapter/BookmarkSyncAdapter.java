@@ -83,23 +83,23 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     private void InsertBookmarks(Account account, SyncResult syncResult) 
     	throws AuthenticationException, IOException{
 
-    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+    	final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
     	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
     	Update update = null;
-    	String username = account.name;
+    	final String username = account.name;
 
     	update = PinboardApi.lastUpdate(account, mContext);
     	
     	if(update.getLastUpdate() > lastUpdate) {
 	
 			Log.d("BookmarkSync", "In Bookmark Load");
-			ArrayList<String> accounts = new ArrayList<String>();
+			final ArrayList<String> accounts = new ArrayList<String>();
 			accounts.add(account.name);
 			BookmarkManager.TruncateBookmarks(accounts, mContext, false);
 			TagManager.TruncateTags(username, mContext);
 			
-			ArrayList<Tag> tagList = PinboardApi.getTags(account, mContext);
-			ArrayList<Bookmark> addBookmarkList = PinboardApi.getAllBookmarks(null, account, mContext);
+			final ArrayList<Tag> tagList = PinboardApi.getTags(account, mContext);
+			final ArrayList<Bookmark> addBookmarkList = PinboardApi.getAllBookmarks(null, account, mContext);
 			
 			final ContentResolver resolver = mContext.getContentResolver();
 			final BatchOperation batch = new BatchOperation(mContext, resolver, BookmarkContentProvider.AUTHORITY);
@@ -118,7 +118,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			
 			batch.execute();
 			
-    		SharedPreferences.Editor editor = settings.edit();
+    		final SharedPreferences.Editor editor = settings.edit();
     		editor.putLong(Constants.PREFS_LAST_SYNC, update.getLastUpdate());
             editor.commit();
     	} else {

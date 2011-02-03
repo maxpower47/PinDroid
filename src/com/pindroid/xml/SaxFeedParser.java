@@ -47,8 +47,8 @@ public class SaxFeedParser {
 
     public ArrayList<Bookmark> parse() throws ParseException {
         final Bookmark currentBookmark = new Bookmark();
-        RootElement root = new RootElement(nsRdf, "RDF");
-        Element item = root.getChild(ns, "item");
+        final RootElement root = new RootElement(nsRdf, "RDF");
+        final Element item = root.getChild(ns, "item");
         final ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
         
         item.setEndElementListener(new EndElementListener(){

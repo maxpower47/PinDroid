@@ -44,20 +44,20 @@ public class SaxBookmarkParser {
 
     public ArrayList<Bookmark> parse() throws ParseException {
         final Bookmark currentBookmark = new Bookmark();
-        RootElement root = new RootElement("posts");
+        final RootElement root = new RootElement("posts");
         final ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
 
         root.getChild("post").setStartElementListener(new StartElementListener(){
             public void start(Attributes attributes) {
-            	String url = attributes.getValue("", "href");
-            	String time = attributes.getValue("", "time");
-            	String description = attributes.getValue("", "description");
-            	String extended = attributes.getValue("", "extended");
-            	String tag = attributes.getValue("", "tag");
-            	String hash = attributes.getValue("", "hash");
-            	String meta = attributes.getValue("", "meta");
-            	String toread = attributes.getValue("", "toread");
-            	String shared = attributes.getValue("", "shared");
+            	final String url = attributes.getValue("", "href");
+            	final String time = attributes.getValue("", "time");
+            	final String description = attributes.getValue("", "description");
+            	final String extended = attributes.getValue("", "extended");
+            	final String tag = attributes.getValue("", "tag");
+            	final String hash = attributes.getValue("", "hash");
+            	final String meta = attributes.getValue("", "meta");
+            	final String toread = attributes.getValue("", "toread");
+            	final String shared = attributes.getValue("", "shared");
             	
             	if(url != null) {
             		currentBookmark.setUrl(url);
