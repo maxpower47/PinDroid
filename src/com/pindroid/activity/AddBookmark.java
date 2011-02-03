@@ -105,7 +105,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
 
-		if(savedInstanceState ==  null){
+		if(savedInstanceState == null){
 			Intent intent = getIntent();
 			
 			if(Intent.ACTION_SEND.equals(intent.getAction())){
@@ -132,7 +132,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 				mPrivate.setChecked(extraPrivate);
 				mToRead.setChecked(extraToRead);
 				
-				if(mEditDescription.getText().equals(""))
+				if(mEditDescription.getText().toString().equals(""))
 					new GetWebpageTitleTask().execute(url);
 				
 				bookmark = new Bookmark();
@@ -158,6 +158,8 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 						oldBookmark.setToRead(intent.getBooleanExtra(Constants.EXTRA_TOREAD + ".old", false));
 					}
 				}
+				
+				new GetTagSuggestionsTask().execute(url);
 				
 			} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
 				int id = Integer.parseInt(intent.getData().getLastPathSegment());
