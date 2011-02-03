@@ -1,0 +1,20 @@
+com.pindroid.authenticator.AuthenticatorActivity
+com.pindroid.authenticator.AuthenticatorActivity: void handleLogin(android.view.View)
+com.pindroid.activity.TagLiveFolder
+com.pindroid.activity.BookmarkLiveFolder
+com.pindroid.activity.AppBaseActivity
+com.pindroid.activity.ViewBookmark
+com.pindroid.activity.AddBookmark
+com.pindroid.activity.AboutActivity
+com.pindroid.activity.AppBaseListActivity
+com.pindroid.activity.BrowseBookmarks
+com.pindroid.activity.BrowseTags
+com.pindroid.activity.Main
+com.pindroid.activity.MainSearchResults
+com.pindroid.activity.Preferences
+com.pindroid.authenticator.AuthenticatorActivity
+com.pindroid.authenticator.AuthenticationService
+com.pindroid.syncadapter.BookmarkSyncService
+com.pindroid.syncadapter.PeriodicSyncReceiver
+com.pindroid.widget.SearchWidgetProvider
+com.pindroid.providers.BookmarkContentProvider
