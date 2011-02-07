@@ -1,5 +1,6 @@
 com.pindroid.authenticator.AuthenticatorActivity
 com.pindroid.authenticator.AuthenticatorActivity: void handleLogin(android.view.View)
+com.pindroid.providers.BookmarkContentProvider
 com.pindroid.activity.TagLiveFolder
 com.pindroid.activity.BookmarkLiveFolder
 com.pindroid.activity.AppBaseActivity
