@@ -42,8 +42,7 @@ public class HttpClientFactory {
         ConnManagerParams.setTimeout(params, REGISTRATION_TIMEOUT);
 
 	    client = new DefaultHttpClient(
-	        new ThreadSafeClientConnManager(params,
-	            mgr.getSchemeRegistry()), params);
+	        new ThreadSafeClientConnManager(params, mgr.getSchemeRegistry()), params);
 	  
 	    return client;
 	} 

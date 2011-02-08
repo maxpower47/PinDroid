@@ -369,9 +369,8 @@ public class PinboardApi {
 
     	final AccountManager am = AccountManager.get(context);
     	
-    	String username = account.name;
+    	final String username = account.name;
     	String authtoken = null;
-    	String scheme = null;
     	
     	try {
 			authtoken = am.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, false);
@@ -382,14 +381,9 @@ public class PinboardApi {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		scheme = SCHEME;
     	
-    	HttpResponse resp = null;
-    	HttpGet post = null;
-    	
-		Uri.Builder builder = new Uri.Builder();
-		builder.scheme(scheme);
+		final Uri.Builder builder = new Uri.Builder();
+		builder.scheme(SCHEME);
 		builder.authority(PINBOARD_AUTHORITY);
 		builder.appendEncodedPath(url);
 		for(String key : params.keySet()){
@@ -399,27 +393,27 @@ public class PinboardApi {
 		String apiCallUrl = builder.build().toString();
 		
 		Log.d("apiCallUrl", apiCallUrl);
-		post = new HttpGet(apiCallUrl);
+		final HttpGet post = new HttpGet(apiCallUrl);
 
 		post.setHeader("User-Agent", "PinDroid");
 		post.setHeader("Accept-Encoding", "gzip");
 
-		DefaultHttpClient client = HttpClientFactory.getThreadSafeClient();
-        CredentialsProvider provider = client.getCredentialsProvider();
-        Credentials credentials = new UsernamePasswordCredentials(username, authtoken);
+		final DefaultHttpClient client = HttpClientFactory.getThreadSafeClient();
+        final CredentialsProvider provider = client.getCredentialsProvider();
+        final Credentials credentials = new UsernamePasswordCredentials(username, authtoken);
         provider.setCredentials(SCOPE, credentials);
         
-        resp = client.execute(post);
+        final HttpResponse resp = client.execute(post);
         
-        int statusCode = resp.getStatusLine().getStatusCode();
+        final int statusCode = resp.getStatusLine().getStatusCode();
 
     	if (statusCode == HttpStatus.SC_OK) {
     		
-    		HttpEntity entity = resp.getEntity();
+    		final HttpEntity entity = resp.getEntity();
     		
     		InputStream instream = entity.getContent();
     		
-    		Header encoding = entity.getContentEncoding();
+    		final Header encoding = entity.getContentEncoding();
     		
     		if(encoding != null && encoding.getValue().equalsIgnoreCase("gzip")) {
     			instream = new GZIPInputStream(instream);

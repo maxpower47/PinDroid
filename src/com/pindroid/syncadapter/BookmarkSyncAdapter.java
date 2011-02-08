@@ -25,6 +25,7 @@ import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SyncResult;
@@ -35,10 +36,8 @@ import android.util.Log;
 import com.pindroid.Constants;
 import com.pindroid.client.PinboardApi;
 import com.pindroid.client.Update;
-import com.pindroid.platform.BatchOperation;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
-import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 
@@ -49,8 +48,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * SyncAdapter implementation for syncing sample SyncAdapter contacts to the
- * platform ContactOperations provider.
+ * SyncAdapter implementation for syncing bookmarks.
  */
 public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = "BookmarkSyncAdapter";
@@ -65,9 +63,9 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority,
         ContentProviderClient provider, SyncResult syncResult) {
-
-         try {
-            InsertBookmarks(account, syncResult); 
+    	
+        try {
+            InsertBookmarks(account, syncResult);
         } catch (final ParseException e) {
             syncResult.stats.numParseExceptions++;
             Log.e(TAG, "ParseException", e);
@@ -100,27 +98,58 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			
 			final ArrayList<Tag> tagList = PinboardApi.getTags(account, mContext);
 			final ArrayList<Bookmark> addBookmarkList = PinboardApi.getAllBookmarks(null, account, mContext);
-			
-			final ContentResolver resolver = mContext.getContentResolver();
-			final BatchOperation batch = new BatchOperation(mContext, resolver, BookmarkContentProvider.AUTHORITY);
-			
-			if(!tagList.isEmpty()){		
-				for(Tag t : tagList){
-					batch.add(TagManager.AddTagBatch(t, username, mContext));
-				}
-			}
 
-			if(!addBookmarkList.isEmpty()){				
-				for(Bookmark b : addBookmarkList){
-					batch.add(BookmarkManager.AddBookmarkBatch(b, username, mContext));
+			final ContentResolver resolver = mContext.getContentResolver();
+			
+			int tagsize = tagList.size();
+			ContentValues[] tcv = new ContentValues[tagsize];
+			
+			if(!tagList.isEmpty()){
+				for(int i = 0; i < tagsize; i++){	
+					Tag t = tagList.get(i);
+					
+					ContentValues values = new ContentValues();
+					
+					values.put(Tag.Name, t.getTagName());
+					values.put(Tag.Count, t.getCount());
+					values.put(Tag.Account, username);
+					
+					tcv[i] = values;
 				}
 			}
 			
-			batch.execute();
+			resolver.bulkInsert(Tag.CONTENT_URI, tcv);
+			tcv = null;
+
+			int bookmarksize = addBookmarkList.size();
+			ContentValues[] bcv = new ContentValues[bookmarksize];
+
+			if(!addBookmarkList.isEmpty()){
+				for(int i = 0; i < bookmarksize; i++){
+					Bookmark b = addBookmarkList.get(i);
+					
+					ContentValues values = new ContentValues();
+					values.put(Bookmark.Description, b.getDescription());
+					values.put(Bookmark.Url, b.getUrl());
+					values.put(Bookmark.Notes, b.getNotes());
+					values.put(Bookmark.Tags, b.getTagString());
+					values.put(Bookmark.Hash, b.getHash());
+					values.put(Bookmark.Meta, b.getMeta());
+					values.put(Bookmark.Time, b.getTime());
+					values.put(Bookmark.Account, username);
+					values.put(Bookmark.ToRead, b.getToRead() ? 1 : 0);
+					values.put(Bookmark.Shared, b.getShared() ? 1 : 0);
+					
+					bcv[i] = values;
+				}
+			}
 			
+			resolver.bulkInsert(Bookmark.CONTENT_URI, bcv);
+
     		final SharedPreferences.Editor editor = settings.edit();
     		editor.putLong(Constants.PREFS_LAST_SYNC, update.getLastUpdate());
             editor.commit();
+
     	} else {
     		Log.d("BookmarkSync", "No update needed.  Last update time before last sync.");
     	}
