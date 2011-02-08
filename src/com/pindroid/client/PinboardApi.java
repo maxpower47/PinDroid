@@ -336,11 +336,10 @@ public class PinboardApi {
     	ArrayList<Tag> tagList = new ArrayList<Tag>();
 
     	InputStream responseStream = null;
-    	TreeMap<String, String> params = new TreeMap<String, String>();
-    	String url = FETCH_TAGS_URI;
+    	final TreeMap<String, String> params = new TreeMap<String, String>();
     	  	
-    	responseStream = PinboardApiCall(url, params, account, context);
-    	SaxTagParser parser = new SaxTagParser(responseStream);
+    	responseStream = PinboardApiCall(FETCH_TAGS_URI, params, account, context);
+    	final SaxTagParser parser = new SaxTagParser(responseStream);
     	
     	try {
 			tagList = parser.parse();

@@ -34,6 +34,7 @@ import android.util.Log;
 import android.util.Xml;
 
 import com.pindroid.providers.TagContent.Tag;
+import com.pindroid.util.IntUtils;
 
 public class SaxTagParser {
 
@@ -54,7 +55,7 @@ public class SaxTagParser {
             	final String tag = attributes.getValue("tag");
             	
             	if(count != null) {
-            		currentTag.setCount(Integer.parseInt(count));
+            		currentTag.setCount(IntUtils.parseUInt(count));
             	}
             	if(tag != null) {
             		currentTag.setTagName(tag);
