@@ -98,7 +98,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			
 			final ArrayList<Tag> tagList = PinboardApi.getTags(account, mContext);
 			final ArrayList<Bookmark> addBookmarkList = PinboardApi.getAllBookmarks(null, account, mContext);
-
+			
 			final ContentResolver resolver = mContext.getContentResolver();
 			
 			int tagsize = tagList.size();
@@ -145,7 +145,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			}
 			
 			resolver.bulkInsert(Bookmark.CONTENT_URI, bcv);
-
+			
     		final SharedPreferences.Editor editor = settings.edit();
     		editor.putLong(Constants.PREFS_LAST_SYNC, update.getLastUpdate());
             editor.commit();

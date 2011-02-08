@@ -43,6 +43,7 @@ import android.content.SharedPreferences;
 import android.content.UriMatcher;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.MatrixCursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -564,6 +565,41 @@ public class BookmarkContentProvider extends ContentProvider {
 		
 		
 		return mc;
+	}
+	
+	@Override
+	public int bulkInsert(Uri uri, ContentValues[] values){
+		switch(sURIMatcher.match(uri)) {
+			case Bookmarks:
+				return bulkLoad(BOOKMARK_TABLE_NAME, values);
+			case Tags:
+				return bulkLoad(TAG_TABLE_NAME, values);
+			default:
+				throw new IllegalArgumentException("Unknown Uri: " + uri);
+		}
+	}
+	
+	private int bulkLoad(String table, ContentValues[] values){
+		db = dbHelper.getWritableDatabase();
+		int inserted = 0;
+		
+		db.beginTransaction();
+		
+		try{
+			final DatabaseUtils.InsertHelper ih = new DatabaseUtils.InsertHelper(db, table);
+			
+			for(ContentValues v : values) {
+				ih.insert(v);
+			}
+			
+			db.setTransactionSuccessful();
+			inserted = values.length;
+		}
+		finally{
+			db.endTransaction();
+		}
+
+		return inserted;
 	}
 	
     private static UriMatcher buildUriMatcher() {
