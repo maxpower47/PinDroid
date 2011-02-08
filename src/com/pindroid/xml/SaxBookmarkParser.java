@@ -49,26 +49,21 @@ public class SaxBookmarkParser {
 
         root.getChild("post").setStartElementListener(new StartElementListener(){
             public void start(Attributes attributes) {
-            	final String url = attributes.getValue("", "href");
-            	final String time = attributes.getValue("", "time");
-            	final String description = attributes.getValue("", "description");
-            	final String extended = attributes.getValue("", "extended");
-            	final String tag = attributes.getValue("", "tag");
-            	final String hash = attributes.getValue("", "hash");
-            	final String meta = attributes.getValue("", "meta");
-            	final String toread = attributes.getValue("", "toread");
-            	final String shared = attributes.getValue("", "shared");
+            	final String url = attributes.getValue("href");
+            	final String time = attributes.getValue("time");
+            	final String description = attributes.getValue("description");
+            	final String extended = attributes.getValue("extended");
+            	final String tag = attributes.getValue("tag");
+            	final String hash = attributes.getValue("hash");
+            	final String meta = attributes.getValue("meta");
+            	final String toread = attributes.getValue("toread");
+            	final String shared = attributes.getValue("shared");
             	
             	if(url != null) {
             		currentBookmark.setUrl(url);
             	}
             	if(time != null) {
-            		try {
-						currentBookmark.setTime(DateParser.parseTime(time));
-					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					currentBookmark.setTime(DateParser.parseTime(time));
             	}
             	if(description != null) {
             		currentBookmark.setDescription(description);

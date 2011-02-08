@@ -51,7 +51,7 @@ public class DateParser {
         
     }
     
-    public static long parseTime( String input ) throws java.text.ParseException {
+    public static long parseTime( String input ) {
 
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         c.set(Integer.parseInt(input.substring(0, 4)), 

@@ -50,8 +50,8 @@ public class SaxTagParser {
 
         root.getChild("tag").setStartElementListener(new StartElementListener(){
             public void start(Attributes attributes) {
-            	final String count = attributes.getValue("", "count");
-            	final String tag = attributes.getValue("", "tag");
+            	final String count = attributes.getValue("count");
+            	final String tag = attributes.getValue("tag");
             	
             	if(count != null) {
             		currentTag.setCount(Integer.parseInt(count));
@@ -73,7 +73,7 @@ public class SaxTagParser {
     
     public ArrayList<Tag> parseSuggested() throws ParseException {
         final Tag currentTag = new Tag();
-        RootElement root = new RootElement("suggested");
+        final RootElement root = new RootElement("suggested");
         final ArrayList<Tag> tags = new ArrayList<Tag>();
 
         root.getChild("popular").setEndTextElementListener(new EndTextElementListener(){

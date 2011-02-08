@@ -37,9 +37,9 @@ import com.pindroid.util.DateParser;
 public class SaxFeedParser {
 
 	private InputStream is;
-	private String nsRdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-	private String nsDc = "http://purl.org/dc/elements/1.1/";
-	private String ns = "http://purl.org/rss/1.0/";
+	static final String nsRdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+	static final String nsDc = "http://purl.org/dc/elements/1.1/";
+	static final String ns = "http://purl.org/rss/1.0/";
 	
     public SaxFeedParser(InputStream stream) {
     	is = stream;
@@ -64,12 +64,7 @@ public class SaxFeedParser {
         });
         item.getChild(nsDc, "date").setEndTextElementListener(new EndTextElementListener(){
             public void end(String body) {
-            	try {
-					currentBookmark.setTime(DateParser.parseTime(body.trim()));
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				currentBookmark.setTime(DateParser.parseTime(body.trim()));
             }
         });
         item.getChild(ns, "link").setEndTextElementListener(new EndTextElementListener(){
