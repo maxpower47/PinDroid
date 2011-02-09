@@ -103,12 +103,14 @@ public class BookmarkManager {
 			
 			final boolean read = c.getInt(readColumn) == 0 ? false : true;
 			final boolean share = c.getInt(shareColumn) == 0 ? false : true;
+
+			Bookmark b = new Bookmark(id, c.getString(accountColumn), c.getString(urlColumn), 
+				c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn),
+				c.getString(hashColumn), c.getString(metaColumn), c.getLong(timeColumn), read, share);
 			
 			c.close();
 			
-			return new Bookmark(id, c.getString(accountColumn), c.getString(urlColumn), 
-				c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn),
-				c.getString(hashColumn), c.getString(metaColumn), c.getLong(timeColumn), read, share);
+			return b;
 		} else {
 			c.close();
 			throw new ContentNotFoundException();

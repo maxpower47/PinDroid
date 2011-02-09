@@ -43,6 +43,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Debug;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -76,6 +77,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	private boolean unread = false;
 	
 	private boolean loaded = false;
+	private boolean myBookmarks = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -142,6 +144,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	    		finish();
 	    		
 	    	} else if(path.equals("/bookmarks") && isMyself()) {
+	    		myBookmarks = true;
 	    		String title = "";
 	    		
 	    		if(unread && tagname != null && tagname != "") {
@@ -200,8 +203,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 			    		readBookmark(b);
 			    	} else {
 			    		openBookmarkInBrowser(b);
-			    	}
-			    	
+			    	}   	
 			    }
 			});
 			
@@ -239,9 +241,10 @@ public class BrowseBookmarks extends AppBaseListActivity {
 			username = getIntent().getStringExtra("username");
 		} else username = mAccount.name;
 		
-		if(loaded) {
+		if(!loaded && myBookmarks) {
 			refreshBookmarkList();
 		}
+		loaded = false;
 	}
 	
 	@Override

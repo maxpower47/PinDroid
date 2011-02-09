@@ -83,10 +83,9 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 
     	final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
     	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
-    	Update update = null;
     	final String username = account.name;
 
-    	update = PinboardApi.lastUpdate(account, mContext);
+    	final Update update = PinboardApi.lastUpdate(account, mContext);
     	
     	if(update.getLastUpdate() > lastUpdate) {
 	
