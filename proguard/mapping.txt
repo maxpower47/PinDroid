@@ -372,14 +372,7 @@ com.pindroid.listadapter.ViewHolder$BookmarkListViewHolder -> com.pindroid.g.e:
 com.pindroid.listadapter.ViewHolder$TagListViewHolder -> com.pindroid.g.a:
     android.widget.TextView name -> a
     android.widget.TextView count -> b
-com.pindroid.platform.BatchOperation -> com.pindroid.e.b:
-    java.lang.String TAG -> a
-    android.content.ContentResolver mResolver -> b
-    java.util.ArrayList mOperations -> c
-    java.lang.String auth -> d
-    void add(android.content.ContentProviderOperation) -> a
-    void execute() -> a
-com.pindroid.platform.BookmarkManager -> com.pindroid.e.c:
+com.pindroid.platform.BookmarkManager -> com.pindroid.e.b:
     java.util.ArrayList GetBookmarks(java.lang.String,java.lang.String,boolean,java.lang.String,android.content.Context) -> a
     com.pindroid.providers.BookmarkContent$Bookmark GetById(int,android.content.Context) -> a
     void UpdateBookmark(com.pindroid.providers.BookmarkContent$Bookmark,java.lang.String,android.content.Context) -> a
@@ -453,6 +446,8 @@ com.pindroid.providers.BookmarkContentProvider -> com.pindroid.providers.Bookmar
     android.database.Cursor getTagLiveFolderResults(android.net.Uri) -> a
     int update(android.net.Uri,android.content.ContentValues,java.lang.String,java.lang.String[]) -> update
     android.database.Cursor getBookmarkLiveFolderResults(android.net.Uri) -> b
+    int bulkInsert(android.net.Uri,android.content.ContentValues[]) -> bulkInsert
+    int bulkLoad(java.lang.String,android.content.ContentValues[]) -> a
 com.pindroid.providers.BookmarkContentProvider$DatabaseHelper -> com.pindroid.providers.g:
     android.content.Context mContext -> a
     void onCreate(android.database.sqlite.SQLiteDatabase) -> onCreate
@@ -509,8 +504,13 @@ com.pindroid.ui.TagSpan -> com.pindroid.b.d:
 com.pindroid.ui.TagSpan$OnTagClickListener -> com.pindroid.b.c:
     void onTagClick(java.lang.String) -> a
 com.pindroid.util.DateParser -> com.pindroid.d.b:
-    long parseTime(java.lang.String) -> a
-com.pindroid.util.Md5Hash -> com.pindroid.d.c:
+    java.util.TimeZone tz -> a
+    java.util.Calendar c -> b
+    java.util.Date parse(java.lang.String) -> a
+    long parseTime(java.lang.String) -> b
+com.pindroid.util.IntUtils -> com.pindroid.d.c:
+    int parseUInt(java.lang.String) -> a
+com.pindroid.util.Md5Hash -> com.pindroid.d.d:
     java.lang.String md5(java.lang.String) -> a
 com.pindroid.util.SyncUtils -> com.pindroid.d.a:
     void addPeriodicSync(java.lang.String,android.os.Bundle,long,android.content.Context) -> a
@@ -526,9 +526,6 @@ com.pindroid.xml.SaxBookmarkParser$1 -> com.pindroid.c.a:
     void start(org.xml.sax.Attributes) -> start
 com.pindroid.xml.SaxFeedParser -> com.pindroid.c.o:
     java.io.InputStream is -> a
-    java.lang.String nsRdf -> b
-    java.lang.String nsDc -> c
-    java.lang.String ns -> d
     java.util.ArrayList parse() -> a
 com.pindroid.xml.SaxFeedParser$1 -> com.pindroid.c.i:
     com.pindroid.xml.SaxFeedParser this$0 -> a

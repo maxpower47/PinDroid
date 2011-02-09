@@ -46,8 +46,6 @@ com.pindroid.client.PinboardFeed:
     public static final java.lang.String FETCH_RECENT_USER_URI
 com.pindroid.client.TokenRejectedException:
     private static final long serialVersionUID
-com.pindroid.platform.BatchOperation:
-    51:51:public int size()
 com.pindroid.providers.BookmarkContent$Bookmark:
     public static final java.lang.String CONTENT_TYPE
     public static final java.lang.String Account
@@ -97,3 +95,7 @@ com.pindroid.ui.TagSpan:
     51:51:public com.pindroid.ui.TagSpan$OnTagClickListener getOnTagClickListener()
 com.pindroid.util.DateParser:
     69:87:public static java.lang.String toString(java.util.Date)
+com.pindroid.xml.SaxFeedParser:
+    static final java.lang.String nsRdf
+    static final java.lang.String nsDc
+    static final java.lang.String ns

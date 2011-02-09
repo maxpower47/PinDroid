@@ -25,35 +25,29 @@ import java.util.ArrayList;
 
 import com.pindroid.providers.TagContent.Tag;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.text.TextUtils;
 
 public class TagManager {
 	
 	public static ArrayList<Tag> GetTags(String account, String sortorder, Context context) {
-		ArrayList<Tag> tagList = new ArrayList<Tag>();
+		final ArrayList<Tag> tagList = new ArrayList<Tag>();
 		
-		String[] projection = new String[] {Tag.Name, Tag.Count};
-		String selection = Tag.Account + "=?";
-		String[] selectionargs = new String[]{account};
+		final String[] projection = new String[] {Tag.Name, Tag.Count};
+		final String selection = Tag.Account + "=?";
+		final String[] selectionargs = new String[]{account};
 		
-		Uri tags = Tag.CONTENT_URI;
-		
-		Cursor c = context.getContentResolver().query(tags, projection, selection, selectionargs, sortorder);				
+		final Cursor c = context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);				
 		
 		if(c.moveToFirst()){
 			
-			int nameColumn = c.getColumnIndex(Tag.Name);
-			int countColumn = c.getColumnIndex(Tag.Count);
+			final int nameColumn = c.getColumnIndex(Tag.Name);
+			final int countColumn = c.getColumnIndex(Tag.Count);
 
 			do {	
-				Tag t = new Tag(c.getString(nameColumn), c.getInt(countColumn));
-
-				tagList.add(t);
+				tagList.add(new Tag(c.getString(nameColumn), c.getInt(countColumn)));
 			} while(c.moveToNext());	
 		}
 		c.close();
@@ -62,7 +56,7 @@ public class TagManager {
 	}
 	
 	public static void AddTag(Tag tag, String account, Context context){
-		ContentValues values = new ContentValues();
+		final ContentValues values = new ContentValues();
 		
 		values.put(Tag.Name, tag.getTagName());
 		values.put(Tag.Count, tag.getCount());
@@ -72,18 +66,16 @@ public class TagManager {
 	}
 	
 	public static void UpsertTag(Tag tag, String account, Context context){
-		String[] projection = new String[] {Tag.Name, Tag.Count};
-		String selection = Tag.Name + "=? AND " +
+		final String[] projection = new String[] {Tag.Name, Tag.Count};
+		final String selection = Tag.Name + "=? AND " +
 			Tag.Account + "=?";
-		String[] selectionargs = new String[]{tag.getTagName(), account};
-		Uri tags = Tag.CONTENT_URI;
+		final String[] selectionargs = new String[]{tag.getTagName(), account};
 		
-		ContentResolver cr = context.getContentResolver();
-		Cursor c = cr.query(tags, projection, selection, selectionargs, null);
+		final Cursor c = context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, null);
 		
 		if(c.moveToFirst()){
-			int countColumn = c.getColumnIndex(Tag.Count);
-			int count = c.getInt(countColumn);
+			final int countColumn = c.getColumnIndex(Tag.Count);
+			final int count = c.getInt(countColumn);
 			
 			tag.setCount(count + 1);
 			UpdateTag(tag, account, context);
@@ -96,30 +88,27 @@ public class TagManager {
 	
 	public static void UpdateTag(Tag tag, String account, Context context){
 		
-		String selection = Tag.Name + "=? AND " +
+		final String selection = Tag.Name + "=? AND " +
 							Tag.Account + "=?";
-		String[] selectionargs = new String[]{tag.getTagName(), account};
+		final String[] selectionargs = new String[]{tag.getTagName(), account};
 		
-		ContentValues values = new ContentValues();
-		
+		final ContentValues values = new ContentValues();
 		values.put(Tag.Count, tag.getCount());
 		
 		context.getContentResolver().update(Tag.CONTENT_URI, values, selection, selectionargs);
 	}
 	
 	public static void UpleteTag(Tag tag, String account, Context context){
-		String[] projection = new String[] {Tag.Name, Tag.Count};
-		String selection = Tag.Name + "=? AND " +
+		final String[] projection = new String[] {Tag.Name, Tag.Count};
+		final String selection = Tag.Name + "=? AND " +
 			Tag.Account + "=?";
-		String[] selectionargs = new String[]{tag.getTagName(), account};
-		Uri tags = Tag.CONTENT_URI;
-		
-		ContentResolver cr = context.getContentResolver();
-		Cursor c = cr.query(tags, projection, selection, selectionargs, null);
+		final String[] selectionargs = new String[]{tag.getTagName(), account};
+
+		final Cursor c = context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, null);
 		
 		if(c.moveToFirst()){
-			int countColumn = c.getColumnIndex(Tag.Count);
-			int count = c.getInt(countColumn);
+			final int countColumn = c.getColumnIndex(Tag.Count);
+			final int count = c.getInt(countColumn);
 			
 			if(count > 1){
 				tag.setCount(count - 1);
@@ -132,47 +121,44 @@ public class TagManager {
 	}
 
 	public static void DeleteTag(Tag tag, String account, Context context){
-		
-		String selection = Tag.Name + "=? AND " +
+		final String selection = Tag.Name + "=? AND " +
 			Tag.Account + "=?";
-		String[] selectionargs = new String[]{tag.getTagName(), account};
+		final String[] selectionargs = new String[]{tag.getTagName(), account};
 		
 		context.getContentResolver().delete(Tag.CONTENT_URI, selection, selectionargs);
 	}
 	
 	public static void TruncateTags(String account, Context context){
 		
-		String selection = Tag.Account + "=?";
-		String[] selectionargs = new String[]{account};
+		final String selection = Tag.Account + "=?";
+		final String[] selectionargs = new String[]{account};
 		
 		context.getContentResolver().delete(Tag.CONTENT_URI, selection, selectionargs);
 	}
 	
 	public static void TruncateOldTags(ArrayList<String> accounts, Context context){
 		
-		ArrayList<String> selectionList = new ArrayList<String>();
+		final ArrayList<String> selectionList = new ArrayList<String>();
 		
 		for(String s : accounts) {
 			selectionList.add(Tag.Account + " <> '" + s + "'");
 		}
 		
-		String selection = TextUtils.join(" AND ", selectionList);
+		final String selection = TextUtils.join(" AND ", selectionList);
 		
 		context.getContentResolver().delete(Tag.CONTENT_URI, selection, null);
 	}
 	
 	public static ArrayList<Tag> SearchTags(String query, String username, Context context) {
-		ArrayList<Tag> tagList = new ArrayList<Tag>();
-		String[] projection = new String[] { Tag._ID, Tag.Name, Tag.Count };
+		final ArrayList<Tag> tagList = new ArrayList<Tag>();
+		final String[] projection = new String[] { Tag._ID, Tag.Name, Tag.Count };
 		String selection = null;
-		String[] selectionargs = new String[]{ username };
-		String sortorder = null;
-		
-		String[] queryTags = query.split(" ");
+		final String[] selectionargs = new String[]{ username };
+		final String sortorder = Tag.Name + " ASC";
 		
 		ArrayList<String> queryList = new ArrayList<String>();
 		
-		for(String s : queryTags) {
+		for(String s : query.split(" ")) {
 			queryList.add(Tag.Name + " LIKE '%" + s + "%'");
 		}
 		
@@ -183,20 +169,14 @@ public class TagManager {
 			selection = Tag.Account + "=?";
 		}
 		
-		sortorder = Tag.Name + " ASC";
-		
-		Uri tags = Tag.CONTENT_URI;
-		
-		Cursor c = context.getContentResolver().query(tags, projection, selection, selectionargs, sortorder);				
+		final Cursor c = context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);				
 		
 		if(c.moveToFirst()){
-			int nameColumn = c.getColumnIndex(Tag.Name);
-			int countColumn = c.getColumnIndex(Tag.Count);
+			final int nameColumn = c.getColumnIndex(Tag.Name);
+			final int countColumn = c.getColumnIndex(Tag.Count);
 			
 			do {
-				Tag t = new Tag(c.getString(nameColumn), c.getInt(countColumn));
-				
-				tagList.add(t);
+				tagList.add(new Tag(c.getString(nameColumn), c.getInt(countColumn)));
 			} while(c.moveToNext());	
 		}
 		c.close();
