@@ -98,53 +98,14 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			final ArrayList<Tag> tagList = PinboardApi.getTags(account, mContext);
 			final ArrayList<Bookmark> addBookmarkList = PinboardApi.getAllBookmarks(null, account, mContext);
 			
-			final ContentResolver resolver = mContext.getContentResolver();
-			
-			int tagsize = tagList.size();
-			ContentValues[] tcv = new ContentValues[tagsize];
-			
 			if(!tagList.isEmpty()){
-				for(int i = 0; i < tagsize; i++){	
-					Tag t = tagList.get(i);
-					
-					ContentValues values = new ContentValues();
-					
-					values.put(Tag.Name, t.getTagName());
-					values.put(Tag.Count, t.getCount());
-					values.put(Tag.Account, username);
-					
-					tcv[i] = values;
-				}
+				TagManager.BulkInsert(tagList, username, mContext);
 			}
-			
-			resolver.bulkInsert(Tag.CONTENT_URI, tcv);
-			tcv = null;
-
-			int bookmarksize = addBookmarkList.size();
-			ContentValues[] bcv = new ContentValues[bookmarksize];
 
 			if(!addBookmarkList.isEmpty()){
-				for(int i = 0; i < bookmarksize; i++){
-					Bookmark b = addBookmarkList.get(i);
-					
-					ContentValues values = new ContentValues();
-					values.put(Bookmark.Description, b.getDescription());
-					values.put(Bookmark.Url, b.getUrl());
-					values.put(Bookmark.Notes, b.getNotes());
-					values.put(Bookmark.Tags, b.getTagString());
-					values.put(Bookmark.Hash, b.getHash());
-					values.put(Bookmark.Meta, b.getMeta());
-					values.put(Bookmark.Time, b.getTime());
-					values.put(Bookmark.Account, username);
-					values.put(Bookmark.ToRead, b.getToRead() ? 1 : 0);
-					values.put(Bookmark.Shared, b.getShared() ? 1 : 0);
-					
-					bcv[i] = values;
-				}
+				BookmarkManager.BulkInsert(addBookmarkList, username, mContext);
 			}
-			
-			resolver.bulkInsert(Bookmark.CONTENT_URI, bcv);
-			
+
     		final SharedPreferences.Editor editor = settings.edit();
     		editor.putLong(Constants.PREFS_LAST_SYNC, update.getLastUpdate());
             editor.commit();

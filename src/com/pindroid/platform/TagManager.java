@@ -65,6 +65,25 @@ public class TagManager {
 		context.getContentResolver().insert(Tag.CONTENT_URI, values);
 	}
 	
+	public static void BulkInsert(ArrayList<Tag> list, String account, Context context) {
+		int tagsize = list.size();
+		ContentValues[] tcv = new ContentValues[tagsize];
+		
+		for(int i = 0; i < tagsize; i++){	
+			Tag t = list.get(i);
+			
+			ContentValues values = new ContentValues();
+			
+			values.put(Tag.Name, t.getTagName());
+			values.put(Tag.Count, t.getCount());
+			values.put(Tag.Account, account);
+			
+			tcv[i] = values;
+		}
+		
+		context.getContentResolver().bulkInsert(Tag.CONTENT_URI, tcv);
+	}
+	
 	public static void UpsertTag(Tag tag, String account, Context context){
 		final String[] projection = new String[] {Tag.Name, Tag.Count};
 		final String selection = Tag.Name + "=? AND " +
