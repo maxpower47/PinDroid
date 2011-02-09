@@ -52,6 +52,7 @@ public class BrowseTags extends AppBaseListActivity {
 	private ArrayList<Tag> tagList = new ArrayList<Tag>();
 	
 	private boolean loaded = false;
+	private boolean myTags = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -88,6 +89,7 @@ public class BrowseTags extends AppBaseListActivity {
 	    		setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
 	    		
 	    	} else if(mAccount.name.equals(username)){
+	    		myTags = true;
 				try{
 					if(Intent.ACTION_VIEW.equals(action)) {
 						setTitle(res.getString(R.string.browse_my_tags_title));
@@ -148,9 +150,11 @@ public class BrowseTags extends AppBaseListActivity {
 	public void onResume(){
 		super.onResume();
 		
-		if(loaded) {
+		if(!loaded && myTags) {
 			refreshTagList();
-		}	
+		}
+		
+		loaded = false;
 	}
 	
 	@Override
