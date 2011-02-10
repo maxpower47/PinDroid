@@ -60,7 +60,6 @@ public class ViewBookmark extends AppBaseActivity{
 	private TextView mUsername;
 	private ImageView mIcon;
 	private Bookmark bookmark;
-	private Boolean myself;
 	
 	private String user;
 	private String path;
@@ -85,17 +84,15 @@ public class ViewBookmark extends AppBaseActivity{
 		path = data.getPath();
 		Log.d("path", path);
 		
-		final String username = data.getUserInfo();
+		username = data.getUserInfo();
 		user = data.getQueryParameter("account");
-		
-		myself = mAccount.name.equals(username);
 	}
 	
 	@Override
 	public void onResume(){
 		super.onResume();
 		
-		if(path.contains("/bookmarks") && myself){
+		if(path.contains("/bookmarks") && isMyself()){
 			
 			try{		
 				int id = Integer.parseInt(data.getLastPathSegment());
@@ -126,7 +123,7 @@ public class ViewBookmark extends AppBaseActivity{
         		mTags.setMovementMethod(LinkMovementMethod.getInstance());
 			}
 			catch(ContentNotFoundException e){}
-		} else if(path.contains("/bookmarks") && !myself) {
+		} else if(path.contains("/bookmarks") && !isMyself()) {
 
 			bookmark = new Bookmark();
 			bookmark.setDescription(data.getQueryParameter("title"));
@@ -180,7 +177,7 @@ public class ViewBookmark extends AppBaseActivity{
     		i.addCategory(Intent.CATEGORY_DEFAULT);
     		Uri.Builder data = new Uri.Builder();
     		data.scheme(Constants.CONTENT_SCHEME);
-    		data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
+    		data.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
     		data.appendEncodedPath("bookmarks");
     		data.appendQueryParameter("tagname", tag);
     		i.setData(data.build());
@@ -252,7 +249,7 @@ public class ViewBookmark extends AppBaseActivity{
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		if(!myself) {
+		if(!isMyself()) {
 			menu.removeItem(R.id.menu_view_editbookmark);
 			menu.removeItem(R.id.menu_view_deletebookmark);
 		}
