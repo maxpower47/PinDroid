@@ -21,13 +21,13 @@
 
 package com.pindroid.activity;
 
-import java.net.URLEncoder;
 import java.util.Date;
 
 import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.DeleteBookmarkTask;
+import com.pindroid.action.IntentHelper;
 import com.pindroid.action.MarkReadBookmarkTask;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContentProvider;
@@ -265,16 +265,12 @@ public class ViewBookmark extends AppBaseActivity{
 		    		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, mAccount, this);
 		    		new MarkReadBookmarkTask().execute(args);
 		    	}
-		    	String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(((Spannable) mUrl.getText()).toString());
-		    	Uri readLink = Uri.parse(readUrl);
-				Intent readIntent = new Intent(Intent.ACTION_VIEW, readLink);
-				startActivity(readIntent);
+
+				startActivity(IntentHelper.ReadBookmark(((Spannable) mUrl.getText()).toString()));
 				return true;
 		    case R.id.menu_view_openbookmark:
 		    	String url = ((Spannable) mUrl.getText()).toString();
-		    	Uri link = Uri.parse(url);
-				Intent i = new Intent(Intent.ACTION_VIEW, link);
-				startActivity(i);
+				startActivity(IntentHelper.OpenInBrowser(url));
 				return true;
 		    case R.id.menu_view_editbookmark:
 				Intent editBookmark = new Intent(this, AddBookmark.class);
@@ -296,11 +292,7 @@ public class ViewBookmark extends AppBaseActivity{
 		    case R.id.menu_view_sendbookmark:
 		    	String sendUrl = ((Spannable) mUrl.getText()).toString();
 		    	String sendTitle = mTitle.getText().toString();
-		    	Intent sendIntent = new Intent(Intent.ACTION_SEND);
-		    	sendIntent.setType("text/plain");
-		    	sendIntent.putExtra(Intent.EXTRA_TEXT, sendUrl);
-		    	sendIntent.putExtra(Intent.EXTRA_SUBJECT, sendTitle);
-		    	sendIntent.putExtra(Intent.EXTRA_TITLE, sendTitle);
+		    	Intent sendIntent = IntentHelper.SendBookmark(sendUrl, sendTitle);
 		    	startActivity(Intent.createChooser(sendIntent, res.getString(R.string.share_chooser_title)));
 		    	return true;
 		    case R.id.menu_view_settings:

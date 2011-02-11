@@ -22,7 +22,6 @@
 package com.pindroid.activity;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -30,6 +29,7 @@ import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.DeleteBookmarkTask;
+import com.pindroid.action.IntentHelper;
 import com.pindroid.action.MarkReadBookmarkTask;
 import com.pindroid.client.PinboardFeed;
 import com.pindroid.listadapter.BookmarkListAdapter;
@@ -44,7 +44,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -289,11 +288,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				return true;
 				
 			case 5:
-		    	Intent sendIntent = new Intent(Intent.ACTION_SEND);
-		    	sendIntent.setType("text/plain");
-		    	sendIntent.putExtra(Intent.EXTRA_TEXT, b.getUrl());
-		    	sendIntent.putExtra(Intent.EXTRA_SUBJECT, b.getDescription());
-		    	sendIntent.putExtra(Intent.EXTRA_TITLE, b.getDescription());
+		    	Intent sendIntent = IntentHelper.SendBookmark(b.getUrl(), b.getDescription());
 		    	startActivity(Intent.createChooser(sendIntent, res.getString(R.string.share_chooser_title)));
 				
 				return true;
@@ -397,11 +392,8 @@ public class BrowseBookmarks extends AppBaseListActivity {
     	if(!url.startsWith("http")) {
     		url = "http://" + url;
     	}
-    	
-    	Uri link = Uri.parse(url);
-		Intent i = new Intent(Intent.ACTION_VIEW, link);
 		
-		startActivity(i);
+		startActivity(IntentHelper.OpenInBrowser(url));
 	}
 	
 	private void viewBookmark(int id) {
@@ -414,36 +406,11 @@ public class BrowseBookmarks extends AppBaseListActivity {
     		BookmarkTaskArgs unreadArgs = new BookmarkTaskArgs(b, mAccount, this);
     		new MarkReadBookmarkTask().execute(unreadArgs);
     	}
-    	String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(b.getUrl());
-    	Uri readLink = Uri.parse(readUrl);
-		Intent readIntent = new Intent(Intent.ACTION_VIEW, readLink);
-		startActivity(readIntent);
+		startActivity(IntentHelper.ReadBookmark(b.getUrl()));
 	}
 	
 	private void viewBookmark(Bookmark b) {
-		Intent viewBookmark = new Intent();
-		viewBookmark.setAction(Intent.ACTION_VIEW);
-		viewBookmark.addCategory(Intent.CATEGORY_DEFAULT);
-		Uri.Builder data = new Uri.Builder();
-		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
-		data.appendEncodedPath("bookmarks");
-		
-		if(isMyself()) {
-			data.appendEncodedPath(Integer.toString(b.getId()));
-		} else {
-			data.appendEncodedPath(Integer.toString(0));
-			data.appendQueryParameter("url", b.getUrl());
-			data.appendQueryParameter("title", b.getDescription());
-			data.appendQueryParameter("notes", b.getNotes());
-			data.appendQueryParameter("tags", b.getTagString());
-			data.appendQueryParameter("time", Long.toString(b.getTime()));
-			data.appendQueryParameter("account", b.getAccount());
-		}
-		viewBookmark.setData(data.build());
-		
-		Log.d("View Bookmark Uri", data.build().toString());
-		startActivity(viewBookmark);
+		startActivity(IntentHelper.ViewBookmark(b, username));
 	}
 	
 	@Override
