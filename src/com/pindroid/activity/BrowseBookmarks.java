@@ -285,10 +285,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				return true;
 				
 			case 4:				
-				Intent addBookmark = new Intent(this, AddBookmark.class);
-				addBookmark.setAction(Intent.ACTION_SEND);
-				addBookmark.putExtra(Intent.EXTRA_TEXT, b.getUrl());
-				startActivity(addBookmark);
+				startActivity(IntentHelper.AddBookmark(b.getUrl(), mAccount.name));
 				return true;
 				
 			case 5:

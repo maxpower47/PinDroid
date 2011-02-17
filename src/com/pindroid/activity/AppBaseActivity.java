@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import com.pindroid.R;
 import com.pindroid.Constants;
+import com.pindroid.action.IntentHelper;
 import com.pindroid.authenticator.AuthenticatorActivity;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
@@ -154,8 +155,7 @@ public class AppBaseActivity extends Activity {
 	    // Handle item selection
 	    switch (item.getItemId()) {
 	    case R.id.menu_addbookmark:
-			Intent addBookmark = new Intent(this, AddBookmark.class);
-			startActivity(addBookmark);
+			startActivity(IntentHelper.AddBookmark(null, mAccount.name));
 			return true;
 	    case R.id.menu_settings:
 			Intent prefs = new Intent(this, Preferences.class);

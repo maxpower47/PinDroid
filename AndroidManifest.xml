@@ -121,6 +121,11 @@
         	<meta-data android:name="android.app.searchable" android:resource="@xml/main_searchable"/>
         </activity>
         <activity android:name=".activity.AddBookmark">
+            <intent-filter>
+        		<action android:name="android.intent.action.SEND" />
+        		<category android:name="android.intent.category.DEFAULT" />
+        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/bookmarks"/>
+        	</intent-filter>
         	<intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />

@@ -32,6 +32,21 @@ public class IntentHelper {
     	return sendIntent;
 	}
 	
+	public static Intent AddBookmark(String url, String account) {
+		Intent addBookmark = new Intent();
+		addBookmark.setAction(Intent.ACTION_SEND);
+		if(url != null)
+			addBookmark.putExtra(Intent.EXTRA_TEXT, url);
+		
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.appendEncodedPath("bookmarks");
+		addBookmark.setData(data.build());
+		
+		return addBookmark;
+	}
+	
 	public static Intent ViewBookmark(Bookmark b, String account) {
 		
 		Intent viewBookmark = new Intent();
