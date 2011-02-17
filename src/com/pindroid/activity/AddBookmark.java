@@ -43,12 +43,14 @@ import com.pindroid.util.StringUtils;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
@@ -120,6 +122,37 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 					finish();
 				} else {
 					onSearchRequested();
+				}
+			} else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
+				
+				Uri data = intent.getData();
+				String path = null;
+				String tagname = null;
+				
+				if(data != null) {
+					path = data.getPath();
+					tagname = data.getQueryParameter("tagname");
+				}
+				
+				if(data.getScheme() == null || !data.getScheme().equals("content")){
+					Intent i = new Intent(Intent.ACTION_VIEW, data);
+					
+					startActivity(i);
+					finish();				
+				} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
+					Intent viewBookmark = new Intent(this, ViewBookmark.class);
+					viewBookmark.setData(data);
+					
+					Log.d("View Bookmark Uri", data.toString());
+					startActivity(viewBookmark);
+					finish();
+				} else if(tagname != null) {
+					Intent viewTags = new Intent(this, BrowseBookmarks.class);
+					viewTags.setData(data);
+					
+					Log.d("View Tags Uri", data.toString());
+					startActivity(viewTags);
+					finish();
 				}
 			} else if(Intent.ACTION_SEND.equals(intent.getAction())){
 				String extraUrl = intent.getStringExtra(Intent.EXTRA_TEXT);

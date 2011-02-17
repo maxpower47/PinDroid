@@ -151,13 +151,14 @@
     
     <string name="search_results_bookmark">Bookmark Results</string>
     <string name="search_results_tag">Tag Results</string>
-    <string name="search_results_global_tag">Global Tag Results For \"%1$s\"</string>
+    <string name="search_results_global_tag">Global Tag Results</string>
 
     <string name="tag_search_text">Search Pinboard</string>
     
     <string name="bookmark_search_results_title">Bookmark Search Results For \"%1$s\"</string>
     <string name="unread_search_results_title">Unread Search Results For \"%1$s\"</string>
     <string name="tag_search_results_title">Tag Search Results For \"%1$s\"</string>
+    <string name="search_results_global_tag_title">Global Tag Results For \"%1$s\"</string>
     
     <string name="bookmark_count">bookmark(s)</string>
     
@@ -250,19 +251,19 @@
     <string name="about_activity_title">About PinDroid</string>
     <string name="about_title">PinDroid</string>
     <string name="about_text">
-    &amp;lt;html&amp;gt; 
-    &amp;lt;body style="background-color:#000000;color:#BEBEBE"&amp;gt;
-    	PinDroid is a port of DeliciousDroid for the Pinboard bookmarking system.&amp;lt;br/&amp;gt;&amp;lt;br/&amp;gt;
-    	Developed, maintained, and supported by Matt Schmidt&amp;lt;br/&amp;gt;&amp;lt;br/&amp;gt;
-    	Find a bug or have a suggestion for a new feature?  Open an issue at &amp;lt;a href=\'http://code.google.com/p/pindroid/issues\'&amp;gt;http://code.google.com/p/pindroid/issues&amp;lt;/a&amp;gt;&amp;lt;br/&amp;gt;&amp;lt;br/&amp;gt;
-    	Or, drop me a line on Twitter @PinDroid&amp;lt;br/&amp;gt;&amp;lt;br/&amp;gt;
-    	&amp;lt;b&amp;gt;Known Issues:&amp;lt;/b&amp;gt;
-    	&amp;lt;ul&amp;gt;
-     		&amp;lt;li&amp;gt;Only a single Pinboard account is currently supported. &amp;lt;/li&amp;gt;
-     		&amp;lt;li&amp;gt;Certain features from DeliciousDroid have not been ported yet due to limitations in Pinboards API, including contact syncing and viewing network bookmark lists. &amp;lt;/li&amp;gt;
-    	&amp;lt;/ul&amp;gt;&amp;lt;br/&amp;gt;
+    &lt;html&gt; 
+    &lt;body style="background-color:#000000;color:#BEBEBE"&gt;
+    	PinDroid is a port of DeliciousDroid for the Pinboard bookmarking system.&lt;br/&gt;&lt;br/&gt;
+    	Developed, maintained, and supported by Matt Schmidt&lt;br/&gt;&lt;br/&gt;
+    	Find a bug or have a suggestion for a new feature?  Open an issue at &lt;a href=\'http://code.google.com/p/pindroid/issues\'&gt;http://code.google.com/p/pindroid/issues&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;
+    	Or, drop me a line on Twitter @PinDroid&lt;br/&gt;&lt;br/&gt;
+    	&lt;b&gt;Known Issues:&lt;/b&gt;
+    	&lt;ul&gt;
+     		&lt;li&gt;Only a single Pinboard account is currently supported. &lt;/li&gt;
+     		&lt;li&gt;Certain features from DeliciousDroid have not been ported yet due to limitations in Pinboards API, including contact syncing and viewing network bookmark lists. &lt;/li&gt;
+    	&lt;/ul&gt;&lt;br/&gt;
     	Read view powered by Instapaper
-    &amp;lt;/body&amp;gt;
-    &amp;lt;/html&amp;gt;
+    &lt;/body&gt;
+    &lt;/html&gt;
     </string>
 </resources>

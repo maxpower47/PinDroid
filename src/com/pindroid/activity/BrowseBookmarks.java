@@ -136,7 +136,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	    		
 	    			setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));
 	    		} else {
-	    			setTitle(getString(R.string.search_results_global_tag, query));
+	    			setTitle(getString(R.string.search_results_global_tag_title, query));
 	    			new LoadBookmarkFeedTask().execute("global", query);
 	    		}
 	    		

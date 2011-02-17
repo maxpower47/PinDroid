@@ -150,22 +150,22 @@
   <string name="about_activity_title">Tietoja PinDroid:sta</string>
   <string name="about_title">PinDroid</string>
   <string name="about_text">
-    &amp;lt;html&amp;gt;
-    &amp;lt;head&amp;gt;
-    	&amp;lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"&amp;gt;
-    &amp;lt;/head&amp;gt;
-    &amp;lt;body style="background-color:#000000;color:#BEBEBE"&amp;gt;
-    PinDroid:in kirjanmerkki järjestelmä on portattu DeliciousDroid:sta.&amp;lt;br/&amp;gt;&amp;lt;br/&amp;gt;
-    Kehittänyt, ylläpitää, ja tukee Matt Schmidt&amp;lt;br/&amp;gt;&amp;lt;br/&amp;gt;
-    Löysitkö virheen tai mielessä on uusia ominaisuus? me &amp;lt;a href=\'http://code.google.com/p/pindroid/issues\'&amp;gt;http://code.google.com/p/pindroid/issues&amp;lt;/a&amp;gt;&amp;lt;br/&amp;gt;&amp;lt;br/&amp;gt;
-    tai ilmoita Twitteriin @PinDroid&amp;lt;br/&amp;gt;&amp;lt;br/&amp;gt;
-       &amp;lt;b&amp;gt;Tunnetut ongelmat:&amp;lt;/b&amp;gt;
-       &amp;lt;ul&amp;gt;
-             &amp;lt;li&amp;gt;Tällä hetkellä tuetaan vain Pinboard-tiliä. &amp;lt;/li&amp;gt;
-             &amp;lt;li&amp;gt;Tietyt ominaisuuksia DeliousDroid:sta ei ole viellä siirretty johtuen rajoittuneesta Pinbords API:sta, myös kontaktien synkronointi ja verkkokirjanmerkkilistojen katselu.&amp;lt;/li&amp;gt;
-       &amp;lt;/ul&amp;gt;&amp;lt;br/&amp;gt;
+    &lt;html&gt;
+    &lt;head&gt;
+    	&lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"&gt;
+    &lt;/head&gt;
+    &lt;body style="background-color:#000000;color:#BEBEBE"&gt;
+    PinDroid:in kirjanmerkki järjestelmä on portattu DeliciousDroid:sta.&lt;br/&gt;&lt;br/&gt;
+    Kehittänyt, ylläpitää, ja tukee Matt Schmidt&lt;br/&gt;&lt;br/&gt;
+    Löysitkö virheen tai mielessä on uusia ominaisuus? me &lt;a href=\'http://code.google.com/p/pindroid/issues\'&gt;http://code.google.com/p/pindroid/issues&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;
+    tai ilmoita Twitteriin @PinDroid&lt;br/&gt;&lt;br/&gt;
+       &lt;b&gt;Tunnetut ongelmat:&lt;/b&gt;
+       &lt;ul&gt;
+             &lt;li&gt;Tällä hetkellä tuetaan vain Pinboard-tiliä. &lt;/li&gt;
+             &lt;li&gt;Tietyt ominaisuuksia DeliousDroid:sta ei ole viellä siirretty johtuen rajoittuneesta Pinbords API:sta, myös kontaktien synkronointi ja verkkokirjanmerkkilistojen katselu.&lt;/li&gt;
+       &lt;/ul&gt;&lt;br/&gt;
        Lukunäkymä perustuu Instapper-palveluun
-    &amp;lt;/body&amp;gt;
-    &amp;lt;/html&amp;gt;
+    &lt;/body&gt;
+    &lt;/html&gt;
     </string>
 </resources>

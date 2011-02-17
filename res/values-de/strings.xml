@@ -151,13 +151,14 @@
     
     <string name="search_results_bookmark">Lesezeichen Ergebnisse</string>
     <string name="search_results_tag">Tag Ergebnisse</string>
-    <string name="search_results_global_tag">Globale Tag Ergebnisse für \"%1$s\"</string>
+    <string name="search_results_global_tag">Globale Tag Ergebnisse</string>
 
     <string name="tag_search_text">Pinboard durchsuchen</string>
     
     <string name="bookmark_search_results_title">Lesezeichen Suchergebnisse für \"%1$s\"</string>
     <string name="unread_search_results_title">Ungelesene Suchergebnisse für \"%1$s\"</string>
     <string name="tag_search_results_title">Tag Suchergebnisse für \"%1$s\"</string>
+    <string name="search_results_global_tag_title">Globale Tag Ergebnisse für \"%1$s\"</string>
     
     <string name="bookmark_count">Lesezeichen</string>
     
@@ -250,19 +251,19 @@
     <string name="about_activity_title">Über PinDroid</string>
     <string name="about_title">PinDroid</string>
     <string name="about_text">
-    &amp;lt;html&amp;gt; 
-    &amp;lt;body style="background-color:#000000;color:#BEBEBE"&amp;gt;
-    	PinDroid ist eine Portierung von DeliciousDroid fuer das Pinboard Lesezeichen System (bookmarking system).&amp;lt;br/&amp;gt;&amp;lt;br/&amp;gt;
-    	Entwickelt, verwaltet und unterhalten von Matt Schmidt&amp;lt;br/&amp;gt;&amp;lt;br/&amp;gt;
-    	Einen Fehler gefunden oder einen Vorschlag fuer eine neue Funktion?  Stelle dies unter &amp;lt;a href=\'http://code.google.com/p/pindroid/issues\'&amp;gt;http://code.google.com/p/pindroid/issues&amp;lt;/a&amp;gt;&amp;lt;br/&amp;gt;&amp;lt;br/&amp;gt; ein.
-    	Oder sende mir eine kurze Mitteilung auf Twitter @PinDroid&amp;lt;br/&amp;gt;&amp;lt;br/&amp;gt;
-    	&amp;lt;b&amp;gt;Bekannte Probleme:&amp;lt;/b&amp;gt;
-    	&amp;lt;ul&amp;gt;
-     		&amp;lt;li&amp;gt;Derzeit wird nur ein Pinboard Account unterstuetzt. &amp;lt;/li&amp;gt;
-     		&amp;lt;li&amp;gt;Einige Funktionen von DeliciousDroid wurden aufgrund des derzeit noch limitierten Funktionsumfangs der Pinboard API noch nicht portiert. Dies umfasst die Synchronisierung von Kontakten und die Anzeige von Lesezeichen des eigenen Netzwerks. &amp;lt;/li&amp;gt;
-    	&amp;lt;/ul&amp;gt;&amp;lt;br/&amp;gt;
+    &lt;html&gt; 
+    &lt;body style="background-color:#000000;color:#BEBEBE"&gt;
+    	PinDroid ist eine Portierung von DeliciousDroid fuer das Pinboard Lesezeichen System (bookmarking system).&lt;br/&gt;&lt;br/&gt;
+    	Entwickelt, verwaltet und unterhalten von Matt Schmidt&lt;br/&gt;&lt;br/&gt;
+    	Einen Fehler gefunden oder einen Vorschlag fuer eine neue Funktion?  Stelle dies unter &lt;a href=\'http://code.google.com/p/pindroid/issues\'&gt;http://code.google.com/p/pindroid/issues&lt;/a&gt;&lt;br/&gt;&lt;br/&gt; ein.
+    	Oder sende mir eine kurze Mitteilung auf Twitter @PinDroid&lt;br/&gt;&lt;br/&gt;
+    	&lt;b&gt;Bekannte Probleme:&lt;/b&gt;
+    	&lt;ul&gt;
+     		&lt;li&gt;Derzeit wird nur ein Pinboard Account unterstuetzt. &lt;/li&gt;
+     		&lt;li&gt;Einige Funktionen von DeliciousDroid wurden aufgrund des derzeit noch limitierten Funktionsumfangs der Pinboard API noch nicht portiert. Dies umfasst die Synchronisierung von Kontakten und die Anzeige von Lesezeichen des eigenen Netzwerks. &lt;/li&gt;
+    	&lt;/ul&gt;&lt;br/&gt;
     	Lese Ansicht wird bereitgestellt durch Instapaper
-    &amp;lt;/body&amp;gt;
-    &amp;lt;/html&amp;gt;
+    &lt;/body&gt;
+    &lt;/html&gt;
     </string>
 </resources>

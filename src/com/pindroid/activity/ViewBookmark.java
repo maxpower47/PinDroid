@@ -84,19 +84,44 @@ public class ViewBookmark extends AppBaseActivity{
 		mIcon = (ImageView) findViewById(R.id.view_bookmark_icon);
 		
 		setTitle(R.string.view_bookmark_title);
+		
+		Intent intent = getIntent();
 
-		if(Intent.ACTION_SEARCH.equals(getIntent().getAction())){
-			if(getIntent().hasExtra(SearchManager.QUERY)){
+		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
+			if(intent.hasExtra(SearchManager.QUERY)){
 				Intent i = new Intent(mContext, MainSearchResults.class);
-				i.putExtras(getIntent().getExtras());
+				i.putExtras(intent.getExtras());
 				startActivity(i);
 				finish();
 			} else {
 				onSearchRequested();
 			}
-		}
+		} else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
+			
+			Uri data = intent.getData();
+			String tagname = null;
+			
+			if(data != null) {
+				path = data.getPath();
+				tagname = data.getQueryParameter("tagname");
+			}
+			
+			if(data.getScheme() == null || !data.getScheme().equals("content")){
+				Intent i = new Intent(Intent.ACTION_VIEW, data);
+				
+				startActivity(i);
+				finish();				
+			} else if(tagname != null) {
+				Intent viewTags = new Intent(this, BrowseBookmarks.class);
+				viewTags.setData(data);
+				
+				Log.d("View Tags Uri", data.toString());
+				startActivity(viewTags);
+				finish();
+			}
+		} 
 		
-		if(getIntent().getData() != null) {
+		if(intent.getData() != null) {
 			data = getIntent().getData();
 			path = data.getPath();
 			
