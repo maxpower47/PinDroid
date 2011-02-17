@@ -310,7 +310,7 @@ public class ViewBookmark extends AppBaseActivity{
 		    	String sendUrl = ((Spannable) mUrl.getText()).toString();
 		    	String sendTitle = mTitle.getText().toString();
 		    	Intent sendIntent = IntentHelper.SendBookmark(sendUrl, sendTitle);
-		    	startActivity(Intent.createChooser(sendIntent, res.getString(R.string.share_chooser_title)));
+		    	startActivity(Intent.createChooser(sendIntent, getString(R.string.share_chooser_title)));
 		    	return true;
 		    case R.id.menu_view_settings:
 				Intent prefs = new Intent(this, Preferences.class);

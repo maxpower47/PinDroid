@@ -46,8 +46,8 @@ public class MainSearchResults extends AppBaseListActivity {
 		
 		((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
 		
-		String[] MENU_ITEMS = new String[] {res.getString(R.string.search_results_bookmark),
-				res.getString(R.string.search_results_tag), res.getString(R.string.search_results_global_tag)};
+		String[] MENU_ITEMS = new String[] {getString(R.string.search_results_bookmark),
+				getString(R.string.search_results_tag), getString(R.string.search_results_global_tag)};
 		
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
 		mContext = this;

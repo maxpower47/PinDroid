@@ -41,7 +41,7 @@ public class AboutActivity extends AppBaseActivity {
 		((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
 		
 		WebView content = (WebView) findViewById(R.id.about_text_view);
-		content.loadData(res.getString(R.string.about_text), "text/html", "utf-8");
+		content.loadData(getString(R.string.about_text), "text/html", "utf-8");
 		
 		if(Intent.ACTION_SEARCH.equals(getIntent().getAction())){
 			if(getIntent().hasExtra(SearchManager.QUERY)){

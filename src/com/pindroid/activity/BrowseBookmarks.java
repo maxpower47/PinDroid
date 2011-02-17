@@ -126,8 +126,8 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	    		}
 	    		
 	    		if(unread) {
-	    			setTitle(String.format(res.getString(R.string.unread_search_results_title), query));
-	    		} else setTitle(String.format(res.getString(R.string.bookmark_search_results_title), query));
+	    			setTitle(getString(R.string.unread_search_results_title, query));
+	    		} else setTitle(getString(R.string.bookmark_search_results_title, query));
 	    		
 	    		if(isMyself()) {
 	    			if(bookmarkList.isEmpty()) {
@@ -150,13 +150,13 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	    		String title = "";
 	    		
 	    		if(unread && tagname != null && tagname != "") {
-	    			title = String.format(res.getString(R.string.browse_my_unread_bookmarks_tagged_title), tagname);
+	    			title = getString(R.string.browse_my_unread_bookmarks_tagged_title, tagname);
 	    		} else if(unread && (tagname == null || tagname.equals(""))) {
-	    			title = res.getString(R.string.browse_my_unread_bookmarks_title);
+	    			title = getString(R.string.browse_my_unread_bookmarks_title);
 	    		} else if(tagname != null && tagname != "") {
-	    			title = String.format(res.getString(R.string.browse_my_bookmarks_tagged_title), tagname);
+	    			title = getString(R.string.browse_my_bookmarks_tagged_title, tagname);
 	    		} else {
-	    			title = res.getString(R.string.browse_my_bookmarks_title);
+	    			title = getString(R.string.browse_my_bookmarks_title);
 	    		}
 	    		
 				setTitle(title);
@@ -167,7 +167,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				loaded = true;
 			}  else if(username.equals("recent")){
 				try{
-					setTitle(res.getString(R.string.browse_recent_bookmarks_title));
+					setTitle(getString(R.string.browse_recent_bookmarks_title));
 
 					new LoadBookmarkFeedTask().execute("recent");
 				}
@@ -180,9 +180,9 @@ public class BrowseBookmarks extends AppBaseListActivity {
 					String title = "";
 					
 					if(tagname != null && tagname != "") {
-						title = String.format(res.getString(R.string.browse_user_bookmarks_tagged_title), username, tagname);
+						title = getString(R.string.browse_user_bookmarks_tagged_title, username, tagname);
 					} else {
-						title = String.format(res.getString(R.string.browse_user_bookmarks_title), username);
+						title = getString(R.string.browse_user_bookmarks_title, username);
 					}
 					setTitle(title);
 
@@ -214,18 +214,18 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 					menu.setHeaderTitle("Actions");
 					if(isMyself()){
-						menu.add(Menu.NONE, 0, Menu.NONE, res.getString(R.string.bookmark_context_open));
-						menu.add(Menu.NONE, 1, Menu.NONE, res.getString(R.string.bookmark_context_view));
-						menu.add(Menu.NONE, 6, Menu.NONE, res.getString(R.string.bookmark_context_read));
-						menu.add(Menu.NONE, 2, Menu.NONE, res.getString(R.string.bookmark_context_edit));
-						menu.add(Menu.NONE, 3, Menu.NONE, res.getString(R.string.bookmark_context_delete));
-						menu.add(Menu.NONE, 5, Menu.NONE, res.getString(R.string.bookmark_context_share));
+						menu.add(Menu.NONE, 0, Menu.NONE, getString(R.string.bookmark_context_open));
+						menu.add(Menu.NONE, 1, Menu.NONE, getString(R.string.bookmark_context_view));
+						menu.add(Menu.NONE, 6, Menu.NONE, getString(R.string.bookmark_context_read));
+						menu.add(Menu.NONE, 2, Menu.NONE, getString(R.string.bookmark_context_edit));
+						menu.add(Menu.NONE, 3, Menu.NONE, getString(R.string.bookmark_context_delete));
+						menu.add(Menu.NONE, 5, Menu.NONE, getString(R.string.bookmark_context_share));
 					} else {
-						menu.add(Menu.NONE, 4, Menu.NONE, res.getString(R.string.bookmark_context_add));
-						menu.add(Menu.NONE, 0, Menu.NONE, res.getString(R.string.bookmark_context_open));
-						menu.add(Menu.NONE, 1, Menu.NONE, res.getString(R.string.bookmark_context_view));
-						menu.add(Menu.NONE, 6, Menu.NONE, res.getString(R.string.bookmark_context_read));
-						menu.add(Menu.NONE, 5, Menu.NONE, res.getString(R.string.bookmark_context_share));
+						menu.add(Menu.NONE, 4, Menu.NONE, getString(R.string.bookmark_context_add));
+						menu.add(Menu.NONE, 0, Menu.NONE, getString(R.string.bookmark_context_open));
+						menu.add(Menu.NONE, 1, Menu.NONE, getString(R.string.bookmark_context_view));
+						menu.add(Menu.NONE, 6, Menu.NONE, getString(R.string.bookmark_context_read));
+						menu.add(Menu.NONE, 5, Menu.NONE, getString(R.string.bookmark_context_share));
 					}
 				}
 			});
@@ -293,7 +293,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				
 			case 5:
 		    	Intent sendIntent = IntentHelper.SendBookmark(b.getUrl(), b.getDescription());
-		    	startActivity(Intent.createChooser(sendIntent, res.getString(R.string.share_chooser_title)));
+		    	startActivity(Intent.createChooser(sendIntent, getString(R.string.share_chooser_title)));
 				
 				return true;
 			case 6:
@@ -326,12 +326,12 @@ public class BrowseBookmarks extends AppBaseListActivity {
 		if(result && isMyself()) {
 		    SubMenu sortmenu = menu.addSubMenu(Menu.NONE, Menu.NONE, 1, R.string.menu_sort_title);
 		    sortmenu.setIcon(R.drawable.ic_menu_sort_alphabetically);
-		    sortmenu.add(Menu.NONE, sortDateAsc, 0, res.getString(R.string.bookmark_sort_date_asc));
-		    sortmenu.add(Menu.NONE, sortDateDesc, 1, res.getString(R.string.bookmark_sort_date_desc));
-		    sortmenu.add(Menu.NONE, sortDescAsc, 2, res.getString(R.string.bookmark_sort_description_asc));
-		    sortmenu.add(Menu.NONE, sortDescDesc, 3, res.getString(R.string.bookmark_sort_description_desc));
-		    sortmenu.add(Menu.NONE, sortUrlAsc, 4, res.getString(R.string.bookmark_sort_url_asc));
-		    sortmenu.add(Menu.NONE, sortUrlDesc, 5, res.getString(R.string.bookmark_sort_url_desc));
+		    sortmenu.add(Menu.NONE, sortDateAsc, 0, getString(R.string.bookmark_sort_date_asc));
+		    sortmenu.add(Menu.NONE, sortDateDesc, 1, getString(R.string.bookmark_sort_date_desc));
+		    sortmenu.add(Menu.NONE, sortDescAsc, 2, getString(R.string.bookmark_sort_description_asc));
+		    sortmenu.add(Menu.NONE, sortDescDesc, 3, getString(R.string.bookmark_sort_description_desc));
+		    sortmenu.add(Menu.NONE, sortUrlAsc, 4, getString(R.string.bookmark_sort_url_asc));
+		    sortmenu.add(Menu.NONE, sortUrlDesc, 5, getString(R.string.bookmark_sort_url_desc));
 		}
 		
 	    return result;
@@ -433,7 +433,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
         protected void onPreExecute() {
 	        progress = new ProgressDialog(mContext);
 	        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-	        progress.setMessage(res.getString(R.string.bookmark_feed_task_progress));
+	        progress.setMessage(getString(R.string.bookmark_feed_task_progress));
 	        progress.setCancelable(true);
 	        progress.show();
         }

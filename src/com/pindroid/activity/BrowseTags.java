@@ -85,7 +85,7 @@ public class BrowseTags extends AppBaseListActivity {
 	  		
 	    		String query = intent.getStringExtra(SearchManager.QUERY);
 	    		
-	    		setTitle(String.format(res.getString(R.string.tag_search_results_title), query));
+	    		setTitle(getString(R.string.tag_search_results_title, query));
 	    		
 	    		tagList = TagManager.SearchTags(query, username, this);
 	    		
@@ -95,9 +95,9 @@ public class BrowseTags extends AppBaseListActivity {
 	    		myTags = true;
 				try{
 					if(Intent.ACTION_VIEW.equals(action)) {
-						setTitle(res.getString(R.string.browse_my_tags_title));
+						setTitle(getString(R.string.browse_my_tags_title));
 					} else if(Intent.ACTION_PICK.equals(action)) {
-						setTitle(res.getString(R.string.tag_live_folder_chooser_title));
+						setTitle(getString(R.string.tag_live_folder_chooser_title));
 					}
 	
 					loadTagList();
@@ -167,10 +167,10 @@ public class BrowseTags extends AppBaseListActivity {
 		if(result && isMyself()) {
 		    SubMenu sortmenu = menu.addSubMenu(Menu.NONE, Menu.NONE, 1, R.string.menu_sort_title);
 		    sortmenu.setIcon(R.drawable.ic_menu_sort_alphabetically);
-		    sortmenu.add(Menu.NONE, sortNameAsc, 0, res.getString(R.string.tag_sort_name_asc));
-		    sortmenu.add(Menu.NONE, sortNameDesc, 1, res.getString(R.string.tag_sort_name_desc));
-		    sortmenu.add(Menu.NONE, sortCountAsc, 2, res.getString(R.string.tag_sort_count_asc));
-		    sortmenu.add(Menu.NONE, sortCountDesc, 3, res.getString(R.string.tag_sort_count_desc));
+		    sortmenu.add(Menu.NONE, sortNameAsc, 0, getString(R.string.tag_sort_name_asc));
+		    sortmenu.add(Menu.NONE, sortNameDesc, 1, getString(R.string.tag_sort_name_desc));
+		    sortmenu.add(Menu.NONE, sortCountAsc, 2, getString(R.string.tag_sort_count_asc));
+		    sortmenu.add(Menu.NONE, sortCountDesc, 3, getString(R.string.tag_sort_count_desc));
 		}
 		
 	    return result;

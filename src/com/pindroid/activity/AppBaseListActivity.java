@@ -37,7 +37,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -54,7 +53,6 @@ public class AppBaseListActivity extends ListActivity {
 	protected Account mAccount;
 	protected Context mContext;
 	protected String username = null;
-	protected Resources res;
 	protected SharedPreferences settings;
 	
 	protected long lastUpdate;
@@ -72,8 +70,6 @@ public class AppBaseListActivity extends ListActivity {
 		savedState = savedInstanceState;
 		super.onCreate(savedState);
 		
-		res = getResources();
-		
 		mContext = this;
 		mAccountManager = AccountManager.get(this);
 		
@@ -90,7 +86,7 @@ public class AppBaseListActivity extends ListActivity {
 			return;
 		} else if(lastUpdate == 0) {
 	
-			Toast.makeText(this, res.getString(R.string.syncing_toast), Toast.LENGTH_LONG).show();
+			Toast.makeText(this, getString(R.string.syncing_toast), Toast.LENGTH_LONG).show();
 			
 			if(mAccount == null || username == null)
 				loadAccounts();

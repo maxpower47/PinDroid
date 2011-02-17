@@ -200,8 +200,8 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		}
 		
 		if(update)
-			setTitle(res.getString(R.string.add_bookmark_edit_title));
-		else setTitle(res.getString(R.string.add_bookmark_add_title));
+			setTitle(getString(R.string.add_bookmark_edit_title));
+		else setTitle(getString(R.string.add_bookmark_add_title));
 		
 		mEditUrl.setOnFocusChangeListener(new OnFocusChangeListener(){
 			public void onFocusChange(View v, boolean hasFocus) {
