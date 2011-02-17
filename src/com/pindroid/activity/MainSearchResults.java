@@ -23,12 +23,14 @@ package com.pindroid.activity;
 
 import com.pindroid.R;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.view.View;
 
@@ -39,6 +41,10 @@ public class MainSearchResults extends AppBaseListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main_search_results);
+		setTitle(R.string.main_search_results_title);
+		
+		((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
 		
 		String[] MENU_ITEMS = new String[] {res.getString(R.string.search_results_bookmark),
 				res.getString(R.string.search_results_tag), res.getString(R.string.search_results_global_tag)};
@@ -47,6 +53,17 @@ public class MainSearchResults extends AppBaseListActivity {
 		mContext = this;
 
 		final Intent intent = getIntent();
+		
+		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
+			if(intent.hasExtra(SearchManager.QUERY)){
+				Intent i = new Intent(mContext, MainSearchResults.class);
+				i.putExtras(intent.getExtras());
+				startActivity(i);
+				finish();
+			} else {
+				onSearchRequested();
+			}
+		}
 		
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);

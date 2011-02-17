@@ -53,6 +53,7 @@ import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -81,6 +82,8 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_bookmarks);
+		
+        ((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
 		
 		if(mAccount != null) {
 			
@@ -133,6 +136,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	    		
 	    			setListAdapter(new BookmarkListAdapter(this, R.layout.bookmark_view, bookmarkList));
 	    		} else {
+	    			setTitle(getString(R.string.search_results_global_tag, query));
 	    			new LoadBookmarkFeedTask().execute("global", query);
 	    		}
 	    		
@@ -309,7 +313,10 @@ public class BrowseBookmarks extends AppBaseListActivity {
 			contextData.putBoolean("unread", unread);
 			startSearch(null, false, contextData, false);
 			return true;
-		} else return false;
+		} else {
+			startSearch(null, false, Bundle.EMPTY, false);
+			return true;
+		}
 	}
 	
 	@Override

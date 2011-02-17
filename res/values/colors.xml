@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+ -->
+<resources>
+	<color name="background">#FFFFFFFF</color>
+	<color name="lightText">#D888</color>
+	<color name="textColor">#D333</color>
+	<color name="darkText">#333</color>
+	<color name="gitHubBlue">#4183C4</color>
+	<color name="addedText">#DDFFDD</color>
+	<color name="removedText">#FFDDDD</color>
+	<color name="diffAtAtText">#EAF2F5</color>
+	<color name="orange1">#FF6600</color>
+	<color name="orange2">#FF9900</color>
+	<color name="yellow">#FFCC00</color>
+	<color name="gray">#808080</color>
+	<color name="transparent">#00000000</color>
+</resources>

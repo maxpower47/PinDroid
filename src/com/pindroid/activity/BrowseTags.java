@@ -36,6 +36,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.view.*;
@@ -58,6 +59,8 @@ public class BrowseTags extends AppBaseListActivity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_tags);
+		
+		((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
 		
 		if(mAccount != null) {
 			

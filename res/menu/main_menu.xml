@@ -28,11 +28,6 @@
 		android:icon="@drawable/ic_menu_add"
 		android:orderInCategory="0" />
 	<item 
-		android:id="@+id/menu_search" 
-		android:title="@string/menu_search_title" 
-		android:icon="@drawable/ic_menu_search"
-		android:orderInCategory="3" />
-	<item 
 		android:id="@+id/menu_settings" 
 		android:title="@string/menu_settings_title" 
 		android:icon="@drawable/ic_menu_preferences"

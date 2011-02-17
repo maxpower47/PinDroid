@@ -21,8 +21,11 @@
 
 package com.pindroid.activity;
 
+import android.app.SearchManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebView;
+import android.widget.ImageButton;
 
 import com.pindroid.R;
 
@@ -33,8 +36,22 @@ public class AboutActivity extends AppBaseActivity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.about_view);
+		setTitle(R.string.about_activity_title);
+		
+		((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
 		
 		WebView content = (WebView) findViewById(R.id.about_text_view);
 		content.loadData(res.getString(R.string.about_text), "text/html", "utf-8");
+		
+		if(Intent.ACTION_SEARCH.equals(getIntent().getAction())){
+			if(getIntent().hasExtra(SearchManager.QUERY)){
+				Intent i = new Intent(mContext, MainSearchResults.class);
+				i.putExtras(getIntent().getExtras());
+				startActivity(i);
+				finish();
+			} else {
+				onSearchRequested();
+			}
+		}
 	}
 }

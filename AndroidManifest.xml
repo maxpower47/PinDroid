@@ -39,7 +39,8 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <application
         android:icon="@drawable/ic_main"
-        android:label="@string/label">
+        android:label="@string/label"
+        android:theme="@android:style/Theme.NoTitleBar">
         <activity
         	android:name=".activity.Main"
         	android:label="@string/titleMain">
@@ -107,20 +108,38 @@
         		<category android:name="android.intent.category.DEFAULT" />
         		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:pathPattern="/bookmarks/.*"/>
         	</intent-filter>
+        	<intent-filter>
+            	<action android:name="android.intent.action.SEARCH" />
+        	</intent-filter>
+        	<meta-data android:name="android.app.searchable" android:resource="@xml/main_searchable"/>
         </activity>
         <activity android:name=".activity.MainSearchResults"
-        	android:label="@string/main_search_results_title" />
+        	android:label="@string/main_search_results_title">
+        	<intent-filter>
+            	<action android:name="android.intent.action.SEARCH" />
+        	</intent-filter>
+        	<meta-data android:name="android.app.searchable" android:resource="@xml/main_searchable"/>
+        </activity>
         <activity android:name=".activity.AddBookmark">
         	<intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
             </intent-filter>
+            <intent-filter>
+            	<action android:name="android.intent.action.SEARCH" />
+        	</intent-filter>
+            <meta-data android:name="android.app.searchable" android:resource="@xml/main_searchable"/>
         </activity>
         <activity android:name=".activity.Preferences"
         	android:label="@string/preferences_title" />
         <activity android:name=".activity.AboutActivity" 
-        	android:label="@string/about_activity_title"/>
+        	android:label="@string/about_activity_title">
+        	<intent-filter>
+            	<action android:name="android.intent.action.SEARCH" />
+        	</intent-filter>
+        	<meta-data android:name="android.app.searchable" android:resource="@xml/main_searchable"/>
+        </activity>
         <!-- The authenticator service -->
         <service
             android:name=".authenticator.AuthenticationService"

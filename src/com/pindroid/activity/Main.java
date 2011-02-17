@@ -34,6 +34,7 @@ import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.view.View;
 
@@ -42,6 +43,9 @@ public class Main extends AppBaseListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedState);
+		setContentView(R.layout.main);
+		
+		((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
 		
 		String[] MENU_ITEMS = new String[] {res.getString(R.string.main_menu_my_bookmarks),
 				res.getString(R.string.main_menu_my_unread_bookmarks),

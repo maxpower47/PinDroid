@@ -40,9 +40,12 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class AppBaseListActivity extends ListActivity {
@@ -98,6 +101,12 @@ public class AppBaseListActivity extends ListActivity {
 		}
 	}
 	
+	protected View.OnClickListener searchHandler = new View.OnClickListener() {
+		public void onClick(View v) {
+			onSearchRequested();
+		}
+	};
+	
 	@Override
 	public void onResume(){
 		super.onResume();
@@ -141,10 +150,6 @@ public class AppBaseListActivity extends ListActivity {
 	    MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.main_menu, menu);
 	    
-	    if(!isMyself()) {
-	    	menu.findItem(R.id.menu_search).setEnabled(false);
-	    }
-	    
 	    return true;
 	}
 	
@@ -156,9 +161,6 @@ public class AppBaseListActivity extends ListActivity {
 			Intent addBookmark = new Intent(this, AddBookmark.class);
 			startActivity(addBookmark);
 			return true;
-	    case R.id.menu_search:			
-			this.onSearchRequested();
-	        return true;
 	    case R.id.menu_settings:
 			Intent prefs = new Intent(this, Preferences.class);
 			startActivity(prefs);
@@ -172,5 +174,14 @@ public class AppBaseListActivity extends ListActivity {
 		if(mAccount != null && username != null)
 			return mAccount.name.equals(username);
 		else return false;
+	}
+	
+	@Override
+	public void setTitle(CharSequence title){
+		super.setTitle(title);
+		Log.d("got", "here");
+		if(this.findViewById(R.id.action_bar_title) != null) {
+			((TextView)this.findViewById(R.id.action_bar_title)).setText(title);
+		}
 	}
 }

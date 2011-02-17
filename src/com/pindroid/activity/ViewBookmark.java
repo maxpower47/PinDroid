@@ -37,6 +37,7 @@ import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.AccountSpan;
 import com.pindroid.ui.TagSpan;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -71,6 +73,8 @@ public class ViewBookmark extends AppBaseActivity{
 		
 		setContentView(R.layout.view_bookmark);
 		
+		((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
+		
 		mTitle = (TextView) findViewById(R.id.view_bookmark_title);
 		mUrl = (TextView) findViewById(R.id.view_bookmark_url);
 		mNotes = (TextView) findViewById(R.id.view_bookmark_notes);
@@ -79,13 +83,26 @@ public class ViewBookmark extends AppBaseActivity{
 		mUsername = (TextView) findViewById(R.id.view_bookmark_account);
 		mIcon = (ImageView) findViewById(R.id.view_bookmark_icon);
 		
-		Log.d("browse bookmarks", getIntent().getDataString());
-		data = getIntent().getData();
-		path = data.getPath();
-		Log.d("path", path);
+		setTitle(R.string.view_bookmark_title);
+
+		if(Intent.ACTION_SEARCH.equals(getIntent().getAction())){
+			if(getIntent().hasExtra(SearchManager.QUERY)){
+				Intent i = new Intent(mContext, MainSearchResults.class);
+				i.putExtras(getIntent().getExtras());
+				startActivity(i);
+				finish();
+			} else {
+				onSearchRequested();
+			}
+		}
 		
-		username = data.getUserInfo();
-		user = data.getQueryParameter("account");
+		if(getIntent().getData() != null) {
+			data = getIntent().getData();
+			path = data.getPath();
+			
+			username = data.getUserInfo();
+			user = data.getQueryParameter("account");
+		}
 	}
 	
 	@Override

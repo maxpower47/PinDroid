@@ -41,6 +41,7 @@ import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.TagSpan;
 import com.pindroid.util.StringUtils;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -54,6 +55,7 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -88,6 +90,8 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.add_bookmark);
+		((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
+		
 		mEditUrl = (EditText) findViewById(R.id.add_edit_url);
 		mEditDescription = (EditText) findViewById(R.id.add_edit_description);
 		mDescriptionProgress = (ProgressBar) findViewById(R.id.add_description_progress);
@@ -108,7 +112,16 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		if(savedInstanceState == null){
 			Intent intent = getIntent();
 			
-			if(Intent.ACTION_SEND.equals(intent.getAction())){
+			if(Intent.ACTION_SEARCH.equals(intent.getAction())){
+				if(intent.hasExtra(SearchManager.QUERY)){
+					Intent i = new Intent(mContext, MainSearchResults.class);
+					i.putExtras(intent.getExtras());
+					startActivity(i);
+					finish();
+				} else {
+					onSearchRequested();
+				}
+			} else if(Intent.ACTION_SEND.equals(intent.getAction())){
 				String extraUrl = intent.getStringExtra(Intent.EXTRA_TEXT);
 				String extraDescription = intent.getStringExtra(Constants.EXTRA_DESCRIPTION);
 				String extraNotes = intent.getStringExtra(Constants.EXTRA_NOTES);
