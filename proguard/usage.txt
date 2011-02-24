@@ -2,6 +2,7 @@ com.pindroid.Constants
 com.pindroid.R
 com.pindroid.R$array
 com.pindroid.R$attr
+com.pindroid.R$color
 com.pindroid.R$drawable
 com.pindroid.R$id
 com.pindroid.R$layout

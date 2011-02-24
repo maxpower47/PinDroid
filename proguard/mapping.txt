@@ -29,6 +29,7 @@ com.pindroid.action.IntentHelper -> com.pindroid.f.c:
     android.content.Intent OpenInBrowser(java.lang.String) -> a
     android.content.Intent ReadBookmark(java.lang.String) -> b
     android.content.Intent SendBookmark(java.lang.String,java.lang.String) -> a
+    android.content.Intent AddBookmark(java.lang.String,java.lang.String) -> b
 com.pindroid.action.MarkReadBookmarkTask -> com.pindroid.f.b:
     android.content.Context context -> a
     com.pindroid.providers.BookmarkContent$Bookmark bookmark -> b
@@ -71,13 +72,13 @@ com.pindroid.activity.AddBookmark -> com.pindroid.activity.AddBookmark:
     android.widget.ProgressBar access$5(com.pindroid.activity.AddBookmark) -> f
     android.widget.ProgressBar access$6(com.pindroid.activity.AddBookmark) -> g
     android.widget.EditText access$7(com.pindroid.activity.AddBookmark) -> h
-com.pindroid.activity.AddBookmark$1 -> com.pindroid.activity.r:
+com.pindroid.activity.AddBookmark$1 -> com.pindroid.activity.t:
     com.pindroid.activity.AddBookmark this$0 -> a
     void onTagClick(java.lang.String) -> a
-com.pindroid.activity.AddBookmark$2 -> com.pindroid.activity.t:
+com.pindroid.activity.AddBookmark$2 -> com.pindroid.activity.v:
     com.pindroid.activity.AddBookmark this$0 -> a
     void onFocusChange(android.view.View,boolean) -> onFocusChange
-com.pindroid.activity.AddBookmark$GetTagSuggestionsTask -> com.pindroid.activity.l:
+com.pindroid.activity.AddBookmark$GetTagSuggestionsTask -> com.pindroid.activity.n:
     java.lang.String url -> a
     com.pindroid.activity.AddBookmark this$0 -> b
     java.util.ArrayList doInBackground(java.lang.String[]) -> a
@@ -85,7 +86,7 @@ com.pindroid.activity.AddBookmark$GetTagSuggestionsTask -> com.pindroid.activity
     void addTag(android.text.SpannableStringBuilder,com.pindroid.providers.TagContent$Tag) -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.pindroid.activity.AddBookmark$GetWebpageTitleTask -> com.pindroid.activity.k:
+com.pindroid.activity.AddBookmark$GetWebpageTitleTask -> com.pindroid.activity.m:
     java.lang.String url -> a
     com.pindroid.activity.AddBookmark this$0 -> b
     void onPreExecute() -> onPreExecute
@@ -96,15 +97,15 @@ com.pindroid.activity.AppBaseActivity -> com.pindroid.activity.AppBaseActivity:
     android.accounts.Account mAccount -> b
     android.content.Context mContext -> c
     java.lang.String username -> d
-    android.content.res.Resources res -> e
     android.content.SharedPreferences settings -> i
     long lastUpdate -> j
-    boolean privateDefault -> f
-    boolean toreadDefault -> g
+    boolean privateDefault -> e
+    boolean toreadDefault -> f
     java.lang.String defaultAction -> k
-    boolean markAsRead -> h
+    boolean markAsRead -> g
     boolean first -> l
     android.os.Bundle savedState -> m
+    android.view.View$OnClickListener searchHandler -> h
     void onCreate(android.os.Bundle) -> onCreate
     void init() -> b
     void onResume() -> onResume
@@ -113,20 +114,24 @@ com.pindroid.activity.AppBaseActivity -> com.pindroid.activity.AppBaseActivity:
     boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     boolean isMyself() -> a
+    void setTitle(java.lang.CharSequence) -> setTitle
+com.pindroid.activity.AppBaseActivity$1 -> com.pindroid.activity.i:
+    com.pindroid.activity.AppBaseActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
 com.pindroid.activity.AppBaseListActivity -> com.pindroid.activity.AppBaseListActivity:
     android.accounts.AccountManager mAccountManager -> h
     android.accounts.Account mAccount -> a
     android.content.Context mContext -> b
     java.lang.String username -> c
-    android.content.res.Resources res -> d
     android.content.SharedPreferences settings -> i
     long lastUpdate -> j
     boolean privateDefault -> k
     boolean toreadDefault -> l
-    java.lang.String defaultAction -> e
-    boolean markAsRead -> f
+    java.lang.String defaultAction -> d
+    boolean markAsRead -> e
     boolean first -> m
-    android.os.Bundle savedState -> g
+    android.os.Bundle savedState -> f
+    android.view.View$OnClickListener searchHandler -> g
     void onCreate(android.os.Bundle) -> onCreate
     void init() -> b
     void onResume() -> onResume
@@ -135,6 +140,10 @@ com.pindroid.activity.AppBaseListActivity -> com.pindroid.activity.AppBaseListAc
     boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     boolean isMyself() -> a
+    void setTitle(java.lang.CharSequence) -> setTitle
+com.pindroid.activity.AppBaseListActivity$1 -> com.pindroid.activity.h:
+    com.pindroid.activity.AppBaseListActivity this$0 -> a
+    void onClick(android.view.View) -> onClick
 com.pindroid.activity.BookmarkLiveFolder -> com.pindroid.activity.BookmarkLiveFolder:
     android.accounts.AccountManager mAccountManager -> a
     android.accounts.Account mAccount -> b
@@ -178,7 +187,7 @@ com.pindroid.activity.BrowseBookmarks$1 -> com.pindroid.activity.e:
 com.pindroid.activity.BrowseBookmarks$2 -> com.pindroid.activity.f:
     com.pindroid.activity.BrowseBookmarks this$0 -> a
     void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo) -> onCreateContextMenu
-com.pindroid.activity.BrowseBookmarks$LoadBookmarkFeedTask -> com.pindroid.activity.m:
+com.pindroid.activity.BrowseBookmarks$LoadBookmarkFeedTask -> com.pindroid.activity.o:
     java.lang.String user -> a
     java.lang.String tag -> b
     android.app.ProgressDialog progress -> c
@@ -201,10 +210,10 @@ com.pindroid.activity.BrowseTags -> com.pindroid.activity.BrowseTags:
     boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     void loadTagList() -> b
-com.pindroid.activity.BrowseTags$1 -> com.pindroid.activity.j:
+com.pindroid.activity.BrowseTags$1 -> com.pindroid.activity.l:
     com.pindroid.activity.BrowseTags this$0 -> a
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
-com.pindroid.activity.BrowseTags$2 -> com.pindroid.activity.i:
+com.pindroid.activity.BrowseTags$2 -> com.pindroid.activity.k:
     com.pindroid.activity.BrowseTags this$0 -> a
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
 com.pindroid.activity.Main -> com.pindroid.activity.Main:
@@ -226,22 +235,22 @@ com.pindroid.activity.Preferences -> com.pindroid.activity.Preferences:
     void onCreate(android.os.Bundle) -> onCreate
     android.content.Context access$0(com.pindroid.activity.Preferences) -> a
     android.content.res.Resources access$1(com.pindroid.activity.Preferences) -> b
-com.pindroid.activity.Preferences$1 -> com.pindroid.activity.h:
+com.pindroid.activity.Preferences$1 -> com.pindroid.activity.j:
     com.pindroid.activity.Preferences this$0 -> a
     boolean onPreferenceChange(android.preference.Preference,java.lang.Object) -> onPreferenceChange
-com.pindroid.activity.Preferences$2 -> com.pindroid.activity.s:
+com.pindroid.activity.Preferences$2 -> com.pindroid.activity.u:
     com.pindroid.activity.Preferences this$0 -> a
     boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
-com.pindroid.activity.Preferences$3 -> com.pindroid.activity.q:
+com.pindroid.activity.Preferences$3 -> com.pindroid.activity.s:
     com.pindroid.activity.Preferences this$0 -> a
     boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
-com.pindroid.activity.Preferences$4 -> com.pindroid.activity.p:
+com.pindroid.activity.Preferences$4 -> com.pindroid.activity.r:
     com.pindroid.activity.Preferences this$0 -> a
     boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
-com.pindroid.activity.Preferences$5 -> com.pindroid.activity.o:
+com.pindroid.activity.Preferences$5 -> com.pindroid.activity.q:
     com.pindroid.activity.Preferences this$0 -> a
     boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
-com.pindroid.activity.Preferences$6 -> com.pindroid.activity.n:
+com.pindroid.activity.Preferences$6 -> com.pindroid.activity.p:
     com.pindroid.activity.Preferences this$0 -> a
     boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
 com.pindroid.activity.TagLiveFolder -> com.pindroid.activity.TagLiveFolder:
