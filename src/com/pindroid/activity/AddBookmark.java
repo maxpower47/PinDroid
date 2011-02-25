@@ -51,13 +51,11 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -92,10 +90,6 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.add_bookmark);
-		
-		if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
-			((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
-		}
 		
 		mEditUrl = (EditText) findViewById(R.id.add_edit_url);
 		mEditDescription = (EditText) findViewById(R.id.add_edit_description);
@@ -350,11 +344,6 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
     	
     	super.onBackPressed();
     }
-    
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-	    return true;
-	}
     
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {

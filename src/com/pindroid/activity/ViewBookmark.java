@@ -48,7 +48,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -72,10 +71,6 @@ public class ViewBookmark extends AppBaseActivity{
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.view_bookmark);
-		
-		if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
-			((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
-		}
 		
 		mTitle = (TextView) findViewById(R.id.view_bookmark_title);
 		mUrl = (TextView) findViewById(R.id.view_bookmark_url);
@@ -286,6 +281,7 @@ public class ViewBookmark extends AppBaseActivity{
     
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 	    MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.view_menu, menu);
 	    return true;
@@ -339,10 +335,6 @@ public class ViewBookmark extends AppBaseActivity{
 		    	Intent sendIntent = IntentHelper.SendBookmark(sendUrl, sendTitle);
 		    	startActivity(Intent.createChooser(sendIntent, getString(R.string.share_chooser_title)));
 		    	return true;
-		    case R.id.menu_view_settings:
-				Intent prefs = new Intent(this, Preferences.class);
-				startActivity(prefs);
-		        return true;
 		    default:
 		        return super.onOptionsItemSelected(item);
 	    }

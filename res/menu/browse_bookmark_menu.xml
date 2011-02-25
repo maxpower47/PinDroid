@@ -23,28 +23,29 @@
  -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item 
-		android:id="@+id/menu_view_read" 
-		android:title="@string/menu_view_read_title" 
-		android:icon="@drawable/ic_menu_read"
-		android:orderInCategory="2" />
-	<item 
-		android:id="@+id/menu_view_openbookmark" 
-		android:title="@string/menu_view_openbookmark_title" 
-		android:icon="@drawable/ic_menu_view"
-		android:orderInCategory="3" />
-	<item 
-		android:id="@+id/menu_view_editbookmark" 
-		android:title="@string/menu_view_editbookmark_title" 
-		android:icon="@drawable/ic_menu_edit"
-		android:orderInCategory="4" />
-	<item 
-		android:id="@+id/menu_view_deletebookmark" 
-		android:title="@string/menu_view_deletebookmark_title" 
-		android:icon="@drawable/ic_menu_delete"
-		android:orderInCategory="5" />
-	<item 
-		android:id="@+id/menu_view_sendbookmark" 
-		android:title="@string/menu_view_sendbookmark_title" 
-		android:icon="@drawable/ic_menu_share"
-		android:orderInCategory="6" />
+		android:id="@+id/menu_sortbookmark" 
+		android:title="@string/menu_sort_title" 
+		android:icon="@drawable/ic_menu_sort_alphabetically"
+		android:orderInCategory="2">
+		<menu>
+			<item 
+				android:id="@+id/menu_bookmark_sort_date_asc" 
+				android:title="@string/bookmark_sort_date_asc" />
+			<item 
+				android:id="@+id/menu_bookmark_sort_date_desc" 
+				android:title="@string/bookmark_sort_date_desc" />
+			<item 
+				android:id="@+id/menu_bookmark_sort_description_asc" 
+				android:title="@string/bookmark_sort_description_asc" />
+			<item 
+				android:id="@+id/menu_bookmark_sort_description_desc" 
+				android:title="@string/bookmark_sort_description_desc" />
+			<item 
+				android:id="@+id/menu_bookmark_sort_url_asc" 
+				android:title="@string/bookmark_sort_url_asc" />
+			<item 
+				android:id="@+id/menu_bookmark_sort_url_desc" 
+				android:title="@string/bookmark_sort_url_desc" />
+		</menu>
+	</item>
 </menu>

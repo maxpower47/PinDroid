@@ -47,26 +47,18 @@ import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class BrowseBookmarks extends AppBaseListActivity {
 	
 	private ListView lv;
-	
-	private final int sortDateAsc = 9999991;
-	private final int sortDateDesc = 9999992;
-	private final int sortDescAsc = 9999993;
-	private final int sortDescDesc = 9999994;
-	private final int sortUrlAsc = 9999995;
-	private final int sortUrlDesc = 9999996;
 	
 	private String sortfield = Bookmark.Time + " DESC";
 	
@@ -82,10 +74,6 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_bookmarks);
-		
-		if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
-			((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
-		}
 		
 		if(mAccount != null) {
 			
@@ -215,19 +203,12 @@ public class BrowseBookmarks extends AppBaseListActivity {
 			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 				public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 					menu.setHeaderTitle("Actions");
+					MenuInflater inflater = getMenuInflater();
+					
 					if(isMyself()){
-						menu.add(Menu.NONE, 0, Menu.NONE, getString(R.string.bookmark_context_open));
-						menu.add(Menu.NONE, 1, Menu.NONE, getString(R.string.bookmark_context_view));
-						menu.add(Menu.NONE, 6, Menu.NONE, getString(R.string.bookmark_context_read));
-						menu.add(Menu.NONE, 2, Menu.NONE, getString(R.string.bookmark_context_edit));
-						menu.add(Menu.NONE, 3, Menu.NONE, getString(R.string.bookmark_context_delete));
-						menu.add(Menu.NONE, 5, Menu.NONE, getString(R.string.bookmark_context_share));
+						inflater.inflate(R.menu.browse_bookmark_context_menu_self, menu);
 					} else {
-						menu.add(Menu.NONE, 4, Menu.NONE, getString(R.string.bookmark_context_add));
-						menu.add(Menu.NONE, 0, Menu.NONE, getString(R.string.bookmark_context_open));
-						menu.add(Menu.NONE, 1, Menu.NONE, getString(R.string.bookmark_context_view));
-						menu.add(Menu.NONE, 6, Menu.NONE, getString(R.string.bookmark_context_read));
-						menu.add(Menu.NONE, 5, Menu.NONE, getString(R.string.bookmark_context_share));
+						inflater.inflate(R.menu.browse_bookmark_context_menu_other, menu);
 					}
 				}
 			});
@@ -257,13 +238,13 @@ public class BrowseBookmarks extends AppBaseListActivity {
 		final Bookmark b = (Bookmark)lv.getItemAtPosition(menuInfo.position);
 		
 		switch (aItem.getItemId()) {
-			case 0:
+			case R.id.menu_bookmark_context_open:
 				openBookmarkInBrowser(b);
 				return true;
-			case 1:				
+			case R.id.menu_bookmark_context_view:				
 				viewBookmark(b);
 				return true;
-			case 2:
+			case R.id.menu_bookmark_context_edit:
 				Intent editBookmark = new Intent(this, AddBookmark.class);
 				editBookmark.setAction(Intent.ACTION_EDIT);
 				
@@ -277,7 +258,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				startActivity(editBookmark);
 				return true;
 			
-			case 3:
+			case R.id.menu_bookmark_context_delete:
 				BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, mContext);	
 				new DeleteBookmarkTask().execute(args);
 				
@@ -286,16 +267,16 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				bla.notifyDataSetChanged();
 				return true;
 				
-			case 4:				
+			case R.id.menu_bookmark_context_add:				
 				startActivity(IntentHelper.AddBookmark(b.getUrl(), mAccount.name));
 				return true;
 				
-			case 5:
+			case R.id.menu_bookmark_context_share:
 		    	Intent sendIntent = IntentHelper.SendBookmark(b.getUrl(), b.getDescription());
 		    	startActivity(Intent.createChooser(sendIntent, getString(R.string.share_chooser_title)));
 				
 				return true;
-			case 6:
+			case R.id.menu_bookmark_context_read:
 				readBookmark(b);
 				return true;
 		}
@@ -321,16 +302,10 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
+	    MenuInflater inflater = getMenuInflater();
 		
 		if(result && isMyself()) {
-		    SubMenu sortmenu = menu.addSubMenu(Menu.NONE, Menu.NONE, 1, R.string.menu_sort_title);
-		    sortmenu.setIcon(R.drawable.ic_menu_sort_alphabetically);
-		    sortmenu.add(Menu.NONE, sortDateAsc, 0, getString(R.string.bookmark_sort_date_asc));
-		    sortmenu.add(Menu.NONE, sortDateDesc, 1, getString(R.string.bookmark_sort_date_desc));
-		    sortmenu.add(Menu.NONE, sortDescAsc, 2, getString(R.string.bookmark_sort_description_asc));
-		    sortmenu.add(Menu.NONE, sortDescDesc, 3, getString(R.string.bookmark_sort_description_desc));
-		    sortmenu.add(Menu.NONE, sortUrlAsc, 4, getString(R.string.bookmark_sort_url_asc));
-		    sortmenu.add(Menu.NONE, sortUrlDesc, 5, getString(R.string.bookmark_sort_url_desc));
+			inflater.inflate(R.menu.browse_bookmark_menu, menu);
 		}
 		
 	    return result;
@@ -342,27 +317,27 @@ public class BrowseBookmarks extends AppBaseListActivity {
 		boolean result = false;
 		
 	    switch (item.getItemId()) {
-		    case sortDateAsc:
+		    case R.id.menu_bookmark_sort_date_asc:
 		    	sortfield = Bookmark.Time + " ASC";
 				result = true;
 				break;
-		    case sortDateDesc:			
+		    case R.id.menu_bookmark_sort_date_desc:			
 		    	sortfield = Bookmark.Time + " DESC";
 		    	result = true;
 		    	break;
-		    case sortDescAsc:			
+		    case R.id.menu_bookmark_sort_description_asc:			
 		    	sortfield = Bookmark.Description + " ASC";
 		    	result = true;
 		    	break;
-		    case sortDescDesc:			
+		    case R.id.menu_bookmark_sort_description_desc:			
 		    	sortfield = Bookmark.Description + " DESC";
 		    	result = true;
 		    	break;
-		    case sortUrlAsc:			
+		    case R.id.menu_bookmark_sort_url_asc:			
 		    	sortfield = Bookmark.Url + " ASC";
 		    	result = true;
 		    	break;
-		    case sortUrlDesc:			
+		    case R.id.menu_bookmark_sort_url_desc:			
 		    	sortfield = Bookmark.Url + " DESC";
 		    	result = true;
 		    	break;

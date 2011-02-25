@@ -31,7 +31,6 @@ import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -46,10 +45,6 @@ public class MainSearchResults extends AppBaseListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_search_results);
 		setTitle(R.string.main_search_results_title);
-		
-		if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
-			((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
-		}
 		
 		String[] MENU_ITEMS = new String[] {getString(R.string.search_results_bookmark),
 				getString(R.string.search_results_tag), getString(R.string.search_results_global_tag)};

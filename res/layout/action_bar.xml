@@ -43,7 +43,8 @@
 		android:background="@drawable/action_bar_button"
 		android:layout_width="42dip"
 		android:layout_height="fill_parent"
-		android:layout_alignParentRight="true" />
+		android:layout_alignParentRight="true"
+		android:onClick="searchHandler" />
 	<LinearLayout android:id="@+id/divider_btn_search"
 		android:background="@drawable/action_bar_divider"
 		android:layout_width="1dip"

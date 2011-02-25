@@ -97,11 +97,11 @@ public class AppBaseListActivity extends ListActivity {
 		}
 	}
 	
-	protected View.OnClickListener searchHandler = new View.OnClickListener() {
-		public void onClick(View v) {
-			onSearchRequested();
-		}
-	};
+
+	public void searchHandler(View v) {
+		onSearchRequested();
+	}
+
 	
 	@Override
 	public void onResume(){
