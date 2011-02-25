@@ -41,7 +41,9 @@ public class AboutActivity extends AppBaseActivity {
 		setContentView(R.layout.about_view);
 		setTitle(R.string.about_activity_title);
 		
-		((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
+		if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
+			((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
+		}
 		
 		WebView content = (WebView) findViewById(R.id.about_text_view);
 		content.loadData(getString(R.string.about_text), "text/html", "utf-8");

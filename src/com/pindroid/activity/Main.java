@@ -43,9 +43,12 @@ public class Main extends AppBaseListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedState);
+		
 		setContentView(R.layout.main);
 		
-		((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
+		if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
+			((ImageButton) findViewById(R.id.action_bar_search)).setOnClickListener(searchHandler);
+		}
 		
 		String[] MENU_ITEMS = new String[] {getString(R.string.main_menu_my_bookmarks),
 				getString(R.string.main_menu_my_unread_bookmarks),

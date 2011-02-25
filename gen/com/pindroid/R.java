@@ -19,6 +19,7 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
+        public static final int actionbar_background_light=0x7f06000d;
         public static final int addedText=0x7f060005;
         public static final int background=0x7f060000;
         public static final int darkText=0x7f060003;
@@ -139,13 +140,14 @@ public final class R {
         public static final int include_action_bar=0x7f0a0000;
         public static final int main_menu_description=0x7f0a0025;
         public static final int menu_addbookmark=0x7f0a003b;
-        public static final int menu_settings=0x7f0a003c;
-        public static final int menu_view_deletebookmark=0x7f0a0040;
-        public static final int menu_view_editbookmark=0x7f0a003f;
-        public static final int menu_view_openbookmark=0x7f0a003e;
-        public static final int menu_view_read=0x7f0a003d;
-        public static final int menu_view_sendbookmark=0x7f0a0041;
-        public static final int menu_view_settings=0x7f0a0042;
+        public static final int menu_search=0x7f0a003c;
+        public static final int menu_settings=0x7f0a003d;
+        public static final int menu_view_deletebookmark=0x7f0a0041;
+        public static final int menu_view_editbookmark=0x7f0a0040;
+        public static final int menu_view_openbookmark=0x7f0a003f;
+        public static final int menu_view_read=0x7f0a003e;
+        public static final int menu_view_sendbookmark=0x7f0a0042;
+        public static final int menu_view_settings=0x7f0a0043;
         public static final int message=0x7f0a001f;
         public static final int message_bottom=0x7f0a0023;
         public static final int ok_button=0x7f0a0024;
@@ -424,6 +426,9 @@ public final class R {
         public static final int view_bookmark_title=0x7f07005f;
     }
     public static final class style {
+        public static final int ActionBar=0x7f08000e;
+        public static final int ActionBar_Light=0x7f08000f;
+        public static final int ActionBar_Light_Title=0x7f080010;
         public static final int AddBookmarkButton=0x7f080005;
         public static final int AddBookmarkButtonBar=0x7f080006;
         public static final int AddBookmarkFieldEdit=0x7f080004;
@@ -433,6 +438,7 @@ public final class R {
         public static final int LoginButtonFrame=0x7f080009;
         public static final int LoginFrame=0x7f080007;
         public static final int LoginMessage=0x7f080008;
+        public static final int ThemeSelector=0x7f08000d;
         public static final int ViewBookmarkFieldContent=0x7f080002;
         public static final int ViewBookmarkFieldTitle=0x7f080001;
         public static final int WidgetButton=0x7f08000b;

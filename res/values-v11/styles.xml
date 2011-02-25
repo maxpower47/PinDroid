@@ -107,5 +107,20 @@
         <item name="android:layout_marginTop">19dp</item>
         <item name="android:background">@drawable/widget_button</item>
     </style>
-    <style name="ThemeSelector" parent="@android:style/Theme.NoTitleBar"></style>
+    
+    <style name="ActionBar" parent="@android:style/Widget.Holo.ActionBar" />
+
+    <style name="ActionBar.Light" parent="@style/ActionBar">
+        <item name="android:background">@color/actionbar_background_light</item>
+        <item name="android:titleTextStyle">@style/ActionBar.Light.Title</item>
+    </style>
+    
+    <style name="ActionBar.Light.Title">
+        <item name="android:textColor">#000000</item>
+    </style>
+    
+    
+    <style name="ThemeSelector" parent="android:Theme.Holo">
+    	<item name="android:actionBarStyle">@style/ActionBar.Light</item>
+    </style>
 </resources>

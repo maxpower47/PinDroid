@@ -157,6 +157,9 @@ public class AppBaseListActivity extends ListActivity {
 			Intent addBookmark = new Intent(this, AddBookmark.class);
 			startActivity(addBookmark);
 			return true;
+	    case R.id.menu_search:
+	    	onSearchRequested();
+	    	return true;
 	    case R.id.menu_settings:
 			Intent prefs = new Intent(this, Preferences.class);
 			startActivity(prefs);
