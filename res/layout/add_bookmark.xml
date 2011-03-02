@@ -149,12 +149,14 @@
 		<Button
 			android:id="@+id/add_button_save"
 		    style="@style/AddBookmarkButton"
-		    android:text="@string/add_button_save" />
+		    android:text="@string/add_button_save"
+		    android:onClick="saveHandler" />
 		<LinearLayout style="@style/LayoutRight">
 			<Button
 				android:id="@+id/add_button_cancel"
 			    style="@style/AddBookmarkButton"
-			    android:text="@string/add_button_cancel" />
+			    android:text="@string/add_button_cancel"
+			    android:onClick="cancelHandler" />
 		</LinearLayout>
 	</LinearLayout>
 </LinearLayout>

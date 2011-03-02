@@ -51,9 +51,11 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -61,7 +63,7 @@ import android.widget.TextView;
 
 import com.pindroid.action.AddBookmarkTask;
 
-public class AddBookmark extends AppBaseActivity implements View.OnClickListener{
+public class AddBookmark extends AppBaseActivity {
 
 	private EditText mEditUrl;
 	private EditText mEditDescription;
@@ -74,10 +76,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 	private ProgressBar mPopularProgress;
 	private CheckBox mPrivate;
 	private CheckBox mToRead;
-	private Button mButtonSave;
-	private Button mButtonCancel;
 	private Bookmark bookmark;
-	Thread background;
 	private Boolean update = false;
 	private Boolean error = false;
 	
@@ -102,8 +101,6 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 		mPopularProgress = (ProgressBar) findViewById(R.id.add_popular_tags_progress);
 		mPrivate = (CheckBox) findViewById(R.id.add_edit_private);
 		mToRead = (CheckBox) findViewById(R.id.add_edit_toread);
-		mButtonSave = (Button) findViewById(R.id.add_button_save);
-		mButtonCancel = (Button) findViewById(R.id.add_button_cancel);
 		
 		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
@@ -245,9 +242,18 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 				}
 			}
 		});
-
-		mButtonSave.setOnClickListener(this);
-		mButtonCancel.setOnClickListener(this);
+	}
+	
+	public void saveHandler(View v) {
+		save();
+	}
+	
+	public void cancelHandler(View v) {
+    	if(error) {
+    		revertBookmark();
+    	}
+    	
+    	finish();
 	}
 	
 	private void setDefaultValues(){   	
@@ -321,21 +327,6 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 			}
     	}
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void onClick(View v) {
-        if (v == mButtonSave) {
-            save();
-        } else if(v == mButtonCancel) {
-        	if(error) {
-        		revertBookmark();
-        	}
-        	
-        	finish();
-        }
-    }
     
     public void onBackPressed(){
     	if(error) {
@@ -344,6 +335,37 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
     	
     	super.onBackPressed();
     }
+    
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		boolean result = super.onCreateOptionsMenu(menu);
+	    MenuInflater inflater = getMenuInflater();
+		
+		if(result && isMyself()) {
+			inflater.inflate(R.menu.add_bookmark_menu, menu);
+		}
+		
+	    return result;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	    case R.id.menu_addbookmark_save:
+	    	save();
+			return true;
+	    case R.id.menu_addbookmark_cancel:
+        	if(error) {
+        		revertBookmark();
+        	}
+        	
+        	finish();
+	        return true;
+	    default:
+	        return super.onOptionsItemSelected(item);
+	    }
+	}
     
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {

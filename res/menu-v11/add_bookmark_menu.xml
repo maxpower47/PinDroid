@@ -23,14 +23,13 @@
  -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item 
-		android:id="@+id/menu_addbookmark" 
-		android:title="@string/menu_addbookmark_title" 
-		android:icon="@drawable/ic_menu_add"
+		android:id="@+id/menu_addbookmark_save" 
+		android:title="@string/add_button_save" 
 		android:showAsAction="ifRoom"
-		android:orderInCategory="2" />
+		android:orderInCategory="0" />
 	<item 
-		android:id="@+id/menu_settings" 
-		android:title="@string/menu_settings_title" 
-		android:icon="@drawable/ic_menu_preferences"
-		android:orderInCategory="99" />
+		android:id="@+id/menu_addbookmark_cancel" 
+		android:title="@string/add_button_cancel" 
+		android:showAsAction="ifRoom"
+		android:orderInCategory="1" />
 </menu>
