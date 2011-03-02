@@ -120,7 +120,7 @@ public class AddBookmark extends AppBaseActivity implements View.OnClickListener
 				} else {
 					onSearchRequested();
 				}
-			} else if(Intent.ACTION_VIEW.equals(intent.getAction()) || !intent.hasExtra(Intent.EXTRA_TEXT)) {
+			} else if(Intent.ACTION_VIEW.equals(intent.getAction()) || (!intent.hasExtra(Intent.EXTRA_TEXT) && !Intent.ACTION_EDIT.equals(intent.getAction()))) {
 				
 				Uri data = intent.getData();
 				String path = null;
