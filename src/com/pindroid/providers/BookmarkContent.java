@@ -46,6 +46,7 @@ public class BookmarkContent {
 		public static final String Time = "TIME";
 		public static final String ToRead = "TOREAD";
 		public static final String Shared = "SHARED";
+		public static final String Source = "SOURCE";
 		
 		private int mId = 0;
 		private String mAccount = null;
@@ -62,6 +63,10 @@ public class BookmarkContent {
 
         public int getId(){
         	return mId;
+        }
+        
+        public void setId(int id){
+        	mId = id;
         }
         
         public String getUrl() {

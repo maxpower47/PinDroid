@@ -23,8 +23,9 @@ package com.pindroid.xml;
 
 import java.io.InputStream;
 import java.text.ParseException;
-import java.util.ArrayList;
 
+import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.sax.Element;
 import android.sax.EndElementListener;
 import android.sax.EndTextElementListener;
@@ -45,15 +46,20 @@ public class SaxFeedParser {
     	is = stream;
     }
 
-    public ArrayList<Bookmark> parse() throws ParseException {
+    public Cursor parse() throws ParseException {
         final Bookmark currentBookmark = new Bookmark();
         final RootElement root = new RootElement(nsRdf, "RDF");
         final Element item = root.getChild(ns, "item");
-        final ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
+        final MatrixCursor bookmarks = new MatrixCursor(new String[] {Bookmark._ID, Bookmark.Url, 
+        		Bookmark.Description, Bookmark.Meta, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared,
+        		Bookmark.Source, Bookmark.Notes, Bookmark.Time, Bookmark.Account});
         
         item.setEndElementListener(new EndElementListener(){
             public void end() {
-                bookmarks.add(currentBookmark.copy());
+                bookmarks.addRow(new Object[]{0, currentBookmark.getUrl(), currentBookmark.getDescription(),
+                		currentBookmark.getMeta(), currentBookmark.getTagString(), currentBookmark.getToRead() ? 1 : 0,
+                		currentBookmark.getShared() ? 1 : 0, currentBookmark.getSource(), currentBookmark.getNotes(),
+                		currentBookmark.getTime(), currentBookmark.getAccount()});
                 currentBookmark.clear();
             }
         });

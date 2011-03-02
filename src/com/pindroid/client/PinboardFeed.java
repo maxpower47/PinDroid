@@ -24,16 +24,15 @@ package com.pindroid.client;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
-import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.client.methods.HttpGet;
 
-import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.xml.SaxFeedParser;
 
+import android.database.Cursor;
 import android.util.Log;
 
 public class PinboardFeed {
@@ -51,12 +50,12 @@ public class PinboardFeed {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      */
-    public static ArrayList<Bookmark> fetchRecent()
+    public static Cursor fetchRecent()
     	throws IOException, ParseException {
 
         final HttpGet post = new HttpGet(FETCH_RECENT_URI);
         
-        ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
+        Cursor bookmarkList = null;
 
         final HttpResponse resp = HttpClientFactory.getThreadSafeClient().execute(post);
         InputStream responseStream = resp.getEntity().getContent();
@@ -83,7 +82,7 @@ public class PinboardFeed {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      */
-    public static ArrayList<Bookmark> fetchUserRecent(String username, String tagname)
+    public static Cursor fetchUserRecent(String username, String tagname)
     	throws IOException, ParseException {
     	
     	String url = FETCH_RECENT_USER_URI;
@@ -99,7 +98,7 @@ public class PinboardFeed {
 
         final HttpGet post = new HttpGet(url);
         
-        ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
+        Cursor bookmarkList = null;
 
         final HttpResponse resp = HttpClientFactory.getThreadSafeClient().execute(post);
         InputStream responseStream = resp.getEntity().getContent();

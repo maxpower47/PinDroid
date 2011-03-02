@@ -21,33 +21,27 @@
 
 package com.pindroid.activity;
 
-import java.util.ArrayList;
-
 import com.pindroid.R;
 import com.pindroid.Constants;
-import com.pindroid.listadapter.TagListAdapter;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.TagContent.Tag;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.view.*;
 
 public class BrowseTags extends AppBaseListActivity {
 		
 	private String sortfield = Tag.Name + " ASC";
-	
-	private ArrayList<Tag> tagList = new ArrayList<Tag>();
-	
-	private boolean loaded = false;
-	private boolean myTags = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -79,12 +73,12 @@ public class BrowseTags extends AppBaseListActivity {
 	    		
 	    		setTitle(getString(R.string.tag_search_results_title, query));
 	    		
-	    		tagList = TagManager.SearchTags(query, username, this);
+	    		Cursor c = TagManager.SearchTags(query, username, this);
+	    		startManagingCursor(c);
 	    		
-	    		setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
+	    		setListAdapter(new SimpleCursorAdapter(this, R.layout.tag_view, c, new String[] {Tag.Name, Tag.Count}, new int[] {R.id.tag_name, R.id.tag_count}));	
 	    		
 	    	} else if(mAccount.name.equals(username)){
-	    		myTags = true;
 				try{
 					if(Intent.ACTION_VIEW.equals(action)) {
 						setTitle(getString(R.string.browse_my_tags_title));
@@ -93,7 +87,6 @@ public class BrowseTags extends AppBaseListActivity {
 					}
 	
 					loadTagList();
-					loaded = true;
 	
 				} catch(Exception e) {
 					
@@ -142,17 +135,6 @@ public class BrowseTags extends AppBaseListActivity {
 	}
 	
 	@Override
-	public void onResume(){
-		super.onResume();
-		
-		if(!loaded && myTags) {
-			refreshTagList();
-		}
-		
-		loaded = false;
-	}
-	
-	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
 	    MenuInflater inflater = getMenuInflater();
@@ -196,19 +178,8 @@ public class BrowseTags extends AppBaseListActivity {
 	}
 	
 	private void loadTagList() {
-		tagList = TagManager.GetTags(username, sortfield, this);
-		
-		setListAdapter(new TagListAdapter(this, R.layout.tag_view, tagList));	
-		((TagListAdapter)getListAdapter()).notifyDataSetChanged();
-	}
-	
-	private void refreshTagList() {
-		tagList = TagManager.GetTags(username, sortfield, this);
-		TagListAdapter adapter = (TagListAdapter)getListAdapter();
-		
-		if(adapter != null) {
-			adapter.update(tagList);
-			adapter.notifyDataSetChanged();
-		}
+		Cursor c = TagManager.GetTags(username, sortfield, this);
+		startManagingCursor(c);
+		setListAdapter(new SimpleCursorAdapter(this, R.layout.tag_view, c, new String[] {Tag.Name, Tag.Count}, new int[] {R.id.tag_name, R.id.tag_count}));
 	}
 }

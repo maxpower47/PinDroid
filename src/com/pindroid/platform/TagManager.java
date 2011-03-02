@@ -32,27 +32,12 @@ import android.text.TextUtils;
 
 public class TagManager {
 	
-	public static ArrayList<Tag> GetTags(String account, String sortorder, Context context) {
-		final ArrayList<Tag> tagList = new ArrayList<Tag>();
-		
-		final String[] projection = new String[] {Tag.Name, Tag.Count};
+	public static Cursor GetTags(String account, String sortorder, Context context) {		
+		final String[] projection = new String[] {Tag._ID, Tag.Name, Tag.Count};
 		final String selection = Tag.Account + "=?";
 		final String[] selectionargs = new String[]{account};
 		
-		final Cursor c = context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);				
-		
-		if(c.moveToFirst()){
-			
-			final int nameColumn = c.getColumnIndex(Tag.Name);
-			final int countColumn = c.getColumnIndex(Tag.Count);
-
-			do {	
-				tagList.add(new Tag(c.getString(nameColumn), c.getInt(countColumn)));
-			} while(c.moveToNext());	
-		}
-		c.close();
-		
-		return tagList;
+		return context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);
 	}
 	
 	public static void AddTag(Tag tag, String account, Context context){
@@ -168,8 +153,7 @@ public class TagManager {
 		context.getContentResolver().delete(Tag.CONTENT_URI, selection, null);
 	}
 	
-	public static ArrayList<Tag> SearchTags(String query, String username, Context context) {
-		final ArrayList<Tag> tagList = new ArrayList<Tag>();
+	public static Cursor SearchTags(String query, String username, Context context) {
 		final String[] projection = new String[] { Tag._ID, Tag.Name, Tag.Count };
 		String selection = null;
 		final String[] selectionargs = new String[]{ username };
@@ -188,17 +172,6 @@ public class TagManager {
 			selection = Tag.Account + "=?";
 		}
 		
-		final Cursor c = context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);				
-		
-		if(c.moveToFirst()){
-			final int nameColumn = c.getColumnIndex(Tag.Name);
-			final int countColumn = c.getColumnIndex(Tag.Count);
-			
-			do {
-				tagList.add(new Tag(c.getString(nameColumn), c.getInt(countColumn)));
-			} while(c.moveToNext());	
-		}
-		c.close();
-		return tagList;
+		return context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);
 	}
 }
