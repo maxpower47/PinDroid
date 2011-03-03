@@ -31,6 +31,7 @@ import com.pindroid.action.DeleteBookmarkTask;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.action.MarkReadBookmarkTask;
 import com.pindroid.client.PinboardFeed;
+import com.pindroid.listadapter.BookmarkViewBinder;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -52,11 +53,9 @@ import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 public class BrowseBookmarks extends AppBaseListActivity {
 	
@@ -114,7 +113,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	    			SimpleCursorAdapter a = new SimpleCursorAdapter(mContext, R.layout.bookmark_view, c, 
 	    					new String[]{Bookmark.Description, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared}, 
 	    					new int[]{R.id.bookmark_description, R.id.bookmark_tags, R.id.bookmark_unread, R.id.bookmark_private});
-	    			a.setViewBinder(viewBinder);
+	    			a.setViewBinder(new BookmarkViewBinder());
 	    			
 	    			setListAdapter(a);
 	    		} else {
@@ -343,7 +342,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 		SimpleCursorAdapter a = new SimpleCursorAdapter(mContext, R.layout.bookmark_view, c, 
 				new String[]{Bookmark.Description, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared}, 
 				new int[]{R.id.bookmark_description, R.id.bookmark_tags, R.id.bookmark_unread, R.id.bookmark_private});
-		a.setViewBinder(viewBinder);
+		a.setViewBinder(new BookmarkViewBinder());
 		
 		setListAdapter(a);
 	}
@@ -374,55 +373,6 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	private void viewBookmark(Bookmark b) {
 		startActivity(IntentHelper.ViewBookmark(b, username));
 	}
-	
-	SimpleCursorAdapter.ViewBinder viewBinder = new SimpleCursorAdapter.ViewBinder() {
-		public boolean setViewValue(View v, Cursor c, int columnIndex) {
-	        switch(v.getId()) {
-	            case R.id.bookmark_description:
-	            	((TextView)v).setText(c.getString(columnIndex));
-	            	break;
-	            case R.id.bookmark_tags:
-	            	((TextView)v).setText(c.getString(columnIndex));
-	            	break;
-	            case R.id.bookmark_unread:
-	            	if(c.getInt(columnIndex) == 1)
-	            		v.setVisibility(View.VISIBLE);
-	            	else v.setVisibility(View.GONE);
-	            	break;
-	            case R.id.bookmark_private:
-	                if(c.getInt(columnIndex) == 0){
-	                	v.setVisibility(View.VISIBLE);
-	                	((ImageView)v).setImageResource(R.drawable.padlock);
-	                } else v.setVisibility(View.GONE);
-	            	break;
-	            case R.id.bookmark_source:
-	    	        String src = c.getString(columnIndex);
-	    	    	
-	    	        if(src != null && src.contains("twitter")) {
-	    	        	v.setVisibility(View.VISIBLE);
-	    	        	((ImageView)v).setImageResource(R.drawable.twitter);
-	    	        } else if(src != null && src.contains("instapaper")) {
-	    	        	v.setVisibility(View.VISIBLE);
-	    	        	((ImageView)v).setImageResource(R.drawable.instapaper);
-	    	        } else if(src != null && src.contains("apple")) {
-	    	        	v.setVisibility(View.VISIBLE);
-	    	        	((ImageView)v).setImageResource(R.drawable.apple);
-	    	        } else if(src != null && src.contains("google")) {
-	    	        	v.setVisibility(View.VISIBLE);
-	    	        	((ImageView)v).setImageResource(R.drawable.google);
-	    	        } else if(src != null && src.contains("readitlater")) {
-	    	        	v.setVisibility(View.VISIBLE);
-	    	        	((ImageView)v).setImageResource(R.drawable.ril);
-	    	        } else if(src != null && src.contains("delicious")) {
-	    	        	v.setVisibility(View.VISIBLE);
-	    	        	((ImageView)v).setImageResource(R.drawable.delicious);
-	    	        } else v.setVisibility(View.GONE);
-	    	        break;
-	        }
-	
-			return true;
-		}
-	};
 	
     public class LoadBookmarkFeedTask extends AsyncTask<String, Integer, Boolean>{
         private String user;
@@ -476,7 +426,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
         				new String[]{Bookmark.Description, Bookmark.Tags, Bookmark.Source}, 
         				new int[]{R.id.bookmark_description, R.id.bookmark_tags, R.id.bookmark_source});
         		
-        		a.setViewBinder(viewBinder);
+        		a.setViewBinder(new BookmarkViewBinder());
         		setListAdapter(a);	
         	}
         }
