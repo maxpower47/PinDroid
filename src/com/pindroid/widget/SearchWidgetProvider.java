@@ -2,7 +2,8 @@ package com.pindroid.widget;
 
 import com.pindroid.R;
 import com.pindroid.Constants;
-import com.pindroid.activity.AddBookmark;
+import com.pindroid.action.IntentHelper;
+
 import com.pindroid.activity.Main;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContentProvider;
@@ -58,7 +59,7 @@ public class SearchWidgetProvider extends AppWidgetProvider {
     		Intent searchIntent = new Intent(context, Main.class);
     		searchIntent.setAction(Intent.ACTION_SEARCH);
     		
-    		Intent addIntent = new Intent(context, AddBookmark.class);
+    		Intent addIntent = IntentHelper.AddBookmark(null, username);
     		
     		Intent unreadIntent = new Intent();
     		unreadIntent.setAction(Intent.ACTION_VIEW);
