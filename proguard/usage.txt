@@ -10,8 +10,6 @@ com.pindroid.R$menu
 com.pindroid.R$string
 com.pindroid.R$style
 com.pindroid.R$xml
-com.pindroid.activity.AddBookmark:
-    java.lang.Thread background
 com.pindroid.authenticator.AuthenticationService:
     private static final java.lang.String TAG
 com.pindroid.authenticator.AuthenticatorActivity:
@@ -59,6 +57,7 @@ com.pindroid.providers.BookmarkContent$Bookmark:
     public static final java.lang.String Time
     public static final java.lang.String ToRead
     public static final java.lang.String Shared
+    public static final java.lang.String Source
 com.pindroid.providers.BookmarkContentProvider:
     private static final java.lang.String DATABASE_NAME
     private static final int DATABASE_VERSION
@@ -85,6 +84,7 @@ com.pindroid.providers.TagContent$Tag:
     public static final java.lang.String Account
     45:45:public int getId()
     61:62:public void setTagCount(int)
+    84:87:public TagContent$Tag(java.lang.String,int)
 com.pindroid.syncadapter.BookmarkSyncAdapter:
     private static final java.lang.String TAG
 com.pindroid.syncadapter.PeriodicSyncReceiver:

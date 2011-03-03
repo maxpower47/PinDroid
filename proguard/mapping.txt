@@ -1,4 +1,4 @@
-com.pindroid.action.AddBookmarkTask -> com.pindroid.f.d:
+com.pindroid.action.AddBookmarkTask -> com.pindroid.g.d:
     android.content.Context context -> a
     com.pindroid.providers.BookmarkContent$Bookmark bookmark -> b
     com.pindroid.providers.BookmarkContent$Bookmark oldBookmark -> c
@@ -7,7 +7,7 @@ com.pindroid.action.AddBookmarkTask -> com.pindroid.f.d:
     java.lang.Boolean doInBackground(com.pindroid.action.BookmarkTaskArgs[]) -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.pindroid.action.BookmarkTaskArgs -> com.pindroid.f.a:
+com.pindroid.action.BookmarkTaskArgs -> com.pindroid.g.a:
     com.pindroid.providers.BookmarkContent$Bookmark bookmark -> a
     com.pindroid.providers.BookmarkContent$Bookmark oldBookmark -> b
     android.accounts.Account account -> c
@@ -18,19 +18,19 @@ com.pindroid.action.BookmarkTaskArgs -> com.pindroid.f.a:
     android.accounts.Account getAccount() -> c
     android.content.Context getContext() -> d
     java.lang.Boolean getUpdate() -> e
-com.pindroid.action.DeleteBookmarkTask -> com.pindroid.f.e:
+com.pindroid.action.DeleteBookmarkTask -> com.pindroid.g.e:
     android.content.Context context -> a
     com.pindroid.providers.BookmarkContent$Bookmark bookmark -> b
     android.accounts.Account account -> c
     java.lang.Boolean doInBackground(com.pindroid.action.BookmarkTaskArgs[]) -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.pindroid.action.IntentHelper -> com.pindroid.f.c:
+com.pindroid.action.IntentHelper -> com.pindroid.g.c:
     android.content.Intent OpenInBrowser(java.lang.String) -> a
     android.content.Intent ReadBookmark(java.lang.String) -> b
     android.content.Intent SendBookmark(java.lang.String,java.lang.String) -> a
     android.content.Intent AddBookmark(java.lang.String,java.lang.String) -> b
-com.pindroid.action.MarkReadBookmarkTask -> com.pindroid.f.b:
+com.pindroid.action.MarkReadBookmarkTask -> com.pindroid.g.b:
     android.content.Context context -> a
     com.pindroid.providers.BookmarkContent$Bookmark bookmark -> b
     android.accounts.Account account -> c
@@ -40,30 +40,31 @@ com.pindroid.action.MarkReadBookmarkTask -> com.pindroid.f.b:
 com.pindroid.activity.AboutActivity -> com.pindroid.activity.AboutActivity:
     void onCreate(android.os.Bundle) -> onCreate
 com.pindroid.activity.AddBookmark -> com.pindroid.activity.AddBookmark:
-    android.widget.EditText mEditUrl -> i
-    android.widget.EditText mEditDescription -> j
-    android.widget.ProgressBar mDescriptionProgress -> k
-    android.widget.EditText mEditNotes -> l
-    android.widget.EditText mEditTags -> m
-    android.widget.TextView mRecommendedTags -> n
-    android.widget.ProgressBar mRecommendedProgress -> o
-    android.widget.TextView mPopularTags -> p
-    android.widget.ProgressBar mPopularProgress -> q
-    android.widget.CheckBox mPrivate -> r
-    android.widget.CheckBox mToRead -> s
-    android.widget.Button mButtonSave -> t
-    android.widget.Button mButtonCancel -> u
-    com.pindroid.providers.BookmarkContent$Bookmark bookmark -> v
-    java.lang.Boolean update -> w
-    java.lang.Boolean error -> x
-    com.pindroid.providers.BookmarkContent$Bookmark oldBookmark -> y
-    long updateTime -> z
+    android.widget.EditText mEditUrl -> h
+    android.widget.EditText mEditDescription -> i
+    android.widget.ProgressBar mDescriptionProgress -> j
+    android.widget.EditText mEditNotes -> k
+    android.widget.EditText mEditTags -> l
+    android.widget.TextView mRecommendedTags -> m
+    android.widget.ProgressBar mRecommendedProgress -> n
+    android.widget.TextView mPopularTags -> o
+    android.widget.ProgressBar mPopularProgress -> p
+    android.widget.CheckBox mPrivate -> q
+    android.widget.CheckBox mToRead -> r
+    com.pindroid.providers.BookmarkContent$Bookmark bookmark -> s
+    java.lang.Boolean update -> t
+    java.lang.Boolean error -> u
+    com.pindroid.providers.BookmarkContent$Bookmark oldBookmark -> v
+    long updateTime -> w
     com.pindroid.ui.TagSpan$OnTagClickListener tagOnClickListener -> a
     void onCreate(android.os.Bundle) -> onCreate
-    void revertBookmark() -> b
-    void onClick(android.view.View) -> onClick
+    void saveHandler(android.view.View) -> saveHandler
+    void cancelHandler(android.view.View) -> cancelHandler
+    void save() -> b
+    void revertBookmark() -> c
     void onBackPressed() -> onBackPressed
     boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
+    boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     android.widget.EditText access$0(com.pindroid.activity.AddBookmark) -> a
     android.widget.ProgressBar access$1(com.pindroid.activity.AddBookmark) -> b
     android.widget.EditText access$2(com.pindroid.activity.AddBookmark) -> c
@@ -72,13 +73,13 @@ com.pindroid.activity.AddBookmark -> com.pindroid.activity.AddBookmark:
     android.widget.ProgressBar access$5(com.pindroid.activity.AddBookmark) -> f
     android.widget.ProgressBar access$6(com.pindroid.activity.AddBookmark) -> g
     android.widget.EditText access$7(com.pindroid.activity.AddBookmark) -> h
-com.pindroid.activity.AddBookmark$1 -> com.pindroid.activity.t:
+com.pindroid.activity.AddBookmark$1 -> com.pindroid.activity.r:
     com.pindroid.activity.AddBookmark this$0 -> a
     void onTagClick(java.lang.String) -> a
-com.pindroid.activity.AddBookmark$2 -> com.pindroid.activity.v:
+com.pindroid.activity.AddBookmark$2 -> com.pindroid.activity.t:
     com.pindroid.activity.AddBookmark this$0 -> a
     void onFocusChange(android.view.View,boolean) -> onFocusChange
-com.pindroid.activity.AddBookmark$GetTagSuggestionsTask -> com.pindroid.activity.n:
+com.pindroid.activity.AddBookmark$GetTagSuggestionsTask -> com.pindroid.activity.l:
     java.lang.String url -> a
     com.pindroid.activity.AddBookmark this$0 -> b
     java.util.ArrayList doInBackground(java.lang.String[]) -> a
@@ -86,7 +87,7 @@ com.pindroid.activity.AddBookmark$GetTagSuggestionsTask -> com.pindroid.activity
     void addTag(android.text.SpannableStringBuilder,com.pindroid.providers.TagContent$Tag) -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.pindroid.activity.AddBookmark$GetWebpageTitleTask -> com.pindroid.activity.m:
+com.pindroid.activity.AddBookmark$GetWebpageTitleTask -> com.pindroid.activity.k:
     java.lang.String url -> a
     com.pindroid.activity.AddBookmark this$0 -> b
     void onPreExecute() -> onPreExecute
@@ -97,17 +98,17 @@ com.pindroid.activity.AppBaseActivity -> com.pindroid.activity.AppBaseActivity:
     android.accounts.Account mAccount -> b
     android.content.Context mContext -> c
     java.lang.String username -> d
-    android.content.SharedPreferences settings -> i
-    long lastUpdate -> j
+    android.content.SharedPreferences settings -> h
+    long lastUpdate -> i
     boolean privateDefault -> e
     boolean toreadDefault -> f
-    java.lang.String defaultAction -> k
+    java.lang.String defaultAction -> j
     boolean markAsRead -> g
-    boolean first -> l
-    android.os.Bundle savedState -> m
-    android.view.View$OnClickListener searchHandler -> h
+    boolean first -> k
+    android.os.Bundle savedState -> l
     void onCreate(android.os.Bundle) -> onCreate
     void init() -> b
+    void searchHandler(android.view.View) -> searchHandler
     void onResume() -> onResume
     void loadAccounts() -> c
     void loadSettings() -> d
@@ -115,25 +116,22 @@ com.pindroid.activity.AppBaseActivity -> com.pindroid.activity.AppBaseActivity:
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     boolean isMyself() -> a
     void setTitle(java.lang.CharSequence) -> setTitle
-com.pindroid.activity.AppBaseActivity$1 -> com.pindroid.activity.i:
-    com.pindroid.activity.AppBaseActivity this$0 -> a
-    void onClick(android.view.View) -> onClick
 com.pindroid.activity.AppBaseListActivity -> com.pindroid.activity.AppBaseListActivity:
-    android.accounts.AccountManager mAccountManager -> h
+    android.accounts.AccountManager mAccountManager -> g
     android.accounts.Account mAccount -> a
     android.content.Context mContext -> b
     java.lang.String username -> c
-    android.content.SharedPreferences settings -> i
-    long lastUpdate -> j
-    boolean privateDefault -> k
-    boolean toreadDefault -> l
+    android.content.SharedPreferences settings -> h
+    long lastUpdate -> i
+    boolean privateDefault -> j
+    boolean toreadDefault -> k
     java.lang.String defaultAction -> d
     boolean markAsRead -> e
-    boolean first -> m
+    boolean first -> l
     android.os.Bundle savedState -> f
-    android.view.View$OnClickListener searchHandler -> g
     void onCreate(android.os.Bundle) -> onCreate
     void init() -> b
+    void searchHandler(android.view.View) -> searchHandler
     void onResume() -> onResume
     void loadAccounts() -> c
     void loadSettings() -> d
@@ -141,9 +139,6 @@ com.pindroid.activity.AppBaseListActivity -> com.pindroid.activity.AppBaseListAc
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     boolean isMyself() -> a
     void setTitle(java.lang.CharSequence) -> setTitle
-com.pindroid.activity.AppBaseListActivity$1 -> com.pindroid.activity.h:
-    com.pindroid.activity.AppBaseListActivity this$0 -> a
-    void onClick(android.view.View) -> onClick
 com.pindroid.activity.BookmarkLiveFolder -> com.pindroid.activity.BookmarkLiveFolder:
     android.accounts.AccountManager mAccountManager -> a
     android.accounts.Account mAccount -> b
@@ -151,19 +146,10 @@ com.pindroid.activity.BookmarkLiveFolder -> com.pindroid.activity.BookmarkLiveFo
     void onCreate(android.os.Bundle) -> onCreate
     void onActivityResult(int,int,android.content.Intent) -> onActivityResult
 com.pindroid.activity.BrowseBookmarks -> com.pindroid.activity.BrowseBookmarks:
-    android.widget.ListView lv -> h
-    int sortDateAsc -> i
-    int sortDateDesc -> j
-    int sortDescAsc -> k
-    int sortDescDesc -> l
-    int sortUrlAsc -> m
-    int sortUrlDesc -> n
-    java.lang.String sortfield -> o
-    java.util.ArrayList bookmarkList -> p
-    java.lang.String tagname -> q
-    boolean unread -> r
-    boolean loaded -> s
-    boolean myBookmarks -> t
+    android.widget.ListView lv -> g
+    java.lang.String sortfield -> h
+    java.lang.String tagname -> i
+    boolean unread -> j
     void onCreate(android.os.Bundle) -> onCreate
     void onResume() -> onResume
     boolean onContextItemSelected(android.view.MenuItem) -> onContextItemSelected
@@ -174,46 +160,36 @@ com.pindroid.activity.BrowseBookmarks -> com.pindroid.activity.BrowseBookmarks:
     void openBookmarkInBrowser(com.pindroid.providers.BookmarkContent$Bookmark) -> a
     void readBookmark(com.pindroid.providers.BookmarkContent$Bookmark) -> b
     void viewBookmark(com.pindroid.providers.BookmarkContent$Bookmark) -> c
-    java.lang.Object onRetainNonConfigurationInstance() -> onRetainNonConfigurationInstance
-    java.util.ArrayList access$0(com.pindroid.activity.BrowseBookmarks) -> a
-    void access$1(com.pindroid.activity.BrowseBookmarks,java.util.ArrayList) -> a
-    android.widget.ListView access$2(com.pindroid.activity.BrowseBookmarks) -> b
-    void access$3(com.pindroid.activity.BrowseBookmarks,com.pindroid.providers.BookmarkContent$Bookmark) -> a
-    void access$4(com.pindroid.activity.BrowseBookmarks,com.pindroid.providers.BookmarkContent$Bookmark) -> b
-    void access$5(com.pindroid.activity.BrowseBookmarks,com.pindroid.providers.BookmarkContent$Bookmark) -> c
+    android.widget.ListView access$0(com.pindroid.activity.BrowseBookmarks) -> a
+    void access$1(com.pindroid.activity.BrowseBookmarks,com.pindroid.providers.BookmarkContent$Bookmark) -> a
+    void access$2(com.pindroid.activity.BrowseBookmarks,com.pindroid.providers.BookmarkContent$Bookmark) -> b
+    void access$3(com.pindroid.activity.BrowseBookmarks,com.pindroid.providers.BookmarkContent$Bookmark) -> c
 com.pindroid.activity.BrowseBookmarks$1 -> com.pindroid.activity.e:
     com.pindroid.activity.BrowseBookmarks this$0 -> a
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
 com.pindroid.activity.BrowseBookmarks$2 -> com.pindroid.activity.f:
     com.pindroid.activity.BrowseBookmarks this$0 -> a
     void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo) -> onCreateContextMenu
-com.pindroid.activity.BrowseBookmarks$LoadBookmarkFeedTask -> com.pindroid.activity.o:
+com.pindroid.activity.BrowseBookmarks$LoadBookmarkFeedTask -> com.pindroid.activity.m:
     java.lang.String user -> a
     java.lang.String tag -> b
     android.app.ProgressDialog progress -> c
-    com.pindroid.activity.BrowseBookmarks this$0 -> d
+    android.database.Cursor c -> d
+    com.pindroid.activity.BrowseBookmarks this$0 -> e
     void onPreExecute() -> onPreExecute
     java.lang.Boolean doInBackground(java.lang.String[]) -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
 com.pindroid.activity.BrowseTags -> com.pindroid.activity.BrowseTags:
-    java.lang.String sortfield -> h
-    int sortNameAsc -> i
-    int sortNameDesc -> j
-    int sortCountAsc -> k
-    int sortCountDesc -> l
-    java.util.ArrayList tagList -> m
-    boolean loaded -> n
-    boolean myTags -> o
+    java.lang.String sortfield -> g
     void onCreate(android.os.Bundle) -> onCreate
-    void onResume() -> onResume
     boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     void loadTagList() -> b
-com.pindroid.activity.BrowseTags$1 -> com.pindroid.activity.l:
+com.pindroid.activity.BrowseTags$1 -> com.pindroid.activity.j:
     com.pindroid.activity.BrowseTags this$0 -> a
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
-com.pindroid.activity.BrowseTags$2 -> com.pindroid.activity.k:
+com.pindroid.activity.BrowseTags$2 -> com.pindroid.activity.i:
     com.pindroid.activity.BrowseTags this$0 -> a
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
 com.pindroid.activity.Main -> com.pindroid.activity.Main:
@@ -222,7 +198,7 @@ com.pindroid.activity.Main$1 -> com.pindroid.activity.g:
     com.pindroid.activity.Main this$0 -> a
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
 com.pindroid.activity.MainSearchResults -> com.pindroid.activity.MainSearchResults:
-    android.content.Context mContext -> h
+    android.content.Context mContext -> g
     void onCreate(android.os.Bundle) -> onCreate
     android.content.Context access$0(com.pindroid.activity.MainSearchResults) -> a
 com.pindroid.activity.MainSearchResults$1 -> com.pindroid.activity.d:
@@ -235,22 +211,22 @@ com.pindroid.activity.Preferences -> com.pindroid.activity.Preferences:
     void onCreate(android.os.Bundle) -> onCreate
     android.content.Context access$0(com.pindroid.activity.Preferences) -> a
     android.content.res.Resources access$1(com.pindroid.activity.Preferences) -> b
-com.pindroid.activity.Preferences$1 -> com.pindroid.activity.j:
+com.pindroid.activity.Preferences$1 -> com.pindroid.activity.h:
     com.pindroid.activity.Preferences this$0 -> a
     boolean onPreferenceChange(android.preference.Preference,java.lang.Object) -> onPreferenceChange
-com.pindroid.activity.Preferences$2 -> com.pindroid.activity.u:
+com.pindroid.activity.Preferences$2 -> com.pindroid.activity.s:
     com.pindroid.activity.Preferences this$0 -> a
     boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
-com.pindroid.activity.Preferences$3 -> com.pindroid.activity.s:
+com.pindroid.activity.Preferences$3 -> com.pindroid.activity.q:
     com.pindroid.activity.Preferences this$0 -> a
     boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
-com.pindroid.activity.Preferences$4 -> com.pindroid.activity.r:
+com.pindroid.activity.Preferences$4 -> com.pindroid.activity.p:
     com.pindroid.activity.Preferences this$0 -> a
     boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
-com.pindroid.activity.Preferences$5 -> com.pindroid.activity.q:
+com.pindroid.activity.Preferences$5 -> com.pindroid.activity.o:
     com.pindroid.activity.Preferences this$0 -> a
     boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
-com.pindroid.activity.Preferences$6 -> com.pindroid.activity.p:
+com.pindroid.activity.Preferences$6 -> com.pindroid.activity.n:
     com.pindroid.activity.Preferences this$0 -> a
     boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
 com.pindroid.activity.TagLiveFolder -> com.pindroid.activity.TagLiveFolder:
@@ -258,19 +234,19 @@ com.pindroid.activity.TagLiveFolder -> com.pindroid.activity.TagLiveFolder:
     void onCreate(android.os.Bundle) -> onCreate
 com.pindroid.activity.ViewBookmark -> com.pindroid.activity.ViewBookmark:
     android.widget.TextView mTitle -> a
-    android.widget.TextView mUrl -> i
-    android.widget.TextView mNotes -> j
-    android.widget.TextView mTags -> k
-    android.widget.TextView mTime -> l
-    android.widget.TextView mUsername -> m
-    android.widget.ImageView mIcon -> n
-    com.pindroid.providers.BookmarkContent$Bookmark bookmark -> o
-    java.lang.String user -> p
-    java.lang.String path -> q
-    android.net.Uri data -> r
-    com.pindroid.ui.TagSpan$OnTagClickListener tagOnClickListener -> s
-    com.pindroid.ui.TagSpan$OnTagClickListener userTagOnClickListener -> t
-    com.pindroid.ui.AccountSpan$OnAccountClickListener accountOnClickListener -> u
+    android.widget.TextView mUrl -> h
+    android.widget.TextView mNotes -> i
+    android.widget.TextView mTags -> j
+    android.widget.TextView mTime -> k
+    android.widget.TextView mUsername -> l
+    android.widget.ImageView mIcon -> m
+    com.pindroid.providers.BookmarkContent$Bookmark bookmark -> n
+    java.lang.String user -> o
+    java.lang.String path -> p
+    android.net.Uri data -> q
+    com.pindroid.ui.TagSpan$OnTagClickListener tagOnClickListener -> r
+    com.pindroid.ui.TagSpan$OnTagClickListener userTagOnClickListener -> s
+    com.pindroid.ui.AccountSpan$OnAccountClickListener accountOnClickListener -> t
     void onCreate(android.os.Bundle) -> onCreate
     void onResume() -> onResume
     void addTag(android.text.SpannableStringBuilder,com.pindroid.providers.TagContent$Tag,com.pindroid.ui.TagSpan$OnTagClickListener) -> a
@@ -356,52 +332,28 @@ com.pindroid.client.PinboardApi -> com.pindroid.a.e:
     java.io.InputStream PinboardApiCall(java.lang.String,java.util.TreeMap,android.accounts.Account,android.content.Context) -> a
     java.lang.String convertStreamToString(java.io.InputStream) -> a
 com.pindroid.client.PinboardFeed -> com.pindroid.a.d:
-    java.util.ArrayList fetchUserRecent(java.lang.String,java.lang.String) -> a
+    android.database.Cursor fetchUserRecent(java.lang.String,java.lang.String) -> a
 com.pindroid.client.TokenRejectedException -> com.pindroid.a.a:
 com.pindroid.client.Update -> com.pindroid.a.f:
     long lastUpdate -> a
     long getLastUpdate() -> a
     com.pindroid.client.Update valueOf(java.lang.String) -> a
-com.pindroid.listadapter.BookmarkListAdapter -> com.pindroid.g.d:
-    java.util.ArrayList bookmarks -> a
-    void update(java.util.ArrayList) -> a
-    int getCount() -> getCount
-    void remove(com.pindroid.providers.BookmarkContent$Bookmark) -> a
-    android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
-    java.lang.Object getItem(int) -> getItem
-    void remove(java.lang.Object) -> remove
-com.pindroid.listadapter.TagListAdapter -> com.pindroid.g.c:
-    java.util.ArrayList tags -> a
-    void update(java.util.ArrayList) -> a
-    int getCount() -> getCount
-    android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
-    java.lang.Object getItem(int) -> getItem
-com.pindroid.listadapter.ViewHolder -> com.pindroid.g.b:
-com.pindroid.listadapter.ViewHolder$BookmarkListViewHolder -> com.pindroid.g.e:
-    android.widget.TextView description -> a
-    android.widget.TextView tags -> b
-    android.widget.ImageView unread -> c
-    android.widget.ImageView source -> d
-    android.widget.ImageView priv -> e
-com.pindroid.listadapter.ViewHolder$TagListViewHolder -> com.pindroid.g.a:
-    android.widget.TextView name -> a
-    android.widget.TextView count -> b
-com.pindroid.platform.BookmarkManager -> com.pindroid.e.b:
-    java.util.ArrayList GetBookmarks(java.lang.String,java.lang.String,boolean,java.lang.String,android.content.Context) -> a
+com.pindroid.listadapter.BookmarkViewBinder -> com.pindroid.c.a:
+    boolean setViewValue(android.view.View,android.database.Cursor,int) -> setViewValue
+com.pindroid.platform.BookmarkManager -> com.pindroid.f.b:
     com.pindroid.providers.BookmarkContent$Bookmark GetById(int,android.content.Context) -> a
     void BulkInsert(java.util.ArrayList,java.lang.String,android.content.Context) -> a
     void UpdateBookmark(com.pindroid.providers.BookmarkContent$Bookmark,java.lang.String,android.content.Context) -> a
     void DeleteBookmark(com.pindroid.providers.BookmarkContent$Bookmark,android.content.Context) -> a
     void TruncateBookmarks(java.util.ArrayList,android.content.Context,boolean) -> a
-    java.util.ArrayList SearchBookmarks(java.lang.String,java.lang.String,boolean,java.lang.String,android.content.Context) -> b
-com.pindroid.platform.TagManager -> com.pindroid.e.a:
-    java.util.ArrayList GetTags(java.lang.String,java.lang.String,android.content.Context) -> a
+    com.pindroid.providers.BookmarkContent$Bookmark CursorToBookmark(android.database.Cursor) -> a
+com.pindroid.platform.TagManager -> com.pindroid.f.a:
     void BulkInsert(java.util.ArrayList,java.lang.String,android.content.Context) -> a
     void UpsertTag(com.pindroid.providers.TagContent$Tag,java.lang.String,android.content.Context) -> a
     void UpdateTag(com.pindroid.providers.TagContent$Tag,java.lang.String,android.content.Context) -> c
     void UpleteTag(com.pindroid.providers.TagContent$Tag,java.lang.String,android.content.Context) -> b
     void TruncateOldTags(java.util.ArrayList,android.content.Context) -> a
-    java.util.ArrayList SearchTags(java.lang.String,java.lang.String,android.content.Context) -> b
+    android.database.Cursor SearchTags(java.lang.String,java.lang.String,android.content.Context) -> a
 com.pindroid.providers.BookmarkContent -> com.pindroid.providers.e:
 com.pindroid.providers.BookmarkContent$Bookmark -> com.pindroid.providers.d:
     android.net.Uri CONTENT_URI -> a
@@ -418,6 +370,7 @@ com.pindroid.providers.BookmarkContent$Bookmark -> com.pindroid.providers.d:
     long mTime -> l
     java.lang.String mSource -> m
     int getId() -> a
+    void setId(int) -> a
     java.lang.String getUrl() -> b
     void setUrl(java.lang.String) -> a
     java.lang.String getDescription() -> c
@@ -519,78 +472,78 @@ com.pindroid.ui.TagSpan -> com.pindroid.b.d:
     void setOnTagClickListener(com.pindroid.ui.TagSpan$OnTagClickListener) -> a
 com.pindroid.ui.TagSpan$OnTagClickListener -> com.pindroid.b.c:
     void onTagClick(java.lang.String) -> a
-com.pindroid.util.DateParser -> com.pindroid.d.b:
+com.pindroid.util.DateParser -> com.pindroid.e.b:
     java.util.TimeZone tz -> a
     java.util.Calendar c -> b
     java.util.Date parse(java.lang.String) -> a
     long parseTime(java.lang.String) -> b
-com.pindroid.util.IntUtils -> com.pindroid.d.c:
+com.pindroid.util.IntUtils -> com.pindroid.e.c:
     int parseUInt(java.lang.String) -> a
-com.pindroid.util.Md5Hash -> com.pindroid.d.d:
+com.pindroid.util.Md5Hash -> com.pindroid.e.d:
     java.lang.String md5(java.lang.String) -> a
-com.pindroid.util.SyncUtils -> com.pindroid.d.a:
+com.pindroid.util.SyncUtils -> com.pindroid.e.a:
     void addPeriodicSync(java.lang.String,android.os.Bundle,long,android.content.Context) -> a
 com.pindroid.widget.SearchWidgetProvider -> com.pindroid.widget.SearchWidgetProvider:
     void onUpdate(android.content.Context,android.appwidget.AppWidgetManager,int[]) -> onUpdate
-com.pindroid.xml.SaxBookmarkParser -> com.pindroid.c.e:
+com.pindroid.xml.SaxBookmarkParser -> com.pindroid.d.e:
     java.io.InputStream is -> a
     java.util.ArrayList parse() -> a
-com.pindroid.xml.SaxBookmarkParser$1 -> com.pindroid.c.a:
+com.pindroid.xml.SaxBookmarkParser$1 -> com.pindroid.d.a:
     com.pindroid.xml.SaxBookmarkParser this$0 -> a
     com.pindroid.providers.BookmarkContent$Bookmark val$currentBookmark -> b
     java.util.ArrayList val$bookmarks -> c
     void start(org.xml.sax.Attributes) -> start
-com.pindroid.xml.SaxFeedParser -> com.pindroid.c.o:
+com.pindroid.xml.SaxFeedParser -> com.pindroid.d.o:
     java.io.InputStream is -> a
-    java.util.ArrayList parse() -> a
-com.pindroid.xml.SaxFeedParser$1 -> com.pindroid.c.i:
+    android.database.Cursor parse() -> a
+com.pindroid.xml.SaxFeedParser$1 -> com.pindroid.d.i:
     com.pindroid.xml.SaxFeedParser this$0 -> a
-    java.util.ArrayList val$bookmarks -> b
+    android.database.MatrixCursor val$bookmarks -> b
     com.pindroid.providers.BookmarkContent$Bookmark val$currentBookmark -> c
     void end() -> end
-com.pindroid.xml.SaxFeedParser$2 -> com.pindroid.c.j:
+com.pindroid.xml.SaxFeedParser$2 -> com.pindroid.d.j:
     com.pindroid.xml.SaxFeedParser this$0 -> a
     com.pindroid.providers.BookmarkContent$Bookmark val$currentBookmark -> b
     void end(java.lang.String) -> end
-com.pindroid.xml.SaxFeedParser$3 -> com.pindroid.c.k:
+com.pindroid.xml.SaxFeedParser$3 -> com.pindroid.d.k:
     com.pindroid.xml.SaxFeedParser this$0 -> a
     com.pindroid.providers.BookmarkContent$Bookmark val$currentBookmark -> b
     void end(java.lang.String) -> end
-com.pindroid.xml.SaxFeedParser$4 -> com.pindroid.c.l:
+com.pindroid.xml.SaxFeedParser$4 -> com.pindroid.d.l:
     com.pindroid.xml.SaxFeedParser this$0 -> a
     com.pindroid.providers.BookmarkContent$Bookmark val$currentBookmark -> b
     void end(java.lang.String) -> end
-com.pindroid.xml.SaxFeedParser$5 -> com.pindroid.c.m:
+com.pindroid.xml.SaxFeedParser$5 -> com.pindroid.d.m:
     com.pindroid.xml.SaxFeedParser this$0 -> a
     com.pindroid.providers.BookmarkContent$Bookmark val$currentBookmark -> b
     void end(java.lang.String) -> end
-com.pindroid.xml.SaxFeedParser$6 -> com.pindroid.c.n:
+com.pindroid.xml.SaxFeedParser$6 -> com.pindroid.d.n:
     com.pindroid.xml.SaxFeedParser this$0 -> a
     com.pindroid.providers.BookmarkContent$Bookmark val$currentBookmark -> b
     void end(java.lang.String) -> end
-com.pindroid.xml.SaxFeedParser$7 -> com.pindroid.c.g:
+com.pindroid.xml.SaxFeedParser$7 -> com.pindroid.d.g:
     com.pindroid.xml.SaxFeedParser this$0 -> a
     com.pindroid.providers.BookmarkContent$Bookmark val$currentBookmark -> b
     void end(java.lang.String) -> end
-com.pindroid.xml.SaxFeedParser$8 -> com.pindroid.c.h:
+com.pindroid.xml.SaxFeedParser$8 -> com.pindroid.d.h:
     com.pindroid.xml.SaxFeedParser this$0 -> a
     com.pindroid.providers.BookmarkContent$Bookmark val$currentBookmark -> b
     void end(java.lang.String) -> end
-com.pindroid.xml.SaxTagParser -> com.pindroid.c.f:
+com.pindroid.xml.SaxTagParser -> com.pindroid.d.f:
     java.io.InputStream is -> a
     java.util.ArrayList parse() -> a
     java.util.ArrayList parseSuggested() -> b
-com.pindroid.xml.SaxTagParser$1 -> com.pindroid.c.c:
+com.pindroid.xml.SaxTagParser$1 -> com.pindroid.d.c:
     com.pindroid.xml.SaxTagParser this$0 -> a
     com.pindroid.providers.TagContent$Tag val$currentTag -> b
     java.util.ArrayList val$tags -> c
     void start(org.xml.sax.Attributes) -> start
-com.pindroid.xml.SaxTagParser$2 -> com.pindroid.c.d:
+com.pindroid.xml.SaxTagParser$2 -> com.pindroid.d.d:
     com.pindroid.xml.SaxTagParser this$0 -> a
     com.pindroid.providers.TagContent$Tag val$currentTag -> b
     java.util.ArrayList val$tags -> c
     void end(java.lang.String) -> end
-com.pindroid.xml.SaxTagParser$3 -> com.pindroid.c.b:
+com.pindroid.xml.SaxTagParser$3 -> com.pindroid.d.b:
     com.pindroid.xml.SaxTagParser this$0 -> a
     com.pindroid.providers.TagContent$Tag val$currentTag -> b
     java.util.ArrayList val$tags -> c
