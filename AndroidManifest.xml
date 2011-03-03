@@ -24,8 +24,8 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pindroid"
-    android:versionCode="19"
-    android:versionName="1.5.6">
+    android:versionCode="20"
+    android:versionName="1.5.7">
     <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="11" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
