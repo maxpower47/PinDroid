@@ -310,17 +310,20 @@ public class BookmarkContentProvider extends ContentProvider {
 		bookmarkqb.setTables(BOOKMARK_TABLE_NAME);
 		
 		ArrayList<String> bookmarkList = new ArrayList<String>();
+		final ArrayList<String> selectionlist = new ArrayList<String>();
 		
 		for(String s : bookmarks) {
-			bookmarkList.add("(" + Bookmark.Description + " LIKE '%" + s + "%' OR " + 
-					Bookmark.Notes + " LIKE '%" + s + "%')");
+			bookmarkList.add("(" + Bookmark.Description + " LIKE ? OR " + 
+					Bookmark.Notes + " LIKE ?)");
+			selectionlist.add("%" + s + "%");
+			selectionlist.add("%" + s + "%");
 		}
 		
 		String selection = TextUtils.join(" AND ", bookmarkList);
 		
 		String[] projection = new String[] {BaseColumns._ID, Bookmark.Description, Bookmark.Url};
 
-		Cursor c = getBookmarks(Bookmark.CONTENT_URI, projection, selection, null, null, SuggestionLimit);
+		Cursor c = getBookmarks(Bookmark.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), null, SuggestionLimit);
 		
 		if(c.moveToFirst()){
 			int descColumn = c.getColumnIndex(Bookmark.Description);
@@ -378,16 +381,18 @@ public class BookmarkContentProvider extends ContentProvider {
 		tagqb.setTables(TAG_TABLE_NAME);
 		
 		ArrayList<String> tagList = new ArrayList<String>();
+		final ArrayList<String> selectionlist = new ArrayList<String>();
 		
 		for(String s : tags){
-			tagList.add(Tag.Name + " LIKE '%" + s + "%'");
+			tagList.add(Tag.Name + " LIKE ?");
+			selectionlist.add("%" + s + "%");
 		}
 		
 		String selection = TextUtils.join(" OR ", tagList);
 
 		String[] projection = new String[] {BaseColumns._ID, Tag.Name, Tag.Count};
 
-		Cursor c = getTags(Tag.CONTENT_URI, projection, selection, null, null, SuggestionLimit);
+		Cursor c = getTags(Tag.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), null, SuggestionLimit);
 		
 		if(c.moveToFirst()){
 			int nameColumn = c.getColumnIndex(Tag.Name);
@@ -526,16 +531,25 @@ public class BookmarkContentProvider extends ContentProvider {
 		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
 		qb.setTables(BOOKMARK_TABLE_NAME);
 		
+		ArrayList<String> selectionlist = new ArrayList<String>();
+		
 		String[] projection = new String[]{Bookmark.Description, Bookmark.Url, BaseColumns._ID};
 		String selection = "(" + Bookmark.Tags + " LIKE '% " + tagname + " %' OR " +
 			Bookmark.Tags + " LIKE '% " + tagname + "' OR " +
 			Bookmark.Tags + " LIKE '" + tagname + " %' OR " +
 			Bookmark.Tags + " = '" + tagname + "') AND " +
 			Bookmark.Account + "=?";
-		String[] selectionArgs = new String[]{mAccount.name};
+		
+		selectionlist.add("% " + tagname + " %");
+		selectionlist.add("% " + tagname);
+		selectionlist.add(tagname + " %");
+		selectionlist.add(tagname);
+		selectionlist.add(mAccount.name);
+
+		
 		String sortOrder = Bookmark.Description + " ASC";
 		
-		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder);
+		Cursor c = qb.query(rdb, projection, selection, selectionlist.toArray(new String[]{}), null, null, sortOrder);
 		c.setNotificationUri(getContext().getContentResolver(), uri);
 		
 		MatrixCursor mc = new MatrixCursor(new String[] { BaseColumns._ID, LiveFolders.NAME, 

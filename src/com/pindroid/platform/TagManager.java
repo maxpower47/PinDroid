@@ -156,14 +156,18 @@ public class TagManager {
 	public static Cursor SearchTags(String query, String username, Context context) {
 		final String[] projection = new String[] { Tag._ID, Tag.Name, Tag.Count };
 		String selection = null;
-		final String[] selectionargs = new String[]{ username };
+		
 		final String sortorder = Tag.Name + " ASC";
+		final ArrayList<String> selectionlist = new ArrayList<String>();
 		
 		ArrayList<String> queryList = new ArrayList<String>();
 		
 		for(String s : query.split(" ")) {
-			queryList.add(Tag.Name + " LIKE '%" + s + "%'");
+			queryList.add(Tag.Name + " LIKE ?");
+			selectionlist.add("%" + s + "%");
 		}
+		
+		selectionlist.add(username);
 		
 		if(query != null && query != "") {
 			selection = "(" + TextUtils.join(" OR ", queryList) + ")" + 
@@ -172,6 +176,6 @@ public class TagManager {
 			selection = Tag.Account + "=?";
 		}
 		
-		return context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);
+		return context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), sortorder);
 	}
 }
