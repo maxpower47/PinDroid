@@ -278,8 +278,18 @@ public class AddBookmark extends AppBaseActivity {
 			updateTime = d.getTime();
 		}
 		
+		String tagstring = "";
+		String[] tags = mEditTags.getText().toString().trim().split(" ");
+		
+		
+		
+		for(String s : tags){
+			if(!s.equals("") && !s.equals(" "))
+				tagstring += (s + " ");
+		}
+		
 		bookmark = new Bookmark(url, mEditDescription.getText().toString(), 
-				mEditNotes.getText().toString(), mEditTags.getText().toString(),
+				mEditNotes.getText().toString(), tagstring.trim(),
 				!mPrivate.isChecked(), mToRead.isChecked(), updateTime);
 		
 		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, oldBookmark, mAccount, mContext, update);

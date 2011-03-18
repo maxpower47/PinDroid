@@ -11949,7 +11949,7 @@ _____________________________________________________________________
 
 Interfaces (count = 0):
 
-Constant Pool (count = 193):
+Constant Pool (count = 197):
   - Integer [2130903050]
   - Integer [2131361831]
   - Integer [2131361832]
@@ -11985,8 +11985,8 @@ Constant Pool (count = 193):
   - Class [android/net/Uri]
   - Class [android/net/Uri$Builder]
   - Class [android/widget/RemoteViews]
-  - Class [com/pindroid/activity/AddBookmark]
   - Class [com/pindroid/activity/Main]
+  - Class [com/pindroid/g/c]
   - Class [com/pindroid/providers/d]
   - Class [com/pindroid/widget/SearchWidgetProvider]
   - Class [java/lang/Integer]
@@ -12017,6 +12017,7 @@ Constant Pool (count = 193):
   - Methodref [android/widget/RemoteViews.setOnClickPendingIntent (ILandroid/app/PendingIntent;)V]
   - Methodref [android/widget/RemoteViews.setTextViewText (ILjava/lang/CharSequence;)V]
   - Methodref [android/widget/RemoteViews.setViewVisibility (II)V]
+  - Methodref [com/pindroid/g/c.b (Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;]
   - Methodref [java/lang/Integer.toString (I)Ljava/lang/String;]
   - Methodref [java/lang/String.valueOf (Ljava/lang/Object;)Ljava/lang/String;]
   - Methodref [java/lang/StringBuilder.<init> (Ljava/lang/String;)V]
@@ -12033,6 +12034,7 @@ Constant Pool (count = 193):
   + NameAndType [append (Ljava/lang/String;)Ljava/lang/StringBuilder;]
   + NameAndType [appendEncodedPath (Ljava/lang/String;)Landroid/net/Uri$Builder;]
   + NameAndType [appendQueryParameter (Ljava/lang/String;Ljava/lang/String;)Landroid/net/Uri$Builder;]
+  + NameAndType [b (Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;]
   + NameAndType [build ()Landroid/net/Uri;]
   + NameAndType [close ()V]
   + NameAndType [encodedAuthority (Ljava/lang/String;)Landroid/net/Uri$Builder;]
@@ -12078,6 +12080,7 @@ Constant Pool (count = 193):
   + Utf8 [(Ljava/lang/String;)V]
   + Utf8 [(Ljava/lang/String;)[Landroid/accounts/Account;]
   + Utf8 [(Ljava/lang/String;I)V]
+  + Utf8 [(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;]
   + Utf8 [(Ljava/lang/String;Ljava/lang/String;)Landroid/net/Uri$Builder;]
   + Utf8 [+]
   + Utf8 [1]
@@ -12108,13 +12111,14 @@ Constant Pool (count = 193):
   + Utf8 [append]
   + Utf8 [appendEncodedPath]
   + Utf8 [appendQueryParameter]
+  + Utf8 [b]
   + Utf8 [bookmarks]
   + Utf8 [build]
   + Utf8 [close]
   + Utf8 [com.pindroid]
   + Utf8 [com.pindroid.providers.BookmarkContentProvider]
-  + Utf8 [com/pindroid/activity/AddBookmark]
   + Utf8 [com/pindroid/activity/Main]
+  + Utf8 [com/pindroid/g/c]
   + Utf8 [com/pindroid/providers/d]
   + Utf8 [com/pindroid/widget/SearchWidgetProvider]
   + Utf8 [content]
@@ -12161,7 +12165,7 @@ Methods (count = 2):
     Access flags: 0x1
       = public void onUpdate(android.content.Context,android.appwidget.AppWidgetManager,int[])
     Class member attributes (count = 1):
-    + Code attribute instructions (code length = 626, locals = 14, stack = 6):
+    + Code attribute instructions (code length = 622, locals = 14, stack = 6):
       [0] aload_3 v3
       [1] arraylength
       [2] istore v4
@@ -12191,7 +12195,7 @@ Methods (count = 2):
       [37] astore v6
       [39] iconst_0
       [40] istore v5
-      [42] goto +576 (target=618)
+      [42] goto +572 (target=614)
       [45] aload_3 v3
       [46] iload v5
       [48] iaload
@@ -12231,19 +12235,19 @@ Methods (count = 2):
         - Class [java/lang/StringBuilder]
       [96] dup
       [97] aload v6
-      [99] invokestatic #69
+      [99] invokestatic #70
         - Methodref [java/lang/String.valueOf (Ljava/lang/Object;)Ljava/lang/String;]
-      [102] invokespecial #70
+      [102] invokespecial #71
         - Methodref [java/lang/StringBuilder.<init> (Ljava/lang/String;)V]
       [105] ldc #12
         - String [@]
-      [107] invokevirtual #71
+      [107] invokevirtual #72
         - Methodref [java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;]
       [110] ldc #20
         - String [com.pindroid.providers.BookmarkContentProvider]
-      [112] invokevirtual #71
+      [112] invokevirtual #72
         - Methodref [java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;]
-      [115] invokevirtual #72
+      [115] invokevirtual #73
         - Methodref [java/lang/StringBuilder.toString ()Ljava/lang/String;]
       [118] invokevirtual #62
         - Methodref [android/net/Uri$Builder.encodedAuthority (Ljava/lang/String;)Landroid/net/Uri$Builder;]
@@ -12296,19 +12300,19 @@ Methods (count = 2):
         - Class [java/lang/StringBuilder]
       [186] dup
       [187] aload v6
-      [189] invokestatic #69
+      [189] invokestatic #70
         - Methodref [java/lang/String.valueOf (Ljava/lang/Object;)Ljava/lang/String;]
-      [192] invokespecial #70
+      [192] invokespecial #71
         - Methodref [java/lang/StringBuilder.<init> (Ljava/lang/String;)V]
       [195] ldc #12
         - String [@]
-      [197] invokevirtual #71
+      [197] invokevirtual #72
         - Methodref [java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;]
       [200] ldc #20
         - String [com.pindroid.providers.BookmarkContentProvider]
-      [202] invokevirtual #71
+      [202] invokevirtual #72
         - Methodref [java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;]
-      [205] invokevirtual #72
+      [205] invokevirtual #73
         - Methodref [java/lang/StringBuilder.toString ()Ljava/lang/String;]
       [208] invokevirtual #62
         - Methodref [android/net/Uri$Builder.encodedAuthority (Ljava/lang/String;)Landroid/net/Uri$Builder;]
@@ -12330,7 +12334,7 @@ Methods (count = 2):
         - Class [android/content/Intent]
       [234] dup
       [235] aload_1 v1
-      [236] ldc #37
+      [236] ldc #36
         - Class [com/pindroid/activity/Main]
       [238] invokespecial #54
         - Methodref [android/content/Intent.<init> (Landroid/content/Context;Ljava/lang/Class;)V]
@@ -12341,260 +12345,256 @@ Methods (count = 2):
       [246] invokevirtual #56
         - Methodref [android/content/Intent.setAction (Ljava/lang/String;)Landroid/content/Intent;]
       [249] pop
-      [250] new #31
+      [250] aconst_null
+      [251] aload v6
+      [253] invokestatic #68
+        - Methodref [com/pindroid/g/c.b (Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;]
+      [256] astore v11
+      [258] new #31
         - Class [android/content/Intent]
-      [253] dup
-      [254] aload_1 v1
-      [255] ldc #36
-        - Class [com/pindroid/activity/AddBookmark]
-      [257] invokespecial #54
-        - Methodref [android/content/Intent.<init> (Landroid/content/Context;Ljava/lang/Class;)V]
-      [260] astore v11
-      [262] new #31
-        - Class [android/content/Intent]
-      [265] dup
-      [266] invokespecial #53
+      [261] dup
+      [262] invokespecial #53
         - Methodref [android/content/Intent.<init> ()V]
-      [269] dup
-      [270] astore v12
-      [272] ldc #16
+      [265] dup
+      [266] astore v12
+      [268] ldc #16
         - String [android.intent.action.VIEW]
-      [274] invokevirtual #56
+      [270] invokevirtual #56
         - Methodref [android/content/Intent.setAction (Ljava/lang/String;)Landroid/content/Intent;]
-      [277] pop
-      [278] aload v12
-      [280] ldc #17
+      [273] pop
+      [274] aload v12
+      [276] ldc #17
         - String [android.intent.category.DEFAULT]
-      [282] invokevirtual #55
+      [278] invokevirtual #55
         - Methodref [android/content/Intent.addCategory (Ljava/lang/String;)Landroid/content/Intent;]
-      [285] pop
-      [286] new #34
+      [281] pop
+      [282] new #34
         - Class [android/net/Uri$Builder]
-      [289] dup
-      [290] invokespecial #58
+      [285] dup
+      [286] invokespecial #58
         - Methodref [android/net/Uri$Builder.<init> ()V]
-      [293] dup
-      [294] astore v13
-      [296] ldc #21
+      [289] dup
+      [290] astore v13
+      [292] ldc #21
         - String [content]
-      [298] invokevirtual #63
+      [294] invokevirtual #63
         - Methodref [android/net/Uri$Builder.scheme (Ljava/lang/String;)Landroid/net/Uri$Builder;]
-      [301] pop
-      [302] aload v13
-      [304] new #42
+      [297] pop
+      [298] aload v13
+      [300] new #42
         - Class [java/lang/StringBuilder]
-      [307] dup
-      [308] aload v6
-      [310] invokestatic #69
+      [303] dup
+      [304] aload v6
+      [306] invokestatic #70
         - Methodref [java/lang/String.valueOf (Ljava/lang/Object;)Ljava/lang/String;]
-      [313] invokespecial #70
+      [309] invokespecial #71
         - Methodref [java/lang/StringBuilder.<init> (Ljava/lang/String;)V]
-      [316] ldc #12
+      [312] ldc #12
         - String [@]
-      [318] invokevirtual #71
+      [314] invokevirtual #72
         - Methodref [java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;]
-      [321] ldc #20
+      [317] ldc #20
         - String [com.pindroid.providers.BookmarkContentProvider]
-      [323] invokevirtual #71
+      [319] invokevirtual #72
         - Methodref [java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;]
-      [326] invokevirtual #72
+      [322] invokevirtual #73
         - Methodref [java/lang/StringBuilder.toString ()Ljava/lang/String;]
-      [329] invokevirtual #62
+      [325] invokevirtual #62
         - Methodref [android/net/Uri$Builder.encodedAuthority (Ljava/lang/String;)Landroid/net/Uri$Builder;]
-      [332] pop
-      [333] aload v13
-      [335] ldc #18
+      [328] pop
+      [329] aload v13
+      [331] ldc #18
         - String [bookmarks]
-      [337] invokevirtual #59
+      [333] invokevirtual #59
         - Methodref [android/net/Uri$Builder.appendEncodedPath (Ljava/lang/String;)Landroid/net/Uri$Builder;]
-      [340] pop
-      [341] aload v13
-      [343] ldc #23
+      [336] pop
+      [337] aload v13
+      [339] ldc #23
         - String [unread]
-      [345] ldc #11
+      [341] ldc #11
         - String [1]
-      [347] invokevirtual #60
+      [343] invokevirtual #60
         - Methodref [android/net/Uri$Builder.appendQueryParameter (Ljava/lang/String;Ljava/lang/String;)Landroid/net/Uri$Builder;]
-      [350] pop
-      [351] aload v12
-      [353] aload v13
-      [355] invokevirtual #61
+      [346] pop
+      [347] aload v12
+      [349] aload v13
+      [351] invokevirtual #61
         - Methodref [android/net/Uri$Builder.build ()Landroid/net/Uri;]
-      [358] invokevirtual #57
+      [354] invokevirtual #57
         - Methodref [android/content/Intent.setData (Landroid/net/Uri;)Landroid/content/Intent;]
-      [361] pop
-      [362] aload_1 v1
-      [363] iconst_0
-      [364] aload v8
-      [366] iconst_0
-      [367] invokestatic #47
+      [357] pop
+      [358] aload_1 v1
+      [359] iconst_0
+      [360] aload v8
+      [362] iconst_0
+      [363] invokestatic #47
         - Methodref [android/app/PendingIntent.getActivity (Landroid/content/Context;ILandroid/content/Intent;I)Landroid/app/PendingIntent;]
-      [370] astore v8
-      [372] aload_1 v1
-      [373] iconst_0
-      [374] aload v9
-      [376] iconst_0
-      [377] invokestatic #47
+      [366] astore v8
+      [368] aload_1 v1
+      [369] iconst_0
+      [370] aload v9
+      [372] iconst_0
+      [373] invokestatic #47
         - Methodref [android/app/PendingIntent.getActivity (Landroid/content/Context;ILandroid/content/Intent;I)Landroid/app/PendingIntent;]
-      [380] astore v9
-      [382] aload_1 v1
-      [383] iconst_0
-      [384] aload v10
-      [386] iconst_0
-      [387] invokestatic #47
+      [376] astore v9
+      [378] aload_1 v1
+      [379] iconst_0
+      [380] aload v10
+      [382] iconst_0
+      [383] invokestatic #47
         - Methodref [android/app/PendingIntent.getActivity (Landroid/content/Context;ILandroid/content/Intent;I)Landroid/app/PendingIntent;]
-      [390] astore v10
-      [392] aload_1 v1
-      [393] iconst_0
-      [394] aload v11
-      [396] iconst_0
-      [397] invokestatic #47
+      [386] astore v10
+      [388] aload_1 v1
+      [389] iconst_0
+      [390] aload v11
+      [392] iconst_0
+      [393] invokestatic #47
         - Methodref [android/app/PendingIntent.getActivity (Landroid/content/Context;ILandroid/content/Intent;I)Landroid/app/PendingIntent;]
-      [400] astore v11
-      [402] aload_1 v1
-      [403] iconst_0
-      [404] aload v12
-      [406] iconst_0
-      [407] invokestatic #47
+      [396] astore v11
+      [398] aload_1 v1
+      [399] iconst_0
+      [400] aload v12
+      [402] iconst_0
+      [403] invokestatic #47
         - Methodref [android/app/PendingIntent.getActivity (Landroid/content/Context;ILandroid/content/Intent;I)Landroid/app/PendingIntent;]
-      [410] astore v12
-      [412] new #35
+      [406] astore v12
+      [408] new #35
         - Class [android/widget/RemoteViews]
-      [415] dup
-      [416] aload_1 v1
-      [417] invokevirtual #52
+      [411] dup
+      [412] aload_1 v1
+      [413] invokevirtual #52
         - Methodref [android/content/Context.getPackageName ()Ljava/lang/String;]
-      [420] ldc #1
+      [416] ldc #1
         - Integer [2130903050]
-      [422] invokespecial #64
+      [418] invokespecial #64
         - Methodref [android/widget/RemoteViews.<init> (Ljava/lang/String;I)V]
-      [425] dup
-      [426] astore v13
-      [428] ldc #2
+      [421] dup
+      [422] astore v13
+      [424] ldc #2
         - Integer [2131361831]
-      [430] aload v8
-      [432] invokevirtual #65
+      [426] aload v8
+      [428] invokevirtual #65
         - Methodref [android/widget/RemoteViews.setOnClickPendingIntent (ILandroid/app/PendingIntent;)V]
-      [435] aload v13
-      [437] ldc #6
+      [431] aload v13
+      [433] ldc #6
         - Integer [2131361835]
-      [439] aload v9
-      [441] invokevirtual #65
+      [435] aload v9
+      [437] invokevirtual #65
         - Methodref [android/widget/RemoteViews.setOnClickPendingIntent (ILandroid/app/PendingIntent;)V]
-      [444] aload v13
-      [446] ldc #8
+      [440] aload v13
+      [442] ldc #8
         - Integer [2131361837]
-      [448] aload v10
-      [450] invokevirtual #65
+      [444] aload v10
+      [446] invokevirtual #65
         - Methodref [android/widget/RemoteViews.setOnClickPendingIntent (ILandroid/app/PendingIntent;)V]
-      [453] aload v13
-      [455] ldc #7
+      [449] aload v13
+      [451] ldc #7
         - Integer [2131361836]
-      [457] aload v11
-      [459] invokevirtual #65
+      [453] aload v11
+      [455] invokevirtual #65
         - Methodref [android/widget/RemoteViews.setOnClickPendingIntent (ILandroid/app/PendingIntent;)V]
-      [462] aload v13
-      [464] ldc #3
+      [458] aload v13
+      [460] ldc #3
         - Integer [2131361832]
-      [466] aload v12
-      [468] invokevirtual #65
+      [462] aload v12
+      [464] invokevirtual #65
         - Methodref [android/widget/RemoteViews.setOnClickPendingIntent (ILandroid/app/PendingIntent;)V]
-      [471] aload v6
-      [473] aload_1 v1
-      [474] astore v9
-      [476] astore v8
-      [478] iconst_1
-      [479] anewarray #41
+      [467] aload v6
+      [469] aload_1 v1
+      [470] astore v9
+      [472] astore v8
+      [474] iconst_1
+      [475] anewarray #41
         - Class [java/lang/String]
-      [482] dup
-      [483] iconst_0
-      [484] ldc #14
+      [478] dup
+      [479] iconst_0
+      [480] ldc #14
         - String [_id]
-      [486] aastore
-      [487] astore v10
-      [489] iconst_1
-      [490] anewarray #41
+      [482] aastore
+      [483] astore v10
+      [485] iconst_1
+      [486] anewarray #41
         - Class [java/lang/String]
-      [493] dup
-      [494] iconst_0
-      [495] aload v8
-      [497] aastore
-      [498] astore v8
-      [500] aload v9
-      [502] invokevirtual #51
+      [489] dup
+      [490] iconst_0
+      [491] aload v8
+      [493] aastore
+      [494] astore v8
+      [496] aload v9
+      [498] invokevirtual #51
         - Methodref [android/content/Context.getContentResolver ()Landroid/content/ContentResolver;]
-      [505] getstatic #44
+      [501] getstatic #44
         - Fieldref [com/pindroid/providers/d.a Landroid/net/Uri;]
-      [508] aload v10
-      [510] ldc #13
+      [504] aload v10
+      [506] ldc #13
         - String [ACCOUNT=? AND TOREAD=1]
-      [512] aload v8
-      [514] aconst_null
-      [515] invokevirtual #50
+      [508] aload v8
+      [510] aconst_null
+      [511] invokevirtual #50
         - Methodref [android/content/ContentResolver.query (Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;]
-      [518] dup
-      [519] astore v8
-      [521] invokeinterface #74
+      [514] dup
+      [515] astore v8
+      [517] invokeinterface #75
         - InterfaceMethodref [android/database/Cursor.getCount ()I]
-      [526] istore v9
-      [528] aload v8
-      [530] invokeinterface #73
+      [522] istore v9
+      [524] aload v8
+      [526] invokeinterface #74
         - InterfaceMethodref [android/database/Cursor.close ()V]
-      [535] iload v9
-      [537] dup
-      [538] istore v8
-      [540] invokestatic #68
+      [531] iload v9
+      [533] dup
+      [534] istore v8
+      [536] invokestatic #69
         - Methodref [java/lang/Integer.toString (I)Ljava/lang/String;]
-      [543] astore v9
-      [545] iload v8
-      [547] bipush 99
-      [549] ificmple +7 (target=556)
-      [552] ldc #10
+      [539] astore v9
+      [541] iload v8
+      [543] bipush 99
+      [545] ificmple +7 (target=552)
+      [548] ldc #10
         - String [+]
-      [554] astore v9
-      [556] iload v8
-      [558] ifle +31 (target=589)
-      [561] aload v13
-      [563] ldc #5
+      [550] astore v9
+      [552] iload v8
+      [554] ifle +31 (target=585)
+      [557] aload v13
+      [559] ldc #5
         - Integer [2131361834]
-      [565] iconst_0
-      [566] invokevirtual #67
+      [561] iconst_0
+      [562] invokevirtual #67
         - Methodref [android/widget/RemoteViews.setViewVisibility (II)V]
-      [569] aload v13
-      [571] ldc #4
+      [565] aload v13
+      [567] ldc #4
         - Integer [2131361833]
-      [573] iconst_0
-      [574] invokevirtual #67
+      [569] iconst_0
+      [570] invokevirtual #67
         - Methodref [android/widget/RemoteViews.setViewVisibility (II)V]
-      [577] aload v13
-      [579] ldc #5
+      [573] aload v13
+      [575] ldc #5
         - Integer [2131361834]
-      [581] aload v9
-      [583] invokevirtual #66
+      [577] aload v9
+      [579] invokevirtual #66
         - Methodref [android/widget/RemoteViews.setTextViewText (ILjava/lang/CharSequence;)V]
-      [586] goto +21 (target=607)
-      [589] aload v13
-      [591] ldc #5
+      [582] goto +21 (target=603)
+      [585] aload v13
+      [587] ldc #5
         - Integer [2131361834]
-      [593] bipush 8
-      [595] invokevirtual #67
+      [589] bipush 8
+      [591] invokevirtual #67
         - Methodref [android/widget/RemoteViews.setViewVisibility (II)V]
-      [598] aload v13
-      [600] ldc #4
+      [594] aload v13
+      [596] ldc #4
         - Integer [2131361833]
-      [602] bipush 8
-      [604] invokevirtual #67
+      [598] bipush 8
+      [600] invokevirtual #67
         - Methodref [android/widget/RemoteViews.setViewVisibility (II)V]
-      [607] aload_2 v2
-      [608] iload v7
-      [610] aload v13
-      [612] invokevirtual #48
+      [603] aload_2 v2
+      [604] iload v7
+      [606] aload v13
+      [608] invokevirtual #48
         - Methodref [android/appwidget/AppWidgetManager.updateAppWidget (ILandroid/widget/RemoteViews;)V]
-      [615] iinc v5, 1
-      [618] iload v5
-      [620] iload v4
-      [622] ificmplt -577 (target=45)
-      [625] return
+      [611] iinc v5, 1
+      [614] iload v5
+      [616] iload v4
+      [618] ificmplt -573 (target=45)
+      [621] return
       Code attribute exceptions (count = 0):
       Code attribute attributes (attribute count = 0):
 
