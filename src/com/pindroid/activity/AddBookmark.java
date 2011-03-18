@@ -31,8 +31,8 @@ import org.apache.http.auth.AuthenticationException;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.BookmarkTaskArgs;
+import com.pindroid.action.GetWebpageTitleTask;
 import com.pindroid.client.PinboardApi;
-import com.pindroid.client.NetworkUtilities;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.ContentNotFoundException;
@@ -83,6 +83,9 @@ public class AddBookmark extends AppBaseActivity {
 	private Bookmark oldBookmark;
 	
 	private long updateTime = 0;
+	
+	private AsyncTask<String, Integer, String> titleTask;
+	private AsyncTask<String, Integer, ArrayList<Tag>> tagTask;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -173,7 +176,7 @@ public class AddBookmark extends AppBaseActivity {
 				mToRead.setChecked(extraToRead);
 				
 				if(mEditDescription.getText().toString().equals(""))
-					new GetWebpageTitleTask().execute(url);
+					titleTask = new GetTitleTask().execute(url);
 				
 				bookmark = new Bookmark();
 				bookmark.setUrl(url);
@@ -199,7 +202,7 @@ public class AddBookmark extends AppBaseActivity {
 					}
 				}
 				
-				new GetTagSuggestionsTask().execute(url);
+				tagTask = new GetTagSuggestionsTask().execute(url);
 				
 			} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
 				int id = Integer.parseInt(intent.getData().getLastPathSegment());
@@ -236,9 +239,9 @@ public class AddBookmark extends AppBaseActivity {
 					String url = mEditUrl.getText().toString();
 					
 					if(mEditDescription.getText().toString().equals("")) {
-						new GetWebpageTitleTask().execute(url);
+						titleTask = new GetTitleTask().execute(url);
 					}
-					new GetTagSuggestionsTask().execute(url);
+					tagTask = new GetTagSuggestionsTask().execute(url);
 				}
 			}
 		});
@@ -262,12 +265,11 @@ public class AddBookmark extends AppBaseActivity {
 	}
 	
     private void save() {
+    	
+    	titleTask.cancel(true);
+    	tagTask.cancel(true);
 
 		String url = mEditUrl.getText().toString();
-		
-		if(mEditDescription.getText().toString().equals("")) {
-			mEditDescription.setText(url);
-		}
 		
 		if(!url.startsWith("http")){
 			url = "http://" + url;
@@ -280,9 +282,7 @@ public class AddBookmark extends AppBaseActivity {
 		
 		String tagstring = "";
 		String[] tags = mEditTags.getText().toString().trim().split(" ");
-		
-		
-		
+
 		for(String s : tags){
 			if(!s.equals("") && !s.equals(" "))
 				tagstring += (s + " ");
@@ -395,20 +395,7 @@ public class AddBookmark extends AppBaseActivity {
         }
     };
     
-    public class GetWebpageTitleTask extends AsyncTask<String, Integer, String>{
-    	private String url;
-    	
-    	@Override
-    	protected String doInBackground(String... args) {
-    		
-    		if(args.length > 0 && args[0] != null && args[0] != "") {
-	    		url = args[0];
-		
-	    		return NetworkUtilities.getWebpageTitle(url);
-    		} else return "";
-    		
-    	}
-    	
+    public class GetTitleTask extends GetWebpageTitleTask{    	
     	protected void onPreExecute(){
     		mDescriptionProgress.setVisibility(View.VISIBLE);
     	}

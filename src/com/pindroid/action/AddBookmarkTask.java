@@ -15,7 +15,9 @@ import android.util.Log;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.activity.AddBookmark;
+import com.pindroid.client.NetworkUtilities;
 import com.pindroid.client.PinboardApi;
+import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
 public class AddBookmarkTask extends AsyncTask<BookmarkTaskArgs, Integer, Boolean>{
@@ -32,6 +34,16 @@ public class AddBookmarkTask extends AsyncTask<BookmarkTaskArgs, Integer, Boolea
 		oldBookmark = args[0].getOldBookmark();
 		account = args[0].getAccount();
 		update = args[0].getUpdate();
+		
+		if(bookmark.getDescription().equals("")){
+			bookmark.setDescription(NetworkUtilities.getWebpageTitle(bookmark.getUrl()));
+			
+			if(bookmark.getDescription().equals("")){
+				bookmark.setDescription(bookmark.getUrl());
+			}
+			
+			BookmarkManager.UpdateBookmark(bookmark, account.name, context);
+		}
 		
 		try {
 			Boolean success = PinboardApi.addBookmark(bookmark, account, context);
