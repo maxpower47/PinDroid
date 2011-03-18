@@ -266,8 +266,11 @@ public class AddBookmark extends AppBaseActivity {
 	
     private void save() {
     	
-    	titleTask.cancel(true);
-    	tagTask.cancel(true);
+    	if(titleTask != null)
+    		titleTask.cancel(true);
+    	
+    	if(tagTask != null)
+    		tagTask.cancel(true);
 
 		String url = mEditUrl.getText().toString();
 		
