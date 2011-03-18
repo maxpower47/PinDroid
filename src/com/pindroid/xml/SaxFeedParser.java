@@ -56,6 +56,9 @@ public class SaxFeedParser {
         
         item.setEndElementListener(new EndElementListener(){
             public void end() {
+            	if(currentBookmark.getDescription() == null || currentBookmark.getDescription().equals(""))
+            		currentBookmark.setDescription(currentBookmark.getUrl());
+            	
                 bookmarks.addRow(new Object[]{0, currentBookmark.getUrl(), currentBookmark.getDescription(),
                 		currentBookmark.getMeta(), currentBookmark.getTagString(), currentBookmark.getToRead() ? 1 : 0,
                 		currentBookmark.getShared() ? 1 : 0, currentBookmark.getSource(), currentBookmark.getNotes(),
