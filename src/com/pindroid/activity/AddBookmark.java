@@ -152,39 +152,44 @@ public class AddBookmark extends AppBaseActivity {
 					finish();
 				}
 			} else if(Intent.ACTION_SEND.equals(intent.getAction())){
-				String extraUrl = intent.getStringExtra(Intent.EXTRA_TEXT);
-				String extraDescription = intent.getStringExtra(Constants.EXTRA_DESCRIPTION);
-				String extraNotes = intent.getStringExtra(Constants.EXTRA_NOTES);
-				String extraTags = intent.getStringExtra(Constants.EXTRA_TAGS);
-				Boolean extraPrivate = intent.getBooleanExtra(Constants.EXTRA_PRIVATE, privateDefault);
-				Boolean extraToRead = intent.getBooleanExtra(Constants.EXTRA_TOREAD, toreadDefault);
+				Bookmark b = new Bookmark();
+				
+				b.setUrl(StringUtils.getUrl(intent.getStringExtra(Intent.EXTRA_TEXT)));
+				b.setDescription(intent.getStringExtra(Constants.EXTRA_DESCRIPTION));
+				b.setNotes(intent.getStringExtra(Constants.EXTRA_NOTES));
+				b.setTagString(intent.getStringExtra(Constants.EXTRA_TAGS));
+				b.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, privateDefault));
+				b.setToRead(intent.getBooleanExtra(Constants.EXTRA_TOREAD, toreadDefault));
 				error = intent.getBooleanExtra(Constants.EXTRA_ERROR, false);
 				
-				String url = StringUtils.getUrl(extraUrl);
-				mEditUrl.setText(url);
+
 				
-				if(extraDescription != null)
-					mEditDescription.setText(extraDescription);
+				try{
+					Bookmark old = BookmarkManager.GetByUrl(b.getUrl(), this);
+					b = old.copy();
+				} catch(Exception e) {
+					
+				}
 				
-				if(extraNotes != null)
-					mEditNotes.setText(extraNotes);
 				
-				if(extraTags != null)
-					mEditTags.setText(extraTags);
+				mEditUrl.setText(b.getUrl());
 				
-				mPrivate.setChecked(extraPrivate);
-				mToRead.setChecked(extraToRead);
+				if(b.getDescription() != null)
+					mEditDescription.setText(b.getDescription());
+				
+				if(b.getNotes() != null)
+					mEditNotes.setText(b.getNotes());
+				
+				if(b.getTagString() != null)
+					mEditTags.setText(b.getTagString());
+				
+				mPrivate.setChecked(!b.getShared());
+				mToRead.setChecked(b.getToRead());
 				
 				if(mEditDescription.getText().toString().equals(""))
-					titleTask = new GetTitleTask().execute(url);
+					titleTask = new GetTitleTask().execute(b.getUrl());
 				
-				bookmark = new Bookmark();
-				bookmark.setUrl(url);
-				bookmark.setDescription(extraDescription);
-				bookmark.setNotes(extraNotes);
-				bookmark.setShared(!extraPrivate);
-				bookmark.setTagString(extraTags);
-				bookmark.setToRead(extraToRead);
+				bookmark = b.copy();
 				
 				if(error){
 					update = intent.getBooleanExtra(Constants.EXTRA_UPDATE, false);
@@ -202,7 +207,7 @@ public class AddBookmark extends AppBaseActivity {
 					}
 				}
 				
-				tagTask = new GetTagSuggestionsTask().execute(url);
+				tagTask = new GetTagSuggestionsTask().execute(b.getUrl());
 				
 			} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
 				int id = Integer.parseInt(intent.getData().getLastPathSegment());
@@ -291,9 +296,19 @@ public class AddBookmark extends AppBaseActivity {
 				tagstring += (s + " ");
 		}
 		
+		int oldid = 0;
+		if(bookmark != null && bookmark.getId() != 0) {
+			oldid = bookmark.getId();
+			update = true;
+			oldBookmark = bookmark.copy();
+		}
+			
+		
 		bookmark = new Bookmark(url, mEditDescription.getText().toString(), 
 				mEditNotes.getText().toString(), tagstring.trim(),
 				!mPrivate.isChecked(), mToRead.isChecked(), updateTime);
+		
+		bookmark.setId(oldid);
 		
 		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, oldBookmark, mAccount, mContext, update);
 		
