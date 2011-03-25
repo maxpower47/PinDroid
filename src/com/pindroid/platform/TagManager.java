@@ -27,17 +27,18 @@ import com.pindroid.providers.TagContent.Tag;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.support.v4.content.CursorLoader;
 import android.database.Cursor;
 import android.text.TextUtils;
 
 public class TagManager {
 	
-	public static Cursor GetTags(String account, String sortorder, Context context) {		
+	public static CursorLoader GetTags(String account, String sortorder, Context context) {		
 		final String[] projection = new String[] {Tag._ID, Tag.Name, Tag.Count};
 		final String selection = Tag.Account + "=?";
 		final String[] selectionargs = new String[]{account};
 		
-		return context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);
+		return new CursorLoader(context, Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);
 	}
 	
 	public static void AddTag(Tag tag, String account, Context context){
@@ -153,7 +154,7 @@ public class TagManager {
 		context.getContentResolver().delete(Tag.CONTENT_URI, selection, null);
 	}
 	
-	public static Cursor SearchTags(String query, String username, Context context) {
+	public static CursorLoader SearchTags(String query, String username, Context context) {
 		final String[] projection = new String[] { Tag._ID, Tag.Name, Tag.Count };
 		String selection = null;
 		
@@ -176,6 +177,6 @@ public class TagManager {
 			selection = Tag.Account + "=?";
 		}
 		
-		return context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), sortorder);
+		return new CursorLoader(context, Tag.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), sortorder);
 	}
 }
