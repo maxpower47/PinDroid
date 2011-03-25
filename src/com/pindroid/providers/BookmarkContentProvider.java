@@ -534,10 +534,10 @@ public class BookmarkContentProvider extends ContentProvider {
 		ArrayList<String> selectionlist = new ArrayList<String>();
 		
 		String[] projection = new String[]{Bookmark.Description, Bookmark.Url, BaseColumns._ID};
-		String selection = "(" + Bookmark.Tags + " LIKE '% " + tagname + " %' OR " +
-			Bookmark.Tags + " LIKE '% " + tagname + "' OR " +
-			Bookmark.Tags + " LIKE '" + tagname + " %' OR " +
-			Bookmark.Tags + " = '" + tagname + "') AND " +
+		String selection = "(" + Bookmark.Tags + " LIKE ? OR " +
+			Bookmark.Tags + " LIKE ? OR " +
+			Bookmark.Tags + " LIKE ? OR " +
+			Bookmark.Tags + " = ?) AND " +
 			Bookmark.Account + "=?";
 		
 		selectionlist.add("% " + tagname + " %");
