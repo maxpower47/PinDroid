@@ -33,7 +33,9 @@
         <LinearLayout style="@style/LoginFrame">
             <TextView
                 android:id="@+id/message"
-                style="@style/LoginMessage" />
+                style="@style/LoginMessage"
+                android:autoLink="web"
+                android:linksClickable="true" />
             <TextView
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textStyle="bold"
