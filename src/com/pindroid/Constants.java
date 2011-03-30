@@ -43,6 +43,8 @@ public class Constants {
     public static final String EXTRA_TIME = "com.pindroid.bookmark.time";
     public static final String EXTRA_UPDATE = "com.pindroid.bookmark.update";
 
+    public static final int BOOKMARK_PAGE_SIZE = 500;
+    
     /**
      * Authtoken type string.
      */

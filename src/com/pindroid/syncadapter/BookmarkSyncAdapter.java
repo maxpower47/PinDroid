@@ -52,6 +52,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = "BookmarkSyncAdapter";
 
     private final Context mContext;
+    private Account mAccount;
 
     public BookmarkSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -82,6 +83,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
     	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
     	final String username = account.name;
+    	mAccount = account;
 
     	final Update update = PinboardApi.lastUpdate(account, mContext);
     	
@@ -94,7 +96,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			TagManager.TruncateTags(username, mContext);
 			
 			final ArrayList<Tag> tagList = PinboardApi.getTags(account, mContext);
-			final ArrayList<Bookmark> addBookmarkList = PinboardApi.getAllBookmarks(null, account, mContext);
+			final ArrayList<Bookmark> addBookmarkList = getBookmarkList();
 			
 			if(!tagList.isEmpty()){
 				TagManager.BulkInsert(tagList, username, mContext);
@@ -111,5 +113,20 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	} else {
     		Log.d("BookmarkSync", "No update needed.  Last update time before last sync.");
     	}
+    }
+    
+    private ArrayList<Bookmark> getBookmarkList()
+    	throws AuthenticationException, IOException {
+    	int pageSize = Constants.BOOKMARK_PAGE_SIZE;
+    	ArrayList<Bookmark> results = new ArrayList<Bookmark>();   	
+
+		int page = 0;
+		boolean morePages = true;
+		
+		do{
+			morePages = results.addAll(PinboardApi.getAllBookmarks(null, page++ * pageSize, pageSize, mAccount, mContext));
+		} while(morePages);
+
+		return results;
     }
 }

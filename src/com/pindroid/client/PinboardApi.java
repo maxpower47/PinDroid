@@ -254,7 +254,24 @@ public class PinboardApi {
      */
     public static ArrayList<Bookmark> getAllBookmarks(String tagName, Account account, Context context) 
     	throws IOException, AuthenticationException {
-    	
+
+        return getAllBookmarks(tagName, 0, 0, account, context);
+    }
+    
+    /**
+     * Retrieves the entire list of bookmarks for a user from Pinboard.
+     * 
+     * @param tagname If specified, will only retrieve bookmarks with a specific tag.
+     * @param start Bookmark number to start from.
+     * @param count Number of results to retrieve.
+     * @param account The account being synced.
+     * @param context The current application context.
+     * @return A list of bookmarks received from the server.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
+     */
+    public static ArrayList<Bookmark> getAllBookmarks(String tagName, int start, int count, Account account, Context context) 
+	throws IOException, AuthenticationException {
     	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 
     	InputStream responseStream = null;
@@ -263,6 +280,14 @@ public class PinboardApi {
 
     	if(tagName != null && tagName != ""){
     		params.put("tag", tagName);
+    	}
+    	
+    	if(start != 0){
+    		params.put("start", Integer.toString(start));
+    	}
+    	
+    	if(count != 0){
+    		params.put("results", Integer.toString(count));
     	}
     	
     	params.put("meta", "yes");
