@@ -24,36 +24,23 @@ package com.pindroid.action;
 import android.accounts.Account;
 import android.content.Context;
 
-import com.pindroid.providers.BookmarkContent.Bookmark;
-
-public class BookmarkTaskArgs extends TaskArgs {
-	private Bookmark bookmark;
-	private Bookmark oldBookmark;
-	private Boolean update;
+public class TaskArgs{
+	protected Account account;
+	protected Context context;
 	
-	public Bookmark getBookmark(){
-		return bookmark;
+	public Account getAccount(){
+		return account;
 	}
 	
-	public Bookmark getOldBookmark(){
-		return oldBookmark;
+	public Context getContext(){
+		return context;
 	}
 	
-	public Boolean getUpdate(){
-		return update;
+	public TaskArgs(){
 	}
 	
-	public BookmarkTaskArgs(Bookmark b, Account a, Context c){
-		bookmark = b;
+	public TaskArgs(Account a, Context c){
 		account = a;
 		context = c;
-	}
-	
-	public BookmarkTaskArgs(Bookmark b, Bookmark ob, Account a, Context c, Boolean u){
-		bookmark = b;
-		oldBookmark = ob;
-		account = a;
-		context = c;
-		update = u;
 	}
 }

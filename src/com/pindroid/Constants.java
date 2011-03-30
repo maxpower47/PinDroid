@@ -55,6 +55,8 @@ public class Constants {
     public static final String PREFS_AUTH_TYPE = "authentication_type";
     public static final String AUTH_TYPE_PINBOARD = "pinboard";
     
+    public static final String PREFS_SECRET_TOKEN = "secret_token";
+    
     public static final String INSTAPAPER_URL = "http://www.instapaper.com/text?u=";
     
     public static final String GPL_URL = "http://www.gnu.org/licenses/gpl-3.0.txt";

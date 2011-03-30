@@ -48,6 +48,7 @@ public class Main extends AppBaseListActivity {
 		String[] MENU_ITEMS = new String[] {getString(R.string.main_menu_my_bookmarks),
 				getString(R.string.main_menu_my_unread_bookmarks),
 				getString(R.string.main_menu_my_tags),
+				getString(R.string.main_menu_network_bookmarks),
 				getString(R.string.main_menu_recent_bookmarks)};
 
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
@@ -149,7 +150,7 @@ public class Main extends AppBaseListActivity {
 		    		i.addCategory(Intent.CATEGORY_DEFAULT);
 		    		Uri.Builder data = new Uri.Builder();
 		    		data.scheme(Constants.CONTENT_SCHEME);
-		    		data.encodedAuthority("recent@" + BookmarkContentProvider.AUTHORITY);
+		    		data.encodedAuthority("network@" + BookmarkContentProvider.AUTHORITY);
 		    		data.appendEncodedPath("bookmarks");
 		    		i.setData(data.build());
 		    		
@@ -163,7 +164,7 @@ public class Main extends AppBaseListActivity {
 		    		i.addCategory(Intent.CATEGORY_DEFAULT);
 		    		Uri.Builder data = new Uri.Builder();
 		    		data.scheme(Constants.CONTENT_SCHEME);
-		    		data.encodedAuthority("popular@" + BookmarkContentProvider.AUTHORITY);
+		    		data.encodedAuthority("recent@" + BookmarkContentProvider.AUTHORITY);
 		    		data.appendEncodedPath("bookmarks");
 		    		i.setData(data.build());
 		    		

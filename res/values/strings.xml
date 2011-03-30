@@ -64,6 +64,7 @@
     <string name="main_menu_my_bookmarks">My Bookmarks</string>
     <string name="main_menu_my_unread_bookmarks">My Unread</string>
     <string name="main_menu_my_tags">My Tags</string>
+    <string name="main_menu_network_bookmarks">Network Bookmarks</string>
     <string name="main_menu_recent_bookmarks">Recent Bookmarks</string>
 
 	<!-- MainSearchResults -->
@@ -75,6 +76,7 @@
     <string name="browse_my_bookmarks_tagged_title">My Bookmarks Tagged With %1$s</string>
     <string name="browse_my_unread_bookmarks_tagged_title">My Unread Bookmarks Tagged With %1$s</string>
     <string name="browse_recent_bookmarks_title">Recent Bookmarks</string>
+    <string name="browse_network_bookmarks_title">Network Bookmarks</string>
     <string name="browse_user_bookmarks_title">Bookmarks For %1$s</string>
     <string name="browse_user_bookmarks_tagged_title">Bookmarks For %1$s Tagged With %2$s</string>
     

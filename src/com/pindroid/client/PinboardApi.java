@@ -68,6 +68,7 @@ public class PinboardApi {
     public static final String LAST_UPDATE_URI = "v1/posts/update";
     public static final String DELETE_BOOKMARK_URI = "v1/posts/delete";
     public static final String ADD_BOOKMARKS_URI = "v1/posts/add";
+    public static final String FETCH_SECRET_URI = "v1/user/secret";
   
     private static final String SCHEME = "https";
     private static final String PINBOARD_AUTHORITY = "api.pinboard.in";
@@ -92,9 +93,8 @@ public class PinboardApi {
     	InputStream responseStream = null;
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	Update update = null;
-    	String url = LAST_UPDATE_URI;
     	
-    	responseStream = PinboardApiCall(url, params, account, context);
+    	responseStream = PinboardApiCall(LAST_UPDATE_URI, params, account, context);
     	response = convertStreamToString(responseStream);
     	responseStream.close();
     	
@@ -375,6 +375,39 @@ public class PinboardApi {
 
         responseStream.close();
         return tagList;
+    }
+    
+    /**
+     * Gets the users secret rss token.
+     * 
+     * @param account The account being synced.
+     * @param context The current application context.
+     * @return The secret rss token.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
+     */
+    public static String getSecretToken(Account account, Context context) 
+    	throws IOException, AuthenticationException {
+
+    	InputStream responseStream = null;
+    	final TreeMap<String, String> params = new TreeMap<String, String>();
+    	String response = null;
+    	String token = null;
+    	  	
+    	responseStream = PinboardApiCall(FETCH_SECRET_URI, params, account, context);
+    	response = convertStreamToString(responseStream);
+    	responseStream.close();
+    	
+        if (response.contains("<?xml")) {
+        	
+        	int start = response.indexOf("<result>");
+        	int end = response.indexOf("</result>", start);
+        	token = response.substring(start + 8, end);
+        } else {
+            Log.e(TAG, "Server error in fetching bookmark list");
+            throw new IOException();
+        }
+        return token;
     }
     
     /**

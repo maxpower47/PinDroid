@@ -25,7 +25,9 @@ import java.util.ArrayList;
 
 import com.pindroid.R;
 import com.pindroid.Constants;
+import com.pindroid.action.GetSecretTask;
 import com.pindroid.action.IntentHelper;
+import com.pindroid.action.TaskArgs;
 import com.pindroid.authenticator.AuthenticatorActivity;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
@@ -61,6 +63,7 @@ public class AppBaseListActivity extends ListActivity {
 	protected boolean toreadDefault;
 	protected String defaultAction;
 	protected boolean markAsRead;
+	protected String secretToken;
 	
 	private boolean first = true;
 	
@@ -73,9 +76,11 @@ public class AppBaseListActivity extends ListActivity {
 		
 		mContext = this;
 		mAccountManager = AccountManager.get(this);
+		settings = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		loadSettings();
 		init();
+		loadSecret();
 	}
 	
 	private void init(){
@@ -134,12 +139,19 @@ public class AppBaseListActivity extends ListActivity {
 	}
 	
 	private void loadSettings(){
-		settings = PreferenceManager.getDefaultSharedPreferences(this);
     	lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
     	privateDefault = settings.getBoolean("pref_save_private_default", false);
     	toreadDefault = settings.getBoolean("pref_save_toread_default", false);
     	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
-    	markAsRead = settings.getBoolean("pref_markasread", false);	
+    	markAsRead = settings.getBoolean("pref_markasread", false);
+	}
+	
+	private void loadSecret(){
+        secretToken = settings.getString(Constants.PREFS_SECRET_TOKEN, "");
+		
+		if(secretToken.equals("")){
+			new GetSecretTask().execute(new TaskArgs(mAccount, this));
+		}
 	}
 
 	@Override

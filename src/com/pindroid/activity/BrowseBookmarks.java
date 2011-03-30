@@ -146,14 +146,21 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				loadBookmarkList();
 
 
-			}  else if(username.equals("recent")){
+			} else if(username.equals("recent")){
 				try{
 					setTitle(getString(R.string.browse_recent_bookmarks_title));
 
 					new LoadBookmarkFeedTask().execute("recent");
 				}
 				catch(Exception e){}
-			} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
+			} else if(username.equals("network")){
+					try{
+						setTitle(getString(R.string.browse_network_bookmarks_title));
+
+						new LoadBookmarkFeedTask().execute("network");
+					}
+					catch(Exception e){}
+				} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
 				viewBookmark(Integer.parseInt(data.getLastPathSegment()));
 				finish();
 			} else {
@@ -391,7 +398,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
         @Override
         protected Boolean doInBackground(String... args) {
 	       user = args[0];
-	       
+   
 	       if(user.equals("global"))
 	    	   user = "";
 	       
@@ -402,7 +409,9 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	       boolean result = false;
        
 		   try {
-			   if(user.equals("recent")) {
+			   if(user.equals("network")) {
+				   c = PinboardFeed.fetchNetworkRecent(mAccount.name, secretToken);
+			   } else if(user.equals("recent")) {
 				   c = PinboardFeed.fetchRecent();
 			   } else {
 				   c = PinboardFeed.fetchUserRecent(user, tag);

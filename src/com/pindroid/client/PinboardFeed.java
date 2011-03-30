@@ -40,6 +40,7 @@ public class PinboardFeed {
 
     public static final String FETCH_RECENT_URI = "http://feeds.pinboard.in/rss/recent/";
     public static final String FETCH_RECENT_USER_URI = "http://feeds.pinboard.in/rss";
+    public static final String FETCH_NETWORK_URI = "http://feeds.pinboard.in/rss/";
     
     /**
      * Retrieves a list of recent bookmarks for Pinboard.
@@ -95,6 +96,50 @@ public class PinboardFeed {
     			url += "/t:" + s;
     		}	
     	}
+
+        final HttpGet post = new HttpGet(url);
+        
+        Cursor bookmarkList = null;
+
+        final HttpResponse resp = HttpClientFactory.getThreadSafeClient().execute(post);
+        InputStream responseStream = resp.getEntity().getContent();
+
+        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+        	SaxFeedParser parser = new SaxFeedParser(responseStream);
+
+			bookmarkList = parser.parse();
+
+        } else {
+        	Log.e(TAG, "Server error in fetching network recent list");
+            throw new IOException();
+        }
+
+        return bookmarkList;
+    }
+    
+    /**
+     * Retrieves a list of recent bookmarks for a Pinboard users network.
+     * 
+     * @return The list of bookmarks received from the server.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
+     */
+    public static Cursor fetchNetworkRecent(String username, String secretToken)
+    	throws IOException, ParseException {
+    	
+    	String url = FETCH_RECENT_USER_URI;
+    	
+    	if(secretToken != null && secretToken != ""){
+    		url += "/secret:" + secretToken;
+    	}
+    	
+    	if(username != null && username != ""){
+    		url += "/u:" + username;
+    	}
+    	
+    	url += "/network/";
+    	
+    	Log.d("network", url);
 
         final HttpGet post = new HttpGet(url);
         
