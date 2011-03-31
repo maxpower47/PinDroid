@@ -66,6 +66,8 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	private String tagname = null;
 	private boolean unread = false;
 	
+	private LoadBookmarkFeedTask feedTask;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -150,14 +152,16 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				try{
 					setTitle(getString(R.string.browse_recent_bookmarks_title));
 
-					new LoadBookmarkFeedTask().execute("recent");
+					feedTask = new LoadBookmarkFeedTask();
+					feedTask.execute("recent");
 				}
 				catch(Exception e){}
 			} else if(username.equals("network")){
 					try{
 						setTitle(getString(R.string.browse_network_bookmarks_title));
 
-						new LoadBookmarkFeedTask().execute("network");
+						feedTask = new LoadBookmarkFeedTask();
+						feedTask.execute("network");
 					}
 					catch(Exception e){}
 				} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
@@ -174,7 +178,8 @@ public class BrowseBookmarks extends AppBaseListActivity {
 					}
 					setTitle(title);
 
-					new LoadBookmarkFeedTask().execute(username, tagname);
+					feedTask = new LoadBookmarkFeedTask();
+					feedTask.execute(username, tagname);
 				}
 				catch(Exception e){}
 			}
@@ -224,6 +229,14 @@ public class BrowseBookmarks extends AppBaseListActivity {
 		} else if(getIntent().hasExtra("username")){
 			username = getIntent().getStringExtra("username");
 		} else username = mAccount.name;
+	}
+	
+	@Override
+	public void onPause(){
+		super.onPause();
+		
+		if(feedTask != null)
+			feedTask.killProgress();
 	}
 	
 	@Override
@@ -386,6 +399,13 @@ public class BrowseBookmarks extends AppBaseListActivity {
         private String tag;
         private ProgressDialog progress;
         private Cursor c;
+        
+        public void killProgress(){
+        	if(progress != null && progress.isShowing())
+        		progress.dismiss();
+        	
+        	progress = null;
+        }
        
         protected void onPreExecute() {
 	        progress = new ProgressDialog(mContext);
@@ -427,7 +447,8 @@ public class BrowseBookmarks extends AppBaseListActivity {
         }
        
         protected void onPostExecute(Boolean result) {
-        	progress.dismiss();
+        	if(progress != null && progress.isShowing())
+        		progress.dismiss();
 
         	if(result) {
         		startManagingCursor(c);
