@@ -62,7 +62,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority,
         ContentProviderClient provider, SyncResult syncResult) {
-    	
+    	Log.d(TAG, "Beginning Sync");
         try {
             InsertBookmarks(account, syncResult);
         } catch (final ParseException e) {
@@ -74,6 +74,8 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
         } catch (final IOException e) {
             syncResult.stats.numIoExceptions++;
             Log.e(TAG, "IOException", e);
+        } finally {
+        	Log.d(TAG, "Finished Sync");
         }
     }
     
@@ -89,7 +91,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	
     	if(update.getLastUpdate() > lastUpdate) {
 	
-			Log.d("BookmarkSync", "In Bookmark Load");
+			Log.d(TAG, "In Bookmark Load");
 			final ArrayList<String> accounts = new ArrayList<String>();
 			accounts.add(account.name);
 			BookmarkManager.TruncateBookmarks(accounts, mContext, false);
@@ -111,7 +113,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
             editor.commit();
 
     	} else {
-    		Log.d("BookmarkSync", "No update needed.  Last update time before last sync.");
+    		Log.d(TAG, "No update needed.  Last update time before last sync.");
     	}
     }
     
