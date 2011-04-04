@@ -149,7 +149,7 @@ public class AppBaseListActivity extends ListActivity {
 	private void loadSecret(){
         secretToken = settings.getString(Constants.PREFS_SECRET_TOKEN, "");
 		
-		if(secretToken.equals("")){
+        if(secretToken.equals("") && mAccount != null){
 			new GetSecretTask().execute(new TaskArgs(mAccount, this));
 		}
 	}
