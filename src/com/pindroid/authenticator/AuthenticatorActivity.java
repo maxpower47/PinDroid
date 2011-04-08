@@ -137,7 +137,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
      */
     public void handleLogin(View view) {
         if (mRequestNewAccount) {
-            mUsername = mUsernameEdit.getText().toString();
+            mUsername = mUsernameEdit.getText().toString().trim();
         }
         mPassword = mPasswordEdit.getText().toString();
         
