@@ -91,13 +91,17 @@ public class AppBaseActivity extends Activity {
 			
 			return;
 		} else if(lastUpdate == 0) {
-	
-			Toast.makeText(this, getString(R.string.syncing_toast), Toast.LENGTH_LONG).show();
-			
+
 			if(mAccount == null || username == null)
 				loadAccounts();
 			
-			ContentResolver.requestSync(mAccount, BookmarkContentProvider.AUTHORITY, Bundle.EMPTY);
+			if(!ContentResolver.isSyncActive(mAccount, BookmarkContentProvider.AUTHORITY) &&
+				!ContentResolver.isSyncPending(mAccount, BookmarkContentProvider.AUTHORITY)) {
+				
+				Toast.makeText(this, getString(R.string.syncing_toast), Toast.LENGTH_LONG).show();
+				
+				ContentResolver.requestSync(mAccount, BookmarkContentProvider.AUTHORITY, Bundle.EMPTY);
+			}
 		} else {
 			loadAccounts();
 		}
