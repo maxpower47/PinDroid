@@ -427,7 +427,7 @@ public class PinboardApi {
     	final AccountManager am = AccountManager.get(context);
     	
 		if(account == null)
-			throw new throw new AuthenticationException();
+			throw new AuthenticationException();
 		
     	final String username = account.name;
     	String authtoken = null;
@@ -435,6 +435,9 @@ public class PinboardApi {
     	try {
 			authtoken = am.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, false);
 		} catch (OperationCanceledException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AuthenticatorException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
