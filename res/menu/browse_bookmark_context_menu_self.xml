@@ -32,6 +32,9 @@
 		android:id="@+id/menu_bookmark_context_read" 
 		android:title="@string/bookmark_context_read" />
 	<item 
+		android:id="@+id/menu_bookmark_context_markread" 
+		android:title="@string/bookmark_context_markread" />
+	<item 
 		android:id="@+id/menu_bookmark_context_edit" 
 		android:title="@string/bookmark_context_edit" />
 	<item 

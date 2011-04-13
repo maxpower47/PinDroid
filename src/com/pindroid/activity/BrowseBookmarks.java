@@ -284,6 +284,9 @@ public class BrowseBookmarks extends AppBaseListActivity {
 			case R.id.menu_bookmark_context_read:
 				readBookmark(b);
 				return true;
+			case R.id.menu_bookmark_context_markread:
+				markBookmark(b);
+				return true;
 		}
 		return false;
 	}
@@ -383,11 +386,16 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	}
 	
 	private void readBookmark(Bookmark b){
-    	if(isMyself() && b.getToRead() && markAsRead) {
+		if(markAsRead)
+			markBookmark(b);
+		startActivity(IntentHelper.ReadBookmark(b.getUrl()));
+	}
+	
+	private void markBookmark(Bookmark b){
+    	if(isMyself() && b.getToRead()) {
     		BookmarkTaskArgs unreadArgs = new BookmarkTaskArgs(b, mAccount, this);
     		new MarkReadBookmarkTask().execute(unreadArgs);
     	}
-		startActivity(IntentHelper.ReadBookmark(b.getUrl()));
 	}
 	
 	private void viewBookmark(Bookmark b) {

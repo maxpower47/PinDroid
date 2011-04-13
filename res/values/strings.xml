@@ -83,6 +83,7 @@
     <string name="bookmark_context_open">Open in browser</string>
     <string name="bookmark_context_view">View Details</string>
     <string name="bookmark_context_read">Read</string>
+    <string name="bookmark_context_markread">Mark as Read</string>
     <string name="bookmark_context_edit">Edit</string>
     <string name="bookmark_context_delete">Delete</string>
     <string name="bookmark_context_share">Share</string>
