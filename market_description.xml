@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+ -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<string name="market_description">
+A client app for the Pinboard bookmarking service. This is a port of DeliciousDroid.
+
+-Add, edit, view, and delete bookmarks
+-Sync bookmarks and tags
+-Home screen widget and live folders
+-Search titles, tags, and notes
+-Three languages (so far)
+-Open source: https://github.com/maxpower47/PinDroid
+-Bug reports: http://code.google.com/p/pindroid
+
+**************
+PLEASE, if you have suggestions or bug reports let me know by email, twitter, or open an issue. PLEASE don't leave them in the comments. I can't respond to comments to ask follow up questions or troubleshoot. Thanks.
+**************
+
+Coming soon (waiting on API support from Pinboard):
+
+-Notes support (add, edit, view)
+-Placemarks support (add, edit, view)
+-More efficient syncing (all syncs are full replacement currently)
+-Support for bookmark stars
+-Support for viewing and syncing your network contacts
+
+Follow PinDroid on Twitter: @PinDroid
+</string>
+</resources>
