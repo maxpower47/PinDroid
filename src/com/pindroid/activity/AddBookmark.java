@@ -60,6 +60,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pindroid.action.AddBookmarkTask;
 
@@ -154,24 +155,27 @@ public class AddBookmark extends AppBaseActivity {
 			} else if(Intent.ACTION_SEND.equals(intent.getAction())){
 				Bookmark b = new Bookmark();
 				
-				b.setUrl(StringUtils.getUrl(intent.getStringExtra(Intent.EXTRA_TEXT)));
+				String url = StringUtils.getUrl(intent.getStringExtra(Intent.EXTRA_TEXT));
+				b.setUrl(url);
+				
+				if(url.equals("")) {
+					Toast.makeText(this, R.string.add_bookmark_invalid_url, Toast.LENGTH_LONG).show();
+				}
+				
 				b.setDescription(intent.getStringExtra(Constants.EXTRA_DESCRIPTION));
 				b.setNotes(intent.getStringExtra(Constants.EXTRA_NOTES));
 				b.setTagString(intent.getStringExtra(Constants.EXTRA_TAGS));
 				b.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, privateDefault));
 				b.setToRead(intent.getBooleanExtra(Constants.EXTRA_TOREAD, toreadDefault));
 				error = intent.getBooleanExtra(Constants.EXTRA_ERROR, false);
-				
-
-				
+	
 				try{
 					Bookmark old = BookmarkManager.GetByUrl(b.getUrl(), this);
 					b = old.copy();
 				} catch(Exception e) {
 					
 				}
-				
-				
+
 				mEditUrl.setText(b.getUrl());
 				
 				if(b.getDescription() != null)
@@ -271,13 +275,20 @@ public class AddBookmark extends AppBaseActivity {
 	
     private void save() {
     	
+    	String url = mEditUrl.getText().toString();
+    	String description = mEditDescription.getText().toString();
+    	
+    	if(url.equals("")) {
+    		Toast.makeText(this, R.string.add_bookmark_blank_url, Toast.LENGTH_LONG).show();
+    		return;
+    	}	
+    	
     	if(titleTask != null)
     		titleTask.cancel(true);
     	
     	if(tagTask != null)
     		tagTask.cancel(true);
 
-		String url = mEditUrl.getText().toString();
 		
 		if(!url.startsWith("http")){
 			url = "http://" + url;
@@ -304,7 +315,7 @@ public class AddBookmark extends AppBaseActivity {
 		}
 			
 		
-		bookmark = new Bookmark(url, mEditDescription.getText().toString(), 
+		bookmark = new Bookmark(url, description, 
 				mEditNotes.getText().toString(), tagstring.trim(),
 				!mPrivate.isChecked(), mToRead.isChecked(), updateTime);
 		

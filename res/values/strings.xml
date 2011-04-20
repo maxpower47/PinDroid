@@ -137,9 +137,12 @@
     <string name="add_bookmark_notification_error_title">PinDroid Error</string>
     <string name="add_bookmark_notification_error_message">Error Saving Bookmark</string>
     
-    <string name="delete_bookmark_success_msg">Bookmark Deleted Successfully</string>
-    <string name="delete_bookmark_error_msg">Error</string>
+    <string name="add_bookmark_invalid_url">Error: Blank or invalid URL</string>
+    <string name="add_bookmark_blank_url">Error: Blank URL</string>
+    <string name="add_bookmark_blank_description">Error: Blank Description</string>
     
+    <string name="delete_bookmark_success_msg">Bookmark Deleted Successfully</string>
+    <string name="delete_bookmark_error_msg">Error</string>  
     
     <!-- Searching -->
     <string name="main_search_label">Pinboard</string>

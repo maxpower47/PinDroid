@@ -35,10 +35,15 @@ public class StringUtils {
     	
     	Pattern pattern = Pattern.compile("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
     	
-    	Matcher matcher = pattern.matcher(s);
-    	
-    	if(matcher.find()) {
-    		result = s.substring(matcher.start(), matcher.end());    		
+    	try{
+	    	Matcher matcher = pattern.matcher(s);
+	    	
+	    	if(matcher.find()) {
+	    		result = s.substring(matcher.start(), matcher.end());    		
+	    	}
+    	}
+    	catch(Exception e){
+    		result = "";
     	}
     	
     	return result;
