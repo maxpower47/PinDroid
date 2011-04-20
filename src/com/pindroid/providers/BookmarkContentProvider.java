@@ -329,11 +329,11 @@ public class BookmarkContentProvider extends ContentProvider {
 			int descColumn = c.getColumnIndex(Bookmark.Description);
 			int idColumn = c.getColumnIndex(BaseColumns._ID);
 			int urlColumn = c.getColumnIndex(Bookmark.Url);
+			
+	    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+	    	String defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
 
 			do {
-		    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getContext());
-		    	String defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
-		    	
 		    	Uri data;
 		    	Uri.Builder builder = new Uri.Builder();
 		    	
@@ -343,7 +343,6 @@ public class BookmarkContentProvider extends ContentProvider {
 		        	String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(c.getString(urlColumn));
 		        	data = Uri.parse(readUrl);
 		    	} else {
-		    	
 		    		builder.scheme(Constants.CONTENT_SCHEME);
 		    		builder.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
 		    		builder.appendEncodedPath("bookmarks");
