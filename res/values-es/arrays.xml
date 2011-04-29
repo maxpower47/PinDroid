@@ -12,9 +12,9 @@
     <item>100</item>
   </string-array>
   <string-array name="pref_view_bookmark_default_action_entries">
-    <item>Avaa selaimessa</item>
-    <item>Näytä tiedot</item>
-    <item>Lue</item>
+    <item>Abrir en el navegador</item>
+    <item>Ver detalles</item>
+    <item>Leer</item>
   </string-array>
   <string-array name="pref_view_bookmark_default_action_values">
     <item>browser</item>
@@ -22,12 +22,12 @@
     <item>read</item>
   </string-array>
   <string-array name="pref_synctime_entries">
-    <item>5 min</item>
-    <item>15 min</item>
-    <item>30 min</item>
-    <item>1 tunti</item>
-    <item>12 tuntia</item>
-    <item>24 tuntia</item>
+    <item>5 minutos</item>
+    <item>15 minutos</item>
+    <item>30 minutos</item>
+    <item>1 hora</item>
+    <item>12 horas</item>
+    <item>24 horas</item>
   </string-array>
   <string-array name="pref_synctime_values">
     <item>5</item>

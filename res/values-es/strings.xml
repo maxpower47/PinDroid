@@ -34,7 +34,7 @@
   <string name="bookmark_context_open">Abrir en el navegador</string>
   <string name="bookmark_context_view">Ver detalles</string>
   <string name="bookmark_context_read">Leer</string>
-  <string name="bookmark_context_markread">Mark as Read</string>
+  <string name="bookmark_context_markread">Marcar como leído</string>
   <string name="bookmark_context_edit">Editar</string>
   <string name="bookmark_context_delete">Eliminar</string>
   <string name="bookmark_context_share">Compartir</string>
@@ -130,7 +130,7 @@
   <string name="pref_searchicons_summary">Mostrar iconos en sugerencias de búsqueda.</string>
   <string name="pref_save_private_default_title">Privada por defecto</string>
   <string name="pref_save_private_default_key">pref_save_private_default</string>
-  <string name="pref_save_private_default_summary">Set new bookmarks as private by default.</string>
+  <string name="pref_save_private_default_summary">Establecer nuevos marcadores como privados por defecto.</string>
   <string name="pref_save_toread_default_title">No léido por defecto</string>
   <string name="pref_save_toread_default_key">pref_save_toread_default</string>
   <string name="pref_save_toread_default_summary">Establecer los nuevos marcadores como no leídos por defecto.</string>
@@ -142,7 +142,7 @@
   <string name="pref_forcesync_summary">Iniciar sincronización de marcador.</string>
   <string name="pref_license_title">Licencia</string>
   <string name="pref_license_key">pref_license</string>
-  <string name="pref_license_summary">Licensed under the GPL v3</string>
+  <string name="pref_license_summary">Licenciado bajo el GPL v3</string>
   <string name="pref_help_title">Ayuda</string>
   <string name="pref_help_key">pref_help</string>
   <string name="pref_help_summary">Ayuda sobre el uso de PinDroid</string>
@@ -157,16 +157,16 @@
   <string name="about_text">
     &lt;html&gt; 
     &lt;body style="background-color:#000000;color:#BEBEBE"&gt;
-    	PinDroid is a port of DeliciousDroid for the Pinboard bookmarking system.&lt;br/&gt;&lt;br/&gt;
-    	Developed, maintained, and supported by Matt Schmidt&lt;br/&gt;&lt;br/&gt;
-    	Find a bug or have a suggestion for a new feature?  Open an issue at &lt;a href=\'http://code.google.com/p/pindroid/issues\'&gt;http://code.google.com/p/pindroid/issues&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;
-    	Or, drop me a line on Twitter @PinDroid&lt;br/&gt;&lt;br/&gt;
-    	&lt;b&gt;Known Issues:&lt;/b&gt;
+    	PinDroid es una aplicación de DeliciousDroid para el sistema de marcadores de Pinboard.&lt;br/&gt;&lt;br/&gt;
+    	Desarrollo, mantenimiento y soporte técnico por parte de Matt Schmidt&lt;br/&gt;&lt;br/&gt;
+    	¿Has encontrado un error o tienes una sugerencia?  Abre un tema nuevo en: &lt;a href=\'http://code.google.com/p/pindroid/issues\'&gt;http://code.google.com/p/pindroid/issues&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;
+    	O bien, dejame un mensaje en Twitter: @PinDroid&lt;br/&gt;&lt;br/&gt;
+    	&lt;b&gt;Temas populares:&lt;/b&gt;
     	&lt;ul&gt;
-     		&lt;li&gt;Only a single Pinboard account is currently supported. &lt;/li&gt;
-     		&lt;li&gt;Certain features from DeliciousDroid have not been ported yet due to limitations in Pinboards API, including contact syncing and viewing network bookmark lists. &lt;/li&gt;
+     		&lt;li&gt;Solo soporta una cuenta de Pinboard en estos momentos. &lt;/li&gt;
+     		&lt;li&gt;Algunas funciones de DeliciousDroid no se han adaptado todavía debido a las limitaciones de Pinboards API, esto incluye la sincronización de contacto y la visualización de la red de listas de marcadores. &lt;/li&gt;
     	&lt;/ul&gt;&lt;br/&gt;
-    	Read view powered by Instapaper
+    	Visualización de lectura con tecnología de Instapaper
     &lt;/body&gt;
     &lt;/html&gt;
     </string>
