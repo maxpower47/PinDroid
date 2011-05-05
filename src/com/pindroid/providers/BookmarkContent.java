@@ -86,7 +86,7 @@ public class BookmarkContent {
         }
         
         public String getNotes(){
-        	return mNotes;
+        	return mNotes == null ? "" : mNotes;
         }
         
         public void setNotes(String notes) {
