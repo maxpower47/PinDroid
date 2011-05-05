@@ -194,7 +194,8 @@
     <string name="menu_view_sendbookmark_title">Share</string>
     
     <!-- Widget -->
-    <string name="search_widget_label">PinDroid</string>
+    <string name="search_widget_label">PinDroid 4x1</string>
+    <string name="unread_widget_label">PinDroid Unread 1x1</string>
     
     <!-- Preferences -->
     <string name="preferences_title">PinDroid Settings</string>
