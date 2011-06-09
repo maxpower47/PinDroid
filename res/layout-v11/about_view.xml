@@ -21,38 +21,13 @@
  * USA
  */
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" 
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical">
-	<LinearLayout
-		android:layout_width="fill_parent" 
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:paddingTop="10dip"
-		android:paddingBottom="10dip">
-		<ImageView
-			android:id="@+id/about_icon"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:src="@drawable/ic_main"
-			android:layout_marginLeft="10dip"
-			android:paddingTop="2dip" />
-		<TextView
-			android:id="@+id/about_title_view"
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			android:textSize="24sp"
-			android:layout_gravity="center"
-			android:layout_marginLeft="20dip"
-			android:text="@string/about_title"/>
-	</LinearLayout>
-	<WebView
-		android:id="@+id/about_text_view"
-		android:layout_height="wrap_content"
-		android:layout_width="fill_parent"
-		android:textSize="14sp"
-		android:background="#000000"
-		android:paddingLeft="10dip"
-		android:paddingTop="20dip" />
+	<fragment class="com.pindroid.activity.AboutFragment"
+		android:id="@+id/about_fragment"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent" >
+	</fragment>
 </LinearLayout>
