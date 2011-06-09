@@ -45,6 +45,10 @@
 	<PreferenceCategory 
 		android:title="@string/pref_cat_sync_title">
 		<Preference
+			android:title="@string/pref_accountsettings_title"
+			android:summary="@string/pref_accountsettings_summary"
+			android:key="@string/pref_accountsettings_key" />
+		<Preference
 			android:title="@string/pref_forcesync_title"
 			android:summary="@string/pref_forcesync_summary"
 			android:key="@string/pref_forcesync_key" />

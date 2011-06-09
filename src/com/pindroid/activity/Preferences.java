@@ -36,6 +36,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -75,6 +76,17 @@ public class Preferences extends PreferenceActivity {
         		Toast.makeText(mContext, res.getString(R.string.syncing_toast), Toast.LENGTH_LONG).show();
         		ContentResolver.requestSync(null, BookmarkContentProvider.AUTHORITY, Bundle.EMPTY);
         		
+            	return true;
+            }
+        });
+        
+        Preference accountPref = (Preference) findPreference("pref_accountsettings");
+        accountPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        	public boolean onPreferenceClick(Preference preference) {
+        		Intent i = new Intent(Settings.ACTION_SYNC_SETTINGS);
+        		i.putExtra(Settings.EXTRA_AUTHORITIES, new String[] {BookmarkContentProvider.AUTHORITY});
+        		
+        		mContext.startActivity(i);
             	return true;
             }
         });
