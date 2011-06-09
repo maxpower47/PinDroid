@@ -59,7 +59,7 @@ public class BrowseTagsFragment extends ListFragment
 		else base.username = base.mAccount.name;
 
 		if(Intent.ACTION_VIEW.equals(action) && data.getLastPathSegment().equals("bookmarks")) {
-			Intent i = new Intent();
+			Intent i = new Intent(base, BrowseBookmarks.class);
 			i.setAction(Intent.ACTION_VIEW);
 			i.addCategory(Intent.CATEGORY_DEFAULT);
 			i.setData(data);
@@ -97,7 +97,7 @@ public class BrowseTagsFragment extends ListFragment
 			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
 			    	
-					Intent i = new Intent();
+					Intent i = new Intent(base, BrowseBookmarks.class);
 					i.setAction(Intent.ACTION_VIEW);
 					i.addCategory(Intent.CATEGORY_DEFAULT);
 	

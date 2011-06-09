@@ -273,7 +273,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 				return true;
 				
 			case R.id.menu_bookmark_context_add:				
-				startActivity(IntentHelper.AddBookmark(b.getUrl(), mAccount.name));
+				startActivity(IntentHelper.AddBookmark(b.getUrl(), mAccount.name, this));
 				return true;
 				
 			case R.id.menu_bookmark_context_share:
@@ -399,7 +399,7 @@ public class BrowseBookmarks extends AppBaseListActivity {
 	}
 	
 	private void viewBookmark(Bookmark b) {
-		startActivity(IntentHelper.ViewBookmark(b, username));
+		startActivity(IntentHelper.ViewBookmark(b, username, this));
 	}
 	
     public class LoadBookmarkFeedTask extends AsyncTask<String, Integer, Boolean>{

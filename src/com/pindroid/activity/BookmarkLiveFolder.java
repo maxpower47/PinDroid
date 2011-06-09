@@ -51,7 +51,7 @@ public class BookmarkLiveFolder extends Activity {
 			mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		}
         
-        Intent tagIntent = new Intent();
+        Intent tagIntent = new Intent(this, BrowseTags.class);
         tagIntent.setAction(Intent.ACTION_PICK);
         tagIntent.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();

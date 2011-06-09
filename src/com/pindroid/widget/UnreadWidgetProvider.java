@@ -3,6 +3,7 @@ package com.pindroid.widget;
 import com.pindroid.R;
 import com.pindroid.Constants;
 
+import com.pindroid.activity.BrowseBookmarks;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContentProvider;
 
@@ -36,7 +37,7 @@ public class UnreadWidgetProvider extends AppWidgetProvider {
         for (int i = 0; i < n; i++) {
             int appWidgetId = appWidgetIds[i];
     		
-    		Intent unreadIntent = new Intent();
+    		Intent unreadIntent = new Intent(context, BrowseBookmarks.class);
     		unreadIntent.setAction(Intent.ACTION_VIEW);
     		unreadIntent.addCategory(Intent.CATEGORY_DEFAULT);
     		Uri.Builder data = new Uri.Builder();

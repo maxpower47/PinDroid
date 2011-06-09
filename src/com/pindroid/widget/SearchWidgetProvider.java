@@ -4,6 +4,8 @@ import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.action.IntentHelper;
 
+import com.pindroid.activity.BrowseBookmarks;
+import com.pindroid.activity.BrowseTags;
 import com.pindroid.activity.Main;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContentProvider;
@@ -38,7 +40,7 @@ public class SearchWidgetProvider extends AppWidgetProvider {
         for (int i = 0; i < n; i++) {
             int appWidgetId = appWidgetIds[i];
 
-            Intent bookmarkIntent = new Intent();
+            Intent bookmarkIntent = new Intent(context, BrowseBookmarks.class);
             bookmarkIntent.setAction(Intent.ACTION_VIEW);
             bookmarkIntent.addCategory(Intent.CATEGORY_DEFAULT);
     		Uri.Builder bookmarkData = new Uri.Builder();
@@ -47,7 +49,7 @@ public class SearchWidgetProvider extends AppWidgetProvider {
     		bookmarkData.appendEncodedPath("bookmarks");
     		bookmarkIntent.setData(bookmarkData.build());
     		
-    		Intent tagIntent = new Intent();
+    		Intent tagIntent = new Intent(context, BrowseTags.class);
     		tagIntent.setAction(Intent.ACTION_VIEW);
     		tagIntent.addCategory(Intent.CATEGORY_DEFAULT);
     		Uri.Builder tagData = new Uri.Builder();
@@ -59,9 +61,9 @@ public class SearchWidgetProvider extends AppWidgetProvider {
     		Intent searchIntent = new Intent(context, Main.class);
     		searchIntent.setAction(Intent.ACTION_SEARCH);
     		
-    		Intent addIntent = IntentHelper.AddBookmark(null, username);
+    		Intent addIntent = IntentHelper.AddBookmark(null, username, context);
     		
-    		Intent unreadIntent = new Intent();
+    		Intent unreadIntent = new Intent(context, BrowseBookmarks.class);
     		unreadIntent.setAction(Intent.ACTION_VIEW);
     		unreadIntent.addCategory(Intent.CATEGORY_DEFAULT);
     		Uri.Builder data = new Uri.Builder();
