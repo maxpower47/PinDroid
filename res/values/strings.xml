@@ -210,6 +210,10 @@
     <string name="pref_cat_save_title">Save Settings</string>
     <string name="pref_cat_help_title">Help</string>
     
+    <string name="pref_accountsettings_title">Account Settings</string>
+    <string name="pref_accountsettings_key">pref_accountsettings</string>
+    <string name="pref_accountsettings_summary">Manage your Pinboard account on this device.</string>
+    
     <string name="pref_synctime_title">Sync Frequency</string>
     <string name="pref_synctime_key">pref_synctime</string>
     <string name="pref_synctime_summary">How often to sync bookmarks.</string>
