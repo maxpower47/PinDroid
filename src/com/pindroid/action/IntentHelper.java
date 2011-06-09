@@ -2,10 +2,13 @@ package com.pindroid.action;
 
 import java.net.URLEncoder;
 
+import com.pindroid.activity.AddBookmark;
+import com.pindroid.activity.ViewBookmark;
 import com.pindroid.Constants;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.BookmarkContentProvider;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -32,8 +35,8 @@ public class IntentHelper {
     	return sendIntent;
 	}
 	
-	public static Intent AddBookmark(String url, String account) {
-		Intent addBookmark = new Intent();
+	public static Intent AddBookmark(String url, String account, Context context) {
+		Intent addBookmark = new Intent(context, AddBookmark.class);
 		addBookmark.setAction(Intent.ACTION_SEND);
 		if(url != null)
 			addBookmark.putExtra(Intent.EXTRA_TEXT, url);
@@ -47,9 +50,9 @@ public class IntentHelper {
 		return addBookmark;
 	}
 	
-	public static Intent ViewBookmark(Bookmark b, String account) {
+	public static Intent ViewBookmark(Bookmark b, String account, Context context) {
 		
-		Intent viewBookmark = new Intent();
+		Intent viewBookmark = new Intent(context, ViewBookmark.class);
 		viewBookmark.setAction(Intent.ACTION_VIEW);
 		viewBookmark.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();

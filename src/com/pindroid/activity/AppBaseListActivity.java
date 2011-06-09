@@ -171,7 +171,7 @@ public class AppBaseListActivity extends ListActivity {
 	    // Handle item selection
 	    switch (item.getItemId()) {
 	    case R.id.menu_addbookmark:
-			startActivity(IntentHelper.AddBookmark(null, mAccount.name));
+			startActivity(IntentHelper.AddBookmark(null, mAccount.name, this));
 			return true;
 	    case R.id.menu_search:
 	    	onSearchRequested();

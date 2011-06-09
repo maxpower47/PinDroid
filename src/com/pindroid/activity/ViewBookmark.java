@@ -211,7 +211,7 @@ public class ViewBookmark extends AppBaseActivity{
 	
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {
-    		Intent i = new Intent();
+    		Intent i = new Intent(mContext, BrowseBookmarks.class);
     		i.setAction(Intent.ACTION_VIEW);
     		i.addCategory(Intent.CATEGORY_DEFAULT);
     		Uri.Builder data = new Uri.Builder();
@@ -229,7 +229,7 @@ public class ViewBookmark extends AppBaseActivity{
     
     TagSpan.OnTagClickListener userTagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {
-    		Intent i = new Intent();
+    		Intent i = new Intent(mContext, BrowseBookmarks.class);
     		i.setAction(Intent.ACTION_VIEW);
     		i.addCategory(Intent.CATEGORY_DEFAULT);
     		Uri.Builder data = new Uri.Builder();
@@ -247,7 +247,7 @@ public class ViewBookmark extends AppBaseActivity{
     
     AccountSpan.OnAccountClickListener accountOnClickListener = new AccountSpan.OnAccountClickListener() {
         public void onAccountClick(String account) {
-    		Intent i = new Intent();
+    		Intent i = new Intent(mContext, BrowseBookmarks.class);
     		i.setAction(Intent.ACTION_VIEW);
     		i.addCategory(Intent.CATEGORY_DEFAULT);
     		Uri.Builder data = new Uri.Builder();

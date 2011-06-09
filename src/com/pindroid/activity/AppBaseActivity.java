@@ -169,7 +169,7 @@ public class AppBaseActivity extends Activity {
 	    // Handle item selection
 	    switch (item.getItemId()) {
 	    case R.id.menu_addbookmark:
-			startActivity(IntentHelper.AddBookmark(null, mAccount.name));
+			startActivity(IntentHelper.AddBookmark(null, mAccount.name, this));
 			return true;
 	    case R.id.menu_settings:
 			Intent prefs = new Intent(this, Preferences.class);
