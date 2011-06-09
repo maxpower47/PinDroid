@@ -51,7 +51,7 @@
         	<intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
         	</intent-filter>
-        	<meta-data android:name="android.app.searchable" android:resource="@xml/main_searchable"/>
+        	<meta-data android:name="android.app.searchable" android:resource="@xml/global_searchable"/>
         </activity>
         <activity android:name=".activity.BrowseTags">
         	<intent-filter>
