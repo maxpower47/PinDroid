@@ -22,13 +22,17 @@
 package com.pindroid.activity;
 
 import com.pindroid.R;
+import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment;
+import com.pindroid.fragment.BrowseBookmarksFragment;
+import com.pindroid.providers.BookmarkContent.Bookmark;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 
 public class BrowseBookmarks extends FragmentBaseActivity {
 	
@@ -40,12 +44,20 @@ public class BrowseBookmarks extends FragmentBaseActivity {
 		Intent intent = getIntent();
 
 		Uri data = intent.getData();
+		String path = "";
 
 		if(data != null) {
+			path = data.getPath();
+			
 			if(data.getUserInfo() != "") {
 				username = data.getUserInfo();
 			} else username = mAccount.name;
 		}
+		
+		if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
+			viewBookmark(Integer.parseInt(data.getLastPathSegment()));
+			finish();
+		} 
 		
 		if(!isMyself()) {
 			FragmentManager fm = getSupportFragmentManager();
@@ -56,4 +68,27 @@ public class BrowseBookmarks extends FragmentBaseActivity {
 			t.commit();
 		}
     }
+	
+	private void viewBookmark(int id) {
+		Bookmark b = new Bookmark(id);
+		viewBookmark(b);
+	}
+	
+	private void viewBookmark(Bookmark b) {
+		startActivity(IntentHelper.ViewBookmark(b, username, this));
+	}
+	
+	@Override
+	public boolean onSearchRequested() {
+
+		if(isMyself()) {
+			BrowseBookmarksFragment frag = (BrowseBookmarksFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
+
+			return frag.onSearchRequested();
+		} else {
+			BrowseBookmarkFeedFragment frag = (BrowseBookmarkFeedFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
+
+			return frag.onSearchRequested();
+		}
+	}
 }

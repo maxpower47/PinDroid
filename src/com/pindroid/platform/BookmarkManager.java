@@ -275,10 +275,10 @@ public class BookmarkManager {
 
 			selection = TextUtils.join(" AND ", queryList) +
 				" AND " + Bookmark.Account + "=? AND " +
-				"(" + Bookmark.Tags + " LIKE '% " + tagname + " %' OR " +
-				Bookmark.Tags + " LIKE '% " + tagname + "' OR " +
-				Bookmark.Tags + " LIKE '" + tagname + " %' OR " +
-				Bookmark.Tags + " = '" + tagname + "')";
+				"(" + Bookmark.Tags + " LIKE ? OR " +
+				Bookmark.Tags + " LIKE ? OR " +
+				Bookmark.Tags + " LIKE ? OR " +
+				Bookmark.Tags + " = ?)";
 			
 			selectionlist.add(username);
 			selectionlist.add("% " + tagname + " %");
