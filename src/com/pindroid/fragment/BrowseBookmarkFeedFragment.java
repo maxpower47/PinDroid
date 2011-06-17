@@ -21,31 +21,29 @@
 
 package com.pindroid.fragment;
 
+import java.io.IOException;
+import java.text.ParseException;
+
 import com.pindroid.R;
-import com.pindroid.Constants;
-import com.pindroid.action.BookmarkTaskArgs;
-import com.pindroid.action.DeleteBookmarkTask;
 import com.pindroid.action.IntentHelper;
-import com.pindroid.action.MarkReadBookmarkTask;
-import com.pindroid.activity.AddBookmark;
 import com.pindroid.activity.FragmentBaseActivity;
+import com.pindroid.client.PinboardFeed;
 import com.pindroid.listadapter.BookmarkViewBinder;
 import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
+import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,16 +54,14 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.support.v4.widget.SimpleCursorAdapter;
 
-public class BrowseBookmarksFragment extends ListFragment 
+public class BrowseBookmarkFeedFragment extends ListFragment 
 	implements LoaderManager.LoaderCallbacks<Cursor> {
 	
 	private SimpleCursorAdapter mAdapter;
 	private FragmentBaseActivity base;
 	
-	private String sortfield = Bookmark.Time + " DESC";
 
 	private String tagname = null;
-	private boolean unread = false;
 	private Intent intent = null;
 	String path = null;
 	
@@ -74,7 +70,7 @@ public class BrowseBookmarksFragment extends ListFragment
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		
+
 		base = (FragmentBaseActivity)getActivity();
 		intent = base.getIntent();
 		
@@ -97,15 +93,15 @@ public class BrowseBookmarksFragment extends ListFragment
 				
 				path = data.getPath();
 				tagname = data.getQueryParameter("tagname");
-				unread = data.getQueryParameter("unread") != null;
-				
-		    	if(!data.getScheme().equals("content")) {
-		    		openBookmarkInBrowser(new Bookmark(data.toString()));
-		    		base.finish();
-		    	}
 			}
+			
+	    	if(!data.getScheme().equals("content")) {
+	    		openBookmarkInBrowser(new Bookmark(data.toString()));
+	    		base.finish();
+	    	}
 	    	
 	    	getLoaderManager().initLoader(0, null, this);
+	    	getLoaderManager().getLoader(0).startLoading();
 	    	
 			lv = getListView();
 			lv.setTextFilterEnabled(true);
@@ -167,81 +163,20 @@ public class BrowseBookmarksFragment extends ListFragment
 			case R.id.menu_bookmark_context_view:				
 				viewBookmark(b);
 				return true;
-			case R.id.menu_bookmark_context_edit:
-				Intent editBookmark = new Intent(base, AddBookmark.class);
-				editBookmark.setAction(Intent.ACTION_EDIT);
-				Uri.Builder data = new Uri.Builder();
-				data.scheme(Constants.CONTENT_SCHEME);
-				data.encodedAuthority(base.mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
-				data.appendEncodedPath("bookmarks");
-				data.appendEncodedPath(Integer.toString(b.getId()));
-				editBookmark.setData(data.build());
-				startActivity(editBookmark);
+			case R.id.menu_bookmark_context_add:				
+				startActivity(IntentHelper.AddBookmark(b.getUrl(), base.mAccount.name, base));
 				return true;
-			case R.id.menu_bookmark_context_delete:
-				BookmarkTaskArgs args = new BookmarkTaskArgs(b, base.mAccount, base);	
-				new DeleteBookmarkTask().execute(args);
+			case R.id.menu_bookmark_context_read:
+				readBookmark(b);
 				return true;
 			case R.id.menu_bookmark_context_share:
 		    	Intent sendIntent = IntentHelper.SendBookmark(b.getUrl(), b.getDescription());
 		    	startActivity(Intent.createChooser(sendIntent, getString(R.string.share_chooser_title)));
 				return true;
-			case R.id.menu_bookmark_context_read:
-				readBookmark(b);
-				return true;
-			case R.id.menu_bookmark_context_markread:
-				markBookmark(b);
-				return true;
 		}
 		return false;
 	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
 		
-		inflater.inflate(R.menu.browse_bookmark_menu, menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		boolean result = false;
-		
-	    switch (item.getItemId()) {
-		    case R.id.menu_bookmark_sort_date_asc:
-		    	sortfield = Bookmark.Time + " ASC";
-				result = true;
-				break;
-		    case R.id.menu_bookmark_sort_date_desc:			
-		    	sortfield = Bookmark.Time + " DESC";
-		    	result = true;
-		    	break;
-		    case R.id.menu_bookmark_sort_description_asc:			
-		    	sortfield = Bookmark.Description + " ASC";
-		    	result = true;
-		    	break;
-		    case R.id.menu_bookmark_sort_description_desc:			
-		    	sortfield = Bookmark.Description + " DESC";
-		    	result = true;
-		    	break;
-		    case R.id.menu_bookmark_sort_url_asc:			
-		    	sortfield = Bookmark.Url + " ASC";
-		    	result = true;
-		    	break;
-		    case R.id.menu_bookmark_sort_url_desc:			
-		    	sortfield = Bookmark.Url + " DESC";
-		    	result = true;
-		    	break;
-	    }
-	    
-	    if(result) {
-	    	getLoaderManager().restartLoader(0, null, this);
-	    } else result = super.onOptionsItemSelected(item);
-	    
-	    return result;
-	}
-	
 	private void openBookmarkInBrowser(Bookmark b) {
     	String url = b.getUrl();
     	
@@ -252,64 +187,39 @@ public class BrowseBookmarksFragment extends ListFragment
 		startActivity(IntentHelper.OpenInBrowser(url));
 	}
 	
-	private void readBookmark(Bookmark b){
-		if(base.markAsRead)
-			markBookmark(b);
-		startActivity(IntentHelper.ReadBookmark(b.getUrl()));
-	}
-	
-	private void markBookmark(Bookmark b){
-    	if(base.isMyself() && b.getToRead()) {
-    		BookmarkTaskArgs unreadArgs = new BookmarkTaskArgs(b, base.mAccount, base);
-    		new MarkReadBookmarkTask().execute(unreadArgs);
-    	}
-	}
-	
 	private void viewBookmark(Bookmark b) {
 		startActivity(IntentHelper.ViewBookmark(b, base.username, base));
+	}
+	
+	private void readBookmark(Bookmark b){
+		startActivity(IntentHelper.ReadBookmark(b.getUrl()));
 	}
     
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
-    		Bundle searchData = intent.getBundleExtra(SearchManager.APP_DATA);
-    		
-    		if(searchData != null) {
-    			tagname = searchData.getString("tagname");
-    			base.username = searchData.getString("username");
-    			unread = searchData.getBoolean("unread");
-    		}
-    		
-    		if(intent.hasExtra("username")) {
-    			base.username = intent.getStringExtra("username");
-    		}
-    		
-    		String query = intent.getStringExtra(SearchManager.QUERY);
-    		
-    		if(unread) {
-    			base.setTitle(getString(R.string.unread_search_results_title, query));
-    		} else base.setTitle(getString(R.string.bookmark_search_results_title, query));
-    		
-			return BookmarkManager.SearchBookmarks(query, tagname, unread, base.username, base);
-		}  else if(path.equals("/bookmarks")) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			base.setTitle(getString(R.string.search_results_global_tag_title, query));
+			return new LoaderDrone(base, "global", query);
+		} else if(base.username.equals("recent")) {
+			base.setTitle(getString(R.string.browse_recent_bookmarks_title));
+			return new LoaderDrone(base, "recent", null);
+		} else if(base.username.equals("network")) {
+			base.setTitle(getString(R.string.browse_network_bookmarks_title));
+			return new LoaderDrone(base, "network", null);
+		} else {
+			String title = "";
 
-    		String title = "";
-    		
-    		if(unread && tagname != null && tagname != "") {
-    			title = getString(R.string.browse_my_unread_bookmarks_tagged_title, tagname);
-    		} else if(unread && (tagname == null || tagname.equals(""))) {
-    			title = getString(R.string.browse_my_unread_bookmarks_title);
-    		} else if(tagname != null && tagname != "") {
-    			title = getString(R.string.browse_my_bookmarks_tagged_title, tagname);
-    		} else {
-    			title = getString(R.string.browse_my_bookmarks_title);
-    		}
-    		
+			if(tagname != null && tagname != "") {
+				title = getString(R.string.browse_user_bookmarks_tagged_title, base.username, tagname);
+			} else {
+				title = getString(R.string.browse_user_bookmarks_title, base.username);
+			}
 			base.setTitle(title);
-
-			return BookmarkManager.GetBookmarks(base.username, tagname, unread, sortfield, base);
+			
+			return new LoaderDrone(base, base.username, tagname);
 		}
-		return new CursorLoader(base);
+
 	}
 	
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -319,4 +229,47 @@ public class BrowseBookmarksFragment extends ListFragment
 	public void onLoaderReset(Loader<Cursor> loader) {
 	    mAdapter.swapCursor(null);
 	}
+	
+	public static class LoaderDrone extends AsyncTaskLoader<Cursor> {
+        
+		private String user = "";
+		private String tag = "";
+
+		private FragmentBaseActivity base = null;
+		
+        public LoaderDrone(Context context, String u, String t) {
+        	super(context);
+        	
+        	user = u;
+            tag = t;
+            base = (FragmentBaseActivity)context;
+        	
+            onForceLoad();
+        }
+
+        @Override
+        public Cursor loadInBackground() {
+            Cursor results = null;
+            
+ 	       if(user.equals("global"))
+ 	    	   user = "";
+        
+ 		   try {
+ 			   if(user.equals("network")) {
+ 				   results = PinboardFeed.fetchNetworkRecent(base.mAccount.name, base.secretToken);
+ 			   } else if(user.equals("recent")) {
+ 				  results = PinboardFeed.fetchRecent();
+ 			   } else {
+ 				  results = PinboardFeed.fetchUserRecent(user, tag);
+ 			   }
+
+ 		   }catch (ParseException e) {
+ 			   e.printStackTrace();
+ 		   }catch (IOException e) {
+ 			   e.printStackTrace();
+ 		   }
+
+           return results;
+        }
+    }
 }
