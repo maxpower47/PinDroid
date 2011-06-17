@@ -26,7 +26,7 @@
 	android:layout_height="fill_parent"
 	android:orientation="vertical">
 	<include android:id="@+id/include_action_bar" layout="@layout/action_bar" />
-	<fragment class="com.pindroid.activity.AboutFragment"
+	<fragment class="com.pindroid.fragment.AboutFragment"
 		android:id="@+id/about_fragment"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent" >
