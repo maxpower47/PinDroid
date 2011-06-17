@@ -22,8 +22,13 @@
 package com.pindroid.activity;
 
 import com.pindroid.R;
+import com.pindroid.fragment.BrowseBookmarkFeedFragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 public class BrowseBookmarks extends FragmentBaseActivity {
 	
@@ -31,5 +36,24 @@ public class BrowseBookmarks extends FragmentBaseActivity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.browse_bookmarks);
+		
+		Intent intent = getIntent();
+
+		Uri data = intent.getData();
+
+		if(data != null) {
+			if(data.getUserInfo() != "") {
+				username = data.getUserInfo();
+			} else username = mAccount.name;
+		}
+		
+		if(!isMyself()) {
+			FragmentManager fm = getSupportFragmentManager();
+			BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
+			FragmentTransaction t = fm.beginTransaction();
+			
+			t.replace(R.id.listcontent, frag);
+			t.commit();
+		}
     }
 }
