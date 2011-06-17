@@ -104,7 +104,7 @@ public class BrowseBookmarksFragment extends ListFragment
 		    		base.finish();
 		    	}
 			}
-	    	
+	
 	    	getLoaderManager().initLoader(0, null, this);
 	    	
 			lv = getListView();
@@ -267,6 +267,16 @@ public class BrowseBookmarksFragment extends ListFragment
 	
 	private void viewBookmark(Bookmark b) {
 		startActivity(IntentHelper.ViewBookmark(b, base.username, base));
+	}
+	
+	public boolean onSearchRequested() {
+
+		Bundle contextData = new Bundle();
+		contextData.putString("tagname", tagname);
+		contextData.putString("username", base.username);
+		contextData.putBoolean("unread", unread);
+		base.startSearch(null, false, contextData, false);
+		return true;
 	}
     
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {

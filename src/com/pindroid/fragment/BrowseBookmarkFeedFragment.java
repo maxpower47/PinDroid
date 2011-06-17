@@ -194,6 +194,11 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	private void readBookmark(Bookmark b){
 		startActivity(IntentHelper.ReadBookmark(b.getUrl()));
 	}
+	
+	public boolean onSearchRequested() {
+		base.startSearch(null, false, Bundle.EMPTY, false);
+		return true;
+	}
     
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
