@@ -22,6 +22,7 @@
 package com.pindroid.activity;
 
 import com.pindroid.R;
+import com.pindroid.fragment.AddBookmarkFragment;
 
 import android.os.Bundle;
 import android.view.View;

@@ -19,10 +19,15 @@
  * USA
  */
 
-package com.pindroid.activity;
+package com.pindroid.fragment;
 
 import com.pindroid.R;
 import com.pindroid.Constants;
+import com.pindroid.activity.BrowseBookmarks;
+import com.pindroid.activity.BrowseTags;
+import com.pindroid.activity.FragmentBaseActivity;
+import com.pindroid.activity.MainSearchResults;
+import com.pindroid.activity.ViewBookmark;
 import com.pindroid.providers.BookmarkContentProvider;
 
 import android.app.SearchManager;

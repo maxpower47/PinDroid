@@ -20,7 +20,7 @@
  */
 
 
-package com.pindroid.activity;
+package com.pindroid.fragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,6 +34,10 @@ import com.pindroid.R;
 import com.pindroid.action.AddBookmarkTask;
 import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.GetWebpageTitleTask;
+import com.pindroid.activity.BrowseBookmarks;
+import com.pindroid.activity.FragmentBaseActivity;
+import com.pindroid.activity.MainSearchResults;
+import com.pindroid.activity.ViewBookmark;
 import com.pindroid.client.PinboardApi;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;

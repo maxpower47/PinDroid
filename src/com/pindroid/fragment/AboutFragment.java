@@ -20,9 +20,13 @@
  */
 
 
-package com.pindroid.activity;
+package com.pindroid.fragment;
 
 import com.pindroid.R;
+import com.pindroid.activity.BrowseBookmarks;
+import com.pindroid.activity.FragmentBaseActivity;
+import com.pindroid.activity.MainSearchResults;
+import com.pindroid.activity.ViewBookmark;
 
 import android.app.SearchManager;
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package com.pindroid.activity;
+package com.pindroid.fragment;
 
 import android.app.Activity;
 import android.app.SearchManager;
@@ -22,6 +22,8 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.pindroid.Constants;
 import com.pindroid.R;
+import com.pindroid.activity.BrowseBookmarks;
+import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.TagContent.Tag;
