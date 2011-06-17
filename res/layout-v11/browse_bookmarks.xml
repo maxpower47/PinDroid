@@ -21,13 +21,14 @@
  * USA
  */
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical">
-	<ListView
-		android:id="@id/android:list"
+	<include android:id="@+id/include_action_bar" layout="@layout/action_bar" />
+	<fragment class="com.pindroid.fragment.BrowseBookmarksFragment"
+		android:id="@+id/listcontent"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent" >
-	</ListView>
+	</fragment>
 </LinearLayout>

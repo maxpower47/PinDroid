@@ -31,11 +31,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.BaseColumns;
+import android.support.v4.content.CursorLoader;
 import android.text.TextUtils;
 
 public class BookmarkManager {
 	
-	public static Cursor GetBookmarks(String username, String tagname, boolean unread, String sortorder, Context context){
+	public static CursorLoader GetBookmarks(String username, String tagname, boolean unread, String sortorder, Context context){
 		final String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, 
 				Bookmark.Meta, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared};
 		String selection = null;
@@ -57,7 +58,7 @@ public class BookmarkManager {
 			selection += " AND " + Bookmark.ToRead + "=1";
 		}
 		
-		return context.getContentResolver().query(Bookmark.CONTENT_URI, projection, selection, selectionargs, sortorder);
+		return new CursorLoader(context, Bookmark.CONTENT_URI, projection, selection, selectionargs, sortorder);
 	}
 	
 	public static Bookmark GetById(int id, Context context) throws ContentNotFoundException {		
@@ -236,7 +237,7 @@ public class BookmarkManager {
 		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, null);
 	}
 	
-	public static Cursor SearchBookmarks(String query, String tagname, boolean unread, String username, Context context) {
+	public static CursorLoader SearchBookmarks(String query, String tagname, boolean unread, String username, Context context) {
 		final String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, 
 				Bookmark.Meta, Bookmark.Tags, Bookmark.Shared, Bookmark.ToRead};
 		String selection = null;
@@ -293,7 +294,7 @@ public class BookmarkManager {
 			selection += " AND " + Bookmark.ToRead + "=1";
 		}
 		
-		return context.getContentResolver().query(Bookmark.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), sortorder);
+		return new CursorLoader(context, Bookmark.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), sortorder);
 	}
 	
 	public static int GetUnreadCount(String username, Context context){		

@@ -62,9 +62,9 @@ public class FragmentBaseActivity extends FragmentActivity {
 	protected long lastUpdate;
 	public boolean privateDefault;
 	public boolean toreadDefault;
-	protected String defaultAction;
+	public String defaultAction;
 	public boolean markAsRead;
-	protected String secretToken;
+	public String secretToken;
 	
 	private boolean first = true;
 	
