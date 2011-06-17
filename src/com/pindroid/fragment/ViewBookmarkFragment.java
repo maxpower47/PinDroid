@@ -20,7 +20,7 @@
  */
 
 
-package com.pindroid.activity;
+package com.pindroid.fragment;
 
 import java.util.Date;
 
@@ -30,6 +30,10 @@ import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.DeleteBookmarkTask;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.action.MarkReadBookmarkTask;
+import com.pindroid.activity.AddBookmark;
+import com.pindroid.activity.BrowseBookmarks;
+import com.pindroid.activity.FragmentBaseActivity;
+import com.pindroid.activity.MainSearchResults;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.ContentNotFoundException;

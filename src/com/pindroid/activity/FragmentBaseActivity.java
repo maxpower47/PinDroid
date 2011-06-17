@@ -54,16 +54,16 @@ import android.widget.Toast;
 public class FragmentBaseActivity extends FragmentActivity {
 	
 	protected AccountManager mAccountManager;
-	protected Account mAccount;
-	protected Context mContext;
-	protected String username = null;
+	public Account mAccount;
+	public Context mContext;
+	public String username = null;
 	protected SharedPreferences settings;
 	
 	protected long lastUpdate;
-	protected boolean privateDefault;
-	protected boolean toreadDefault;
+	public boolean privateDefault;
+	public boolean toreadDefault;
 	protected String defaultAction;
-	protected boolean markAsRead;
+	public boolean markAsRead;
 	protected String secretToken;
 	
 	private boolean first = true;
@@ -184,7 +184,7 @@ public class FragmentBaseActivity extends FragmentActivity {
 	    }
 	}
 	
-	protected boolean isMyself() {
+	public boolean isMyself() {
 		if(mAccount != null && username != null)
 			return mAccount.name.equals(username);
 		else return false;
