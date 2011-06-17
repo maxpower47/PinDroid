@@ -25,7 +25,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical">
-	<fragment class="com.pindroid.activity.AddBookmarkFragment"
+	<fragment class="com.pindroid.fragment.AddBookmarkFragment"
 		android:id="@+id/add_bookmark_fragment"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent" >

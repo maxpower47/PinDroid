@@ -25,7 +25,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical">
-	<fragment class="com.pindroid.activity.AboutFragment"
+	<fragment class="com.pindroid.fragment.AboutFragment"
 		android:id="@+id/about_fragment"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent" >
