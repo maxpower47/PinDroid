@@ -197,5 +197,11 @@
         	android:name=".syncadapter.PeriodicSyncReceiver"
         	android:label="@string/sync_receiver_label">
 		</receiver>
+		<receiver android:name=".receiver.AccountReceiver">
+			<intent-filter>
+				<action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED"></action>
+			</intent-filter>
+		</receiver>
+		<service android:name=".service.AccountService" />
     </application>
 </manifest>
