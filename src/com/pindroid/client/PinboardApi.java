@@ -102,12 +102,18 @@ public class PinboardApi {
     	response = convertStreamToString(responseStream);
     	responseStream.close();
     	
-        if (response.contains("<?xml")) {
-        	update = Update.valueOf(response);
-        } else {
-            Log.e(TAG, "Server error in fetching bookmark list");
-            throw new IOException();
-        }
+    	try{
+	        if (response.contains("<?xml")) {
+	        	update = Update.valueOf(response);
+	        } else {
+	            Log.e(TAG, "Server error in fetching bookmark list");
+	            throw new IOException();
+	        }
+    	}
+    	catch(Exception e) {
+    		Log.e(TAG, "Server error in fetching bookmark list");
+    		throw new IOException();
+    	}
         return update;
     }
     
