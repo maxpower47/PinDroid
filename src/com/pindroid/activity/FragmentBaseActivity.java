@@ -21,16 +21,12 @@
 
 package com.pindroid.activity;
 
-import java.util.ArrayList;
-
 import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.action.GetSecretTask;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.action.TaskArgs;
 import com.pindroid.authenticator.AuthenticatorActivity;
-import com.pindroid.platform.BookmarkManager;
-import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContentProvider;
 
 import android.support.v4.app.FragmentActivity;
@@ -128,15 +124,6 @@ public class FragmentBaseActivity extends FragmentActivity {
 		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
 			mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 		}
-		
-		ArrayList<String> accounts = new ArrayList<String>();
-		
-		for(Account a : mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)) {
-			accounts.add(a.name);
-		}
-		
-		BookmarkManager.TruncateBookmarks(accounts, this, true);
-		TagManager.TruncateOldTags(accounts, this);
 		
 		username = mAccount.name;
 	}
