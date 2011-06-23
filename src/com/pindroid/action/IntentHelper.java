@@ -75,4 +75,18 @@ public class IntentHelper {
 		
 		return viewBookmark;
 	}
+	
+	public static Intent EditBookmark(Bookmark b, String account, Context context) {
+		
+		Intent editBookmark = new Intent(context, AddBookmark.class);
+		editBookmark.setAction(Intent.ACTION_EDIT);
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.appendEncodedPath("bookmarks");
+		data.appendEncodedPath(Integer.toString(b.getId()));
+		editBookmark.setData(data.build());
+		
+		return editBookmark;
+	}
 }

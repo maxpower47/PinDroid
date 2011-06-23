@@ -22,16 +22,9 @@
 package com.pindroid.fragment;
 
 import com.pindroid.R;
-import com.pindroid.Constants;
-import com.pindroid.action.BookmarkTaskArgs;
-import com.pindroid.action.DeleteBookmarkTask;
-import com.pindroid.action.IntentHelper;
-import com.pindroid.action.MarkReadBookmarkTask;
-import com.pindroid.activity.AddBookmark;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.listadapter.BookmarkViewBinder;
 import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
 import android.app.SearchManager;
@@ -70,6 +63,19 @@ public class BrowseBookmarksFragment extends ListFragment
 	String path = null;
 	
 	ListView lv;
+	
+	private OnBookmarkSelectedListener bookmarkSelectedListener;
+	
+	public interface OnBookmarkSelectedListener {
+		public void onBookmarkView(Bookmark b);
+		public void onBookmarkRead(Bookmark b);
+		public void onBookmarkOpen(Bookmark b);
+		public void onBookmarkAdd(Bookmark b);
+		public void onBookmarkShare(Bookmark b);
+		public void onBookmarkMark(Bookmark b);
+		public void onBookmarkEdit(Bookmark b);
+		public void onBookmarkDelete(Bookmark b);
+	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
@@ -131,12 +137,8 @@ public class BrowseBookmarksFragment extends ListFragment
 				public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 					menu.setHeaderTitle("Actions");
 					MenuInflater inflater = base.getMenuInflater();
-					
-					if(base.isMyself()){
-						inflater.inflate(R.menu.browse_bookmark_context_menu_self, menu);
-					} else {
-						inflater.inflate(R.menu.browse_bookmark_context_menu_other, menu);
-					}
+
+					inflater.inflate(R.menu.browse_bookmark_context_menu_self, menu);
 				}
 			});
 		}
@@ -168,23 +170,13 @@ public class BrowseBookmarksFragment extends ListFragment
 				viewBookmark(b);
 				return true;
 			case R.id.menu_bookmark_context_edit:
-				Intent editBookmark = new Intent(base, AddBookmark.class);
-				editBookmark.setAction(Intent.ACTION_EDIT);
-				Uri.Builder data = new Uri.Builder();
-				data.scheme(Constants.CONTENT_SCHEME);
-				data.encodedAuthority(base.mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
-				data.appendEncodedPath("bookmarks");
-				data.appendEncodedPath(Integer.toString(b.getId()));
-				editBookmark.setData(data.build());
-				startActivity(editBookmark);
+				bookmarkSelectedListener.onBookmarkEdit(b);
 				return true;
 			case R.id.menu_bookmark_context_delete:
-				BookmarkTaskArgs args = new BookmarkTaskArgs(b, base.mAccount, base);	
-				new DeleteBookmarkTask().execute(args);
+				bookmarkSelectedListener.onBookmarkDelete(b);
 				return true;
 			case R.id.menu_bookmark_context_share:
-		    	Intent sendIntent = IntentHelper.SendBookmark(b.getUrl(), b.getDescription());
-		    	startActivity(Intent.createChooser(sendIntent, getString(R.string.share_chooser_title)));
+				bookmarkSelectedListener.onBookmarkShare(b);
 				return true;
 			case R.id.menu_bookmark_context_read:
 				readBookmark(b);
@@ -243,30 +235,21 @@ public class BrowseBookmarksFragment extends ListFragment
 	}
 	
 	private void openBookmarkInBrowser(Bookmark b) {
-    	String url = b.getUrl();
-    	
-    	if(!url.startsWith("http")) {
-    		url = "http://" + url;
-    	}
-		
-		startActivity(IntentHelper.OpenInBrowser(url));
+		bookmarkSelectedListener.onBookmarkOpen(b);
 	}
 	
 	private void readBookmark(Bookmark b){
 		if(base.markAsRead)
 			markBookmark(b);
-		startActivity(IntentHelper.ReadBookmark(b.getUrl()));
+		bookmarkSelectedListener.onBookmarkRead(b);
 	}
 	
 	private void markBookmark(Bookmark b){
-    	if(base.isMyself() && b.getToRead()) {
-    		BookmarkTaskArgs unreadArgs = new BookmarkTaskArgs(b, base.mAccount, base);
-    		new MarkReadBookmarkTask().execute(unreadArgs);
-    	}
+		bookmarkSelectedListener.onBookmarkMark(b);
 	}
 	
 	private void viewBookmark(Bookmark b) {
-		startActivity(IntentHelper.ViewBookmark(b, base.username, base));
+		bookmarkSelectedListener.onBookmarkView(b);
 	}
 	
 	public boolean onSearchRequested() {

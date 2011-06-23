@@ -21,10 +21,6 @@
 
 package com.pindroid.authenticator;
 
-import java.io.IOException;
-
-import org.apache.http.auth.AuthenticationException;
-
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
@@ -47,7 +43,6 @@ import android.widget.TextView;
 import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.client.NetworkUtilities;
-import com.pindroid.client.PinboardApi;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.util.SyncUtils;
 
