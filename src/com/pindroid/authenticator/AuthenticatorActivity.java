@@ -21,6 +21,10 @@
 
 package com.pindroid.authenticator;
 
+import java.io.IOException;
+
+import org.apache.http.auth.AuthenticationException;
+
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
@@ -43,6 +47,7 @@ import android.widget.TextView;
 import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.client.NetworkUtilities;
+import com.pindroid.client.PinboardApi;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.util.SyncUtils;
 
@@ -208,7 +213,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
             intent.putExtra(AccountManager.KEY_AUTHTOKEN, mAuthtoken);
         }
         
-		SharedPreferences.Editor editor = settings.edit();
+        SharedPreferences.Editor editor = settings.edit();	
 		editor.putLong(Constants.PREFS_LAST_SYNC, 0);
         editor.commit();
         
