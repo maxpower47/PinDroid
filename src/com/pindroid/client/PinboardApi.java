@@ -407,7 +407,7 @@ public class PinboardApi {
     	responseStream = PinboardApiCall(FETCH_SECRET_URI, params, account, context);
     	response = convertStreamToString(responseStream);
     	responseStream.close();
-    	
+
         if (response.contains("<?xml")) {
         	
         	int start = response.indexOf("<result>");

@@ -21,9 +21,13 @@
 
 package com.pindroid.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.http.auth.AuthenticationException;
+
 import com.pindroid.Constants;
+import com.pindroid.client.PinboardApi;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
 
@@ -31,6 +35,8 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class AccountService extends IntentService {
@@ -43,17 +49,34 @@ public class AccountService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Log.d("AS Handle", intent.toURI());
 		mAccountManager = AccountManager.get(this);
 		
 		Account[] a = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
 		ArrayList<String> accounts = new ArrayList<String>();
-		for (int i = 0; i < a.length; i++) {
-			
+		for (int i = 0; i < a.length; i++) {	
 			accounts.add(a[i].name);
 		}
 		
 		BookmarkManager.TruncateBookmarks(accounts, this, true);
 		TagManager.TruncateOldTags(accounts, this);
+		
+		if(a.length > 0) {
+			Log.d("AS Handle", "Getting Token for " + a[0].name);
+			
+			try {
+				String token = PinboardApi.getSecretToken(a[0], this);
+
+		        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		        SharedPreferences.Editor editor = settings.edit();
+		    	editor.putString(Constants.PREFS_SECRET_TOKEN, token);
+		    	editor.commit();
+			} catch (AuthenticationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }

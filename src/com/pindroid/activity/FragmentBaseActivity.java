@@ -23,9 +23,7 @@ package com.pindroid.activity;
 
 import com.pindroid.R;
 import com.pindroid.Constants;
-import com.pindroid.action.GetSecretTask;
 import com.pindroid.action.IntentHelper;
-import com.pindroid.action.TaskArgs;
 import com.pindroid.authenticator.AuthenticatorActivity;
 import com.pindroid.providers.BookmarkContentProvider;
 
@@ -39,7 +37,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -77,7 +74,6 @@ public class FragmentBaseActivity extends FragmentActivity {
 		
 		loadSettings();
 		init();
-		loadSecret();
 	}
 	
 	private void init(){
@@ -134,14 +130,7 @@ public class FragmentBaseActivity extends FragmentActivity {
     	toreadDefault = settings.getBoolean("pref_save_toread_default", false);
     	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
     	markAsRead = settings.getBoolean("pref_markasread", false);
-	}
-	
-	private void loadSecret(){
-        secretToken = settings.getString(Constants.PREFS_SECRET_TOKEN, "");
-		
-        if(secretToken.equals("") && mAccount != null){
-			new GetSecretTask().execute(new TaskArgs(mAccount, this));
-		}
+    	secretToken = settings.getString(Constants.PREFS_SECRET_TOKEN, "");
 	}
 
 	@Override
@@ -180,7 +169,7 @@ public class FragmentBaseActivity extends FragmentActivity {
 	@Override
 	public void setTitle(CharSequence title){
 		super.setTitle(title);
-		Log.d("got", "here");
+
 		if(this.findViewById(R.id.action_bar_title) != null) {
 			((TextView)this.findViewById(R.id.action_bar_title)).setText(title);
 		}
