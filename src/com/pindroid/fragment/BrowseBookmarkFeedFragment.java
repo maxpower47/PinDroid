@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.text.ParseException;
 
 import com.pindroid.R;
-import com.pindroid.action.IntentHelper;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.client.PinboardFeed;
 import com.pindroid.listadapter.BookmarkViewBinder;
@@ -60,12 +59,15 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	private SimpleCursorAdapter mAdapter;
 	private FragmentBaseActivity base;
 	
-
 	private String tagname = null;
 	private Intent intent = null;
 	String path = null;
 	
 	ListView lv;
+	
+	private BrowseBookmarksFragment.OnBookmarkSelectedListener bookmarkSelectedListener;
+	
+
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
@@ -128,11 +130,7 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 					menu.setHeaderTitle("Actions");
 					MenuInflater inflater = base.getMenuInflater();
 					
-					if(base.isMyself()){
-						inflater.inflate(R.menu.browse_bookmark_context_menu_self, menu);
-					} else {
-						inflater.inflate(R.menu.browse_bookmark_context_menu_other, menu);
-					}
+					inflater.inflate(R.menu.browse_bookmark_context_menu_other, menu);
 				}
 			});
 		}
@@ -164,35 +162,28 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 				viewBookmark(b);
 				return true;
 			case R.id.menu_bookmark_context_add:				
-				startActivity(IntentHelper.AddBookmark(b.getUrl(), base.mAccount.name, base));
+				bookmarkSelectedListener.onBookmarkAdd(b);
 				return true;
 			case R.id.menu_bookmark_context_read:
 				readBookmark(b);
 				return true;
 			case R.id.menu_bookmark_context_share:
-		    	Intent sendIntent = IntentHelper.SendBookmark(b.getUrl(), b.getDescription());
-		    	startActivity(Intent.createChooser(sendIntent, getString(R.string.share_chooser_title)));
+				bookmarkSelectedListener.onBookmarkShare(b);
 				return true;
 		}
 		return false;
 	}
 		
 	private void openBookmarkInBrowser(Bookmark b) {
-    	String url = b.getUrl();
-    	
-    	if(!url.startsWith("http")) {
-    		url = "http://" + url;
-    	}
-		
-		startActivity(IntentHelper.OpenInBrowser(url));
+		bookmarkSelectedListener.onBookmarkOpen(b);
 	}
 	
 	private void viewBookmark(Bookmark b) {
-		startActivity(IntentHelper.ViewBookmark(b, base.username, base));
+		bookmarkSelectedListener.onBookmarkView(b);
 	}
 	
 	private void readBookmark(Bookmark b){
-		startActivity(IntentHelper.ReadBookmark(b.getUrl()));
+		bookmarkSelectedListener.onBookmarkRead(b);
 	}
 	
 	public boolean onSearchRequested() {

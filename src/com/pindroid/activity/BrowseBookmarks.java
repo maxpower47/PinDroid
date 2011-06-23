@@ -22,7 +22,10 @@
 package com.pindroid.activity;
 
 import com.pindroid.R;
+import com.pindroid.action.BookmarkTaskArgs;
+import com.pindroid.action.DeleteBookmarkTask;
 import com.pindroid.action.IntentHelper;
+import com.pindroid.action.MarkReadBookmarkTask;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment;
 import com.pindroid.fragment.BrowseBookmarksFragment;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -34,7 +37,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 
-public class BrowseBookmarks extends FragmentBaseActivity {
+public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookmarksFragment.OnBookmarkSelectedListener {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -90,5 +93,50 @@ public class BrowseBookmarks extends FragmentBaseActivity {
 
 			return frag.onSearchRequested();
 		}
+	}
+
+	public void onBookmarkView(Bookmark b) {
+		viewBookmark(b);
+	}
+
+	public void onBookmarkRead(Bookmark b) {
+		startActivity(IntentHelper.ReadBookmark(b.getUrl()));
+		
+	}
+
+	public void onBookmarkOpen(Bookmark b) {
+    	String url = b.getUrl();
+    	
+    	if(!url.startsWith("http")) {
+    		url = "http://" + url;
+    	}
+		
+		startActivity(IntentHelper.OpenInBrowser(url));
+	}
+
+	public void onBookmarkAdd(Bookmark b) {
+		startActivity(IntentHelper.AddBookmark(b.getUrl(), mAccount.name, this));
+	}
+
+	public void onBookmarkShare(Bookmark b) {
+		Intent sendIntent = IntentHelper.SendBookmark(b.getUrl(), b.getDescription());
+    	startActivity(Intent.createChooser(sendIntent, getString(R.string.share_chooser_title)));	
+	}
+
+	public void onBookmarkMark(Bookmark b) {
+    	if(isMyself() && b.getToRead()) {
+    		BookmarkTaskArgs unreadArgs = new BookmarkTaskArgs(b, mAccount, this);
+    		new MarkReadBookmarkTask().execute(unreadArgs);
+    	}
+	}
+
+	public void onBookmarkEdit(Bookmark b) {
+		startActivity(IntentHelper.EditBookmark(b, mAccount.name, this));
+		
+	}
+
+	public void onBookmarkDelete(Bookmark b) {
+		BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, this);	
+		new DeleteBookmarkTask().execute(args);
 	}
 }
