@@ -27,10 +27,12 @@ import java.text.ParseException;
 import com.pindroid.R;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.client.PinboardFeed;
+import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.listadapter.BookmarkViewBinder;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -268,4 +270,14 @@ public class BrowseBookmarkFeedFragment extends ListFragment
            return results;
         }
     }
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			bookmarkSelectedListener = (OnBookmarkSelectedListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement OnTutSelectedListener");
+		}
+	}
 }

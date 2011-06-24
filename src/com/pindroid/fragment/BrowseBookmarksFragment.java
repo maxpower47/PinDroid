@@ -27,6 +27,7 @@ import com.pindroid.listadapter.BookmarkViewBinder;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.database.Cursor;
@@ -311,5 +312,15 @@ public class BrowseBookmarksFragment extends ListFragment
 	
 	public void onLoaderReset(Loader<Cursor> loader) {
 	    mAdapter.swapCursor(null);
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			bookmarkSelectedListener = (OnBookmarkSelectedListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement OnTutSelectedListener");
+		}
 	}
 }

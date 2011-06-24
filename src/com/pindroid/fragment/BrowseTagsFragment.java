@@ -40,12 +40,10 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.activity.BrowseBookmarks;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.platform.TagManager;
-import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.TagContent.Tag;
 
 public class BrowseTagsFragment extends ListFragment
@@ -54,6 +52,12 @@ public class BrowseTagsFragment extends ListFragment
 	private String sortfield = Tag.Name + " ASC";
 	private SimpleCursorAdapter mAdapter;
 	private FragmentBaseActivity base;
+	
+	private OnTagSelectedListener tagSelectedListener;
+	
+	public interface OnTagSelectedListener {
+		public void onTagSelected(String tag);
+	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
@@ -119,18 +123,7 @@ public class BrowseTagsFragment extends ListFragment
 			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
 			    	
-					Intent i = new Intent(base, BrowseBookmarks.class);
-					i.setAction(Intent.ACTION_VIEW);
-					i.addCategory(Intent.CATEGORY_DEFAULT);
-	
-					Uri.Builder dataBuilder = new Uri.Builder();
-					dataBuilder.scheme(Constants.CONTENT_SCHEME);
-					dataBuilder.encodedAuthority(base.username + "@" + BookmarkContentProvider.AUTHORITY);
-					dataBuilder.appendEncodedPath("bookmarks");
-					dataBuilder.appendQueryParameter("tagname", tagName);
-					i.setData(dataBuilder.build());
-					
-					startActivity(i);
+			    	tagSelectedListener.onTagSelected(tagName);
 			    }
 			});
 		}
@@ -193,5 +186,15 @@ public class BrowseTagsFragment extends ListFragment
 	
 	public void onLoaderReset(Loader<Cursor> loader) {
 	    mAdapter.swapCursor(null);
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			tagSelectedListener = (OnTagSelectedListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement OnTutSelectedListener");
+		}
 	}
 }
