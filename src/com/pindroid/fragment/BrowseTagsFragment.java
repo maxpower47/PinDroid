@@ -194,7 +194,7 @@ public class BrowseTagsFragment extends ListFragment
 		try {
 			tagSelectedListener = (OnTagSelectedListener) activity;
 		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString() + " must implement OnTutSelectedListener");
+			throw new ClassCastException(activity.toString() + " must implement OnTagSelectedListener");
 		}
 	}
 }
