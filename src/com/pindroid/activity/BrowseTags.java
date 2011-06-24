@@ -21,13 +21,11 @@
 
 package com.pindroid.activity;
 
-import com.pindroid.Constants;
+
 import com.pindroid.R;
-import com.pindroid.providers.BookmarkContentProvider;
+import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseTagsFragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragment.OnTagSelectedListener {
@@ -38,18 +36,7 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
         setContentView(R.layout.browse_tags);
     }
 
-	public void onTagSelected(String tag) {
-		Intent i = new Intent(this, BrowseBookmarks.class);
-		i.setAction(Intent.ACTION_VIEW);
-		i.addCategory(Intent.CATEGORY_DEFAULT);
-
-		Uri.Builder dataBuilder = new Uri.Builder();
-		dataBuilder.scheme(Constants.CONTENT_SCHEME);
-		dataBuilder.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
-		dataBuilder.appendEncodedPath("bookmarks");
-		dataBuilder.appendQueryParameter("tagname", tag);
-		i.setData(dataBuilder.build());
-		
-		startActivity(i);	
+	public void onTagSelected(String tag) {		
+		startActivity(IntentHelper.ViewBookmarks(tag, username, this));
 	}
 }

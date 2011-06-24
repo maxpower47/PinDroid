@@ -24,24 +24,20 @@ package com.pindroid.fragment;
 
 import java.util.Date;
 
-import com.pindroid.Constants;
 import com.pindroid.R;
-import com.pindroid.action.BookmarkTaskArgs;
-import com.pindroid.action.DeleteBookmarkTask;
 import com.pindroid.action.IntentHelper;
-import com.pindroid.action.MarkReadBookmarkTask;
-import com.pindroid.activity.AddBookmark;
 import com.pindroid.activity.BrowseBookmarks;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.activity.MainSearchResults;
+import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.AccountSpan;
 import com.pindroid.ui.TagSpan;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
@@ -75,7 +71,16 @@ public class ViewBookmarkFragment extends Fragment {
 	
 	private String user;
 	private String path;
-	private Uri data;	
+	private Uri data;
+	
+	private OnBookmarkActionListener bookmarkActionListener;
+	private OnBookmarkSelectedListener bookmarkSelectedListener;
+	
+	public interface OnBookmarkActionListener {
+		public void onTagSelected(String tag);
+		public void onUserTagSelected(String tag, String user);
+		public void onAccountSelected(String account);
+	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
@@ -144,7 +149,6 @@ public class ViewBookmarkFragment extends Fragment {
 	public void onResume(){
 		super.onResume();
 		
-
 		if(path.contains("/bookmarks") && base.isMyself()){
 			
 			try{		
@@ -225,54 +229,19 @@ public class ViewBookmarkFragment extends Fragment {
 	
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {
-    		Intent i = new Intent(base, BrowseBookmarks.class);
-    		i.setAction(Intent.ACTION_VIEW);
-    		i.addCategory(Intent.CATEGORY_DEFAULT);
-    		Uri.Builder data = new Uri.Builder();
-    		data.scheme(Constants.CONTENT_SCHEME);
-    		data.encodedAuthority(base.username + "@" + BookmarkContentProvider.AUTHORITY);
-    		data.appendEncodedPath("bookmarks");
-    		data.appendQueryParameter("tagname", tag);
-    		i.setData(data.build());
-    		
-    		Log.d("uri", data.build().toString());
-    		
-    		startActivity(i);	
+    		bookmarkActionListener.onTagSelected(tag);
         }
     };
     
     TagSpan.OnTagClickListener userTagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {
-    		Intent i = new Intent(base, BrowseBookmarks.class);
-    		i.setAction(Intent.ACTION_VIEW);
-    		i.addCategory(Intent.CATEGORY_DEFAULT);
-    		Uri.Builder data = new Uri.Builder();
-    		data.scheme(Constants.CONTENT_SCHEME);
-    		data.encodedAuthority(user + "@" + BookmarkContentProvider.AUTHORITY);
-    		data.appendEncodedPath("bookmarks");
-    		data.appendQueryParameter("tagname", tag);
-    		i.setData(data.build());
-    		
-    		Log.d("uri", data.build().toString());
-    		
-    		startActivity(i);	
+        	bookmarkActionListener.onUserTagSelected(tag, user);
         }
     };
     
     AccountSpan.OnAccountClickListener accountOnClickListener = new AccountSpan.OnAccountClickListener() {
         public void onAccountClick(String account) {
-    		Intent i = new Intent(base, BrowseBookmarks.class);
-    		i.setAction(Intent.ACTION_VIEW);
-    		i.addCategory(Intent.CATEGORY_DEFAULT);
-    		Uri.Builder data = new Uri.Builder();
-    		data.scheme(Constants.CONTENT_SCHEME);
-    		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
-    		data.appendEncodedPath("bookmarks");
-    		i.setData(data.build());
-    		
-    		Log.d("uri", data.build().toString());
-    		
-    		startActivity(i);
+        	bookmarkActionListener.onAccountSelected(account);
         }
     };
     
@@ -312,39 +281,22 @@ public class ViewBookmarkFragment extends Fragment {
 	    // Handle item selection
 	    switch (item.getItemId()) {
 		    case R.id.menu_view_read:
-		    	if(base.isMyself() && bookmark.getToRead() && base.markAsRead) {
-		    		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, base.mAccount, base);
-		    		new MarkReadBookmarkTask().execute(args);
-		    	}
-
+		    	if(base.isMyself() && bookmark.getToRead() && base.markAsRead)
+		    		bookmarkSelectedListener.onBookmarkMark(bookmark);
+				bookmarkSelectedListener.onBookmarkRead(bookmark);
 				startActivity(IntentHelper.ReadBookmark(((Spannable) mUrl.getText()).toString()));
 				return true;
 		    case R.id.menu_view_openbookmark:
-		    	String url = ((Spannable) mUrl.getText()).toString();
-				startActivity(IntentHelper.OpenInBrowser(url));
+		    	bookmarkSelectedListener.onBookmarkOpen(bookmark);
 				return true;
 		    case R.id.menu_view_editbookmark:
-				Intent editBookmark = new Intent(base, AddBookmark.class);
-				editBookmark.setAction(Intent.ACTION_EDIT);
-				
-				Uri.Builder data = new Uri.Builder();
-				data.scheme(Constants.CONTENT_SCHEME);
-				data.encodedAuthority(base.mAccount + "@" + BookmarkContentProvider.AUTHORITY);
-				data.appendEncodedPath("bookmarks");
-				data.appendEncodedPath(Integer.toString(bookmark.getId()));
-				editBookmark.setData(data.build());
-
-				startActivity(editBookmark);
+		    	bookmarkSelectedListener.onBookmarkEdit(bookmark);
 		    	return true;
 		    case R.id.menu_view_deletebookmark:
-				BookmarkTaskArgs deleteargs = new BookmarkTaskArgs(bookmark, base.mAccount, base);	
-				new DeleteBookmarkTask().execute(deleteargs);
+		    	bookmarkSelectedListener.onBookmarkDelete(bookmark);
 				return true;
 		    case R.id.menu_view_sendbookmark:
-		    	String sendUrl = ((Spannable) mUrl.getText()).toString();
-		    	String sendTitle = mTitle.getText().toString();
-		    	Intent sendIntent = IntentHelper.SendBookmark(sendUrl, sendTitle);
-		    	startActivity(Intent.createChooser(sendIntent, getString(R.string.share_chooser_title)));
+		    	bookmarkSelectedListener.onBookmarkShare(bookmark);
 		    	return true;
 		    default:
 		        return super.onOptionsItemSelected(item);
@@ -356,4 +308,15 @@ public class ViewBookmarkFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.view_bookmark_fragment, container, false);
     }
+    
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			bookmarkActionListener = (OnBookmarkActionListener) activity;
+			bookmarkSelectedListener = (OnBookmarkSelectedListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement OnBookmarkActionListener and OnBookmarkSelectedListener");
+		}
+	}
 }
