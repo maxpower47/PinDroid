@@ -22,14 +22,37 @@
 package com.pindroid.activity;
 
 import com.pindroid.R;
+import com.pindroid.action.IntentHelper;
+import com.pindroid.fragment.MainFragment;
 
 import android.os.Bundle;
 
-public class Main extends FragmentBaseActivity {
+public class Main extends FragmentBaseActivity implements MainFragment.OnMainActionListener {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedState);
 		setContentView(R.layout.main);
+	}
+
+	public void onMyBookmarksSelected() {
+		startActivity(IntentHelper.ViewBookmarks("", mAccount.name, this));	
+	}
+
+	public void onMyUnreadSelected() {
+		startActivity(IntentHelper.ViewUnread(mAccount.name, this));
+	}
+
+	public void onMyTagsSelected() {
+		startActivity(IntentHelper.ViewTags(mAccount.name, this));
+		
+	}
+
+	public void onMyNetworkSelected() {
+		startActivity(IntentHelper.ViewBookmarks("", "network", this));	
+	}
+
+	public void onRecentSelected() {
+		startActivity(IntentHelper.ViewBookmarks("", "recent", this));	
 	}
 }

@@ -22,14 +22,12 @@
 package com.pindroid.fragment;
 
 import com.pindroid.R;
-import com.pindroid.Constants;
 import com.pindroid.activity.BrowseBookmarks;
-import com.pindroid.activity.BrowseTags;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.activity.MainSearchResults;
 import com.pindroid.activity.ViewBookmark;
-import com.pindroid.providers.BookmarkContentProvider;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
@@ -46,6 +44,16 @@ import android.view.View;
 public class MainFragment extends ListFragment {
 
 	private FragmentBaseActivity base;
+	
+	private OnMainActionListener mainActionListener;
+	
+	public interface OnMainActionListener {
+		public void onMyBookmarksSelected();
+		public void onMyUnreadSelected();
+		public void onMyTagsSelected();
+		public void onMyNetworkSelected();
+		public void onRecentSelected();
+	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
@@ -118,76 +126,27 @@ public class MainFragment extends ListFragment {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		    	if(position == 0){
-		    		
-		    		Intent i = new Intent(base, BrowseBookmarks.class);
-		    		i.setAction(Intent.ACTION_VIEW);
-		    		i.addCategory(Intent.CATEGORY_DEFAULT);
-		    		Uri.Builder data = new Uri.Builder();
-		    		data.scheme(Constants.CONTENT_SCHEME);
-		    		data.encodedAuthority(base.mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
-		    		data.appendEncodedPath("bookmarks");
-		    		i.setData(data.build());
-		    		
-		    		Log.d("uri", data.build().toString());
-		    		
-		    		startActivity(i);
+		    		mainActionListener.onMyBookmarksSelected();
 		    	} else if(position == 1){
-		    		Intent i = new Intent(base, BrowseBookmarks.class);
-		    		i.setAction(Intent.ACTION_VIEW);
-		    		i.addCategory(Intent.CATEGORY_DEFAULT);
-		    		Uri.Builder data = new Uri.Builder();
-		    		data.scheme(Constants.CONTENT_SCHEME);
-		    		data.encodedAuthority(base.mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
-		    		data.appendEncodedPath("bookmarks");
-		    		data.appendQueryParameter("unread", "1");
-		    		i.setData(data.build());
-		    		
-		    		Log.d("uri", data.build().toString());
-		    		
-		    		startActivity(i);
+		    		mainActionListener.onMyUnreadSelected();
 		    	} else if(position == 2){
-		    		Intent i = new Intent(base, BrowseTags.class);
-		    		i.setAction(Intent.ACTION_VIEW);
-		    		i.addCategory(Intent.CATEGORY_DEFAULT);
-		    		Uri.Builder data = new Uri.Builder();
-		    		data.scheme(Constants.CONTENT_SCHEME);
-		    		data.encodedAuthority(base.mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
-		    		data.appendEncodedPath("tags");
-		    		i.setData(data.build());
-		    		
-		    		Log.d("uri", data.build().toString());
-		    		
-		    		startActivity(i);
+		    		mainActionListener.onMyTagsSelected();
 		    	} else if(position == 3){
-		    		
-		    		Intent i = new Intent(base, BrowseBookmarks.class);
-		    		i.setAction(Intent.ACTION_VIEW);
-		    		i.addCategory(Intent.CATEGORY_DEFAULT);
-		    		Uri.Builder data = new Uri.Builder();
-		    		data.scheme(Constants.CONTENT_SCHEME);
-		    		data.encodedAuthority("recent@" + BookmarkContentProvider.AUTHORITY);
-		    		data.appendEncodedPath("bookmarks");
-		    		i.setData(data.build());
-		    		
-		    		Log.d("uri", data.build().toString());
-		    		
-		    		startActivity(i);
+		    		mainActionListener.onRecentSelected();
 		    	} else if(position == 4){
-			    		
-			    		Intent i = new Intent(base, BrowseBookmarks.class);
-			    		i.setAction(Intent.ACTION_VIEW);
-			    		i.addCategory(Intent.CATEGORY_DEFAULT);
-			    		Uri.Builder data = new Uri.Builder();
-			    		data.scheme(Constants.CONTENT_SCHEME);
-			    		data.encodedAuthority("network@" + BookmarkContentProvider.AUTHORITY);
-			    		data.appendEncodedPath("bookmarks");
-			    		i.setData(data.build());
-			    		
-			    		Log.d("uri", data.build().toString());
-			    		
-			    		startActivity(i);
-			    	} 
+		    		mainActionListener.onMyNetworkSelected();
+		    	} 
 		    }
 		});
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			mainActionListener = (OnMainActionListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement OnMainActionListener");
+		}
 	}
 }
