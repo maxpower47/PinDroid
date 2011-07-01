@@ -277,7 +277,7 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		try {
 			bookmarkSelectedListener = (OnBookmarkSelectedListener) activity;
 		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString() + " must implement OnTutSelectedListener");
+			throw new ClassCastException(activity.toString() + " must implement OnBookmarkSelectedListener");
 		}
 	}
 }

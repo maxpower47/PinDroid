@@ -22,14 +22,29 @@
 package com.pindroid.activity;
 
 import com.pindroid.R;
+import com.pindroid.action.IntentHelper;
+import com.pindroid.fragment.MainSearchResultsFragment;
 
+import android.app.SearchManager;
 import android.os.Bundle;
 
-public class MainSearchResults extends FragmentBaseActivity {
+public class MainSearchResults extends FragmentBaseActivity implements MainSearchResultsFragment.OnSearchActionListener {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_search_results);
+	}
+
+	public void onBookmarkSearch() {
+		startActivity(IntentHelper.SearchBookmarks(getIntent().getStringExtra(SearchManager.QUERY), mAccount.name, this));
+	}
+
+	public void onTagSearch() {
+		startActivity(IntentHelper.SearchTags(getIntent().getStringExtra(SearchManager.QUERY), mAccount.name, this));
+	}
+
+	public void onGlobalTagSearch() {
+		startActivity(IntentHelper.SearchGlobalTags(getIntent().getStringExtra(SearchManager.QUERY), mAccount.name, this));
 	}
 }
