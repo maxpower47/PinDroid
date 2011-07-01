@@ -23,10 +23,10 @@ package com.pindroid.fragment;
 
 import com.pindroid.R;
 import com.pindroid.activity.BrowseBookmarks;
-import com.pindroid.activity.BrowseTags;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.activity.ViewBookmark;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
@@ -43,6 +43,14 @@ import android.view.View;
 public class MainSearchResultsFragment extends ListFragment {
 	
 	private FragmentBaseActivity base;
+	
+	private OnSearchActionListener searchActionListener;
+	
+	public interface OnSearchActionListener {
+		public void onBookmarkSearch();
+		public void onTagSearch();
+		public void onGlobalTagSearch();
+	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
@@ -106,29 +114,23 @@ public class MainSearchResultsFragment extends ListFragment {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		    	if(position == 0){
-		    		
-		    		Intent i = new Intent(base, BrowseBookmarks.class);
-		    		i.setAction(Intent.ACTION_SEARCH);
-		    		i.putExtras(intent.getExtras());
-		    		
-		    		startActivity(i);
+		    		searchActionListener.onBookmarkSearch();
 		    	} else if(position == 1){
-		    		
-		    		Intent i = new Intent(base, BrowseTags.class);
-		    		i.setAction(Intent.ACTION_SEARCH);
-		    		i.putExtras(intent.getExtras());
-		    		
-		    		startActivity(i);
+		    		searchActionListener.onTagSearch();
 		    	} else if(position == 2){
-		    		
-		    		Intent i = new Intent(base, BrowseBookmarks.class);
-		    		i.setAction(Intent.ACTION_SEARCH);
-		    		i.putExtras(intent.getExtras());
-		    		i.putExtra("username", "global");
-		    		
-		    		startActivity(i);
+		    		searchActionListener.onGlobalTagSearch();
 		    	}
 		    }
 		});
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			searchActionListener = (OnSearchActionListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement OnSearchActionListener");
+		}
 	}
 }

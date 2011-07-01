@@ -10,6 +10,7 @@ import com.pindroid.Constants;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.BookmarkContentProvider;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -129,6 +130,36 @@ public class IntentHelper {
 		data.scheme(Constants.CONTENT_SCHEME);
 		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("tags");
+		i.setData(data.build());
+		
+		return i;
+	}
+	
+	public static Intent SearchBookmarks(String query, String account, Context context) {
+		Intent i = new Intent(context, BrowseBookmarks.class);
+		i.setAction(Intent.ACTION_SEARCH);
+		i.putExtra(SearchManager.QUERY, query);
+		
+		return i;
+	}
+	
+	public static Intent SearchTags(String query, String account, Context context) {
+		Intent i = new Intent(context, BrowseTags.class);
+		i.setAction(Intent.ACTION_SEARCH);
+		i.putExtra(SearchManager.QUERY, query);
+		
+		return i;
+	}
+	
+	public static Intent SearchGlobalTags(String query, String account, Context context) {
+		Intent i = new Intent(context, BrowseBookmarks.class);
+		i.setAction(Intent.ACTION_SEARCH);
+		i.putExtra(SearchManager.QUERY, query);
+		
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority("global" + "@" + BookmarkContentProvider.AUTHORITY);
+		data.appendEncodedPath("bookmarks");
 		i.setData(data.build());
 		
 		return i;
