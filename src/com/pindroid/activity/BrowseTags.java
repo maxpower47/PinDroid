@@ -26,6 +26,9 @@ import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseTagsFragment;
 
+import android.app.SearchManager;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragment.OnTagSelectedListener {
@@ -34,6 +37,43 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browse_tags);
+
+        Intent intent = getIntent();
+        
+        Uri data = intent.getData();
+        String action = intent.getAction();
+
+		if(data != null)
+			username = data.getUserInfo();
+		else username = mAccount.name;
+        
+		BrowseTagsFragment frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
+        frag.setAccount(username);
+		
+        if(Intent.ACTION_VIEW.equals(action) && data.getLastPathSegment().equals("bookmarks")) {
+			Intent i = new Intent(this, BrowseBookmarks.class);
+			i.setAction(Intent.ACTION_VIEW);
+			i.addCategory(Intent.CATEGORY_DEFAULT);
+			i.setData(data);
+			
+			startActivity(i);
+			finish();
+		}
+        
+		if(Intent.ACTION_VIEW.equals(action)) {
+			setTitle(getString(R.string.browse_my_tags_title));
+		} else if(Intent.ACTION_PICK.equals(action)) {
+			setTitle(getString(R.string.tag_live_folder_chooser_title));
+		} else if(Intent.ACTION_SEARCH.equals(action)) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			setTitle(getString(R.string.tag_search_results_title, query));
+		}
+		
+		if(action != null && action.equals(Intent.ACTION_PICK)) {
+			frag.setAction("pick");
+		} else {
+			frag.setAction("notpick");
+		}
     }
 
 	public void onTagSelected(String tag) {		
