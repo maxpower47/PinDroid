@@ -4,6 +4,7 @@ import java.net.URLEncoder;
 
 import com.pindroid.activity.AddBookmark;
 import com.pindroid.activity.BrowseBookmarks;
+import com.pindroid.activity.BrowseTags;
 import com.pindroid.activity.ViewBookmark;
 import com.pindroid.Constants;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -52,7 +53,6 @@ public class IntentHelper {
 	}
 	
 	public static Intent ViewBookmark(Bookmark b, String account, Context context) {
-		
 		Intent viewBookmark = new Intent(context, ViewBookmark.class);
 		viewBookmark.setAction(Intent.ACTION_VIEW);
 		viewBookmark.addCategory(Intent.CATEGORY_DEFAULT);
@@ -78,7 +78,6 @@ public class IntentHelper {
 	}
 	
 	public static Intent EditBookmark(Bookmark b, String account, Context context) {
-		
 		Intent editBookmark = new Intent(context, AddBookmark.class);
 		editBookmark.setAction(Intent.ACTION_EDIT);
 		Uri.Builder data = new Uri.Builder();
@@ -92,7 +91,6 @@ public class IntentHelper {
 	}
 	
 	public static Intent ViewBookmarks(String tag, String account, Context context) {
-	
 		Intent i = new Intent(context, BrowseBookmarks.class);
 		i.setAction(Intent.ACTION_VIEW);
 		i.addCategory(Intent.CATEGORY_DEFAULT);
@@ -104,6 +102,33 @@ public class IntentHelper {
 		if(tag != null && !tag.equals(""))
 			data.appendQueryParameter("tagname", tag);
 		
+		i.setData(data.build());
+		
+		return i;
+	}
+	
+	public static Intent ViewUnread(String account, Context context) {
+		Intent i = new Intent(context, BrowseBookmarks.class);
+		i.setAction(Intent.ACTION_VIEW);
+		i.addCategory(Intent.CATEGORY_DEFAULT);
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.appendEncodedPath("bookmarks");
+		data.appendQueryParameter("unread", "1");
+		i.setData(data.build());
+		
+		return i;
+	}
+	
+	public static Intent ViewTags(String account, Context context) {
+		Intent i = new Intent(context, BrowseTags.class);
+		i.setAction(Intent.ACTION_VIEW);
+		i.addCategory(Intent.CATEGORY_DEFAULT);
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.appendEncodedPath("tags");
 		i.setData(data.build());
 		
 		return i;
