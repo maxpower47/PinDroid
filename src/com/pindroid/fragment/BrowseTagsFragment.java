@@ -24,7 +24,6 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
@@ -41,8 +40,6 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.pindroid.R;
-import com.pindroid.activity.BrowseBookmarks;
-import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.TagContent.Tag;
 
@@ -51,23 +48,29 @@ public class BrowseTagsFragment extends ListFragment
 
 	private String sortfield = Tag.Name + " ASC";
 	private SimpleCursorAdapter mAdapter;
-	private FragmentBaseActivity base;
+	
+	private String mAccount = "";
 	
 	private OnTagSelectedListener tagSelectedListener;
+	private OnItemClickListener clickListener;
 	
 	public interface OnTagSelectedListener {
 		public void onTagSelected(String tag);
 	}
 	
 	@Override
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		clickListener = viewListener;
+	}
+	
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		
-		base = (FragmentBaseActivity)getActivity();
-		
 		setHasOptionsMenu(true);
 		
-		mAdapter = new SimpleCursorAdapter(base, 
+		mAdapter = new SimpleCursorAdapter(this.getActivity(), 
 				R.layout.tag_view, null, 
 				new String[] {Tag.Name, Tag.Count}, new int[] {R.id.tag_name, R.id.tag_count}, 0);
 		
@@ -75,59 +78,41 @@ public class BrowseTagsFragment extends ListFragment
 		
 		getLoaderManager().initLoader(0, null, this);
 		
-		Intent intent = base.getIntent();
-		String action = intent.getAction();
-		
-		Uri data = base.getIntent().getData();
-
-		if(data != null)
-			base.username = data.getUserInfo();
-		else base.username = base.mAccount.name;
-
-		if(Intent.ACTION_VIEW.equals(action) && data.getLastPathSegment().equals("bookmarks")) {
-			Intent i = new Intent(base, BrowseBookmarks.class);
-			i.setAction(Intent.ACTION_VIEW);
-			i.addCategory(Intent.CATEGORY_DEFAULT);
-			i.setData(data);
-			
-			startActivity(i);
-			base.finish();			
-		}
-		
-		if(Intent.ACTION_VIEW.equals(action)) {
-			base.setTitle(getString(R.string.browse_my_tags_title));
-		} else if(Intent.ACTION_PICK.equals(action)) {
-			base.setTitle(getString(R.string.tag_live_folder_chooser_title));
-		}
-
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
 		lv.setFastScrollEnabled(true);
-	
-		if(action != null && action.equals(Intent.ACTION_PICK)) {
-			
-			lv.setOnItemClickListener(new OnItemClickListener() {
-			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
-			    	
-			    	Intent i = new Intent();
-			    	i.putExtra("tagname", tagName);
-			    	
-			    	base.setResult(Activity.RESULT_OK, i);
-			    	base.finish();
-			    }
-			});
-			
-		} else {
-			lv.setOnItemClickListener(new OnItemClickListener() {
-			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
-			    	
-			    	tagSelectedListener.onTagSelected(tagName);
-			    }
-			});
-		}
+		lv.setOnItemClickListener(clickListener);
 	}
+	
+	public void setAccount(String account) {
+		mAccount = account;
+	}
+	
+	public void setAction(String action) {
+		if(action.equals("pick")) {
+			clickListener = pickListener;
+		} else clickListener = viewListener;
+	}
+	
+	private OnItemClickListener viewListener = new OnItemClickListener() {
+	    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
+	    	
+	    	tagSelectedListener.onTagSelected(tagName);
+	    }
+	};
+	
+	private OnItemClickListener pickListener = new OnItemClickListener() {
+	    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
+	    	
+	    	Intent i = new Intent();
+	    	i.putExtra("tagname", tagName);
+	    	
+	    	getActivity().setResult(Activity.RESULT_OK, i);
+	    	getActivity().finish();
+	    }
+	};
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -168,16 +153,15 @@ public class BrowseTagsFragment extends ListFragment
 	}
 	
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
-		if(Intent.ACTION_SEARCH.equals(getActivity().getIntent().getAction())) { 		
-			String query = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
-			base.setTitle(getString(R.string.tag_search_results_title, query));
-			return TagManager.SearchTags(query, base.username, this.getActivity());
-	
-		} else if(base.mAccount.name.equals(base.username)){
-			return TagManager.GetTags(base.username, sortfield, this.getActivity());
+		if(mAccount != null && !mAccount.equals("")) {
+			if(Intent.ACTION_SEARCH.equals(getActivity().getIntent().getAction())) { 		
+				String query = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
+				return TagManager.SearchTags(query, mAccount, this.getActivity());
+			} else {
+				return TagManager.GetTags(mAccount, sortfield, this.getActivity());
+			}
 		}
-		return new CursorLoader(base);
+		else return new CursorLoader(this.getActivity());
 	}
 	
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
