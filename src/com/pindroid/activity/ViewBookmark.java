@@ -26,19 +26,87 @@ import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.DeleteBookmarkTask;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
+import com.pindroid.fragment.ViewBookmarkFragment;
 import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
+import android.app.SearchManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActionListener,
 	OnBookmarkSelectedListener {
+	
+	private String path;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_bookmark);
+        
+        setTitle(R.string.view_bookmark_title);
+        
+        Intent intent = getIntent();
+        
+        if(Intent.ACTION_SEARCH.equals(intent.getAction())){
+			if(intent.hasExtra(SearchManager.QUERY)){
+				Intent i = new Intent(this, MainSearchResults.class);
+				i.putExtras(intent.getExtras());
+				startActivity(i);
+				finish();
+			} else {
+				onSearchRequested();
+			}
+		} else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
+					
+			Uri data = intent.getData();
+			String tagname = null;
+			
+			if(data != null) {
+				path = data.getPath();
+				tagname = data.getQueryParameter("tagname");
+			}
+			
+			if(data.getScheme() == null || !data.getScheme().equals("content")){
+				Intent i = new Intent(Intent.ACTION_VIEW, data);
+				
+				startActivity(i);
+				finish();				
+			} else if(tagname != null) {
+				Intent viewTags = new Intent(this, BrowseBookmarks.class);
+				viewTags.setData(data);
+				
+				Log.d("View Tags Uri", data.toString());
+				startActivity(viewTags);
+				finish();
+			}
+			
+			if(intent.getData() != null) {
+				data = intent.getData();
+				path = data.getPath();
+				username = data.getUserInfo();
+			}
+			
+			Bookmark bookmark = new Bookmark();
+			
+			if(path.contains("/bookmarks") && isMyself()){		
+				int id = Integer.parseInt(data.getLastPathSegment());
+				bookmark.setId(id);
+			} else if(path.contains("/bookmarks") && !isMyself()) {
+				bookmark.setDescription(data.getQueryParameter("title"));
+				bookmark.setUrl(data.getQueryParameter("url"));
+				bookmark.setNotes(data.getQueryParameter("notes"));
+				bookmark.setTime(Long.parseLong(data.getQueryParameter("time")));
+				if(!data.getQueryParameter("tags").equals("null"))
+					bookmark.setTagString(data.getQueryParameter("tags"));
+				bookmark.setAccount(data.getQueryParameter("account"));
+			}
+			
+			ViewBookmarkFragment frag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.view_bookmark_fragment);
+	        frag.setBookmark(bookmark);
+		}
 	}
 	
 	public void onTagSelected(String tag) {		
