@@ -19,16 +19,13 @@
  * USA
  */
 
-
 package com.pindroid.fragment;
 
 import java.util.Date;
 
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
-import com.pindroid.activity.BrowseBookmarks;
 import com.pindroid.activity.FragmentBaseActivity;
-import com.pindroid.activity.MainSearchResults;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.ContentNotFoundException;
@@ -38,15 +35,11 @@ import com.pindroid.ui.AccountSpan;
 import com.pindroid.ui.TagSpan;
 
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -69,10 +62,6 @@ public class ViewBookmarkFragment extends Fragment {
 	private ImageView mIcon;
 	private Bookmark bookmark;
 	
-	private String user;
-	private String path;
-	private Uri data;
-	
 	private OnBookmarkActionListener bookmarkActionListener;
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
 	
@@ -88,71 +77,25 @@ public class ViewBookmarkFragment extends Fragment {
 		
 		base = (FragmentBaseActivity)getActivity();
 		
-		mTitle = (TextView) base.findViewById(R.id.view_bookmark_title);
-		mUrl = (TextView) base.findViewById(R.id.view_bookmark_url);
-		mNotes = (TextView) base.findViewById(R.id.view_bookmark_notes);
-		mTags = (TextView) base.findViewById(R.id.view_bookmark_tags);
-		mTime = (TextView) base.findViewById(R.id.view_bookmark_time);
-		mUsername = (TextView) base.findViewById(R.id.view_bookmark_account);
-		mIcon = (ImageView) base.findViewById(R.id.view_bookmark_icon);
+		mTitle = (TextView) getView().findViewById(R.id.view_bookmark_title);
+		mUrl = (TextView) getView().findViewById(R.id.view_bookmark_url);
+		mNotes = (TextView) getView().findViewById(R.id.view_bookmark_notes);
+		mTags = (TextView) getView().findViewById(R.id.view_bookmark_tags);
+		mTime = (TextView) getView().findViewById(R.id.view_bookmark_time);
+		mUsername = (TextView) getView().findViewById(R.id.view_bookmark_account);
+		mIcon = (ImageView) getView().findViewById(R.id.view_bookmark_icon);
 		
 		setHasOptionsMenu(true);
-		
-		base.setTitle(R.string.view_bookmark_title);
-		
-		Intent intent = base.getIntent();
-
-		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
-			if(intent.hasExtra(SearchManager.QUERY)){
-				Intent i = new Intent(base, MainSearchResults.class);
-				i.putExtras(intent.getExtras());
-				startActivity(i);
-				base.finish();
-			} else {
-				base.onSearchRequested();
-			}
-		} else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
-			
-			Uri data = intent.getData();
-			String tagname = null;
-			
-			if(data != null) {
-				path = data.getPath();
-				tagname = data.getQueryParameter("tagname");
-			}
-			
-			if(data.getScheme() == null || !data.getScheme().equals("content")){
-				Intent i = new Intent(Intent.ACTION_VIEW, data);
-				
-				startActivity(i);
-				base.finish();				
-			} else if(tagname != null) {
-				Intent viewTags = new Intent(base, BrowseBookmarks.class);
-				viewTags.setData(data);
-				
-				Log.d("View Tags Uri", data.toString());
-				startActivity(viewTags);
-				base.finish();
-			}
-		} 
-		
-		if(intent.getData() != null) {
-			data = base.getIntent().getData();
-			path = data.getPath();
-			
-			base.username = data.getUserInfo();
-			user = data.getQueryParameter("account");
-		}
 	}
 	
 	@Override
 	public void onResume(){
 		super.onResume();
 		
-		if(path.contains("/bookmarks") && base.isMyself()){
+		if(isMyself()){
 			
 			try{		
-				int id = Integer.parseInt(data.getLastPathSegment());
+				int id = bookmark.getId();
 
 				bookmark = BookmarkManager.GetById(id, base);
 				
@@ -180,16 +123,7 @@ public class ViewBookmarkFragment extends Fragment {
         		mTags.setMovementMethod(LinkMovementMethod.getInstance());
 			}
 			catch(ContentNotFoundException e){}
-		} else if(path.contains("/bookmarks") && !base.isMyself()) {
-
-			bookmark = new Bookmark();
-			bookmark.setDescription(data.getQueryParameter("title"));
-			bookmark.setUrl(data.getQueryParameter("url"));
-			bookmark.setNotes(data.getQueryParameter("notes"));
-			bookmark.setTime(Long.parseLong(data.getQueryParameter("time")));
-			if(!data.getQueryParameter("tags").equals("null"))
-				bookmark.setTagString(data.getQueryParameter("tags"));
-			bookmark.setAccount(data.getQueryParameter("account"));
+		} else {
 			
 			Date d = new Date(bookmark.getTime());
 			
@@ -235,7 +169,7 @@ public class ViewBookmarkFragment extends Fragment {
     
     TagSpan.OnTagClickListener userTagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {
-        	bookmarkActionListener.onUserTagSelected(tag, user);
+        	bookmarkActionListener.onUserTagSelected(tag, bookmark.getAccount());
         }
     };
     
@@ -245,6 +179,10 @@ public class ViewBookmarkFragment extends Fragment {
         }
     };
     
+	public void setBookmark(Bookmark b) {
+		bookmark = b;
+	}
+	
 	private void addTag(SpannableStringBuilder builder, Tag t, TagSpan.OnTagClickListener listener) {
 		int flags = 0;
 		
@@ -270,7 +208,7 @@ public class ViewBookmarkFragment extends Fragment {
 	
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-		if(!base.isMyself()) {
+		if(!isMyself()) {
 			menu.removeItem(R.id.menu_view_editbookmark);
 			menu.removeItem(R.id.menu_view_deletebookmark);
 		}
@@ -281,7 +219,7 @@ public class ViewBookmarkFragment extends Fragment {
 	    // Handle item selection
 	    switch (item.getItemId()) {
 		    case R.id.menu_view_read:
-		    	if(base.isMyself() && bookmark.getToRead() && base.markAsRead)
+		    	if(isMyself() && bookmark.getToRead() && base.markAsRead)
 		    		bookmarkSelectedListener.onBookmarkMark(bookmark);
 				bookmarkSelectedListener.onBookmarkRead(bookmark);
 				startActivity(IntentHelper.ReadBookmark(((Spannable) mUrl.getText()).toString()));
@@ -307,6 +245,10 @@ public class ViewBookmarkFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.view_bookmark_fragment, container, false);
+    }
+    
+    private boolean isMyself() {
+    	return bookmark.getId() != 0;
     }
     
 	@Override
