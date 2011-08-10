@@ -23,18 +23,10 @@
 package com.pindroid.fragment;
 
 import com.pindroid.R;
-import com.pindroid.activity.BrowseBookmarks;
 import com.pindroid.activity.FragmentBaseActivity;
-import com.pindroid.activity.MainSearchResults;
-import com.pindroid.activity.ViewBookmark;
 
-import android.app.SearchManager;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,49 +47,7 @@ public class AboutFragment extends Fragment {
 		WebView content = (WebView) base.findViewById(R.id.about_text_view);
 		content.loadData(getString(R.string.about_text), "text/html", "utf-8");
 		
-		Intent intent = base.getIntent();
-		
-		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
-			if(intent.hasExtra(SearchManager.QUERY)){
-				Intent i = new Intent(base, MainSearchResults.class);
-				i.putExtras(intent.getExtras());
-				startActivity(i);
-				base.finish();
-			} else {
-				base.onSearchRequested();
-			}
-		} else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
-			
-			Uri data = intent.getData();
-			String path = null;
-			String tagname = null;
-			
-			if(data != null) {
-				path = data.getPath();
-				tagname = data.getQueryParameter("tagname");
-			}
-			
-			if(data.getScheme() == null || !data.getScheme().equals("content")){
-				Intent i = new Intent(Intent.ACTION_VIEW, data);
-				
-				startActivity(i);
-				base.finish();				
-			} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
-				Intent viewBookmark = new Intent(base, ViewBookmark.class);
-				viewBookmark.setData(data);
-				
-				Log.d("View Bookmark Uri", data.toString());
-				startActivity(viewBookmark);
-				base.finish();
-			} else if(tagname != null) {
-				Intent viewTags = new Intent(base, BrowseBookmarks.class);
-				viewTags.setData(data);
-				
-				Log.d("View Tags Uri", data.toString());
-				startActivity(viewTags);
-				base.finish();
-			}
-		}
+
 	}
 	
     @Override

@@ -50,16 +50,6 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 		BrowseTagsFragment frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
         frag.setAccount(username);
 		
-        if(Intent.ACTION_VIEW.equals(action) && data.getLastPathSegment().equals("bookmarks")) {
-			Intent i = new Intent(this, BrowseBookmarks.class);
-			i.setAction(Intent.ACTION_VIEW);
-			i.addCategory(Intent.CATEGORY_DEFAULT);
-			i.setData(data);
-			
-			startActivity(i);
-			finish();
-		}
-        
 		if(Intent.ACTION_VIEW.equals(action)) {
 			setTitle(getString(R.string.browse_my_tags_title));
 		} else if(Intent.ACTION_PICK.equals(action)) {

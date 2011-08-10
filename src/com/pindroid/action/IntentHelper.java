@@ -139,7 +139,7 @@ public class IntentHelper {
 		Intent i = new Intent(context, BrowseBookmarks.class);
 		i.setAction(Intent.ACTION_SEARCH);
 		i.putExtra(SearchManager.QUERY, query);
-		
+		i.putExtra("MainSearchResults", "1");
 		return i;
 	}
 	
@@ -147,7 +147,7 @@ public class IntentHelper {
 		Intent i = new Intent(context, BrowseTags.class);
 		i.setAction(Intent.ACTION_SEARCH);
 		i.putExtra(SearchManager.QUERY, query);
-		
+		i.putExtra("MainSearchResults", "1");
 		return i;
 	}
 	
@@ -155,6 +155,7 @@ public class IntentHelper {
 		Intent i = new Intent(context, BrowseBookmarks.class);
 		i.setAction(Intent.ACTION_SEARCH);
 		i.putExtra(SearchManager.QUERY, query);
+		i.putExtra("MainSearchResults", "1");
 		
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);

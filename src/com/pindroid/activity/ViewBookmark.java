@@ -50,6 +50,7 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
         
         Intent intent = getIntent();
         
+        
         if(Intent.ACTION_SEARCH.equals(intent.getAction())){
 			if(intent.hasExtra(SearchManager.QUERY)){
 				Intent i = new Intent(this, MainSearchResults.class);
