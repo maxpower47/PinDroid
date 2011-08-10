@@ -28,15 +28,19 @@ import com.pindroid.authenticator.AuthenticatorActivity;
 import com.pindroid.providers.BookmarkContentProvider;
 
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -74,6 +78,55 @@ public class FragmentBaseActivity extends FragmentActivity {
 		
 		loadSettings();
 		init();
+		
+		
+		
+		
+		
+		Intent intent = getIntent();
+		
+		if(Intent.ACTION_SEARCH.equals(intent.getAction()) && !intent.hasExtra("MainSearchResults")){
+			if(intent.hasExtra(SearchManager.QUERY)){
+				Intent i = new Intent(this, MainSearchResults.class);
+				i.putExtras(intent.getExtras());
+				startActivity(i);
+				finish();
+			} else {
+				onSearchRequested();
+			}
+		} else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
+			
+			Uri data = intent.getData();
+			String path = null;
+			String tagname = null;
+			
+			if(data != null) {
+				path = data.getPath();
+				tagname = data.getQueryParameter("tagname");
+			}
+			
+			if(data.getScheme() == null || !data.getScheme().equals("content")){
+				Intent i = new Intent(Intent.ACTION_VIEW, data);
+				Log.d("finish", "here");
+				startActivity(i);
+				finish();				
+			} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment()) && intent.hasExtra(SearchManager.USER_QUERY)) {
+				Intent viewBookmark = new Intent(this, ViewBookmark.class);
+				viewBookmark.setAction(Intent.ACTION_VIEW);
+				viewBookmark.setData(data);
+				viewBookmark.removeExtra(SearchManager.USER_QUERY);
+				Log.d("View Bookmark Uri", data.toString());
+				startActivity(viewBookmark);
+				finish();
+			} else if(tagname != null) {
+				Intent viewTags = new Intent(this, BrowseBookmarks.class);
+				viewTags.setData(data);
+				
+				Log.d("View Tags Uri", data.toString());
+				startActivity(viewTags);
+				finish();
+			}
+		}
 	}
 	
 	private void init(){
