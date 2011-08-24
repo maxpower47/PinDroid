@@ -34,13 +34,17 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -458,10 +462,19 @@ public class PinboardApi {
 		post.setHeader("User-Agent", "PinDroid");
 		post.setHeader("Accept-Encoding", "gzip");
 
-		final DefaultHttpClient client = HttpClientFactory.getThreadSafeClient();
+		final DefaultHttpClient client = (DefaultHttpClient)HttpClientFactory.getThreadSafeClient();
         final CredentialsProvider provider = client.getCredentialsProvider();
         final Credentials credentials = new UsernamePasswordCredentials(username, authtoken);
         provider.setCredentials(SCOPE, credentials);
+        
+		// Get auth/login cookies
+		final HttpPost auth = new HttpPost("http://pinboard.in/auth/");
+		java.util.List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+		nameValuePairs.add(new BasicNameValuePair("username", username));
+		nameValuePairs.add(new BasicNameValuePair("password", authtoken));
+		nameValuePairs.add(new BasicNameValuePair("submit", "log in"));
+		auth.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		client.execute(auth);
         
         final HttpResponse resp = client.execute(post);
         
