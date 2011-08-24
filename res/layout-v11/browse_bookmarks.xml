@@ -26,9 +26,8 @@
 	android:layout_height="fill_parent"
 	android:orientation="vertical">
 	<include android:id="@+id/include_action_bar" layout="@layout/action_bar" />
-	<fragment class="com.pindroid.fragment.BrowseBookmarksFragment"
+	<LinearLayout 
 		android:id="@+id/listcontent"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent" >
-	</fragment>
+		android:layout_width="fill_parent"
+	    android:layout_height="fill_parent" />
 </LinearLayout>

@@ -36,14 +36,12 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
-import android.util.Log;
 
 public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookmarksFragment.OnBookmarkSelectedListener {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		Log.d("bb", "here");
 		setContentView(R.layout.browse_bookmarks);
 		
 		Intent intent = getIntent();
@@ -64,14 +62,18 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 			finish();
 		} 
 		
-		if(!isMyself()) {
-			FragmentManager fm = getSupportFragmentManager();
+		
+		FragmentManager fm = getSupportFragmentManager();
+		FragmentTransaction t = fm.beginTransaction();
+	
+		if(isMyself()) {
+			BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+			t.add(R.id.listcontent, frag);
+		} else {
 			BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
-			FragmentTransaction t = fm.beginTransaction();
-			
-			t.replace(R.id.listcontent, frag);
-			t.commit();
+			t.add(R.id.listcontent, frag);
 		}
+		t.commit();
     }
 	
 	private void viewBookmark(int id) {

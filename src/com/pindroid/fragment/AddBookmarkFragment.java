@@ -87,10 +87,9 @@ public class AddBookmarkFragment extends Fragment {
 	private CheckBox mPrivate;
 	private CheckBox mToRead;
 	private Bookmark bookmark;
+	private Bookmark oldBookmark;
 	private Boolean update = false;
 	private Boolean error = false;
-	
-	private Bookmark oldBookmark;
 	
 	private long updateTime = 0;
 	
@@ -103,158 +102,25 @@ public class AddBookmarkFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		
-		base = (FragmentBaseActivity)getActivity();
-		
 		setHasOptionsMenu(true);
 		
-		mEditUrl = (EditText) base.findViewById(R.id.add_edit_url);
-		mEditDescription = (EditText) base.findViewById(R.id.add_edit_description);
-		mDescriptionProgress = (ProgressBar) base.findViewById(R.id.add_description_progress);
-		mEditNotes = (EditText) base.findViewById(R.id.add_edit_notes);
-		mEditTags = (EditText) base.findViewById(R.id.add_edit_tags);
-		mRecommendedTags = (TextView) base.findViewById(R.id.add_recommended_tags);
-		mRecommendedProgress = (ProgressBar) base.findViewById(R.id.add_recommended_tags_progress);
-		mPopularTags = (TextView) base.findViewById(R.id.add_popular_tags);
-		mPopularProgress = (ProgressBar) base.findViewById(R.id.add_popular_tags_progress);
-		mPrivate = (CheckBox) base.findViewById(R.id.add_edit_private);
-		mToRead = (CheckBox) base.findViewById(R.id.add_edit_toread);
+		base = (FragmentBaseActivity)getActivity();
+		
+		mEditUrl = (EditText) getView().findViewById(R.id.add_edit_url);
+		mEditDescription = (EditText) getView().findViewById(R.id.add_edit_description);
+		mDescriptionProgress = (ProgressBar) getView().findViewById(R.id.add_description_progress);
+		mEditNotes = (EditText) getView().findViewById(R.id.add_edit_notes);
+		mEditTags = (EditText) getView().findViewById(R.id.add_edit_tags);
+		mRecommendedTags = (TextView) getView().findViewById(R.id.add_recommended_tags);
+		mRecommendedProgress = (ProgressBar) getView().findViewById(R.id.add_recommended_tags_progress);
+		mPopularTags = (TextView) getView().findViewById(R.id.add_popular_tags);
+		mPopularProgress = (ProgressBar) getView().findViewById(R.id.add_popular_tags_progress);
+		mPrivate = (CheckBox) getView().findViewById(R.id.add_edit_private);
+		mToRead = (CheckBox) getView().findViewById(R.id.add_edit_toread);
 		
 		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
 
-		if(savedInstanceState == null){
-			Intent intent = base.getIntent();
-			
-			if(Intent.ACTION_SEARCH.equals(intent.getAction())){
-				if(intent.hasExtra(SearchManager.QUERY)){
-					Intent i = new Intent(base.mContext, MainSearchResults.class);
-					i.putExtras(intent.getExtras());
-					startActivity(i);
-					base.finish();
-				} else {
-					base.onSearchRequested();
-				}
-			} else if(Intent.ACTION_VIEW.equals(intent.getAction()) || (!intent.hasExtra(Intent.EXTRA_TEXT) && !Intent.ACTION_EDIT.equals(intent.getAction()))) {
-				
-				Uri data = intent.getData();
-				String path = null;
-				String tagname = null;
-				
-				if(data != null) {
-					path = data.getPath();
-					tagname = data.getQueryParameter("tagname");
-				}
-				
-				if(data.getScheme() == null || !data.getScheme().equals("content")){
-					Intent i = new Intent(Intent.ACTION_VIEW, data);
-					
-					startActivity(i);
-					base.finish();				
-				} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
-					Intent viewBookmark = new Intent(base, ViewBookmark.class);
-					viewBookmark.setData(data);
-					
-					Log.d("View Bookmark Uri", data.toString());
-					startActivity(viewBookmark);
-					base.finish();
-				} else if(tagname != null) {
-					Intent viewTags = new Intent(base, BrowseBookmarks.class);
-					viewTags.setData(data);
-					
-					Log.d("View Tags Uri", data.toString());
-					startActivity(viewTags);
-					base.finish();
-				}
-			} else if(Intent.ACTION_SEND.equals(intent.getAction())){
-				Bookmark b = new Bookmark();
-				
-				String url = StringUtils.getUrl(intent.getStringExtra(Intent.EXTRA_TEXT));
-				b.setUrl(url);
-				
-				if(url.equals("")) {
-					Toast.makeText(base, R.string.add_bookmark_invalid_url, Toast.LENGTH_LONG).show();
-				}
-				
-				b.setDescription(intent.getStringExtra(Constants.EXTRA_DESCRIPTION));
-				b.setNotes(intent.getStringExtra(Constants.EXTRA_NOTES));
-				b.setTagString(intent.getStringExtra(Constants.EXTRA_TAGS));
-				b.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, base.privateDefault));
-				b.setToRead(intent.getBooleanExtra(Constants.EXTRA_TOREAD, base.toreadDefault));
-				error = intent.getBooleanExtra(Constants.EXTRA_ERROR, false);
-	
-				try{
-					Bookmark old = BookmarkManager.GetByUrl(b.getUrl(), base);
-					b = old.copy();
-				} catch(Exception e) {
-					
-				}
-
-				mEditUrl.setText(b.getUrl());
-				
-				if(b.getDescription() != null)
-					mEditDescription.setText(b.getDescription());
-				
-				if(b.getNotes() != null)
-					mEditNotes.setText(b.getNotes());
-				
-				if(b.getTagString() != null)
-					mEditTags.setText(b.getTagString());
-				
-				mPrivate.setChecked(!b.getShared());
-				mToRead.setChecked(b.getToRead());
-				
-				if(mEditDescription.getText().toString().equals(""))
-					titleTask = new GetTitleTask().execute(b.getUrl());
-				
-				bookmark = b.copy();
-				
-				if(error){
-					update = intent.getBooleanExtra(Constants.EXTRA_UPDATE, false);
-					
-					if(update) {
-						oldBookmark = new Bookmark();
-						oldBookmark.setAccount(base.mAccount.name);
-						oldBookmark.setDescription(intent.getStringExtra(Constants.EXTRA_DESCRIPTION + ".old"));
-						oldBookmark.setNotes(intent.getStringExtra(Constants.EXTRA_NOTES + ".old"));
-						oldBookmark.setUrl(intent.getStringExtra(Intent.EXTRA_TEXT + ".old"));
-						oldBookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE + ".old", false));
-						oldBookmark.setTagString(intent.getStringExtra(Constants.EXTRA_TAGS + ".old"));
-						oldBookmark.setTime(intent.getLongExtra(Constants.EXTRA_TIME + ".old", 0));
-						oldBookmark.setToRead(intent.getBooleanExtra(Constants.EXTRA_TOREAD + ".old", false));
-					}
-				}
-				
-				tagTask = new GetTagSuggestionsTask().execute(b.getUrl());
-				
-			} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
-				int id = Integer.parseInt(intent.getData().getLastPathSegment());
-				try {
-					Bookmark b = BookmarkManager.GetById(id, base);
-					oldBookmark = b.copy();
-					
-					mEditUrl.setText(b.getUrl());
-					mEditDescription.setText(b.getDescription());
-					mEditNotes.setText(b.getNotes());
-					mEditTags.setText(b.getTagString());
-					mPrivate.setChecked(!b.getShared());
-					mToRead.setChecked(b.getToRead());
-					updateTime = b.getTime();
-					
-					update = true;
-				} catch (ContentNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} else {
-				mEditUrl.requestFocus();
-				setDefaultValues();
-			}
-		}
-		
-		if(update)
-			base.setTitle(getString(R.string.add_bookmark_edit_title));
-		else base.setTitle(getString(R.string.add_bookmark_add_title));
-		
 		mEditUrl.setOnFocusChangeListener(new OnFocusChangeListener(){
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(!hasFocus){
@@ -267,7 +133,43 @@ public class AddBookmarkFragment extends Fragment {
 				}
 			}
 		});
+	}
+	
+	@Override
+	public void onStart(){
+		super.onStart();
+		
+		if(bookmark != null){
+			mEditUrl.setText(bookmark.getUrl());
+			
+			if(bookmark.getDescription() != null)
+				mEditDescription.setText(bookmark.getDescription());
+			
+			if(bookmark.getNotes() != null)
+				mEditNotes.setText(bookmark.getNotes());
+			
+			if(bookmark.getTagString() != null)
+				mEditTags.setText(bookmark.getTagString());
+			
+			mPrivate.setChecked(!bookmark.getShared());
+			mToRead.setChecked(bookmark.getToRead());
+			
+			if(mEditDescription.getText().toString().equals(""))
+				titleTask = new GetTitleTask().execute(bookmark.getUrl());
 
+			tagTask = new GetTagSuggestionsTask().execute(bookmark.getUrl());
+		} else {
+			mEditUrl.requestFocus();
+			setDefaultValues();
+		}
+	}
+	
+	public void loadBookmark(Bookmark b, Bookmark oldB){
+		if(b != null)
+			bookmark = b.copy();
+		
+		if(oldB != null)
+			oldBookmark = oldB.copy();	
 	}
 	
 	public void saveHandler(View v) {

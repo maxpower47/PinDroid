@@ -21,22 +21,138 @@
 
 package com.pindroid.activity;
 
+import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.fragment.AddBookmarkFragment;
+import com.pindroid.fragment.AddBookmarkFragment.GetTagSuggestionsTask;
+import com.pindroid.fragment.AddBookmarkFragment.GetTitleTask;
+import com.pindroid.platform.BookmarkManager;
+import com.pindroid.providers.ContentNotFoundException;
+import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.util.StringUtils;
 
+import android.app.SearchManager;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 public class AddBookmark extends FragmentBaseActivity {
 
 	private AddBookmarkFragment frag;
+	private Bookmark bookmark = null;
+	private Bookmark oldBookmark = null;
+	private Boolean update = false;
+	private Boolean error = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.add_bookmark);
 		
+		Intent intent = getIntent();
+		
+		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
+			if(intent.hasExtra(SearchManager.QUERY)){
+				Intent i = new Intent(this, MainSearchResults.class);
+				i.putExtras(intent.getExtras());
+				startActivity(i);
+				finish();
+			} else {
+				onSearchRequested();
+			}
+		} else if(Intent.ACTION_VIEW.equals(intent.getAction()) || (!intent.hasExtra(Intent.EXTRA_TEXT) && !Intent.ACTION_EDIT.equals(intent.getAction()))) {
+			
+			Uri data = intent.getData();
+			String path = null;
+			String tagname = null;
+			
+			if(data != null) {
+				path = data.getPath();
+				tagname = data.getQueryParameter("tagname");
+			}
+			
+			if(data.getScheme() == null || !data.getScheme().equals("content")){
+				Intent i = new Intent(Intent.ACTION_VIEW, data);
+				
+				startActivity(i);
+				finish();				
+			} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
+				Intent viewBookmark = new Intent(this, ViewBookmark.class);
+				viewBookmark.setData(data);
+				
+				Log.d("View Bookmark Uri", data.toString());
+				startActivity(viewBookmark);
+				finish();
+			} else if(tagname != null) {
+				Intent viewTags = new Intent(this, BrowseBookmarks.class);
+				viewTags.setData(data);
+				
+				Log.d("View Tags Uri", data.toString());
+				startActivity(viewTags);
+				finish();
+			}
+		} else if(Intent.ACTION_SEND.equals(intent.getAction())){
+			bookmark = new Bookmark();
+			
+			String url = StringUtils.getUrl(intent.getStringExtra(Intent.EXTRA_TEXT));
+			bookmark.setUrl(url);
+			
+			if(url.equals("")) {
+				Toast.makeText(this, R.string.add_bookmark_invalid_url, Toast.LENGTH_LONG).show();
+			}
+			
+			bookmark.setDescription(intent.getStringExtra(Constants.EXTRA_DESCRIPTION));
+			bookmark.setNotes(intent.getStringExtra(Constants.EXTRA_NOTES));
+			bookmark.setTagString(intent.getStringExtra(Constants.EXTRA_TAGS));
+			bookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, privateDefault));
+			bookmark.setToRead(intent.getBooleanExtra(Constants.EXTRA_TOREAD, toreadDefault));
+			error = intent.getBooleanExtra(Constants.EXTRA_ERROR, false);
+
+			try{
+				Bookmark old = BookmarkManager.GetByUrl(bookmark.getUrl(), this);
+				bookmark = old.copy();
+			} catch(Exception e) {
+				
+			}
+			
+			if(error){
+				update = intent.getBooleanExtra(Constants.EXTRA_UPDATE, false);
+				
+				if(update) {
+					oldBookmark = new Bookmark();
+					oldBookmark.setAccount(mAccount.name);
+					oldBookmark.setDescription(intent.getStringExtra(Constants.EXTRA_DESCRIPTION + ".old"));
+					oldBookmark.setNotes(intent.getStringExtra(Constants.EXTRA_NOTES + ".old"));
+					oldBookmark.setUrl(intent.getStringExtra(Intent.EXTRA_TEXT + ".old"));
+					oldBookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE + ".old", false));
+					oldBookmark.setTagString(intent.getStringExtra(Constants.EXTRA_TAGS + ".old"));
+					oldBookmark.setTime(intent.getLongExtra(Constants.EXTRA_TIME + ".old", 0));
+					oldBookmark.setToRead(intent.getBooleanExtra(Constants.EXTRA_TOREAD + ".old", false));
+				}
+			}
+			
+		} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
+			int id = Integer.parseInt(intent.getData().getLastPathSegment());
+			try {
+				Bookmark b = BookmarkManager.GetById(id, this);
+				oldBookmark = b.copy();
+				
+				update = true;
+			} catch (ContentNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if(update)
+			setTitle(getString(R.string.add_bookmark_edit_title));
+		else setTitle(getString(R.string.add_bookmark_add_title));
+		
 		frag = (AddBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.add_bookmark_fragment);
+		frag.loadBookmark(bookmark, oldBookmark);
 	}
 	
 	public void saveHandler(View v) {
