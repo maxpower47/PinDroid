@@ -136,8 +136,8 @@ public class AddBookmark extends FragmentBaseActivity {
 		} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
 			int id = Integer.parseInt(intent.getData().getLastPathSegment());
 			try {
-				Bookmark b = BookmarkManager.GetById(id, this);
-				oldBookmark = b.copy();
+				bookmark = BookmarkManager.GetById(id, this);
+				oldBookmark = bookmark.copy();
 				
 				update = true;
 			} catch (ContentNotFoundException e) {

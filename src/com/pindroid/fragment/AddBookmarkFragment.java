@@ -166,7 +166,7 @@ public class AddBookmarkFragment extends Fragment {
 			bookmark = b.copy();
 		
 		if(oldB != null)
-			oldBookmark = oldB.copy();	
+			oldBookmark = oldB.copy();
 	}
 	
 	public void saveHandler(View v) {
@@ -206,11 +206,6 @@ public class AddBookmarkFragment extends Fragment {
 		if(!url.startsWith("http")){
 			url = "http://" + url;
 		}
-
-		if(!update) {
-			Date d = new Date();
-			updateTime = d.getTime();
-		}
 		
 		String tagstring = "";
 		String[] tags = mEditTags.getText().toString().trim().split(" ");
@@ -226,8 +221,12 @@ public class AddBookmarkFragment extends Fragment {
 			update = true;
 			oldBookmark = bookmark.copy();
 		}
-			
 		
+		if(!update) {
+			Date d = new Date();
+			updateTime = d.getTime();
+		}
+			
 		bookmark = new Bookmark(url, description, 
 				mEditNotes.getText().toString(), tagstring.trim(),
 				!mPrivate.isChecked(), mToRead.isChecked(), updateTime);
