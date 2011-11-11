@@ -94,9 +94,9 @@ public class AddBookmarkFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		
-		setHasOptionsMenu(true);
-		
 		base = (FragmentBaseActivity)getActivity();
+		
+		setHasOptionsMenu(true);
 		
 		mEditUrl = (EditText) getView().findViewById(R.id.add_edit_url);
 		mEditDescription = (EditText) getView().findViewById(R.id.add_edit_description);

@@ -78,11 +78,7 @@ public class FragmentBaseActivity extends FragmentActivity {
 		
 		loadSettings();
 		init();
-		
-		
-		
-		
-		
+
 		Intent intent = getIntent();
 		
 		if(Intent.ACTION_SEARCH.equals(intent.getAction()) && !intent.hasExtra("MainSearchResults")){
