@@ -29,27 +29,19 @@ import java.util.Date;
 
 import org.apache.http.auth.AuthenticationException;
 
-import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.AddBookmarkTask;
 import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.GetWebpageTitleTask;
-import com.pindroid.activity.BrowseBookmarks;
 import com.pindroid.activity.FragmentBaseActivity;
-import com.pindroid.activity.MainSearchResults;
-import com.pindroid.activity.ViewBookmark;
 import com.pindroid.client.PinboardApi;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
-import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.TagSpan;
-import com.pindroid.util.StringUtils;
+import com.pindroid.widgets.MultiWordAutoCompleteView;
 
-import android.app.SearchManager;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -57,7 +49,6 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -65,6 +56,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnFocusChangeListener;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -79,7 +71,7 @@ public class AddBookmarkFragment extends Fragment {
 	private EditText mEditDescription;
 	private ProgressBar mDescriptionProgress;
 	private EditText mEditNotes;
-	private EditText mEditTags;
+	private MultiWordAutoCompleteView mEditTags;
 	private TextView mRecommendedTags;
 	private ProgressBar mRecommendedProgress;
 	private TextView mPopularTags;
@@ -110,7 +102,7 @@ public class AddBookmarkFragment extends Fragment {
 		mEditDescription = (EditText) getView().findViewById(R.id.add_edit_description);
 		mDescriptionProgress = (ProgressBar) getView().findViewById(R.id.add_description_progress);
 		mEditNotes = (EditText) getView().findViewById(R.id.add_edit_notes);
-		mEditTags = (EditText) getView().findViewById(R.id.add_edit_tags);
+		mEditTags = (MultiWordAutoCompleteView) getView().findViewById(R.id.add_edit_tags);
 		mRecommendedTags = (TextView) getView().findViewById(R.id.add_recommended_tags);
 		mRecommendedProgress = (ProgressBar) getView().findViewById(R.id.add_recommended_tags_progress);
 		mPopularTags = (TextView) getView().findViewById(R.id.add_popular_tags);
@@ -120,6 +112,11 @@ public class AddBookmarkFragment extends Fragment {
 		
 		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
+		
+		String[] tagArray = new String[5];
+		tagArray = TagManager.GetTagsAsArray(base.mAccount.name, null, base).toArray(tagArray);
+		ArrayAdapter<String> autoCompleteAdapter = new ArrayAdapter<String>(base, R.layout.autocomplete_view, tagArray);
+		mEditTags.setAdapter(autoCompleteAdapter);
 
 		mEditUrl.setOnFocusChangeListener(new OnFocusChangeListener(){
 			public void onFocusChange(View v, boolean hasFocus) {
@@ -333,6 +330,7 @@ public class AddBookmarkFragment extends Fragment {
         			currentTags.remove(tag);
         		}
         		mEditTags.setText(TextUtils.join(" ", currentTags.toArray()).trim());
+        		mEditTags.setSelection(mEditTags.getText().length());
         	}
         }
     };

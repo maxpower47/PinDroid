@@ -82,7 +82,7 @@
                 android:id="@+id/add_title_tags"
                 style="@style/AddBookmarkFieldTitle"
                 android:text="@string/add_title_tags" />
-            <EditText
+            <com.pindroid.widgets.MultiWordAutoCompleteView
                 android:id="@+id/add_edit_tags"
                 style="@style/AddBookmarkFieldEdit"
                 android:inputType="text"

@@ -24,8 +24,6 @@ package com.pindroid.activity;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.fragment.AddBookmarkFragment;
-import com.pindroid.fragment.AddBookmarkFragment.GetTagSuggestionsTask;
-import com.pindroid.fragment.AddBookmarkFragment.GetTitleTask;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;

@@ -41,6 +41,26 @@ public class TagManager {
 		return new CursorLoader(context, Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);
 	}
 	
+	public static ArrayList<String> GetTagsAsArray(String account, String sortorder, Context context) {	
+		String[] projection = new String[] {Tag.Name};
+		String selection = Tag.Account + "=?";
+		String[] selectionargs = new String[]{account};
+		
+		ArrayList<String> result = new ArrayList<String>();
+
+		Cursor c = context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);
+		
+		if(c.moveToFirst()){
+			int nameColumn = c.getColumnIndex(Tag.Name);
+			
+			do{
+				result.add(c.getString(nameColumn));
+			} while(c.moveToNext());
+		}
+		
+		return result;
+	}
+	
 	public static void AddTag(Tag tag, String account, Context context){
 		final ContentValues values = new ContentValues();
 		
