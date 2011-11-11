@@ -47,6 +47,8 @@
         <item>15 Minuten</item>
         <item>30 Minuten</item>
         <item>1 Stunde</item>
+        <item>3 Stunden</item>
+        <item>6 Stunden</item>
         <item>12 Stunden</item>
         <item>24 Stunden</item>
     </string-array>
@@ -55,6 +57,8 @@
         <item>15</item>
         <item>30</item>
         <item>60</item>
+        <item>180</item>
+        <item>360</item>
         <item>720</item>
         <item>0</item>
     </string-array>

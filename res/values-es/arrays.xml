@@ -26,7 +26,8 @@
     <item>15 minutos</item>
     <item>30 minutos</item>
     <item>1 hora</item>
-    <item>12 horas</item>
+    <item>3 horas</item>
+    <item>6 horas</item>
     <item>24 horas</item>
   </string-array>
   <string-array name="pref_synctime_values">
@@ -34,6 +35,8 @@
     <item>15</item>
     <item>30</item>
     <item>60</item>
+    <item>180</item>
+    <item>360</item>
     <item>720</item>
     <item>0</item>
   </string-array>
