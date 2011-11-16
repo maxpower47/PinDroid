@@ -97,7 +97,7 @@ public class PinboardFeed {
     		}	
     	}
 
-        final HttpGet post = new HttpGet(url);
+        final HttpGet post = new HttpGet(url.trim());
         
         Cursor bookmarkList = null;
 
