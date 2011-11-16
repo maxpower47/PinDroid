@@ -40,7 +40,7 @@ import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.TagSpan;
-import com.pindroid.widgets.MultiWordAutoCompleteView;
+import com.pindroid.util.SpaceTokenizer;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -59,6 +59,7 @@ import android.view.View.OnFocusChangeListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,7 +72,7 @@ public class AddBookmarkFragment extends Fragment {
 	private EditText mEditDescription;
 	private ProgressBar mDescriptionProgress;
 	private EditText mEditNotes;
-	private MultiWordAutoCompleteView mEditTags;
+	private MultiAutoCompleteTextView mEditTags;
 	private TextView mRecommendedTags;
 	private ProgressBar mRecommendedProgress;
 	private TextView mPopularTags;
@@ -102,7 +103,7 @@ public class AddBookmarkFragment extends Fragment {
 		mEditDescription = (EditText) getView().findViewById(R.id.add_edit_description);
 		mDescriptionProgress = (ProgressBar) getView().findViewById(R.id.add_description_progress);
 		mEditNotes = (EditText) getView().findViewById(R.id.add_edit_notes);
-		mEditTags = (MultiWordAutoCompleteView) getView().findViewById(R.id.add_edit_tags);
+		mEditTags = (MultiAutoCompleteTextView) getView().findViewById(R.id.add_edit_tags);
 		mRecommendedTags = (TextView) getView().findViewById(R.id.add_recommended_tags);
 		mRecommendedProgress = (ProgressBar) getView().findViewById(R.id.add_recommended_tags_progress);
 		mPopularTags = (TextView) getView().findViewById(R.id.add_popular_tags);
@@ -117,6 +118,7 @@ public class AddBookmarkFragment extends Fragment {
 		tagArray = TagManager.GetTagsAsArray(base.mAccount.name, null, base).toArray(tagArray);
 		ArrayAdapter<String> autoCompleteAdapter = new ArrayAdapter<String>(base, R.layout.autocomplete_view, tagArray);
 		mEditTags.setAdapter(autoCompleteAdapter);
+		mEditTags.setTokenizer(new SpaceTokenizer());
 
 		mEditUrl.setOnFocusChangeListener(new OnFocusChangeListener(){
 			public void onFocusChange(View v, boolean hasFocus) {
