@@ -70,11 +70,6 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	
 	private BrowseBookmarksFragment.OnBookmarkSelectedListener bookmarkSelectedListener;
 	
-	public BrowseBookmarkFeedFragment(String username, String tagname){
-		this.username = username;
-		this.tagname = tagname;
-	}
-	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
@@ -123,6 +118,11 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 				}
 			});
 		}
+	}
+	
+	public void setQuery(String username, String tagname){
+		this.username = username;
+		this.tagname = tagname;
 	}
 	
 	@Override
