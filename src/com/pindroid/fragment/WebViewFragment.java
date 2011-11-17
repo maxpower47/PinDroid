@@ -59,6 +59,7 @@ public class WebViewFragment extends Fragment {
 		content = (WebView) getView().findViewById(R.id.web_view);
 		
 		setHasOptionsMenu(true);
+		setRetainInstance(true);
 	}
 	
 	@Override
@@ -98,11 +99,13 @@ public class WebViewFragment extends Fragment {
 	public void onStart(){
 		super.onStart();
 
-		if(web){
-			content.loadUrl(bookmark.getUrl());
-		} else {
-			String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(bookmark.getUrl());
-			content.loadUrl(readUrl);
+		if(bookmark != null){
+			if(web){
+				content.loadUrl(bookmark.getUrl());
+			} else {
+				String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(bookmark.getUrl());
+				content.loadUrl(readUrl);
+			}
 		}
 	}
 	

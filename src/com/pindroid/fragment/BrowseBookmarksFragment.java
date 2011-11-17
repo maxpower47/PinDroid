@@ -78,12 +78,6 @@ public class BrowseBookmarksFragment extends ListFragment
 		public void onBookmarkDelete(Bookmark b);
 	}
 	
-	public BrowseBookmarksFragment(String username, String tagname, boolean unread){
-		this.username = username;
-		this.tagname = tagname;
-		this.unread = unread;
-	}
-	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
@@ -133,6 +127,12 @@ public class BrowseBookmarksFragment extends ListFragment
 				}
 			});
 		}
+	}
+	
+	public void setQuery(String username, String tagname, boolean unread){
+		this.username = username;
+		this.tagname = tagname;
+		this.unread = unread;
 	}
 	
 	@Override

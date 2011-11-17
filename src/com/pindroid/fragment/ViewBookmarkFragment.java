@@ -84,6 +84,7 @@ public class ViewBookmarkFragment extends Fragment {
 		mIcon = (ImageView) getView().findViewById(R.id.view_bookmark_icon);
 		
 		setHasOptionsMenu(true);
+		setRetainInstance(true);
 	}
 	
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {

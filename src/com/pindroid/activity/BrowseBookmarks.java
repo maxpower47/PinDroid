@@ -42,6 +42,8 @@ import android.support.v4.app.FragmentTransaction;
 
 public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookmarksFragment.OnBookmarkSelectedListener, 
 	OnBookmarkActionListener, OnBookmarkViewListener {
+	
+	private Bookmark currentBookmark = new Bookmark();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -73,7 +75,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 		FragmentTransaction t = fm.beginTransaction();
 	
 		if(isMyself()) {
-			BrowseBookmarksFragment frag = new BrowseBookmarksFragment(username, tagname, unread);
+			BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+			frag.setQuery(username, tagname, unread);
 			t.add(R.id.listcontent, frag);
 		} else {
 			BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment(username, tagname);
@@ -102,6 +105,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 	}
 
 	public void onBookmarkView(Bookmark b) {
+		currentBookmark = b;
+		
 		if(findViewById(R.id.maincontent) != null) {
 			ViewBookmarkFragment viewFrag = new ViewBookmarkFragment();
 			viewFrag.setBookmark(b);
@@ -114,6 +119,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 	}
 
 	public void onBookmarkRead(Bookmark b) {
+		currentBookmark = b;
+		
 		if(findViewById(R.id.maincontent) != null) {
 			WebViewFragment webFrag = new WebViewFragment();
 			webFrag.setUrl(b, false);
@@ -126,6 +133,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 	}
 
 	public void onBookmarkOpen(Bookmark b) {
+		currentBookmark = b;
+		
     	String url = b.getUrl();
     	
     	if(!url.startsWith("http")) {
@@ -171,7 +180,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 
 	public void onTagSelected(String tag) {
 		if(findViewById(R.id.maincontent) != null) {
-			BrowseBookmarksFragment frag = new BrowseBookmarksFragment(username, tag, false);
+			BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+			frag.setQuery(username, tag, false);
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			transaction.replace(R.id.listcontent, frag);
 			transaction.addToBackStack(null);
