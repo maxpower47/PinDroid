@@ -108,7 +108,81 @@ public class ViewBookmarkFragment extends Fragment {
     
 	public void setBookmark(Bookmark b) {
 		bookmark = b;
+	}
+	
+	private void addTag(SpannableStringBuilder builder, Tag t, TagSpan.OnTagClickListener listener) {
+		int flags = 0;
 		
+		if (builder.length() != 0) {
+			builder.append("  ");
+		}
+		
+		int start = builder.length();
+		builder.append(t.getTagName());
+		int end = builder.length();
+		
+		TagSpan span = new TagSpan(t.getTagName());
+		span.setOnTagClickListener(listener);
+
+		builder.setSpan(span, start, end, flags);
+	}
+    
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+	    inflater.inflate(R.menu.view_menu, menu);
+	}
+	
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		if(bookmark != null){
+			if(!isMyself()) {
+				menu.removeItem(R.id.menu_view_editbookmark);
+				menu.removeItem(R.id.menu_view_deletebookmark);
+			}
+			}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+		    case R.id.menu_view_read:
+		    	if(isMyself() && bookmark.getToRead() && base.markAsRead)
+		    		bookmarkSelectedListener.onBookmarkMark(bookmark);
+				bookmarkSelectedListener.onBookmarkRead(bookmark);
+				return true;
+		    case R.id.menu_view_openbookmark:
+		    	bookmarkSelectedListener.onBookmarkOpen(bookmark);
+				return true;
+		    case R.id.menu_view_editbookmark:
+		    	bookmarkSelectedListener.onBookmarkEdit(bookmark);
+		    	return true;
+		    case R.id.menu_view_deletebookmark:
+		    	bookmarkSelectedListener.onBookmarkDelete(bookmark);
+				return true;
+		    case R.id.menu_view_sendbookmark:
+		    	bookmarkSelectedListener.onBookmarkShare(bookmark);
+		    	return true;
+		    default:
+		        return super.onOptionsItemSelected(item);
+	    }
+	}
+	
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.view_bookmark_fragment, container, false);
+    }
+    
+    private boolean isMyself() {
+    	return bookmark.getId() != 0;
+    }
+    
+    @Override
+    public void onStart(){
+    	super.onStart();
+    	
 		if(bookmark != null){
 			if(isMyself()){
 				
@@ -178,77 +252,11 @@ public class ViewBookmarkFragment extends Fragment {
 				mUsername.setMovementMethod(LinkMovementMethod.getInstance());
 			}
 		}
-	}
-	
-	private void addTag(SpannableStringBuilder builder, Tag t, TagSpan.OnTagClickListener listener) {
-		int flags = 0;
-		
-		if (builder.length() != 0) {
-			builder.append("  ");
-		}
-		
-		int start = builder.length();
-		builder.append(t.getTagName());
-		int end = builder.length();
-		
-		TagSpan span = new TagSpan(t.getTagName());
-		span.setOnTagClickListener(listener);
-
-		builder.setSpan(span, start, end, flags);
-	}
-    
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-	    inflater.inflate(R.menu.view_menu, menu);
-	}
-	
-	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		if(bookmark != null){
-			if(!isMyself()) {
-				menu.removeItem(R.id.menu_view_editbookmark);
-				menu.removeItem(R.id.menu_view_deletebookmark);
-			}
-			}
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-		    case R.id.menu_view_read:
-		    	if(isMyself() && bookmark.getToRead() && base.markAsRead)
-		    		bookmarkSelectedListener.onBookmarkMark(bookmark);
-				bookmarkSelectedListener.onBookmarkRead(bookmark);
-				startActivity(IntentHelper.ReadBookmark(((Spannable) mUrl.getText()).toString()));
-				return true;
-		    case R.id.menu_view_openbookmark:
-		    	bookmarkSelectedListener.onBookmarkOpen(bookmark);
-				return true;
-		    case R.id.menu_view_editbookmark:
-		    	bookmarkSelectedListener.onBookmarkEdit(bookmark);
-		    	return true;
-		    case R.id.menu_view_deletebookmark:
-		    	bookmarkSelectedListener.onBookmarkDelete(bookmark);
-				return true;
-		    case R.id.menu_view_sendbookmark:
-		    	bookmarkSelectedListener.onBookmarkShare(bookmark);
-		    	return true;
-		    default:
-		        return super.onOptionsItemSelected(item);
-	    }
-	}
-	
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.view_bookmark_fragment, container, false);
+    	
+    	
+    	
     }
     
-    private boolean isMyself() {
-    	return bookmark.getId() != 0;
-    }
     
 	@Override
 	public void onAttach(Activity activity) {

@@ -26,11 +26,13 @@
 		android:id="@+id/menu_view_read" 
 		android:title="@string/menu_view_read_title" 
 		android:icon="@drawable/ic_menu_read"
+		android:showAsAction="ifRoom"
 		android:orderInCategory="12" />
 	<item 
 		android:id="@+id/menu_view_openbookmark" 
 		android:title="@string/menu_view_openbookmark_title" 
 		android:icon="@drawable/ic_menu_view"
+		android:showAsAction="ifRoom"
 		android:orderInCategory="13" />
 	<item 
 		android:id="@+id/menu_view_editbookmark" 

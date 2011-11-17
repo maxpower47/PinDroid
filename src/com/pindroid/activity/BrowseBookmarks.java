@@ -21,6 +21,9 @@
 
 package com.pindroid.activity;
 
+import java.net.URLEncoder;
+
+import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.DeleteBookmarkTask;
@@ -29,8 +32,8 @@ import com.pindroid.action.MarkReadBookmarkTask;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment;
 import com.pindroid.fragment.BrowseBookmarksFragment;
 import com.pindroid.fragment.ViewBookmarkFragment;
-import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
+import com.pindroid.fragment.WebViewFragment;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
 import android.content.Intent;
@@ -41,8 +44,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 
 public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookmarksFragment.OnBookmarkSelectedListener, 
-OnBookmarkActionListener {
-	
+	OnBookmarkActionListener {
+
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -110,16 +113,29 @@ OnBookmarkActionListener {
 
 	public void onBookmarkView(Bookmark b) {
 		if(findViewById(R.id.maincontent) != null) {
-			ViewBookmarkFragment frag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.maincontent);
-			frag.setBookmark(b);
+			ViewBookmarkFragment viewFrag = new ViewBookmarkFragment();
+			viewFrag.setBookmark(b);
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			transaction.replace(R.id.maincontent, viewFrag);
+			transaction.commit();
 		} else {
 			viewBookmark(b);
 		}
 	}
 
 	public void onBookmarkRead(Bookmark b) {
-		startActivity(IntentHelper.ReadBookmark(b.getUrl()));
 		
+		String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(b.getUrl());
+		
+		if(findViewById(R.id.maincontent) != null) {
+			WebViewFragment webFrag = new WebViewFragment();
+			webFrag.setUrl(readUrl);
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			transaction.replace(R.id.maincontent, webFrag);
+			transaction.commit();
+		} else {
+			startActivity(IntentHelper.ReadBookmark(b.getUrl()));
+		}	
 	}
 
 	public void onBookmarkOpen(Bookmark b) {
@@ -128,8 +144,16 @@ OnBookmarkActionListener {
     	if(!url.startsWith("http")) {
     		url = "http://" + url;
     	}
-		
-		startActivity(IntentHelper.OpenInBrowser(url));
+    	
+		if(findViewById(R.id.maincontent) != null) {
+			WebViewFragment webFrag = new WebViewFragment();
+			webFrag.setUrl(url);
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			transaction.replace(R.id.maincontent, webFrag);
+			transaction.commit();
+		} else {
+			startActivity(IntentHelper.OpenInBrowser(url));
+		}		
 	}
 
 	public void onBookmarkAdd(Bookmark b) {
