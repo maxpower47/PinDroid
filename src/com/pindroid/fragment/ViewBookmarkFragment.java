@@ -88,79 +88,6 @@ public class ViewBookmarkFragment extends Fragment {
 		setHasOptionsMenu(true);
 	}
 	
-	@Override
-	public void onResume(){
-		super.onResume();
-
-		if(isMyself()){
-			
-			try{		
-				int id = bookmark.getId();
-
-				bookmark = BookmarkManager.GetById(id, base);
-				
-				Date d = new Date(bookmark.getTime());
-				
-				mTitle.setText(bookmark.getDescription());
-				mUrl.setText(bookmark.getUrl());
-				mNotes.setText(bookmark.getNotes());
-				mTime.setText(d.toString());
-				mUsername.setText(bookmark.getAccount());
-				
-				if(!bookmark.getShared()) {
-					mIcon.setImageResource(R.drawable.padlock);
-				} else if(bookmark.getToRead()) {
-					mIcon.setImageResource(R.drawable.book_open);
-				}
-				
-        		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
-
-        		for(Tag t : bookmark.getTags()) {
-        			addTag(tagBuilder, t, tagOnClickListener);
-        		}
-        		
-        		mTags.setText(tagBuilder);
-        		mTags.setMovementMethod(LinkMovementMethod.getInstance());
-			}
-			catch(ContentNotFoundException e){}
-		} else {
-			
-			Date d = new Date(bookmark.getTime());
-			
-			if(!bookmark.getDescription().equals("null"))
-				mTitle.setText(bookmark.getDescription());
-			
-			mUrl.setText(bookmark.getUrl());
-			
-			if(!bookmark.getNotes().equals("null"))
-					mNotes.setText(bookmark.getNotes());
-			
-			mTime.setText(d.toString());
-			
-    		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
-
-    		for(Tag t : bookmark.getTags()) {
-    			addTag(tagBuilder, t, userTagOnClickListener);
-    		}
-    		
-    		mTags.setText(tagBuilder);
-    		mTags.setMovementMethod(LinkMovementMethod.getInstance());
-
-			SpannableStringBuilder builder = new SpannableStringBuilder();
-			int start = builder.length();
-			builder.append(bookmark.getAccount());
-			int end = builder.length();
-			
-			AccountSpan span = new AccountSpan(bookmark.getAccount());
-			span.setOnAccountClickListener(accountOnClickListener);
-
-			builder.setSpan(span, start, end, 0);
-			
-			mUsername.setText(builder);
-			mUsername.setMovementMethod(LinkMovementMethod.getInstance());
-		}
-	}
-	
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {
     		bookmarkActionListener.onTagSelected(tag);
@@ -181,6 +108,76 @@ public class ViewBookmarkFragment extends Fragment {
     
 	public void setBookmark(Bookmark b) {
 		bookmark = b;
+		
+		if(bookmark != null){
+			if(isMyself()){
+				
+				try{		
+					int id = bookmark.getId();
+	
+					bookmark = BookmarkManager.GetById(id, base);
+					
+					Date d = new Date(bookmark.getTime());
+					
+					mTitle.setText(bookmark.getDescription());
+					mUrl.setText(bookmark.getUrl());
+					mNotes.setText(bookmark.getNotes());
+					mTime.setText(d.toString());
+					mUsername.setText(bookmark.getAccount());
+					
+					if(!bookmark.getShared()) {
+						mIcon.setImageResource(R.drawable.padlock);
+					} else if(bookmark.getToRead()) {
+						mIcon.setImageResource(R.drawable.book_open);
+					}
+					
+	        		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
+	
+	        		for(Tag t : bookmark.getTags()) {
+	        			addTag(tagBuilder, t, tagOnClickListener);
+	        		}
+	        		
+	        		mTags.setText(tagBuilder);
+	        		mTags.setMovementMethod(LinkMovementMethod.getInstance());
+				}
+				catch(ContentNotFoundException e){}
+			} else {
+				
+				Date d = new Date(bookmark.getTime());
+				
+				if(!bookmark.getDescription().equals("null"))
+					mTitle.setText(bookmark.getDescription());
+				
+				mUrl.setText(bookmark.getUrl());
+				
+				if(!bookmark.getNotes().equals("null"))
+						mNotes.setText(bookmark.getNotes());
+				
+				mTime.setText(d.toString());
+				
+	    		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
+	
+	    		for(Tag t : bookmark.getTags()) {
+	    			addTag(tagBuilder, t, userTagOnClickListener);
+	    		}
+	    		
+	    		mTags.setText(tagBuilder);
+	    		mTags.setMovementMethod(LinkMovementMethod.getInstance());
+	
+				SpannableStringBuilder builder = new SpannableStringBuilder();
+				int start = builder.length();
+				builder.append(bookmark.getAccount());
+				int end = builder.length();
+				
+				AccountSpan span = new AccountSpan(bookmark.getAccount());
+				span.setOnAccountClickListener(accountOnClickListener);
+	
+				builder.setSpan(span, start, end, 0);
+				
+				mUsername.setText(builder);
+				mUsername.setMovementMethod(LinkMovementMethod.getInstance());
+			}
+		}
 	}
 	
 	private void addTag(SpannableStringBuilder builder, Tag t, TagSpan.OnTagClickListener listener) {
@@ -208,10 +205,12 @@ public class ViewBookmarkFragment extends Fragment {
 	
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-		if(!isMyself()) {
-			menu.removeItem(R.id.menu_view_editbookmark);
-			menu.removeItem(R.id.menu_view_deletebookmark);
-		}
+		if(bookmark != null){
+			if(!isMyself()) {
+				menu.removeItem(R.id.menu_view_editbookmark);
+				menu.removeItem(R.id.menu_view_deletebookmark);
+			}
+			}
 	}
 	
 	@Override

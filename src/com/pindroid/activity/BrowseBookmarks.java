@@ -28,6 +28,9 @@ import com.pindroid.action.IntentHelper;
 import com.pindroid.action.MarkReadBookmarkTask;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment;
 import com.pindroid.fragment.BrowseBookmarksFragment;
+import com.pindroid.fragment.ViewBookmarkFragment;
+import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
+import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
 import android.content.Intent;
@@ -37,7 +40,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 
-public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookmarksFragment.OnBookmarkSelectedListener {
+public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookmarksFragment.OnBookmarkSelectedListener, 
+OnBookmarkActionListener {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -73,6 +77,11 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 			BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
 			t.add(R.id.listcontent, frag);
 		}
+		
+		if(findViewById(R.id.maincontent) != null) {
+			ViewBookmarkFragment viewFrag = new ViewBookmarkFragment();
+			t.add(R.id.maincontent, viewFrag);
+		} 
 		t.commit();
     }
 	
@@ -100,7 +109,12 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 	}
 
 	public void onBookmarkView(Bookmark b) {
-		viewBookmark(b);
+		if(findViewById(R.id.maincontent) != null) {
+			ViewBookmarkFragment frag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.maincontent);
+			frag.setBookmark(b);
+		} else {
+			viewBookmark(b);
+		}
 	}
 
 	public void onBookmarkRead(Bookmark b) {
@@ -142,5 +156,19 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 	public void onBookmarkDelete(Bookmark b) {
 		BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, this);	
 		new DeleteBookmarkTask().execute(args);
+	}
+
+	public void onTagSelected(String tag) {		
+		startActivity(IntentHelper.ViewBookmarks(tag, username, this));
+	}
+
+	public void onUserTagSelected(String tag, String user) {
+		startActivity(IntentHelper.ViewBookmarks(tag, user, this));
+		
+	}
+
+	public void onAccountSelected(String account) {
+		startActivity(IntentHelper.ViewBookmarks(null, account, this));
+		
 	}
 }
