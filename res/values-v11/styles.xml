@@ -108,7 +108,7 @@
         <item name="android:background">@drawable/widget_button</item>
     </style>
     
-    <style name="ActionBar" parent="@android:style/Widget.Holo.ActionBar" />
+    <style name="ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar" />
 
     <style name="ActionBar.Light" parent="@style/ActionBar">
         <item name="android:background">@color/actionbar_background_light</item>
@@ -120,7 +120,13 @@
         <item name="android:textSize">22sp</item>
     </style>
     
+    <style name="MyOverflowButton" parent="@android:style/Widget.Holo.Light.ActionButton.Overflow">
+    </style>
+        
+        
     <style name="ThemeSelector" parent="android:Theme.Holo">
     	<item name="android:actionBarStyle">@style/ActionBar.Light</item>
+    	<item name="android:actionMenuTextColor">#000000</item>
+    	<item name="android:actionOverflowButtonStyle">@style/MyOverflowButton</item>
     </style>
 </resources>

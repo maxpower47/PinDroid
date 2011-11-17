@@ -21,22 +21,24 @@
  * USA
  */
  -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item 
-		android:id="@+id/menu_addbookmark" 
-		android:title="@string/menu_addbookmark_title" 
-		android:icon="@drawable/ic_menu_add_holo_light"
-		android:showAsAction="ifRoom"
-		android:orderInCategory="2" />
-	<item 
-		android:id="@+id/menu_search" 
-		android:title="@string/menu_search_title" 
-		android:icon="@drawable/ic_menu_search_holo_light"
-		android:showAsAction="ifRoom"
-		android:orderInCategory="3" />
-	<item 
-		android:id="@+id/menu_settings" 
-		android:title="@string/menu_settings_title" 
-		android:icon="@android:drawable/ic_menu_preferences"
-		android:orderInCategory="99" />
-</menu>
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical">
+	<include android:id="@+id/include_action_bar" layout="@layout/action_bar" />
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:orientation="horizontal">
+		<LinearLayout 
+			android:id="@+id/listcontent"
+			android:layout_width="0dp"
+			android:layout_weight="35"
+		    android:layout_height="fill_parent" />
+		<LinearLayout 
+			android:id="@+id/maincontent"
+			android:layout_width="0dp"
+			android:layout_weight="65"
+		    android:layout_height="fill_parent" />
+		</LinearLayout>
+</LinearLayout>

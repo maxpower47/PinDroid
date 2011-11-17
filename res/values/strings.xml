@@ -188,7 +188,8 @@
     <string name="view_bookmark_account_title">By</string>
     
     <string name="menu_view_read_title">Read</string>
-    <string name="menu_view_openbookmark_title">Open in browser</string>
+    <string name="menu_view_details_title">Details</string>
+    <string name="menu_view_openbookmark_title">Web</string>
     <string name="menu_view_editbookmark_title">Edit</string>
     <string name="menu_view_deletebookmark_title">Delete</string>
     <string name="menu_view_sendbookmark_title">Share</string>

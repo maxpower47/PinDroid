@@ -21,9 +21,6 @@
 
 package com.pindroid.activity;
 
-import java.net.URLEncoder;
-
-import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.DeleteBookmarkTask;
@@ -34,6 +31,7 @@ import com.pindroid.fragment.BrowseBookmarksFragment;
 import com.pindroid.fragment.ViewBookmarkFragment;
 import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
 import com.pindroid.fragment.WebViewFragment;
+import com.pindroid.fragment.WebViewFragment.OnBookmarkViewListener;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
 import android.content.Intent;
@@ -41,10 +39,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 
 public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookmarksFragment.OnBookmarkSelectedListener, 
-	OnBookmarkActionListener {
+	OnBookmarkActionListener, OnBookmarkViewListener {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -54,12 +51,10 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 		Intent intent = getIntent();
 
 		Uri data = intent.getData();
-		String path = "";
 		String tagname = "";
 		Boolean unread = false;
 
 		if(data != null) {
-			path = data.getPath();
 			
 			if(data.getUserInfo() != "") {
 				username = data.getUserInfo();
@@ -72,13 +67,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 	    		startActivity(IntentHelper.OpenInBrowser(data.toString()));
 	    		finish();
 	    	}
-		}
-		
-		if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
-			viewBookmark(Integer.parseInt(data.getLastPathSegment()));
-			finish();
-		} 
-		
+		}		
 		
 		FragmentManager fm = getSupportFragmentManager();
 		FragmentTransaction t = fm.beginTransaction();
@@ -91,17 +80,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 			t.add(R.id.listcontent, frag);
 		}
 		
-		if(findViewById(R.id.maincontent) != null) {
-			//ViewBookmarkFragment viewFrag = new ViewBookmarkFragment();
-		//	t.add(R.id.maincontent, viewFrag);
-		} 
 		t.commit();
     }
-	
-	private void viewBookmark(int id) {
-		Bookmark b = new Bookmark(id);
-		viewBookmark(b);
-	}
 	
 	private void viewBookmark(Bookmark b) {
 		startActivity(IntentHelper.ViewBookmark(b, username, this));
@@ -134,12 +114,9 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 	}
 
 	public void onBookmarkRead(Bookmark b) {
-		
-		String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(b.getUrl());
-		
 		if(findViewById(R.id.maincontent) != null) {
 			WebViewFragment webFrag = new WebViewFragment();
-			webFrag.setUrl(readUrl);
+			webFrag.setUrl(b, false);
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			transaction.replace(R.id.maincontent, webFrag);
 			transaction.commit();
@@ -157,7 +134,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
     	
 		if(findViewById(R.id.maincontent) != null) {
 			WebViewFragment webFrag = new WebViewFragment();
-			webFrag.setUrl(url);
+			webFrag.setUrl(b, true);
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			transaction.replace(R.id.maincontent, webFrag);
 			transaction.commit();

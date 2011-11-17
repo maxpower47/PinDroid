@@ -21,37 +21,89 @@
 
 package com.pindroid.fragment;
 
-import com.pindroid.R;
+import java.net.URLEncoder;
 
+import com.pindroid.Constants;
+import com.pindroid.R;
+import com.pindroid.providers.BookmarkContent.Bookmark;
+
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
 public class WebViewFragment extends Fragment {
 
-	private String url;
+	private Bookmark bookmark;
+	private boolean web;
 	private WebView content;
+	
+	private OnBookmarkViewListener bookmarkViewListener;
+	
+	public interface OnBookmarkViewListener {
+		public void onBookmarkView(Bookmark b);
+		public void onBookmarkRead(Bookmark b);
+		public void onBookmarkOpen(Bookmark b);
+	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		
 		content = (WebView) getView().findViewById(R.id.web_view);
+		
+		setHasOptionsMenu(true);
 	}
 	
-	public void setUrl(String url){
-
-		this.url = url;
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		if(web) {
+			inflater.inflate(R.menu.web_menu, menu);
+		} else {
+			inflater.inflate(R.menu.read_menu, menu);
+		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+		    case R.id.menu_view_details:
+				bookmarkViewListener.onBookmarkView(bookmark);
+				return true;
+		    case R.id.menu_view_read:
+				bookmarkViewListener.onBookmarkRead(bookmark);
+				return true;
+		    case R.id.menu_view_openbookmark:
+		    	bookmarkViewListener.onBookmarkOpen(bookmark);
+				return true;
+		    default:
+		        return super.onOptionsItemSelected(item);
+	    }
+	}
+	
+	public void setUrl(Bookmark bookmark, boolean web){
+		this.bookmark = bookmark;
+		this.web = web;
 	}
 	
 	@Override
 	public void onStart(){
 		super.onStart();
 
-		content.loadUrl(url);
+		if(web){
+			content.loadUrl(bookmark.getUrl());
+		} else {
+			String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(bookmark.getUrl());
+			content.loadUrl(readUrl);
+		}
 	}
 	
     @Override
@@ -59,4 +111,14 @@ public class WebViewFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.web_view_fragment, container, false);
     }
+    
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			bookmarkViewListener = (OnBookmarkViewListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement OnBookmarkViewListener");
+		}
+	}
 }
