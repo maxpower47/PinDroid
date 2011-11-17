@@ -24,7 +24,6 @@ package com.pindroid.fragment;
 import java.util.Date;
 
 import com.pindroid.R;
-import com.pindroid.action.IntentHelper;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.platform.BookmarkManager;
@@ -37,7 +36,6 @@ import com.pindroid.ui.TagSpan;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;

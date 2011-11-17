@@ -194,6 +194,13 @@ public class FragmentBaseActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle item selection
 	    switch (item.getItemId()) {
+        case android.R.id.home:
+            // app icon in Action Bar clicked; go home
+            Intent intent = new Intent(this, Main.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            return true;
+
 	    case R.id.menu_addbookmark:
 			startActivity(IntentHelper.AddBookmark(null, mAccount.name, this));
 			return true;
