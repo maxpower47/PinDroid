@@ -55,6 +55,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 
 		Uri data = intent.getData();
 		String path = "";
+		String tagname = "";
+		Boolean unread = false;
 
 		if(data != null) {
 			path = data.getPath();
@@ -62,6 +64,14 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 			if(data.getUserInfo() != "") {
 				username = data.getUserInfo();
 			} else username = mAccount.name;
+
+			tagname = data.getQueryParameter("tagname");
+			unread = data.getQueryParameter("unread") != null;
+
+	    	if(!data.getScheme().equals("content")) {
+	    		startActivity(IntentHelper.OpenInBrowser(data.toString()));
+	    		finish();
+	    	}
 		}
 		
 		if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
@@ -74,10 +84,10 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 		FragmentTransaction t = fm.beginTransaction();
 	
 		if(isMyself()) {
-			BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+			BrowseBookmarksFragment frag = new BrowseBookmarksFragment(username, tagname, unread);
 			t.add(R.id.listcontent, frag);
 		} else {
-			BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
+			BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment(username, tagname);
 			t.add(R.id.listcontent, frag);
 		}
 		
@@ -182,17 +192,39 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 		new DeleteBookmarkTask().execute(args);
 	}
 
-	public void onTagSelected(String tag) {		
-		startActivity(IntentHelper.ViewBookmarks(tag, username, this));
+	public void onTagSelected(String tag) {
+		if(findViewById(R.id.maincontent) != null) {
+			BrowseBookmarksFragment frag = new BrowseBookmarksFragment(username, tag, false);
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			transaction.replace(R.id.listcontent, frag);
+			transaction.addToBackStack(null);
+			transaction.commit();
+		} else {
+			startActivity(IntentHelper.ViewBookmarks(tag, username, this));
+		}
 	}
 
 	public void onUserTagSelected(String tag, String user) {
-		startActivity(IntentHelper.ViewBookmarks(tag, user, this));
-		
+		if(findViewById(R.id.maincontent) != null) {
+			BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment(user, tag);
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			transaction.replace(R.id.listcontent, frag);
+			transaction.addToBackStack(null);
+			transaction.commit();
+		} else {
+			startActivity(IntentHelper.ViewBookmarks(tag, user, this));
+		}
 	}
 
 	public void onAccountSelected(String account) {
-		startActivity(IntentHelper.ViewBookmarks(null, account, this));
-		
+		if(findViewById(R.id.maincontent) != null) {
+			BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment(account, null);
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			transaction.replace(R.id.listcontent, frag);
+			transaction.addToBackStack(null);
+			transaction.commit();
+		} else {
+			startActivity(IntentHelper.ViewBookmarks(null, account, this));
+		}
 	}
 }

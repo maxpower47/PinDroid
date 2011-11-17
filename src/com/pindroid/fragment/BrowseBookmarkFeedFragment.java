@@ -61,6 +61,7 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	private SimpleCursorAdapter mAdapter;
 	private FragmentBaseActivity base;
 	
+	private String username = null;
 	private String tagname = null;
 	private Intent intent = null;
 	String path = null;
@@ -69,7 +70,10 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	
 	private BrowseBookmarksFragment.OnBookmarkSelectedListener bookmarkSelectedListener;
 	
-
+	public BrowseBookmarkFeedFragment(String username, String tagname){
+		this.username = username;
+		this.tagname = tagname;
+	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
@@ -87,25 +91,8 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		setListAdapter(mAdapter);
 		mAdapter.setViewBinder(new BookmarkViewBinder());
 
-		if(base.mAccount != null) {				
-			Uri data = intent.getData();
-			
-			if(data != null) {
-				if(data.getUserInfo() != "") {
-					base.username = data.getUserInfo();
-				} else base.username = base.mAccount.name;
-				
-				path = data.getPath();
-				tagname = data.getQueryParameter("tagname");
-			}
-			
-	    	if(!data.getScheme().equals("content")) {
-	    		openBookmarkInBrowser(new Bookmark(data.toString()));
-	    		base.finish();
-	    	}
-	    	
+		if(base.mAccount != null) {					    	
 	    	getLoaderManager().initLoader(0, null, this);
-	    	getLoaderManager().getLoader(0).startLoading();
 	    	
 			lv = getListView();
 			lv.setTextFilterEnabled(true);
@@ -142,12 +129,31 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	public void onResume(){
 		super.onResume();
 		
+		String title = "";
+		
+		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			title = getString(R.string.search_results_global_tag_title, query);
+		} else if(username.equals("recent")) {
+			title = getString(R.string.browse_recent_bookmarks_title);
+		} else if(username.equals("network")) {
+			title = getString(R.string.browse_network_bookmarks_title);
+		} else {	
+
+			if(tagname != null && tagname != "") {
+				title = getString(R.string.browse_user_bookmarks_tagged_title, username, tagname);
+			} else {
+				title = getString(R.string.browse_user_bookmarks_title, username);
+			}
+		}
+		base.setTitle(title);
+		
 		Uri data = base.getIntent().getData();
 		if(data != null && data.getUserInfo() != null && data.getUserInfo() != "") {
-			base.username = data.getUserInfo();
+			username = data.getUserInfo();
 		} else if(base.getIntent().hasExtra("username")){
-			base.username = base.getIntent().getStringExtra("username");
-		} else base.username = base.mAccount.name;
+			username = base.getIntent().getStringExtra("username");
+		} else username = base.mAccount.name;
 	}
 	
 	@Override
@@ -197,25 +203,13 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
 			String query = intent.getStringExtra(SearchManager.QUERY);
-			base.setTitle(getString(R.string.search_results_global_tag_title, query));
 			return new LoaderDrone(base, "global", query);
-		} else if(base.username.equals("recent")) {
-			base.setTitle(getString(R.string.browse_recent_bookmarks_title));
+		} else if(username.equals("recent")) {
 			return new LoaderDrone(base, "recent", null);
-		} else if(base.username.equals("network")) {
-			base.setTitle(getString(R.string.browse_network_bookmarks_title));
+		} else if(username.equals("network")) {
 			return new LoaderDrone(base, "network", null);
-		} else {
-			String title = "";
-
-			if(tagname != null && tagname != "") {
-				title = getString(R.string.browse_user_bookmarks_tagged_title, base.username, tagname);
-			} else {
-				title = getString(R.string.browse_user_bookmarks_title, base.username);
-			}
-			base.setTitle(title);
-			
-			return new LoaderDrone(base, base.username, tagname);
+		} else {			
+			return new LoaderDrone(base, username, tagname);
 		}
 
 	}
