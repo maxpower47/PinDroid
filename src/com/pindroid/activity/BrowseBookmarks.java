@@ -92,8 +92,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 		}
 		
 		if(findViewById(R.id.maincontent) != null) {
-			ViewBookmarkFragment viewFrag = new ViewBookmarkFragment();
-			t.add(R.id.maincontent, viewFrag);
+			//ViewBookmarkFragment viewFrag = new ViewBookmarkFragment();
+		//	t.add(R.id.maincontent, viewFrag);
 		} 
 		t.commit();
     }

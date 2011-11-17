@@ -138,7 +138,7 @@ public class ViewBookmarkFragment extends Fragment {
 				menu.removeItem(R.id.menu_view_editbookmark);
 				menu.removeItem(R.id.menu_view_deletebookmark);
 			}
-			}
+		}
 	}
 	
 	@Override
@@ -250,9 +250,6 @@ public class ViewBookmarkFragment extends Fragment {
 				mUsername.setMovementMethod(LinkMovementMethod.getInstance());
 			}
 		}
-    	
-    	
-    	
     }
     
     
