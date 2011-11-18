@@ -32,15 +32,15 @@
     <style name="ViewBookmarkFieldTitle">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">24sp</item>
         <item name="android:paddingLeft">10dip</item>
         <item name="android:paddingTop">15dip</item>
     </style>
     <style name="ViewBookmarkFieldContent">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:paddingLeft">20dip</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingLeft">25dip</item>
     </style>
 
     <style name="AddBookmarkFieldTitle">
