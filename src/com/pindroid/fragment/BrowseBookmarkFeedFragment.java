@@ -92,6 +92,9 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 			lv = getListView();
 			lv.setTextFilterEnabled(true);
 			lv.setFastScrollEnabled(true);
+
+			lv.setItemsCanFocus(false);
+			lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		
 			lv.setOnItemClickListener(new OnItemClickListener() {
 			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

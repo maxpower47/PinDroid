@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+ -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_height="50dp"
+	android:layout_width="fill_parent"
+	android:background="@color/bookmark_view_bg">
+	<ImageView   
+		android:layout_width="4dip"
+		android:layout_height="fill_parent"
+		android:id="@+id/bookmark_unread"
+		android:visibility="gone"
+		android:src="@drawable/unread_indicator"/>
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:paddingBottom="2dip">
+		<TextView
+		    android:id="@+id/bookmark_description"
+		    android:layout_height="wrap_content"
+		    android:layout_width="fill_parent"
+		    android:scrollHorizontally="true"
+		    android:singleLine="true"
+		    android:ellipsize="end"
+		    android:textSize="20sp"
+		    android:paddingLeft="5dip"
+		    android:paddingRight="10dip"/>
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent">
+			<TextView
+			    android:id="@+id/bookmark_tags"
+			    android:layout_height="wrap_content"
+			    android:layout_width="wrap_content"
+			    android:scrollHorizontally="false"
+			    android:textSize="12sp"
+			    android:paddingLeft="10dip"
+			    android:paddingRight="10dip"/>
+		    <ImageView
+				android:layout_width="16dip"
+				android:layout_height="16dip"
+				android:id="@+id/bookmark_source"
+				android:visibility="gone"/>
+			<ImageView
+				android:layout_width="16dip"
+				android:layout_height="16dip"
+				android:id="@+id/bookmark_private"
+				android:visibility="gone"/>
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>
