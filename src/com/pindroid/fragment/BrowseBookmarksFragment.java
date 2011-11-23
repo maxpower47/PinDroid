@@ -140,22 +140,25 @@ public class BrowseBookmarksFragment extends ListFragment
 	@Override
 	public void onResume(){
 		super.onResume();
-		
-		String title = "";
-		
-		if(unread && tagname != null && tagname != "") {
-			title = getString(R.string.browse_my_unread_bookmarks_tagged_title, tagname);
-		} else if(unread && (tagname == null || tagname.equals(""))) {
-			title = getString(R.string.browse_my_unread_bookmarks_title);
-		} else if(tagname != null && tagname != "") {
-			title = getString(R.string.browse_my_bookmarks_tagged_title, tagname);
-		} else {
-			title = getString(R.string.browse_my_bookmarks_title);
-		}
-		
-		base.setTitle(title);
 
-		
+		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			
+			if(unread) {
+				base.setTitle(getString(R.string.unread_search_results_title, query));
+			} else base.setTitle(getString(R.string.bookmark_search_results_title, query));
+		} else {
+			if(unread && tagname != null && tagname != "") {
+				base.setTitle(getString(R.string.browse_my_unread_bookmarks_tagged_title, tagname));
+			} else if(unread && (tagname == null || tagname.equals(""))) {
+				base.setTitle(getString(R.string.browse_my_unread_bookmarks_title));
+			} else if(tagname != null && tagname != "") {
+				base.setTitle(getString(R.string.browse_my_bookmarks_tagged_title, tagname));
+			} else {
+				base.setTitle(getString(R.string.browse_my_bookmarks_title));
+			}
+		}
+
 		Uri data = base.getIntent().getData();
 		if(data != null && data.getUserInfo() != null && data.getUserInfo() != "") {
 			username = data.getUserInfo();
@@ -281,15 +284,11 @@ public class BrowseBookmarksFragment extends ListFragment
     			unread = searchData.getBoolean("unread");
     		}
     		
+    		String query = intent.getStringExtra(SearchManager.QUERY);
+    		
     		if(intent.hasExtra("username")) {
     			username = intent.getStringExtra("username");
     		}
-    		
-    		String query = intent.getStringExtra(SearchManager.QUERY);
-    		
-    		if(unread) {
-    			base.setTitle(getString(R.string.unread_search_results_title, query));
-    		} else base.setTitle(getString(R.string.bookmark_search_results_title, query));
     		
 			return BookmarkManager.SearchBookmarks(query, tagname, unread, username, base);
 		} else {
