@@ -262,16 +262,6 @@ public class BrowseBookmarksFragment extends ListFragment
 	private void viewBookmark(Bookmark b) {
 		bookmarkSelectedListener.onBookmarkView(b);
 	}
-	
-	public boolean onSearchRequested() {
-
-		Bundle contextData = new Bundle();
-		contextData.putString("tagname", tagname);
-		contextData.putString("username", username);
-		contextData.putBoolean("unread", unread);
-		base.startSearch(null, false, contextData, false);
-		return true;
-	}
     
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 

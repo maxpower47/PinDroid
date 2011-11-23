@@ -132,24 +132,20 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	public void onResume(){
 		super.onResume();
 		
-		String title = "";
-		
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
 			String query = intent.getStringExtra(SearchManager.QUERY);
-			title = getString(R.string.search_results_global_tag_title, query);
+			base.setTitle(getString(R.string.search_results_global_tag_title, query));
 		} else if(username.equals("recent")) {
-			title = getString(R.string.browse_recent_bookmarks_title);
+			base.setTitle(getString(R.string.browse_recent_bookmarks_title));
 		} else if(username.equals("network")) {
-			title = getString(R.string.browse_network_bookmarks_title);
+			base.setTitle(getString(R.string.browse_network_bookmarks_title));
 		} else {	
-
 			if(tagname != null && tagname != "") {
-				title = getString(R.string.browse_user_bookmarks_tagged_title, username, tagname);
+				base.setTitle(getString(R.string.browse_user_bookmarks_tagged_title, username, tagname));
 			} else {
-				title = getString(R.string.browse_user_bookmarks_title, username);
+				base.setTitle(getString(R.string.browse_user_bookmarks_title, username));
 			}
 		}
-		base.setTitle(title);
 		
 		Uri data = base.getIntent().getData();
 		if(data != null && data.getUserInfo() != null && data.getUserInfo() != "") {
@@ -196,14 +192,8 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	private void readBookmark(Bookmark b){
 		bookmarkSelectedListener.onBookmarkRead(b);
 	}
-	
-	public boolean onSearchRequested() {
-		base.startSearch(null, false, Bundle.EMPTY, false);
-		return true;
-	}
-    
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
 			String query = intent.getStringExtra(SearchManager.QUERY);
 			return new LoaderDrone(base, "global", query);
@@ -214,7 +204,6 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		} else {			
 			return new LoaderDrone(base, username, tagname);
 		}
-
 	}
 	
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {

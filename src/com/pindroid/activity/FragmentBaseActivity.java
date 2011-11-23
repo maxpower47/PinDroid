@@ -103,7 +103,6 @@ public class FragmentBaseActivity extends FragmentActivity {
 			
 			if(data.getScheme() == null || !data.getScheme().equals("content")){
 				Intent i = new Intent(Intent.ACTION_VIEW, data);
-				Log.d("finish", "here");
 				startActivity(i);
 				finish();				
 			} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment()) && intent.hasExtra(SearchManager.USER_QUERY)) {
@@ -162,7 +161,6 @@ public class FragmentBaseActivity extends FragmentActivity {
 			init();
 		}
 		first = false;
-		
 	}
 	
 	private void loadAccounts(){
@@ -192,27 +190,24 @@ public class FragmentBaseActivity extends FragmentActivity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
 	    switch (item.getItemId()) {
-        case android.R.id.home:
-            // app icon in Action Bar clicked; go home
-            Intent intent = new Intent(this, Main.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            return true;
-
-	    case R.id.menu_addbookmark:
-			startActivity(IntentHelper.AddBookmark(null, mAccount.name, this));
-			return true;
-	    case R.id.menu_search:
-	    	onSearchRequested();
-	    	return true;
-	    case R.id.menu_settings:
-			Intent prefs = new Intent(this, Preferences.class);
-			startActivity(prefs);
-	        return true;
-	    default:
-	        return super.onOptionsItemSelected(item);
+	        case android.R.id.home:
+	            Intent intent = new Intent(this, Main.class);
+	            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	            startActivity(intent);
+	            return true;
+		    case R.id.menu_addbookmark:
+				startActivity(IntentHelper.AddBookmark(null, mAccount.name, this));
+				return true;
+		    case R.id.menu_search:
+		    	onSearchRequested();
+		    	return true;
+		    case R.id.menu_settings:
+				Intent prefs = new Intent(this, Preferences.class);
+				startActivity(prefs);
+		        return true;
+		    default:
+		        return super.onOptionsItemSelected(item);
 	    }
 	}
 	

@@ -181,6 +181,7 @@ public class AddBookmarkFragment extends Fragment {
 	
 	public void saveHandler(View v) {
 		save();
+		bookmarkSaveListener.onBookmarkSave(bookmark);
 	}
 	
 	public void cancelHandler(View v) {
@@ -188,7 +189,7 @@ public class AddBookmarkFragment extends Fragment {
     		revertBookmark();
     	}
     	
-    	base.finish();
+    	bookmarkSaveListener.onBookmarkCancel(bookmark);
 	}
 	
 	private void setDefaultValues(){   	
