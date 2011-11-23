@@ -24,6 +24,7 @@ package com.pindroid.activity;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.fragment.AddBookmarkFragment;
+import com.pindroid.fragment.AddBookmarkFragment.OnBookmarkSaveListener;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -38,7 +39,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-public class AddBookmark extends FragmentBaseActivity {
+public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveListener {
 
 	private AddBookmarkFragment frag;
 	private Bookmark bookmark = null;
@@ -159,5 +160,13 @@ public class AddBookmark extends FragmentBaseActivity {
 	
 	public void cancelHandler(View v) {
 		frag.cancelHandler(v);
+	}
+
+	public void onBookmarkSave(Bookmark b) {
+		finish();
+	}
+
+	public void onBookmarkCancel(Bookmark b) {
+		finish();
 	}
 }

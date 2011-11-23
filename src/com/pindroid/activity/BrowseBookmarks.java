@@ -26,6 +26,8 @@ import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.DeleteBookmarkTask;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.action.MarkReadBookmarkTask;
+import com.pindroid.fragment.AddBookmarkFragment;
+import com.pindroid.fragment.AddBookmarkFragment.OnBookmarkSaveListener;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment;
 import com.pindroid.fragment.BrowseBookmarksFragment;
 import com.pindroid.fragment.ViewBookmarkFragment;
@@ -41,7 +43,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookmarksFragment.OnBookmarkSelectedListener, 
-	OnBookmarkActionListener, OnBookmarkViewListener {
+	OnBookmarkActionListener, OnBookmarkViewListener, OnBookmarkSaveListener {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -162,13 +164,26 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 	}
 
 	public void onBookmarkEdit(Bookmark b) {
-		startActivity(IntentHelper.EditBookmark(b, mAccount.name, this));
-		
+		if(findViewById(R.id.maincontent) != null) {
+			AddBookmarkFragment addFrag = new AddBookmarkFragment();
+			addFrag.loadBookmark(b, null);
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			transaction.replace(R.id.maincontent, addFrag);
+			transaction.commit();
+		} else {
+			startActivity(IntentHelper.EditBookmark(b, mAccount.name, this));
+		}		
 	}
 
 	public void onBookmarkDelete(Bookmark b) {
 		BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, this);	
 		new DeleteBookmarkTask().execute(args);
+		
+		if(findViewById(R.id.maincontent) != null) {
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			transaction.remove(getSupportFragmentManager().findFragmentById(R.id.maincontent));
+			transaction.commit();
+		}
 	}
 
 	public void onTagSelected(String tag) {
@@ -208,5 +223,15 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 		} else {
 			startActivity(IntentHelper.ViewBookmarks(null, account, this));
 		}
+	}
+
+	public void onBookmarkSave(Bookmark b) {
+		onBookmarkView(b);
+		
+	}
+
+	public void onBookmarkCancel(Bookmark b) {
+		onBookmarkView(b);
+		
 	}
 }

@@ -36,6 +36,7 @@ import com.pindroid.action.GetWebpageTitleTask;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.client.PinboardApi;
 import com.pindroid.client.TooManyRequestsException;
+import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -43,6 +44,7 @@ import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.TagSpan;
 import com.pindroid.util.SpaceTokenizer;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -90,7 +92,12 @@ public class AddBookmarkFragment extends Fragment {
 	private AsyncTask<String, Integer, String> titleTask;
 	private AsyncTask<String, Integer, ArrayList<Tag>> tagTask;
 	
-
+	private OnBookmarkSaveListener bookmarkSaveListener;
+	
+	public interface OnBookmarkSaveListener {
+		public void onBookmarkSave(Bookmark b);
+		public void onBookmarkCancel(Bookmark b);
+	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
@@ -255,8 +262,6 @@ public class AddBookmarkFragment extends Fragment {
 		for(Tag t : bookmark.getTags()){   				
 			TagManager.UpsertTag(t, base.mAccount.name, base);
 		}
-		
-		base.finish();
     }
     
     private void revertBookmark(){
@@ -305,13 +310,14 @@ public class AddBookmarkFragment extends Fragment {
 	    switch (item.getItemId()) {
 	    case R.id.menu_addbookmark_save:
 	    	save();
+			bookmarkSaveListener.onBookmarkSave(bookmark);
 			return true;
 	    case R.id.menu_addbookmark_cancel:
         	if(error) {
         		revertBookmark();
         	}
         	
-        	base.finish();
+        	bookmarkSaveListener.onBookmarkCancel(bookmark);
 	        return true;
 	    default:
 	        return super.onOptionsItemSelected(item);
@@ -421,4 +427,14 @@ public class AddBookmarkFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.add_bookmark_fragment, container, false);
     }
+    
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			bookmarkSaveListener = (OnBookmarkSaveListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement OnBookmarkSaveListener");
+		}
+	}
 }
