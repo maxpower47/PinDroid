@@ -42,6 +42,8 @@ public class Constants {
     public static final String EXTRA_ERROR = "com.pindroid.bookmark.error";
     public static final String EXTRA_TIME = "com.pindroid.bookmark.time";
     public static final String EXTRA_UPDATE = "com.pindroid.bookmark.update";
+    
+    public static final int HTTP_STATUS_TOO_MANY_REQUESTS = 429;
 
     public static final int BOOKMARK_PAGE_SIZE = 500;
     

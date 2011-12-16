@@ -33,6 +33,7 @@ import android.util.Log;
 
 import com.pindroid.Constants;
 import com.pindroid.client.PinboardApi;
+import com.pindroid.client.TooManyRequestsException;
 import com.pindroid.client.Update;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
@@ -74,13 +75,16 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
         } catch (final IOException e) {
             syncResult.stats.numIoExceptions++;
             Log.e(TAG, "IOException", e);
+        } catch (final TooManyRequestsException e) {
+        	syncResult.delayUntil = e.getBackoff();
+        	Log.d(TAG, "Too Many Requests.  Backing off for " + e.getBackoff() + " seconds.");
         } finally {
         	Log.d(TAG, "Finished Sync");
         }
     }
     
     private void InsertBookmarks(Account account, SyncResult syncResult) 
-    	throws AuthenticationException, IOException{
+    	throws AuthenticationException, IOException, TooManyRequestsException{
 
     	final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
     	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
@@ -118,7 +122,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     }
     
     private ArrayList<Bookmark> getBookmarkList()
-    	throws AuthenticationException, IOException {
+    	throws AuthenticationException, IOException, TooManyRequestsException {
     	int pageSize = Constants.BOOKMARK_PAGE_SIZE;
     	ArrayList<Bookmark> results = new ArrayList<Bookmark>();   	
 

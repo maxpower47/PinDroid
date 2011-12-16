@@ -35,6 +35,7 @@ import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.GetWebpageTitleTask;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.client.PinboardApi;
+import com.pindroid.client.TooManyRequestsException;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -357,10 +358,10 @@ public class AddBookmarkFragment extends Fragment {
     		try {
 				return PinboardApi.getSuggestedTags(url, base.mAccount, base);
 			} catch (AuthenticationException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (TooManyRequestsException e) {
 				e.printStackTrace();
 			}
 			return null;

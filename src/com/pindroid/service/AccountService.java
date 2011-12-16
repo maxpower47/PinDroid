@@ -28,6 +28,7 @@ import org.apache.http.auth.AuthenticationException;
 
 import com.pindroid.Constants;
 import com.pindroid.client.PinboardApi;
+import com.pindroid.client.TooManyRequestsException;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
 
@@ -71,10 +72,10 @@ public class AccountService extends IntentService {
 		    	editor.putString(Constants.PREFS_SECRET_TOKEN, token);
 		    	editor.commit();
 			} catch (AuthenticationException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (TooManyRequestsException e){
 				e.printStackTrace();
 			}
 		}
