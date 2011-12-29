@@ -21,8 +21,10 @@
 
 package com.pindroid.fragment;
 
+import java.net.URLEncoder;
 import java.util.Date;
 
+import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
@@ -44,13 +46,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class ViewBookmarkFragment extends Fragment {
 
 	private FragmentBaseActivity base;
 	
+	private ScrollView mBookmarkView;
 	private TextView mTitle;
 	private TextView mUrl;
 	private TextView mNotes;
@@ -58,13 +63,15 @@ public class ViewBookmarkFragment extends Fragment {
 	private TextView mTime;
 	private TextView mUsername;
 	private ImageView mIcon;
+	private WebView mWebContent;
 	private Bookmark bookmark;
+	private String viewType;
 	
 	private OnBookmarkActionListener bookmarkActionListener;
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
 	
 	public interface OnBookmarkActionListener {
-		public void onTagSelected(String tag);
+		public void onViewTagSelected(String tag);
 		public void onUserTagSelected(String tag, String user);
 		public void onAccountSelected(String account);
 	}
@@ -75,6 +82,7 @@ public class ViewBookmarkFragment extends Fragment {
 		
 		base = (FragmentBaseActivity)getActivity();
 		
+		mBookmarkView = (ScrollView) getView().findViewById(R.id.bookmark_scroll_view);
 		mTitle = (TextView) getView().findViewById(R.id.view_bookmark_title);
 		mUrl = (TextView) getView().findViewById(R.id.view_bookmark_url);
 		mNotes = (TextView) getView().findViewById(R.id.view_bookmark_notes);
@@ -82,6 +90,7 @@ public class ViewBookmarkFragment extends Fragment {
 		mTime = (TextView) getView().findViewById(R.id.view_bookmark_time);
 		mUsername = (TextView) getView().findViewById(R.id.view_bookmark_account);
 		mIcon = (ImageView) getView().findViewById(R.id.view_bookmark_icon);
+		mWebContent = (WebView) getView().findViewById(R.id.web_view);
 		
 		setHasOptionsMenu(true);
 		setRetainInstance(true);
@@ -89,7 +98,7 @@ public class ViewBookmarkFragment extends Fragment {
 	
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {
-    		bookmarkActionListener.onTagSelected(tag);
+    		bookmarkActionListener.onViewTagSelected(tag);
         }
     };
     
@@ -105,7 +114,8 @@ public class ViewBookmarkFragment extends Fragment {
         }
     };
     
-	public void setBookmark(Bookmark b) {
+	public void setBookmark(Bookmark b, String viewType) {
+		this.viewType = viewType;
 		bookmark = b;
 	}
 	
@@ -181,76 +191,91 @@ public class ViewBookmarkFragment extends Fragment {
     @Override
     public void onStart(){
     	super.onStart();
-    	
-		if(bookmark != null){
-			if(isMyself()){
-				
-				try{		
-					int id = bookmark.getId();
-	
-					bookmark = BookmarkManager.GetById(id, base);
+    }
+    
+    public void loadBookmark(){
+    	if(bookmark != null){
+    		if(viewType.equals("view")){
+				mBookmarkView.setVisibility(View.VISIBLE);
+				mWebContent.setVisibility(View.GONE);
+				if(isMyself()){
+					
+					try{		
+						int id = bookmark.getId();
+		
+						bookmark = BookmarkManager.GetById(id, base);
+						
+						Date d = new Date(bookmark.getTime());
+						
+						mTitle.setText(bookmark.getDescription());
+						mUrl.setText(bookmark.getUrl());
+						mNotes.setText(bookmark.getNotes());
+						mTime.setText(d.toString());
+						mUsername.setText(bookmark.getAccount());
+						
+						if(!bookmark.getShared()) {
+							mIcon.setImageResource(R.drawable.padlock);
+						} else if(bookmark.getToRead()) {
+							mIcon.setImageResource(R.drawable.book_open);
+						}
+						
+		        		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
+		
+		        		for(Tag t : bookmark.getTags()) {
+		        			addTag(tagBuilder, t, tagOnClickListener);
+		        		}
+		        		
+		        		mTags.setText(tagBuilder);
+		        		mTags.setMovementMethod(LinkMovementMethod.getInstance());
+					}
+					catch(ContentNotFoundException e){}
+				} else {
 					
 					Date d = new Date(bookmark.getTime());
 					
-					mTitle.setText(bookmark.getDescription());
+					if(!bookmark.getDescription().equals("null"))
+						mTitle.setText(bookmark.getDescription());
+					
 					mUrl.setText(bookmark.getUrl());
-					mNotes.setText(bookmark.getNotes());
+					
+					if(!bookmark.getNotes().equals("null"))
+							mNotes.setText(bookmark.getNotes());
+					
 					mTime.setText(d.toString());
-					mUsername.setText(bookmark.getAccount());
 					
-					if(!bookmark.getShared()) {
-						mIcon.setImageResource(R.drawable.padlock);
-					} else if(bookmark.getToRead()) {
-						mIcon.setImageResource(R.drawable.book_open);
-					}
+		    		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
+		
+		    		for(Tag t : bookmark.getTags()) {
+		    			addTag(tagBuilder, t, userTagOnClickListener);
+		    		}
+		    		
+		    		mTags.setText(tagBuilder);
+		    		mTags.setMovementMethod(LinkMovementMethod.getInstance());
+		
+					SpannableStringBuilder builder = new SpannableStringBuilder();
+					int start = builder.length();
+					builder.append(bookmark.getAccount());
+					int end = builder.length();
 					
-	        		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
-	
-	        		for(Tag t : bookmark.getTags()) {
-	        			addTag(tagBuilder, t, tagOnClickListener);
-	        		}
-	        		
-	        		mTags.setText(tagBuilder);
-	        		mTags.setMovementMethod(LinkMovementMethod.getInstance());
+					AccountSpan span = new AccountSpan(bookmark.getAccount());
+					span.setOnAccountClickListener(accountOnClickListener);
+		
+					builder.setSpan(span, start, end, 0);
+					
+					mUsername.setText(builder);
+					mUsername.setMovementMethod(LinkMovementMethod.getInstance());
 				}
-				catch(ContentNotFoundException e){}
-			} else {
-				
-				Date d = new Date(bookmark.getTime());
-				
-				if(!bookmark.getDescription().equals("null"))
-					mTitle.setText(bookmark.getDescription());
-				
-				mUrl.setText(bookmark.getUrl());
-				
-				if(!bookmark.getNotes().equals("null"))
-						mNotes.setText(bookmark.getNotes());
-				
-				mTime.setText(d.toString());
-				
-	    		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
-	
-	    		for(Tag t : bookmark.getTags()) {
-	    			addTag(tagBuilder, t, userTagOnClickListener);
-	    		}
-	    		
-	    		mTags.setText(tagBuilder);
-	    		mTags.setMovementMethod(LinkMovementMethod.getInstance());
-	
-				SpannableStringBuilder builder = new SpannableStringBuilder();
-				int start = builder.length();
-				builder.append(bookmark.getAccount());
-				int end = builder.length();
-				
-				AccountSpan span = new AccountSpan(bookmark.getAccount());
-				span.setOnAccountClickListener(accountOnClickListener);
-	
-				builder.setSpan(span, start, end, 0);
-				
-				mUsername.setText(builder);
-				mUsername.setMovementMethod(LinkMovementMethod.getInstance());
+			} else if(viewType.equals("read")){
+				mBookmarkView.setVisibility(View.GONE);
+				mWebContent.setVisibility(View.VISIBLE);
+				String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(bookmark.getUrl());
+				mWebContent.loadUrl(readUrl);
+			} else if(viewType.equals("web")){
+				mBookmarkView.setVisibility(View.GONE);
+				mWebContent.setVisibility(View.VISIBLE);
+				mWebContent.loadUrl(bookmark.getUrl());
 			}
-		}
+    	}
     }
     
     

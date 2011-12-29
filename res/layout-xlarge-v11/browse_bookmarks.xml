@@ -25,12 +25,17 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="horizontal">
-	<LinearLayout 
+	<fragment class="com.pindroid.fragment.BrowseTagsFragment"
+		android:id="@+id/tagcontent"
+	    android:layout_width="0dp"
+	    android:layout_height="fill_parent"
+	    android:layout_weight="35" />
+	<FrameLayout 
 		android:id="@+id/listcontent"
 		android:layout_width="0dp"
 		android:layout_weight="35"
 	    android:layout_height="fill_parent" />
-	<LinearLayout 
+	<fragment class="com.pindroid.fragment.ViewBookmarkFragment"
 		android:id="@+id/maincontent"
 		android:layout_width="0dp"
 		android:layout_weight="65"

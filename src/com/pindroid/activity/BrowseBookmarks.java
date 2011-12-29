@@ -31,23 +31,25 @@ import com.pindroid.fragment.AddBookmarkFragment.OnBookmarkSaveListener;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment;
 import com.pindroid.fragment.BrowseBookmarksFragment;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
+import com.pindroid.fragment.BrowseTagsFragment;
+import com.pindroid.fragment.BrowseTagsFragment.OnTagSelectedListener;
 import com.pindroid.fragment.ViewBookmarkFragment;
 import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
-import com.pindroid.fragment.WebViewFragment;
-import com.pindroid.fragment.WebViewFragment.OnBookmarkViewListener;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkSelectedListener, 
-	OnBookmarkActionListener, OnBookmarkViewListener, OnBookmarkSaveListener {
+	OnBookmarkActionListener, OnBookmarkSaveListener, OnTagSelectedListener {
 
 	private String tagname = "";
 	private Boolean unread = false;
+	private String path = "";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -66,7 +68,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 
 			tagname = data.getQueryParameter("tagname");
 			unread = data.getQueryParameter("unread") != null;
-
+			path = data.getPath();
+			
 	    	if(!data.getScheme().equals("content")) {
 	    		startActivity(IntentHelper.OpenInBrowser(data.toString()));
 	    		finish();
@@ -75,15 +78,28 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		
 		FragmentManager fm = getSupportFragmentManager();
 		FragmentTransaction t = fm.beginTransaction();
-	
+		
+		Fragment bookmarkFrag = new Fragment();
+		
+		BrowseTagsFragment tagFrag = (BrowseTagsFragment) fm.findFragmentById(R.id.tagcontent);
+		tagFrag.setAccount(username);
+		tagFrag.setAction("notpick");
+
+		
 		if(isMyself()) {
-			BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
-			frag.setQuery(username, tagname, unread);
-			t.add(R.id.listcontent, frag);
+			bookmarkFrag = new BrowseBookmarksFragment();
+			((BrowseBookmarksFragment) bookmarkFrag).setQuery(username, tagname, unread);
 		} else {
-			BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
-			frag.setQuery(username, tagname);
-			t.add(R.id.listcontent, frag);
+			bookmarkFrag = new BrowseBookmarkFeedFragment();
+			((BrowseBookmarkFeedFragment) bookmarkFrag).setQuery(username, tagname);
+		}
+	
+		if(path.contains("bookmarks")){
+			t.add(R.id.listcontent, bookmarkFrag);
+			t.hide(tagFrag);
+		} else if(path.contains("tags")){
+			t.hide(fm.findFragmentById(R.id.maincontent));
+			t.add(R.id.listcontent, bookmarkFrag);
 		}
 		
 		t.commit();
@@ -104,12 +120,20 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	}
 
 	public void onBookmarkView(Bookmark b) {	
-		if(findViewById(R.id.maincontent) != null) {
-			ViewBookmarkFragment viewFrag = new ViewBookmarkFragment();
-			viewFrag.setBookmark(b);
-			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-			transaction.replace(R.id.maincontent, viewFrag);
-			transaction.commit();
+		if(findViewById(R.id.maincontent) != null || findViewById(R.id.tagcontent) != null) {
+			if(getSupportFragmentManager().findFragmentById(R.id.maincontent).isHidden()){
+				FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+				transaction.hide(getSupportFragmentManager().findFragmentById(R.id.tagcontent));
+				transaction.show(getSupportFragmentManager().findFragmentById(R.id.maincontent));
+				transaction.addToBackStack(null);
+				transaction.commit();
+			}
+			
+			ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.maincontent);
+			viewFrag.setBookmark(b, "view");
+			viewFrag.loadBookmark();
+
+
 		} else {
 			startActivity(IntentHelper.ViewBookmark(b, username, this));
 		}
@@ -117,11 +141,9 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 
 	public void onBookmarkRead(Bookmark b) {
 		if(findViewById(R.id.maincontent) != null) {
-			WebViewFragment webFrag = new WebViewFragment();
-			webFrag.setUrl(b, false);
-			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-			transaction.replace(R.id.maincontent, webFrag);
-			transaction.commit();
+			ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.maincontent);
+			viewFrag.setBookmark(b, "read");
+			viewFrag.loadBookmark();
 		} else {
 			startActivity(IntentHelper.ReadBookmark(b.getUrl()));
 		}	
@@ -135,11 +157,9 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
     	}
     	
 		if(findViewById(R.id.maincontent) != null) {
-			WebViewFragment webFrag = new WebViewFragment();
-			webFrag.setUrl(b, true);
-			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-			transaction.replace(R.id.maincontent, webFrag);
-			transaction.commit();
+			ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.maincontent);
+			viewFrag.setBookmark(b, "web");
+			viewFrag.loadBookmark();
 		} else {
 			startActivity(IntentHelper.OpenInBrowser(url));
 		}		
@@ -184,7 +204,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		}
 	}
 
-	public void onTagSelected(String tag) {
+	public void onViewTagSelected(String tag) {
 		if(findViewById(R.id.maincontent) != null) {
 			BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
 			frag.setQuery(username, tag, false);
@@ -229,5 +249,19 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 
 	public void onBookmarkCancel(Bookmark b) {
 		onBookmarkView(b);
+	}
+
+	public void onTagSelected(String tag) {
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		
+		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+		frag.setQuery(username, tag, false);
+		//transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+		transaction.replace(R.id.listcontent, frag);
+
+		transaction.addToBackStack(null);
+		transaction.commit();
+		
 	}
 }

@@ -26,6 +26,7 @@ import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.MainFragment;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 
 public class Main extends FragmentBaseActivity implements MainFragment.OnMainActionListener {
 
@@ -44,7 +45,14 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	}
 
 	public void onMyTagsSelected() {
-		startActivity(IntentHelper.ViewTags(mAccount.name, this));
+		DisplayMetrics outMetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
+		
+		if(outMetrics.widthPixels > 700){
+			startActivity(IntentHelper.ViewTabletTags(mAccount.name, this));
+		} else {
+			startActivity(IntentHelper.ViewTags(mAccount.name, this));
+		}
 		
 	}
 

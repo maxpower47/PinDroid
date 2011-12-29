@@ -135,6 +135,19 @@ public class IntentHelper {
 		return i;
 	}
 	
+	public static Intent ViewTabletTags(String account, Context context) {
+		Intent i = new Intent(context, BrowseBookmarks.class);
+		i.setAction(Intent.ACTION_VIEW);
+		i.addCategory(Intent.CATEGORY_DEFAULT);
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.appendEncodedPath("tags");
+		i.setData(data.build());
+		
+		return i;
+	}
+	
 	public static Intent SearchBookmarks(String query, String account, Context context) {
 		Intent i = new Intent(context, BrowseBookmarks.class);
 		i.setAction(Intent.ACTION_SEARCH);
