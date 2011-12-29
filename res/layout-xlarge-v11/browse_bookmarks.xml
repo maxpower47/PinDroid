@@ -29,15 +29,15 @@
 		android:id="@+id/tagcontent"
 	    android:layout_width="0dp"
 	    android:layout_height="fill_parent"
-	    android:layout_weight="35" />
+	    android:layout_weight="15" />
 	<FrameLayout 
 		android:id="@+id/listcontent"
 		android:layout_width="0dp"
-		android:layout_weight="35"
+		android:layout_weight="30"
 	    android:layout_height="fill_parent" />
 	<fragment class="com.pindroid.fragment.ViewBookmarkFragment"
 		android:id="@+id/maincontent"
 		android:layout_width="0dp"
-		android:layout_weight="65"
+		android:layout_weight="60"
 	    android:layout_height="fill_parent" />
 </LinearLayout>

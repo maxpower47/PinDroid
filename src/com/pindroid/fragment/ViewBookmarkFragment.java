@@ -156,6 +156,9 @@ public class ViewBookmarkFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle item selection
 	    switch (item.getItemId()) {
+		    case R.id.menu_view_details:
+				bookmarkSelectedListener.onBookmarkView(bookmark);
+				return true;
 		    case R.id.menu_view_read:
 		    	if(isMyself() && bookmark.getToRead() && base.markAsRead)
 		    		bookmarkSelectedListener.onBookmarkMark(bookmark);
@@ -187,11 +190,7 @@ public class ViewBookmarkFragment extends Fragment {
     private boolean isMyself() {
     	return bookmark.getId() != 0;
     }
-    
-    @Override
-    public void onStart(){
-    	super.onStart();
-    }
+
     
     public void loadBookmark(){
     	if(bookmark != null){
@@ -266,11 +265,15 @@ public class ViewBookmarkFragment extends Fragment {
 					mUsername.setMovementMethod(LinkMovementMethod.getInstance());
 				}
 			} else if(viewType.equals("read")){
+				mWebContent.clearView();
+				mWebContent.clearCache(true);
 				mBookmarkView.setVisibility(View.GONE);
 				mWebContent.setVisibility(View.VISIBLE);
 				String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(bookmark.getUrl());
 				mWebContent.loadUrl(readUrl);
 			} else if(viewType.equals("web")){
+				mWebContent.clearView();
+				mWebContent.clearCache(true);
 				mBookmarkView.setVisibility(View.GONE);
 				mWebContent.setVisibility(View.VISIBLE);
 				mWebContent.loadUrl(bookmark.getUrl());

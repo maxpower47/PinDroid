@@ -82,6 +82,9 @@ public class BrowseTagsFragment extends ListFragment
 		lv.setTextFilterEnabled(true);
 		lv.setFastScrollEnabled(true);
 		lv.setOnItemClickListener(clickListener);
+
+		lv.setItemsCanFocus(false);
+		lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 	}
 	
 	public void setAccount(String account) {

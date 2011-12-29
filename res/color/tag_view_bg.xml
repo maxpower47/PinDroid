@@ -21,22 +21,7 @@
  * USA
  */
  -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item 
-		android:id="@+id/menu_addbookmark" 
-		android:title="@string/menu_addbookmark_title" 
-		android:icon="@drawable/ic_menu_add_holo_light"
-		android:showAsAction="ifRoom"
-		android:orderInCategory="3" />
-	<item 
-		android:id="@+id/menu_search" 
-		android:title="@string/menu_search_title" 
-		android:icon="@drawable/ic_menu_search_holo_light"
-		android:showAsAction="ifRoom"
-		android:orderInCategory="4" />
-	<item 
-		android:id="@+id/menu_settings" 
-		android:title="@string/menu_settings_title" 
-		android:icon="@android:drawable/ic_menu_preferences"
-		android:orderInCategory="99" />
-</menu>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:state_activated="true" android:drawable="@color/tag_list_activated_bg" />
+	<item android:drawable="@color/tag_list_default_bg" />
+</selector>
