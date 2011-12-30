@@ -146,6 +146,18 @@ public class AddBookmarkFragment extends Fragment {
 	public void onStart(){
 		super.onStart();
 		
+		refreshView();
+	}
+	
+	public void loadBookmark(Bookmark b, Bookmark oldB){
+		if(b != null)
+			bookmark = b.copy();
+		
+		if(oldB != null)
+			oldBookmark = oldB.copy();
+	}
+	
+	public void refreshView(){
 		if(bookmark != null){
 			mEditUrl.setText(bookmark.getUrl());
 			
@@ -169,14 +181,6 @@ public class AddBookmarkFragment extends Fragment {
 			mEditUrl.requestFocus();
 			setDefaultValues();
 		}
-	}
-	
-	public void loadBookmark(Bookmark b, Bookmark oldB){
-		if(b != null)
-			bookmark = b.copy();
-		
-		if(oldB != null)
-			oldBookmark = oldB.copy();
 	}
 	
 	public void saveHandler(View v) {
