@@ -21,6 +21,7 @@
 
 package com.pindroid.activity;
 
+import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.DeleteBookmarkTask;
@@ -121,19 +122,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 
 	public void onBookmarkView(Bookmark b) {	
 		if(findViewById(R.id.maincontent) != null || findViewById(R.id.tagcontent) != null) {
-			if(getSupportFragmentManager().findFragmentById(R.id.maincontent).isHidden()){
-				FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-				transaction.hide(getSupportFragmentManager().findFragmentById(R.id.tagcontent));
-				transaction.show(getSupportFragmentManager().findFragmentById(R.id.maincontent));
-				transaction.addToBackStack(null);
-				transaction.commit();
-			}
-			
-			ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.maincontent);
-			viewFrag.setBookmark(b, "view");
-			viewFrag.loadBookmark();
-
-
+			setBookmarkView(b, BookmarkViewType.VIEW);
 		} else {
 			startActivity(IntentHelper.ViewBookmark(b, username, this));
 		}
@@ -141,27 +130,17 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 
 	public void onBookmarkRead(Bookmark b) {
 		if(findViewById(R.id.maincontent) != null) {
-			ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.maincontent);
-			viewFrag.setBookmark(b, "read");
-			viewFrag.loadBookmark();
+			setBookmarkView(b, BookmarkViewType.READ);
 		} else {
 			startActivity(IntentHelper.ReadBookmark(b.getUrl()));
 		}	
 	}
 
 	public void onBookmarkOpen(Bookmark b) {
-    	String url = b.getUrl();
-    	
-    	if(!url.startsWith("http")) {
-    		url = "http://" + url;
-    	}
-    	
 		if(findViewById(R.id.maincontent) != null) {
-			ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.maincontent);
-			viewFrag.setBookmark(b, "web");
-			viewFrag.loadBookmark();
+			setBookmarkView(b, BookmarkViewType.WEB);
 		} else {
-			startActivity(IntentHelper.OpenInBrowser(url));
+			startActivity(IntentHelper.OpenInBrowser(b.getUrl()));
 		}		
 	}
 
@@ -262,6 +241,19 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 
 		transaction.addToBackStack(null);
 		transaction.commit();
+	}
+	
+	private void setBookmarkView(Bookmark b, BookmarkViewType viewType){
+		if(getSupportFragmentManager().findFragmentById(R.id.maincontent).isHidden()){
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			transaction.hide(getSupportFragmentManager().findFragmentById(R.id.tagcontent));
+			transaction.show(getSupportFragmentManager().findFragmentById(R.id.maincontent));
+			transaction.addToBackStack(null);
+			transaction.commit();
+		}
 		
+		ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.maincontent);
+		viewFrag.setBookmark(b, viewType);
+		viewFrag.loadBookmark();
 	}
 }

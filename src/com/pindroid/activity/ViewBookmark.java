@@ -22,6 +22,7 @@
 package com.pindroid.activity;
 
 import com.pindroid.R;
+import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.DeleteBookmarkTask;
 import com.pindroid.action.IntentHelper;
@@ -106,7 +107,7 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 			}
 			
 			ViewBookmarkFragment frag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.view_bookmark_fragment);
-	        frag.setBookmark(bookmark, "view");
+	        frag.setBookmark(bookmark, BookmarkViewType.VIEW);
 		}
 	}
 	

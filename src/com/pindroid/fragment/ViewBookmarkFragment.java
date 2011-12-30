@@ -25,6 +25,7 @@ import java.net.URLEncoder;
 import java.util.Date;
 
 import com.pindroid.Constants;
+import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
@@ -65,7 +66,7 @@ public class ViewBookmarkFragment extends Fragment {
 	private ImageView mIcon;
 	private WebView mWebContent;
 	private Bookmark bookmark;
-	private String viewType;
+	private BookmarkViewType viewType;
 	
 	private OnBookmarkActionListener bookmarkActionListener;
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
@@ -114,7 +115,7 @@ public class ViewBookmarkFragment extends Fragment {
         }
     };
     
-	public void setBookmark(Bookmark b, String viewType) {
+	public void setBookmark(Bookmark b, BookmarkViewType viewType) {
 		this.viewType = viewType;
 		bookmark = b;
 	}
@@ -194,7 +195,7 @@ public class ViewBookmarkFragment extends Fragment {
     
     public void loadBookmark(){
     	if(bookmark != null){
-    		if(viewType.equals("view")){
+    		if(viewType == BookmarkViewType.VIEW){
 				mBookmarkView.setVisibility(View.VISIBLE);
 				mWebContent.setVisibility(View.GONE);
 				if(isMyself()){
@@ -264,14 +265,14 @@ public class ViewBookmarkFragment extends Fragment {
 					mUsername.setText(builder);
 					mUsername.setMovementMethod(LinkMovementMethod.getInstance());
 				}
-			} else if(viewType.equals("read")){
+			} else if(viewType == BookmarkViewType.READ){
 				mWebContent.clearView();
 				mWebContent.clearCache(true);
 				mBookmarkView.setVisibility(View.GONE);
 				mWebContent.setVisibility(View.VISIBLE);
 				String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(bookmark.getUrl());
 				mWebContent.loadUrl(readUrl);
-			} else if(viewType.equals("web")){
+			} else if(viewType == BookmarkViewType.WEB){
 				mWebContent.clearView();
 				mWebContent.clearCache(true);
 				mBookmarkView.setVisibility(View.GONE);
