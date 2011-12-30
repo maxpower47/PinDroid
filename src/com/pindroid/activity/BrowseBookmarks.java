@@ -232,14 +232,9 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 
 	public void onTagSelected(String tag) {
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		
 		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
 		frag.setQuery(username, tag, false);
-		//transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-
 		transaction.replace(R.id.listcontent, frag);
-
-		transaction.addToBackStack(null);
 		transaction.commit();
 	}
 	

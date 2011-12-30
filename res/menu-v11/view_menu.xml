@@ -25,17 +25,17 @@
     <item 
 		android:id="@+id/menu_view_details" 
 		android:title="@string/menu_view_details_title" 
-		android:showAsAction="ifRoom"
+		android:showAsAction="always"
 		android:orderInCategory="0" />
 	<item 
 		android:id="@+id/menu_view_read" 
 		android:title="@string/menu_view_read_title" 
-		android:showAsAction="ifRoom"
+		android:showAsAction="always"
 		android:orderInCategory="1" />
 	<item 
 		android:id="@+id/menu_view_openbookmark" 
 		android:title="@string/menu_view_openbookmark_title" 
-		android:showAsAction="ifRoom"
+		android:showAsAction="always"
 		android:orderInCategory="2" />
 	<item 
 		android:id="@+id/menu_view_editbookmark" 
