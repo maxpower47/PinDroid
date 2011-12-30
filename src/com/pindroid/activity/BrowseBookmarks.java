@@ -83,8 +83,10 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		Fragment bookmarkFrag = new Fragment();
 		
 		BrowseTagsFragment tagFrag = (BrowseTagsFragment) fm.findFragmentById(R.id.tagcontent);
-		tagFrag.setAccount(username);
-		tagFrag.setAction("notpick");
+		if(tagFrag != null){
+			tagFrag.setAccount(username);
+			tagFrag.setAction("notpick");
+		}
 
 		
 		if(isMyself()) {
@@ -97,7 +99,9 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	
 		if(path.contains("bookmarks")){
 			t.add(R.id.listcontent, bookmarkFrag);
-			t.hide(tagFrag);
+			if(tagFrag != null){
+				t.hide(tagFrag);
+			}
 		} else if(path.contains("tags")){
 			t.hide(fm.findFragmentById(R.id.maincontent));
 			t.add(R.id.listcontent, bookmarkFrag);

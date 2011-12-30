@@ -191,6 +191,13 @@ public class ViewBookmarkFragment extends Fragment {
     private boolean isMyself() {
     	return bookmark.getId() != 0;
     }
+    
+    @Override
+    public void onStart(){
+    	super.onStart();
+    	
+    	loadBookmark();
+    }
 
     
     public void loadBookmark(){
@@ -213,10 +220,12 @@ public class ViewBookmarkFragment extends Fragment {
 						mTime.setText(d.toString());
 						mUsername.setText(bookmark.getAccount());
 						
-						if(!bookmark.getShared()) {
-							mIcon.setImageResource(R.drawable.padlock);
-						} else if(bookmark.getToRead()) {
-							mIcon.setImageResource(R.drawable.book_open);
+						if(mIcon != null){
+							if(!bookmark.getShared()) {
+								mIcon.setImageResource(R.drawable.padlock);
+							} else if(bookmark.getToRead()) {
+								mIcon.setImageResource(R.drawable.book_open);
+							}
 						}
 						
 		        		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
