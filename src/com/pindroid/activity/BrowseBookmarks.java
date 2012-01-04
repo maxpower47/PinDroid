@@ -107,7 +107,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			t.add(R.id.listcontent, bookmarkFrag);
 		}
 		
-		t.hide(getSupportFragmentManager().findFragmentById(R.id.addcontent));
+		t.hide(fm.findFragmentById(R.id.addcontent));
 		
 		t.commit();
     }
@@ -126,7 +126,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		return true;
 	}
 
-	public void onBookmarkView(Bookmark b) {	
+	public void onBookmarkView(Bookmark b) {
 		if(findViewById(R.id.maincontent) != null || findViewById(R.id.tagcontent) != null) {
 			setBookmarkView(b, BookmarkViewType.VIEW);
 		} else {
@@ -268,6 +268,11 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			}
 			transaction.show(getSupportFragmentManager().findFragmentById(R.id.maincontent));
 			transaction.addToBackStack(null);
+			transaction.commit();
+		} else if(getSupportFragmentManager().findFragmentById(R.id.maincontent).isHidden() && getSupportFragmentManager().findFragmentById(R.id.addcontent).isVisible()){
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			transaction.hide(getSupportFragmentManager().findFragmentById(R.id.addcontent));
+			transaction.show(getSupportFragmentManager().findFragmentById(R.id.maincontent));
 			transaction.commit();
 		}
 		

@@ -189,7 +189,7 @@ public class ViewBookmarkFragment extends Fragment {
     }
     
     private boolean isMyself() {
-    	return bookmark.getId() != 0;
+    	return bookmark != null && bookmark.getId() != 0;
     }
     
     @Override
@@ -290,7 +290,6 @@ public class ViewBookmarkFragment extends Fragment {
 			}
     	}
     }
-    
     
 	@Override
 	public void onAttach(Activity activity) {
