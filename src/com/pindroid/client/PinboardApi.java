@@ -145,9 +145,9 @@ public class PinboardApi {
 		params.put("tags", bookmark.getTagString());
 		params.put("url", bookmark.getUrl());
 		
-		if(!bookmark.getShared()){
-			params.put("shared", "no");
-		}
+		if(bookmark.getShared()){
+			params.put("shared", "yes");
+		} else params.put("shared", "no");
 		
 		if(bookmark.getToRead()){
 			params.put("toread", "yes");
