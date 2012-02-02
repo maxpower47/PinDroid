@@ -118,6 +118,10 @@ public class ViewBookmarkFragment extends Fragment {
 	public void setBookmark(Bookmark b, BookmarkViewType viewType) {
 		this.viewType = viewType;
 		bookmark = b;
+		
+		if(android.os.Build.VERSION.SDK_INT >= 11) {
+			this.getActivity().invalidateOptionsMenu();
+		}
 	}
 	
 	private void addTag(SpannableStringBuilder builder, Tag t, TagSpan.OnTagClickListener listener) {
@@ -145,11 +149,12 @@ public class ViewBookmarkFragment extends Fragment {
 	
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-		if(bookmark != null){
-			if(!isMyself()) {
-				menu.removeItem(R.id.menu_view_editbookmark);
-				menu.removeItem(R.id.menu_view_deletebookmark);
-			}
+		if(bookmark == null || !isMyself()){
+			menu.removeItem(R.id.menu_view_editbookmark);
+			menu.removeItem(R.id.menu_view_deletebookmark);
+		}
+		if(bookmark == null){
+			menu.removeItem(R.id.menu_view_sendbookmark);
 		}
 	}
 	
