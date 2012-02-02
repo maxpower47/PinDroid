@@ -70,6 +70,8 @@
   <string name="bookmark_feed_task_progress">Ladataan, odota...</string>
   <string name="menu_addbookmark_title">Lisää kirjanmerkkeihin</string>
   <string name="menu_sort_title">Lajittele</string>
+  <string name="menu_sort_bookmark_title">Lajittele kirjanmerkit</string>
+  <string name="menu_sort_tag_title">Lajittele tunnisteet</string>
   <string name="menu_search_title">Etsi</string>
   <string name="menu_settings_title">Asetukset</string>
   <string name="browse_my_tags_title">Omat tunnisteet</string>

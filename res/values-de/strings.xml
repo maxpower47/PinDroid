@@ -99,6 +99,8 @@
     
     <string name="menu_addbookmark_title">Lesezeichen hinzufügen</string>
     <string name="menu_sort_title">Sortieren</string>
+    <string name="menu_sort_bookmark_title">Sortieren Lesezeichen</string>
+    <string name="menu_sort_tag_title">Sortieren Tags</string>
     <string name="menu_search_title">Suche</string>
     <string name="menu_settings_title">Einstellungen</string>
     

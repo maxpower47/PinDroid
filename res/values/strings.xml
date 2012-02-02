@@ -102,6 +102,8 @@
     
     <string name="menu_addbookmark_title">Add Bookmark</string>
     <string name="menu_sort_title">Sort</string>
+    <string name="menu_sort_bookmark_title">Sort Bookmarks</string>
+    <string name="menu_sort_tag_title">Sort Tags</string>
     <string name="menu_search_title">Search</string>
     <string name="menu_settings_title">Settings</string>
     

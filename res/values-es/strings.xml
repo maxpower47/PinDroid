@@ -49,6 +49,8 @@
   <string name="bookmark_feed_task_progress">Cargando. Por favor espere ...</string>
   <string name="menu_addbookmark_title">Añadir a Favoritos</string>
   <string name="menu_sort_title">Ordenar</string>
+  <string name="menu_sort_bookmark_title">Ordenar Favoritos</string>
+  <string name="menu_sort_tag_title">Ordenar etiquetas</string>
   <string name="menu_search_title">Búsqueda</string>
   <string name="menu_settings_title">Configuración</string>
   <string name="browse_my_tags_title">Mis etiquetas</string>
