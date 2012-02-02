@@ -107,7 +107,10 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			t.add(R.id.listcontent, bookmarkFrag);
 		}
 		
-		t.hide(fm.findFragmentById(R.id.addcontent));
+		Fragment addFrag = fm.findFragmentById(R.id.addcontent);
+		if(addFrag != null){
+			t.hide(addFrag);
+		}
 		
 		t.commit();
     }
