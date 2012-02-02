@@ -130,67 +130,81 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	}
 
 	public void onBookmarkView(Bookmark b) {
-		if(findViewById(R.id.maincontent) != null || findViewById(R.id.tagcontent) != null) {
-			setBookmarkView(b, BookmarkViewType.VIEW);
-		} else {
-			startActivity(IntentHelper.ViewBookmark(b, username, this));
+		if(b != null){
+			if(findViewById(R.id.maincontent) != null || findViewById(R.id.tagcontent) != null) {
+				setBookmarkView(b, BookmarkViewType.VIEW);
+			} else {
+				startActivity(IntentHelper.ViewBookmark(b, username, this));
+			}
 		}
 	}
 
 	public void onBookmarkRead(Bookmark b) {
-		if(findViewById(R.id.maincontent) != null) {
-			setBookmarkView(b, BookmarkViewType.READ);
-		} else {
-			startActivity(IntentHelper.ReadBookmark(b.getUrl()));
-		}	
+		if(b != null){
+			if(findViewById(R.id.maincontent) != null) {
+				setBookmarkView(b, BookmarkViewType.READ);
+			} else {
+				startActivity(IntentHelper.ReadBookmark(b.getUrl()));
+			}
+		}
 	}
 
 	public void onBookmarkOpen(Bookmark b) {
-		if(findViewById(R.id.maincontent) != null) {
-			setBookmarkView(b, BookmarkViewType.WEB);
-		} else {
-			startActivity(IntentHelper.OpenInBrowser(b.getUrl()));
-		}		
+		if(b != null){
+			if(findViewById(R.id.maincontent) != null) {
+				setBookmarkView(b, BookmarkViewType.WEB);
+			} else {
+				startActivity(IntentHelper.OpenInBrowser(b.getUrl()));
+			}
+		}
 	}
 
 	public void onBookmarkAdd(Bookmark b) {
-		startActivity(IntentHelper.AddBookmark(b.getUrl(), mAccount.name, this));
+		if(b != null){
+			startActivity(IntentHelper.AddBookmark(b.getUrl(), mAccount.name, this));
+		}
 	}
 
 	public void onBookmarkShare(Bookmark b) {
-		Intent sendIntent = IntentHelper.SendBookmark(b.getUrl(), b.getDescription());
-    	startActivity(Intent.createChooser(sendIntent, getString(R.string.share_chooser_title)));	
+		if(b != null){
+			Intent sendIntent = IntentHelper.SendBookmark(b.getUrl(), b.getDescription());
+			startActivity(Intent.createChooser(sendIntent, getString(R.string.share_chooser_title)));
+		}
 	}
 
 	public void onBookmarkMark(Bookmark b) {
-    	if(isMyself() && b.getToRead()) {
+    	if(b != null && isMyself() && b.getToRead()) {
     		BookmarkTaskArgs unreadArgs = new BookmarkTaskArgs(b, mAccount, this);
     		new MarkReadBookmarkTask().execute(unreadArgs);
     	}
 	}
 
 	public void onBookmarkEdit(Bookmark b) {
-		if(findViewById(R.id.maincontent) != null) {
-			AddBookmarkFragment addFrag = (AddBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.addcontent);
-			addFrag.loadBookmark(b, null);
-			addFrag.refreshView();
-			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-			transaction.hide(getSupportFragmentManager().findFragmentById(R.id.maincontent));
-			transaction.show(getSupportFragmentManager().findFragmentById(R.id.addcontent));
-			transaction.commit();
-		} else {
-			startActivity(IntentHelper.EditBookmark(b, mAccount.name, this));
-		}		
+		if(b != null){
+			if(findViewById(R.id.maincontent) != null) {
+				AddBookmarkFragment addFrag = (AddBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.addcontent);
+				addFrag.loadBookmark(b, null);
+				addFrag.refreshView();
+				FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+				transaction.hide(getSupportFragmentManager().findFragmentById(R.id.maincontent));
+				transaction.show(getSupportFragmentManager().findFragmentById(R.id.addcontent));
+				transaction.commit();
+			} else {
+				startActivity(IntentHelper.EditBookmark(b, mAccount.name, this));
+			}
+		}
 	}
 
 	public void onBookmarkDelete(Bookmark b) {
-		BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, this);	
-		new DeleteBookmarkTask().execute(args);
-		
-		if(findViewById(R.id.maincontent) != null) {
-			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-			transaction.remove(getSupportFragmentManager().findFragmentById(R.id.maincontent));
-			transaction.commit();
+		if(b != null){
+			BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, this);	
+			new DeleteBookmarkTask().execute(args);
+			
+			if(findViewById(R.id.maincontent) != null) {
+				FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+				transaction.remove(getSupportFragmentManager().findFragmentById(R.id.maincontent));
+				transaction.commit();
+			}
 		}
 	}
 

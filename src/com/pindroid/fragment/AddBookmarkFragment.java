@@ -36,7 +36,6 @@ import com.pindroid.action.GetWebpageTitleTask;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.client.PinboardApi;
 import com.pindroid.client.TooManyRequestsException;
-import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -178,7 +177,9 @@ public class AddBookmarkFragment extends Fragment {
 
 			tagTask = new GetTagSuggestionsTask().execute(bookmark.getUrl());
 		} else {
-			mEditUrl.requestFocus();
+			if(!this.isHidden()){
+				mEditUrl.requestFocus();
+			}
 			setDefaultValues();
 		}
 	}
