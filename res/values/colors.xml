@@ -37,4 +37,10 @@
 	<color name="transparent">#00000000</color>
 	<color name="bookmark_unread_indicator">#FF9900</color>
     <color name="actionbar_background_light">#ccffffff</color>
+    
+    <color name="bookmark_list_default_bg">#373737</color>
+	<color name="bookmark_list_activated_bg">#455082</color>
+	
+	<color name="tag_list_default_bg">#000000</color>
+	<color name="tag_list_activated_bg">#BF8600</color>
 </resources>
