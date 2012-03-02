@@ -21,21 +21,19 @@
 
 package com.pindroid.activity;
 
-import com.pindroid.R;
-import com.pindroid.action.BookmarkTaskArgs;
-import com.pindroid.action.DeleteBookmarkTask;
-import com.pindroid.action.IntentHelper;
-import com.pindroid.action.MarkReadBookmarkTask;
-import com.pindroid.fragment.BrowseBookmarkFeedFragment;
-import com.pindroid.fragment.BrowseBookmarksFragment;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
+
+import com.pindroid.R;
+import com.pindroid.action.IntentHelper;
+import com.pindroid.fragment.BrowseBookmarkFeedFragment;
+import com.pindroid.fragment.BrowseBookmarksFragment;
+import com.pindroid.platform.BookmarkManager;
+import com.pindroid.providers.BookmarkContent.Bookmark;
 
 public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookmarksFragment.OnBookmarkSelectedListener {
 	
@@ -60,8 +58,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 		if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
 			viewBookmark(Integer.parseInt(data.getLastPathSegment()));
 			finish();
-		} 
-		
+		} 	
 		
 		FragmentManager fm = getSupportFragmentManager();
 		FragmentTransaction t = fm.beginTransaction();
@@ -129,8 +126,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 
 	public void onBookmarkMark(Bookmark b) {
     	if(isMyself() && b.getToRead()) {
-    		BookmarkTaskArgs unreadArgs = new BookmarkTaskArgs(b, mAccount, this);
-    		new MarkReadBookmarkTask().execute(unreadArgs);
+    		b.setToRead(false);
+			BookmarkManager.UpdateBookmark(b, mAccount.name, this);
     	}
 	}
 
@@ -140,7 +137,6 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 	}
 
 	public void onBookmarkDelete(Bookmark b) {
-		BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, this);	
-		new DeleteBookmarkTask().execute(args);
+		BookmarkManager.LazyDelete(b, mAccount.name, this);
 	}
 }

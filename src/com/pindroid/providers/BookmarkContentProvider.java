@@ -64,7 +64,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	private SQLiteDatabase db;
 	private DatabaseHelper dbHelper;
 	private static final String DATABASE_NAME = "PinboardBookmarks.db";
-	private static final int DATABASE_VERSION = 23;
+	private static final int DATABASE_VERSION = 26;
 	private static final String BOOKMARK_TABLE_NAME = "bookmark";
 	private static final String TAG_TABLE_NAME = "tag";
 	
@@ -105,7 +105,9 @@ public class BookmarkContentProvider extends ContentProvider {
 					"META TEXT, " +
 					"TIME INTEGER, " +
 					"TOREAD INTEGER, " +
-					"SHARED INTEGER);");
+					"SHARED INTEGER, " +
+					"DELETED INTEGER, " +
+					"SYNCED INTEGER);");
 			
 			sqlDb.execSQL("CREATE INDEX " + BOOKMARK_TABLE_NAME + 
 					"_ACCOUNT ON " + BOOKMARK_TABLE_NAME + " " +
@@ -156,15 +158,16 @@ public class BookmarkContentProvider extends ContentProvider {
 		switch (sURIMatcher.match(uri)) {
 			case Bookmarks:
 				count = db.delete(BOOKMARK_TABLE_NAME, where, whereArgs);
+				getContext().getContentResolver().notifyChange(uri, null, false);
 				break;
 			case Tags:
 				count = db.delete(TAG_TABLE_NAME, where, whereArgs);
+				getContext().getContentResolver().notifyChange(uri, null, false);
 				break;
 			default:
 				throw new IllegalArgumentException("Unknown URI " + uri);
 		}
 		
-		getContext().getContentResolver().notifyChange(uri, null);
 		return count;
 	}
 
@@ -200,7 +203,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		long rowId = db.insert(BOOKMARK_TABLE_NAME, "", values);
 		if(rowId > 0) {
 			Uri rowUri = ContentUris.appendId(BookmarkContent.Bookmark.CONTENT_URI.buildUpon(), rowId).build();
-			getContext().getContentResolver().notifyChange(rowUri, null);
+			getContext().getContentResolver().notifyChange(rowUri, null, true);
 			return rowUri;
 		}
 		throw new SQLException("Failed to insert row into " + uri);
@@ -515,7 +518,9 @@ public class BookmarkContentProvider extends ContentProvider {
 				throw new IllegalArgumentException("Unknown URI " + uri);
 		}
 		
-		getContext().getContentResolver().notifyChange(uri, null);
+		boolean syncOnly = values.size() == 1 && values.containsKey(Bookmark.Synced) && values.getAsBoolean(Bookmark.Synced);
+		
+		getContext().getContentResolver().notifyChange(uri, null, !syncOnly);
 		return count;
 	}
 	
@@ -582,14 +587,23 @@ public class BookmarkContentProvider extends ContentProvider {
 	
 	@Override
 	public int bulkInsert(Uri uri, ContentValues[] values){
+		
+		int result = 0;
+		
 		switch(sURIMatcher.match(uri)) {
 			case Bookmarks:
-				return bulkLoad(BOOKMARK_TABLE_NAME, values);
+				result = bulkLoad(BOOKMARK_TABLE_NAME, values);
+				break;
 			case Tags:
-				return bulkLoad(TAG_TABLE_NAME, values);
+				result = bulkLoad(TAG_TABLE_NAME, values);
+				break;
 			default:
 				throw new IllegalArgumentException("Unknown Uri: " + uri);
 		}
+		
+		getContext().getContentResolver().notifyChange(uri, null, false);
+		
+		return result;
 	}
 	
 	private int bulkLoad(String table, ContentValues[] values){

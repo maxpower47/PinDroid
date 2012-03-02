@@ -46,7 +46,9 @@ public class BookmarkContent {
 		public static final String Time = "TIME";
 		public static final String ToRead = "TOREAD";
 		public static final String Shared = "SHARED";
+		public static final String Synced = "SYNCED";
 		public static final String Source = "SOURCE";
+		public static final String Deleted = "DELETED";
 		
 		private int mId = 0;
 		private String mAccount = null;
@@ -56,10 +58,12 @@ public class BookmarkContent {
         private String mTags = null;
         private String mHash = null;
         private String mMeta = null;
-        private Boolean mShared = true;
-        private Boolean mRead = false;
+        private boolean mShared = true;
+        private boolean mRead = false;
         private long mTime = 0;
+        private boolean mSynced = false;
         private String mSource = null;
+        private boolean mDeleted = false;
 
         public int getId(){
         	return mId;
@@ -161,6 +165,22 @@ public class BookmarkContent {
         	mAccount = account;
         }
         
+        public boolean getSynced(){
+        	return mSynced;
+        }
+        
+        public void setSynced(boolean synced){
+        	mSynced = synced;
+        }
+        
+        public boolean getDeleted(){
+        	return mDeleted;
+        }
+        
+        public void setDeleted(boolean deleted){
+        	mDeleted = deleted;
+        }
+        
         public String getSource(){
         	return mSource;
         }
@@ -190,7 +210,7 @@ public class BookmarkContent {
             mTime = time;
         }
         
-        public Bookmark(int id, String account, String url, String description, String notes, String tags, String hash, String meta, long time, boolean read, boolean share) {
+        public Bookmark(int id, String account, String url, String description, String notes, String tags, String hash, String meta, long time, boolean read, boolean share, boolean synced, boolean deleted) {
             mId = id;
         	mUrl = url;
             mDescription = description;
@@ -202,6 +222,8 @@ public class BookmarkContent {
             mAccount = account;
             mRead = read;
             mShared = share;
+            mSynced = synced;
+            mDeleted = deleted;
         }
         
         public Bookmark copy() {
@@ -218,6 +240,8 @@ public class BookmarkContent {
         	b.mTime = this.mTime;
         	b.mUrl = this.mUrl;
         	b.mSource = this.mSource;
+        	b.mSynced = this.mSynced;
+        	b.mDeleted = this.mDeleted;
         	return b;
         }
         
@@ -234,6 +258,8 @@ public class BookmarkContent {
         	this.mTime = 0;
         	this.mUrl = null;
         	this.mSource = null;
+        	this.mSynced = false;
+        	this.mDeleted = false;
         }
 	}
 }

@@ -26,5 +26,5 @@
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
     android:contentAuthority="com.pindroid.providers.BookmarkContentProvider"
     android:accountType="com.pindroid"
-    android:supportsUploading="false" />
+    android:supportsUploading="true" />
 

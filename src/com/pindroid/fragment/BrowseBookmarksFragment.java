@@ -88,8 +88,8 @@ public class BrowseBookmarksFragment extends ListFragment
 		setHasOptionsMenu(true);
 		
 		mAdapter = new SimpleCursorAdapter(base, R.layout.bookmark_view, null, 
-				new String[]{Bookmark.Description, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared}, 
-				new int[]{R.id.bookmark_description, R.id.bookmark_tags, R.id.bookmark_unread, R.id.bookmark_private}, 0);
+				new String[]{Bookmark.Description, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced}, 
+				new int[]{R.id.bookmark_description, R.id.bookmark_tags, R.id.bookmark_unread, R.id.bookmark_private, R.id.bookmark_unsynced}, 0);
 		
 		setListAdapter(mAdapter);
 		mAdapter.setViewBinder(new BookmarkViewBinder());

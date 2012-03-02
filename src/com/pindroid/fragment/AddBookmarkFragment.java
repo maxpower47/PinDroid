@@ -30,8 +30,6 @@ import java.util.Date;
 import org.apache.http.auth.AuthenticationException;
 
 import com.pindroid.R;
-import com.pindroid.action.AddBookmarkTask;
-import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.GetWebpageTitleTask;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.client.PinboardApi;
@@ -83,14 +81,11 @@ public class AddBookmarkFragment extends Fragment {
 	private Bookmark bookmark;
 	private Bookmark oldBookmark;
 	private Boolean update = false;
-	private Boolean error = false;
 	
 	private long updateTime = 0;
 	
 	private AsyncTask<String, Integer, String> titleTask;
 	private AsyncTask<String, Integer, ArrayList<Tag>> tagTask;
-	
-
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
@@ -176,11 +171,7 @@ public class AddBookmarkFragment extends Fragment {
 		save();
 	}
 	
-	public void cancelHandler(View v) {
-    	if(error) {
-    		revertBookmark();
-    	}
-    	
+	public void cancelHandler(View v) {    	
     	base.finish();
 	}
 	
@@ -236,10 +227,6 @@ public class AddBookmarkFragment extends Fragment {
 		
 		bookmark.setId(oldid);
 		
-		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, oldBookmark, base.mAccount, base, update);
-		
-		new AddBookmarkTask().execute(args);
-		
 		if(update){
 			BookmarkManager.UpdateBookmark(bookmark, base.mAccount.name, base);
 			
@@ -259,38 +246,6 @@ public class AddBookmarkFragment extends Fragment {
 		base.finish();
     }
     
-    private void revertBookmark(){
-    	
-    	if(update) {
-			BookmarkManager.UpdateBookmark(oldBookmark, base.mAccount.name, base);
-			
-			for(Tag t : bookmark.getTags()){
-				if(!oldBookmark.getTags().contains(t)) {
-					TagManager.UpleteTag(t, base.mAccount.name, base);
-				}
-			}
-			
-			for(Tag t : oldBookmark.getTags()){   				
-				TagManager.UpsertTag(t, base.mAccount.name, base);
-			}
-    	} else {
-    		BookmarkManager.DeleteBookmark(bookmark, base);
-    		
-			for(Tag t : bookmark.getTags()){
-				TagManager.UpleteTag(t, base.mAccount.name, base);
-			}
-    	}
-    }
-    
-    @Override
-    public void onStop(){
-    	if(error) {
-    		revertBookmark();
-    	}
-    	
-    	super.onStop();
-    }
-    
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
@@ -307,10 +262,6 @@ public class AddBookmarkFragment extends Fragment {
 	    	save();
 			return true;
 	    case R.id.menu_addbookmark_cancel:
-        	if(error) {
-        		revertBookmark();
-        	}
-        	
         	base.finish();
 	        return true;
 	    default:

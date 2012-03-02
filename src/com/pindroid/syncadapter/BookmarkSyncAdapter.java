@@ -24,6 +24,7 @@ package com.pindroid.syncadapter;
 import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SyncResult;
@@ -61,11 +62,21 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     @Override
-    public void onPerformSync(Account account, Bundle extras, String authority,
-        ContentProviderClient provider, SyncResult syncResult) {
-    	Log.d(TAG, "Beginning Sync");
+    public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+    	
+    	boolean upload = extras.containsKey(ContentResolver.SYNC_EXTRAS_UPLOAD);
+    	
         try {
-            InsertBookmarks(account, syncResult);
+        	if(upload){
+        		Log.d(TAG, "Beginning Upload Sync");
+        		DeleteBookmarks(account, syncResult);
+        		UploadBookmarks(account, syncResult);
+        	} else {
+        		Log.d(TAG, "Beginning Download Sync");
+        		DeleteBookmarks(account, syncResult);
+        		UploadBookmarks(account, syncResult);
+        		InsertBookmarks(account, syncResult);
+        	}
         } catch (final ParseException e) {
             syncResult.stats.numParseExceptions++;
             Log.e(TAG, "ParseException", e);
@@ -98,28 +109,62 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			Log.d(TAG, "In Bookmark Load");
 			final ArrayList<String> accounts = new ArrayList<String>();
 			accounts.add(account.name);
-			BookmarkManager.TruncateBookmarks(accounts, mContext, false);
-			TagManager.TruncateTags(username, mContext);
-			
-			final ArrayList<Tag> tagList = PinboardApi.getTags(account, mContext);
-			final ArrayList<Bookmark> addBookmarkList = getBookmarkList();
-			
-			if(!tagList.isEmpty()){
-				TagManager.BulkInsert(tagList, username, mContext);
-			}
-
+	
+			final ArrayList<Bookmark> addBookmarkList = getBookmarkList();	
+			BookmarkManager.TruncateBookmarks(accounts, mContext, false);		
 			if(!addBookmarkList.isEmpty()){
 				BookmarkManager.BulkInsert(addBookmarkList, username, mContext);
+			}
+			
+			final ArrayList<Tag> tagList = PinboardApi.getTags(account, mContext);
+			TagManager.TruncateTags(username, mContext);
+			if(!tagList.isEmpty()){
+				TagManager.BulkInsert(tagList, username, mContext);
 			}
 
     		final SharedPreferences.Editor editor = settings.edit();
     		editor.putLong(Constants.PREFS_LAST_SYNC, update.getLastUpdate());
             editor.commit();
+            
+            syncResult.stats.numEntries += addBookmarkList.size();
 
     	} else {
     		Log.d(TAG, "No update needed.  Last update time before last sync.");
     	}
     }
+    
+    private void UploadBookmarks(Account account, SyncResult syncResult) 
+		throws AuthenticationException, IOException, TooManyRequestsException{
+    
+    	final ArrayList<Bookmark> bookmarks = BookmarkManager.GetLocalBookmarks(account.name, mContext);
+    	
+    	for(Bookmark b : bookmarks)
+    	{
+			PinboardApi.addBookmark(b, account, mContext);
+
+			Log.d(TAG, "Bookmark edited: " + (b.getHash() == null ? "" : b.getHash()));
+			b.setSynced(true);
+			BookmarkManager.SetSynced(b, true, account.name, mContext);
+    	}
+    	
+    	syncResult.stats.numEntries += bookmarks.size();
+    }
+    
+    private void DeleteBookmarks(Account account, SyncResult syncResult) 
+		throws AuthenticationException, IOException, TooManyRequestsException{
+	
+		final ArrayList<Bookmark> bookmarks = BookmarkManager.GetDeletedBookmarks(account.name, mContext);
+		
+		for(Bookmark b : bookmarks)
+		{
+			PinboardApi.deleteBookmark(b, account, mContext);
+	
+			Log.d(TAG, "Bookmark deleted: " + (b.getHash() == null ? "" : b.getHash()));
+			BookmarkManager.DeleteBookmark(b, mContext);
+		}
+		
+		syncResult.stats.numEntries += bookmarks.size();
+	}
     
     private ArrayList<Bookmark> getBookmarkList()
     	throws AuthenticationException, IOException, TooManyRequestsException {

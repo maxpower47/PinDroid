@@ -44,6 +44,11 @@ public class BookmarkViewBinder implements SimpleCursorAdapter.ViewBinder {
             		v.setVisibility(View.VISIBLE);
             	else v.setVisibility(View.GONE);
             	break;
+            case R.id.bookmark_unsynced:
+            	if(c.getInt(columnIndex) == 0)
+            		v.setVisibility(View.VISIBLE);
+            	else v.setVisibility(View.GONE);
+            	break;
             case R.id.bookmark_private:
                 if(c.getInt(columnIndex) == 0){
                 	v.setVisibility(View.VISIBLE);
