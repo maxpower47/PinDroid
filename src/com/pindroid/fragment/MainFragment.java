@@ -67,13 +67,6 @@ public class MainFragment extends ListFragment {
 				getString(R.string.main_menu_recent_bookmarks),
 				getString(R.string.main_menu_network_bookmarks)};
 		
-		if(base.secretToken == null || base.secretToken.equals("")) {
-			MENU_ITEMS = new String[] {getString(R.string.main_menu_my_bookmarks),
-					getString(R.string.main_menu_my_unread_bookmarks),
-					getString(R.string.main_menu_my_tags),
-					getString(R.string.main_menu_recent_bookmarks)};
-		}
-		
 		setListAdapter(new ArrayAdapter<String>(base, R.layout.main_view, MENU_ITEMS));
 
 		Intent intent = base.getIntent();
