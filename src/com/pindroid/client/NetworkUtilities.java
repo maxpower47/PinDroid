@@ -21,26 +21,21 @@
 
 package com.pindroid.client;
 
-import android.content.Context;
-import android.os.Handler;
-import android.util.Log;
-
-import com.pindroid.authenticator.AuthenticatorActivity;
-
-import org.apache.http.auth.Credentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.auth.AuthScope;
-import android.net.Uri;
+import java.io.IOException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
+import android.net.Uri;
+import android.util.Log;
 
 /**
  * Provides utility methods for communicating with the server.
@@ -55,26 +50,6 @@ public class NetworkUtilities {
     private static final AuthScope SCOPE = new AuthScope(PINBOARD_AUTHORITY, PORT);
 
     /**
-     * Executes the network requests on a separate thread.
-     * 
-     * @param runnable The runnable instance containing network mOperations to
-     *        be executed.
-     */
-    public static Thread performOnBackgroundThread(final Runnable runnable) {
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    runnable.run();
-                } finally {
-                }
-            }
-        };
-        t.start();
-        return t;
-    }
-
-    /**
      * Attempts to authenticate to Pinboard using a legacy Pinboard account.
      * 
      * @param username The user's username.
@@ -84,8 +59,7 @@ public class NetworkUtilities {
      * @return The boolean result indicating whether the user was
      *         successfully authenticated.
      */
-    public static boolean pinboardAuthenticate(String username, String password,
-        Handler handler, final Context context) {
+    public static boolean pinboardAuthenticate(String username, String password) {
         final HttpResponse resp;
         
         Uri.Builder builder = new Uri.Builder();
@@ -108,20 +82,17 @@ public class NetworkUtilities {
                 if (Log.isLoggable(TAG, Log.VERBOSE)) {
                     Log.v(TAG, "Successful authentication");
                 }
-                sendResult(true, handler, context);
                 return true;
             } else {
                 if (Log.isLoggable(TAG, Log.VERBOSE)) {
                     Log.v(TAG, "Error authenticating" + resp.getStatusLine());
                 }
-                sendResult(false, handler, context);
                 return false;
             }
         } catch (final IOException e) {
             if (Log.isLoggable(TAG, Log.VERBOSE)) {
                 Log.v(TAG, "IOException when getting authtoken", e);
             }
-            sendResult(false, handler, context);
             return false;
         } finally {
             if (Log.isLoggable(TAG, Log.VERBOSE)) {
@@ -165,46 +136,5 @@ public class NetworkUtilities {
 				return "";
 			}
     	} else return "";
-    }
-    
-    /**
-     * Sends the authentication response from server back to the caller main UI
-     * thread through its handler.
-     * 
-     * @param result The boolean holding authentication result
-     * @param handler The main UI thread's handler instance.
-     * @param context The caller Activity's context.
-     */
-    private static void sendResult(final boolean result, final Handler handler,
-        final Context context) {
-        if (handler == null || context == null) {
-            return;
-        }
-        
-        handler.post(new Runnable() {
-            public void run() {
-                ((AuthenticatorActivity) context).onAuthenticationResult(result);
-            }
-        });
-    }
-
-    /**
-     * Attempts to authenticate the user credentials on the server.
-     * 
-     * @param username The user's username
-     * @param password The user's password to be authenticated
-     * @param handler The main UI thread's handler instance.
-     * @param context The caller Activity's context
-     * @return Thread The thread on which the network mOperations are executed.
-     */
-    public static Thread attemptAuth(final String username,
-        final String password, final Handler handler, final Context context) {
-        final Runnable runnable = new Runnable() {
-            public void run() {
-            	pinboardAuthenticate(username, password, handler, context);
-            }
-        };
-        // run on background thread.
-        return NetworkUtilities.performOnBackgroundThread(runnable);
     }
 }
