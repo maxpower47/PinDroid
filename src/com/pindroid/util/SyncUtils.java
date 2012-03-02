@@ -71,4 +71,11 @@ public class SyncUtils {
         PendingIntent operation = PeriodicSyncReceiver.createPendingIntent(context, authority, extras);
         manager.cancel(operation);
     }
+    
+    public static void clearSyncMarkers(Context context){
+		Account[] accounts = AccountManager.get(context).getAccountsByType(Constants.ACCOUNT_TYPE);
+		for(Account a : accounts){
+			AccountManager.get(context).setUserData(a, Constants.SYNC_MARKER_KEY, "0");
+		}
+    }
 }

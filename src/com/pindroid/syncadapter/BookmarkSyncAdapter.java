@@ -21,14 +21,20 @@
 
 package com.pindroid.syncadapter;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.apache.http.ParseException;
+import org.apache.http.auth.AuthenticationException;
+
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.SyncResult;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.pindroid.Constants;
@@ -40,24 +46,21 @@ import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 
-import org.apache.http.ParseException;
-import org.apache.http.auth.AuthenticationException;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
 /**
  * SyncAdapter implementation for syncing bookmarks.
  */
 public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = "BookmarkSyncAdapter";
+    
 
     private final Context mContext;
     private Account mAccount;
+    private final AccountManager mAccountManager;
 
     public BookmarkSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
         mContext = context;
+        mAccountManager = AccountManager.get(context);
     }
 
     @Override
@@ -85,9 +88,8 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     
     private void InsertBookmarks(Account account, SyncResult syncResult) 
     	throws AuthenticationException, IOException, TooManyRequestsException{
-
-    	final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
-    	long lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
+    	
+    	long lastUpdate = getServerSyncMarker(account);
     	final String username = account.name;
     	mAccount = account;
 
@@ -111,10 +113,8 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			if(!addBookmarkList.isEmpty()){
 				BookmarkManager.BulkInsert(addBookmarkList, username, mContext);
 			}
-
-    		final SharedPreferences.Editor editor = settings.edit();
-    		editor.putLong(Constants.PREFS_LAST_SYNC, update.getLastUpdate());
-            editor.commit();
+            
+            setServerSyncMarker(account, update.getLastUpdate());
 
     	} else {
     		Log.d(TAG, "No update needed.  Last update time before last sync.");
@@ -134,5 +134,28 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 		} while(morePages);
 
 		return results;
+    }
+    
+    /**
+     * This helper function fetches the last known high-water-mark
+     * we received from the server - or 0 if we've never synced.
+     * @param account the account we're syncing
+     * @return the change high-water-mark
+     */
+    private long getServerSyncMarker(Account account) {
+        String markerString = mAccountManager.getUserData(account, Constants.SYNC_MARKER_KEY);
+        if (!TextUtils.isEmpty(markerString)) {
+            return Long.parseLong(markerString);
+        }
+        return 0;
+    }
+
+    /**
+     * Save off the high-water-mark we receive back from the server.
+     * @param account The account we're syncing
+     * @param marker The high-water-mark we want to save.
+     */
+    private void setServerSyncMarker(Account account, long marker) {
+        mAccountManager.setUserData(account, Constants.SYNC_MARKER_KEY, Long.toString(marker));
     }
 }

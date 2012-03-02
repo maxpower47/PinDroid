@@ -31,6 +31,7 @@ import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
+import com.pindroid.util.SyncUtils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -60,6 +61,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	
 	private AccountManager mAccountManager = null;
 	private Account mAccount = null;
+	private static Context mContext;
 	
 	private SQLiteDatabase db;
 	private DatabaseHelper dbHelper;
@@ -83,8 +85,6 @@ public class BookmarkContentProvider extends ContentProvider {
 	public static final String AUTHORITY = "com.pindroid.providers.BookmarkContentProvider";
 	
 	private static class DatabaseHelper extends SQLiteOpenHelper {
-		
-		private Context mContext;
 		
 		DatabaseHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -138,14 +138,10 @@ public class BookmarkContentProvider extends ContentProvider {
 			sqlDb.execSQL("DROP INDEX IF EXISTS " + BOOKMARK_TABLE_NAME + "_HASH");
 			sqlDb.execSQL("DROP INDEX IF EXISTS " + TAG_TABLE_NAME + "_ACCOUNT");
 			sqlDb.execSQL("DROP TABLE IF EXISTS " + BOOKMARK_TABLE_NAME);
-			sqlDb.execSQL("DROP TABLE IF EXISTS " + TAG_TABLE_NAME);
+			sqlDb.execSQL("DROP TABLE IF EXISTS " + TAG_TABLE_NAME);			
+			onCreate(sqlDb);
 			
-			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
-    		SharedPreferences.Editor editor = settings.edit();
-    		editor.putLong(Constants.PREFS_LAST_SYNC, 0);
-            editor.commit();
-			
-			onCreate(sqlDb);	
+			SyncUtils.clearSyncMarkers(mContext);
 		}
 	}
 	
