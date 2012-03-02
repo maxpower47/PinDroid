@@ -366,7 +366,11 @@ public class BookmarkManager {
 			selectionList.add(Bookmark.Account + " " + operator + " '" + s + "'");
 		}
 		
-		final String selection = TextUtils.join(logicalOp, selectionList);
+		String selection = TextUtils.join(logicalOp, selectionList);
+		
+		if(accounts.size() > 0)
+			selection += " AND " + Bookmark.Synced + "=1";
+		else selection += Bookmark.Synced + "=1";
 		
 		context.getContentResolver().delete(Bookmark.CONTENT_URI, selection, null);
 	}
