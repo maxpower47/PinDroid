@@ -30,8 +30,8 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -58,9 +58,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     private static final String TAG = "AuthenticatorActivity";
 
     private AccountManager mAccountManager;
-    private Thread mAuthThread;
-    private String mAuthtoken;
-    private String mAuthtokenType;
+    private UserLoginTask mAuthTask = null;
+    private ProgressDialog mProgressDialog = null;
 
     /**
      * If set we are just checking that the user knows their credentials; this
@@ -68,8 +67,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
      */
     private Boolean mConfirmCredentials = false;
 
-    /** for posting authentication attempts back to UI thread */
-    private final Handler mHandler = new Handler();
     private TextView mMessage;
     private String mPassword;
     private EditText mPasswordEdit;
@@ -85,17 +82,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
      */
     @Override
     public void onCreate(Bundle icicle) {
-        Log.i(TAG, "onCreate(" + icicle + ")");
         super.onCreate(icicle);
         mAccountManager = AccountManager.get(this);
-        Log.i(TAG, "loading data from Intent");
         final Intent intent = getIntent();
         mUsername = intent.getStringExtra(PARAM_USERNAME);
-        mAuthtokenType = intent.getStringExtra(PARAM_AUTHTOKEN_TYPE);
         mRequestNewAccount = mUsername == null;
         mConfirmCredentials = intent.getBooleanExtra(PARAM_CONFIRMCREDENTIALS, false);
 
-        Log.i(TAG, "    request new: " + mRequestNewAccount);
         requestWindowFeature(Window.FEATURE_LEFT_ICON);
         setContentView(R.layout.login_activity);
         getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, android.R.drawable.ic_dialog_alert);
@@ -104,7 +97,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         mPasswordEdit = (EditText) findViewById(R.id.password_edit);
         mMessage = (TextView) findViewById(R.id.message);
 
-        mUsernameEdit.setText(mUsername);
+        if (!TextUtils.isEmpty(mUsername))
+        	mUsernameEdit.setText(mUsername);
         mMessage.setText(getMessage());
     }
 
@@ -120,12 +114,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             public void onCancel(DialogInterface dialog) {
                 Log.i(TAG, "dialog cancel has been invoked");
-                if (mAuthThread != null) {
-                    mAuthThread.interrupt();
+                if (mAuthTask != null) {
+                    mAuthTask.cancel(true);
                     finish();
                 }
             }
         });
+        mProgressDialog = dialog;
         return dialog;
     }
 
@@ -146,8 +141,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         } else {
             showProgress();
             // Start authenticating...
-            mAuthThread = NetworkUtilities.attemptAuth(mUsername, mPassword, mHandler,
-                    AuthenticatorActivity.this);
+            mAuthTask = new UserLoginTask();
+            mAuthTask.execute();
         }
     }
 
@@ -178,11 +173,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
      * 
      * @param the confirmCredentials result.
      */
-    protected void finishLogin(String authToken) {
-        Log.i(TAG, "finishLogin()");
-
+    protected void finishLogin() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        final String authtype = settings.getString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_PINBOARD);
         final int synctime = Integer.parseInt(settings.getString("pref_synctime", "0"));
         
         final Account account = new Account(mUsername, Constants.ACCOUNT_TYPE);
@@ -197,16 +189,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         } else {
             mAccountManager.setPassword(account, mPassword);
         }
-  
-        mAccountManager.setUserData(account, Constants.PREFS_AUTH_TYPE, authtype);
-        
         final Intent intent = new Intent();
         
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mUsername);
         intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
-        if (mAuthtokenType != null && mAuthtokenType.equals(Constants.AUTHTOKEN_TYPE)) {
-            intent.putExtra(AccountManager.KEY_AUTHTOKEN, mAuthtoken);
-        }
         
         SharedPreferences.Editor editor = settings.edit();	
 		editor.putLong(Constants.PREFS_LAST_SYNC, 0);
@@ -218,33 +204,16 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     }
 
     /**
-     * Hides the progress UI for a lengthy operation.
-     */
-    protected void hideProgress() {
-    	try{
-    		dismissDialog(0);
-    	}
-    	catch(IllegalArgumentException e){
-    		
-    	}
-    }
-
-    /**
      * Called when the authentication process completes (see attemptLogin()).
      */
     public void onAuthenticationResult(boolean result) {
-        // Hide the progress dialog
+    	mAuthTask = null;
         hideProgress();
         if (result) {
-            if (!mConfirmCredentials) {
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = settings.edit();
-            	editor.putString(Constants.PREFS_AUTH_TYPE, Constants.AUTH_TYPE_PINBOARD);
-            	editor.commit();
-            	
-                finishLogin(null);
+            if (!mConfirmCredentials) {            	
+                finishLogin();
             } else {
-                finishConfirmCredentials(true);
+                finishConfirmCredentials(result);
             }
         } else {
             Log.e(TAG, "onAuthenticationResult: failed to authenticate");
@@ -281,5 +250,55 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
      */
     protected void showProgress() {
         showDialog(0);
+    }
+    
+    /**
+     * Hides the progress UI for a lengthy operation.
+     */
+    private void hideProgress() {
+        if (mProgressDialog != null) {
+            mProgressDialog.dismiss();
+            mProgressDialog = null;
+        }
+    }
+    
+    public void onAuthenticationCancel() {
+        mAuthTask = null;
+        hideProgress();
+    }
+    
+    /**
+     * Represents an asynchronous task used to authenticate a user against the
+     * SampleSync Service
+     */
+    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // We do the actual work of authenticating the user
+            // in the NetworkUtilities class.
+            try {
+                return NetworkUtilities.pinboardAuthenticate(mUsername, mPassword);
+            } catch (Exception ex) {
+                Log.e(TAG, "UserLoginTask.doInBackground: failed to authenticate");
+                Log.i(TAG, ex.toString());
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            // On a successful authentication, call back into the Activity to
+            // communicate the authToken (or null for an error).
+            onAuthenticationResult(success);
+        }
+
+        @Override
+        protected void onCancelled() {
+            // If the action was canceled (by the user clicking the cancel
+            // button in the progress dialog), then call back into the
+            // activity to let it know.
+            onAuthenticationCancel();
+        }
     }
 }

@@ -27,11 +27,8 @@ import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
-import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.client.NetworkUtilities;
 
@@ -52,19 +49,11 @@ class Authenticator extends AbstractAccountAuthenticator {
      * {@inheritDoc}
      */
     @Override
-    public Bundle addAccount(AccountAuthenticatorResponse response,
-        String accountType, String authTokenType, String[] requiredFeatures, Bundle options) {
+    public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) {
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
-        intent.putExtra(AuthenticatorActivity.PARAM_AUTHTOKEN_TYPE, authTokenType);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         final Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);
-        
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putBoolean("first_time", true);
-        editor.commit();
-        
         return bundle;
     }
 
@@ -72,8 +61,7 @@ class Authenticator extends AbstractAccountAuthenticator {
      * {@inheritDoc}
      */
     @Override
-    public Bundle confirmCredentials(AccountAuthenticatorResponse response,
-        Account account, Bundle options) {
+    public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) {
         if (options != null && options.containsKey(AccountManager.KEY_PASSWORD)) {
             final String password = options.getString(AccountManager.KEY_PASSWORD);
             final boolean verified = onlineConfirmPassword(account, password);
@@ -95,8 +83,7 @@ class Authenticator extends AbstractAccountAuthenticator {
      * {@inheritDoc}
      */
     @Override
-    public Bundle editProperties(AccountAuthenticatorResponse response,
-        String accountType) {
+    public Bundle editProperties(AccountAuthenticatorResponse response, String accountType) {
         throw new UnsupportedOperationException();
     }
 
@@ -104,8 +91,7 @@ class Authenticator extends AbstractAccountAuthenticator {
      * {@inheritDoc}
      */
     @Override
-    public Bundle getAuthToken(AccountAuthenticatorResponse response,
-        Account account, String authTokenType, Bundle loginOptions) {
+    public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle loginOptions) {
     	
         if (!authTokenType.equals(Constants.AUTHTOKEN_TYPE)) {
             final Bundle result = new Bundle();
@@ -116,8 +102,7 @@ class Authenticator extends AbstractAccountAuthenticator {
         final String password = am.getPassword(account);     
     	
         if (password != null) {
-            final boolean verified =
-                onlineConfirmPassword(account, password);
+            final boolean verified = onlineConfirmPassword(account, password);
             if (verified) {
                 final Bundle result = new Bundle();
                 result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
@@ -142,9 +127,6 @@ class Authenticator extends AbstractAccountAuthenticator {
      */
     @Override
     public String getAuthTokenLabel(String authTokenType) {
-        if (authTokenType.equals(Constants.AUTHTOKEN_TYPE)) {
-            return mContext.getString(R.string.label);
-        }
         return null;
     }
 
@@ -152,8 +134,7 @@ class Authenticator extends AbstractAccountAuthenticator {
      * {@inheritDoc}
      */
     @Override
-    public Bundle hasFeatures(AccountAuthenticatorResponse response,
-        Account account, String[] features) {
+    public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) {
         final Bundle result = new Bundle();
         result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, false);
         return result;
@@ -163,19 +144,16 @@ class Authenticator extends AbstractAccountAuthenticator {
      * Validates user's password on the server
      */
     private boolean onlineConfirmPassword(Account account, String password) {
-    	
-    	return NetworkUtilities.pinboardAuthenticate(account.name, password, null, null);
+    	return NetworkUtilities.pinboardAuthenticate(account.name, password);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Bundle updateCredentials(AccountAuthenticatorResponse response,
-        Account account, String authTokenType, Bundle loginOptions) {
+    public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle loginOptions) {
         final Intent intent = new Intent(mContext, AuthenticatorActivity.class);
         intent.putExtra(AuthenticatorActivity.PARAM_USERNAME, account.name);
-        intent.putExtra(AuthenticatorActivity.PARAM_AUTHTOKEN_TYPE, authTokenType);
         intent.putExtra(AuthenticatorActivity.PARAM_CONFIRMCREDENTIALS, false);
         final Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);

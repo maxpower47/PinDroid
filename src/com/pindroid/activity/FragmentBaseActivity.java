@@ -32,6 +32,7 @@ import android.text.TextUtils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -128,7 +129,7 @@ public class FragmentBaseActivity extends FragmentActivity {
 		
 		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length < 1) {		
 			Intent i = new Intent(this, AuthenticatorActivity.class);
-			startActivity(i);
+			startActivityForResult(i, 0);
 			
 			return;
 		} else if(lastUpdate == 0) {
@@ -223,6 +224,12 @@ public class FragmentBaseActivity extends FragmentActivity {
 
 		if(this.findViewById(R.id.action_bar_title) != null) {
 			((TextView)this.findViewById(R.id.action_bar_title)).setText(title);
+		}
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){	
+		if(resultCode == Activity.RESULT_CANCELED){
+			finish();
 		}
 	}
 }
