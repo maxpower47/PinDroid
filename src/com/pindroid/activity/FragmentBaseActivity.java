@@ -21,33 +21,29 @@
 
 package com.pindroid.activity;
 
-import com.pindroid.R;
-import com.pindroid.Constants;
-import com.pindroid.action.IntentHelper;
-import com.pindroid.authenticator.AuthenticatorActivity;
-import com.pindroid.providers.BookmarkContentProvider;
-
-import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.SearchManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.pindroid.Constants;
+import com.pindroid.R;
+import com.pindroid.action.IntentHelper;
+import com.pindroid.authenticator.AuthenticatorActivity;
 
 public class FragmentBaseActivity extends FragmentActivity {
 	
@@ -57,7 +53,7 @@ public class FragmentBaseActivity extends FragmentActivity {
 	public String username = null;
 	protected SharedPreferences settings;
 	
-	protected long lastUpdate;
+	//protected long lastUpdate;
 	public boolean privateDefault;
 	public boolean toreadDefault;
 	public String defaultAction;
@@ -133,20 +129,9 @@ public class FragmentBaseActivity extends FragmentActivity {
 			startActivityForResult(i, 0);
 			
 			return;
-		} else if(lastUpdate == 0) {
-
+		} else {
 			if(mAccount == null || username == null)
 				loadAccounts();
-			
-			if(!ContentResolver.isSyncActive(mAccount, BookmarkContentProvider.AUTHORITY) &&
-				!ContentResolver.isSyncPending(mAccount, BookmarkContentProvider.AUTHORITY)) {
-				
-				Toast.makeText(this, getString(R.string.syncing_toast), Toast.LENGTH_LONG).show();
-				
-				ContentResolver.requestSync(mAccount, BookmarkContentProvider.AUTHORITY, Bundle.EMPTY);
-			}
-		} else {
-			loadAccounts();
 		}
 	}
 	
@@ -175,7 +160,7 @@ public class FragmentBaseActivity extends FragmentActivity {
 	}
 	
 	private void loadSettings(){
-    	lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
+    	//lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
     	privateDefault = settings.getBoolean("pref_save_private_default", false);
     	toreadDefault = settings.getBoolean("pref_save_toread_default", false);
     	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");

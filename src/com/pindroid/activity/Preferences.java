@@ -74,6 +74,9 @@ public class Preferences extends PreferenceActivity {
             	
         		Log.d("PinDroid", "Starting forced sync");
         		Toast.makeText(mContext, res.getString(R.string.syncing_toast), Toast.LENGTH_LONG).show();
+
+        		SyncUtils.clearSyncMarkers(mContext);
+        		
         		ContentResolver.requestSync(null, BookmarkContentProvider.AUTHORITY, Bundle.EMPTY);
         		
             	return true;
