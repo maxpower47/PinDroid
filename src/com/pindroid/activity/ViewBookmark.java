@@ -35,6 +35,7 @@ import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
+
 public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActionListener,
 	OnBookmarkSelectedListener {
 	
@@ -67,41 +68,38 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 			if(data != null) {
 				path = data.getPath();
 				tagname = data.getQueryParameter("tagname");
-			}
-			
-			if(data.getScheme() == null || !data.getScheme().equals("content")){
-				Intent i = new Intent(Intent.ACTION_VIEW, data);
-				
-				startActivity(i);
-				finish();				
-			} else if(tagname != null) {
-				Intent viewTags = new Intent(this, BrowseBookmarks.class);
-				viewTags.setData(data);
-				
-				Log.d("View Tags Uri", data.toString());
-				startActivity(viewTags);
-				finish();
-			}
-			
-			if(intent.getData() != null) {
-				data = intent.getData();
-				path = data.getPath();
 				username = data.getUserInfo();
-			}
+				
+				if(data.getScheme() == null || !data.getScheme().equals("content")){
+					// URI is web url, open it in browser
+					Intent i = new Intent(Intent.ACTION_VIEW, data);
+					startActivity(i);
+					finish();				
+				} else if(tagname != null) {
+					// URI is tag query, open bookmark list for tag
+					Intent viewTags = new Intent(this, BrowseBookmarks.class);
+					viewTags.setData(data);
+					Log.d("View Tags Uri", data.toString());
+					startActivity(viewTags);
+					finish();
+				}
+			} else username = mAccount.name;
 			
 			Bookmark bookmark = new Bookmark();
 			
-			if(path.contains("/bookmarks") && isMyself()){		
-				int id = Integer.parseInt(data.getLastPathSegment());
-				bookmark.setId(id);
-			} else if(path.contains("/bookmarks") && !isMyself()) {
-				bookmark.setDescription(data.getQueryParameter("title"));
-				bookmark.setUrl(data.getQueryParameter("url"));
-				bookmark.setNotes(data.getQueryParameter("notes"));
-				bookmark.setTime(Long.parseLong(data.getQueryParameter("time")));
-				if(!data.getQueryParameter("tags").equals("null"))
-					bookmark.setTagString(data.getQueryParameter("tags"));
-				bookmark.setAccount(data.getQueryParameter("account"));
+			if(path.contains("/bookmarks")){
+				if(isMyself()){		
+					int id = Integer.parseInt(data.getLastPathSegment());
+					bookmark.setId(id);
+				} else {
+					bookmark.setDescription(data.getQueryParameter("title"));
+					bookmark.setUrl(data.getQueryParameter("url"));
+					bookmark.setNotes(data.getQueryParameter("notes"));
+					bookmark.setTime(Long.parseLong(data.getQueryParameter("time")));
+					if(!data.getQueryParameter("tags").equals("null"))
+						bookmark.setTagString(data.getQueryParameter("tags"));
+					bookmark.setAccount(data.getQueryParameter("account"));
+				}
 			}
 			
 			ViewBookmarkFragment frag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.view_bookmark_fragment);
@@ -111,6 +109,7 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	
 	public void onTagSelected(String tag) {		
 		startActivity(IntentHelper.ViewBookmarks(tag, username, this));
+
 	}
 
 	public void onUserTagSelected(String tag, String user) {

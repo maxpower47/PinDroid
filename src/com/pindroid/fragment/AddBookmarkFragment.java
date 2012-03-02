@@ -110,11 +110,13 @@ public class AddBookmarkFragment extends Fragment {
 		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
 		
-		String[] tagArray = new String[5];
-		tagArray = TagManager.GetTagsAsArray(base.mAccount.name, null, base).toArray(tagArray);
-		ArrayAdapter<String> autoCompleteAdapter = new ArrayAdapter<String>(base, R.layout.autocomplete_view, tagArray);
-		mEditTags.setAdapter(autoCompleteAdapter);
-		mEditTags.setTokenizer(new SpaceTokenizer());
+		if(base.mAccount != null){
+			String[] tagArray = new String[5];
+			tagArray = TagManager.GetTagsAsArray(base.mAccount.name, null, base).toArray(tagArray);
+			ArrayAdapter<String> autoCompleteAdapter = new ArrayAdapter<String>(base, R.layout.autocomplete_view, tagArray);
+			mEditTags.setAdapter(autoCompleteAdapter);
+			mEditTags.setTokenizer(new SpaceTokenizer());
+		}
 
 		mEditUrl.setOnFocusChangeListener(new OnFocusChangeListener(){
 			public void onFocusChange(View v, boolean hasFocus) {
