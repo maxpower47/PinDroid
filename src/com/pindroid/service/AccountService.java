@@ -36,8 +36,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.IntentService;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class AccountService extends IntentService {
@@ -52,31 +50,29 @@ public class AccountService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		mAccountManager = AccountManager.get(this);
 		
-		Account[] a = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
-		ArrayList<String> accounts = new ArrayList<String>();
-		for (int i = 0; i < a.length; i++) {	
-			accounts.add(a[i].name);
+		Account[] accounts = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE);
+		ArrayList<String> accountsList = new ArrayList<String>();
+		for (int i = 0; i < accounts.length; i++) {	
+			accountsList.add(accounts[i].name);
 		}
 		
-		BookmarkManager.TruncateBookmarks(accounts, this, true);
-		TagManager.TruncateOldTags(accounts, this);
+		BookmarkManager.TruncateBookmarks(accountsList, this, true);
+		TagManager.TruncateOldTags(accountsList, this);
 		
-		if(a.length > 0) {
-			Log.d("AS Handle", "Getting Token for " + a[0].name);
-			
-			try {
-				String token = PinboardApi.getSecretToken(a[0], this);
-
-		        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		        SharedPreferences.Editor editor = settings.edit();
-		    	editor.putString(Constants.PREFS_SECRET_TOKEN, token);
-		    	editor.commit();
-			} catch (AuthenticationException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (TooManyRequestsException e){
-				e.printStackTrace();
+		if(accounts.length > 0) {
+			for(Account a : accounts){
+				Log.d("AS Handle", "Getting Token for " + a.name);
+				
+				try {
+					String token = PinboardApi.getSecretToken(a, this);		
+					mAccountManager.setUserData(a, Constants.PREFS_SECRET_TOKEN, token);
+				} catch (AuthenticationException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (TooManyRequestsException e){
+					e.printStackTrace();
+				}
 			}
 		}
 	}

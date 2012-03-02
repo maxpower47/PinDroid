@@ -53,12 +53,10 @@ public class FragmentBaseActivity extends FragmentActivity {
 	public String username = null;
 	protected SharedPreferences settings;
 	
-	//protected long lastUpdate;
 	public boolean privateDefault;
 	public boolean toreadDefault;
 	public String defaultAction;
 	public boolean markAsRead;
-	public String secretToken;
 	
 	private boolean first = true;
 	
@@ -158,12 +156,10 @@ public class FragmentBaseActivity extends FragmentActivity {
 	}
 	
 	private void loadSettings(){
-    	//lastUpdate = settings.getLong(Constants.PREFS_LAST_SYNC, 0);
     	privateDefault = settings.getBoolean("pref_save_private_default", false);
     	toreadDefault = settings.getBoolean("pref_save_toread_default", false);
     	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
     	markAsRead = settings.getBoolean("pref_markasread", false);
-    	secretToken = settings.getString(Constants.PREFS_SECRET_TOKEN, "");
 	}
 
 	@Override

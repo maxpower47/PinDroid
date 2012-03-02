@@ -24,6 +24,7 @@ package com.pindroid.fragment;
 import java.io.IOException;
 import java.text.ParseException;
 
+import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.client.PinboardFeed;
@@ -32,6 +33,7 @@ import com.pindroid.listadapter.BookmarkViewBinder;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
@@ -240,7 +242,8 @@ public class BrowseBookmarkFeedFragment extends ListFragment
         
  		   try {
  			   if(user.equals("network")) {
- 				   results = PinboardFeed.fetchNetworkRecent(base.mAccount.name, base.secretToken);
+ 				   String token = AccountManager.get(getContext()).getUserData(base.mAccount, Constants.PREFS_SECRET_TOKEN);
+ 				   results = PinboardFeed.fetchNetworkRecent(base.mAccount.name, token);
  			   } else if(user.equals("recent")) {
  				  results = PinboardFeed.fetchRecent();
  			   } else {
