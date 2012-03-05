@@ -101,7 +101,7 @@ public class ViewBookmarkFragment extends Fragment {
 				
 				Date d = new Date(bookmark.getTime());
 				
-				mTitle.setText(Boolean.toString(bookmark.getSynced()));
+				mTitle.setText(bookmark.getDescription());
 				mUrl.setText(bookmark.getUrl());
 				mNotes.setText(bookmark.getNotes());
 				mTime.setText(d.toString());
