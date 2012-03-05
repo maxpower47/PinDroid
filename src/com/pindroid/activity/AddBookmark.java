@@ -45,7 +45,6 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 	private Bookmark bookmark = null;
 	private Bookmark oldBookmark = null;
 	private Boolean update = false;
-	private Boolean error = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -109,29 +108,12 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 			bookmark.setTagString(intent.getStringExtra(Constants.EXTRA_TAGS));
 			bookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, privateDefault));
 			bookmark.setToRead(intent.getBooleanExtra(Constants.EXTRA_TOREAD, toreadDefault));
-			error = intent.getBooleanExtra(Constants.EXTRA_ERROR, false);
 
 			try{
 				Bookmark old = BookmarkManager.GetByUrl(bookmark.getUrl(), this);
 				bookmark = old.copy();
 			} catch(Exception e) {
 				
-			}
-			
-			if(error){
-				update = intent.getBooleanExtra(Constants.EXTRA_UPDATE, false);
-				
-				if(update) {
-					oldBookmark = new Bookmark();
-					oldBookmark.setAccount(mAccount.name);
-					oldBookmark.setDescription(intent.getStringExtra(Constants.EXTRA_DESCRIPTION + ".old"));
-					oldBookmark.setNotes(intent.getStringExtra(Constants.EXTRA_NOTES + ".old"));
-					oldBookmark.setUrl(intent.getStringExtra(Intent.EXTRA_TEXT + ".old"));
-					oldBookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE + ".old", false));
-					oldBookmark.setTagString(intent.getStringExtra(Constants.EXTRA_TAGS + ".old"));
-					oldBookmark.setTime(intent.getLongExtra(Constants.EXTRA_TIME + ".old", 0));
-					oldBookmark.setToRead(intent.getBooleanExtra(Constants.EXTRA_TOREAD + ".old", false));
-				}
 			}
 			
 		} else if(Intent.ACTION_EDIT.equals(intent.getAction())){

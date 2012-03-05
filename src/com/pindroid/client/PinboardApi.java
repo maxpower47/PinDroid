@@ -126,12 +126,12 @@ public class PinboardApi {
      * @param context The current application context.
      * @return A boolean indicating whether or not the api call was successful.
      * @throws IOException If a server error was encountered.
+     * @throws TooManyRequestsException 
      * @throws AuthenticationException If an authentication error was encountered.
-     * @throws TokenRejectedException If the oauth token is reported to be expired.
      * @throws Exception If an unknown error is encountered.
      */
     public static Boolean addBookmark(Bookmark bookmark, Account account, Context context) 
-    	throws Exception {
+    	throws IOException, AuthenticationException, TooManyRequestsException {
 
     	String url = bookmark.getUrl();
     	if(url.endsWith("/")) {
@@ -145,9 +145,9 @@ public class PinboardApi {
 		params.put("tags", bookmark.getTagString());
 		params.put("url", bookmark.getUrl());
 		
-		if(!bookmark.getShared()){
-			params.put("shared", "no");
-		}
+		if(bookmark.getShared()){
+			params.put("shared", "yes");
+		} else params.put("shared", "no");
 		
 		if(bookmark.getToRead()){
 			params.put("toread", "yes");
@@ -164,16 +164,8 @@ public class PinboardApi {
         if (response.contains("<result code=\"done\" />")) {
             return true;
         } else {
-        	if(response.contains("<result code=\"something went wrong\" />")){
-                Log.e(TAG, "Server error in adding bookmark");
-                throw new IOException();
-            } else if(response.contains("token_expired")){
-            	Log.d(TAG, "Token Expired");
-            	throw new TokenRejectedException();
-            } else{
-            	Log.e(TAG, "Unknown error in adding bookmark");
-            	throw new Exception();
-            }
+        	Log.e(TAG, "Server error in adding bookmark");
+            throw new IOException();
         }
     }
     

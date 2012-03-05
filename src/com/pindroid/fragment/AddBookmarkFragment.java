@@ -30,8 +30,6 @@ import java.util.Date;
 import org.apache.http.auth.AuthenticationException;
 
 import com.pindroid.R;
-import com.pindroid.action.AddBookmarkTask;
-import com.pindroid.action.BookmarkTaskArgs;
 import com.pindroid.action.GetWebpageTitleTask;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.client.PinboardApi;
@@ -84,7 +82,6 @@ public class AddBookmarkFragment extends Fragment {
 	private Bookmark bookmark;
 	private Bookmark oldBookmark;
 	private Boolean update = false;
-	private Boolean error = false;
 	
 	private long updateTime = 0;
 	
@@ -191,11 +188,7 @@ public class AddBookmarkFragment extends Fragment {
 		bookmarkSaveListener.onBookmarkSave(bookmark);
 	}
 	
-	public void cancelHandler(View v) {
-    	if(error) {
-    		revertBookmark();
-    	}
-    	
+	public void cancelHandler(View v) {    	
     	bookmarkSaveListener.onBookmarkCancel(bookmark);
 	}
 	
@@ -251,10 +244,6 @@ public class AddBookmarkFragment extends Fragment {
 		
 		bookmark.setId(oldid);
 		
-		BookmarkTaskArgs args = new BookmarkTaskArgs(bookmark, oldBookmark, base.mAccount, base, update);
-		
-		new AddBookmarkTask().execute(args);
-		
 		if(update){
 			BookmarkManager.UpdateBookmark(bookmark, base.mAccount.name, base);
 			
@@ -270,38 +259,6 @@ public class AddBookmarkFragment extends Fragment {
 		for(Tag t : bookmark.getTags()){   				
 			TagManager.UpsertTag(t, base.mAccount.name, base);
 		}
-    }
-    
-    private void revertBookmark(){
-    	
-    	if(update) {
-			BookmarkManager.UpdateBookmark(oldBookmark, base.mAccount.name, base);
-			
-			for(Tag t : bookmark.getTags()){
-				if(!oldBookmark.getTags().contains(t)) {
-					TagManager.UpleteTag(t, base.mAccount.name, base);
-				}
-			}
-			
-			for(Tag t : oldBookmark.getTags()){   				
-				TagManager.UpsertTag(t, base.mAccount.name, base);
-			}
-    	} else {
-    		BookmarkManager.DeleteBookmark(bookmark, base);
-    		
-			for(Tag t : bookmark.getTags()){
-				TagManager.UpleteTag(t, base.mAccount.name, base);
-			}
-    	}
-    }
-    
-    @Override
-    public void onStop(){
-    	if(error) {
-    		revertBookmark();
-    	}
-    	
-    	super.onStop();
     }
     
 	@Override
@@ -321,10 +278,6 @@ public class AddBookmarkFragment extends Fragment {
 			bookmarkSaveListener.onBookmarkSave(bookmark);
 			return true;
 	    case R.id.menu_addbookmark_cancel:
-        	if(error) {
-        		revertBookmark();
-        	}
-        	
         	bookmarkSaveListener.onBookmarkCancel(bookmark);
 	        return true;
 	    default:

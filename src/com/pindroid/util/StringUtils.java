@@ -33,7 +33,7 @@ public class StringUtils {
     public static String getUrl(String s) {
     	String result = "";
     	
-    	Pattern pattern = Pattern.compile("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;()]*[-a-zA-Z0-9+&@#/%=~_|()]");
+    	Pattern pattern = Pattern.compile("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@'#/%?=~_|!:,.;()]*[-a-zA-Z0-9+&@'#/%=~_|()]");
     	
     	try{
 	    	Matcher matcher = pattern.matcher(s);

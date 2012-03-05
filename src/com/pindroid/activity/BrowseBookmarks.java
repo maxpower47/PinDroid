@@ -174,8 +174,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 
 	public void onBookmarkMark(Bookmark b) {
     	if(b != null && isMyself() && b.getToRead()) {
-    		BookmarkTaskArgs unreadArgs = new BookmarkTaskArgs(b, mAccount, this);
-    		new MarkReadBookmarkTask().execute(unreadArgs);
+    		b.setToRead(false);
+			BookmarkManager.UpdateBookmark(b, mAccount.name, this);
     	}
 	}
 
@@ -196,16 +196,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	}
 
 	public void onBookmarkDelete(Bookmark b) {
-		if(b != null){
-			BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, this);	
-			new DeleteBookmarkTask().execute(args);
-			
-			if(findViewById(R.id.maincontent) != null) {
-				FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-				transaction.remove(getSupportFragmentManager().findFragmentById(R.id.maincontent));
-				transaction.commit();
-			}
-		}
+		BookmarkManager.LazyDelete(b, mAccount.name, this);
 	}
 
 	public void onViewTagSelected(String tag) {

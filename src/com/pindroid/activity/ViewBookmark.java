@@ -21,21 +21,21 @@
 
 package com.pindroid.activity;
 
-import com.pindroid.R;
-import com.pindroid.Constants.BookmarkViewType;
-import com.pindroid.action.BookmarkTaskArgs;
-import com.pindroid.action.DeleteBookmarkTask;
-import com.pindroid.action.IntentHelper;
-import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
-import com.pindroid.fragment.ViewBookmarkFragment;
-import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-
 import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.pindroid.R;
+import com.pindroid.Constants.BookmarkViewType;
+import com.pindroid.action.IntentHelper;
+import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
+import com.pindroid.fragment.ViewBookmarkFragment;
+import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
+import com.pindroid.platform.BookmarkManager;
+import com.pindroid.providers.BookmarkContent.Bookmark;
+
 
 public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActionListener,
 	OnBookmarkSelectedListener {
@@ -110,6 +110,7 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	
 	public void onViewTagSelected(String tag) {		
 		startActivity(IntentHelper.ViewBookmarks(tag, mAccount.name, this));
+
 	}
 
 	public void onUserTagSelected(String tag, String user) {
@@ -156,7 +157,6 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	}
 
 	public void onBookmarkDelete(Bookmark b) {
-		BookmarkTaskArgs args = new BookmarkTaskArgs(b, mAccount, this);	
-		new DeleteBookmarkTask().execute(args);
+		BookmarkManager.LazyDelete(b, mAccount.name, this);
 	}
 }
