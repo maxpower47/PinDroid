@@ -23,10 +23,7 @@ package com.pindroid.activity;
 
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
-import com.pindroid.action.BookmarkTaskArgs;
-import com.pindroid.action.DeleteBookmarkTask;
 import com.pindroid.action.IntentHelper;
-import com.pindroid.action.MarkReadBookmarkTask;
 import com.pindroid.fragment.AddBookmarkFragment;
 import com.pindroid.fragment.AddBookmarkFragment.OnBookmarkSaveListener;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment;
@@ -36,6 +33,7 @@ import com.pindroid.fragment.BrowseTagsFragment;
 import com.pindroid.fragment.BrowseTagsFragment.OnTagSelectedListener;
 import com.pindroid.fragment.ViewBookmarkFragment;
 import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
+import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
 import android.content.Intent;
