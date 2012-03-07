@@ -29,7 +29,7 @@
 		android:textSize="16dip"
 		android:textStyle="bold"
 		android:textColor="#555"
-		android:text="PinDroid"
+		android:text="@string/pindroid"
 		android:layout_width="fill_parent"
 		android:maxLines="2"
 		android:ellipsize="end"

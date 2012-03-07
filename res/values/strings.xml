@@ -24,6 +24,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Label for this package -->
     <string name="label">Pinboard</string>
+    <string name="pindroid">PinDroid</string>
 
     <!-- Title string for Login activity-->
     <string name="ui_activity_title">Sign in</string>
@@ -98,7 +99,7 @@
     <string name="bookmark_sort_url_asc">Url (A-Z)</string>
     <string name="bookmark_sort_url_desc">Url (Z-A)</string>
     
-    <string name="bookmark_feed_task_progress">Loading. Please wait...</string>
+    <string name="bookmark_feed_task_progress">Loading. Please wait…</string>
     
     <string name="menu_addbookmark_title">Add Bookmark</string>
     <string name="menu_sort_title">Sort</string>
@@ -119,7 +120,7 @@
     <string name="add_bookmark_add_title">Add Bookmark</string>
     <string name="add_bookmark_edit_title">Edit Bookmark</string>
     
-    <string name="add_bookmark_task_progress">Working...</string>
+    <string name="add_bookmark_task_progress">Working…</string>
     
     <string name="add_button_save">Save</string>
     <string name="add_button_cancel">Cancel</string>
@@ -180,7 +181,7 @@
     <string name="bookmark_content_provider_label">Bookmarks</string>  
     
     <string name="sync_receiver_label">PinDroid Bookmark Sync</string>
-    <string name="syncing_toast">Syncing...</string>
+    <string name="syncing_toast">Syncing…</string>
 
     <!-- ViewBookmark -->
     <string name="view_bookmark_title">View Bookmark Details</string>

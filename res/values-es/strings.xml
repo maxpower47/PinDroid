@@ -46,7 +46,7 @@
   <string name="bookmark_sort_description_desc">Descripción (Z-A)</string>
   <string name="bookmark_sort_url_asc">Dirección URL (A-Z)</string>
   <string name="bookmark_sort_url_desc">Dirección URL (Z-A)</string>
-  <string name="bookmark_feed_task_progress">Cargando. Por favor espere ...</string>
+  <string name="bookmark_feed_task_progress">Cargando. Por favor espere…</string>
   <string name="menu_addbookmark_title">Añadir a Favoritos</string>
   <string name="menu_sort_title">Ordenar</string>
   <string name="menu_sort_bookmark_title">Ordenar Favoritos</string>
@@ -60,7 +60,7 @@
   <string name="tag_sort_count_desc">Contar (mayor primero)</string>
   <string name="add_bookmark_add_title">Añadir a Marcadores</string>
   <string name="add_bookmark_edit_title">Editar marcador</string>
-  <string name="add_bookmark_task_progress">Espere...</string>
+  <string name="add_bookmark_task_progress">Espere…</string>
   <string name="add_button_save">Guardar</string>
   <string name="add_button_cancel">Cancelar</string>
   <string name="add_title_url">Dirección URL</string>
@@ -100,7 +100,7 @@
   <string name="tag_live_folder_chooser_title">Seleccione una etiqueta para la carpeta</string>
   <string name="bookmark_content_provider_label">Marcadores</string>
   <string name="sync_receiver_label">Sincronización de los marcadores de PinDroid</string>
-  <string name="syncing_toast">Sincronizando...</string>
+  <string name="syncing_toast">Sincronizando…</string>
   <string name="view_bookmark_title">Ver detalles de marcador</string>
   <string name="view_bookmark_notes_title">Notas</string>
   <string name="view_bookmark_tags_title">Etiquetas</string>

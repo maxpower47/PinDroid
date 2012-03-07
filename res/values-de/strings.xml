@@ -95,7 +95,7 @@
     <string name="bookmark_sort_url_asc">Url (A-Z)</string>
     <string name="bookmark_sort_url_desc">Url (Z-A)</string>
     
-    <string name="bookmark_feed_task_progress">Lade. Bitte warten...</string>
+    <string name="bookmark_feed_task_progress">Lade. Bitte warten…</string>
     
     <string name="menu_addbookmark_title">Lesezeichen hinzufügen</string>
     <string name="menu_sort_title">Sortieren</string>
@@ -116,7 +116,7 @@
     <string name="add_bookmark_add_title">Lesezeichen hinzufügen</string>
     <string name="add_bookmark_edit_title">Lesezeichen bearbeiten</string>
     
-    <string name="add_bookmark_task_progress">Arbeite...</string>
+    <string name="add_bookmark_task_progress">Arbeite…</string>
     
     <string name="add_button_save">Speichern</string>
     <string name="add_button_cancel">Abbrechen</string>
@@ -174,7 +174,7 @@
     <string name="bookmark_content_provider_label">Lesezeichen</string>  
     
     <string name="sync_receiver_label">PinDroid Lesezeichen Synchronisierung</string>
-    <string name="syncing_toast">Synchronisiere...</string>
+    <string name="syncing_toast">Synchronisiere…</string>
 
     <!-- ViewBookmark -->
     <string name="view_bookmark_title">Zeige Lesezeichendetails</string>
