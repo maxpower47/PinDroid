@@ -21,7 +21,6 @@
 
 package com.pindroid.activity;
 
-
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseTagsFragment;

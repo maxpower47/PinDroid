@@ -22,8 +22,6 @@
 package com.pindroid.fragment;
 
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -61,7 +59,6 @@ public class BrowseBookmarksFragment extends ListFragment
 	private String tagname = null;
 	private boolean unread = false;
 	private String query = null;
-	private Intent intent = null;
 	
 	ListView lv;
 	
@@ -83,7 +80,6 @@ public class BrowseBookmarksFragment extends ListFragment
 		super.onActivityCreated(savedInstanceState);
 		
 		base = (FragmentBaseActivity)getActivity();
-		intent = base.getIntent();
 		
 		setHasOptionsMenu(true);
 		
@@ -149,9 +145,7 @@ public class BrowseBookmarksFragment extends ListFragment
 	public void onResume(){
 		super.onResume();
 
-		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			String query = intent.getStringExtra(SearchManager.QUERY);
-			
+		if(query != null) {
 			if(unread) {
 				base.setTitle(getString(R.string.unread_search_results_title, query));
 			} else base.setTitle(getString(R.string.bookmark_search_results_title, query));
