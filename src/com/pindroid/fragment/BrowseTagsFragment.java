@@ -21,7 +21,6 @@
 package com.pindroid.fragment;
 
 import android.app.Activity;
-import android.app.SearchManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -29,15 +28,15 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
-import android.support.v4.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.pindroid.R;
 import com.pindroid.platform.TagManager;
@@ -49,7 +48,8 @@ public class BrowseTagsFragment extends ListFragment
 	private String sortfield = Tag.Name + " ASC";
 	private SimpleCursorAdapter mAdapter;
 	
-	private String mAccount = "";
+	private String username = null;
+	private String query = null;
 	
 	private OnTagSelectedListener tagSelectedListener;
 	private OnItemClickListener clickListener;
@@ -88,7 +88,11 @@ public class BrowseTagsFragment extends ListFragment
 	}
 	
 	public void setAccount(String account) {
-		mAccount = account;
+		this.username = account;
+	}
+	
+	public void setQuery(String query) {
+		this.query = query;
 	}
 	
 	public void setAction(String action) {
@@ -156,12 +160,11 @@ public class BrowseTagsFragment extends ListFragment
 	}
 	
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		if(mAccount != null && !mAccount.equals("")) {
-			if(Intent.ACTION_SEARCH.equals(getActivity().getIntent().getAction())) { 		
-				String query = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
-				return TagManager.SearchTags(query, mAccount, this.getActivity());
+		if(username != null && !username.equals("")) {
+			if(query != null) {
+				return TagManager.SearchTags(query, username, this.getActivity());
 			} else {
-				return TagManager.GetTags(mAccount, sortfield, this.getActivity());
+				return TagManager.GetTags(username, sortfield, this.getActivity());
 			}
 		}
 		else return new CursorLoader(this.getActivity());

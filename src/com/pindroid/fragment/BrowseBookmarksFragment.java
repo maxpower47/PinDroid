@@ -60,6 +60,7 @@ public class BrowseBookmarksFragment extends ListFragment
 	private String username = null;
 	private String tagname = null;
 	private boolean unread = false;
+	private String query = null;
 	private Intent intent = null;
 	
 	ListView lv;
@@ -132,6 +133,13 @@ public class BrowseBookmarksFragment extends ListFragment
 	}
 	
 	public void setQuery(String username, String tagname, boolean unread){
+		this.username = username;
+		this.tagname = tagname;
+		this.unread = unread;
+	}
+	
+	public void setSearchQuery(String query, String username, String tagname, boolean unread){
+		this.query = query;
 		this.username = username;
 		this.tagname = tagname;
 		this.unread = unread;
@@ -265,21 +273,7 @@ public class BrowseBookmarksFragment extends ListFragment
     
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
-    		Bundle searchData = intent.getBundleExtra(SearchManager.APP_DATA);
-    		
-    		if(searchData != null) {
-    			tagname = searchData.getString("tagname");
-    			username = searchData.getString("username");
-    			unread = searchData.getBoolean("unread");
-    		}
-    		
-    		String query = intent.getStringExtra(SearchManager.QUERY);
-    		
-    		if(intent.hasExtra("username")) {
-    			username = intent.getStringExtra("username");
-    		}
-    		
+		if(query != null) {    		
 			return BookmarkManager.SearchBookmarks(query, tagname, unread, username, base);
 		} else {
 			return BookmarkManager.GetBookmarks(username, tagname, unread, sortfield, base);
