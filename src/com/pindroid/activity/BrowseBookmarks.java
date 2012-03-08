@@ -29,6 +29,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
@@ -80,7 +81,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
     		
 			bookmarkFrag = new BrowseBookmarksFragment();
 			((BrowseBookmarksFragment) bookmarkFrag).setSearchQuery(query, username, tagname, unread);
-		} else {
+		} else if(!Constants.ACTION_SEARCH_SUGGESTION.equals(intent.getAction())) {
 			if(data != null) {
 				
 				if(data.getUserInfo() != "") {
