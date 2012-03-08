@@ -49,6 +49,8 @@ public class Constants {
 
     public static final int BOOKMARK_PAGE_SIZE = 500;
     
+    public static final String ACTION_SEARCH_SUGGESTION = "com.pindroid.intent.action.SearchSuggestion";
+    
     /**
      * Authtoken type string.
      */

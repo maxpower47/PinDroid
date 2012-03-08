@@ -25,7 +25,7 @@
 	android:label="@string/main_search_label"
 	android:hint="@string/main_search_hint"
 	android:searchSuggestAuthority="com.pindroid.providers.BookmarkContentProvider"
-	android:searchSuggestIntentAction="android.intent.action.VIEW"
+	android:searchSuggestIntentAction="com.pindroid.intent.action.SearchSuggestion"
 	android:searchSuggestPath="main" 
 	android:includeInGlobalSearch="true" 
 	android:searchSettingsDescription="@string/main_search_description"/>

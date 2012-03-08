@@ -85,8 +85,7 @@ public class FragmentBaseActivity extends FragmentActivity {
 			} else {
 				onSearchRequested();
 			}
-		} else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
-			
+		} else if(Constants.ACTION_SEARCH_SUGGESTION.equals(intent.getAction())) {
 			Uri data = intent.getData();
 			String path = null;
 			String tagname = null;

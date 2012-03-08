@@ -21,14 +21,12 @@
 
 package com.pindroid.activity;
 
-import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.pindroid.R;
 import com.pindroid.Constants.BookmarkViewType;
+import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.fragment.ViewBookmarkFragment;
@@ -45,45 +43,21 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	@Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.view_bookmark);
         
         setTitle(R.string.view_bookmark_title);
         
         Intent intent = getIntent();
         
-        
-        if(Intent.ACTION_SEARCH.equals(intent.getAction())){
-			if(intent.hasExtra(SearchManager.QUERY)){
-				Intent i = new Intent(this, MainSearchResults.class);
-				i.putExtras(intent.getExtras());
-				startActivity(i);
-				finish();
-			} else {
-				onSearchRequested();
-			}
-		} else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
+        if(Intent.ACTION_VIEW.equals(intent.getAction())) {
 					
 			Uri data = intent.getData();
-			String tagname = null;
 			
 			if(data != null) {
 				path = data.getPath();
-				tagname = data.getQueryParameter("tagname");
 				username = data.getUserInfo();
 				
-				if(data.getScheme() == null || !data.getScheme().equals("content")){
-					// URI is web url, open it in browser
-					Intent i = new Intent(Intent.ACTION_VIEW, data);
-					startActivity(i);
-					finish();				
-				} else if(tagname != null) {
-					// URI is tag query, open bookmark list for tag
-					Intent viewTags = new Intent(this, BrowseBookmarks.class);
-					viewTags.setData(data);
-					Log.d("View Tags Uri", data.toString());
-					startActivity(viewTags);
-					finish();
-				}
 			} else username = mAccount.name;
 			
 			Bookmark bookmark = new Bookmark();
