@@ -21,12 +21,6 @@
 
 package com.pindroid.fragment;
 
-import com.pindroid.R;
-import com.pindroid.activity.FragmentBaseActivity;
-import com.pindroid.listadapter.BookmarkViewBinder;
-import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
@@ -36,6 +30,7 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -45,9 +40,14 @@ import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.support.v4.widget.SimpleCursorAdapter;
+import android.widget.ListView;
+
+import com.pindroid.R;
+import com.pindroid.activity.FragmentBaseActivity;
+import com.pindroid.listadapter.BookmarkViewBinder;
+import com.pindroid.platform.BookmarkManager;
+import com.pindroid.providers.BookmarkContent.Bookmark;
 
 public class BrowseBookmarksFragment extends ListFragment 
 	implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -265,7 +265,7 @@ public class BrowseBookmarksFragment extends ListFragment
     
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
+		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
     		Bundle searchData = intent.getBundleExtra(SearchManager.APP_DATA);
     		
     		if(searchData != null) {

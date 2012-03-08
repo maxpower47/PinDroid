@@ -21,6 +21,13 @@
 
 package com.pindroid.activity;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
@@ -35,13 +42,6 @@ import com.pindroid.fragment.ViewBookmarkFragment;
 import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
-
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 
 public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkSelectedListener, 
 	OnBookmarkActionListener, OnBookmarkSaveListener, OnTagSelectedListener {
@@ -95,14 +95,15 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			((BrowseBookmarkFeedFragment) bookmarkFrag).setQuery(username, tagname);
 		}
 	
-		if(path.contains("bookmarks")){
+
+		if(path.contains("tags")){
+			t.hide(fm.findFragmentById(R.id.maincontent));
+			t.add(R.id.listcontent, bookmarkFrag);
+		} else{
 			t.add(R.id.listcontent, bookmarkFrag);
 			if(tagFrag != null){
 				t.hide(tagFrag);
 			}
-		} else if(path.contains("tags")){
-			t.hide(fm.findFragmentById(R.id.maincontent));
-			t.add(R.id.listcontent, bookmarkFrag);
 		}
 		
 		Fragment addFrag = fm.findFragmentById(R.id.addcontent);
