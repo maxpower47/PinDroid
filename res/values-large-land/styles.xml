@@ -21,14 +21,10 @@
  * USA
  */
  -->
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="vertical"
-	style="@style/TabletLandFrame">
-	<fragment class="com.pindroid.fragment.AboutFragment"
-		android:id="@+id/about_fragment"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent" >
-	</fragment>
-</LinearLayout>
+<resources>
+    <style name="TabletLandFrame">
+        	<item name="android:paddingLeft">150dp</item>
+        	<item name="android:paddingRight">150dp</item>
+        	<item name="android:background">#151515</item>        
+    </style>
+</resources>

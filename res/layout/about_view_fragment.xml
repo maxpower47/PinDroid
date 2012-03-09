@@ -27,7 +27,7 @@
 	android:orientation="vertical">
 	<WebView
 		android:id="@+id/about_text_view"
-		android:layout_height="wrap_content"
+		android:layout_height="fill_parent"
 		android:layout_width="fill_parent"
 		android:textSize="14sp"
 		android:background="#000000"
