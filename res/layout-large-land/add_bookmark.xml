@@ -24,7 +24,10 @@
  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:orientation="vertical">
+	android:orientation="vertical"
+	android:paddingLeft="150dp"
+	android:paddingRight="150dp"
+	android:background="#151515">
 	<fragment class="com.pindroid.fragment.AddBookmarkFragment"
 		android:id="@+id/add_bookmark_fragment"
 	    android:layout_width="fill_parent"

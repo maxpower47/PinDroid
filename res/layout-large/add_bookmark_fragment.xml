@@ -27,7 +27,8 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:background="#000000">
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
