@@ -38,7 +38,9 @@ import android.widget.ListView;
 import android.support.v4.app.ListFragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 public class MainSearchResultsFragment extends ListFragment {
 	
@@ -123,6 +125,12 @@ public class MainSearchResultsFragment extends ListFragment {
 		    }
 		});
 	}
+	
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.main_search_fragment, container, false);
+    }
 	
 	@Override
 	public void onAttach(Activity activity) {
