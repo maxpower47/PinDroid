@@ -123,26 +123,7 @@
                 android:layout_width="wrap_content"
                 android:textSize="16sp"
                 android:paddingLeft="12dip" />
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <CheckBox
-                    android:id="@+id/add_edit_private"
-                    android:text="@string/add_title_private"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="5dip" />
-                <LinearLayout
-                    style="@style/LayoutRight">
-                    <CheckBox
-                        android:id="@+id/add_edit_toread"
-                        android:text="@string/add_title_toread"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="5dip" />
-                </LinearLayout>
-            </LinearLayout>
+            <include android:id="@+id/include_add_switches" layout="@layout/add_switches" />
         </LinearLayout>
     </ScrollView>
     <LinearLayout

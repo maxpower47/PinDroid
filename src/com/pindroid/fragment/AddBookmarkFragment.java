@@ -19,7 +19,6 @@
  * USA
  */
 
-
 package com.pindroid.fragment;
 
 import java.io.IOException;
@@ -57,7 +56,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnFocusChangeListener;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.ProgressBar;
@@ -77,8 +76,8 @@ public class AddBookmarkFragment extends Fragment {
 	private ProgressBar mRecommendedProgress;
 	private TextView mPopularTags;
 	private ProgressBar mPopularProgress;
-	private CheckBox mPrivate;
-	private CheckBox mToRead;
+	private CompoundButton mPrivate;
+	private CompoundButton mToRead;
 	private Bookmark bookmark;
 	private Bookmark oldBookmark;
 	private Boolean update = false;
@@ -112,8 +111,8 @@ public class AddBookmarkFragment extends Fragment {
 		mRecommendedProgress = (ProgressBar) getView().findViewById(R.id.add_recommended_tags_progress);
 		mPopularTags = (TextView) getView().findViewById(R.id.add_popular_tags);
 		mPopularProgress = (ProgressBar) getView().findViewById(R.id.add_popular_tags_progress);
-		mPrivate = (CheckBox) getView().findViewById(R.id.add_edit_private);
-		mToRead = (CheckBox) getView().findViewById(R.id.add_edit_toread);
+		mPrivate = (CompoundButton) getView().findViewById(R.id.add_edit_private);
+		mToRead = (CompoundButton) getView().findViewById(R.id.add_edit_toread);
 		
 		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
