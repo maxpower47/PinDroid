@@ -277,7 +277,7 @@
      		&lt;li&gt;Only a single Pinboard account is currently supported. &lt;/li&gt;
      		&lt;li&gt;Certain features from DeliciousDroid have not been ported yet due to limitations in Pinboards API, including contact syncing and viewing network bookmark lists. &lt;/li&gt;
     	&lt;/ul&gt;&lt;br/&gt;
-    	Read view powered by Instapaper
+    	Read view powered by viewtext.org
     &lt;/body&gt;
     &lt;/html&gt;
     </string>

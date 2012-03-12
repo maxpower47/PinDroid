@@ -23,7 +23,7 @@ public class IntentHelper {
 	}
 	
 	public static Intent ReadBookmark(String url){
-    	String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(url);
+    	String readUrl = Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(url);
     	Uri readLink = Uri.parse(readUrl);
 		return new Intent(Intent.ACTION_VIEW, readLink);
 	}

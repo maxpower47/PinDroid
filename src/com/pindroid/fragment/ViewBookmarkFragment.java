@@ -48,6 +48,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -92,6 +93,8 @@ public class ViewBookmarkFragment extends Fragment {
 		mUsername = (TextView) getView().findViewById(R.id.view_bookmark_account);
 		mIcon = (ImageView) getView().findViewById(R.id.view_bookmark_icon);
 		mWebContent = (WebView) getView().findViewById(R.id.web_view);
+		
+		mWebContent.getSettings().setJavaScriptEnabled(true);
 		
 		setHasOptionsMenu(true);
 		setRetainInstance(true);
@@ -284,8 +287,10 @@ public class ViewBookmarkFragment extends Fragment {
 				mWebContent.clearCache(true);
 				mBookmarkView.setVisibility(View.GONE);
 				mWebContent.setVisibility(View.VISIBLE);
-				String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(bookmark.getUrl());
+				String readUrl = Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(bookmark.getUrl());
 				mWebContent.loadUrl(readUrl);
+				mWebContent.setWebViewClient(new WebClient());
+
 			} else if(viewType == BookmarkViewType.WEB){
 				mWebContent.clearView();
 				mWebContent.clearCache(true);
@@ -305,5 +310,18 @@ public class ViewBookmarkFragment extends Fragment {
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString() + " must implement OnBookmarkActionListener and OnBookmarkSelectedListener");
 		}
+	}
+	
+	private class WebClient extends WebViewClient {
+	    @Override
+	    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+	        view.loadUrl(url);
+	        return true;
+	    }
+
+	    @Override
+	    public void onPageFinished(WebView view, String url) {       
+	        view.loadUrl("javascript:document.getElementById('vt-header').style.display = 'none';");       
+	    }
 	}
 }

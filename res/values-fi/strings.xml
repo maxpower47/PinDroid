@@ -189,7 +189,7 @@
              &lt;li&gt;Tällä hetkellä tuetaan vain Pinboard-tiliä. &lt;/li&gt;
              &lt;li&gt;Tietyt ominaisuuksia DeliousDroid:sta ei ole viellä siirretty             johtuen rajoittuneesta Pinbords API:sta, myös kontaktien synkronointi ja                 verkkokirjanmerkkilistojen katselu.&lt;/li&gt;
        &lt;/ul&gt;&lt;br/&gt;
-       Lukunäkymä perustuu Instapper-palveluun
+       Lukunäkymä perustuu viewtext.org-palveluun
     &lt;/body&gt;
     &lt;/html&gt;
     </string>
