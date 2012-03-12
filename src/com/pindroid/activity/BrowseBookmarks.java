@@ -60,62 +60,64 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		Intent intent = getIntent();
 
 		Uri data = intent.getData();
-		
-		Fragment bookmarkFrag = new Fragment();
-
-		
-		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
-    		Bundle searchData = intent.getBundleExtra(SearchManager.APP_DATA);
-    		
-    		if(searchData != null) {
-    			tagname = searchData.getString("tagname");
-    			username = searchData.getString("username");
-    			unread = searchData.getBoolean("unread");
-    		}
-    		
-    		String query = intent.getStringExtra(SearchManager.QUERY);
-    		
-    		if(intent.hasExtra("username")) {
-    			username = intent.getStringExtra("username");
-    		}
-    		
-			bookmarkFrag = new BrowseBookmarksFragment();
-			((BrowseBookmarksFragment) bookmarkFrag).setSearchQuery(query, username, tagname, unread);
-		} else if(!Constants.ACTION_SEARCH_SUGGESTION.equals(intent.getAction())) {
-			if(data != null) {
-				
-				if(data.getUserInfo() != "") {
-					username = data.getUserInfo();
-				} else username = mAccount.name;
-	
-				tagname = data.getQueryParameter("tagname");
-				unread = data.getQueryParameter("unread") != null;
-				path = data.getPath();
-			}
-			
-			if(isMyself()) {
-				bookmarkFrag = new BrowseBookmarksFragment();
-				((BrowseBookmarksFragment) bookmarkFrag).setQuery(username, tagname, unread);
-			} else {
-				bookmarkFrag = new BrowseBookmarkFeedFragment();
-				((BrowseBookmarkFeedFragment) bookmarkFrag).setQuery(username, tagname);
-			}
-		}
-		
 		FragmentManager fm = getSupportFragmentManager();
 		FragmentTransaction t = fm.beginTransaction();
+		
+		if(fm.findFragmentById(R.id.listcontent) == null){
+			Fragment bookmarkFrag = new Fragment();
+	
+			
+			if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+	    		Bundle searchData = intent.getBundleExtra(SearchManager.APP_DATA);
+	    		
+	    		if(searchData != null) {
+	    			tagname = searchData.getString("tagname");
+	    			username = searchData.getString("username");
+	    			unread = searchData.getBoolean("unread");
+	    		}
+	    		
+	    		String query = intent.getStringExtra(SearchManager.QUERY);
+	    		
+	    		if(intent.hasExtra("username")) {
+	    			username = intent.getStringExtra("username");
+	    		}
+	    		
+				bookmarkFrag = new BrowseBookmarksFragment();
+				((BrowseBookmarksFragment) bookmarkFrag).setSearchQuery(query, username, tagname, unread);
+			} else if(!Constants.ACTION_SEARCH_SUGGESTION.equals(intent.getAction())) {
+				if(data != null) {
+					
+					if(data.getUserInfo() != "") {
+						username = data.getUserInfo();
+					} else username = mAccount.name;
+		
+					tagname = data.getQueryParameter("tagname");
+					unread = data.getQueryParameter("unread") != null;
+					path = data.getPath();
+				}
+				
+				if(isMyself()) {
+					bookmarkFrag = new BrowseBookmarksFragment();
+					((BrowseBookmarksFragment) bookmarkFrag).setQuery(username, tagname, unread);
+				} else {
+					bookmarkFrag = new BrowseBookmarkFeedFragment();
+					((BrowseBookmarkFeedFragment) bookmarkFrag).setQuery(username, tagname);
+				}
+			}
+
+			t.add(R.id.listcontent, bookmarkFrag);
+		}
 		
 		BrowseTagsFragment tagFrag = (BrowseTagsFragment) fm.findFragmentById(R.id.tagcontent);
 		if(tagFrag != null){
 			tagFrag.setAccount(username);
 			tagFrag.setAction("notpick");
 		}
-
+		
 		if(path.contains("tags")){
 			t.hide(fm.findFragmentById(R.id.maincontent));
-			t.add(R.id.listcontent, bookmarkFrag);
+			
 		} else{
-			t.add(R.id.listcontent, bookmarkFrag);
 			if(tagFrag != null){
 				t.hide(tagFrag);
 			}
@@ -126,7 +128,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			t.hide(addFrag);
 		}
 		
-		t.commit();
+		t.commit();	
     }
 	
 	@Override
