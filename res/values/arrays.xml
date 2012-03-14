@@ -41,6 +41,46 @@
         <item>browser</item>
         <item>view</item>
         <item>read</item>
+    </string-array> 
+    <string-array name="pref_reading_background_entries">
+        <item>White</item>
+        <item>Black</item>
+        <item>Parchment</item>
+    </string-array>
+    <string-array name="pref_reading_background_values">
+        <item>white</item>
+        <item>black</item>
+        <item>parchment</item>
+    </string-array>
+    <string-array name="pref_reading_font_entries">
+        <item>Droid Sans</item>
+        <item>Droid Serif</item>
+        <item>Monospace</item>
+    </string-array>
+    <string-array name="pref_reading_font_values">
+        <item>sans</item>
+        <item>serif</item>
+        <item>monospace</item>
+    </string-array>
+    <string-array name="pref_reading_margins_entries">
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+    </string-array>
+    <string-array name="pref_reading_margins_values">
+        <item>small</item>
+        <item>normal</item>
+        <item>large</item>
+    </string-array>
+    <string-array name="pref_reading_fontsize_entries">
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+    </string-array>
+    <string-array name="pref_reading_fontsize_values">
+        <item>small</item>
+        <item>normal</item>
+        <item>large</item>
     </string-array>
     <string-array name="pref_synctime_entries">
         <item>5 mins</item>

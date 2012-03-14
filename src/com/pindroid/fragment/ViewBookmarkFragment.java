@@ -315,14 +315,47 @@ public class ViewBookmarkFragment extends Fragment {
 	
 	private class WebClient extends WebViewClient {
 	    @Override
-	    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-	        view.loadUrl(url);
-	        return true;
-	    }
-
-	    @Override
 	    public void onPageFinished(WebView view, String url) {       
-	        view.loadUrl("javascript:document.getElementById('vt-header').style.display = 'none';");       
+	        view.loadUrl("javascript:document.getElementById('vt-header').style.display = 'none';");
+	        
+	        
+	        if(base.readingBackground.equals("black")){
+	        	view.loadUrl("javascript:document.body.style.backgroundColor = '#000000';");
+	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.color = '#878787';");
+	        	view.loadUrl("javascript:document.getElementById('vt-title').style.color = '#878787';");
+	        }
+	        if(base.readingBackground.equals("parchment")){
+	        	view.loadUrl("javascript:document.body.style.backgroundColor = '#F7F2E6';");
+	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.color = '#403929';");
+	        	view.loadUrl("javascript:document.getElementById('vt-title').style.color = '#403929';");
+	        }
+	        if(base.readingFont.equals("serif")){
+	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.fontFamily = 'serif';");
+	        }
+	        if(base.readingFont.equals("monospace")){
+	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.fontFamily = 'monospace';");
+	        }
+	        view.loadUrl("javascript:document.getElementById('toadjaw-article').style.maxWidth = 'inherit';");
+	        if(base.readingMargins.equals("small")){
+	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.margin = '0 5px';");
+	        }
+	        if(base.readingMargins.equals("normal")){
+	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.margin = '0 20px';");
+	        }
+	        if(base.readingMargins.equals("large")){
+	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.margin = '0 40px';");
+	        }
+	        
+	        if(base.readingFontSize.equals("small")){
+	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.fontSize = '12px';");
+	        }
+	        if(base.readingFontSize.equals("normal")){
+	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.fontSize = '16px';");
+	        }
+	        if(base.readingFontSize.equals("large")){
+	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.fontSize = '20px';");
+	        }
+	        
 	    }
 	}
 }

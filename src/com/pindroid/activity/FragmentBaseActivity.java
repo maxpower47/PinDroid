@@ -57,6 +57,10 @@ public class FragmentBaseActivity extends FragmentActivity {
 	public boolean toreadDefault;
 	public String defaultAction;
 	public boolean markAsRead;
+	public String readingBackground;
+	public String readingFont;
+	public String readingMargins;
+	public String readingFontSize;
 	
 	private boolean first = true;
 	
@@ -159,6 +163,10 @@ public class FragmentBaseActivity extends FragmentActivity {
     	toreadDefault = settings.getBoolean("pref_save_toread_default", false);
     	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
     	markAsRead = settings.getBoolean("pref_markasread", false);
+    	readingBackground = settings.getString("pref_reading_background", "white");
+    	readingFont = settings.getString("pref_reading_font", "sans");
+    	readingMargins = settings.getString("pref_reading_margins", "normal");
+    	readingFontSize = settings.getString("pref_reading_fontsize", "normal");
 	}
 
 	@Override
