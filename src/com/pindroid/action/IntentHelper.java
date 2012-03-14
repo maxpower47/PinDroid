@@ -7,6 +7,7 @@ import com.pindroid.activity.BrowseBookmarks;
 import com.pindroid.activity.BrowseTags;
 import com.pindroid.activity.ViewBookmark;
 import com.pindroid.Constants;
+import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.BookmarkContentProvider;
 
@@ -53,10 +54,11 @@ public class IntentHelper {
 		return addBookmark;
 	}
 	
-	public static Intent ViewBookmark(Bookmark b, String account, Context context) {
+	public static Intent ViewBookmark(Bookmark b, BookmarkViewType type, String account, Context context) {
 		Intent viewBookmark = new Intent(context, ViewBookmark.class);
 		viewBookmark.setAction(Intent.ACTION_VIEW);
 		viewBookmark.addCategory(Intent.CATEGORY_DEFAULT);
+		viewBookmark.putExtra("com.pindroid.BookmarkViewType", type);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
 		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);

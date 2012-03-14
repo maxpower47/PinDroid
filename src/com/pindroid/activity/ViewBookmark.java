@@ -77,24 +77,23 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 				}
 			}
 			
+			BookmarkViewType type = (BookmarkViewType) intent.getSerializableExtra("com.pindroid.BookmarkViewType");
+			
 			ViewBookmarkFragment frag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.view_bookmark_fragment);
-	        frag.setBookmark(bookmark, BookmarkViewType.VIEW);
+	        frag.setBookmark(bookmark, type);
 		}
 	}
 	
 	public void onViewTagSelected(String tag) {		
 		startActivity(IntentHelper.ViewBookmarks(tag, mAccount.name, this));
-
 	}
 
 	public void onUserTagSelected(String tag, String user) {
 		startActivity(IntentHelper.ViewBookmarks(tag, user, this));
-		
 	}
 
 	public void onAccountSelected(String account) {
 		startActivity(IntentHelper.ViewBookmarks(null, account, this));
-		
 	}
 
 	public void onBookmarkView(Bookmark b) {
@@ -102,7 +101,6 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 
 	public void onBookmarkRead(Bookmark b) {
 		startActivity(IntentHelper.ReadBookmark(b.getUrl()));
-		
 	}
 
 	public void onBookmarkOpen(Bookmark b) {

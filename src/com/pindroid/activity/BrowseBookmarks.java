@@ -150,7 +150,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			if(findViewById(R.id.maincontent) != null || findViewById(R.id.tagcontent) != null) {
 				setBookmarkView(b, BookmarkViewType.VIEW);
 			} else {
-				startActivity(IntentHelper.ViewBookmark(b, username, this));
+				startActivity(IntentHelper.ViewBookmark(b, BookmarkViewType.VIEW, username, this));
 			}
 		}
 	}
@@ -160,7 +160,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			if(findViewById(R.id.maincontent) != null) {
 				setBookmarkView(b, BookmarkViewType.READ);
 			} else {
-				startActivity(IntentHelper.ReadBookmark(b.getUrl()));
+				startActivity(IntentHelper.ViewBookmark(b, BookmarkViewType.READ, username, this));
 			}
 		}
 	}

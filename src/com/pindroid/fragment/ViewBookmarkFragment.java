@@ -210,42 +210,43 @@ public class ViewBookmarkFragment extends Fragment {
     
     public void loadBookmark(){
     	if(bookmark != null){
+    		
+    		if(isMyself() && bookmark.getId() != 0){
+				try{		
+					int id = bookmark.getId();
+					bookmark = BookmarkManager.GetById(id, base);
+				}
+				catch(ContentNotFoundException e){}
+    		}
+    		
     		if(viewType == BookmarkViewType.VIEW){
 				mBookmarkView.setVisibility(View.VISIBLE);
 				mWebContent.setVisibility(View.GONE);
 				if(isMyself()){
+					Date d = new Date(bookmark.getTime());
 					
-					try{		
-						int id = bookmark.getId();
-		
-						bookmark = BookmarkManager.GetById(id, base);
-						
-						Date d = new Date(bookmark.getTime());
-						
-						mTitle.setText(bookmark.getDescription());
-						mUrl.setText(bookmark.getUrl());
-						mNotes.setText(bookmark.getNotes());
-						mTime.setText(d.toString());
-						mUsername.setText(bookmark.getAccount());
-						
-						if(mIcon != null){
-							if(!bookmark.getShared()) {
-								mIcon.setImageResource(R.drawable.padlock);
-							} else if(bookmark.getToRead()) {
-								mIcon.setImageResource(R.drawable.book_open);
-							}
+					mTitle.setText(bookmark.getDescription());
+					mUrl.setText(bookmark.getUrl());
+					mNotes.setText(bookmark.getNotes());
+					mTime.setText(d.toString());
+					mUsername.setText(bookmark.getAccount());
+					
+					if(mIcon != null){
+						if(!bookmark.getShared()) {
+							mIcon.setImageResource(R.drawable.padlock);
+						} else if(bookmark.getToRead()) {
+							mIcon.setImageResource(R.drawable.book_open);
 						}
-						
-		        		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
-		
-		        		for(Tag t : bookmark.getTags()) {
-		        			addTag(tagBuilder, t, tagOnClickListener);
-		        		}
-		        		
-		        		mTags.setText(tagBuilder);
-		        		mTags.setMovementMethod(LinkMovementMethod.getInstance());
 					}
-					catch(ContentNotFoundException e){}
+					
+	        		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
+	
+	        		for(Tag t : bookmark.getTags()) {
+	        			addTag(tagBuilder, t, tagOnClickListener);
+	        		}
+	        		
+	        		mTags.setText(tagBuilder);
+	        		mTags.setMovementMethod(LinkMovementMethod.getInstance());
 				} else {
 					
 					Date d = new Date(bookmark.getTime());
