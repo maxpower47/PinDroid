@@ -45,22 +45,22 @@
     <string-array name="pref_reading_background_entries">
         <item>White</item>
         <item>Black</item>
-        <item>Parchment</item>
+        <item>Sepia</item>
     </string-array>
     <string-array name="pref_reading_background_values">
-        <item>white</item>
-        <item>black</item>
-        <item>parchment</item>
+        <item>-1</item>
+        <item>-16777216</item>
+        <item>-256</item>
     </string-array>
     <string-array name="pref_reading_font_entries">
-        <item>Droid Sans</item>
-        <item>Droid Serif</item>
-        <item>Monospace</item>
+        <item>Asenine</item>
+        <item>Nobile</item>
+        <item>Roboto</item>
     </string-array>
     <string-array name="pref_reading_font_values">
-        <item>sans</item>
-        <item>serif</item>
-        <item>monospace</item>
+        <item>ASENINE</item>
+        <item>nobile</item>
+        <item>Roboto-Regular</item>
     </string-array>
     <string-array name="pref_reading_margins_entries">
         <item>Small</item>
@@ -68,9 +68,9 @@
         <item>Large</item>
     </string-array>
     <string-array name="pref_reading_margins_values">
-        <item>small</item>
-        <item>normal</item>
-        <item>large</item>
+        <item>10</item>
+        <item>20</item>
+        <item>40</item>
     </string-array>
     <string-array name="pref_reading_fontsize_entries">
         <item>Small</item>
@@ -81,6 +81,16 @@
         <item>12</item>
         <item>16</item>
         <item>20</item>
+    </string-array>
+    <string-array name="pref_reading_linespace_entries">
+        <item>Less</item>
+        <item>Normal</item>
+        <item>More</item>
+    </string-array>
+    <string-array name="pref_reading_linespace_values">
+        <item>1</item>
+        <item>1.5</item>
+        <item>2</item>
     </string-array>
     <string-array name="pref_synctime_entries">
         <item>5 mins</item>

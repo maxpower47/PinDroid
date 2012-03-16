@@ -25,45 +25,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Date;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import com.pindroid.Constants;
-import com.pindroid.Constants.BookmarkViewType;
-import com.pindroid.R;
-import com.pindroid.action.GetArticleTextTask;
-import com.pindroid.action.GetWebpageTitleTask;
-import com.pindroid.activity.FragmentBaseActivity;
-import com.pindroid.client.NetworkUtilities;
-import com.pindroid.fragment.AddBookmarkFragment.GetTitleTask;
-import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
-import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.ContentNotFoundException;
-import com.pindroid.providers.ArticleContent.Article;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.providers.TagContent.Tag;
-import com.pindroid.ui.AccountSpan;
-import com.pindroid.ui.TagSpan;
-
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.text.Html.ImageGetter;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -71,10 +45,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.pindroid.Constants.BookmarkViewType;
+import com.pindroid.R;
+import com.pindroid.activity.FragmentBaseActivity;
+import com.pindroid.client.NetworkUtilities;
+import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
+import com.pindroid.platform.BookmarkManager;
+import com.pindroid.providers.ArticleContent.Article;
+import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.providers.ContentNotFoundException;
+import com.pindroid.providers.TagContent.Tag;
+import com.pindroid.ui.AccountSpan;
+import com.pindroid.ui.TagSpan;
 
 public class ViewBookmarkFragment extends Fragment {
 
@@ -126,6 +112,7 @@ public class ViewBookmarkFragment extends Fragment {
 		readView = (TextView) getView().findViewById(R.id.read_view);
 		
 		mWebContent.getSettings().setJavaScriptEnabled(true);
+		readView.setMovementMethod(LinkMovementMethod.getInstance());
 		
 		setHasOptionsMenu(true);
 		setRetainInstance(true);
@@ -315,18 +302,7 @@ public class ViewBookmarkFragment extends Fragment {
 					mUsername.setMovementMethod(LinkMovementMethod.getInstance());
 				}
 			} else if(viewType == BookmarkViewType.READ){
-				
-				//String readUrl = Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(bookmark.getUrl());
-				//mWebContent.loadUrl(readUrl);
-				//mWebContent.setWebViewClient(new WebClient());
-				
-
-				
 				articleTask = new GetArticleTask().execute(bookmark.getUrl());
-				
-
-				
-
 			} else if(viewType == BookmarkViewType.WEB){
 				mWebContent.clearView();
 				mWebContent.clearCache(true);
@@ -351,144 +327,74 @@ public class ViewBookmarkFragment extends Fragment {
 	@Override
 	public void onResume(){
 		super.onResume();
-		mWebContent.getSettings().setDefaultFontSize(Integer.parseInt(base.readingFontSize));
+		readView.setBackgroundColor(Integer.parseInt(base.readingBackground));
+		
+		if(Integer.parseInt(base.readingBackground) == Color.BLACK)
+			readView.setTextColor(Color.WHITE);
+		else readView.setTextColor(Color.BLACK);
+		
+		readView.setPadding(Integer.parseInt(base.readingMargins), 5, Integer.parseInt(base.readingMargins), 5);
+
+		Typeface tf = Typeface.createFromAsset(base.getAssets(), "fonts/" + base.readingFont + ".ttf");
+		readView.setTypeface(tf);
+		
+		readView.setTextSize(Float.parseFloat(base.readingFontSize));
+		readView.setLineSpacing(0, Float.parseFloat(base.readingLineSpace));
+		
 	}
 	
-    public class GetArticleTask extends GetArticleTextTask{
+    public class GetArticleTask extends AsyncTask<String, Integer, Article>{
+    	private String url;
     	protected void onPreExecute(){
-			mWebContent.clearView();
-			mWebContent.clearCache(true);
-			mWebContent.setBackgroundColor(Color.BLACK);
-			mWebContent.getSettings().setDefaultFontSize(Integer.parseInt(base.readingFontSize));
 
-			//mBookmarkView.setVisibility(View.VISIBLE);
-			//mWebContent.setVisibility(View.GONE);
-			//readSection.setVisibility(View.VISIBLE);
+    	}
+    	
+    	@Override
+    	protected Article doInBackground(String... args) {
+    		
+    		if(args.length > 0 && args[0] != null && args[0] != "") {
+    			url = args[0];
+    	
+        		Article a = NetworkUtilities.getArticleText(url);
+
+        		Spanned s = Html.fromHtml(a.getContent(), new Html.ImageGetter() {
+
+        			public Drawable getDrawable(String source) {                  
+        				Drawable d = null;
+        				try {
+        					InputStream src = imageFetch(source);
+        					d = Drawable.createFromStream(src, "src");
+        					if(d != null){
+        						d.setBounds(0,0,d.getIntrinsicWidth(), d.getIntrinsicHeight());
+        					}
+        				} catch (MalformedURLException e) {
+        					e.printStackTrace(); 
+        				} catch (IOException e) {
+        					e.printStackTrace();  
+        				}
+        				return d;
+        			}
+        		}, null);
+
+        		a.setSpan(s);
+        		return a;
+
+    		} else return null;
     	}
     	
         protected void onPostExecute(Article result) {
-        	//readTitle.setText(result.getTitle());
-        	//readView.setText(Html.fromHtml(result.getContent()));
+        	readSection.scrollTo(0, 0);
         	mBookmarkView.setVisibility(View.GONE);
 			readSection.setVisibility(View.VISIBLE);
-			readTitle.setText(result.getTitle());
-			
-			String html = "Hello " +
-			"<img src='http://www.gravatar.com/avatar/" + 
-			"f9dd8b16d54f483f22c0b7a7e3d840f9?s=32&d=identicon&r=PG'/>" +
-			" This is a test " +
-			"<img src='http://www.gravatar.com/avatar/a9317e7f0a78bb10a980cadd9dd035c9?s=32&d=identicon&r=PG'/>";
-			
-			URLImageParser p = new URLImageParser(readView, base);
-			Spanned htmlSpan = Html.fromHtml(result.getContent(), p, null);
-			
-			
-			
-			
-			readView.setText(htmlSpan);
-        	//mWebContent.loadDataWithBaseURL("file:///android_asset/", "<html><head><link rel='stylesheet' type='text/css' href='style.css' /></head><body>" + result.getContent() + "</body></html>", "text/html", "utf-8", null);
+			readTitle.setText(Html.fromHtml(result.getTitle()));
+			readView.setText(result.getSpan());
         }
+        
+        private InputStream imageFetch(String source) throws MalformedURLException,IOException {
+	    	URL url = new URL(source);
+	    	Object o = url.getContent();
+	    	InputStream content = (InputStream)o;    
+	    	return content;
+	    }
     }
-    
-
-
-	
-	
-	
-	
-	
-	public class URLDrawable extends BitmapDrawable {
-	    // the drawable that you need to set, you could set the initial drawing
-	    // with the loading image if you need to
-	    protected Drawable drawable;
-
-	    @Override
-	    public void draw(Canvas canvas) {
-	        // override the draw to facilitate refresh function later
-	        if(drawable != null) {
-	            drawable.draw(canvas);
-	        }
-	    }
-	}
-	
-	
-	public class URLImageParser implements ImageGetter {
-	    Context c;
-	    View container;
-
-	    /***
-	     * Construct the URLImageParser which will execute AsyncTask and refresh the container
-	     * @param t
-	     * @param c
-	     */
-	    public URLImageParser(View t, Context c) {
-	        this.c = c;
-	        this.container = t;
-	    }
-
-	    public Drawable getDrawable(String source) {
-	        URLDrawable urlDrawable = new URLDrawable();
-
-	        // get the actual source
-	        ImageGetterAsyncTask asyncTask = new ImageGetterAsyncTask(urlDrawable);
-
-	        asyncTask.execute(source);
-
-	        // return reference to URLDrawable where I will change with actual image from
-	        // the src tag
-	        return urlDrawable;
-	    }
-
-	    public class ImageGetterAsyncTask extends AsyncTask<String, Void, Drawable>  {
-	        URLDrawable urlDrawable;
-
-	        public ImageGetterAsyncTask(URLDrawable d) {
-	            this.urlDrawable = d;
-	        }
-
-	        @Override
-	        protected Drawable doInBackground(String... params) {
-	            String source = params[0];
-	            return fetchDrawable(source);
-	        }
-
-	        @Override
-	        protected void onPostExecute(Drawable result) {
-	            // set the correct bound according to the result from HTTP call
-	            urlDrawable.setBounds(0, 0, 0 + result.getIntrinsicWidth(), 0 
-	                    + result.getIntrinsicHeight()); 
-
-	            // change the reference of the current drawable to the result
-	            // from the HTTP call
-	            urlDrawable.drawable = result;
-
-	            // redraw the image by invalidating the container
-	            URLImageParser.this.container.invalidate();
-	        }
-
-	        /***
-	         * Get the Drawable from URL
-	         * @param urlString
-	         * @return
-	         */
-	        public Drawable fetchDrawable(String urlString) {
-	            try {
-	                InputStream is = fetch(urlString);
-	                Drawable drawable = Drawable.createFromStream(is, "src");
-	                drawable.setBounds(0, 0, 0 + drawable.getIntrinsicWidth(), 0 
-	                        + drawable.getIntrinsicHeight()); 
-	                return drawable;
-	            } catch (Exception e) {
-	                return null;
-	            } 
-	        }
-
-	        private InputStream fetch(String urlString) throws MalformedURLException, IOException {
-	            DefaultHttpClient httpClient = new DefaultHttpClient();
-	            HttpGet request = new HttpGet(urlString);
-	            HttpResponse response = httpClient.execute(request);
-	            return response.getEntity().getContent();
-	        }
-	    }
-	}
 }

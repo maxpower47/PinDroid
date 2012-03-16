@@ -79,7 +79,7 @@
 			android:title="@string/pref_reading_background_title"
 			android:entries="@array/pref_reading_background_entries"
 			android:entryValues="@array/pref_reading_background_values"
-			android:defaultValue="white"
+			android:defaultValue="-1"
 			android:summary="@string/pref_reading_background_summary"
 			android:key="@string/pref_reading_background_key" />
 	    <ListPreference 
@@ -93,16 +93,23 @@
 			android:title="@string/pref_reading_font_title"
 			android:entries="@array/pref_reading_font_entries"
 			android:entryValues="@array/pref_reading_font_values"
-			android:defaultValue="sans"
+			android:defaultValue="nobile"
 			android:summary="@string/pref_reading_font_summary"
 			android:key="@string/pref_reading_font_key" />
 	   	<ListPreference 
 			android:title="@string/pref_reading_margins_title"
 			android:entries="@array/pref_reading_margins_entries"
 			android:entryValues="@array/pref_reading_margins_values"
-			android:defaultValue="normal"
+			android:defaultValue="20"
 			android:summary="@string/pref_reading_margins_summary"
 			android:key="@string/pref_reading_margins_key" />
+	   	<ListPreference 
+			android:title="@string/pref_reading_linespace_title"
+			android:entries="@array/pref_reading_linespace_entries"
+			android:entryValues="@array/pref_reading_linespace_values"
+			android:defaultValue="1.5"
+			android:summary="@string/pref_reading_linespace_summary"
+			android:key="@string/pref_reading_linespace_key" />
 	</PreferenceCategory>
 	<PreferenceCategory 
 		android:title="@string/pref_cat_help_title">

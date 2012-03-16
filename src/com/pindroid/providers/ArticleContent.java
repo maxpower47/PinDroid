@@ -21,6 +21,8 @@
 
 package com.pindroid.providers;
 
+import android.text.Spanned;
+
 public class ArticleContent {
 
 	public static class Article {
@@ -30,6 +32,7 @@ public class ArticleContent {
         private String responseUrl;
         private String content;
         private String title;
+        private Spanned span;
 
 
         public String getUrl() {
@@ -38,6 +41,14 @@ public class ArticleContent {
 
         public void setUrl(String url) {
         	this.url = url;
+        }
+        
+        public Spanned getSpan() {
+            return span;
+        }
+
+        public void setSpan(Spanned span) {
+        	this.span = span;
         }
         
         public String getResponseUrl() {

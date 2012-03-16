@@ -266,6 +266,10 @@
     <string name="pref_reading_fontsize_key">pref_reading_fontsize</string>
     <string name="pref_reading_fontsize_summary">Font Size</string>
     
+    <string name="pref_reading_linespace_title">Line Spacing</string>
+    <string name="pref_reading_linespace_key">pref_reading_linespace</string>
+    <string name="pref_reading_linespace_summary">Space between the lines of text</string>
+    
     
     
     
