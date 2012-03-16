@@ -22,8 +22,15 @@
 package com.pindroid.fragment;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Date;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
@@ -43,12 +50,18 @@ import com.pindroid.ui.AccountSpan;
 import com.pindroid.ui.TagSpan;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
+import android.text.Html.ImageGetter;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -341,7 +354,7 @@ public class ViewBookmarkFragment extends Fragment {
 		mWebContent.getSettings().setDefaultFontSize(Integer.parseInt(base.readingFontSize));
 	}
 	
-    public class GetArticleTask extends GetArticleTextTask{    	
+    public class GetArticleTask extends GetArticleTextTask{
     	protected void onPreExecute(){
 			mWebContent.clearView();
 			mWebContent.clearCache(true);
@@ -359,53 +372,123 @@ public class ViewBookmarkFragment extends Fragment {
         	mBookmarkView.setVisibility(View.GONE);
 			readSection.setVisibility(View.VISIBLE);
 			readTitle.setText(result.getTitle());
-        	mWebContent.loadDataWithBaseURL("file:///android_asset/", "<html><head><link rel='stylesheet' type='text/css' href='style.css' /></head><body>" + result.getContent() + "</body></html>", "text/html", "utf-8", null);
+			
+			String html = "Hello " +
+			"<img src='http://www.gravatar.com/avatar/" + 
+			"f9dd8b16d54f483f22c0b7a7e3d840f9?s=32&d=identicon&r=PG'/>" +
+			" This is a test " +
+			"<img src='http://www.gravatar.com/avatar/a9317e7f0a78bb10a980cadd9dd035c9?s=32&d=identicon&r=PG'/>";
+			
+			URLImageParser p = new URLImageParser(readView, base);
+			Spanned htmlSpan = Html.fromHtml(result.getContent(), p, null);
+			
+			
+			
+			
+			readView.setText(htmlSpan);
+        	//mWebContent.loadDataWithBaseURL("file:///android_asset/", "<html><head><link rel='stylesheet' type='text/css' href='style.css' /></head><body>" + result.getContent() + "</body></html>", "text/html", "utf-8", null);
         }
     }
+    
+
+
 	
-	private class WebClient extends WebViewClient {
+	
+	
+	
+	
+	public class URLDrawable extends BitmapDrawable {
+	    // the drawable that you need to set, you could set the initial drawing
+	    // with the loading image if you need to
+	    protected Drawable drawable;
+
 	    @Override
-	    public void onPageFinished(WebView view, String url) {       
-	        view.loadUrl("javascript:document.getElementById('vt-header').style.display = 'none';");
-	        
-	        
-	        if(base.readingBackground.equals("black")){
-	        	view.loadUrl("javascript:document.body.style.backgroundColor = '#000000';");
-	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.color = '#878787';");
-	        	view.loadUrl("javascript:document.getElementById('vt-title').style.color = '#878787';");
+	    public void draw(Canvas canvas) {
+	        // override the draw to facilitate refresh function later
+	        if(drawable != null) {
+	            drawable.draw(canvas);
 	        }
-	        if(base.readingBackground.equals("parchment")){
-	        	view.loadUrl("javascript:document.body.style.backgroundColor = '#F7F2E6';");
-	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.color = '#403929';");
-	        	view.loadUrl("javascript:document.getElementById('vt-title').style.color = '#403929';");
+	    }
+	}
+	
+	
+	public class URLImageParser implements ImageGetter {
+	    Context c;
+	    View container;
+
+	    /***
+	     * Construct the URLImageParser which will execute AsyncTask and refresh the container
+	     * @param t
+	     * @param c
+	     */
+	    public URLImageParser(View t, Context c) {
+	        this.c = c;
+	        this.container = t;
+	    }
+
+	    public Drawable getDrawable(String source) {
+	        URLDrawable urlDrawable = new URLDrawable();
+
+	        // get the actual source
+	        ImageGetterAsyncTask asyncTask = new ImageGetterAsyncTask(urlDrawable);
+
+	        asyncTask.execute(source);
+
+	        // return reference to URLDrawable where I will change with actual image from
+	        // the src tag
+	        return urlDrawable;
+	    }
+
+	    public class ImageGetterAsyncTask extends AsyncTask<String, Void, Drawable>  {
+	        URLDrawable urlDrawable;
+
+	        public ImageGetterAsyncTask(URLDrawable d) {
+	            this.urlDrawable = d;
 	        }
-	        if(base.readingFont.equals("serif")){
-	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.fontFamily = 'serif';");
+
+	        @Override
+	        protected Drawable doInBackground(String... params) {
+	            String source = params[0];
+	            return fetchDrawable(source);
 	        }
-	        if(base.readingFont.equals("monospace")){
-	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.fontFamily = 'monospace';");
+
+	        @Override
+	        protected void onPostExecute(Drawable result) {
+	            // set the correct bound according to the result from HTTP call
+	            urlDrawable.setBounds(0, 0, 0 + result.getIntrinsicWidth(), 0 
+	                    + result.getIntrinsicHeight()); 
+
+	            // change the reference of the current drawable to the result
+	            // from the HTTP call
+	            urlDrawable.drawable = result;
+
+	            // redraw the image by invalidating the container
+	            URLImageParser.this.container.invalidate();
 	        }
-	        view.loadUrl("javascript:document.getElementById('toadjaw-article').style.maxWidth = 'inherit';");
-	        if(base.readingMargins.equals("small")){
-	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.margin = '0 5px';");
+
+	        /***
+	         * Get the Drawable from URL
+	         * @param urlString
+	         * @return
+	         */
+	        public Drawable fetchDrawable(String urlString) {
+	            try {
+	                InputStream is = fetch(urlString);
+	                Drawable drawable = Drawable.createFromStream(is, "src");
+	                drawable.setBounds(0, 0, 0 + drawable.getIntrinsicWidth(), 0 
+	                        + drawable.getIntrinsicHeight()); 
+	                return drawable;
+	            } catch (Exception e) {
+	                return null;
+	            } 
 	        }
-	        if(base.readingMargins.equals("normal")){
-	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.margin = '0 20px';");
+
+	        private InputStream fetch(String urlString) throws MalformedURLException, IOException {
+	            DefaultHttpClient httpClient = new DefaultHttpClient();
+	            HttpGet request = new HttpGet(urlString);
+	            HttpResponse response = httpClient.execute(request);
+	            return response.getEntity().getContent();
 	        }
-	        if(base.readingMargins.equals("large")){
-	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.margin = '0 40px';");
-	        }
-	        
-	        if(base.readingFontSize.equals("small")){
-	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.fontSize = '12px';");
-	        }
-	        if(base.readingFontSize.equals("normal")){
-	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.fontSize = '16px';");
-	        }
-	        if(base.readingFontSize.equals("large")){
-	        	view.loadUrl("javascript:document.getElementById('toadjaw-article').style.fontSize = '20px';");
-	        }
-	        
 	    }
 	}
 }
