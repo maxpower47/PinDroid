@@ -86,7 +86,7 @@
 			android:title="@string/pref_reading_fontsize_title"
 			android:entries="@array/pref_reading_fontsize_entries"
 			android:entryValues="@array/pref_reading_fontsize_values"
-			android:defaultValue="normal"
+			android:defaultValue="16"
 			android:summary="@string/pref_reading_fontsize_summary"
 			android:key="@string/pref_reading_fontsize_key" />
 	   	<ListPreference 

@@ -90,13 +90,24 @@
 			</TableLayout>
 		</LinearLayout>
 	</ScrollView>
-	<WebView
-		android:id="@+id/web_view"
-		android:layout_height="wrap_content"
-		android:layout_width="fill_parent"
-		android:textSize="14sp"
-		android:background="#000000"
-		android:paddingLeft="10dip"
-		android:paddingTop="20dip"
-		android:visibility="gone" />
+
+	<ScrollView 
+	    android:id="@+id/read_bookmark_section"
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent"
+		android:visibility="gone" >
+		<LinearLayout
+			android:layout_width="fill_parent" 
+			android:layout_height="fill_parent"
+			android:orientation="vertical">
+				<TextView
+					android:id="@+id/read_bookmark_title"
+					style="@style/ViewBookmarkFieldContent"
+					android:textSize="24sp" />
+				<WebView
+					android:id="@+id/web_view"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent" />
+		</LinearLayout>
+	</ScrollView>
 </FrameLayout>

@@ -21,26 +21,36 @@
 
 package com.pindroid.fragment;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.Date;
 
 import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
+import com.pindroid.action.GetArticleTextTask;
+import com.pindroid.action.GetWebpageTitleTask;
 import com.pindroid.activity.FragmentBaseActivity;
+import com.pindroid.client.NetworkUtilities;
+import com.pindroid.fragment.AddBookmarkFragment.GetTitleTask;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.ContentNotFoundException;
+import com.pindroid.providers.ArticleContent.Article;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.AccountSpan;
 import com.pindroid.ui.TagSpan;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -68,6 +78,11 @@ public class ViewBookmarkFragment extends Fragment {
 	private WebView mWebContent;
 	private Bookmark bookmark;
 	private BookmarkViewType viewType;
+	private View readSection;
+	private TextView readTitle;
+	private TextView readView;
+	
+	private AsyncTask<String, Integer, Article> articleTask;
 	
 	private OnBookmarkActionListener bookmarkActionListener;
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
@@ -93,6 +108,9 @@ public class ViewBookmarkFragment extends Fragment {
 		mUsername = (TextView) getView().findViewById(R.id.view_bookmark_account);
 		mIcon = (ImageView) getView().findViewById(R.id.view_bookmark_icon);
 		mWebContent = (WebView) getView().findViewById(R.id.web_view);
+		readSection = getView().findViewById(R.id.read_bookmark_section);
+		readTitle = (TextView) getView().findViewById(R.id.read_bookmark_title);
+		readView = (TextView) getView().findViewById(R.id.read_view);
 		
 		mWebContent.getSettings().setJavaScriptEnabled(true);
 		
@@ -221,7 +239,7 @@ public class ViewBookmarkFragment extends Fragment {
     		
     		if(viewType == BookmarkViewType.VIEW){
 				mBookmarkView.setVisibility(View.VISIBLE);
-				mWebContent.setVisibility(View.GONE);
+				readSection.setVisibility(View.GONE);
 				if(isMyself()){
 					Date d = new Date(bookmark.getTime());
 					
@@ -284,13 +302,17 @@ public class ViewBookmarkFragment extends Fragment {
 					mUsername.setMovementMethod(LinkMovementMethod.getInstance());
 				}
 			} else if(viewType == BookmarkViewType.READ){
-				mWebContent.clearView();
-				mWebContent.clearCache(true);
-				mBookmarkView.setVisibility(View.GONE);
-				mWebContent.setVisibility(View.VISIBLE);
-				String readUrl = Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(bookmark.getUrl());
-				mWebContent.loadUrl(readUrl);
-				mWebContent.setWebViewClient(new WebClient());
+				
+				//String readUrl = Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(bookmark.getUrl());
+				//mWebContent.loadUrl(readUrl);
+				//mWebContent.setWebViewClient(new WebClient());
+				
+
+				
+				articleTask = new GetArticleTask().execute(bookmark.getUrl());
+				
+
+				
 
 			} else if(viewType == BookmarkViewType.WEB){
 				mWebContent.clearView();
@@ -312,6 +334,34 @@ public class ViewBookmarkFragment extends Fragment {
 			throw new ClassCastException(activity.toString() + " must implement OnBookmarkActionListener and OnBookmarkSelectedListener");
 		}
 	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		mWebContent.getSettings().setDefaultFontSize(Integer.parseInt(base.readingFontSize));
+	}
+	
+    public class GetArticleTask extends GetArticleTextTask{    	
+    	protected void onPreExecute(){
+			mWebContent.clearView();
+			mWebContent.clearCache(true);
+			mWebContent.setBackgroundColor(Color.BLACK);
+			mWebContent.getSettings().setDefaultFontSize(Integer.parseInt(base.readingFontSize));
+
+			//mBookmarkView.setVisibility(View.VISIBLE);
+			//mWebContent.setVisibility(View.GONE);
+			//readSection.setVisibility(View.VISIBLE);
+    	}
+    	
+        protected void onPostExecute(Article result) {
+        	//readTitle.setText(result.getTitle());
+        	//readView.setText(Html.fromHtml(result.getContent()));
+        	mBookmarkView.setVisibility(View.GONE);
+			readSection.setVisibility(View.VISIBLE);
+			readTitle.setText(result.getTitle());
+        	mWebContent.loadDataWithBaseURL("file:///android_asset/", "<html><head><link rel='stylesheet' type='text/css' href='style.css' /></head><body>" + result.getContent() + "</body></html>", "text/html", "utf-8", null);
+        }
+    }
 	
 	private class WebClient extends WebViewClient {
 	    @Override

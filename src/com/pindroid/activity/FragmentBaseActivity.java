@@ -166,7 +166,7 @@ public class FragmentBaseActivity extends FragmentActivity {
     	readingBackground = settings.getString("pref_reading_background", "white");
     	readingFont = settings.getString("pref_reading_font", "sans");
     	readingMargins = settings.getString("pref_reading_margins", "normal");
-    	readingFontSize = settings.getString("pref_reading_fontsize", "normal");
+    	readingFontSize = settings.getString("pref_reading_fontsize", "16");
 	}
 
 	@Override

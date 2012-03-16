@@ -22,7 +22,12 @@
 package com.pindroid.client;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLEncoder;
+import java.util.zip.GZIPInputStream;
 
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
@@ -33,6 +38,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+
+import com.pindroid.Constants;
+import com.pindroid.providers.ArticleContent.Article;
+import com.pindroid.xml.SaxArticleParser;
 
 import android.net.Uri;
 import android.util.Log;
@@ -136,5 +145,55 @@ public class NetworkUtilities {
 				return "";
 			}
     	} else return "";
+    }
+    
+    /**
+     * Gets the title of a web page.
+     * 
+     * @param url The URL of the web page.
+     * @return A String containing the title of the web page.
+     */
+    public static Article getArticleText(String url) {
+   	
+    	if(url != null && !url.equals("")) {
+    		
+    		if(!url.startsWith("http")){
+    			url = "http://" + url;
+    		}
+	
+	    	HttpResponse resp = null;
+	    	HttpGet post = null;
+	    	
+	    	try {
+				post = new HttpGet(Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(url) + "&format=xml");
+	
+				post.setHeader("User-Agent", "Mozilla/5.0");
+	
+				resp = HttpClientFactory.getThreadSafeClient().execute(post);
+				
+		        
+		        final int statusCode = resp.getStatusLine().getStatusCode();
+				
+		    	if (statusCode == HttpStatus.SC_OK) {
+		    		
+		    		final HttpEntity entity = resp.getEntity();
+		    		
+		    		InputStream instream = entity.getContent();
+		    		
+		    		final Header encoding = entity.getContentEncoding();
+		    		
+		    		if(encoding != null && encoding.getValue().equalsIgnoreCase("gzip")) {
+		    			instream = new GZIPInputStream(instream);
+		    		}
+		    		
+		    		SaxArticleParser parser = new SaxArticleParser(instream);
+		    		
+		    		return parser.parse();
+		    	}
+			} catch (Exception e) {
+				return null;
+			}
+    	}
+		return null;
     }
 }

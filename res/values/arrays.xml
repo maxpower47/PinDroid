@@ -78,9 +78,9 @@
         <item>Large</item>
     </string-array>
     <string-array name="pref_reading_fontsize_values">
-        <item>small</item>
-        <item>normal</item>
-        <item>large</item>
+        <item>12</item>
+        <item>16</item>
+        <item>20</item>
     </string-array>
     <string-array name="pref_synctime_entries">
         <item>5 mins</item>
