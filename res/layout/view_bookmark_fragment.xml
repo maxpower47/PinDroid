@@ -83,9 +83,7 @@
 			<TextView
 				android:id="@+id/view_bookmark_account"
 				style="@style/ViewBookmarkFieldContent" />
-
 		</LinearLayout>
-
 	</ScrollView>
 	<WebView
 		android:id="@+id/web_view"
@@ -96,24 +94,5 @@
 		android:paddingLeft="10dip"
 		android:paddingTop="20dip" 
 		android:visibility="gone" />
-	<ScrollView 
-	    android:id="@+id/read_bookmark_section"
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent"
-		android:visibility="gone" >
-		<LinearLayout
-			android:layout_width="fill_parent" 
-			android:layout_height="fill_parent"
-			android:orientation="vertical">
-				<TextView
-					android:id="@+id/read_bookmark_title"
-					style="@style/ViewBookmarkFieldContent" />
-				<TextView
-					android:id="@+id/read_view"
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent"
-					android:autoLink="web|email"
-					android:linksClickable="true" />
-		</LinearLayout>
-	</ScrollView>
+	<include android:id="@+id/read_view_placeholder" layout="@layout/read_view" />
 </FrameLayout>

@@ -225,7 +225,6 @@ public class ViewBookmarkFragment extends Fragment {
     	loadBookmark();
     }
 
-    
     public void loadBookmark(){
     	if(bookmark != null){
     		
@@ -240,6 +239,7 @@ public class ViewBookmarkFragment extends Fragment {
     		if(viewType == BookmarkViewType.VIEW){
 				mBookmarkView.setVisibility(View.VISIBLE);
 				readSection.setVisibility(View.GONE);
+				mWebContent.setVisibility(View.GONE);
 				if(isMyself()){
 					Date d = new Date(bookmark.getTime());
 					
@@ -307,7 +307,8 @@ public class ViewBookmarkFragment extends Fragment {
 				mWebContent.clearView();
 				mWebContent.clearCache(true);
 				mBookmarkView.setVisibility(View.GONE);
-				mWebContent.setVisibility(View.VISIBLE);
+				readSection.setVisibility(View.GONE);
+				mWebContent.setVisibility(View.VISIBLE);				
 				mWebContent.loadUrl(bookmark.getUrl());
 			}
     	}
@@ -330,16 +331,16 @@ public class ViewBookmarkFragment extends Fragment {
 		readView.setBackgroundColor(Integer.parseInt(base.readingBackground));
 		
 		if(Integer.parseInt(base.readingBackground) == Color.BLACK)
-			readView.setTextColor(Color.WHITE);
-		else readView.setTextColor(Color.BLACK);
+			readView.setTextColor(Color.parseColor("#878787"));
+		else readView.setTextColor(Color.parseColor("#222222"));
 		
-		readView.setPadding(Integer.parseInt(base.readingMargins), 5, Integer.parseInt(base.readingMargins), 5);
+		readView.setPadding(Integer.parseInt(base.readingMargins), 15, Integer.parseInt(base.readingMargins), 15);
 
 		Typeface tf = Typeface.createFromAsset(base.getAssets(), "fonts/" + base.readingFont + ".ttf");
 		readView.setTypeface(tf);
 		
 		readView.setTextSize(Float.parseFloat(base.readingFontSize));
-		readView.setLineSpacing(0, Float.parseFloat(base.readingLineSpace));
+		readView.setLineSpacing(Float.parseFloat(base.readingLineSpace), 1);
 		
 	}
 	
@@ -385,6 +386,7 @@ public class ViewBookmarkFragment extends Fragment {
         protected void onPostExecute(Article result) {
         	readSection.scrollTo(0, 0);
         	mBookmarkView.setVisibility(View.GONE);
+        	mWebContent.setVisibility(View.GONE);
 			readSection.setVisibility(View.VISIBLE);
 			readTitle.setText(Html.fromHtml(result.getTitle()));
 			readView.setText(result.getSpan());

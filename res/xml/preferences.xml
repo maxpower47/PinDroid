@@ -107,7 +107,7 @@
 			android:title="@string/pref_reading_linespace_title"
 			android:entries="@array/pref_reading_linespace_entries"
 			android:entryValues="@array/pref_reading_linespace_values"
-			android:defaultValue="1.5"
+			android:defaultValue="5"
 			android:summary="@string/pref_reading_linespace_summary"
 			android:key="@string/pref_reading_linespace_key" />
 	</PreferenceCategory>

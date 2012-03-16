@@ -53,12 +53,12 @@
         <item>-256</item>
     </string-array>
     <string-array name="pref_reading_font_entries">
-        <item>Asenine</item>
+        <item>Open Sans</item>
         <item>Nobile</item>
         <item>Roboto</item>
     </string-array>
     <string-array name="pref_reading_font_values">
-        <item>ASENINE</item>
+        <item>OpenSans-Regular</item>
         <item>nobile</item>
         <item>Roboto-Regular</item>
     </string-array>
@@ -88,9 +88,9 @@
         <item>More</item>
     </string-array>
     <string-array name="pref_reading_linespace_values">
-        <item>1</item>
-        <item>1.5</item>
-        <item>2</item>
+        <item>0</item>
+        <item>5</item>
+        <item>10</item>
     </string-array>
     <string-array name="pref_synctime_entries">
         <item>5 mins</item>

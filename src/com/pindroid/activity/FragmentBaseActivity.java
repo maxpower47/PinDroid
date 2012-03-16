@@ -168,7 +168,7 @@ public class FragmentBaseActivity extends FragmentActivity {
     	readingFont = settings.getString("pref_reading_font", "nobile");
     	readingMargins = settings.getString("pref_reading_margins", "20");
     	readingFontSize = settings.getString("pref_reading_fontsize", "16");
-    	readingLineSpace = settings.getString("pref_reading_linespace", "1.5");
+    	readingLineSpace = settings.getString("pref_reading_linespace", "5");
 	}
 
 	@Override
