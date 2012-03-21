@@ -26,7 +26,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
@@ -167,7 +166,7 @@ public class BrowseTagsFragment extends ListFragment
 				return TagManager.GetTags(username, sortfield, this.getActivity());
 			}
 		}
-		else return new CursorLoader(this.getActivity());
+		else return null;
 	}
 	
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {

@@ -127,8 +127,17 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		if(addFrag != null){
 			t.hide(addFrag);
 		}
-		
-		t.commit();	
+	
+		if(username != null){
+			if(isMyself()) {
+				BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+				t.add(R.id.listcontent, frag);
+			} else {
+				BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
+				t.add(R.id.listcontent, frag);
+			}
+		}
+		t.commit();
     }
 	
 	@Override

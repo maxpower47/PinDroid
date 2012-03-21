@@ -194,7 +194,7 @@ public class PinboardApi {
     	response = convertStreamToString(responseStream);
     	responseStream.close();
     	
-        if (response.contains("<result code=\"done\"")) {
+        if (response.contains("<result code=\"done\"") || response.contains("<result code=\"item not found\"")) {
             return true;
         } else {
             Log.e(TAG, "Server error in fetching bookmark list");

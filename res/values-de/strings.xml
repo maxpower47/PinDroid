@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
  * PinDroid - http://code.google.com/p/PinDroid/
@@ -21,238 +21,169 @@
  * USA
  */
  -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- Label for this package -->
-    <string name="label">Pinboard</string>
-
-    <!-- Title string for Login activity-->
-    <string name="ui_activity_title">Anmelden</string>
-    <!-- Message shown in progress dialog while app connects to the server -->
-    <string name="ui_activity_authenticating">Authentifiziere</string>
-
-    <!-- AuthenticatorActivity -->
-    <!-- Label above username EditText -->
-    <string name="login_activity_username_label">Benutzername</string>
-    <!-- Label above password EditText -->
-    <string name="login_activity_password_label">Passwort</string>
-    <!-- Button to sign in after entering username and password -->
-    <string name="login_activity_ok_button">Anmelden</string>
-
-    <!-- Message shown in dialog if the username or password is invalid. -->
-    <string name="login_activity_loginfail_text_both">Der Benutzername oder das Passwort ist nicht korrekt. Es wird ein Pinboard Konto
+<resources>
+  <string name="label">Pinboard</string>
+  <string name="ui_activity_title">Anmelden</string>
+  <string name="ui_activity_authenticating">Authentifiziere</string>
+  <string name="login_activity_username_label">Benutzername</string>
+  <string name="login_activity_password_label">Passwort</string>
+  <string name="login_activity_ok_button">Anmelden</string>
+  <string name="login_activity_loginfail_text_both">Der Benutzername oder das Passwort ist nicht korrekt. Es wird ein Pinboard Konto
         benötigt. Bitte noch einmal versuchen. </string>
-    <!-- Message shown in dialog if the password is invalid -->
-    <string name="login_activity_loginfail_text_pwonly">Du hast ein falsches Passwort eingegeben oder dein Account hat sich geändert.
+  <string name="login_activity_loginfail_text_pwonly">Du hast ein falsches Passwort eingegeben oder dein Account hat sich geändert.
         Bitte das Passwort noch einmal eingeben.</string>
-    <!-- Message shown in dialog to prompt the user for their password -->
-    <string name="login_activity_loginfail_text_pwmissing">Passwort für dieses Konto eingeben.</string>
-    <!-- Message shown if the provided account doesn't support the current activity. -->
-    <string name="login_activity_newaccount_text">Dein Pinboard Konto anmelden.</string>
-
-    <!-- Button that takes the user to the "sign in" screen -->
-    <string name="sign_in_button_label">Anmelden</string>
-    <!-- Button for going to the previous screen or step -->
-    <string name="back_button_label">Zurück</string>
-    <!-- Button to cancel the current operation -->
-    <string name="cancel_button_label">Abbrechen</string>
-    <string name="titleMain">Pinboard</string>
-    
-    <string name="dialog_no_account_title">Es wurde kein Pinboard Konto gefunden</string>
-    <string name="dialog_no_account_text"> Um deinen Pinboard Konto hinzuzufügen gehe in "Konten und Synchronisierung" in den Einstellungen.</string>
-    
-    <!-- Main -->
-    <string name="main_menu_my_bookmarks">Meine Lesezeichen</string>
-    <string name="main_menu_my_unread_bookmarks">Meine Ungelesenen</string>
-    <string name="main_menu_my_tags">Meine Tags</string>
-    <string name="main_menu_recent_bookmarks">Neue Lesezeichen</string>
-
-	<!-- MainSearchResults -->
-    <string name="main_search_results_title">Suchergebnisse</string>
-      
-    <!-- BrowseBookmarks -->
-    <string name="browse_my_bookmarks_title">Meine Lesezeichen</string>
-    <string name="browse_my_unread_bookmarks_title">Meine ungelesenen Lesezeichen</string>
-    <string name="browse_my_bookmarks_tagged_title">Meine Lesezeichen markiert mit Tag %1$s</string>
-    <string name="browse_my_unread_bookmarks_tagged_title">Meine ungelesenen Lesezeichen markiert mit %1$s</string>
-    <string name="browse_recent_bookmarks_title">Neue Lesezeichen</string>
-    <string name="browse_user_bookmarks_title">Lesezeichen für %1$s</string>
-    <string name="browse_user_bookmarks_tagged_title">Lesezeichen für %1$s markiert mit %2$s</string>
-    
-    <string name="bookmark_context_open">Im Browser öffnen</string>
-    <string name="bookmark_context_view">Details anzeigen</string>
-    <string name="bookmark_context_read">Lesen</string>
-    <string name="bookmark_context_edit">Bearbeiten</string>
-    <string name="bookmark_context_delete">Löschen</string>
-    <string name="bookmark_context_share">Teilen</string>
-    <string name="bookmark_context_add">Hinzufügen</string>
-    
-    <string name="share_chooser_title">Link teilen</string>
-    
-    <string name="bookmark_sort_date_asc">Datum (älteste zuerst)</string>
-    <string name="bookmark_sort_date_desc">Datum (neueste zuerst)</string>
-    <string name="bookmark_sort_description_asc">Beschreibung (A-Z)</string>
-    <string name="bookmark_sort_description_desc">Beschreibung (Z-A)</string>
-    <string name="bookmark_sort_url_asc">Url (A-Z)</string>
-    <string name="bookmark_sort_url_desc">Url (Z-A)</string>
-    
-    <string name="bookmark_feed_task_progress">Lade. Bitte warten…</string>
-    
-    <string name="menu_addbookmark_title">Lesezeichen hinzufügen</string>
-    <string name="menu_sort_title">Sortieren</string>
-    <string name="menu_sort_bookmark_title">Sortieren Lesezeichen</string>
-    <string name="menu_sort_tag_title">Sortieren Tags</string>
-    <string name="menu_search_title">Suche</string>
-    <string name="menu_settings_title">Einstellungen</string>
-    
-    <!-- BrowseTags -->
-    <string name="browse_my_tags_title">Meine Tags</string>
-     
-    <string name="tag_sort_name_asc">Name (A-Z)</string>
-    <string name="tag_sort_name_desc">Name (Z-A)</string>
-    <string name="tag_sort_count_asc">Anzahl (Wenigste zuerst)</string>
-    <string name="tag_sort_count_desc">Anzahl (Meiste zuerst)</string>
-    
-    <!-- AddBookmark -->
-    <string name="add_bookmark_add_title">Lesezeichen hinzufügen</string>
-    <string name="add_bookmark_edit_title">Lesezeichen bearbeiten</string>
-    
-    <string name="add_bookmark_task_progress">Arbeite…</string>
-    
-    <string name="add_button_save">Speichern</string>
-    <string name="add_button_cancel">Abbrechen</string>
-    <string name="add_title_url">URL</string>
-    <string name="add_title_description">Beschreibung</string>
-    <string name="add_title_notes">Notizen</string>
-    <string name="add_title_tags">Tags</string>
-    <string name="add_title_recommended_tags">Empfohlene Tags</string>
-    <string name="add_title_popular_tags">Beliebte Tags</string>
-    <string name="add_title_private">Privat?</string>
-    <string name="add_title_toread">Noch zu lesen?</string>
-    
-    <string name="add_bookmark_success_msg">Lesezeichen erfolgreich hinzugefügt</string>
-    <string name="edit_bookmark_success_msg">Lesezeichen erfolgreich aktualisiert</string>
-    <string name="add_bookmark_error_msg">Fehler</string>
-    
-    <string name="add_bookmark_notification_error_title">PinDroid Fehler</string>
-    <string name="add_bookmark_notification_error_message">Fehler beim Speichern Lesezeichen</string>
-    
-    <string name="delete_bookmark_success_msg">Lesezeichen erfolgreich gelöscht</string>
-    <string name="delete_bookmark_error_msg">Fehler</string>
-    
-    
-    <!-- Searching -->
-    <string name="main_search_label">Pinboard</string>
-    <string name="main_search_hint">Tags, Titel, Notizen</string>
-    <string name="main_search_description">Tags, Titel, und Notizen</string>
-    
-    <string name="tag_search_label">Pinboard Tags</string>
-    <string name="tag_search_hint">Tags</string>
-    
-    <string name="bookmark_search_label">Pinboard Lesezeichen</string>
-    <string name="bookmark_search_hint">Tags, Titel, Notizen</string>
-    
-    <string name="search_results_bookmark">Lesezeichen Ergebnisse</string>
-    <string name="search_results_tag">Tag Ergebnisse</string>
-    <string name="search_results_global_tag">Globale Tag Ergebnisse</string>
-
-    <string name="tag_search_text">Pinboard durchsuchen</string>
-    
-    <string name="bookmark_search_results_title">Lesezeichen Suchergebnisse für \"%1$s\"</string>
-    <string name="unread_search_results_title">Ungelesene Suchergebnisse für \"%1$s\"</string>
-    <string name="tag_search_results_title">Tag Suchergebnisse für \"%1$s\"</string>
-    <string name="search_results_global_tag_title">Globale Tag Ergebnisse für \"%1$s\"</string>
-    
-    <string name="bookmark_count">Lesezeichen</string>
-    
-    <!-- Live Folders -->
-    <string name="tag_live_folder_name">Meine Tags</string>
-    <string name="tag_live_folder_label">Pinboard Tags</string>
-    <string name="bookmark_live_folder_label">Pinboard Lesezeichen</string>
-    <string name="tag_live_folder_chooser_title">Wähle einen Tag für diesen Ordner</string>
-    
-    <!-- Content Provider -->
-    <string name="bookmark_content_provider_label">Lesezeichen</string>  
-    
-    <string name="sync_receiver_label">PinDroid Lesezeichen Synchronisierung</string>
-    <string name="syncing_toast">Synchronisiere…</string>
-
-    <!-- ViewBookmark -->
-    <string name="view_bookmark_title">Zeige Lesezeichendetails</string>
-    <string name="view_bookmark_notes_title">Notizen</string>
-    <string name="view_bookmark_tags_title">Tags</string>
-    <string name="view_bookmark_time_title">Gespeichert am</string>
-    <string name="view_bookmark_account_title">von</string>
-    
-    <string name="menu_view_read_title">Gelesen</string>
-    <string name="menu_view_openbookmark_title">Im Browser öffnen</string>
-    <string name="menu_view_editbookmark_title">Editieren</string>
-    <string name="menu_view_deletebookmark_title">Löschen</string>
-    <string name="menu_view_sendbookmark_title">Teilen</string>
-    
-    <!-- Widget -->
-    <string name="search_widget_label">PinDroid</string>
-    
-    <!-- Preferences -->
-    <string name="preferences_title">PinDroid Einstellungen</string>
-    
-    <string name="account_preferences_cat_title">Allgemeine Einstellungen</string>
-    <string name="account_preferences_key">account_settings</string>
-    <string name="account_preferences_title">Account Einstellungen</string>
-    <string name="account_preferences_summary">Synchronisierungs- und Benachrichtigungseinstellungen.</string>
-    
-    <string name="pref_cat_general_title">Allgemeine Einstellungen</string>
-    <string name="pref_cat_sync_title">Synchronisierungseinstellungen</string>
-    <string name="pref_cat_save_title">Speichereinstellungen</string>
-    <string name="pref_cat_help_title">Hilfe</string>
-    
-    <string name="pref_synctime_title">Synchronis. Frequenz</string>
-    <string name="pref_synctime_key">pref_synctime</string>
-    <string name="pref_synctime_summary">Wie oft sollen die Lesezeichen synchronisiert werden?</string>
-    
-    <string name="pref_view_bookmark_default_action_title">Lesezeichen Aktion</string>
-    <string name="pref_view_bookmark_default_action_key">pref_view_bookmark_default_action</string>
-    <string name="pref_view_bookmark_default_action_summary">Standardaktion für Lesezeichen.</string>
-    
-    <string name="pref_searchicons_title">Such Icons anzeigen</string>
-    <string name="pref_searchicons_key">pref_searchicons</string>
-    <string name="pref_searchicons_summary">Icons in Suchvorschlägen anzeigen.</string>
-    
-    <string name="pref_save_private_default_title">Privat als Standard</string>
-    <string name="pref_save_private_default_key">pref_save_private_default</string>
-    <string name="pref_save_private_default_summary">Setze neue Lesezeichen standardmäßig auf privat.</string>
-    
-    <string name="pref_save_toread_default_title">Ungelesen als Standard</string>
-    <string name="pref_save_toread_default_key">pref_save_toread_default</string>
-    <string name="pref_save_toread_default_summary">Setze neue Lesezeichen standardmäßig auf ungelesen.</string>
-    
-    <string name="pref_markasread_title">Als gelesen markieren</string>
-    <string name="pref_markasread_key">pref_markasread</string>
-    <string name="pref_markasread_summary">Markiere ungelesene Lesezeichen nach dem Öffnen als gelesen.</string>
-    
-    <string name="pref_forcesync_title">Jetzt synchronisieren</string>
-    <string name="pref_forcesync_key">pref_forcesync</string>
-    <string name="pref_forcesync_summary">Beginne mit der Synchronisierung der Lesezeichen.</string>
-    
-    <string name="pref_license_title">Lizenz</string>
-    <string name="pref_license_key">pref_license</string>
-    <string name="pref_license_summary">Lizenziert unter der GPL v3</string>
-    
-    <string name="pref_help_title">Hilfe</string>
-    <string name="pref_help_key">pref_help</string>
-    <string name="pref_help_summary">Hilfe für die Benutzung von PinDroid</string>
-    
-    <string name="pref_about_title">Über</string>
-    <string name="pref_about_key">pref_about</string>
-    <string name="pref_about_summary">Über PinDroid</string>
-    
-    <string name="pref_donate_title">Spenden</string>
-    <string name="pref_donate_key">pref_donate</string>
-    <string name="pref_donate_summary">Unterstütze PinDroid</string>
-    
-    <!-- AboutActivity -->
-    <string name="about_activity_title">Über PinDroid</string>
-    <string name="about_title">PinDroid</string>
-    <string name="about_text">
+  <string name="login_activity_loginfail_text_pwmissing">Passwort für dieses Konto eingeben.</string>
+  <string name="login_activity_newaccount_text">An Deinem Pinboard Account anmelden.\n\nDu hast kein Pinboard Account?\nMelde Dich hier an: http://pinboard.in/signup</string>
+  <string name="sign_in_button_label">Anmelden</string>
+  <string name="back_button_label">Zurück</string>
+  <string name="cancel_button_label">Abbrechen</string>
+  <string name="titleMain">Pinboard</string>
+  <string name="dialog_no_account_title">Es wurde kein Pinboard Konto gefunden</string>
+  <string name="dialog_no_account_text"> Um deinen Pinboard Konto hinzuzufügen gehe in "Konten und Synchronisierung" in den Einstellungen.</string>
+  <string name="main_menu_my_bookmarks">Meine Lesezeichen</string>
+  <string name="main_menu_my_unread_bookmarks">Meine Ungelesenen</string>
+  <string name="main_menu_my_tags">Meine Tags</string>
+  <string name="main_menu_network_bookmarks">Netzwerk-Bookmarks</string>
+  <string name="main_menu_recent_bookmarks">Neue Lesezeichen</string>
+  <string name="main_search_results_title">Suchergebnisse</string>
+  <string name="browse_my_bookmarks_title">Meine Lesezeichen</string>
+  <string name="browse_my_unread_bookmarks_title">Meine ungelesenen Lesezeichen</string>
+  <string name="browse_my_bookmarks_tagged_title">Meine Lesezeichen markiert mit Tag %1$s</string>
+  <string name="browse_my_unread_bookmarks_tagged_title">Meine ungelesenen Lesezeichen markiert mit %1$s</string>
+  <string name="browse_recent_bookmarks_title">Neue Lesezeichen</string>
+  <string name="browse_network_bookmarks_title">Netzwerk-Bookmarks</string>
+  <string name="browse_user_bookmarks_title">Lesezeichen für %1$s</string>
+  <string name="browse_user_bookmarks_tagged_title">Lesezeichen für %1$s markiert mit %2$s</string>
+  <string name="bookmark_context_open">Im Browser öffnen</string>
+  <string name="bookmark_context_view">Details anzeigen</string>
+  <string name="bookmark_context_read">Lesen</string>
+  <string name="bookmark_context_markread">Als gelesen markieren</string>
+  <string name="bookmark_context_edit">Bearbeiten</string>
+  <string name="bookmark_context_delete">Löschen</string>
+  <string name="bookmark_context_share">Teilen</string>
+  <string name="bookmark_context_add">Hinzufügen</string>
+  <string name="share_chooser_title">Link teilen</string>
+  <string name="bookmark_sort_date_asc">Datum (älteste zuerst)</string>
+  <string name="bookmark_sort_date_desc">Datum (neueste zuerst)</string>
+  <string name="bookmark_sort_description_asc">Beschreibung (A-Z)</string>
+  <string name="bookmark_sort_description_desc">Beschreibung (Z-A)</string>
+  <string name="bookmark_sort_url_asc">Url (A-Z)</string>
+  <string name="bookmark_sort_url_desc">Url (Z-A)</string>
+  <string name="bookmark_feed_task_progress">Lade. Bitte warten...</string>
+  <string name="menu_addbookmark_title">Lesezeichen hinzufügen</string>
+  <string name="menu_sort_title">Sortieren</string>
+  <string name="menu_search_title">Suche</string>
+  <string name="menu_settings_title">Einstellungen</string>
+  <string name="browse_my_tags_title">Meine Tags</string>
+  <string name="tag_sort_name_asc">Name (A-Z)</string>
+  <string name="tag_sort_name_desc">Name (Z-A)</string>
+  <string name="tag_sort_count_asc">Anzahl (Wenigste zuerst)</string>
+  <string name="tag_sort_count_desc">Anzahl (Meiste zuerst)</string>
+  <string name="add_bookmark_add_title">Lesezeichen hinzufügen</string>
+  <string name="add_bookmark_edit_title">Lesezeichen bearbeiten</string>
+  <string name="add_bookmark_task_progress">Arbeite...</string>
+  <string name="add_button_save">Speichern</string>
+  <string name="add_button_cancel">Abbrechen</string>
+  <string name="add_title_url">URL</string>
+  <string name="add_title_description">Beschreibung</string>
+  <string name="add_title_notes">Notizen</string>
+  <string name="add_title_tags">Tags</string>
+  <string name="add_title_recommended_tags">Empfohlene Tags</string>
+  <string name="add_title_popular_tags">Beliebte Tags</string>
+  <string name="add_title_private">Privat?</string>
+  <string name="add_title_toread">Noch zu lesen?</string>
+  <string name="add_bookmark_success_msg">Lesezeichen erfolgreich hinzugefügt</string>
+  <string name="edit_bookmark_success_msg">Lesezeichen erfolgreich aktualisiert</string>
+  <string name="add_bookmark_error_msg">Fehler</string>
+  <string name="add_bookmark_notification_error_title">PinDroid Fehler</string>
+  <string name="add_bookmark_notification_error_message">Fehler beim Speichern Lesezeichen</string>
+  <string name="add_bookmark_invalid_url">Fehler: Leere oder ungültige URL</string>
+  <string name="add_bookmark_blank_url">Fehler: Leere URL</string>
+  <string name="add_bookmark_blank_description">Fehler: Leere Beschreibung</string>
+  <string name="delete_bookmark_success_msg">Lesezeichen erfolgreich gelöscht</string>
+  <string name="delete_bookmark_error_msg">Fehler</string>
+  <string name="main_search_label">Pinboard</string>
+  <string name="main_search_hint">Tags, Titel, Notizen</string>
+  <string name="main_search_description">Tags, Titel, und Notizen</string>
+  <string name="tag_search_label">Pinboard Tags</string>
+  <string name="tag_search_hint">Tags</string>
+  <string name="bookmark_search_label">Pinboard Lesezeichen</string>
+  <string name="bookmark_search_hint">Tags, Titel, Notizen</string>
+  <string name="search_results_bookmark">Lesezeichen Ergebnisse</string>
+  <string name="search_results_tag">Tag Ergebnisse</string>
+  <string name="search_results_global_tag">Globale Tag Ergebnisse</string>
+  <string name="tag_search_text">Pinboard durchsuchen</string>
+  <string name="bookmark_search_results_title">Lesezeichen Suchergebnisse für \"%1$s\"</string>
+  <string name="unread_search_results_title">Ungelesene Suchergebnisse für \"%1$s\"</string>
+  <string name="tag_search_results_title">Tag Suchergebnisse für \"%1$s\"</string>
+  <string name="search_results_global_tag_title">Globale Tag Ergebnisse für \"%1$s\"</string>
+  <string name="bookmark_count">Lesezeichen</string>
+  <string name="tag_live_folder_name">Meine Tags</string>
+  <string name="tag_live_folder_label">Pinboard Tags</string>
+  <string name="bookmark_live_folder_label">Pinboard Lesezeichen</string>
+  <string name="tag_live_folder_chooser_title">Wähle einen Tag für diesen Ordner</string>
+  <string name="bookmark_content_provider_label">Lesezeichen</string>
+  <string name="sync_receiver_label">PinDroid Lesezeichen Synchronisierung</string>
+  <string name="syncing_toast">Synchronisiere...</string>
+  <string name="view_bookmark_title">Zeige Lesezeichendetails</string>
+  <string name="view_bookmark_notes_title">Notizen</string>
+  <string name="view_bookmark_tags_title">Tags</string>
+  <string name="view_bookmark_time_title">Gespeichert am</string>
+  <string name="view_bookmark_account_title">von</string>
+  <string name="menu_view_read_title">Gelesen</string>
+  <string name="menu_view_openbookmark_title">Im Browser öffnen</string>
+  <string name="menu_view_editbookmark_title">Editieren</string>
+  <string name="menu_view_deletebookmark_title">Löschen</string>
+  <string name="menu_view_sendbookmark_title">Teilen</string>
+  <string name="search_widget_label">PinDroid 4x1</string>
+  <string name="unread_widget_label">PinDroid Ungelesene 1x1</string>
+  <string name="preferences_title">PinDroid Einstellungen</string>
+  <string name="account_preferences_cat_title">Allgemeine Einstellungen</string>
+  <string name="account_preferences_key">account_settings</string>
+  <string name="account_preferences_title">Account Einstellungen</string>
+  <string name="account_preferences_summary">Synchronisierungs- und Benachrichtigungseinstellungen.</string>
+  <string name="pref_cat_general_title">Allgemeine Einstellungen</string>
+  <string name="pref_cat_sync_title">Synchronisierungseinstellungen</string>
+  <string name="pref_cat_save_title">Speichereinstellungen</string>
+  <string name="pref_cat_help_title">Hilfe</string>
+  <string name="pref_accountsettings_title">Account-Einstellungen</string>
+  <string name="pref_accountsettings_summary">Pinboard Account auf diesem Gerät verwalten.</string>
+  <string name="pref_synctime_title">Synchronis. Frequenz</string>
+  <string name="pref_synctime_key">pref_synctime</string>
+  <string name="pref_synctime_summary">Wie oft sollen die Lesezeichen synchronisiert werden?</string>
+  <string name="pref_view_bookmark_default_action_title">Lesezeichen Aktion</string>
+  <string name="pref_view_bookmark_default_action_key">pref_view_bookmark_default_action</string>
+  <string name="pref_view_bookmark_default_action_summary">Standardaktion für Lesezeichen.</string>
+  <string name="pref_searchicons_title">Such Icons anzeigen</string>
+  <string name="pref_searchicons_key">pref_searchicons</string>
+  <string name="pref_searchicons_summary">Icons in Suchvorschlägen anzeigen.</string>
+  <string name="pref_save_private_default_title">Privat als Standard</string>
+  <string name="pref_save_private_default_key">pref_save_private_default</string>
+  <string name="pref_save_private_default_summary">Setze neue Lesezeichen standardmäßig auf privat.</string>
+  <string name="pref_save_toread_default_title">Ungelesen als Standard</string>
+  <string name="pref_save_toread_default_key">pref_save_toread_default</string>
+  <string name="pref_save_toread_default_summary">Setze neue Lesezeichen standardmäßig auf ungelesen.</string>
+  <string name="pref_markasread_title">Als gelesen markieren</string>
+  <string name="pref_markasread_key">pref_markasread</string>
+  <string name="pref_markasread_summary">Markiere ungelesene Lesezeichen nach dem Öffnen als gelesen.</string>
+  <string name="pref_forcesync_title">Jetzt synchronisieren</string>
+  <string name="pref_forcesync_key">pref_forcesync</string>
+  <string name="pref_forcesync_summary">Beginne mit der Synchronisierung der Lesezeichen.</string>
+  <string name="pref_license_title">Lizenz</string>
+  <string name="pref_license_key">pref_license</string>
+  <string name="pref_license_summary">Lizenziert unter der GPL v3</string>
+  <string name="pref_help_title">Hilfe</string>
+  <string name="pref_help_key">pref_help</string>
+  <string name="pref_help_summary">Hilfe für die Benutzung von PinDroid</string>
+  <string name="pref_about_title">Über</string>
+  <string name="pref_about_key">pref_about</string>
+  <string name="pref_about_summary">Über PinDroid</string>
+  <string name="pref_donate_title">Spenden</string>
+  <string name="pref_donate_key">pref_donate</string>
+  <string name="pref_donate_summary">Unterstütze PinDroid</string>
+  <string name="about_activity_title">Über PinDroid</string>
+  <string name="about_title">PinDroid</string>
+  <string name="about_text">
     &lt;html&gt; 
     &lt;body style="background-color:#000000;color:#BEBEBE"&gt;
     	PinDroid ist eine Portierung von DeliciousDroid fuer das Pinboard Lesezeichen System (bookmarking system).&lt;br/&gt;&lt;br/&gt;

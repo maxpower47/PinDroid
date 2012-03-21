@@ -122,6 +122,8 @@
     
     <string name="add_bookmark_task_progress">Working…</string>
     
+    <string name="add_bookmark_default_title">[no title]</string>
+    
     <string name="add_button_save">Save</string>
     <string name="add_button_cancel">Cancel</string>
     <string name="add_title_url">URL</string>

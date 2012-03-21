@@ -33,9 +33,9 @@
     <item>100</item>
   </string-array>
   <string-array name="pref_view_bookmark_default_action_entries">
-    <item>Im Browser öffnen</item>
-    <item>Details anzeigen</item>
-    <item>Lesen</item>
+    <item>Open in browser</item>
+    <item>View details</item>
+    <item>Read</item>
   </string-array>
   <string-array name="pref_view_bookmark_default_action_values">
     <item>browser</item>
@@ -43,14 +43,14 @@
     <item>read</item>
   </string-array>
   <string-array name="pref_synctime_entries">
-    <item>5 Minuten</item>
-    <item>15 Minuten</item>
-    <item>30 Minuten</item>
-    <item>1 Stunde</item>
-    <item>3 Stunden</item>
-    <item>6 Stunden</item>
-    <item>12 Stunden</item>
-    <item>24 Stunden</item>
+    <item>5 mins</item>
+    <item>15 mins</item>
+    <item>30 mins</item>
+    <item>1 hour</item>
+    <item>3 hours</item>
+    <item>6 hours</item>
+    <item>12 hours</item>
+    <item>24 hours</item>
   </string-array>
   <string-array name="pref_synctime_values">
     <item>5</item>
