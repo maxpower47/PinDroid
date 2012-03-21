@@ -187,6 +187,9 @@ public class AddBookmarkFragment extends Fragment {
     	String url = mEditUrl.getText().toString();
     	String description = mEditDescription.getText().toString();
     	
+    	if(description.equals(""))
+    		description = getResources().getString(R.string.add_bookmark_default_title);
+    	
     	if(url.equals("")) {
     		Toast.makeText(base, R.string.add_bookmark_blank_url, Toast.LENGTH_LONG).show();
     		return;
