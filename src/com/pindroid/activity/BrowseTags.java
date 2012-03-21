@@ -45,7 +45,6 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 
 		if(data != null)
 			username = data.getUserInfo();
-		else username = mAccount.name;
         
 		BrowseTagsFragment frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
         frag.setAccount(username);

@@ -52,7 +52,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 			
 			if(data.getUserInfo() != "") {
 				username = data.getUserInfo();
-			} else username = mAccount.name;
+			} //else username = mAccount.name;
 		}
 		
 		if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
@@ -63,12 +63,14 @@ public class BrowseBookmarks extends FragmentBaseActivity implements BrowseBookm
 		FragmentManager fm = getSupportFragmentManager();
 		FragmentTransaction t = fm.beginTransaction();
 	
-		if(isMyself()) {
-			BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
-			t.add(R.id.listcontent, frag);
-		} else {
-			BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
-			t.add(R.id.listcontent, frag);
+		if(username != null){
+			if(isMyself()) {
+				BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+				t.add(R.id.listcontent, frag);
+			} else {
+				BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
+				t.add(R.id.listcontent, frag);
+			}
 		}
 		t.commit();
     }
