@@ -49,6 +49,7 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
@@ -306,14 +307,18 @@ public class ViewBookmarkFragment extends Fragment {
 			} else if(viewType == BookmarkViewType.READ){
 				articleTask = new GetArticleTask().execute(bookmark.getUrl());
 			} else if(viewType == BookmarkViewType.WEB){
-				mWebContent.clearView();
-				mWebContent.clearCache(true);
-				mBookmarkView.setVisibility(View.GONE);
-				readSection.setVisibility(View.GONE);
-				mWebContent.setVisibility(View.VISIBLE);				
-				mWebContent.loadUrl(bookmark.getUrl());
+				showInWebView();
 			}
     	}
+    }
+    
+    private void showInWebView(){
+		mWebContent.clearView();
+		mWebContent.clearCache(true);
+		mBookmarkView.setVisibility(View.GONE);
+		readSection.setVisibility(View.GONE);
+		mWebContent.setVisibility(View.VISIBLE);				
+		mWebContent.loadUrl(bookmark.getUrl());
     }
     
 	@Override
@@ -348,10 +353,7 @@ public class ViewBookmarkFragment extends Fragment {
 	
     public class GetArticleTask extends AsyncTask<String, Integer, Article>{
     	private String url;
-    	protected void onPreExecute(){
 
-    	}
-    	
     	@Override
     	protected Article doInBackground(String... args) {
     		
@@ -360,38 +362,44 @@ public class ViewBookmarkFragment extends Fragment {
     	
         		Article a = NetworkUtilities.getArticleText(url);
 
-        		Spanned s = Html.fromHtml(a.getContent(), new Html.ImageGetter() {
-
-        			public Drawable getDrawable(String source) {                  
-        				Drawable d = null;
-        				try {
-        					InputStream src = imageFetch(source);
-        					d = Drawable.createFromStream(src, "src");
-        					if(d != null){
-        						d.setBounds(0,0,d.getIntrinsicWidth(), d.getIntrinsicHeight());
-        					}
-        				} catch (MalformedURLException e) {
-        					e.printStackTrace(); 
-        				} catch (IOException e) {
-        					e.printStackTrace();  
-        				}
-        				return d;
-        			}
-        		}, null);
-
-        		a.setSpan(s);
+        		if(a.getContent() != null){
+	        		Spanned s = Html.fromHtml(a.getContent(), new Html.ImageGetter() {
+	
+	        			public Drawable getDrawable(String source) {                  
+	        				Drawable d = null;
+	        				try {
+	        					InputStream src = imageFetch(source);
+	        					d = Drawable.createFromStream(src, "src");
+	        					if(d != null){
+	        						d.setBounds(0,0,d.getIntrinsicWidth(), d.getIntrinsicHeight());
+	        					}
+	        				} catch (MalformedURLException e) {
+	        					e.printStackTrace(); 
+	        				} catch (IOException e) {
+	        					e.printStackTrace();  
+	        				}
+	        				return d;
+	        			}
+	        		}, null);
+	
+	        		a.setSpan(s);
+        		}
         		return a;
 
     		} else return null;
     	}
     	
         protected void onPostExecute(Article result) {
-        	readSection.scrollTo(0, 0);
-        	mBookmarkView.setVisibility(View.GONE);
-        	mWebContent.setVisibility(View.GONE);
-			readSection.setVisibility(View.VISIBLE);
-			readTitle.setText(Html.fromHtml(result.getTitle()));
-			readView.setText(result.getSpan());
+        	if(result.getSpan() != null){
+	        	readSection.scrollTo(0, 0);
+	        	mBookmarkView.setVisibility(View.GONE);
+	        	mWebContent.setVisibility(View.GONE);
+				readSection.setVisibility(View.VISIBLE);
+				readTitle.setText(Html.fromHtml(result.getTitle()));
+				readView.setText(result.getSpan());
+        	} else {
+        		showInWebView();
+        	}
         }
         
         private InputStream imageFetch(String source) throws MalformedURLException,IOException {

@@ -248,50 +248,28 @@
     <string name="pref_forcesync_title">Sync Now</string>
     <string name="pref_forcesync_key">pref_forcesync</string>
     <string name="pref_forcesync_summary">Start a bookmark sync.</string>
-    
-    
-    
+
     
     <string name="pref_reading_background_title">Background</string>
     <string name="pref_reading_background_key">pref_reading_background</string>
-    <string name="pref_reading_background_summary">Background color</string>
+    <string name="pref_reading_background_summary">Background color in read view</string>
     
     <string name="pref_reading_font_title">Font</string>
     <string name="pref_reading_font_key">pref_reading_font</string>
-    <string name="pref_reading_font_summary">Font</string>
+    <string name="pref_reading_font_summary">Font for read view</string>
     
     <string name="pref_reading_margins_title">Margins</string>
     <string name="pref_reading_margins_key">pref_reading_margins</string>
-    <string name="pref_reading_margins_summary">Margins</string>
+    <string name="pref_reading_margins_summary">Side margins for read view</string>
     
     <string name="pref_reading_fontsize_title">Font Size</string>
     <string name="pref_reading_fontsize_key">pref_reading_fontsize</string>
-    <string name="pref_reading_fontsize_summary">Font Size</string>
+    <string name="pref_reading_fontsize_summary">Font size for read view</string>
     
     <string name="pref_reading_linespace_title">Line Spacing</string>
     <string name="pref_reading_linespace_key">pref_reading_linespace</string>
-    <string name="pref_reading_linespace_summary">Space between the lines of text</string>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    <string name="pref_reading_linespace_summary">Space between lines in read view</string>
+
     
     <string name="pref_license_title">License</string>
     <string name="pref_license_key">pref_license</string>
