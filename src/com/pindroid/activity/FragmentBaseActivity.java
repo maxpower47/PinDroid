@@ -45,7 +45,7 @@ import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.authenticator.AuthenticatorActivity;
 
-public class FragmentBaseActivity extends FragmentActivity {
+public abstract class FragmentBaseActivity extends FragmentActivity {
 	
 	protected AccountManager mAccountManager;
 	public Account mAccount;

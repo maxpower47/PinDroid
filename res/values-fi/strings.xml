@@ -67,7 +67,7 @@
   <string name="bookmark_sort_description_desc">Kuvaus (Z-A)</string>
   <string name="bookmark_sort_url_asc">URL-osoite (A-Z)</string>
   <string name="bookmark_sort_url_desc">URL-osoite (Z-A)</string>
-  <string name="bookmark_feed_task_progress">Ladataan, odota...</string>
+  <string name="bookmark_feed_task_progress">Ladataan, odota…</string>
   <string name="menu_addbookmark_title">Lisää kirjanmerkkeihin</string>
   <string name="menu_sort_title">Lajittele</string>
   <string name="menu_search_title">Etsi</string>
@@ -79,7 +79,7 @@
   <string name="tag_sort_count_desc">Määrä (eniten ensimmäisenä)</string>
   <string name="add_bookmark_add_title">Lisää kirjanmerkkeihin</string>
   <string name="add_bookmark_edit_title">Muokkaa kirjanmerkkiä</string>
-  <string name="add_bookmark_task_progress">Työn alla...</string>
+  <string name="add_bookmark_task_progress">Työn alla…</string>
   <string name="add_button_save">Tallenna</string>
   <string name="add_button_cancel">Peruuta</string>
   <string name="add_title_url">URL-osoite</string>
@@ -122,7 +122,7 @@
   <string name="tag_live_folder_chooser_title">Valitse tunniste kansiolle</string>
   <string name="bookmark_content_provider_label">Kirjanmerkit</string>
   <string name="sync_receiver_label">PinDroid-kirjanmerkkien synkronointi</string>
-  <string name="syncing_toast">Synkronointi...</string>
+  <string name="syncing_toast">Synkronointi…</string>
   <string name="view_bookmark_title">Näytä kirjanmerkin tiedot</string>
   <string name="view_bookmark_notes_title">Huomautukset</string>
   <string name="view_bookmark_tags_title">Tunnisteet</string>

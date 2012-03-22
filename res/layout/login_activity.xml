@@ -49,9 +49,7 @@
                 android:layout_height="wrap_content"
                 android:minWidth="350dip"
                 android:scrollHorizontally="true"
-                android:capitalize="none"
-                android:autoText="false"
-                android:inputType="text" />
+                android:inputType="text|textNoSuggestions" />
             <TextView
                 android:id="@+id/username_fixed"
                 android:textAppearance="?android:attr/textAppearanceSmall"
@@ -74,10 +72,7 @@
                 android:layout_height="wrap_content"
                 android:minWidth="350dip"
                 android:scrollHorizontally="true"
-                android:capitalize="none"
-                android:autoText="false"
-                android:password="true"
-                android:inputType="textPassword" />
+                android:inputType="textPassword|textNoSuggestions" />
             <TextView
                 android:id="@+id/message_bottom"
                 android:textAppearance="?android:attr/textAppearanceSmall"

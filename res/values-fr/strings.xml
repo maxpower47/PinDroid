@@ -46,7 +46,7 @@
   <string name="bookmark_sort_description_desc">Description (Z-A)</string>
   <string name="bookmark_sort_url_asc">URL (A-Z)</string>
   <string name="bookmark_sort_url_desc">URL (Z-A)</string>
-  <string name="bookmark_feed_task_progress">Chargement. Veuillez patienter...</string>
+  <string name="bookmark_feed_task_progress">Chargement. Veuillez patienter…</string>
   <string name="menu_addbookmark_title">Ajouter un signet</string>
   <string name="menu_sort_title">Trier</string>
   <string name="menu_search_title">Rechercher</string>

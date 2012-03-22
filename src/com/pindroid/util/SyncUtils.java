@@ -24,6 +24,7 @@ package com.pindroid.util;
 import com.pindroid.Constants;
 import com.pindroid.syncadapter.PeriodicSyncReceiver;
 
+import android.annotation.TargetApi;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.AlarmManager;
@@ -35,6 +36,7 @@ import android.os.SystemClock;
 
 public class SyncUtils {
 
+	@TargetApi(8)
 	public static void addPeriodicSync(String authority, Bundle extras, long frequency, Context context) {
 		long pollFrequencyMsec = frequency * 60000;
 		
@@ -52,11 +54,13 @@ public class SyncUtils {
 			Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
 			
 			for(Account a : accounts) {
+				
 				ContentResolver.addPeriodicSync(a, authority, extras, frequency * 60);
 			}
 		}
 	}
 	
+	@TargetApi(8)
     public static void removePeriodicSync(String authority, Bundle extras, Context context) {	
     	if(android.os.Build.VERSION.SDK_INT >= 8) {
 			AccountManager am = AccountManager.get(context);
