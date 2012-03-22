@@ -24,6 +24,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent" 
 	android:layout_height="fill_parent"
+	android:id="@+id/view_bookmark_container"
 	android:background="#000000">
 	<ScrollView 
 	    android:id="@+id/bookmark_scroll_view"
@@ -94,5 +95,5 @@
 		android:paddingLeft="10dip"
 		android:paddingTop="20dip" 
 		android:visibility="gone" />
-	<include android:id="@+id/read_view_placeholder" layout="@layout/read_view" />
+	<include android:id="@+id/read_bookmark_section" layout="@layout/read_view" />
 </FrameLayout>

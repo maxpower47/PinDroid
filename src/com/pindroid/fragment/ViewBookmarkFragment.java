@@ -49,7 +49,6 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
@@ -68,6 +67,7 @@ public class ViewBookmarkFragment extends Fragment {
 
 	private FragmentBaseActivity base;
 	
+	private View container;
 	private ScrollView mBookmarkView;
 	private TextView mTitle;
 	private TextView mUrl;
@@ -100,6 +100,7 @@ public class ViewBookmarkFragment extends Fragment {
 		
 		base = (FragmentBaseActivity)getActivity();
 		
+		container = (View) getView().findViewById(R.id.view_bookmark_container);
 		mBookmarkView = (ScrollView) getView().findViewById(R.id.bookmark_scroll_view);
 		mTitle = (TextView) getView().findViewById(R.id.view_bookmark_title);
 		mUrl = (TextView) getView().findViewById(R.id.view_bookmark_url);
@@ -371,7 +372,18 @@ public class ViewBookmarkFragment extends Fragment {
 	        					InputStream src = imageFetch(source);
 	        					d = Drawable.createFromStream(src, "src");
 	        					if(d != null){
-	        						d.setBounds(0,0,d.getIntrinsicWidth(), d.getIntrinsicHeight());
+	        						int containerWidth = container.getWidth() - (Integer.parseInt(base.readingMargins) * 2);
+	        						int width = Math.min(containerWidth, d.getIntrinsicWidth());
+	        						
+	        						int height = d.getIntrinsicHeight();
+	        						
+	        						if(containerWidth < d.getIntrinsicWidth()){
+	        							double scale = ((double)containerWidth / (double)d.getIntrinsicWidth());	        							
+	        							double newWidth = d.getIntrinsicHeight() * scale;
+	        							height = (int)Math.floor(newWidth);
+	        							
+	        						}
+	        						d.setBounds(0, 0, width, height);
 	        					}
 	        				} catch (MalformedURLException e) {
 	        					e.printStackTrace(); 
