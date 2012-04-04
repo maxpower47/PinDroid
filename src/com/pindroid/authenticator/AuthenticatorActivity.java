@@ -97,8 +97,10 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
         mPasswordEdit = (EditText) findViewById(R.id.password_edit);
         mMessage = (TextView) findViewById(R.id.message);
 
-        if (!TextUtils.isEmpty(mUsername))
+        if (!TextUtils.isEmpty(mUsername)){
         	mUsernameEdit.setText(mUsername);
+        	mPasswordEdit.requestFocus();
+        }
         mMessage.setText(getMessage());
     }
 

@@ -45,7 +45,7 @@
     <string name="login_activity_loginfail_text_pwonly">You entered the wrong password or your account has changed.
         Please re-enter your password.</string>
     <!-- Message shown in dialog to prompt the user for their password -->
-    <string name="login_activity_loginfail_text_pwmissing">Enter the password for this account.</string>
+    <string name="login_activity_loginfail_text_pwmissing">Enter the password for your Pinboard account.</string>
     <!-- Message shown if the provided account doesn't support the current activity. -->
     <string name="login_activity_newaccount_text">Sign in to your Pinboard account. \n\nDon\'t have a Pinboard account?  \nSign up at http://pinboard.in/signup</string>
 
