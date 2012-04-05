@@ -444,7 +444,7 @@ public class PinboardApi {
     	String authtoken = null;
     	
     	try {
-			authtoken = am.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, false);
+			authtoken = am.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, true);
 		} catch (OperationCanceledException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -481,7 +481,22 @@ public class PinboardApi {
 		nameValuePairs.add(new BasicNameValuePair("password", authtoken));
 		nameValuePairs.add(new BasicNameValuePair("submit", "log in"));
 		auth.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-		client.execute(auth);
+		
+		try{
+			client.execute(auth);
+		} catch(org.apache.http.client.ClientProtocolException e){
+			am.invalidateAuthToken(Constants.ACCOUNT_TYPE, authtoken);
+			try {
+				am.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, true);
+			} catch (OperationCanceledException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (AuthenticatorException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new AuthenticationException();
+		}
         
         final HttpResponse resp = client.execute(post);
         
