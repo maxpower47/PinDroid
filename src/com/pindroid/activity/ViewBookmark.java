@@ -100,7 +100,9 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	}
 
 	public void onBookmarkRead(Bookmark b) {
-		startActivity(IntentHelper.ReadBookmark(b.getUrl()));
+		ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.view_bookmark_fragment);
+		viewFrag.setBookmark(b, BookmarkViewType.READ);
+		viewFrag.loadBookmark();
 	}
 
 	public void onBookmarkOpen(Bookmark b) {
