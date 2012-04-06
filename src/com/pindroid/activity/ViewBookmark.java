@@ -34,7 +34,6 @@ import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
-
 public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActionListener,
 	OnBookmarkSelectedListener {
 	
@@ -78,6 +77,8 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 			}
 			
 			BookmarkViewType type = (BookmarkViewType) intent.getSerializableExtra("com.pindroid.BookmarkViewType");
+			if(type == null)
+				type = BookmarkViewType.VIEW;
 			
 			ViewBookmarkFragment frag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.view_bookmark_fragment);
 	        frag.setBookmark(bookmark, type);
