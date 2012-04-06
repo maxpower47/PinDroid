@@ -175,7 +175,8 @@
         <provider
         	android:name="com.pindroid.providers.BookmarkContentProvider"
         	android:label="@string/bookmark_content_provider_label"
-        	android:authorities="com.pindroid.providers.BookmarkContentProvider" />
+        	android:authorities="com.pindroid.providers.BookmarkContentProvider"
+        	android:syncable="true" />
         <receiver 
         	android:name=".widget.SearchWidgetProvider"
         	android:label="@string/search_widget_label">

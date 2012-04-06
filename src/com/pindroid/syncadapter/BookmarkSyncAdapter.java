@@ -70,6 +70,9 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
     	
     	boolean upload = extras.containsKey(ContentResolver.SYNC_EXTRAS_UPLOAD);
+    	boolean manual = extras.containsKey(ContentResolver.SYNC_EXTRAS_IGNORE_BACKOFF) && extras.containsKey(ContentResolver.SYNC_EXTRAS_IGNORE_SETTINGS);
+    	
+
     	
         try {
         	if(upload){
@@ -77,7 +80,10 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
         		DeleteBookmarks(account, syncResult);
         		UploadBookmarks(account, syncResult);
         	} else {
-        		Log.d(TAG, "Beginning Download Sync");
+            	if(manual)
+            		Log.d(TAG, "Beginning Manual Download Sync");
+            	else Log.d(TAG, "Beginning Download Sync");
+            	
         		DeleteBookmarks(account, syncResult);
         		UploadBookmarks(account, syncResult);
         		InsertBookmarks(account, syncResult);
