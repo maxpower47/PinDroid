@@ -27,13 +27,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -139,14 +139,11 @@ public class ViewBookmarkFragment extends Fragment {
         }
     };
     
-    @TargetApi(11)
 	public void setBookmark(Bookmark b, BookmarkViewType viewType) {
 		this.viewType = viewType;
 		bookmark = b;
 		
-		if(android.os.Build.VERSION.SDK_INT >= 11) {
-			this.getActivity().invalidateOptionsMenu();
-		}
+		ActivityCompat.invalidateOptionsMenu(this.getActivity());
 	}
 	
 	private void addTag(SpannableStringBuilder builder, Tag t, TagSpan.OnTagClickListener listener) {
