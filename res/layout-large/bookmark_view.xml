@@ -32,12 +32,14 @@
 		android:layout_height="fill_parent"
 		android:id="@+id/bookmark_unsynced"
 		android:visibility="gone"
+		android:contentDescription="@string/bookmark_unsynced_alt"
 		android:src="@drawable/unsynced_indicator"/>
 	<ImageView   
 		android:layout_width="4dip"
 		android:layout_height="fill_parent"
 		android:id="@+id/bookmark_unread"
 		android:visibility="gone"
+		android:contentDescription="@string/bookmark_unread_alt"
 		android:src="@drawable/unread_indicator"/>
 	<LinearLayout
 		android:orientation="vertical"
