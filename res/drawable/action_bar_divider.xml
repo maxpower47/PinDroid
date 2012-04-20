@@ -23,5 +23,5 @@
  -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
 	android:shape="rectangle">
-	<solid android:color="#FDDD" />
+	<solid android:color="@color/actionbar_divider" />
 </shape>

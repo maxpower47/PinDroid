@@ -26,7 +26,9 @@
 	<color name="orange2">#FF9900</color>
 	<color name="yellow">#FFCC00</color>
 	<color name="bookmark_unread_indicator">#FF9900</color>
-    <color name="actionbar_background_light">#ccffffff</color>
+    <color name="actionbar_background">#222222</color>
+    <color name="actionbar_text">#FFF</color>
+    <color name="actionbar_divider">#555</color>
     
     <color name="bookmark_list_default_bg">#373737</color>
 	<color name="bookmark_list_activated_bg">#455082</color>
