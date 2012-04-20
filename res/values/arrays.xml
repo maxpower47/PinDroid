@@ -45,12 +45,10 @@
     <string-array name="pref_reading_background_entries">
         <item>White</item>
         <item>Black</item>
-        <item>Sepia</item>
     </string-array>
     <string-array name="pref_reading_background_values">
         <item>-1</item>
         <item>-16777216</item>
-        <item>-256</item>
     </string-array>
     <string-array name="pref_reading_font_entries">
         <item>Open Sans</item>
