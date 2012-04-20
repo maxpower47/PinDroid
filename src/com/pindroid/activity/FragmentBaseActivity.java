@@ -38,6 +38,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.pindroid.Constants;
@@ -175,6 +176,13 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.main_menu, menu);
+	    
+	    if(android.os.Build.VERSION.SDK_INT >= 11) {
+	    	SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+	    	SearchView searchView = (SearchView)menu.findItem(R.id.menu_search).getActionView();
+	    	searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+	    	searchView.setSubmitButtonEnabled(true);
+	    }
 	    
 	    return true;
 	}

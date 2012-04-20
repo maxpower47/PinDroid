@@ -360,7 +360,7 @@ public class ViewBookmarkFragment extends Fragment {
     	
         		Article a = NetworkUtilities.getArticleText(url);
 
-        		if(a.getContent() != null){
+        		if(a != null && a.getContent() != null){
 	        		Spanned s = Html.fromHtml(a.getContent(), new Html.ImageGetter() {
 	
 	        			public Drawable getDrawable(String source) {                  
@@ -399,7 +399,7 @@ public class ViewBookmarkFragment extends Fragment {
     	}
     	
         protected void onPostExecute(Article result) {
-        	if(result.getSpan() != null){
+        	if(result != null && result.getSpan() != null){
 	        	readSection.scrollTo(0, 0);
 	        	mBookmarkView.setVisibility(View.GONE);
 	        	mWebContent.setVisibility(View.GONE);
