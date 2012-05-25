@@ -21,7 +21,10 @@
 
 package com.pindroid.providers;
 
+import org.json.JSONObject;
+
 import android.text.Spanned;
+import android.util.Log;
 
 public class ArticleContent {
 
@@ -78,6 +81,28 @@ public class ArticleContent {
 
         
         public Article() {
+        }
+        
+        public Article(String content, String title, String url, String responseUrl) {
+        	this.content = content;
+        	this.title = title;
+        	this.url = url;
+        	this.responseUrl = responseUrl;
+        }
+        
+        
+        public static Article valueOf(JSONObject userBookmark) {
+            try {
+                final String content = userBookmark.getString("content");
+                final String title = userBookmark.getString("title");
+                final String url = userBookmark.getString("url");
+                final String responseUrl = userBookmark.getString("responseUrl");
+
+                return new Article(content, title, url, responseUrl);
+            } catch (final Exception ex) {
+            	Log.i("User.Bookmark", "Error parsing JSON user object");
+            }
+            return null;
         }
 	}
 }

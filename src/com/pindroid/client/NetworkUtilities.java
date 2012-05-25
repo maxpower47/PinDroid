@@ -38,6 +38,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.pindroid.Constants;
 import com.pindroid.providers.ArticleContent.Article;
@@ -165,7 +167,7 @@ public class NetworkUtilities {
 	    	HttpGet post = null;
 	    	
 	    	try {
-				post = new HttpGet(Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(url) + "&format=xml");
+				post = new HttpGet(Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(url) + "&format=json");
 	
 				post.setHeader("User-Agent", "Mozilla/5.0");
 	
@@ -174,21 +176,12 @@ public class NetworkUtilities {
 		        
 		        final int statusCode = resp.getStatusLine().getStatusCode();
 				
-		    	if (statusCode == HttpStatus.SC_OK) {
+		    	if (statusCode == HttpStatus.SC_OK) {		    		
+		    		final String response = EntityUtils.toString(resp.getEntity());
 		    		
-		    		final HttpEntity entity = resp.getEntity();
+		    		final JSONObject article = new JSONObject(response);
 		    		
-		    		InputStream instream = entity.getContent();
-		    		
-		    		final Header encoding = entity.getContentEncoding();
-		    		
-		    		if(encoding != null && encoding.getValue().equalsIgnoreCase("gzip")) {
-		    			instream = new GZIPInputStream(instream);
-		    		}
-		    		
-		    		SaxArticleParser parser = new SaxArticleParser(instream);
-		    		
-		    		return parser.parse();
+		    		return Article.valueOf(article);
 		    	}
 			} catch (Exception e) {
 				return null;
