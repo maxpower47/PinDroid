@@ -39,6 +39,7 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -185,7 +186,7 @@ public class ViewBookmarkFragment extends Fragment {
 	    // Handle item selection
 	    switch (item.getItemId()) {
 		    case R.id.menu_view_details:
-				bookmarkSelectedListener.onBookmarkView(bookmark);
+		    	bookmarkSelectedListener.onBookmarkView(bookmark);
 				return true;
 		    case R.id.menu_view_read:
 		    	if(isMyself() && bookmark.getToRead() && base.markAsRead)

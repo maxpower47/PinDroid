@@ -195,6 +195,7 @@
     <string name="view_bookmark_time_title">Saved on</string>
     <string name="view_bookmark_account_title">By</string>
     
+    <string name="menu_view_title">View</string>
     <string name="menu_view_read_title">Read</string>
     <string name="menu_view_details_title">Details</string>
     <string name="menu_view_openbookmark_title">Web</string>
