@@ -48,7 +48,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		DisplayMetrics outMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
 		
-		if(outMetrics.widthPixels > 700){
+		if(findViewById(R.id.main_tablet_detect) != null){
 			startActivity(IntentHelper.ViewTabletTags(mAccount.name, this));
 		} else {
 			startActivity(IntentHelper.ViewTags(mAccount.name, this));
