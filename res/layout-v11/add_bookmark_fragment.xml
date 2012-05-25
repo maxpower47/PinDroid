@@ -21,18 +21,21 @@
  * USA
  */
  -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
+
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
+	android:id="@+id/add_bookmark_container"
+	android:paddingLeft="5dip"
+	android:paddingRight="10dip">
+	<ScrollView 
+	    android:id="@+id/add_bookmark_scroll_view"
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent">
 	<LinearLayout
 	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:paddingLeft="5dip"
-	    android:paddingRight="10dip"
+	    android:layout_height="fill_parent"
 	    android:orientation="vertical">
 	    <TextView
 	        android:id="@+id/add_title_url"
@@ -120,4 +123,5 @@
 	        android:paddingLeft="12dip" />
 	    <include android:id="@+id/include_add_switches" layout="@layout/add_switches" />
 	</LinearLayout>
-</LinearLayout>
+	</ScrollView>
+	</FrameLayout>
