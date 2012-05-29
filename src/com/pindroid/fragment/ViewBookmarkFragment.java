@@ -39,7 +39,6 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,10 +48,12 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
+import com.pindroid.action.IntentHelper;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.client.NetworkUtilities;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
@@ -168,6 +169,11 @@ public class ViewBookmarkFragment extends Fragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 	    inflater.inflate(R.menu.view_menu, menu);
+	    
+	    if(android.os.Build.VERSION.SDK_INT >= 14) {
+	    	ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_view_sendbookmark).getActionProvider();
+	    	shareActionProvider.setShareIntent(IntentHelper.SendBookmark(bookmark.getUrl(), bookmark.getDescription()));
+	    }
 	}
 	
 	@Override

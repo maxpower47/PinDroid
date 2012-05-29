@@ -160,6 +160,15 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		username = mAccount.name;
 	}
 	
+	public void setupSearch(Menu menu){
+	    if(android.os.Build.VERSION.SDK_INT >= 11) {
+	    	SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+	    	SearchView searchView = (SearchView)menu.findItem(R.id.menu_search).getActionView();
+	    	searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+	    	searchView.setSubmitButtonEnabled(false);
+	    }
+	}
+	
 	private void loadSettings(){
     	privateDefault = settings.getBoolean("pref_save_private_default", false);
     	toreadDefault = settings.getBoolean("pref_save_toread_default", false);
@@ -175,14 +184,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.main_menu, menu);
-	    
-	    if(android.os.Build.VERSION.SDK_INT >= 11) {
-	    	SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
-	    	SearchView searchView = (SearchView)menu.findItem(R.id.menu_search).getActionView();
-	    	searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-	    	searchView.setSubmitButtonEnabled(true);
-	    }
+	    inflater.inflate(R.menu.base_menu, menu);
 	    
 	    return true;
 	}

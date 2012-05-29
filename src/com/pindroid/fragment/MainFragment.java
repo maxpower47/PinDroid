@@ -25,6 +25,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -54,6 +56,7 @@ public class MainFragment extends ListFragment {
 		super.onActivityCreated(savedInstanceState);
 		
 		base = (FragmentBaseActivity)getActivity();
+		setHasOptionsMenu(true);
 		
 		String[] MENU_ITEMS = new String[] {getString(R.string.main_menu_my_bookmarks),
 				getString(R.string.main_menu_my_unread_bookmarks),
@@ -81,6 +84,14 @@ public class MainFragment extends ListFragment {
 		    	} 
 		    }
 		});
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.main_menu, menu);
+		
+		base.setupSearch(menu);
 	}
 	
     @Override

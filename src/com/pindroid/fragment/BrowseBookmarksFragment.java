@@ -204,8 +204,10 @@ public class BrowseBookmarksFragment extends ListFragment
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		
+		inflater.inflate(R.menu.main_menu, menu);
 		inflater.inflate(R.menu.browse_bookmark_menu, menu);
+		
+		base.setupSearch(menu);
 	}
 	
 	@Override
