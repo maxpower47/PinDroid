@@ -77,7 +77,8 @@
         		<category android:name="android.intent.category.DEFAULT" />	
         	</intent-filter>
         </activity>
-        <activity android:name=".activity.BrowseBookmarks" >
+        <activity android:name=".activity.BrowseBookmarks" 
+        	android:uiOptions="splitActionBarWhenNarrow">
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
@@ -102,7 +103,8 @@
         	</intent-filter>
         </activity>
         <activity android:name=".activity.ViewBookmark"
-        	android:label="@string/view_bookmark_title">
+        	android:label="@string/view_bookmark_title"
+        	android:uiOptions="splitActionBarWhenNarrow">
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
