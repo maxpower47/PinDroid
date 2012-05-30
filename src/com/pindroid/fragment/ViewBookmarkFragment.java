@@ -348,10 +348,16 @@ public class ViewBookmarkFragment extends Fragment {
 	public void onResume(){
 		super.onResume();
 		readView.setBackgroundColor(Integer.parseInt(base.readingBackground));
+		readTitle.setBackgroundColor(Integer.parseInt(base.readingBackground));
 		
-		if(Integer.parseInt(base.readingBackground) == Color.BLACK)
-			readView.setTextColor(Color.parseColor("#878787"));
-		else readView.setTextColor(Color.parseColor("#222222"));
+		if(Integer.parseInt(base.readingBackground) == Color.BLACK){
+			readView.setTextColor(Color.parseColor("#999999"));
+			readTitle.setTextColor(Color.parseColor("#999999"));
+		}
+		else { 
+			readView.setTextColor(Color.parseColor("#222222"));
+			readTitle.setTextColor(Color.parseColor("#222222"));
+		}
 		
 		readView.setPadding(Integer.parseInt(base.readingMargins), 15, Integer.parseInt(base.readingMargins), 15);
 

@@ -34,8 +34,15 @@
 				style="@style/ViewBookmarkFieldContent"
 				android:textSize="24sp"
 				android:padding="10dp"
-				android:textColor="#CCCCCC"
-				android:background="#000042" />
+				android:textColor="#CCCCCC" />
+			<View
+			    android:layout_height="1dp"
+			    android:layout_width="fill_parent"
+			    android:background="#000000" />
+			<View
+			    android:layout_height="1dp"
+			    android:layout_width="fill_parent"
+			    android:background="#FFFFFF" />
 			<TextView
 				android:id="@+id/read_view"
 				android:layout_height="wrap_content"
