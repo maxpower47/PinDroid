@@ -70,11 +70,19 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	
 	ListView lv;
 	
+	static final String STATE_USERNAME = "username";
+	static final String STATE_TAGNAME = "tagname";
+	
 	private BrowseBookmarksFragment.OnBookmarkSelectedListener bookmarkSelectedListener;
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
+		
+	    if (savedInstanceState != null) {
+	        username = savedInstanceState.getString(STATE_USERNAME);
+	        tagname = savedInstanceState.getString(STATE_TAGNAME);
+	    } 
 
 		base = (FragmentBaseActivity)getActivity();
 		intent = base.getIntent();
@@ -88,7 +96,9 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		setListAdapter(mAdapter);
 		mAdapter.setViewBinder(new BookmarkViewBinder());
 
-		if(base.mAccount != null) {					    	
+		if(base.mAccount != null) {
+			setListShown(false);
+			
 	    	getLoaderManager().initLoader(0, null, this);
 	    	
 			lv = getListView();
@@ -123,6 +133,14 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 				}
 			});
 		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	    savedInstanceState.putString(STATE_USERNAME, username);
+	    savedInstanceState.putString(STATE_TAGNAME, tagname);
+	    
+	    super.onSaveInstanceState(savedInstanceState);
 	}
 	
 	public void setQuery(String username, String tagname){
@@ -210,6 +228,13 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 	    mAdapter.swapCursor(data);
+	    
+	    // The list should now be shown.
+        if (isResumed()) {
+            setListShown(true);
+        } else {
+            setListShownNoAnimation(true);
+        }
 	}
 	
 	public void onLoaderReset(Loader<Cursor> loader) {

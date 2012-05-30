@@ -70,8 +70,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
-		savedState = savedInstanceState;
-		super.onCreate(savedState);
+		super.onCreate(savedInstanceState);
 		
 		mContext = this;
 		mAccountManager = AccountManager.get(this);

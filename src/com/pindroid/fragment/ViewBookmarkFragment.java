@@ -91,6 +91,8 @@ public class ViewBookmarkFragment extends Fragment {
 	private OnBookmarkActionListener bookmarkActionListener;
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
 	
+	private static final String STATE_VIEWTYPE = "viewType";
+	
 	public interface OnBookmarkActionListener {
 		public void onViewTagSelected(String tag);
 		public void onUserTagSelected(String tag, String user);
@@ -100,6 +102,10 @@ public class ViewBookmarkFragment extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
+		
+	    if (savedInstanceState != null) {
+	        viewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_VIEWTYPE);
+	    } 
 		
 		base = (FragmentBaseActivity)getActivity();
 		
@@ -121,7 +127,7 @@ public class ViewBookmarkFragment extends Fragment {
 		readView.setMovementMethod(LinkMovementMethod.getInstance());
 		
 		setHasOptionsMenu(true);
-		setRetainInstance(true);
+		//setRetainInstance(true);
 	}
 	
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
@@ -164,6 +170,13 @@ public class ViewBookmarkFragment extends Fragment {
 		span.setOnTagClickListener(listener);
 
 		builder.setSpan(span, start, end, flags);
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	    savedInstanceState.putSerializable(STATE_VIEWTYPE, viewType);
+	    
+	    super.onSaveInstanceState(savedInstanceState);
 	}
     
 	@Override
