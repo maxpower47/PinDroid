@@ -28,9 +28,4 @@
 		android:icon="@drawable/ic_menu_add"
 		android:showAsAction="ifRoom"
 		android:orderInCategory="2" />
-	<item 
-		android:id="@+id/menu_settings" 
-		android:title="@string/menu_settings_title" 
-		android:icon="@drawable/ic_menu_preferences"
-		android:orderInCategory="99" />
 </menu>
