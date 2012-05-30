@@ -187,6 +187,7 @@ public class ViewBookmarkFragment extends Fragment {
 			menu.removeItem(R.id.menu_view_deletebookmark);
 		}
 		if(bookmark == null){
+			menu.removeItem(R.id.menu_view);
 			menu.removeItem(R.id.menu_view_sendbookmark);
 		}
 	}

@@ -27,7 +27,7 @@
 		android:title="@string/menu_view_title" 
 		android:showAsAction="ifRoom"
 		android:icon="@drawable/ic_menu_view"
-		android:orderInCategory="0" >
+		android:orderInCategory="5" >
 		<menu>
 		    <item 
 				android:id="@+id/menu_view_details" 
