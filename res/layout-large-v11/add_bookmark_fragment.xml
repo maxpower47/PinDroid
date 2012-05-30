@@ -100,8 +100,8 @@
 	        android:id="@+id/add_recommended_tags"
 	        android:layout_height="fill_parent"
 	        android:layout_width="wrap_content"
-	        android:textSize="16sp"
-	        android:paddingLeft="12dip" />
+	        android:textSize="18sp"
+	        android:paddingLeft="12dp" />
 	    <TextView
 	        android:id="@+id/add_title_popular_tags"
 	        style="@style/AddBookmarkFieldTitle"
@@ -117,8 +117,9 @@
 	        android:id="@+id/add_popular_tags"
 	        android:layout_height="fill_parent"
 	        android:layout_width="wrap_content"
-	        android:textSize="16sp"
-	        android:paddingLeft="12dip" />
+	        android:textSize="18sp"
+	        android:paddingLeft="12dp"
+	        android:paddingBottom="10dp" />
 	    <include android:id="@+id/include_add_switches" layout="@layout/add_switches" />
 	</LinearLayout>
 </LinearLayout>
