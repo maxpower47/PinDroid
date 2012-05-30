@@ -1,5 +1,6 @@
 package com.pindroid.action;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import com.pindroid.activity.AddBookmark;
@@ -24,7 +25,13 @@ public class IntentHelper {
 	}
 	
 	public static Intent ReadBookmark(String url){
-    	String readUrl = Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(url);
+    	String readUrl = "";
+		try {
+			readUrl = Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(url, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	Uri readLink = Uri.parse(readUrl);
 		return new Intent(Intent.ACTION_VIEW, readLink);
 	}

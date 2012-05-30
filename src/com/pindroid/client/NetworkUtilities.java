@@ -161,7 +161,7 @@ public class NetworkUtilities {
 	    	HttpGet post = null;
 	    	
 	    	try {
-				post = new HttpGet(Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(url) + "&format=json");
+				post = new HttpGet(Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(url, "UTF-8") + "&format=json");
 	
 				post.setHeader("User-Agent", "Mozilla/5.0");
 	
