@@ -43,6 +43,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.pindroid.R;
+import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.listadapter.BookmarkViewBinder;
 import com.pindroid.platform.BookmarkManager;
@@ -63,6 +64,8 @@ public class BrowseBookmarksFragment extends ListFragment
 	
 	ListView lv;
 	
+	private static final String STATE_USERNAME = "username";
+	
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
 	
 	public interface OnBookmarkSelectedListener {
@@ -79,6 +82,10 @@ public class BrowseBookmarksFragment extends ListFragment
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
+		
+	    if (savedInstanceState != null) {
+	        username = savedInstanceState.getString(STATE_USERNAME);
+	    } 
 		
 		base = (FragmentBaseActivity)getActivity();
 		
@@ -168,6 +175,13 @@ public class BrowseBookmarksFragment extends ListFragment
 		} else if(base.getIntent().hasExtra("username")){
 			username = base.getIntent().getStringExtra("username");
 		} else username = base.mAccount.name;
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	    savedInstanceState.putString(STATE_USERNAME, username);
+	    
+	    super.onSaveInstanceState(savedInstanceState);
 	}
 	
 	@Override
