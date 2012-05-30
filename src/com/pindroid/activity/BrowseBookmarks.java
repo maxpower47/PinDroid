@@ -28,6 +28,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
@@ -143,6 +145,15 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			startSearch(null, false, Bundle.EMPTY, false);
 		}
 		return true;
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main_menu, menu);
+	    setupSearch(menu);
+	    return true;
 	}
 
 	public void onBookmarkView(Bookmark b) {

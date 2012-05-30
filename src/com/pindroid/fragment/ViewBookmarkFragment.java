@@ -39,6 +39,7 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -171,8 +172,11 @@ public class ViewBookmarkFragment extends Fragment {
 	    inflater.inflate(R.menu.view_menu, menu);
 	    
 	    if(android.os.Build.VERSION.SDK_INT >= 14) {
-	    	ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_view_sendbookmark).getActionProvider();
-	    	shareActionProvider.setShareIntent(IntentHelper.SendBookmark(bookmark.getUrl(), bookmark.getDescription()));
+	    	Log.d("bookmark", Boolean.toString(bookmark == null));
+	    	if(bookmark != null){
+	    		ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_view_sendbookmark).getActionProvider();
+	    		shareActionProvider.setShareIntent(IntentHelper.SendBookmark(bookmark.getUrl(), bookmark.getDescription()));
+	    	}
 	    }
 	}
 	
@@ -209,7 +213,9 @@ public class ViewBookmarkFragment extends Fragment {
 		    	bookmarkSelectedListener.onBookmarkDelete(bookmark);
 				return true;
 		    case R.id.menu_view_sendbookmark:
-		    	bookmarkSelectedListener.onBookmarkShare(bookmark);
+		    	if(android.os.Build.VERSION.SDK_INT < 14 || item.getActionProvider() == null || !(item.getActionProvider() instanceof ShareActionProvider)) {
+		    		bookmarkSelectedListener.onBookmarkShare(bookmark);
+		    	}
 		    	return true;
 		    default:
 		        return super.onOptionsItemSelected(item);

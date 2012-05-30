@@ -22,12 +22,8 @@
 package com.pindroid.client;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URLEncoder;
-import java.util.zip.GZIPInputStream;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
@@ -38,12 +34,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.pindroid.Constants;
 import com.pindroid.providers.ArticleContent.Article;
-import com.pindroid.xml.SaxArticleParser;
 
 import android.net.Uri;
 import android.util.Log;

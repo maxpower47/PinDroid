@@ -29,6 +29,8 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragment.OnTagSelectedListener {
 	
@@ -59,6 +61,16 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 			setTitle(getString(R.string.tag_search_results_title, query));
 		}
     }
+    
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main_menu, menu);
+	    
+	    setupSearch(menu);
+	    return true;
+	}
 
 	public void onTagSelected(String tag) {		
 		startActivity(IntentHelper.ViewBookmarks(tag, username, this));

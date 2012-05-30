@@ -38,7 +38,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pindroid.R;
-import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.TagContent.Tag;
 
@@ -47,7 +46,6 @@ public class BrowseTagsFragment extends ListFragment
 
 	private String sortfield = Tag.Name + " ASC";
 	private SimpleCursorAdapter mAdapter;
-	private FragmentBaseActivity base;
 	
 	private String username = null;
 	private String query = null;
@@ -68,9 +66,7 @@ public class BrowseTagsFragment extends ListFragment
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		
-		base = (FragmentBaseActivity)getActivity();
-		
+
 		setHasOptionsMenu(true);
 		
 		mAdapter = new SimpleCursorAdapter(this.getActivity(), 
@@ -127,10 +123,7 @@ public class BrowseTagsFragment extends ListFragment
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.main_menu, menu);
 		inflater.inflate(R.menu.browse_tag_menu, menu);
-		
-		base.setupSearch(menu);
 	}
 
 	@Override

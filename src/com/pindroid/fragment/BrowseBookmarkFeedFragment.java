@@ -47,7 +47,6 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -182,14 +181,6 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 				return true;
 		}
 		return false;
-	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.main_menu, menu);
-		
-		base.setupSearch(menu);
 	}
 		
 	private void openBookmarkInBrowser(Bookmark b) {
