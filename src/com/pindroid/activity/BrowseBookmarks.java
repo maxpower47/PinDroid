@@ -53,6 +53,11 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	private String tagname = "";
 	private Boolean unread = false;
 	private String path = "";
+	private Bookmark lastSelected = null;
+	private BookmarkViewType lastViewType = null;
+	
+	static final String STATE_LASTBOOKMARK = "lastBookmark";
+	static final String STATE_LASTVIEWTYPE = "lastViewType";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -155,10 +160,32 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	    setupSearch(menu);
 	    return true;
 	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		if(lastSelected != null && lastViewType != null){
+			savedInstanceState.putSerializable(STATE_LASTBOOKMARK, lastSelected);
+	    	savedInstanceState.putSerializable(STATE_LASTVIEWTYPE, lastViewType);
+		}
+
+	    super.onSaveInstanceState(savedInstanceState);
+	}
+	
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+	    super.onRestoreInstanceState(savedInstanceState);
+	   
+	    if(findViewById(R.id.maincontent) != null) {
+	    	lastSelected = (Bookmark)savedInstanceState.getSerializable(STATE_LASTBOOKMARK);
+	    	lastViewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_LASTVIEWTYPE);
+	    	setBookmarkView(lastSelected, lastViewType);
+	    }
+	}
 
 	public void onBookmarkView(Bookmark b) {
 		if(b != null){
 			if(findViewById(R.id.maincontent) != null || findViewById(R.id.tagcontent) != null) {
+				lastSelected = b;
+				lastViewType = BookmarkViewType.VIEW;
 				setBookmarkView(b, BookmarkViewType.VIEW);
 			} else {
 				startActivity(IntentHelper.ViewBookmark(b, BookmarkViewType.VIEW, username, this));
@@ -169,6 +196,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	public void onBookmarkRead(Bookmark b) {
 		if(b != null){
 			if(findViewById(R.id.maincontent) != null) {
+				lastSelected = b;
+				lastViewType = BookmarkViewType.READ;
 				setBookmarkView(b, BookmarkViewType.READ);
 			} else {
 				startActivity(IntentHelper.ViewBookmark(b, BookmarkViewType.READ, username, this));
@@ -179,6 +208,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	public void onBookmarkOpen(Bookmark b) {
 		if(b != null){
 			if(findViewById(R.id.maincontent) != null) {
+				lastSelected = b;
+				lastViewType = BookmarkViewType.WEB;
 				setBookmarkView(b, BookmarkViewType.WEB);
 			} else {
 				startActivity(IntentHelper.OpenInBrowser(b.getUrl()));

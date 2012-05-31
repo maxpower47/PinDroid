@@ -43,7 +43,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.pindroid.R;
-import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.listadapter.BookmarkViewBinder;
 import com.pindroid.platform.BookmarkManager;
