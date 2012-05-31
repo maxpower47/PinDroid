@@ -297,13 +297,13 @@ public class ViewBookmarkFragment extends Fragment {
 					
 					Date d = new Date(bookmark.getTime());
 					
-					if(!bookmark.getDescription().equals("null"))
+					if(bookmark.getDescription() != null && !bookmark.getDescription().equals("null"))
 						mTitle.setText(bookmark.getDescription());
 					
 					mUrl.setText(bookmark.getUrl());
 					
-					if(!bookmark.getNotes().equals("null"))
-							mNotes.setText(bookmark.getNotes());
+					if(bookmark.getNotes() != null && !bookmark.getNotes().equals("null"))
+						mNotes.setText(bookmark.getNotes());
 					
 					mTime.setText(d.toString());
 					
@@ -316,17 +316,21 @@ public class ViewBookmarkFragment extends Fragment {
 		    		mTags.setText(tagBuilder);
 		    		mTags.setMovementMethod(LinkMovementMethod.getInstance());
 		
-					SpannableStringBuilder builder = new SpannableStringBuilder();
-					int start = builder.length();
-					builder.append(bookmark.getAccount());
-					int end = builder.length();
+		    		if(bookmark.getAccount() != null){
+						SpannableStringBuilder builder = new SpannableStringBuilder();
+						int start = builder.length();
+						builder.append(bookmark.getAccount());
+						int end = builder.length();
+						
+						AccountSpan span = new AccountSpan(bookmark.getAccount());
+						span.setOnAccountClickListener(accountOnClickListener);
+			
+						builder.setSpan(span, start, end, 0);
+						
+						mUsername.setText(builder);
+		    		}
 					
-					AccountSpan span = new AccountSpan(bookmark.getAccount());
-					span.setOnAccountClickListener(accountOnClickListener);
-		
-					builder.setSpan(span, start, end, 0);
 					
-					mUsername.setText(builder);
 					mUsername.setMovementMethod(LinkMovementMethod.getInstance());
 				}
 			} else if(viewType == BookmarkViewType.READ){

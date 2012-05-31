@@ -58,6 +58,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	
 	static final String STATE_LASTBOOKMARK = "lastBookmark";
 	static final String STATE_LASTVIEWTYPE = "lastViewType";
+	static final String STATE_USERNAME = "username";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -167,6 +168,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			savedInstanceState.putSerializable(STATE_LASTBOOKMARK, lastSelected);
 	    	savedInstanceState.putSerializable(STATE_LASTVIEWTYPE, lastViewType);
 		}
+		
+		savedInstanceState.putString(STATE_USERNAME, username);
 
 	    super.onSaveInstanceState(savedInstanceState);
 	}
@@ -174,6 +177,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 	    super.onRestoreInstanceState(savedInstanceState);
 	   
+	    username = savedInstanceState.getString(STATE_USERNAME);
+	    
 	    if(findViewById(R.id.maincontent) != null) {
 	    	lastSelected = (Bookmark)savedInstanceState.getSerializable(STATE_LASTBOOKMARK);
 	    	lastViewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_LASTVIEWTYPE);
