@@ -34,6 +34,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -96,8 +97,13 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 		} else if(Intent.ACTION_SEND.equals(intent.getAction())){
 			bookmark = new Bookmark();
 			
+			ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(this);
+			
 			String url = StringUtils.getUrl(intent.getStringExtra(Intent.EXTRA_TEXT));
 			bookmark.setUrl(url);
+			
+			if(reader.getSubject() != null)
+				bookmark.setDescription(reader.getSubject());
 			
 			if(url.equals("")) {
 				Toast.makeText(this, R.string.add_bookmark_invalid_url, Toast.LENGTH_LONG).show();
