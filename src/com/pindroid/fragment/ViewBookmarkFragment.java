@@ -195,13 +195,18 @@ public class ViewBookmarkFragment extends Fragment {
 	
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-		if(bookmark == null || !isMyself()){
-			menu.removeItem(R.id.menu_view_editbookmark);
-			menu.removeItem(R.id.menu_view_deletebookmark);
-		}
-		if(bookmark == null){
+		if(bookmark != null){
+			if(!isMyself()){
+				menu.removeItem(R.id.menu_view_editbookmark);
+				menu.removeItem(R.id.menu_view_deletebookmark);
+			} else {
+				menu.removeItem(R.id.menu_addbookmark);
+			}
+		} else {
 			menu.removeItem(R.id.menu_view);
 			menu.removeItem(R.id.menu_view_sendbookmark);
+			menu.removeItem(R.id.menu_view_editbookmark);
+			menu.removeItem(R.id.menu_view_deletebookmark);
 		}
 	}
 	

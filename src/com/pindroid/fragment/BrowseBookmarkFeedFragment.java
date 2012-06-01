@@ -68,6 +68,8 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	private Intent intent = null;
 	String path = null;
 	
+	Bookmark lastSelected = null;
+	
 	ListView lv;
 	
 	static final String STATE_USERNAME = "username";
@@ -111,14 +113,14 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 			lv.setOnItemClickListener(new OnItemClickListener() {
 			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					final Cursor c = (Cursor)lv.getItemAtPosition(position);
-					Bookmark b = BookmarkManager.CursorToBookmark(c);
+					lastSelected = BookmarkManager.CursorToBookmark(c);
 	
 			    	if(base.defaultAction.equals("view")) {
-			    		viewBookmark(b);
+			    		viewBookmark(lastSelected);
 			    	} else if(base.defaultAction.equals("read")) {
-			    		readBookmark(b);
+			    		readBookmark(lastSelected);
 			    	} else {
-			    		openBookmarkInBrowser(b);
+			    		openBookmarkInBrowser(lastSelected);
 			    	}   	
 			    }
 			});
@@ -199,6 +201,24 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 				return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		boolean result = false;
+		
+	    switch (item.getItemId()) {
+	    case R.id.menu_addbookmark:
+			bookmarkSelectedListener.onBookmarkAdd(lastSelected);
+			return true;
+	    }
+	    
+	    if(result) {
+	    	getLoaderManager().restartLoader(0, null, this);
+	    } else result = super.onOptionsItemSelected(item);
+	    
+	    return result;
 	}
 		
 	private void openBookmarkInBrowser(Bookmark b) {

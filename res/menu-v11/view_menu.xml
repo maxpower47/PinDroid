@@ -43,7 +43,6 @@
 				android:orderInCategory="2" />
         </menu>
     </item>
-
 	<item 
 		android:id="@+id/menu_view_editbookmark" 
 		android:title="@string/menu_view_editbookmark_title" 

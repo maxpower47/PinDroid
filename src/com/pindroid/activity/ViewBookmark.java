@@ -24,6 +24,9 @@ package com.pindroid.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
@@ -38,6 +41,7 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	OnBookmarkSelectedListener {
 	
 	private String path;
+	private Bookmark bookmark = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -59,7 +63,7 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 				
 			} else username = mAccount.name;
 			
-			Bookmark bookmark = new Bookmark();
+			bookmark = new Bookmark();
 			
 			if(path.contains("/bookmarks")){
 				if(isMyself()){		
@@ -83,6 +87,25 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 			ViewBookmarkFragment frag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.view_bookmark_fragment);
 	        frag.setBookmark(bookmark, type);
 		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.view_activity_menu, menu);
+	    return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+		    case R.id.menu_addbookmark:
+				startActivity(IntentHelper.AddBookmark(bookmark.getUrl(), mAccount.name, this));
+				return true;
+		    default:
+		        return super.onOptionsItemSelected(item);
+	    }
 	}
 	
 	public void onViewTagSelected(String tag) {		
