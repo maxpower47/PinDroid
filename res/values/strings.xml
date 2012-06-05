@@ -236,18 +236,34 @@
     <string name="pref_searchicons_title">Display Search Icons</string>
     <string name="pref_searchicons_key">pref_searchicons</string>
     <string name="pref_searchicons_summary">Display icons in search suggestions.</string>
+    <string name="pref_searchicons_summary_off">Don\'t display icons in search suggestions.</string>
+    <string name="pref_searchicons_summary_on">Display icons in search suggestions.</string>
+    <string name="pref_searchicons_switch_off">No</string>
+    <string name="pref_searchicons_switch_on">Yes</string>
     
     <string name="pref_save_private_default_title">Private Default</string>
     <string name="pref_save_private_default_key">pref_save_private_default</string>
     <string name="pref_save_private_default_summary">Set new bookmarks as private by default.</string>
+    <string name="pref_save_private_default_summary_off">Set new bookmarks as public by default.</string>
+    <string name="pref_save_private_default_summary_on">Set new bookmarks as private by default.</string>
+    <string name="pref_save_private_default_switch_off">No</string>
+    <string name="pref_save_private_default_switch_on">Yes</string>
     
     <string name="pref_save_toread_default_title">Unread Default</string>
     <string name="pref_save_toread_default_key">pref_save_toread_default</string>
     <string name="pref_save_toread_default_summary">Set new bookmarks as unread by default.</string>
+    <string name="pref_save_toread_default_summary_off">Set new bookmarks as read by default.</string>
+    <string name="pref_save_toread_default_summary_on">Set new bookmarks as unread by default.</string>
+    <string name="pref_save_toread_default_switch_off">No</string>
+    <string name="pref_save_toread_default_switch_on">Yes</string>
     
     <string name="pref_markasread_title">Mark as Read</string>
     <string name="pref_markasread_key">pref_markasread</string>
     <string name="pref_markasread_summary">Mark unread bookmarks as read when you read them.</string>
+    <string name="pref_markasread_summary_off">Leave unread bookmarks unread when you read them.</string>
+    <string name="pref_markasread_summary_on">Mark unread bookmarks as read when you read them.</string>
+    <string name="pref_markasread_switch_off">No</string>
+    <string name="pref_markasread_switch_on">Yes</string>
     
     <string name="pref_forcesync_title">Sync Now</string>
     <string name="pref_forcesync_key">pref_forcesync</string>
