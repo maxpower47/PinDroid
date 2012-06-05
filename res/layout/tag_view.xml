@@ -24,7 +24,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="horizontal"
 	android:layout_height="fill_parent"
-	android:layout_width="fill_parent">
+	android:layout_width="fill_parent"
+	android:gravity="center_vertical|left">
 	<TextView
 	    android:id="@+id/tag_name"
 	    android:layout_height="fill_parent"
@@ -32,16 +33,14 @@
 	    android:paddingLeft="10dip"
 	    android:paddingTop="3dip"
 	    android:paddingBottom="5dip"
+	    android:layout_weight="1"
 	    android:textSize="26sp"/>
-  	<LinearLayout
-  		style="@style/LayoutRight">
-		<TextView
-		    android:id="@+id/tag_count"
-		    android:layout_height="fill_parent"
-		    android:layout_width="wrap_content"
-		    android:gravity="right"
-		    android:textSize="24sp"
-		    android:paddingTop="6dip"
-		    android:paddingRight="15dip"/>
-	</LinearLayout>
+	<TextView
+	    android:id="@+id/tag_count"
+	    android:layout_height="fill_parent"
+	    android:layout_width="wrap_content"
+	    android:layout_weight="0"
+	    android:textSize="24sp"
+	    android:paddingTop="6dip"
+	    android:paddingRight="15dip"/>
 </LinearLayout>
