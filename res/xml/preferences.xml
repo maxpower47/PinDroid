@@ -93,7 +93,7 @@
 			android:title="@string/pref_reading_font_title"
 			android:entries="@array/pref_reading_font_entries"
 			android:entryValues="@array/pref_reading_font_values"
-			android:defaultValue="nobile"
+			android:defaultValue="Roboto-Regular"
 			android:summary="@string/pref_reading_font_summary"
 			android:key="@string/pref_reading_font_key" />
 	   	<ListPreference 

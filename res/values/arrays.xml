@@ -51,14 +51,16 @@
         <item>-16777216</item>
     </string-array>
     <string-array name="pref_reading_font_entries">
-        <item>Open Sans</item>
-        <item>Nobile</item>
-        <item>Roboto</item>
+        <item>Roboto (sans)</item>
+        <item>News Cycle (sans)</item>
+        <item>Alegreya (serif)</item>
+        <item>Cousine (fixed-width)</item>
     </string-array>
     <string-array name="pref_reading_font_values">
-        <item>OpenSans-Regular</item>
-        <item>nobile</item>
         <item>Roboto-Regular</item>
+        <item>NewsCycle-Regular</item>
+        <item>Alegreya-Regular</item>
+        <item>Cousine-Regular-Latin</item>
     </string-array>
     <string-array name="pref_reading_margins_entries">
         <item>Small</item>
