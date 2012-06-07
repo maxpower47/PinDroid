@@ -441,7 +441,7 @@ public class ViewBookmarkFragment extends Fragment {
     	}
     	
         protected void onPostExecute(Article result) {
-        	if(result != null && result.getSpan() != null){
+        	if(result != null && result.getSpan() != null && !result.getContent().equals("") && !result.getContent().equals("null")){
 	        	readSection.scrollTo(0, 0);
 	        	mBookmarkView.setVisibility(View.GONE);
 	        	mWebContent.setVisibility(View.GONE);
