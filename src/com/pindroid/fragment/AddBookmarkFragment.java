@@ -19,7 +19,6 @@
  * USA
  */
 
-
 package com.pindroid.fragment;
 
 import java.io.IOException;
@@ -41,6 +40,7 @@ import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.TagSpan;
 import com.pindroid.util.SpaceTokenizer;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -56,7 +56,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnFocusChangeListener;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.ProgressBar;
@@ -76,8 +76,8 @@ public class AddBookmarkFragment extends Fragment {
 	private ProgressBar mRecommendedProgress;
 	private TextView mPopularTags;
 	private ProgressBar mPopularProgress;
-	private CheckBox mPrivate;
-	private CheckBox mToRead;
+	private CompoundButton mPrivate;
+	private CompoundButton mToRead;
 	private Bookmark bookmark;
 	private Bookmark oldBookmark;
 	private Boolean update = false;
@@ -86,6 +86,13 @@ public class AddBookmarkFragment extends Fragment {
 	
 	private AsyncTask<String, Integer, String> titleTask;
 	private AsyncTask<String, Integer, ArrayList<Tag>> tagTask;
+	
+	private OnBookmarkSaveListener bookmarkSaveListener;
+	
+	public interface OnBookmarkSaveListener {
+		public void onBookmarkSave(Bookmark b);
+		public void onBookmarkCancel(Bookmark b);
+	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
@@ -104,8 +111,8 @@ public class AddBookmarkFragment extends Fragment {
 		mRecommendedProgress = (ProgressBar) getView().findViewById(R.id.add_recommended_tags_progress);
 		mPopularTags = (TextView) getView().findViewById(R.id.add_popular_tags);
 		mPopularProgress = (ProgressBar) getView().findViewById(R.id.add_popular_tags_progress);
-		mPrivate = (CheckBox) getView().findViewById(R.id.add_edit_private);
-		mToRead = (CheckBox) getView().findViewById(R.id.add_edit_toread);
+		mPrivate = (CompoundButton) getView().findViewById(R.id.add_edit_private);
+		mToRead = (CompoundButton) getView().findViewById(R.id.add_edit_toread);
 		
 		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
@@ -136,6 +143,18 @@ public class AddBookmarkFragment extends Fragment {
 	public void onStart(){
 		super.onStart();
 		
+		refreshView();
+	}
+	
+	public void loadBookmark(Bookmark b, Bookmark oldB){
+		if(b != null)
+			bookmark = b.copy();
+		
+		if(oldB != null)
+			oldBookmark = oldB.copy();
+	}
+	
+	public void refreshView(){
 		if(bookmark != null){
 			mEditUrl.setText(bookmark.getUrl());
 			
@@ -156,25 +175,20 @@ public class AddBookmarkFragment extends Fragment {
 
 			tagTask = new GetTagSuggestionsTask().execute(bookmark.getUrl());
 		} else {
-			mEditUrl.requestFocus();
+			if(!this.isHidden()){
+				mEditUrl.requestFocus();
+			}
 			setDefaultValues();
 		}
 	}
 	
-	public void loadBookmark(Bookmark b, Bookmark oldB){
-		if(b != null)
-			bookmark = b.copy();
-		
-		if(oldB != null)
-			oldBookmark = oldB.copy();
-	}
-	
 	public void saveHandler(View v) {
 		save();
+		bookmarkSaveListener.onBookmarkSave(bookmark);
 	}
 	
 	public void cancelHandler(View v) {    	
-    	base.finish();
+    	bookmarkSaveListener.onBookmarkCancel(bookmark);
 	}
 	
 	private void setDefaultValues(){   	
@@ -247,8 +261,6 @@ public class AddBookmarkFragment extends Fragment {
 		for(Tag t : bookmark.getTags()){   				
 			TagManager.UpsertTag(t, base.mAccount.name, base);
 		}
-		
-		base.finish();
     }
     
 	@Override
@@ -265,9 +277,10 @@ public class AddBookmarkFragment extends Fragment {
 	    switch (item.getItemId()) {
 	    case R.id.menu_addbookmark_save:
 	    	save();
+			bookmarkSaveListener.onBookmarkSave(bookmark);
 			return true;
 	    case R.id.menu_addbookmark_cancel:
-        	base.finish();
+        	bookmarkSaveListener.onBookmarkCancel(bookmark);
 	        return true;
 	    default:
 	        return super.onOptionsItemSelected(item);
@@ -377,4 +390,14 @@ public class AddBookmarkFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.add_bookmark_fragment, container, false);
     }
+    
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			bookmarkSaveListener = (OnBookmarkSaveListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString() + " must implement OnBookmarkSaveListener");
+		}
+	}
 }

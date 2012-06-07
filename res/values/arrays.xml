@@ -41,6 +41,56 @@
         <item>browser</item>
         <item>view</item>
         <item>read</item>
+    </string-array> 
+    <string-array name="pref_reading_background_entries">
+        <item>White</item>
+        <item>Black</item>
+    </string-array>
+    <string-array name="pref_reading_background_values">
+        <item>-1</item>
+        <item>-16777216</item>
+    </string-array>
+    <string-array name="pref_reading_font_entries">
+        <item>Roboto (sans)</item>
+        <item>News Cycle (sans)</item>
+        <item>Alegreya (serif)</item>
+        <item>Cousine (fixed-width)</item>
+    </string-array>
+    <string-array name="pref_reading_font_values">
+        <item>Roboto-Regular</item>
+        <item>NewsCycle-Regular</item>
+        <item>Alegreya-Regular</item>
+        <item>Cousine-Regular-Latin</item>
+    </string-array>
+    <string-array name="pref_reading_margins_entries">
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+    </string-array>
+    <string-array name="pref_reading_margins_values">
+        <item>10</item>
+        <item>20</item>
+        <item>40</item>
+    </string-array>
+    <string-array name="pref_reading_fontsize_entries">
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+    </string-array>
+    <string-array name="pref_reading_fontsize_values">
+        <item>12</item>
+        <item>16</item>
+        <item>20</item>
+    </string-array>
+    <string-array name="pref_reading_linespace_entries">
+        <item>Less</item>
+        <item>Normal</item>
+        <item>More</item>
+    </string-array>
+    <string-array name="pref_reading_linespace_values">
+        <item>0</item>
+        <item>5</item>
+        <item>10</item>
     </string-array>
     <string-array name="pref_synctime_entries">
         <item>5 mins</item>

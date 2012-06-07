@@ -23,15 +23,26 @@
  -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item 
-		android:id="@+id/menu_view_read" 
-		android:title="@string/menu_view_read_title" 
-		android:icon="@drawable/ic_menu_read"
-		android:orderInCategory="12" />
-	<item 
-		android:id="@+id/menu_view_openbookmark" 
-		android:title="@string/menu_view_openbookmark_title" 
+		android:id="@+id/menu_view" 
+		android:title="@string/menu_view_title" 
+		android:showAsAction="ifRoom"
 		android:icon="@drawable/ic_menu_view"
-		android:orderInCategory="13" />
+		android:orderInCategory="12" >
+		<menu>
+		    <item 
+				android:id="@+id/menu_view_details" 
+				android:title="@string/menu_view_details_title" 
+				android:orderInCategory="0" />
+			<item 
+				android:id="@+id/menu_view_read" 
+				android:title="@string/menu_view_read_title" 
+				android:orderInCategory="1" />
+			<item 
+				android:id="@+id/menu_view_openbookmark" 
+				android:title="@string/menu_view_openbookmark_title"
+				android:orderInCategory="2" />
+        </menu>
+    </item>
 	<item 
 		android:id="@+id/menu_view_editbookmark" 
 		android:title="@string/menu_view_editbookmark_title" 

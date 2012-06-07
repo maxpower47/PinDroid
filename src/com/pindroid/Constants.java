@@ -49,6 +49,8 @@ public class Constants {
 
     public static final int BOOKMARK_PAGE_SIZE = 500;
     
+    public static final String ACTION_SEARCH_SUGGESTION = "com.pindroid.intent.action.SearchSuggestion";
+    
     /**
      * Authtoken type string.
      */
@@ -61,9 +63,11 @@ public class Constants {
     
     public static final String PREFS_SECRET_TOKEN = "secret_token";
     
-    public static final String INSTAPAPER_URL = "http://www.instapaper.com/text?u=";
+    public static final String TEXT_EXTRACTOR_URL = "http://viewtext.org/api/text?url=";
     
     public static final String GPL_URL = "http://www.gnu.org/licenses/gpl-3.0.txt";
     public static final String MANUAL_URL = "http://code.google.com/p/pindroid/wiki/Manual";
     public static final String DONATION_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EUS2Z3WVWK6ZU";
+    
+    public static enum BookmarkViewType {VIEW, READ, WEB};
 }

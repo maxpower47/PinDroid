@@ -339,7 +339,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		    	if(defaultAction.equals("browser")) {
 		    		data = Uri.parse(c.getString(urlColumn));
 		    	} else if(defaultAction.equals("read")){
-		        	String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(c.getString(urlColumn));
+		        	String readUrl = Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(c.getString(urlColumn));
 		        	data = Uri.parse(readUrl);
 		    	} else {
 		    		builder.scheme(Constants.CONTENT_SCHEME);

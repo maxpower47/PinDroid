@@ -21,6 +21,7 @@
 
 package com.pindroid.providers;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.pindroid.providers.TagContent.Tag;
@@ -30,7 +31,12 @@ import android.provider.BaseColumns;
 
 public class BookmarkContent {
 
-	public static class Bookmark implements BaseColumns {
+	public static class Bookmark implements BaseColumns, Serializable {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 8170498291668576792L;
+
 		public static final Uri CONTENT_URI = Uri.parse("content://" + 
 				BookmarkContentProvider.AUTHORITY + "/bookmark");
 		

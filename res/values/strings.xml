@@ -24,6 +24,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Label for this package -->
     <string name="label">Pinboard</string>
+    <string name="pindroid">PinDroid</string>
 
     <!-- Title string for Login activity-->
     <string name="ui_activity_title">Sign in</string>
@@ -98,12 +99,17 @@
     <string name="bookmark_sort_url_asc">Url (A-Z)</string>
     <string name="bookmark_sort_url_desc">Url (Z-A)</string>
     
-    <string name="bookmark_feed_task_progress">Loading. Please wait...</string>
+    <string name="bookmark_feed_task_progress">Loading. Please wait…</string>
     
     <string name="menu_addbookmark_title">Add Bookmark</string>
     <string name="menu_sort_title">Sort</string>
+    <string name="menu_sort_bookmark_title">Sort Bookmarks</string>
+    <string name="menu_sort_tag_title">Sort Tags</string>
     <string name="menu_search_title">Search</string>
     <string name="menu_settings_title">Settings</string>
+    
+    <string name="bookmark_unsynced_alt">Unsynced Indicator</string>
+    <string name="bookmark_unread_alt">Unread Indicator</string>
     
     <!-- BrowseTags -->
     <string name="browse_my_tags_title">My Tags</string>
@@ -117,7 +123,7 @@
     <string name="add_bookmark_add_title">Add Bookmark</string>
     <string name="add_bookmark_edit_title">Edit Bookmark</string>
     
-    <string name="add_bookmark_task_progress">Working...</string>
+    <string name="add_bookmark_task_progress">Working…</string>
     
     <string name="add_bookmark_default_title">[no title]</string>
     
@@ -180,7 +186,7 @@
     <string name="bookmark_content_provider_label">Bookmarks</string>  
     
     <string name="sync_receiver_label">PinDroid Bookmark Sync</string>
-    <string name="syncing_toast">Syncing...</string>
+    <string name="syncing_toast">Syncing…</string>
 
     <!-- ViewBookmark -->
     <string name="view_bookmark_title">View Bookmark Details</string>
@@ -189,8 +195,10 @@
     <string name="view_bookmark_time_title">Saved on</string>
     <string name="view_bookmark_account_title">By</string>
     
+    <string name="menu_view_title">View</string>
     <string name="menu_view_read_title">Read</string>
-    <string name="menu_view_openbookmark_title">Open in browser</string>
+    <string name="menu_view_details_title">Details</string>
+    <string name="menu_view_openbookmark_title">Web</string>
     <string name="menu_view_editbookmark_title">Edit</string>
     <string name="menu_view_deletebookmark_title">Delete</string>
     <string name="menu_view_sendbookmark_title">Share</string>
@@ -210,6 +218,7 @@
     <string name="pref_cat_general_title">General Settings</string>
     <string name="pref_cat_sync_title">Sync Settings</string>
     <string name="pref_cat_save_title">Save Settings</string>
+    <string name="pref_cat_reading_title">Reading Options</string>
     <string name="pref_cat_help_title">Help</string>
     
     <string name="pref_accountsettings_title">Account Settings</string>
@@ -227,22 +236,60 @@
     <string name="pref_searchicons_title">Display Search Icons</string>
     <string name="pref_searchicons_key">pref_searchicons</string>
     <string name="pref_searchicons_summary">Display icons in search suggestions.</string>
+    <string name="pref_searchicons_summary_off">Don\'t display icons in search suggestions.</string>
+    <string name="pref_searchicons_summary_on">Display icons in search suggestions.</string>
+    <string name="pref_searchicons_switch_off">No</string>
+    <string name="pref_searchicons_switch_on">Yes</string>
     
     <string name="pref_save_private_default_title">Private Default</string>
     <string name="pref_save_private_default_key">pref_save_private_default</string>
     <string name="pref_save_private_default_summary">Set new bookmarks as private by default.</string>
+    <string name="pref_save_private_default_summary_off">Set new bookmarks as public by default.</string>
+    <string name="pref_save_private_default_summary_on">Set new bookmarks as private by default.</string>
+    <string name="pref_save_private_default_switch_off">No</string>
+    <string name="pref_save_private_default_switch_on">Yes</string>
     
     <string name="pref_save_toread_default_title">Unread Default</string>
     <string name="pref_save_toread_default_key">pref_save_toread_default</string>
     <string name="pref_save_toread_default_summary">Set new bookmarks as unread by default.</string>
+    <string name="pref_save_toread_default_summary_off">Set new bookmarks as read by default.</string>
+    <string name="pref_save_toread_default_summary_on">Set new bookmarks as unread by default.</string>
+    <string name="pref_save_toread_default_switch_off">No</string>
+    <string name="pref_save_toread_default_switch_on">Yes</string>
     
     <string name="pref_markasread_title">Mark as Read</string>
     <string name="pref_markasread_key">pref_markasread</string>
     <string name="pref_markasread_summary">Mark unread bookmarks as read when you read them.</string>
+    <string name="pref_markasread_summary_off">Leave unread bookmarks unread when you read them.</string>
+    <string name="pref_markasread_summary_on">Mark unread bookmarks as read when you read them.</string>
+    <string name="pref_markasread_switch_off">No</string>
+    <string name="pref_markasread_switch_on">Yes</string>
     
     <string name="pref_forcesync_title">Sync Now</string>
     <string name="pref_forcesync_key">pref_forcesync</string>
     <string name="pref_forcesync_summary">Start a bookmark sync.</string>
+
+    
+    <string name="pref_reading_background_title">Background</string>
+    <string name="pref_reading_background_key">pref_reading_background</string>
+    <string name="pref_reading_background_summary">Background color in read view</string>
+    
+    <string name="pref_reading_font_title">Font</string>
+    <string name="pref_reading_font_key">pref_reading_font</string>
+    <string name="pref_reading_font_summary">Font for read view</string>
+    
+    <string name="pref_reading_margins_title">Margins</string>
+    <string name="pref_reading_margins_key">pref_reading_margins</string>
+    <string name="pref_reading_margins_summary">Side margins for read view</string>
+    
+    <string name="pref_reading_fontsize_title">Font Size</string>
+    <string name="pref_reading_fontsize_key">pref_reading_fontsize</string>
+    <string name="pref_reading_fontsize_summary">Font size for read view</string>
+    
+    <string name="pref_reading_linespace_title">Line Spacing</string>
+    <string name="pref_reading_linespace_key">pref_reading_linespace</string>
+    <string name="pref_reading_linespace_summary">Space between lines in read view</string>
+
     
     <string name="pref_license_title">License</string>
     <string name="pref_license_key">pref_license</string>
@@ -275,7 +322,7 @@
      		&lt;li&gt;Only a single Pinboard account is currently supported. &lt;/li&gt;
      		&lt;li&gt;Certain features from DeliciousDroid have not been ported yet due to limitations in Pinboards API, including contact syncing and viewing network bookmark lists. &lt;/li&gt;
     	&lt;/ul&gt;&lt;br/&gt;
-    	Read view powered by Instapaper
+    	Read view powered by viewtext.org
     &lt;/body&gt;
     &lt;/html&gt;
     </string>

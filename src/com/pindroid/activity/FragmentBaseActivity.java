@@ -38,6 +38,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.pindroid.Constants;
@@ -45,7 +46,7 @@ import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.authenticator.AuthenticatorActivity;
 
-public class FragmentBaseActivity extends FragmentActivity {
+public abstract class FragmentBaseActivity extends FragmentActivity {
 	
 	protected AccountManager mAccountManager;
 	public Account mAccount;
@@ -57,6 +58,11 @@ public class FragmentBaseActivity extends FragmentActivity {
 	public boolean toreadDefault;
 	public String defaultAction;
 	public boolean markAsRead;
+	public String readingBackground;
+	public String readingFont;
+	public String readingMargins;
+	public String readingFontSize;
+	public String readingLineSpace;
 	
 	private boolean first = true;
 	
@@ -64,8 +70,7 @@ public class FragmentBaseActivity extends FragmentActivity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
-		savedState = savedInstanceState;
-		super.onCreate(savedState);
+		super.onCreate(savedInstanceState);
 		
 		mContext = this;
 		mAccountManager = AccountManager.get(this);
@@ -73,6 +78,10 @@ public class FragmentBaseActivity extends FragmentActivity {
 		
 		loadSettings();
 		init();
+		
+		if(android.os.Build.VERSION.SDK_INT >= 14) {
+			getActionBar().setHomeButtonEnabled(true);
+		}
 
 		Intent intent = getIntent();
 		
@@ -85,8 +94,7 @@ public class FragmentBaseActivity extends FragmentActivity {
 			} else {
 				onSearchRequested();
 			}
-		} else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
-			
+		} else if(Constants.ACTION_SEARCH_SUGGESTION.equals(intent.getAction())) {
 			Uri data = intent.getData();
 			String path = null;
 			String tagname = null;
@@ -98,7 +106,6 @@ public class FragmentBaseActivity extends FragmentActivity {
 			
 			if(data.getScheme() == null || !data.getScheme().equals("content")){
 				Intent i = new Intent(Intent.ACTION_VIEW, data);
-				Log.d("finish", "here");
 				startActivity(i);
 				finish();				
 			} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment()) && intent.hasExtra(SearchManager.USER_QUERY)) {
@@ -146,7 +153,6 @@ public class FragmentBaseActivity extends FragmentActivity {
 			init();
 		}
 		first = false;
-		
 	}
 	
 	private void loadAccounts(){
@@ -157,37 +163,55 @@ public class FragmentBaseActivity extends FragmentActivity {
 		username = mAccount.name;
 	}
 	
+	public void setupSearch(Menu menu){
+	    if(android.os.Build.VERSION.SDK_INT >= 11) {
+	    	SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+	    	SearchView searchView = (SearchView)menu.findItem(R.id.menu_search).getActionView();
+	    	searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+	    	searchView.setSubmitButtonEnabled(false);
+	    }
+	}
+	
 	private void loadSettings(){
     	privateDefault = settings.getBoolean("pref_save_private_default", false);
     	toreadDefault = settings.getBoolean("pref_save_toread_default", false);
     	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
     	markAsRead = settings.getBoolean("pref_markasread", false);
+    	readingBackground = settings.getString("pref_reading_background", "-1");
+    	readingFont = settings.getString("pref_reading_font", "nobile");
+    	readingMargins = settings.getString("pref_reading_margins", "20");
+    	readingFontSize = settings.getString("pref_reading_fontsize", "16");
+    	readingLineSpace = settings.getString("pref_reading_linespace", "5");
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.main_menu, menu);
+	    inflater.inflate(R.menu.base_menu, menu);
 	    
 	    return true;
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
 	    switch (item.getItemId()) {
-	    case R.id.menu_addbookmark:
-			startActivity(IntentHelper.AddBookmark(null, mAccount.name, this));
-			return true;
-	    case R.id.menu_search:
-	    	onSearchRequested();
-	    	return true;
-	    case R.id.menu_settings:
-			Intent prefs = new Intent(this, Preferences.class);
-			startActivity(prefs);
-	        return true;
-	    default:
-	        return super.onOptionsItemSelected(item);
+	        case android.R.id.home:
+	            Intent intent = new Intent(this, Main.class);
+	            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	            startActivity(intent);
+	            return true;
+		    case R.id.menu_addbookmark:
+				startActivity(IntentHelper.AddBookmark(null, mAccount.name, this));
+				return true;
+		    case R.id.menu_search:
+		    	onSearchRequested();
+		    	return true;
+		    case R.id.menu_settings:
+				Intent prefs = new Intent(this, Preferences.class);
+				startActivity(prefs);
+		        return true;
+		    default:
+		        return super.onOptionsItemSelected(item);
 	    }
 	}
 	

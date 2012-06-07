@@ -69,7 +69,7 @@
   <string name="bookmark_sort_description_desc">Beschreibung (Z-A)</string>
   <string name="bookmark_sort_url_asc">Url (A-Z)</string>
   <string name="bookmark_sort_url_desc">Url (Z-A)</string>
-  <string name="bookmark_feed_task_progress">Lade. Bitte warten...</string>
+  <string name="bookmark_feed_task_progress">Lade. Bitte warten…</string>
   <string name="menu_addbookmark_title">Lesezeichen hinzufügen</string>
   <string name="menu_sort_title">Sortieren</string>
   <string name="menu_search_title">Suche</string>
@@ -81,7 +81,7 @@
   <string name="tag_sort_count_desc">Anzahl (Meiste zuerst)</string>
   <string name="add_bookmark_add_title">Lesezeichen hinzufügen</string>
   <string name="add_bookmark_edit_title">Lesezeichen bearbeiten</string>
-  <string name="add_bookmark_task_progress">Arbeite...</string>
+  <string name="add_bookmark_task_progress">Arbeite…</string>
   <string name="add_button_save">Speichern</string>
   <string name="add_button_cancel">Abbrechen</string>
   <string name="add_title_url">URL</string>
@@ -124,7 +124,7 @@
   <string name="tag_live_folder_chooser_title">Wähle einen Tag für diesen Ordner</string>
   <string name="bookmark_content_provider_label">Lesezeichen</string>
   <string name="sync_receiver_label">PinDroid Lesezeichen Synchronisierung</string>
-  <string name="syncing_toast">Synchronisiere...</string>
+  <string name="syncing_toast">Synchronisiere…</string>
   <string name="view_bookmark_title">Zeige Lesezeichendetails</string>
   <string name="view_bookmark_notes_title">Notizen</string>
   <string name="view_bookmark_tags_title">Tags</string>
@@ -195,7 +195,7 @@
      		&lt;li&gt;Derzeit wird nur ein Pinboard Account unterstuetzt. &lt;/li&gt;
      		&lt;li&gt;Einige Funktionen von DeliciousDroid wurden aufgrund des derzeit noch limitierten Funktionsumfangs der Pinboard API noch nicht portiert. Dies umfasst die Synchronisierung von Kontakten und die Anzeige von Lesezeichen des eigenen Netzwerks. &lt;/li&gt;
     	&lt;/ul&gt;&lt;br/&gt;
-    	Lese Ansicht wird bereitgestellt durch Instapaper
+    	Lese Ansicht wird bereitgestellt durch viewtext.org
     &lt;/body&gt;
     &lt;/html&gt;
     </string>

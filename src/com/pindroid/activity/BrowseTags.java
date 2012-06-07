@@ -21,7 +21,6 @@
 
 package com.pindroid.activity;
 
-
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseTagsFragment;
@@ -30,6 +29,8 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragment.OnTagSelectedListener {
 	
@@ -52,18 +53,24 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 		if(Intent.ACTION_VIEW.equals(action)) {
 			setTitle(getString(R.string.browse_my_tags_title));
 		} else if(Intent.ACTION_PICK.equals(action)) {
+			frag.setAction("pick");
 			setTitle(getString(R.string.tag_live_folder_chooser_title));
 		} else if(Intent.ACTION_SEARCH.equals(action)) {
 			String query = intent.getStringExtra(SearchManager.QUERY);
+			frag.setQuery(query);
 			setTitle(getString(R.string.tag_search_results_title, query));
 		}
-		
-		if(action != null && action.equals(Intent.ACTION_PICK)) {
-			frag.setAction("pick");
-		} else {
-			frag.setAction("notpick");
-		}
     }
+    
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main_menu, menu);
+	    
+	    setupSearch(menu);
+	    return true;
+	}
 
 	public void onTagSelected(String tag) {		
 		startActivity(IntentHelper.ViewBookmarks(tag, username, this));

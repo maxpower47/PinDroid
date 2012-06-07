@@ -21,22 +21,15 @@
 
 package com.pindroid.fragment;
 
-import com.pindroid.R;
-import com.pindroid.activity.FragmentBaseActivity;
-import com.pindroid.listadapter.BookmarkViewBinder;
-import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -46,9 +39,14 @@ import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.support.v4.widget.SimpleCursorAdapter;
+import android.widget.ListView;
+
+import com.pindroid.R;
+import com.pindroid.activity.FragmentBaseActivity;
+import com.pindroid.listadapter.BookmarkViewBinder;
+import com.pindroid.platform.BookmarkManager;
+import com.pindroid.providers.BookmarkContent.Bookmark;
 
 public class BrowseBookmarksFragment extends ListFragment 
 	implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -58,12 +56,14 @@ public class BrowseBookmarksFragment extends ListFragment
 	
 	private String sortfield = Bookmark.Time + " DESC";
 
+	private String username = null;
 	private String tagname = null;
 	private boolean unread = false;
-	private Intent intent = null;
-	String path = null;
+	private String query = null;
 	
 	ListView lv;
+	
+	private static final String STATE_USERNAME = "username";
 	
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
 	
@@ -82,8 +82,11 @@ public class BrowseBookmarksFragment extends ListFragment
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		
+	    if (savedInstanceState != null) {
+	        username = savedInstanceState.getString(STATE_USERNAME);
+	    } 
+		
 		base = (FragmentBaseActivity)getActivity();
-		intent = base.getIntent();
 		
 		setHasOptionsMenu(true);
 		
@@ -95,28 +98,15 @@ public class BrowseBookmarksFragment extends ListFragment
 		mAdapter.setViewBinder(new BookmarkViewBinder());
 
 		if(base.mAccount != null) {				
-			Uri data = intent.getData();
-			
-			if(data != null) {
-				if(data.getUserInfo() != "") {
-					base.username = data.getUserInfo();
-				} else base.username = base.mAccount.name;
-				
-				path = data.getPath();
-				tagname = data.getQueryParameter("tagname");
-				unread = data.getQueryParameter("unread") != null;
-				
-		    	if(!data.getScheme().equals("content")) {
-		    		openBookmarkInBrowser(new Bookmark(data.toString()));
-		    		base.finish();
-		    	}
-			}
 	
 	    	getLoaderManager().initLoader(0, null, this);
 	    	
 			lv = getListView();
 			lv.setTextFilterEnabled(true);
 			lv.setFastScrollEnabled(true);
+			
+			lv.setItemsCanFocus(false);
+			lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		
 			lv.setOnItemClickListener(new OnItemClickListener() {
 			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -145,16 +135,52 @@ public class BrowseBookmarksFragment extends ListFragment
 		}
 	}
 	
+	public void setQuery(String username, String tagname, boolean unread){
+		this.username = username;
+		this.tagname = tagname;
+		this.unread = unread;
+	}
+	
+	public void setSearchQuery(String query, String username, String tagname, boolean unread){
+		this.query = query;
+		this.username = username;
+		this.tagname = tagname;
+		this.unread = unread;
+	}
+	
 	@Override
 	public void onResume(){
 		super.onResume();
-		
+
+		if(query != null) {
+			if(unread) {
+				base.setTitle(getString(R.string.unread_search_results_title, query));
+			} else base.setTitle(getString(R.string.bookmark_search_results_title, query));
+		} else {
+			if(unread && tagname != null && tagname != "") {
+				base.setTitle(getString(R.string.browse_my_unread_bookmarks_tagged_title, tagname));
+			} else if(unread && (tagname == null || tagname.equals(""))) {
+				base.setTitle(getString(R.string.browse_my_unread_bookmarks_title));
+			} else if(tagname != null && tagname != "") {
+				base.setTitle(getString(R.string.browse_my_bookmarks_tagged_title, tagname));
+			} else {
+				base.setTitle(getString(R.string.browse_my_bookmarks_title));
+			}
+		}
+
 		Uri data = base.getIntent().getData();
 		if(data != null && data.getUserInfo() != null && data.getUserInfo() != "") {
-			base.username = data.getUserInfo();
+			username = data.getUserInfo();
 		} else if(base.getIntent().hasExtra("username")){
-			base.username = base.getIntent().getStringExtra("username");
-		} else base.username = base.mAccount.name;
+			username = base.getIntent().getStringExtra("username");
+		} else username = base.mAccount.name;
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	    savedInstanceState.putString(STATE_USERNAME, username);
+	    
+	    super.onSaveInstanceState(savedInstanceState);
 	}
 	
 	@Override
@@ -177,6 +203,7 @@ public class BrowseBookmarksFragment extends ListFragment
 				bookmarkSelectedListener.onBookmarkDelete(b);
 				return true;
 			case R.id.menu_bookmark_context_share:
+				Log.d("share", "browse");
 				bookmarkSelectedListener.onBookmarkShare(b);
 				return true;
 			case R.id.menu_bookmark_context_read:
@@ -192,7 +219,6 @@ public class BrowseBookmarksFragment extends ListFragment
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		
 		inflater.inflate(R.menu.browse_bookmark_menu, menu);
 	}
 	
@@ -252,58 +278,14 @@ public class BrowseBookmarksFragment extends ListFragment
 	private void viewBookmark(Bookmark b) {
 		bookmarkSelectedListener.onBookmarkView(b);
 	}
-	
-	public boolean onSearchRequested() {
-
-		Bundle contextData = new Bundle();
-		contextData.putString("tagname", tagname);
-		contextData.putString("username", base.username);
-		contextData.putBoolean("unread", unread);
-		base.startSearch(null, false, contextData, false);
-		return true;
-	}
     
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
-    		Bundle searchData = intent.getBundleExtra(SearchManager.APP_DATA);
-    		
-    		if(searchData != null) {
-    			tagname = searchData.getString("tagname");
-    			base.username = searchData.getString("username");
-    			unread = searchData.getBoolean("unread");
-    		}
-    		
-    		if(intent.hasExtra("username")) {
-    			base.username = intent.getStringExtra("username");
-    		}
-    		
-    		String query = intent.getStringExtra(SearchManager.QUERY);
-    		
-    		if(unread) {
-    			base.setTitle(getString(R.string.unread_search_results_title, query));
-    		} else base.setTitle(getString(R.string.bookmark_search_results_title, query));
-    		
-			return BookmarkManager.SearchBookmarks(query, tagname, unread, base.username, base);
-		}  else if(path.equals("/bookmarks")) {
-
-    		String title = "";
-    		
-    		if(unread && tagname != null && tagname != "") {
-    			title = getString(R.string.browse_my_unread_bookmarks_tagged_title, tagname);
-    		} else if(unread && (tagname == null || tagname.equals(""))) {
-    			title = getString(R.string.browse_my_unread_bookmarks_title);
-    		} else if(tagname != null && tagname != "") {
-    			title = getString(R.string.browse_my_bookmarks_tagged_title, tagname);
-    		} else {
-    			title = getString(R.string.browse_my_bookmarks_title);
-    		}
-    		
-			base.setTitle(title);
-
-			return BookmarkManager.GetBookmarks(base.username, tagname, unread, sortfield, base);
+		if(query != null) {    		
+			return BookmarkManager.SearchBookmarks(query, tagname, unread, username, base);
+		} else {
+			return BookmarkManager.GetBookmarks(username, tagname, unread, sortfield, base);
 		}
-		return new CursorLoader(base);
 	}
 	
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -320,7 +302,7 @@ public class BrowseBookmarksFragment extends ListFragment
 		try {
 			bookmarkSelectedListener = (OnBookmarkSelectedListener) activity;
 		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString() + " must implement OnTutSelectedListener");
+			throw new ClassCastException(activity.toString() + " must implement OnBookmarkSelectedListener");
 		}
 	}
 }

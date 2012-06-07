@@ -1,5 +1,6 @@
 package com.pindroid.action;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import com.pindroid.activity.AddBookmark;
@@ -7,6 +8,7 @@ import com.pindroid.activity.BrowseBookmarks;
 import com.pindroid.activity.BrowseTags;
 import com.pindroid.activity.ViewBookmark;
 import com.pindroid.Constants;
+import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.BookmarkContentProvider;
 
@@ -23,7 +25,13 @@ public class IntentHelper {
 	}
 	
 	public static Intent ReadBookmark(String url){
-    	String readUrl = Constants.INSTAPAPER_URL + URLEncoder.encode(url);
+    	String readUrl = "";
+		try {
+			readUrl = Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(url, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	Uri readLink = Uri.parse(readUrl);
 		return new Intent(Intent.ACTION_VIEW, readLink);
 	}
@@ -53,10 +61,11 @@ public class IntentHelper {
 		return addBookmark;
 	}
 	
-	public static Intent ViewBookmark(Bookmark b, String account, Context context) {
+	public static Intent ViewBookmark(Bookmark b, BookmarkViewType type, String account, Context context) {
 		Intent viewBookmark = new Intent(context, ViewBookmark.class);
 		viewBookmark.setAction(Intent.ACTION_VIEW);
 		viewBookmark.addCategory(Intent.CATEGORY_DEFAULT);
+		viewBookmark.putExtra("com.pindroid.BookmarkViewType", type);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
 		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
@@ -124,6 +133,19 @@ public class IntentHelper {
 	
 	public static Intent ViewTags(String account, Context context) {
 		Intent i = new Intent(context, BrowseTags.class);
+		i.setAction(Intent.ACTION_VIEW);
+		i.addCategory(Intent.CATEGORY_DEFAULT);
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.appendEncodedPath("tags");
+		i.setData(data.build());
+		
+		return i;
+	}
+	
+	public static Intent ViewTabletTags(String account, Context context) {
+		Intent i = new Intent(context, BrowseBookmarks.class);
 		i.setAction(Intent.ACTION_VIEW);
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();

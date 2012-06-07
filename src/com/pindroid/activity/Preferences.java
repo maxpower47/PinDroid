@@ -37,7 +37,6 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.Toast;
 
 public class Preferences extends PreferenceActivity {
@@ -71,16 +70,16 @@ public class Preferences extends PreferenceActivity {
         Preference syncPref = (Preference) findPreference("pref_forcesync");
         syncPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
         	public boolean onPreferenceClick(Preference preference) {
-            	
-        		Log.d("PinDroid", "Starting forced sync");
         		Toast.makeText(mContext, res.getString(R.string.syncing_toast), Toast.LENGTH_LONG).show();
-
         		SyncUtils.clearSyncMarkers(mContext);
-        		
-        		ContentResolver.requestSync(null, BookmarkContentProvider.AUTHORITY, Bundle.EMPTY);
-        		
-            	return true;
-            }
+
+        		Bundle extras = new Bundle();
+        		extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+
+        		ContentResolver.requestSync(null, BookmarkContentProvider.AUTHORITY, extras);
+
+        		return true;
+        	}
         });
         
         Preference accountPref = (Preference) findPreference("pref_accountsettings");

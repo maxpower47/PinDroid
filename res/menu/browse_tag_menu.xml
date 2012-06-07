@@ -24,7 +24,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item 
 		android:id="@+id/menu_sorttag" 
-		android:title="@string/menu_sort_title" 
+		android:title="@string/menu_sort_tag_title" 
 		android:icon="@drawable/ic_menu_sort_alphabetically"
 		android:orderInCategory="12">
 		<menu>

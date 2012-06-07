@@ -24,6 +24,7 @@ package com.pindroid.activity;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.fragment.AddBookmarkFragment;
+import com.pindroid.fragment.AddBookmarkFragment.OnBookmarkSaveListener;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -33,12 +34,13 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-public class AddBookmark extends FragmentBaseActivity {
+public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveListener {
 
 	private AddBookmarkFragment frag;
 	private Bookmark bookmark = null;
@@ -95,8 +97,13 @@ public class AddBookmark extends FragmentBaseActivity {
 		} else if(Intent.ACTION_SEND.equals(intent.getAction())){
 			bookmark = new Bookmark();
 			
+			ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(this);
+			
 			String url = StringUtils.getUrl(intent.getStringExtra(Intent.EXTRA_TEXT));
 			bookmark.setUrl(url);
+			
+			if(reader.getSubject() != null)
+				bookmark.setDescription(reader.getSubject());
 			
 			if(url.equals("")) {
 				Toast.makeText(this, R.string.add_bookmark_invalid_url, Toast.LENGTH_LONG).show();
@@ -141,5 +148,13 @@ public class AddBookmark extends FragmentBaseActivity {
 	
 	public void cancelHandler(View v) {
 		frag.cancelHandler(v);
+	}
+
+	public void onBookmarkSave(Bookmark b) {
+		finish();
+	}
+
+	public void onBookmarkCancel(Bookmark b) {
+		finish();
 	}
 }

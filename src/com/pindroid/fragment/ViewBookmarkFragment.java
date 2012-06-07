@@ -21,38 +21,57 @@
 
 package com.pindroid.fragment;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 
-import com.pindroid.R;
-import com.pindroid.action.IntentHelper;
-import com.pindroid.activity.FragmentBaseActivity;
-import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
-import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.ContentNotFoundException;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.providers.TagContent.Tag;
-import com.pindroid.ui.AccountSpan;
-import com.pindroid.ui.TagSpan;
-
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.text.Spannable;
+import android.text.Html;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
+
+import com.pindroid.Constants.BookmarkViewType;
+import com.pindroid.R;
+import com.pindroid.action.IntentHelper;
+import com.pindroid.activity.FragmentBaseActivity;
+import com.pindroid.client.NetworkUtilities;
+import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
+import com.pindroid.platform.BookmarkManager;
+import com.pindroid.providers.ArticleContent.Article;
+import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.providers.ContentNotFoundException;
+import com.pindroid.providers.TagContent.Tag;
+import com.pindroid.ui.AccountSpan;
+import com.pindroid.ui.TagSpan;
 
 public class ViewBookmarkFragment extends Fragment {
 
 	private FragmentBaseActivity base;
 	
+	private View container;
+	private ScrollView mBookmarkView;
 	private TextView mTitle;
 	private TextView mUrl;
 	private TextView mNotes;
@@ -60,13 +79,22 @@ public class ViewBookmarkFragment extends Fragment {
 	private TextView mTime;
 	private TextView mUsername;
 	private ImageView mIcon;
+	private WebView mWebContent;
 	private Bookmark bookmark;
+	private BookmarkViewType viewType;
+	private View readSection;
+	private TextView readTitle;
+	private TextView readView;
+	
+	private AsyncTask<String, Integer, Article> articleTask;
 	
 	private OnBookmarkActionListener bookmarkActionListener;
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
 	
+	private static final String STATE_VIEWTYPE = "viewType";
+	
 	public interface OnBookmarkActionListener {
-		public void onTagSelected(String tag);
+		public void onViewTagSelected(String tag);
 		public void onUserTagSelected(String tag, String user);
 		public void onAccountSelected(String account);
 	}
@@ -75,8 +103,14 @@ public class ViewBookmarkFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		
+	    if (savedInstanceState != null) {
+	        viewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_VIEWTYPE);
+	    } 
+		
 		base = (FragmentBaseActivity)getActivity();
 		
+		container = (View) getView().findViewById(R.id.view_bookmark_container);
+		mBookmarkView = (ScrollView) getView().findViewById(R.id.bookmark_scroll_view);
 		mTitle = (TextView) getView().findViewById(R.id.view_bookmark_title);
 		mUrl = (TextView) getView().findViewById(R.id.view_bookmark_url);
 		mNotes = (TextView) getView().findViewById(R.id.view_bookmark_notes);
@@ -84,86 +118,21 @@ public class ViewBookmarkFragment extends Fragment {
 		mTime = (TextView) getView().findViewById(R.id.view_bookmark_time);
 		mUsername = (TextView) getView().findViewById(R.id.view_bookmark_account);
 		mIcon = (ImageView) getView().findViewById(R.id.view_bookmark_icon);
+		mWebContent = (WebView) getView().findViewById(R.id.web_view);
+		readSection = getView().findViewById(R.id.read_bookmark_section);
+		readTitle = (TextView) getView().findViewById(R.id.read_bookmark_title);
+		readView = (TextView) getView().findViewById(R.id.read_view);
+		
+		mWebContent.getSettings().setJavaScriptEnabled(true);
+		readView.setMovementMethod(LinkMovementMethod.getInstance());
 		
 		setHasOptionsMenu(true);
-	}
-	
-	@Override
-	public void onResume(){
-		super.onResume();
-
-		if(isMyself()){
-			
-			try{		
-				int id = bookmark.getId();
-
-				bookmark = BookmarkManager.GetById(id, base);
-				
-				Date d = new Date(bookmark.getTime());
-				
-				mTitle.setText(bookmark.getDescription());
-				mUrl.setText(bookmark.getUrl());
-				mNotes.setText(bookmark.getNotes());
-				mTime.setText(d.toString());
-				mUsername.setText(bookmark.getAccount());
-				
-				if(!bookmark.getShared()) {
-					mIcon.setImageResource(R.drawable.padlock);
-				} else if(bookmark.getToRead()) {
-					mIcon.setImageResource(R.drawable.book_open);
-				}
-				
-        		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
-
-        		for(Tag t : bookmark.getTags()) {
-        			addTag(tagBuilder, t, tagOnClickListener);
-        		}
-        		
-        		mTags.setText(tagBuilder);
-        		mTags.setMovementMethod(LinkMovementMethod.getInstance());
-			}
-			catch(ContentNotFoundException e){}
-		} else {
-			
-			Date d = new Date(bookmark.getTime());
-			
-			if(!bookmark.getDescription().equals("null"))
-				mTitle.setText(bookmark.getDescription());
-			
-			mUrl.setText(bookmark.getUrl());
-			
-			if(!bookmark.getNotes().equals("null"))
-					mNotes.setText(bookmark.getNotes());
-			
-			mTime.setText(d.toString());
-			
-    		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
-
-    		for(Tag t : bookmark.getTags()) {
-    			addTag(tagBuilder, t, userTagOnClickListener);
-    		}
-    		
-    		mTags.setText(tagBuilder);
-    		mTags.setMovementMethod(LinkMovementMethod.getInstance());
-
-			SpannableStringBuilder builder = new SpannableStringBuilder();
-			int start = builder.length();
-			builder.append(bookmark.getAccount());
-			int end = builder.length();
-			
-			AccountSpan span = new AccountSpan(bookmark.getAccount());
-			span.setOnAccountClickListener(accountOnClickListener);
-
-			builder.setSpan(span, start, end, 0);
-			
-			mUsername.setText(builder);
-			mUsername.setMovementMethod(LinkMovementMethod.getInstance());
-		}
+		//setRetainInstance(true);
 	}
 	
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {
-    		bookmarkActionListener.onTagSelected(tag);
+    		bookmarkActionListener.onViewTagSelected(tag);
         }
     };
     
@@ -179,8 +148,11 @@ public class ViewBookmarkFragment extends Fragment {
         }
     };
     
-	public void setBookmark(Bookmark b) {
+	public void setBookmark(Bookmark b, BookmarkViewType viewType) {
+		this.viewType = viewType;
 		bookmark = b;
+		
+		ActivityCompat.invalidateOptionsMenu(this.getActivity());
 	}
 	
 	private void addTag(SpannableStringBuilder builder, Tag t, TagSpan.OnTagClickListener listener) {
@@ -199,16 +171,40 @@ public class ViewBookmarkFragment extends Fragment {
 
 		builder.setSpan(span, start, end, flags);
 	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	    savedInstanceState.putSerializable(STATE_VIEWTYPE, viewType);
+	    
+	    super.onSaveInstanceState(savedInstanceState);
+	}
     
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 	    inflater.inflate(R.menu.view_menu, menu);
+	    
+	    if(android.os.Build.VERSION.SDK_INT >= 14) {
+	    	Log.d("bookmark", Boolean.toString(bookmark == null));
+	    	if(bookmark != null){
+	    		ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_view_sendbookmark).getActionProvider();
+	    		shareActionProvider.setShareIntent(IntentHelper.SendBookmark(bookmark.getUrl(), bookmark.getDescription()));
+	    	}
+	    }
 	}
 	
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-		if(!isMyself()) {
+		if(bookmark != null){
+			if(!isMyself()){
+				menu.removeItem(R.id.menu_view_editbookmark);
+				menu.removeItem(R.id.menu_view_deletebookmark);
+			} else {
+				menu.removeItem(R.id.menu_addbookmark);
+			}
+		} else {
+			menu.removeItem(R.id.menu_view);
+			menu.removeItem(R.id.menu_view_sendbookmark);
 			menu.removeItem(R.id.menu_view_editbookmark);
 			menu.removeItem(R.id.menu_view_deletebookmark);
 		}
@@ -218,11 +214,13 @@ public class ViewBookmarkFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle item selection
 	    switch (item.getItemId()) {
+		    case R.id.menu_view_details:
+		    	bookmarkSelectedListener.onBookmarkView(bookmark);
+				return true;
 		    case R.id.menu_view_read:
 		    	if(isMyself() && bookmark.getToRead() && base.markAsRead)
 		    		bookmarkSelectedListener.onBookmarkMark(bookmark);
 				bookmarkSelectedListener.onBookmarkRead(bookmark);
-				startActivity(IntentHelper.ReadBookmark(((Spannable) mUrl.getText()).toString()));
 				return true;
 		    case R.id.menu_view_openbookmark:
 		    	bookmarkSelectedListener.onBookmarkOpen(bookmark);
@@ -234,7 +232,9 @@ public class ViewBookmarkFragment extends Fragment {
 		    	bookmarkSelectedListener.onBookmarkDelete(bookmark);
 				return true;
 		    case R.id.menu_view_sendbookmark:
-		    	bookmarkSelectedListener.onBookmarkShare(bookmark);
+		    	if(android.os.Build.VERSION.SDK_INT < 14 || item.getActionProvider() == null || !(item.getActionProvider() instanceof ShareActionProvider)) {
+		    		bookmarkSelectedListener.onBookmarkShare(bookmark);
+		    	}
 		    	return true;
 		    default:
 		        return super.onOptionsItemSelected(item);
@@ -248,7 +248,111 @@ public class ViewBookmarkFragment extends Fragment {
     }
     
     private boolean isMyself() {
-    	return bookmark.getId() != 0;
+    	return bookmark != null && bookmark.getId() != 0;
+    }
+    
+    @Override
+    public void onStart(){
+    	super.onStart();
+    	
+    	loadBookmark();
+    }
+
+    public void loadBookmark(){
+    	if(bookmark != null){
+    		
+    		if(isMyself() && bookmark.getId() != 0){
+				try{		
+					int id = bookmark.getId();
+					bookmark = BookmarkManager.GetById(id, base);
+				}
+				catch(ContentNotFoundException e){}
+    		}
+    		
+    		if(viewType == BookmarkViewType.VIEW){
+				mBookmarkView.setVisibility(View.VISIBLE);
+				readSection.setVisibility(View.GONE);
+				mWebContent.setVisibility(View.GONE);
+				if(isMyself()){
+					Date d = new Date(bookmark.getTime());
+					
+					mTitle.setText(bookmark.getDescription());
+					mUrl.setText(bookmark.getUrl());
+					mNotes.setText(bookmark.getNotes());
+					mTime.setText(d.toString());
+					mUsername.setText(bookmark.getAccount());
+					
+					if(mIcon != null){
+						if(!bookmark.getShared()) {
+							mIcon.setImageResource(R.drawable.padlock);
+						} else if(bookmark.getToRead()) {
+							mIcon.setImageResource(R.drawable.book_open);
+						}
+					}
+					
+	        		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
+	
+	        		for(Tag t : bookmark.getTags()) {
+	        			addTag(tagBuilder, t, tagOnClickListener);
+	        		}
+	        		
+	        		mTags.setText(tagBuilder);
+	        		mTags.setMovementMethod(LinkMovementMethod.getInstance());
+				} else {
+					
+					Date d = new Date(bookmark.getTime());
+					
+					if(bookmark.getDescription() != null && !bookmark.getDescription().equals("null"))
+						mTitle.setText(bookmark.getDescription());
+					
+					mUrl.setText(bookmark.getUrl());
+					
+					if(bookmark.getNotes() != null && !bookmark.getNotes().equals("null"))
+						mNotes.setText(bookmark.getNotes());
+					
+					mTime.setText(d.toString());
+					
+		    		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
+		
+		    		for(Tag t : bookmark.getTags()) {
+		    			addTag(tagBuilder, t, userTagOnClickListener);
+		    		}
+		    		
+		    		mTags.setText(tagBuilder);
+		    		mTags.setMovementMethod(LinkMovementMethod.getInstance());
+		
+		    		if(bookmark.getAccount() != null){
+						SpannableStringBuilder builder = new SpannableStringBuilder();
+						int start = builder.length();
+						builder.append(bookmark.getAccount());
+						int end = builder.length();
+						
+						AccountSpan span = new AccountSpan(bookmark.getAccount());
+						span.setOnAccountClickListener(accountOnClickListener);
+			
+						builder.setSpan(span, start, end, 0);
+						
+						mUsername.setText(builder);
+		    		}
+					
+					
+					mUsername.setMovementMethod(LinkMovementMethod.getInstance());
+				}
+			} else if(viewType == BookmarkViewType.READ){
+				articleTask = new GetArticleTask().execute(bookmark.getUrl());
+			} else if(viewType == BookmarkViewType.WEB){
+				showInWebView();
+			}
+    	}
+    }
+    
+    private void showInWebView(){
+		mWebContent.clearView();
+		mWebContent.clearCache(true);
+		mBookmarkView.setVisibility(View.GONE);
+		readSection.setVisibility(View.GONE);
+		mWebContent.setVisibility(View.VISIBLE);				
+		mWebContent.loadUrl(bookmark.getUrl());
     }
     
 	@Override
@@ -261,4 +365,99 @@ public class ViewBookmarkFragment extends Fragment {
 			throw new ClassCastException(activity.toString() + " must implement OnBookmarkActionListener and OnBookmarkSelectedListener");
 		}
 	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		readView.setBackgroundColor(Integer.parseInt(base.readingBackground));
+		readTitle.setBackgroundColor(Integer.parseInt(base.readingBackground));
+		
+		if(Integer.parseInt(base.readingBackground) == Color.BLACK){
+			readView.setTextColor(Color.parseColor("#999999"));
+			readTitle.setTextColor(Color.parseColor("#999999"));
+		}
+		else { 
+			readView.setTextColor(Color.parseColor("#222222"));
+			readTitle.setTextColor(Color.parseColor("#222222"));
+		}
+		
+		readView.setPadding(Integer.parseInt(base.readingMargins), 15, Integer.parseInt(base.readingMargins), 15);
+
+		Typeface tf = Typeface.createFromAsset(base.getAssets(), "fonts/" + base.readingFont + ".ttf");
+		readView.setTypeface(tf);
+		
+		readView.setTextSize(Float.parseFloat(base.readingFontSize));
+		readView.setLineSpacing(Float.parseFloat(base.readingLineSpace), 1);
+		
+	}
+	
+    public class GetArticleTask extends AsyncTask<String, Integer, Article>{
+    	private String url;
+
+    	@Override
+    	protected Article doInBackground(String... args) {
+    		
+    		if(args.length > 0 && args[0] != null && args[0] != "") {
+    			url = args[0];
+    	
+        		Article a = NetworkUtilities.getArticleText(url);
+
+        		if(a != null && a.getContent() != null){
+	        		Spanned s = Html.fromHtml(a.getContent(), new Html.ImageGetter() {
+	
+	        			public Drawable getDrawable(String source) {                  
+	        				Drawable d = null;
+	        				try {
+	        					InputStream src = imageFetch(source);
+	        					d = Drawable.createFromStream(src, "src");
+	        					if(d != null){
+	        						int containerWidth = container.getWidth() - (Integer.parseInt(base.readingMargins) * 2);
+	        						int width = Math.min(containerWidth, d.getIntrinsicWidth());
+	        						
+	        						int height = d.getIntrinsicHeight();
+	        						
+	        						if(containerWidth < d.getIntrinsicWidth()){
+	        							double scale = ((double)containerWidth / (double)d.getIntrinsicWidth());	        							
+	        							double newWidth = d.getIntrinsicHeight() * scale;
+	        							height = (int)Math.floor(newWidth);
+	        							
+	        						}
+	        						d.setBounds(0, 0, width, height);
+	        					}
+	        				} catch (MalformedURLException e) {
+	        					e.printStackTrace(); 
+	        				} catch (IOException e) {
+	        					e.printStackTrace();  
+	        				}
+	        				return d;
+	        			}
+	        		}, null);
+	
+	        		a.setSpan(s);
+        		}
+        		return a;
+
+    		} else return null;
+    	}
+    	
+        protected void onPostExecute(Article result) {
+        	if(result != null && result.getSpan() != null && !result.getContent().equals("") && !result.getContent().equals("null")){
+	        	readSection.scrollTo(0, 0);
+	        	mBookmarkView.setVisibility(View.GONE);
+	        	mWebContent.setVisibility(View.GONE);
+				readSection.setVisibility(View.VISIBLE);
+				readTitle.setText(Html.fromHtml(result.getTitle()));
+				readView.setText(result.getSpan());
+        	} else {
+        		showInWebView();
+        	}
+        }
+        
+        private InputStream imageFetch(String source) throws MalformedURLException,IOException {
+	    	URL url = new URL(source);
+	    	Object o = url.getContent();
+	    	InputStream content = (InputStream)o;    
+	    	return content;
+	    }
+    }
 }

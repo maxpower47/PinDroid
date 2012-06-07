@@ -26,7 +26,7 @@
     package="com.pindroid"
     android:versionCode="38"
     android:versionName="1.8.3">
-    <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="11" />
+    <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="14" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
@@ -39,7 +39,8 @@
     <application
         android:icon="@drawable/ic_main"
         android:label="@string/label"
-        android:theme="@style/ThemeSelector">
+        android:theme="@style/ThemeSelector"
+        android:hardwareAccelerated="true">
         <activity
         	android:name=".activity.Main"
         	android:label="@string/titleMain">
@@ -101,7 +102,8 @@
         	</intent-filter>
         </activity>
         <activity android:name=".activity.ViewBookmark"
-        	android:label="@string/view_bookmark_title">
+        	android:label="@string/view_bookmark_title"
+        	android:uiOptions="splitActionBarWhenNarrow">
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
@@ -174,7 +176,8 @@
         <provider
         	android:name="com.pindroid.providers.BookmarkContentProvider"
         	android:label="@string/bookmark_content_provider_label"
-        	android:authorities="com.pindroid.providers.BookmarkContentProvider" />
+        	android:authorities="com.pindroid.providers.BookmarkContentProvider"
+        	android:syncable="true" />
         <receiver 
         	android:name=".widget.SearchWidgetProvider"
         	android:label="@string/search_widget_label">

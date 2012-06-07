@@ -25,5 +25,5 @@
 	android:label="@string/bookmark_search_label"
 	android:hint="@string/bookmark_search_hint"
 	android:searchSuggestAuthority="com.pindroid.providers.BookmarkContentProvider"
-	android:searchSuggestIntentAction="android.intent.action.VIEW"
+	android:searchSuggestIntentAction="com.pindroid.intent.action.SearchSuggestion"
 	android:searchSuggestPath="bookmark" />
