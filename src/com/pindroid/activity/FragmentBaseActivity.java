@@ -178,7 +178,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
     	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
     	markAsRead = settings.getBoolean("pref_markasread", false);
     	readingBackground = settings.getString("pref_reading_background", "-1");
-    	readingFont = settings.getString("pref_reading_font", "nobile");
+    	readingFont = settings.getString("pref_reading_font", "Roboto-Regular");
     	readingMargins = settings.getString("pref_reading_margins", "20");
     	readingFontSize = settings.getString("pref_reading_fontsize", "16");
     	readingLineSpace = settings.getString("pref_reading_linespace", "5");
