@@ -24,11 +24,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="42dip"
-	android:background="#CCC">
+	android:background="@color/actionbar_background">
 	<TextView android:id="@+id/action_bar_title"
 		android:textSize="16dip"
 		android:textStyle="bold"
-		android:textColor="#555"
+		android:textColor="@color/actionbar_text"
 		android:text="@string/pindroid"
 		android:layout_width="fill_parent"
 		android:maxLines="2"
@@ -38,7 +38,7 @@
 		android:layout_alignParentLeft="true"
 		android:layout_centerVertical="true" />
 	<ImageButton android:id="@+id/action_bar_search"
-		android:src="@android:drawable/ic_menu_search"
+		android:src="@drawable/ic_menu_search"
 		android:scaleType="fitXY"
 		android:background="@drawable/action_bar_button"
 		android:layout_width="42dip"

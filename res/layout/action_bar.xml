@@ -38,7 +38,7 @@
 		android:layout_alignParentLeft="true"
 		android:layout_centerVertical="true" />
 	<ImageButton android:id="@+id/action_bar_search"
-		android:src="@android:drawable/ic_menu_search"
+		android:src="@drawable/ic_menu_search"
 		android:scaleType="fitXY"
 		android:background="@drawable/action_bar_button"
 		android:layout_width="42dip"

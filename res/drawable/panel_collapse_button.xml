@@ -22,7 +22,14 @@
  */
  -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android"> 
-    <item android:drawable="@drawable/list_selector_background_pressed" android:state_pressed="true" />
-    <item android:drawable="@drawable/list_selector_background_focus" android:state_focused="true" />
-    <item android:drawable="@drawable/list_selector_background_disabled" />
+    <item android:state_pressed="true" >
+        <shape>
+            <solid android:color="@color/orange2" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="#555555" />
+        </shape>
+    </item>
 </selector>
