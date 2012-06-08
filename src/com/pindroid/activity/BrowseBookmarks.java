@@ -190,9 +190,15 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	@Override
 	public void onBackPressed(){
 		super.onBackPressed();
-		if(getSupportFragmentManager().findFragmentById(R.id.tagcontent).isVisible())
-			findViewById(R.id.panel_collapse_button).setVisibility(View.GONE);
-		else findViewById(R.id.panel_collapse_button).setVisibility(View.VISIBLE);
+		
+		Fragment tagFrag = getSupportFragmentManager().findFragmentById(R.id.tagcontent);
+		View panelBtn = findViewById(R.id.panel_collapse_button);
+		
+		if(tagFrag != null && panelBtn != null){
+			if(tagFrag.isVisible())
+				findViewById(R.id.panel_collapse_button).setVisibility(View.GONE);
+			else findViewById(R.id.panel_collapse_button).setVisibility(View.VISIBLE);
+		}
 	}
 
 	public void onBookmarkView(Bookmark b) {
