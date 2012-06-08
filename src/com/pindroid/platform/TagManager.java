@@ -58,6 +58,8 @@ public class TagManager {
 			} while(c.moveToNext());
 		}
 		
+		c.close();
+		
 		return result;
 	}
 	
