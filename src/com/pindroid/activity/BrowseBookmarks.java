@@ -30,6 +30,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 
 import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
@@ -124,7 +125,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		
 		if(path.contains("tags")){
 			t.hide(fm.findFragmentById(R.id.maincontent));
-			
+			findViewById(R.id.panel_collapse_button).setVisibility(View.GONE);
 		} else{
 			if(tagFrag != null){
 				t.hide(tagFrag);
@@ -184,6 +185,14 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	    	lastViewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_LASTVIEWTYPE);
 	    	setBookmarkView(lastSelected, lastViewType);
 	    }
+	}
+	
+	@Override
+	public void onBackPressed(){
+		super.onBackPressed();
+		if(getSupportFragmentManager().findFragmentById(R.id.tagcontent).isVisible())
+			findViewById(R.id.panel_collapse_button).setVisibility(View.GONE);
+		else findViewById(R.id.panel_collapse_button).setVisibility(View.VISIBLE);
 	}
 
 	public void onBookmarkView(Bookmark b) {
@@ -343,6 +352,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			if(getSupportFragmentManager().findFragmentById(R.id.tagcontent).isVisible()){
 				transaction.hide(getSupportFragmentManager().findFragmentById(R.id.tagcontent));
+				findViewById(R.id.panel_collapse_button).setVisibility(View.VISIBLE);
 			}
 			transaction.show(getSupportFragmentManager().findFragmentById(R.id.maincontent));
 			transaction.addToBackStack(null);
@@ -357,5 +367,34 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.maincontent);
 		viewFrag.setBookmark(b, viewType);
 		viewFrag.loadBookmark();
+	}
+	
+	public void collapsePanel(View v) {
+		
+		if(findViewById(R.id.listcontent) != null){
+			View bookmarkList = findViewById(R.id.listcontent);
+			
+			if(bookmarkList.getVisibility() == View.VISIBLE)
+				bookmarkList.setVisibility(View.GONE);
+			else bookmarkList.setVisibility(View.VISIBLE);
+		}
+	}
+	
+	public void saveHandler(View v) {
+		FragmentManager fm = getSupportFragmentManager();
+		AddBookmarkFragment addFrag = (AddBookmarkFragment)fm.findFragmentById(R.id.addcontent);
+		
+		if(addFrag != null){
+			addFrag.saveHandler(v);
+		}
+	}
+	
+	public void cancelHandler(View v) {
+		FragmentManager fm = getSupportFragmentManager();
+		AddBookmarkFragment addFrag = (AddBookmarkFragment)fm.findFragmentById(R.id.addcontent);
+		
+		if(addFrag != null) {
+			addFrag.cancelHandler(v);
+		}
 	}
 }
