@@ -69,14 +69,6 @@
         	</intent-filter>
 			<meta-data android:name="android.app.searchable" android:resource="@xml/tag_searchable"/>
         </activity>
-        <activity android:name=".activity.TagLiveFolder"
-        	android:label="@string/tag_live_folder_label"
-        	android:icon="@drawable/ic_tag_folder">
-            <intent-filter>
-        		<action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
-        		<category android:name="android.intent.category.DEFAULT" />	
-        	</intent-filter>
-        </activity>
         <activity android:name=".activity.BrowseBookmarks" >
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
@@ -92,14 +84,6 @@
             	<action android:name="android.intent.action.SEARCH" />
         	</intent-filter>
         	<meta-data android:name="android.app.searchable" android:resource="@xml/bookmark_searchable"/>
-        </activity>
-        <activity android:name=".activity.BookmarkLiveFolder"
-        	android:label="@string/bookmark_live_folder_label"
-        	android:icon="@drawable/ic_bookmark_folder">
-            <intent-filter>
-        		<action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
-        		<category android:name="android.intent.category.DEFAULT" />	
-        	</intent-filter>
         </activity>
         <activity android:name=".activity.ViewBookmark"
         	android:label="@string/view_bookmark_title"
@@ -185,14 +169,6 @@
         		<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
     		</intent-filter>
     		<meta-data android:name="android.appwidget.provider" android:resource="@xml/search_appwidget_info" />
-		</receiver>
-		<receiver 
-        	android:name=".widget.UnreadWidgetProvider"
-        	android:label="@string/unread_widget_label">
-    		<intent-filter>
-        		<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-    		</intent-filter>
-    		<meta-data android:name="android.appwidget.provider" android:resource="@xml/unread_appwidget_info" />
 		</receiver>
 		<receiver 
         	android:name=".syncadapter.PeriodicSyncReceiver"
