@@ -120,7 +120,6 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		BrowseTagsFragment tagFrag = (BrowseTagsFragment) fm.findFragmentById(R.id.tagcontent);
 		if(tagFrag != null){
 			tagFrag.setAccount(username);
-			tagFrag.setAction("notpick");
 		}
 		
 		if(path.contains("tags")){

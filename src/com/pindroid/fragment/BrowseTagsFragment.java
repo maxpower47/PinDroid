@@ -21,7 +21,6 @@
 package com.pindroid.fragment;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -94,29 +93,11 @@ public class BrowseTagsFragment extends ListFragment
 		this.query = query;
 	}
 	
-	public void setAction(String action) {
-		if(action.equals("pick")) {
-			clickListener = pickListener;
-		} else clickListener = viewListener;
-	}
-	
 	private OnItemClickListener viewListener = new OnItemClickListener() {
 	    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 	    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
 	    	
 	    	tagSelectedListener.onTagSelected(tagName);
-	    }
-	};
-	
-	private OnItemClickListener pickListener = new OnItemClickListener() {
-	    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-	    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
-	    	
-	    	Intent i = new Intent();
-	    	i.putExtra("tagname", tagName);
-	    	
-	    	getActivity().setResult(Activity.RESULT_OK, i);
-	    	getActivity().finish();
 	    }
 	};
 	

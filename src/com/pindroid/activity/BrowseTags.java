@@ -52,9 +52,6 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 		
 		if(Intent.ACTION_VIEW.equals(action)) {
 			setTitle(getString(R.string.browse_my_tags_title));
-		} else if(Intent.ACTION_PICK.equals(action)) {
-			frag.setAction("pick");
-			setTitle(getString(R.string.tag_live_folder_chooser_title));
 		} else if(Intent.ACTION_SEARCH.equals(action)) {
 			String query = intent.getStringExtra(SearchManager.QUERY);
 			frag.setQuery(query);

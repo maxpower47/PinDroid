@@ -489,10 +489,8 @@ public class PinboardApi {
 			try {
 				am.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, true);
 			} catch (OperationCanceledException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (AuthenticatorException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			throw new AuthenticationException();
