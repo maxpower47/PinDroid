@@ -66,11 +66,6 @@
 			    android:textSize="12sp"
 			    android:paddingLeft="10dip"
 			    android:paddingRight="10dip"/>
-		    <ImageView
-				android:layout_width="16dip"
-				android:layout_height="16dip"
-				android:id="@+id/bookmark_source"
-				android:visibility="gone"/>
 			<ImageView
 				android:layout_width="16dip"
 				android:layout_height="16dip"

@@ -52,7 +52,7 @@ public class SaxFeedParser {
         final Element item = root.getChild(ns, "item");
         final MatrixCursor bookmarks = new MatrixCursor(new String[] {Bookmark._ID, Bookmark.Url, 
         		Bookmark.Description, Bookmark.Meta, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared,
-        		Bookmark.Source, Bookmark.Notes, Bookmark.Time, Bookmark.Account});
+        		Bookmark.Notes, Bookmark.Time, Bookmark.Account});
         
         item.setEndElementListener(new EndElementListener(){
             public void end() {
@@ -61,7 +61,7 @@ public class SaxFeedParser {
             	
                 bookmarks.addRow(new Object[]{0, currentBookmark.getUrl(), currentBookmark.getDescription(),
                 		currentBookmark.getMeta(), currentBookmark.getTagString(), currentBookmark.getToRead() ? 1 : 0,
-                		currentBookmark.getShared() ? 1 : 0, currentBookmark.getSource(), currentBookmark.getNotes(),
+                		currentBookmark.getShared() ? 1 : 0, currentBookmark.getNotes(),
                 		currentBookmark.getTime(), currentBookmark.getAccount()});
                 currentBookmark.clear();
             }
@@ -94,11 +94,6 @@ public class SaxFeedParser {
         item.getChild(nsDc, "subject").setEndTextElementListener(new EndTextElementListener(){
             public void end(String body) {
             	currentBookmark.setTagString(body.trim());
-            }
-        });
-        item.getChild(nsDc, "source").setEndTextElementListener(new EndTextElementListener(){
-            public void end(String body) {
-            	currentBookmark.setSource(body.trim());
             }
         });
 

@@ -53,7 +53,6 @@ public class BookmarkContent {
 		public static final String ToRead = "TOREAD";
 		public static final String Shared = "SHARED";
 		public static final String Synced = "SYNCED";
-		public static final String Source = "SOURCE";
 		public static final String Deleted = "DELETED";
 		
 		private int mId = 0;
@@ -68,7 +67,6 @@ public class BookmarkContent {
         private boolean mRead = false;
         private long mTime = 0;
         private boolean mSynced = false;
-        private String mSource = null;
         private boolean mDeleted = false;
 
         public int getId(){
@@ -187,14 +185,6 @@ public class BookmarkContent {
         	mDeleted = deleted;
         }
         
-        public String getSource(){
-        	return mSource;
-        }
-        
-        public void setSource(String source){
-        	mSource = source;
-        }
-        
         public Bookmark() {
         }
         
@@ -245,7 +235,6 @@ public class BookmarkContent {
         	b.mTags = this.mTags;
         	b.mTime = this.mTime;
         	b.mUrl = this.mUrl;
-        	b.mSource = this.mSource;
         	b.mSynced = this.mSynced;
         	b.mDeleted = this.mDeleted;
         	return b;
@@ -263,7 +252,6 @@ public class BookmarkContent {
         	this.mTags = null;
         	this.mTime = 0;
         	this.mUrl = null;
-        	this.mSource = null;
         	this.mSynced = false;
         	this.mDeleted = false;
         }

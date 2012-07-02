@@ -459,9 +459,6 @@ public class BookmarkManager {
 		b.setTagString(c.getString(c.getColumnIndex(Bookmark.Tags)));
 		b.setToRead(c.getInt(c.getColumnIndex(Bookmark.ToRead)) == 1 ? true : false);
 		
-		if(c.getColumnIndex(Bookmark.Source) != -1)
-			b.setSource(c.getString(c.getColumnIndex(Bookmark.Source)));
-		
 		if(c.getColumnIndex(Bookmark.Account) != -1)
 			b.setAccount(c.getString(c.getColumnIndex(Bookmark.Account)));
 		
