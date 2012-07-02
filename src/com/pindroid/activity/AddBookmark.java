@@ -30,13 +30,9 @@ import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.util.StringUtils;
 
-import android.app.SearchManager;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -54,52 +50,12 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 		
 		Intent intent = getIntent();
 		
-		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
-			if(intent.hasExtra(SearchManager.QUERY)){
-				Intent i = new Intent(this, MainSearchResults.class);
-				i.putExtras(intent.getExtras());
-				startActivity(i);
-				finish();
-			} else {
-				onSearchRequested();
-			}
-		} else if(Intent.ACTION_VIEW.equals(intent.getAction()) || (!intent.hasExtra(Intent.EXTRA_TEXT) && !Intent.ACTION_EDIT.equals(intent.getAction()))) {
-			
-			Uri data = intent.getData();
-			String path = null;
-			String tagname = null;
-			
-			if(data != null) {
-				path = data.getPath();
-				tagname = data.getQueryParameter("tagname");
-			}
-			
-			if(data.getScheme() == null || !data.getScheme().equals("content")){
-				Intent i = new Intent(Intent.ACTION_VIEW, data);
-				
-				startActivity(i);
-				finish();				
-			} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
-				Intent viewBookmark = new Intent(this, ViewBookmark.class);
-				viewBookmark.setData(data);
-				
-				Log.d("View Bookmark Uri", data.toString());
-				startActivity(viewBookmark);
-				finish();
-			} else if(tagname != null) {
-				Intent viewTags = new Intent(this, BrowseBookmarks.class);
-				viewTags.setData(data);
-				
-				Log.d("View Tags Uri", data.toString());
-				startActivity(viewTags);
-				finish();
-			}
-		} else if(Intent.ACTION_SEND.equals(intent.getAction())){
+		if(Intent.ACTION_SEND.equals(intent.getAction())){
 			bookmark = new Bookmark();
 			
 			ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(this);
 			
-			String url = StringUtils.getUrl(intent.getStringExtra(Intent.EXTRA_TEXT));
+			String url = StringUtils.getUrl(reader.getText().toString());
 			bookmark.setUrl(url);
 			
 			if(reader.getSubject() != null)
