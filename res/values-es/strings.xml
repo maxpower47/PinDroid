@@ -32,12 +32,7 @@
   <string name="login_activity_loginfail_text_pwonly">Ha introducido una contraseña incorrecta o su cuenta ha cambiado. Por favor, vuelva a introducir su contraseña.</string>
   <string name="login_activity_loginfail_text_pwmissing">Introduzca la contraseña para esta cuenta.</string>
   <string name="login_activity_newaccount_text">Acceda a su cuenta de Pinboard. \n\n ¿No tiene una cuenta de Pinboard? \ N Regístrese en http://pinboard.in/signup</string>
-  <string name="sign_in_button_label">Registrarse</string>
-  <string name="back_button_label">Atrás</string>
-  <string name="cancel_button_label">Cancelar</string>
   <string name="titleMain">Pinboard</string>
-  <string name="dialog_no_account_title">No se ha encontrado alguna cuenta de Pinboard.</string>
-  <string name="dialog_no_account_text">Para agregar su cuenta de Pinboard vaya a Cuentas y a Sincronización de la Configuración.</string>
   <string name="main_menu_my_bookmarks">Mis Favoritos</string>
   <string name="main_menu_my_unread_bookmarks">No leídos</string>
   <string name="main_menu_my_tags">Mis etiquetas</string>
@@ -67,9 +62,7 @@
   <string name="bookmark_sort_description_desc">Descripción (Z-A)</string>
   <string name="bookmark_sort_url_asc">Dirección URL (A-Z)</string>
   <string name="bookmark_sort_url_desc">Dirección URL (Z-A)</string>
-  <string name="bookmark_feed_task_progress">Cargando. Por favor espere…</string>
   <string name="menu_addbookmark_title">Añadir a Favoritos</string>
-  <string name="menu_sort_title">Ordenar</string>
   <string name="menu_sort_bookmark_title">Ordenar Favoritos</string>
   <string name="menu_sort_tag_title">Ordenar etiquetas</string>
   <string name="menu_search_title">Búsqueda</string>
@@ -81,7 +74,6 @@
   <string name="tag_sort_count_desc">Contar (mayor primero)</string>
   <string name="add_bookmark_add_title">Añadir a Marcadores</string>
   <string name="add_bookmark_edit_title">Editar marcador</string>
-  <string name="add_bookmark_task_progress">Espere…</string>
   <string name="add_button_save">Guardar</string>
   <string name="add_button_cancel">Cancelar</string>
   <string name="add_title_url">Dirección URL</string>
@@ -92,13 +84,6 @@
   <string name="add_title_popular_tags">Etiquetas populares</string>
   <string name="add_title_private">¿Privado?</string>
   <string name="add_title_toread">¿Leer?</string>
-  <string name="add_bookmark_success_msg">Marcador agregado correctamente</string>
-  <string name="edit_bookmark_success_msg">Marcador actualizado correctamente</string>
-  <string name="add_bookmark_error_msg">Error</string>
-  <string name="add_bookmark_notification_error_title">Error de PinDroid</string>
-  <string name="add_bookmark_notification_error_message">Error al guardar el marcador</string>
-  <string name="delete_bookmark_success_msg">Marcador eliminado correctamente.</string>
-  <string name="delete_bookmark_error_msg">Error</string>
   <string name="main_search_label">Pinboard</string>
   <string name="main_search_hint">Etiquetas, Títulos, Notas</string>
   <string name="main_search_description">Etiquetas, títulos y notas</string>
@@ -109,7 +94,6 @@
   <string name="search_results_bookmark">Añadir a marcadores los resultados</string>
   <string name="search_results_tag">Etiquetar los resultados</string>
   <string name="search_results_global_tag">Resultados generales de la etiqueta</string>
-  <string name="tag_search_text">Buscar en Pinboard</string>
   <string name="bookmark_search_results_title">Agregar a marcadores los resultados de búsqueda para \"%1$s\"</string>
   <string name="unread_search_results_title">Marcar como no léidos los resultados de búsqueda de \"%1$s\"</string>
   <string name="tag_search_results_title">Resultados de búsqueda de etiqueta de \"%1$s\"</string>
@@ -165,7 +149,6 @@
   <string name="pref_donate_title">Donar</string>
   <string name="pref_donate_summary">Soporte de PinDroid</string>
   <string name="about_activity_title">Acerca de PinDroid</string>
-  <string name="about_title">PinDroid</string>
   <string name="about_text">
     &lt;html&gt; 
     &lt;body style="background-color:#000000;color:#BEBEBE"&gt;

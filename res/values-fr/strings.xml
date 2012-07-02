@@ -28,10 +28,6 @@
   <string name="login_activity_ok_button">Identifiez-vous</string>
   <string name="login_activity_loginfail_text_both">Le nom d\'utilisateur et/ou le mot de passe est incorrect. Un compte Pinboard est nécessaire. Veuillez retaper votre mot de passe.</string>
   <string name="login_activity_loginfail_text_pwmissing">Entrez le mot de passe pour ce compte.</string>
-  <string name="sign_in_button_label">Identifiez-vous</string>
-  <string name="back_button_label">Précédent</string>
-  <string name="cancel_button_label">Annuler</string>
-  <string name="dialog_no_account_title">Pas de compte Pinboard trouvé</string>
   <string name="main_menu_my_bookmarks">Mes Favoris</string>
   <string name="main_menu_my_tags">Mes tags</string>
   <string name="bookmark_context_read">Lire</string>
@@ -46,9 +42,7 @@
   <string name="bookmark_sort_description_desc">Description (Z-A)</string>
   <string name="bookmark_sort_url_asc">URL (A-Z)</string>
   <string name="bookmark_sort_url_desc">URL (Z-A)</string>
-  <string name="bookmark_feed_task_progress">Chargement. Veuillez patienter…</string>
   <string name="menu_addbookmark_title">Ajouter un signet</string>
-  <string name="menu_sort_title">Trier</string>
   <string name="menu_search_title">Rechercher</string>
   <string name="menu_settings_title">Paramètres</string>
   <string name="browse_my_tags_title">Mes tags</string>

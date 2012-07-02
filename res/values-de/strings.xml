@@ -34,12 +34,7 @@
         Bitte das Passwort noch einmal eingeben.</string>
   <string name="login_activity_loginfail_text_pwmissing">Passwort für dieses Konto eingeben.</string>
   <string name="login_activity_newaccount_text">An Deinem Pinboard Account anmelden.\n\nDu hast kein Pinboard Account?\nMelde Dich hier an: http://pinboard.in/signup</string>
-  <string name="sign_in_button_label">Anmelden</string>
-  <string name="back_button_label">Zurück</string>
-  <string name="cancel_button_label">Abbrechen</string>
   <string name="titleMain">Pinboard</string>
-  <string name="dialog_no_account_title">Es wurde kein Pinboard Konto gefunden</string>
-  <string name="dialog_no_account_text"> Um deinen Pinboard Konto hinzuzufügen gehe in "Konten und Synchronisierung" in den Einstellungen.</string>
   <string name="main_menu_my_bookmarks">Meine Lesezeichen</string>
   <string name="main_menu_my_unread_bookmarks">Meine Ungelesenen</string>
   <string name="main_menu_my_tags">Meine Tags</string>
@@ -69,9 +64,7 @@
   <string name="bookmark_sort_description_desc">Beschreibung (Z-A)</string>
   <string name="bookmark_sort_url_asc">Url (A-Z)</string>
   <string name="bookmark_sort_url_desc">Url (Z-A)</string>
-  <string name="bookmark_feed_task_progress">Lade. Bitte warten…</string>
   <string name="menu_addbookmark_title">Lesezeichen hinzufügen</string>
-  <string name="menu_sort_title">Sortieren</string>
   <string name="menu_search_title">Suche</string>
   <string name="menu_settings_title">Einstellungen</string>
   <string name="browse_my_tags_title">Meine Tags</string>
@@ -81,7 +74,6 @@
   <string name="tag_sort_count_desc">Anzahl (Meiste zuerst)</string>
   <string name="add_bookmark_add_title">Lesezeichen hinzufügen</string>
   <string name="add_bookmark_edit_title">Lesezeichen bearbeiten</string>
-  <string name="add_bookmark_task_progress">Arbeite…</string>
   <string name="add_button_save">Speichern</string>
   <string name="add_button_cancel">Abbrechen</string>
   <string name="add_title_url">URL</string>
@@ -92,16 +84,8 @@
   <string name="add_title_popular_tags">Beliebte Tags</string>
   <string name="add_title_private">Privat?</string>
   <string name="add_title_toread">Noch zu lesen?</string>
-  <string name="add_bookmark_success_msg">Lesezeichen erfolgreich hinzugefügt</string>
-  <string name="edit_bookmark_success_msg">Lesezeichen erfolgreich aktualisiert</string>
-  <string name="add_bookmark_error_msg">Fehler</string>
-  <string name="add_bookmark_notification_error_title">PinDroid Fehler</string>
-  <string name="add_bookmark_notification_error_message">Fehler beim Speichern Lesezeichen</string>
   <string name="add_bookmark_invalid_url">Fehler: Leere oder ungültige URL</string>
   <string name="add_bookmark_blank_url">Fehler: Leere URL</string>
-  <string name="add_bookmark_blank_description">Fehler: Leere Beschreibung</string>
-  <string name="delete_bookmark_success_msg">Lesezeichen erfolgreich gelöscht</string>
-  <string name="delete_bookmark_error_msg">Fehler</string>
   <string name="main_search_label">Pinboard</string>
   <string name="main_search_hint">Tags, Titel, Notizen</string>
   <string name="main_search_description">Tags, Titel, und Notizen</string>
@@ -112,7 +96,6 @@
   <string name="search_results_bookmark">Lesezeichen Ergebnisse</string>
   <string name="search_results_tag">Tag Ergebnisse</string>
   <string name="search_results_global_tag">Globale Tag Ergebnisse</string>
-  <string name="tag_search_text">Pinboard durchsuchen</string>
   <string name="bookmark_search_results_title">Lesezeichen Suchergebnisse für \"%1$s\"</string>
   <string name="unread_search_results_title">Ungelesene Suchergebnisse für \"%1$s\"</string>
   <string name="tag_search_results_title">Tag Suchergebnisse für \"%1$s\"</string>
@@ -182,7 +165,6 @@
   <string name="pref_donate_key">pref_donate</string>
   <string name="pref_donate_summary">Unterstütze PinDroid</string>
   <string name="about_activity_title">Über PinDroid</string>
-  <string name="about_title">PinDroid</string>
   <string name="about_text">
     &lt;html&gt; 
     &lt;body style="background-color:#000000;color:#BEBEBE"&gt;

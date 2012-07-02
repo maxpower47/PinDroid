@@ -50,16 +50,7 @@
     <!-- Message shown if the provided account doesn't support the current activity. -->
     <string name="login_activity_newaccount_text">Sign in to your Pinboard account. \n\nDon\'t have a Pinboard account?  \nSign up at http://pinboard.in/signup</string>
 
-    <!-- Button that takes the user to the "sign in" screen -->
-    <string name="sign_in_button_label">Sign in</string>
-    <!-- Button for going to the previous screen or step -->
-    <string name="back_button_label">Back</string>
-    <!-- Button to cancel the current operation -->
-    <string name="cancel_button_label">Cancel</string>
     <string name="titleMain">Pinboard</string>
-    
-    <string name="dialog_no_account_title">No Pinboard Account Found</string>
-    <string name="dialog_no_account_text">To add your Pinboard account go to Accounts and Sync in Settings.</string>
     
     <!-- Main -->
     <string name="main_menu_my_bookmarks">My Bookmarks</string>
@@ -99,10 +90,7 @@
     <string name="bookmark_sort_url_asc">Url (A-Z)</string>
     <string name="bookmark_sort_url_desc">Url (Z-A)</string>
     
-    <string name="bookmark_feed_task_progress">Loading. Please wait…</string>
-    
     <string name="menu_addbookmark_title">Add Bookmark</string>
-    <string name="menu_sort_title">Sort</string>
     <string name="menu_sort_bookmark_title">Sort Bookmarks</string>
     <string name="menu_sort_tag_title">Sort Tags</string>
     <string name="menu_search_title">Search</string>
@@ -123,8 +111,6 @@
     <string name="add_bookmark_add_title">Add Bookmark</string>
     <string name="add_bookmark_edit_title">Edit Bookmark</string>
     
-    <string name="add_bookmark_task_progress">Working…</string>
-    
     <string name="add_bookmark_default_title">[no title]</string>
     
     <string name="add_button_save">Save</string>
@@ -138,19 +124,8 @@
     <string name="add_title_private">Private?</string>
     <string name="add_title_toread">To Read?</string>
     
-    <string name="add_bookmark_success_msg">Bookmark Added Successfully</string>
-    <string name="edit_bookmark_success_msg">Bookmark Updated Successfully</string>
-    <string name="add_bookmark_error_msg">Error</string>
-    
-    <string name="add_bookmark_notification_error_title">PinDroid Error</string>
-    <string name="add_bookmark_notification_error_message">Error Saving Bookmark</string>
-    
     <string name="add_bookmark_invalid_url">Error: Blank or invalid URL</string>
     <string name="add_bookmark_blank_url">Error: Blank URL</string>
-    <string name="add_bookmark_blank_description">Error: Blank Description</string>
-    
-    <string name="delete_bookmark_success_msg">Bookmark Deleted Successfully</string>
-    <string name="delete_bookmark_error_msg">Error</string>  
     
     <!-- Searching -->
     <string name="main_search_label">Pinboard</string>
@@ -166,8 +141,6 @@
     <string name="search_results_bookmark">Bookmark Results</string>
     <string name="search_results_tag">Tag Results</string>
     <string name="search_results_global_tag">Global Tag Results</string>
-
-    <string name="tag_search_text">Search Pinboard</string>
     
     <string name="bookmark_search_results_title">Bookmark Search Results For \"%1$s\"</string>
     <string name="unread_search_results_title">Unread Search Results For \"%1$s\"</string>
@@ -309,7 +282,6 @@
     
     <!-- AboutActivity -->
     <string name="about_activity_title">About PinDroid</string>
-    <string name="about_title">PinDroid</string>
     <string name="about_text">
     &lt;html&gt; 
     &lt;body style="background-color:#000000;color:#BEBEBE"&gt;
