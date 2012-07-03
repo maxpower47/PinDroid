@@ -99,10 +99,6 @@
   <string name="tag_search_results_title">Resultados de búsqueda de etiqueta de \"%1$s\"</string>
   <string name="search_results_global_tag_title">Resultados generales de etiqueta para \"%1$s\"</string>
   <string name="bookmark_count">marcadores</string>
-  <string name="tag_live_folder_name">Mis etiquetas</string>
-  <string name="tag_live_folder_label">Etiquetas en Pinboard</string>
-  <string name="bookmark_live_folder_label">Marcadores en Pinboard</string>
-  <string name="tag_live_folder_chooser_title">Seleccione una etiqueta para la carpeta</string>
   <string name="bookmark_content_provider_label">Marcadores</string>
   <string name="sync_receiver_label">Sincronización de los marcadores de PinDroid</string>
   <string name="syncing_toast">Sincronizando…</string>

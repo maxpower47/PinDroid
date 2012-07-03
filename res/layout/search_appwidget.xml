@@ -21,62 +21,64 @@
  * USA
  */
  -->
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/search_widget_blk"
-    android:orientation="horizontal">
-    <RelativeLayout
-        android:layout_width="wrap_content"
-    	android:layout_height="wrap_content">
-    	<ImageView
-    		android:src="@drawable/ic_main"
-    		android:layout_width="32dp"
-	        android:layout_height="32dp"
-	        android:layout_marginTop="34dp"
-	        android:layout_marginLeft="15dp"/>
-	    <ImageButton
-	    	android:id="@+id/search_widget_bookmarks_button"
-	    	android:src="@drawable/widget_bookmark_button"
-	    	style="@style/WidgetButton"
-	        android:layout_marginLeft="55dp"/>
-	    <ImageButton
-	    	android:id="@+id/search_widget_unread_button"
-	    	android:src="@drawable/widget_unread_button"
-	    	style="@style/WidgetButton"
-	        android:layout_marginLeft="105dp"/>
-	    <ImageView 
-	    	android:id="@+id/search_widget_unread_count_background"
-	    	android:src="@drawable/widget_unread_count"
-	    	android:visibility="gone"
-	    	android:layout_width="18dp"
-	        android:layout_height="18dp"
-	    	android:layout_marginLeft="134dp"
-	    	android:layout_marginTop="28dp" />
-	    <TextView
-	    	android:id="@+id/search_widget_unread_count"
-	    	android:layout_width="18dp"
-	        android:layout_height="19dp"
-	        android:gravity="center"
-	    	android:textStyle="bold"
-	    	android:textColor="#FFFFFF"
-	    	android:layout_alignLeft="@id/search_widget_unread_count_background"
-	    	android:layout_alignBottom="@id/search_widget_unread_count_background" />
-	    <ImageButton
-	    	android:id="@+id/search_widget_tags_button"
-	    	android:src="@drawable/widget_tag_button"
-	    	style="@style/WidgetButton"
-	        android:layout_marginLeft="155dp"/>
-	    <ImageButton
-	    	android:id="@+id/search_widget_add_button"
-	    	android:src="@drawable/widget_add_button"
-	    	style="@style/WidgetButton"
-	        android:layout_marginLeft="205dp"/>
-	    <ImageButton
-	    	android:id="@+id/search_widget_search_button"
-	    	android:src="@drawable/widget_search_button"
-	    	style="@style/WidgetButton"
-	        android:layout_marginLeft="255dp"/>
-    </RelativeLayout>
-</LinearLayout>
+   	android:layout_height="wrap_content"
+   	android:background="@drawable/search_widget_blk">
+   	<ImageView
+   		android:src="@drawable/ic_main"
+   		android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginLeft="15dp"
+        android:contentDescription="@string/alt_widget_main"/>
+    <ImageButton
+    	android:id="@+id/search_widget_bookmarks_button"
+    	android:src="@drawable/widget_bookmark_button"
+    	style="@style/WidgetButton"
+        android:layout_marginLeft="55dp"
+        android:contentDescription="@string/alt_widget_my_bookmarks"/>
+    <ImageButton
+    	android:id="@+id/search_widget_unread_button"
+    	android:src="@drawable/widget_unread_button"
+    	style="@style/WidgetButton"
+        android:layout_marginLeft="105dp"
+        android:contentDescription="@string/alt_widget_unread_bookmarks"/>
+    <ImageView 
+    	android:id="@+id/search_widget_unread_count_background"
+    	android:src="@drawable/widget_unread_count"
+    	android:visibility="gone"
+    	android:layout_width="18dp"
+        android:layout_height="18dp"
+    	android:layout_marginLeft="134dp"
+    	android:layout_marginTop="28dp"
+    	android:contentDescription="@string/alt_widget_unread_bookmark_count" />
+    <TextView
+    	android:id="@+id/search_widget_unread_count"
+    	android:layout_width="18dp"
+        android:layout_height="19dp"
+        android:gravity="center"
+    	android:textStyle="bold"
+    	android:textColor="#FFFFFF"
+    	android:layout_alignLeft="@id/search_widget_unread_count_background"
+    	android:layout_alignBottom="@id/search_widget_unread_count_background" />
+    <ImageButton
+    	android:id="@+id/search_widget_tags_button"
+    	android:src="@drawable/widget_tag_button"
+    	style="@style/WidgetButton"
+        android:layout_marginLeft="155dp"
+        android:contentDescription="@string/alt_widget_my_tags"/>
+    <ImageButton
+    	android:id="@+id/search_widget_add_button"
+    	android:src="@drawable/widget_add_button"
+    	style="@style/WidgetButton"
+        android:layout_marginLeft="205dp"
+        android:contentDescription="@string/alt_widget_add_bookmark"/>
+    <ImageButton
+    	android:id="@+id/search_widget_search_button"
+    	android:src="@drawable/widget_search_button"
+    	style="@style/WidgetButton"
+        android:layout_marginLeft="255dp"
+        android:contentDescription="@string/alt_widget_search"/>
+</RelativeLayout>

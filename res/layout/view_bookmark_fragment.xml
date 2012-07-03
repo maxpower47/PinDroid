@@ -43,7 +43,8 @@
 					android:id="@+id/view_bookmark_icon"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:paddingTop="2dip" />
+					android:paddingTop="2dip"
+					android:contentDescription="@string/alt_bookmark_view_private" />
 			    <TextView
 					android:id="@+id/view_bookmark_title"
 					android:layout_height="wrap_content"

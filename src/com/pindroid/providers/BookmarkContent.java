@@ -112,8 +112,8 @@ public class BookmarkContent {
         public ArrayList<Tag> getTags(){
 			ArrayList<Tag> result = new ArrayList<Tag>();
 			
-			if(this.getTagString() != null){
-				for(String s : this.getTagString().split(" ")) {
+			if(mTags != null){
+				for(String s : mTags.split(" ")) {
 					result.add(new Tag(s));
 				}
 			}

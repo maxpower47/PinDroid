@@ -98,10 +98,6 @@
   <string name="tag_search_results_title">Tunnisteiden tulokset haulle \"%1$s\"</string>
   <string name="search_results_global_tag_title">Yleiset tunnistetulokset haulle \"%1$s\"</string>
   <string name="bookmark_count">kirjanmerkki(ä)</string>
-  <string name="tag_live_folder_name">Omat tunnisteet</string>
-  <string name="tag_live_folder_label">Pinboard-tunnisteet</string>
-  <string name="bookmark_live_folder_label">Pinboard-kirjanmerkit</string>
-  <string name="tag_live_folder_chooser_title">Valitse tunniste kansiolle</string>
   <string name="bookmark_content_provider_label">Kirjanmerkit</string>
   <string name="sync_receiver_label">PinDroid-kirjanmerkkien synkronointi</string>
   <string name="view_bookmark_title">Näytä kirjanmerkin tiedot</string>
@@ -114,7 +110,6 @@
   <string name="menu_view_deletebookmark_title">Poista</string>
   <string name="menu_view_sendbookmark_title">Jaa</string>
   <string name="search_widget_label">PinDroid 4x1</string>
-  <string name="unread_widget_label">PinDroid-lukematon 1x1</string>
   <string name="preferences_title">PinDroid asetukset</string>
   <string name="account_preferences_cat_title">Yleiset asetukset</string>
   <string name="account_preferences_key">account_settings</string>

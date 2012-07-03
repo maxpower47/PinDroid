@@ -70,6 +70,7 @@
 				android:layout_width="16dip"
 				android:layout_height="16dip"
 				android:id="@+id/bookmark_private"
+				android:contentDescription="@string/alt_bookmark_list_private"
 				android:visibility="gone"/>
 		</LinearLayout>
 	</LinearLayout>
