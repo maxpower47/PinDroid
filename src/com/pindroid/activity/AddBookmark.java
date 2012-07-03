@@ -50,7 +50,7 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 		
 		Intent intent = getIntent();
 		
-		if(Intent.ACTION_SEND.equals(intent.getAction())){
+		if(Intent.ACTION_SEND.equals(intent.getAction()) && intent.hasExtra(Intent.EXTRA_TEXT)){
 			bookmark = new Bookmark();
 			
 			ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(this);
