@@ -23,6 +23,7 @@ package com.pindroid.activity;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
@@ -69,6 +70,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	Bundle savedState;
 	
 	@Override
+	@TargetApi(14)
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
@@ -163,6 +165,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		username = mAccount.name;
 	}
 	
+	@TargetApi(11)
 	public void setupSearch(Menu menu){
 	    if(android.os.Build.VERSION.SDK_INT >= 11) {
 	    	SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);

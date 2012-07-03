@@ -21,6 +21,7 @@
 
 package com.pindroid.providers;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Map;
@@ -332,7 +333,12 @@ public class BookmarkContentProvider extends ContentProvider {
 		    	if(defaultAction.equals("browser")) {
 		    		data = Uri.parse(c.getString(urlColumn));
 		    	} else if(defaultAction.equals("read")){
-		        	String readUrl = Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(c.getString(urlColumn));
+		        	String readUrl = "";
+					try {
+						readUrl = Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(c.getString(urlColumn), "UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
 		        	data = Uri.parse(readUrl);
 		    	} else {
 		    		builder.scheme(Constants.CONTENT_SCHEME);

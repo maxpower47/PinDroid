@@ -27,6 +27,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -85,8 +86,6 @@ public class ViewBookmarkFragment extends Fragment {
 	private View readSection;
 	private TextView readTitle;
 	private TextView readView;
-	
-	private AsyncTask<String, Integer, Article> articleTask;
 	
 	private OnBookmarkActionListener bookmarkActionListener;
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
@@ -180,6 +179,7 @@ public class ViewBookmarkFragment extends Fragment {
 	}
     
 	@Override
+	@TargetApi(14)
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 	    inflater.inflate(R.menu.view_menu, menu);
@@ -211,6 +211,7 @@ public class ViewBookmarkFragment extends Fragment {
 	}
 	
 	@Override
+	@TargetApi(14)
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle item selection
 	    switch (item.getItemId()) {
@@ -339,7 +340,7 @@ public class ViewBookmarkFragment extends Fragment {
 					mUsername.setMovementMethod(LinkMovementMethod.getInstance());
 				}
 			} else if(viewType == BookmarkViewType.READ){
-				articleTask = new GetArticleTask().execute(bookmark.getUrl());
+				new GetArticleTask().execute(bookmark.getUrl());
 			} else if(viewType == BookmarkViewType.WEB){
 				showInWebView();
 			}
