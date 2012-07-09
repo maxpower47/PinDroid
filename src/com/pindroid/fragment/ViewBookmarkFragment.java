@@ -187,8 +187,16 @@ public class ViewBookmarkFragment extends Fragment {
 	    if(android.os.Build.VERSION.SDK_INT >= 14) {
 	    	Log.d("bookmark", Boolean.toString(bookmark == null));
 	    	if(bookmark != null){
-	    		ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_view_sendbookmark).getActionProvider();
-	    		shareActionProvider.setShareIntent(IntentHelper.SendBookmark(bookmark.getUrl(), bookmark.getDescription()));
+	    		if(isMyself() && bookmark.getId() != 0){
+					try{		
+						int id = bookmark.getId();
+						bookmark = BookmarkManager.GetById(id, base);
+						
+			    		ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_view_sendbookmark).getActionProvider();
+			    		shareActionProvider.setShareIntent(IntentHelper.SendBookmark(bookmark.getUrl(), bookmark.getDescription()));
+					}
+					catch(ContentNotFoundException e){}
+	    		}
 	    	}
 	    }
 	}
