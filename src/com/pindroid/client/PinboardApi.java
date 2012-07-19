@@ -34,17 +34,13 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -64,6 +60,7 @@ public class PinboardApi {
 	
     private static final String TAG = "PinboardApi";
 
+    public static final String AUTH_TOKEN_URI = "v1/user/api_token";
     public static final String FETCH_TAGS_URI = "v1/tags/get";
     public static final String FETCH_SUGGESTED_TAGS_URI = "v1/posts/suggest";
     public static final String FETCH_BOOKMARKS_URI = "v1/posts/all";
@@ -77,8 +74,75 @@ public class PinboardApi {
     private static final String SCHEME = "https";
     private static final String PINBOARD_AUTHORITY = "api.pinboard.in";
     private static final int PORT = 443;
- 
+    
     private static final AuthScope SCOPE = new AuthScope(PINBOARD_AUTHORITY, PORT);
+
+    /**
+     * Attempts to authenticate to Pinboard using a legacy Pinboard account.
+     * 
+     * @param username The user's username.
+     * @param password The user's password.
+     * @param handler The hander instance from the calling UI thread.
+     * @param context The context of the calling Activity.
+     * @return The boolean result indicating whether the user was
+     *         successfully authenticated.
+     */
+    public static String pinboardAuthenticate(String username, String password) {
+        final HttpResponse resp;
+        
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(SCHEME);
+        builder.authority(PINBOARD_AUTHORITY);
+        builder.appendEncodedPath(AUTH_TOKEN_URI);
+        Uri uri = builder.build();
+
+        HttpGet request = new HttpGet(String.valueOf(uri));
+
+        DefaultHttpClient client = (DefaultHttpClient)HttpClientFactory.getThreadSafeClient();
+        
+        CredentialsProvider provider = client.getCredentialsProvider();
+        Credentials credentials = new UsernamePasswordCredentials(username, password);
+        provider.setCredentials(SCOPE, credentials);
+
+        try {
+            resp = client.execute(request);
+            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            	
+        		final HttpEntity entity = resp.getEntity();
+        		
+        		InputStream instream = entity.getContent();
+        		String response = convertStreamToString(instream);
+            	if (response.contains("<?xml")) {
+            		int start = response.indexOf("<result>");
+                	int end = response.indexOf("</result>", start);
+                	
+                	String authToken = response.substring(start + 8, end);
+    	        
+	                if (Log.isLoggable(TAG, Log.VERBOSE)) {
+	                    Log.v(TAG, "Successful authentication");
+	                    Log.v(TAG, "AuthToken: " + authToken);
+	                }
+	                
+	                return authToken;
+            	} else return null;
+                
+            } else {
+                if (Log.isLoggable(TAG, Log.VERBOSE)) {
+                    Log.v(TAG, "Error authenticating" + resp.getStatusLine());
+                }
+                return null;
+            }
+        } catch (final IOException e) {
+            if (Log.isLoggable(TAG, Log.VERBOSE)) {
+                Log.v(TAG, "IOException when getting authtoken", e);
+            }
+            return null;
+        } finally {
+            if (Log.isLoggable(TAG, Log.VERBOSE)) {
+                Log.v(TAG, "getAuthtoken completing");
+            }
+        }
+    }
 
     /**
      * Gets timestamp of last update to data on Pinboard servers.
@@ -453,6 +517,8 @@ public class PinboardApi {
 			e.printStackTrace();
 		}
     	
+    	params.put("auth_token", username + ":" + authtoken);
+    	
 		final Uri.Builder builder = new Uri.Builder();
 		builder.scheme(SCHEME);
 		builder.authority(PINBOARD_AUTHORITY);
@@ -470,33 +536,6 @@ public class PinboardApi {
 		post.setHeader("Accept-Encoding", "gzip");
 
 		final DefaultHttpClient client = (DefaultHttpClient)HttpClientFactory.getThreadSafeClient();
-        final CredentialsProvider provider = client.getCredentialsProvider();
-        final Credentials credentials = new UsernamePasswordCredentials(username, authtoken);
-        provider.setCredentials(SCOPE, credentials);
-        
-		// Get auth/login cookies
-		final HttpPost auth = new HttpPost("http://pinboard.in/auth/");
-		java.util.List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-		nameValuePairs.add(new BasicNameValuePair("username", username));
-		nameValuePairs.add(new BasicNameValuePair("password", authtoken));
-		nameValuePairs.add(new BasicNameValuePair("submit", "log in"));
-		auth.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-		
-		try{
-			client.execute(auth);
-		} catch(org.apache.http.client.ClientProtocolException e){
-			am.invalidateAuthToken(Constants.ACCOUNT_TYPE, authtoken);
-			try {
-				am.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, true);
-			} catch (OperationCanceledException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (AuthenticatorException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			throw new AuthenticationException();
-		}
         
         final HttpResponse resp = client.execute(post);
         
@@ -516,6 +555,18 @@ public class PinboardApi {
     		
     		return instream;
     	} else if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
+    		am.invalidateAuthToken(Constants.AUTHTOKEN_TYPE, authtoken);
+    		
+        	try {
+    			authtoken = am.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, true);
+    		} catch (OperationCanceledException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		} catch (AuthenticatorException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+        	
     		throw new AuthenticationException();
     	} else if (statusCode == Constants.HTTP_STATUS_TOO_MANY_REQUESTS) {
     		throw new TooManyRequestsException(300);

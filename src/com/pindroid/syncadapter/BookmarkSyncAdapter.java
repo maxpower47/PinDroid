@@ -72,8 +72,6 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	boolean upload = extras.containsKey(ContentResolver.SYNC_EXTRAS_UPLOAD);
     	boolean manual = extras.containsKey(ContentResolver.SYNC_EXTRAS_IGNORE_BACKOFF) && extras.containsKey(ContentResolver.SYNC_EXTRAS_IGNORE_SETTINGS);
     	
-
-    	
         try {
         	if(upload){
         		Log.d(TAG, "Beginning Upload Sync");
