@@ -30,7 +30,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.pindroid.Constants;
-import com.pindroid.client.NetworkUtilities;
+import com.pindroid.client.PinboardApi;
 
 /**
  * This class is an implementation of AbstractAccountAuthenticator for
@@ -64,9 +64,10 @@ class Authenticator extends AbstractAccountAuthenticator {
     public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) {
         if (options != null && options.containsKey(AccountManager.KEY_PASSWORD)) {
             final String password = options.getString(AccountManager.KEY_PASSWORD);
-            final boolean verified = onlineConfirmPassword(account, password);
+            final String verified = onlineConfirmPassword(account, password);
             final Bundle result = new Bundle();
-            result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, verified);
+            boolean confirmed = verified != null;
+            result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, confirmed);
             return result;
         }
         // Launch AuthenticatorActivity to confirm credentials
@@ -99,15 +100,19 @@ class Authenticator extends AbstractAccountAuthenticator {
             return result;
         }
         final AccountManager am = AccountManager.get(mContext);
-        final String password = am.getPassword(account);     
+        final String password = am.getPassword(account);
+        am.setPassword(account, null);
     	
         if (password != null) {
-            final boolean verified = onlineConfirmPassword(account, password);
-            if (verified) {
+            final String authToken = onlineConfirmPassword(account, password);
+            if (authToken != null) {
+            	
+            	am.setAuthToken(account, Constants.AUTHTOKEN_TYPE, authToken);
+            	
                 final Bundle result = new Bundle();
                 result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
                 result.putString(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
-                result.putString(AccountManager.KEY_AUTHTOKEN, password);
+                result.putString(AccountManager.KEY_AUTHTOKEN, authToken);
                 return result;
             }
         }
@@ -143,8 +148,8 @@ class Authenticator extends AbstractAccountAuthenticator {
     /**
      * Validates user's password on the server
      */
-    private boolean onlineConfirmPassword(Account account, String password) {
-    	return NetworkUtilities.pinboardAuthenticate(account.name, password);
+    private String onlineConfirmPassword(Account account, String password) {
+    	return PinboardApi.pinboardAuthenticate(account.name, password);
     }
 
     /**

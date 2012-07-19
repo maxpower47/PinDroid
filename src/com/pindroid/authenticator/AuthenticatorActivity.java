@@ -43,6 +43,7 @@ import android.widget.TextView;
 import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.client.NetworkUtilities;
+import com.pindroid.client.PinboardApi;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.util.SyncUtils;
 
@@ -155,12 +156,13 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
      * 
      * @param the confirmCredentials result.
      */
-    protected void finishConfirmCredentials(boolean result) {
+    protected void finishConfirmCredentials(String authToken) {
         Log.i(TAG, "finishConfirmCredentials()");
         final Account account = new Account(mUsername, Constants.ACCOUNT_TYPE);
-        mAccountManager.setPassword(account, mPassword);
+        mAccountManager.setAuthToken(account, Constants.AUTHTOKEN_TYPE, authToken);
         final Intent intent = new Intent();
-        intent.putExtra(AccountManager.KEY_BOOLEAN_RESULT, result);
+        intent.putExtra(AccountManager.KEY_BOOLEAN_RESULT, authToken != null);
+        intent.putExtra(AccountManager.KEY_AUTHTOKEN, authToken);
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
         finish();
@@ -175,26 +177,28 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
      * 
      * @param the confirmCredentials result.
      */
-    protected void finishLogin() {
+    protected void finishLogin(String authToken) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final int synctime = Integer.parseInt(settings.getString("pref_synctime", "0"));
         
         final Account account = new Account(mUsername, Constants.ACCOUNT_TYPE);
 
         if (mRequestNewAccount) {
-            mAccountManager.addAccountExplicitly(account, mPassword, null);
+            mAccountManager.addAccountExplicitly(account, null, null);
 
             ContentResolver.setSyncAutomatically(account, BookmarkContentProvider.AUTHORITY, true);
             if(synctime != 0) {
             	SyncUtils.addPeriodicSync(BookmarkContentProvider.AUTHORITY, Bundle.EMPTY, synctime, this);
             }
-        } else {
-            mAccountManager.setPassword(account, mPassword);
         }
+        
+        mAccountManager.setAuthToken(account, Constants.AUTHTOKEN_TYPE, authToken);
+        
         final Intent intent = new Intent();
         
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, mUsername);
         intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
+        intent.putExtra(AccountManager.KEY_AUTHTOKEN, authToken);
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
         finish();
@@ -203,12 +207,12 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
     /**
      * Called when the authentication process completes (see attemptLogin()).
      */
-    public void onAuthenticationResult(boolean result) {
+    public void onAuthenticationResult(String result) {
     	mAuthTask = null;
         hideProgress();
-        if (result) {
+        if (result != null) {
             if (!mConfirmCredentials) {            	
-                finishLogin();
+                finishLogin(result);
             } else {
                 finishConfirmCredentials(result);
             }
@@ -268,26 +272,26 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity {
      * Represents an asynchronous task used to authenticate a user against the
      * SampleSync Service
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<Void, Void, String> {
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             // We do the actual work of authenticating the user
             // in the NetworkUtilities class.
             try {
-                return NetworkUtilities.pinboardAuthenticate(mUsername, mPassword);
+                return PinboardApi.pinboardAuthenticate(mUsername, mPassword);
             } catch (Exception ex) {
                 Log.e(TAG, "UserLoginTask.doInBackground: failed to authenticate");
                 Log.i(TAG, ex.toString());
-                return false;
+                return null;
             }
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final String authToken) {
             // On a successful authentication, call back into the Activity to
             // communicate the authToken (or null for an error).
-            onAuthenticationResult(success);
+            onAuthenticationResult(authToken);
         }
 
         @Override
