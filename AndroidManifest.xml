@@ -96,6 +96,13 @@
         	</intent-filter>
         	<meta-data android:name="android.app.searchable" android:resource="@xml/bookmark_searchable"/>
         </activity>
+        <activity android:name=".activity.BrowseNotes">
+        	<intent-filter>
+        		<action android:name="android.intent.action.VIEW" />
+        		<category android:name="android.intent.category.DEFAULT" />
+        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/notes"/>
+			</intent-filter>
+        </activity>
         <activity android:name=".activity.ViewBookmark"
         	android:label="@string/view_bookmark_title"
         	android:uiOptions="splitActionBarWhenNarrow">

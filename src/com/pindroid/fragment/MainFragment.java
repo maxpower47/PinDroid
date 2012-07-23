@@ -47,6 +47,7 @@ public class MainFragment extends ListFragment {
 		public void onMyBookmarksSelected();
 		public void onMyUnreadSelected();
 		public void onMyTagsSelected();
+		public void onMyNotesSelected();
 		public void onMyNetworkSelected();
 		public void onRecentSelected();
 	}
@@ -61,6 +62,7 @@ public class MainFragment extends ListFragment {
 		String[] MENU_ITEMS = new String[] {getString(R.string.main_menu_my_bookmarks),
 				getString(R.string.main_menu_my_unread_bookmarks),
 				getString(R.string.main_menu_my_tags),
+				getString(R.string.main_menu_my_notes),
 				getString(R.string.main_menu_recent_bookmarks),
 				getString(R.string.main_menu_network_bookmarks)};
 		
@@ -78,10 +80,12 @@ public class MainFragment extends ListFragment {
 		    	} else if(position == 2){
 		    		mainActionListener.onMyTagsSelected();
 		    	} else if(position == 3){
-		    		mainActionListener.onRecentSelected();
+		    		mainActionListener.onMyNotesSelected();
 		    	} else if(position == 4){
+		    		mainActionListener.onRecentSelected();
+		    	} else if(position == 5){
 		    		mainActionListener.onMyNetworkSelected();
-		    	} 
+		    	}
 		    }
 		});
 	}

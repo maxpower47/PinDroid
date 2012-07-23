@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 
 import com.pindroid.activity.AddBookmark;
 import com.pindroid.activity.BrowseBookmarks;
+import com.pindroid.activity.BrowseNotes;
 import com.pindroid.activity.BrowseTags;
 import com.pindroid.activity.ViewBookmark;
 import com.pindroid.Constants;
@@ -110,6 +111,20 @@ public class IntentHelper {
 		
 		if(tag != null && !tag.equals(""))
 			data.appendQueryParameter("tagname", tag);
+		
+		i.setData(data.build());
+		
+		return i;
+	}
+	
+	public static Intent ViewNotes(String tag, String account, Context context) {
+		Intent i = new Intent(context, BrowseNotes.class);
+		i.setAction(Intent.ACTION_VIEW);
+		i.addCategory(Intent.CATEGORY_DEFAULT);
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.appendEncodedPath("notes");
 		
 		i.setData(data.build());
 		

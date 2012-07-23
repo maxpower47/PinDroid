@@ -57,6 +57,7 @@
     <string name="main_menu_my_bookmarks">My Bookmarks</string>
     <string name="main_menu_my_unread_bookmarks">My Unread</string>
     <string name="main_menu_my_tags">My Tags</string>
+    <string name="main_menu_my_notes">My Notes</string>
     <string name="main_menu_network_bookmarks">Network Bookmarks</string>
     <string name="main_menu_recent_bookmarks">Recent Bookmarks</string>
 
@@ -107,6 +108,9 @@
     <string name="tag_sort_name_desc">Name (Z-A)</string>
     <string name="tag_sort_count_asc">Count (Least First)</string>
     <string name="tag_sort_count_desc">Count (Most First)</string>
+    
+    <!-- BrowseNotes -->
+    <string name="browse_my_notes_title">My Notes</string>
     
     <!-- AddBookmark -->
     <string name="add_bookmark_add_title">Add Bookmark</string>

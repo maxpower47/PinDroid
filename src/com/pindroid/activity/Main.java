@@ -52,8 +52,11 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 			startActivity(IntentHelper.ViewTabletTags(mAccount.name, this));
 		} else {
 			startActivity(IntentHelper.ViewTags(mAccount.name, this));
-		}
-		
+		}	
+	}
+	
+	public void onMyNotesSelected() {
+		startActivity(IntentHelper.ViewNotes("", mAccount.name, this));	
 	}
 
 	public void onMyNetworkSelected() {
