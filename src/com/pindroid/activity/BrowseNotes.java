@@ -24,9 +24,8 @@ package com.pindroid.activity;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseNotesFragment;
-import com.pindroid.fragment.BrowseTagsFragment;
+import com.pindroid.providers.NoteContent.Note;
 
-import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -66,7 +65,9 @@ public class BrowseNotes extends FragmentBaseActivity implements BrowseNotesFrag
 	    return true;
 	}
 
-	public void onNoteSelected(String tag) {		
-		startActivity(IntentHelper.ViewBookmarks(tag, username, this));
+	public void onNoteView(Note n) {
+		if(n != null){
+			startActivity(IntentHelper.ViewNote(n, username, this));
+		}
 	}
 }

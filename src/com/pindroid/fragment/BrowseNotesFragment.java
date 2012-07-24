@@ -27,20 +27,14 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.pindroid.R;
 import com.pindroid.platform.NoteManager;
-import com.pindroid.platform.TagManager;
 import com.pindroid.providers.NoteContent.Note;
-import com.pindroid.providers.TagContent.Tag;
 
 public class BrowseNotesFragment extends ListFragment
 	implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -49,19 +43,16 @@ public class BrowseNotesFragment extends ListFragment
 	private SimpleCursorAdapter mAdapter;
 	
 	private String username = null;
-	private String query = null;
 	
 	private OnNoteSelectedListener noteSelectedListener;
-	private OnItemClickListener clickListener;
 	
 	public interface OnNoteSelectedListener {
-		public void onNoteSelected(String pid);
+		public void onNoteView(Note n);
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		clickListener = viewListener;
 	}
 	
 	@Override
@@ -78,30 +69,30 @@ public class BrowseNotesFragment extends ListFragment
 		
 		getLoaderManager().initLoader(0, null, this);
 		
-		ListView lv = getListView();
+		final ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
 		lv.setFastScrollEnabled(true);
-		//lv.setOnItemClickListener(clickListener);
+		
+		lv.setItemsCanFocus(false);
+		lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-		//lv.setItemsCanFocus(false);
-		//lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		lv.setOnItemClickListener(new OnItemClickListener() {
+		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				final Cursor c = (Cursor)lv.getItemAtPosition(position);
+				Note n = NoteManager.CursorToNote(c);
+				
+		    	viewNote(n);
+		    }
+		});
+	}
+	
+	private void viewNote(Note n) {
+		noteSelectedListener.onNoteView(n);
 	}
 	
 	public void setAccount(String account) {
 		this.username = account;
 	}
-	
-	public void setQuery(String query) {
-		this.query = query;
-	}
-	
-	private OnItemClickListener viewListener = new OnItemClickListener() {
-	    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-	    	String noteName = ((TextView)view.findViewById(R.id.note_title)).getText().toString();
-	    	
-	    	noteSelectedListener.onNoteSelected(noteName);
-	    }
-	};
 	
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		if(username != null && !username.equals("")) {

@@ -23,22 +23,53 @@ package com.pindroid.platform;
 
 import java.util.ArrayList;
 
+import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.NoteContent.Note;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.provider.BaseColumns;
 import android.support.v4.content.CursorLoader;
 import android.text.TextUtils;
 
 public class NoteManager {
 	
 	public static CursorLoader GetNotes(String account, String sortorder, Context context) {		
-		final String[] projection = new String[] {Note._ID, Note.Title};
+		final String[] projection = new String[] {Note._ID, Note.Title, Note.Text, Note.Hash, Note.Pid, Note.Account, Note.Added, Note.Updated};
 		final String selection = Note.Account + "=?";
 		final String[] selectionargs = new String[]{account};
 		
 		return new CursorLoader(context, Note.CONTENT_URI, projection, selection, selectionargs, sortorder);
+	}
+	
+	public static Note GetById(int id, Context context) throws ContentNotFoundException {		
+		final String[] projection = new String[] {Note.Account, Note.Title, Note.Text, Note.Pid, Note.Hash, Note.Added, Note.Updated};
+		String selection = BaseColumns._ID + "=?";
+		final String[] selectionargs = new String[]{Integer.toString(id)};
+		
+		Cursor c = context.getContentResolver().query(Note.CONTENT_URI, projection, selection, selectionargs, null);				
+		
+		if(c.moveToFirst()){
+			final int accountColumn = c.getColumnIndex(Note.Account);
+			final int titleColumn = c.getColumnIndex(Note.Title);
+			final int textColumn = c.getColumnIndex(Note.Text);
+			final int pidColumn = c.getColumnIndex(Note.Pid);
+			final int hashColumn = c.getColumnIndex(Note.Hash);
+			final int addedColumn = c.getColumnIndex(Note.Added);
+			final int updatedColumn = c.getColumnIndex(Note.Updated);
+
+			Note n = new Note(id, c.getString(titleColumn), c.getString(textColumn), 
+				c.getString(accountColumn), c.getString(hashColumn), c.getString(pidColumn),
+				c.getLong(addedColumn), c.getLong(updatedColumn));
+			
+			c.close();
+			
+			return n;
+		} else {
+			c.close();
+			throw new ContentNotFoundException();
+		}
 	}
 	
 	public static void BulkInsert(ArrayList<Note> list, String account, Context context) {
@@ -135,5 +166,17 @@ public class NoteManager {
 		values.put(Note.Account, note.getAccount());
 		
 		context.getContentResolver().update(Note.CONTENT_URI, values, selection, selectionargs);
+	}
+	
+	public static Note CursorToNote(Cursor c) {
+		Note n = new Note();
+		n.setId(c.getInt(c.getColumnIndex(BaseColumns._ID)));
+		n.setTitle(c.getString(c.getColumnIndex(Note.Title)));
+		n.setText(c.getString(c.getColumnIndex(Note.Text)));
+
+		if(c.getColumnIndex(Note.Account) != -1)
+			n.setAccount(c.getString(c.getColumnIndex(Note.Account)));
+		
+		return n;
 	}
 }

@@ -175,6 +175,10 @@
     <string name="menu_view_deletebookmark_title">Delete</string>
     <string name="menu_view_sendbookmark_title">Share</string>
     
+    <!-- ViewNote -->
+    <string name="view_note_title">View Note Details</string>
+    <string name="view_note_account_title">By</string>
+    
     <!-- Widget -->
     <string name="search_widget_label">PinDroid 4x1</string>
     

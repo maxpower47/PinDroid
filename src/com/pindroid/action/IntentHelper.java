@@ -12,6 +12,7 @@ import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.BookmarkContentProvider;
+import com.pindroid.providers.NoteContent.Note;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -82,6 +83,22 @@ public class IntentHelper {
 			data.appendQueryParameter("time", Long.toString(b.getTime()));
 			data.appendQueryParameter("account", b.getAccount());
 		}
+		viewBookmark.setData(data.build());
+		
+		return viewBookmark;
+	}
+	
+	public static Intent ViewNote(Note n, String account, Context context) {
+		Intent viewBookmark = new Intent(context, com.pindroid.activity.ViewNote.class);
+		viewBookmark.setAction(Intent.ACTION_VIEW);
+		viewBookmark.addCategory(Intent.CATEGORY_DEFAULT);
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.appendEncodedPath("notes");
+		
+		data.appendEncodedPath(Integer.toString(n.getId()));
+
 		viewBookmark.setData(data.build());
 		
 		return viewBookmark;

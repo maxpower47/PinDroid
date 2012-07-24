@@ -116,6 +116,13 @@
         	</intent-filter>
         	<meta-data android:name="android.app.searchable" android:resource="@xml/main_searchable"/>
         </activity>
+        <activity android:name=".activity.ViewNote">
+        	<intent-filter>
+        		<action android:name="android.intent.action.VIEW" />
+        		<category android:name="android.intent.category.DEFAULT" />
+        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:pathPattern="/bookmarks/.*"/>
+        	</intent-filter>
+        </activity>
         <activity android:name=".activity.MainSearchResults"
         	android:label="@string/main_search_results_title"
         	android:exported="false">

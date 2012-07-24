@@ -52,6 +52,10 @@ public class NoteContent {
         	return mId;
         }
         
+        public void setId(int id){
+        	mId = id;
+        }
+        
         public String getTitle() {
             return mTitle;
         }
@@ -111,7 +115,8 @@ public class NoteContent {
         public Note() {
         }
         
-        public Note(String title, String text, String account, String hash, String pid, long added, long updated) {
+        public Note(int id, String title, String text, String account, String hash, String pid, long added, long updated) {
+        	mId = id;
             mTitle = title;
             mText = text;
             mAccount = account;
