@@ -119,7 +119,7 @@ public class AddBookmarkFragment extends Fragment {
 		
 		if(base.mAccount != null){
 			String[] tagArray = new String[5];
-			tagArray = TagManager.GetTagsAsArray(base.mAccount.name, null, base).toArray(tagArray);
+			tagArray = TagManager.GetTagsAsArray(base.mAccount.name, Tag.Name + " ASC", base).toArray(tagArray);
 			ArrayAdapter<String> autoCompleteAdapter = new ArrayAdapter<String>(base, R.layout.autocomplete_view, tagArray);
 			mEditTags.setAdapter(autoCompleteAdapter);
 			mEditTags.setTokenizer(new SpaceTokenizer());
