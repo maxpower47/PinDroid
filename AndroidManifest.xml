@@ -36,6 +36,17 @@
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    
+    <permission android:name="com.pindroid.READ_BOOKMARKS"
+	    android:label="@string/perm_read_bookmarks_label"
+	    android:description="@string/perm_read_bookmarks_description"
+	    android:protectionLevel="normal" />
+
+	<permission android:name="com.pindroid.WRITE_BOOKMARKS"
+	    android:label="@string/perm_write_bookmarks_label"
+	    android:description="@string/perm_write_bookmarks_description"
+	    android:protectionLevel="normal" />
+    
     <application
         android:icon="@drawable/ic_main"
         android:label="@string/label"
@@ -69,14 +80,6 @@
         	</intent-filter>
 			<meta-data android:name="android.app.searchable" android:resource="@xml/tag_searchable"/>
         </activity>
-        <activity android:name=".activity.TagLiveFolder"
-        	android:label="@string/tag_live_folder_label"
-        	android:icon="@drawable/ic_tag_folder">
-            <intent-filter>
-        		<action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
-        		<category android:name="android.intent.category.DEFAULT" />	
-        	</intent-filter>
-        </activity>
         <activity android:name=".activity.BrowseBookmarks" >
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
@@ -93,13 +96,12 @@
         	</intent-filter>
         	<meta-data android:name="android.app.searchable" android:resource="@xml/bookmark_searchable"/>
         </activity>
-        <activity android:name=".activity.BookmarkLiveFolder"
-        	android:label="@string/bookmark_live_folder_label"
-        	android:icon="@drawable/ic_bookmark_folder">
-            <intent-filter>
-        		<action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
-        		<category android:name="android.intent.category.DEFAULT" />	
-        	</intent-filter>
+        <activity android:name=".activity.BrowseNotes">
+        	<intent-filter>
+        		<action android:name="android.intent.action.VIEW" />
+        		<category android:name="android.intent.category.DEFAULT" />
+        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/notes"/>
+			</intent-filter>
         </activity>
         <activity android:name=".activity.ViewBookmark"
         	android:label="@string/view_bookmark_title"
@@ -114,8 +116,16 @@
         	</intent-filter>
         	<meta-data android:name="android.app.searchable" android:resource="@xml/main_searchable"/>
         </activity>
+        <activity android:name=".activity.ViewNote">
+        	<intent-filter>
+        		<action android:name="android.intent.action.VIEW" />
+        		<category android:name="android.intent.category.DEFAULT" />
+        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:pathPattern="/bookmarks/.*"/>
+        	</intent-filter>
+        </activity>
         <activity android:name=".activity.MainSearchResults"
-        	android:label="@string/main_search_results_title">
+        	android:label="@string/main_search_results_title"
+        	android:exported="false">
         	<intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
         	</intent-filter>
@@ -140,7 +150,8 @@
         <activity android:name=".activity.Preferences"
         	android:label="@string/preferences_title" />
         <activity android:name=".activity.AboutActivity" 
-        	android:label="@string/about_activity_title">
+        	android:label="@string/about_activity_title"
+        	android:exported="false">
         	<intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
         	</intent-filter>
@@ -149,7 +160,7 @@
         <!-- The authenticator service -->
         <service
             android:name=".authenticator.AuthenticationService"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -159,7 +170,7 @@
         </service>
         <service
             android:name=".syncadapter.BookmarkSyncService"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -177,28 +188,24 @@
         	android:name="com.pindroid.providers.BookmarkContentProvider"
         	android:label="@string/bookmark_content_provider_label"
         	android:authorities="com.pindroid.providers.BookmarkContentProvider"
+        	android:readPermission="com.pindroid.READ_BOOKMARKS"
+        	android:writePermission="com.pindroid.WRITE_BOOKMARKS"
         	android:syncable="true" />
         <receiver 
         	android:name=".widget.SearchWidgetProvider"
-        	android:label="@string/search_widget_label">
+        	android:label="@string/search_widget_label"
+        	android:exported="false">
     		<intent-filter>
         		<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
     		</intent-filter>
     		<meta-data android:name="android.appwidget.provider" android:resource="@xml/search_appwidget_info" />
 		</receiver>
 		<receiver 
-        	android:name=".widget.UnreadWidgetProvider"
-        	android:label="@string/unread_widget_label">
-    		<intent-filter>
-        		<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-    		</intent-filter>
-    		<meta-data android:name="android.appwidget.provider" android:resource="@xml/unread_appwidget_info" />
-		</receiver>
-		<receiver 
         	android:name=".syncadapter.PeriodicSyncReceiver"
         	android:label="@string/sync_receiver_label">
 		</receiver>
-		<receiver android:name=".receiver.AccountReceiver">
+		<receiver android:name=".receiver.AccountReceiver"
+			android:exported="false">
 			<intent-filter>
 				<action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED"></action>
 			</intent-filter>

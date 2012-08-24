@@ -21,6 +21,7 @@
 
 package com.pindroid.providers;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Map;
@@ -30,6 +31,7 @@ import java.util.TreeMap;
 import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.providers.NoteContent.Note;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.util.SyncUtils;
 
@@ -53,7 +55,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
-import android.provider.LiveFolders;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -66,17 +67,18 @@ public class BookmarkContentProvider extends ContentProvider {
 	private SQLiteDatabase db;
 	private DatabaseHelper dbHelper;
 	private static final String DATABASE_NAME = "PinboardBookmarks.db";
-	private static final int DATABASE_VERSION = 26;
+	private static final int DATABASE_VERSION = 27;
 	private static final String BOOKMARK_TABLE_NAME = "bookmark";
 	private static final String TAG_TABLE_NAME = "tag";
+	private static final String NOTE_TABLE_NAME = "note";
 	
 	private static final int Bookmarks = 1;
 	private static final int SearchSuggest = 2;
 	private static final int Tags = 3;
 	private static final int TagSearchSuggest = 4;
 	private static final int BookmarkSearchSuggest = 5;
-	private static final int TagLiveFolder = 6;
-	private static final int BookmarkLiveFolder = 7;
+	private static final int Notes = 6;
+	private static final int NoteSearchSuggest = 7;
 	
 	private static final String SuggestionLimit = "10";
 	
@@ -131,6 +133,20 @@ public class BookmarkContentProvider extends ContentProvider {
 					"_ACCOUNT ON " + TAG_TABLE_NAME + " " +
 					"(ACCOUNT)");
 			
+			sqlDb.execSQL("Create table " + NOTE_TABLE_NAME + 
+					" (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					"ACCOUNT TEXT, " +
+					"TITLE TEXT COLLATE NOCASE, " +
+					"TEXT TEXT, " +
+					"ADDED INTEGER, " +
+					"UPDATED INTEGER, " +
+					"HASH TEXT, " +
+					"PID TEXT);");
+			
+			sqlDb.execSQL("CREATE INDEX " + NOTE_TABLE_NAME + 
+					"_ACCOUNT ON " + NOTE_TABLE_NAME + " " +
+					"(ACCOUNT)");
+			
 		}
 
 		@Override
@@ -139,8 +155,10 @@ public class BookmarkContentProvider extends ContentProvider {
 			sqlDb.execSQL("DROP INDEX IF EXISTS " + BOOKMARK_TABLE_NAME + "_TAGS");
 			sqlDb.execSQL("DROP INDEX IF EXISTS " + BOOKMARK_TABLE_NAME + "_HASH");
 			sqlDb.execSQL("DROP INDEX IF EXISTS " + TAG_TABLE_NAME + "_ACCOUNT");
+			sqlDb.execSQL("DROP INDEX IF EXISTS " + NOTE_TABLE_NAME + "_ACCOUNT");
 			sqlDb.execSQL("DROP TABLE IF EXISTS " + BOOKMARK_TABLE_NAME);
-			sqlDb.execSQL("DROP TABLE IF EXISTS " + TAG_TABLE_NAME);			
+			sqlDb.execSQL("DROP TABLE IF EXISTS " + TAG_TABLE_NAME);
+			sqlDb.execSQL("DROP TABLE IF EXISTS " + NOTE_TABLE_NAME);	
 			onCreate(sqlDb);
 			
 			SyncUtils.clearSyncMarkers(mContext);
@@ -160,6 +178,10 @@ public class BookmarkContentProvider extends ContentProvider {
 				count = db.delete(TAG_TABLE_NAME, where, whereArgs);
 				getContext().getContentResolver().notifyChange(uri, null, false);
 				break;
+			case Notes:
+				count = db.delete(NOTE_TABLE_NAME, where, whereArgs);
+				getContext().getContentResolver().notifyChange(uri, null, false);
+				break;
 			default:
 				throw new IllegalArgumentException("Unknown URI " + uri);
 		}
@@ -176,6 +198,8 @@ public class BookmarkContentProvider extends ContentProvider {
 				return SearchManager.SUGGEST_MIME_TYPE;
 			case Tags:
 				return Tag.CONTENT_TYPE;
+			case Notes:
+				return Note.CONTENT_TYPE;
 			default:
 				throw new IllegalArgumentException("Unknown URL " + uri);
 		}
@@ -189,6 +213,8 @@ public class BookmarkContentProvider extends ContentProvider {
 				return insertBookmark(uri, values);
 			case Tags:
 				return insertTag(uri, values);
+			case Notes:
+				return insertNote(uri, values);
 			default:
 				throw new IllegalArgumentException("Unknown Uri: " + uri);
 		}
@@ -210,6 +236,17 @@ public class BookmarkContentProvider extends ContentProvider {
 		long rowId = db.insert(TAG_TABLE_NAME, "", values);
 		if(rowId > 0) {
 			Uri rowUri = ContentUris.appendId(TagContent.Tag.CONTENT_URI.buildUpon(), rowId).build();
+			getContext().getContentResolver().notifyChange(rowUri, null);
+			return rowUri;
+		}
+		throw new SQLException("Failed to insert row into " + uri);
+	}
+	
+	private Uri insertNote(Uri uri, ContentValues values){
+		db = dbHelper.getWritableDatabase();
+		long rowId = db.insert(NOTE_TABLE_NAME, "", values);
+		if(rowId > 0) {
+			Uri rowUri = ContentUris.appendId(NoteContent.Note.CONTENT_URI.buildUpon(), rowId).build();
 			getContext().getContentResolver().notifyChange(rowUri, null);
 			return rowUri;
 		}
@@ -240,10 +277,11 @@ public class BookmarkContentProvider extends ContentProvider {
 			case BookmarkSearchSuggest:
 				String bookmarkQuery = uri.getLastPathSegment().toLowerCase();
 				return getSearchCursor(getBookmarkSearchSuggestions(bookmarkQuery));
-			case TagLiveFolder:
-				return getTagLiveFolderResults(uri);
-			case BookmarkLiveFolder:
-				return getBookmarkLiveFolderResults(uri);
+			case Notes:
+				return getNotes(uri, projection, selection, selectionArgs, sortOrder);
+			case NoteSearchSuggest:
+				String noteQuery = uri.getLastPathSegment().toLowerCase();
+				return getSearchCursor(getNoteSearchSuggestions(noteQuery));
 			default:
 				throw new IllegalArgumentException("Unknown Uri: " + uri);
 		}
@@ -275,6 +313,19 @@ public class BookmarkContentProvider extends ContentProvider {
 		return c;
 	}
 	
+	private Cursor getNotes(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
+		return getNotes(uri, projection, selection, selectionArgs, sortOrder, null);
+	}
+	
+	private Cursor getNotes(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder, String limit) {
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
+		qb.setTables(NOTE_TABLE_NAME);
+		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder, limit);
+		c.setNotificationUri(getContext().getContentResolver(), uri);
+		return c;
+	}
+	
 	private Cursor getSearchSuggestions(String query) {
 		Log.d("getSearchSuggestions", query);
 		
@@ -283,13 +334,16 @@ public class BookmarkContentProvider extends ContentProvider {
 		
 		Map<String, SearchSuggestionContent> tagSuggestions = new TreeMap<String, SearchSuggestionContent>();
 		Map<String, SearchSuggestionContent> bookmarkSuggestions = new TreeMap<String, SearchSuggestionContent>();
+		Map<String, SearchSuggestionContent> noteSuggestions = new TreeMap<String, SearchSuggestionContent>();
 			
 		tagSuggestions = getTagSearchSuggestions(query);
 		bookmarkSuggestions = getBookmarkSearchSuggestions(query);
+		noteSuggestions = getNoteSearchSuggestions(query);
 	
 		SortedMap<String, SearchSuggestionContent> s = new TreeMap<String, SearchSuggestionContent>();
 		s.putAll(tagSuggestions);
 		s.putAll(bookmarkSuggestions);
+		s.putAll(noteSuggestions);
 		
 		return getSearchCursor(s);
 	}
@@ -339,7 +393,12 @@ public class BookmarkContentProvider extends ContentProvider {
 		    	if(defaultAction.equals("browser")) {
 		    		data = Uri.parse(c.getString(urlColumn));
 		    	} else if(defaultAction.equals("read")){
-		        	String readUrl = Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(c.getString(urlColumn));
+		        	String readUrl = "";
+					try {
+						readUrl = Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(c.getString(urlColumn), "UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
 		        	data = Uri.parse(readUrl);
 		    	} else {
 		    		builder.scheme(Constants.CONTENT_SCHEME);
@@ -419,6 +478,64 @@ public class BookmarkContentProvider extends ContentProvider {
 		return suggestions;
 	}
 	
+	private Map<String, SearchSuggestionContent> getNoteSearchSuggestions(String query) {
+		Log.d("getNoteSearchSuggestions", query);
+		
+		String[] notes = query.split(" ");
+		
+		mAccountManager = AccountManager.get(getContext());
+		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+		
+		Map<String, SearchSuggestionContent> suggestions = new TreeMap<String, SearchSuggestionContent>();
+		
+		// Tag search suggestions
+		SQLiteQueryBuilder noteqb = new SQLiteQueryBuilder();	
+		noteqb.setTables(NOTE_TABLE_NAME);
+		
+		ArrayList<String> noteList = new ArrayList<String>();
+		final ArrayList<String> selectionlist = new ArrayList<String>();
+		
+		for(String s : notes) {
+			noteList.add("(" + Note.Title + " LIKE ? OR " + 
+					Note.Text + " LIKE ?)");
+			selectionlist.add("%" + s + "%");
+			selectionlist.add("%" + s + "%");
+		}
+		
+		String selection = TextUtils.join(" OR ", noteList);
+
+		String[] projection = new String[] {BaseColumns._ID, Note.Title, Note.Text};
+
+		Cursor c = getNotes(Tag.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), null, SuggestionLimit);
+		
+		if(c.moveToFirst()){
+			int titleColumn = c.getColumnIndex(Note.Title);
+			int textColumn = c.getColumnIndex(Note.Text);
+			int idColumn = c.getColumnIndex(BaseColumns._ID);
+
+			do {
+				Uri data;
+				Uri.Builder builder = new Uri.Builder();
+				builder.scheme(Constants.CONTENT_SCHEME);
+				builder.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
+				builder.appendEncodedPath("notes");
+				builder.appendEncodedPath(c.getString(idColumn));
+	    		data = builder.build();
+				
+				String title = c.getString(titleColumn);
+				String text = c.getString(textColumn);
+				
+				suggestions.put(title, new SearchSuggestionContent(title, 
+					text,
+					R.drawable.ic_main, R.drawable.ic_tag, data.toString()));
+				
+			} while(c.moveToNext());	
+		}
+		c.close();
+
+		return suggestions;
+	}
+	
 	private Cursor getSearchCursor(Map<String, SearchSuggestionContent> list) {
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getContext());
     	Boolean icons = settings.getBoolean("pref_searchicons", true);
@@ -451,53 +568,6 @@ public class BookmarkContentProvider extends ContentProvider {
 		
 		return mc;
 	}
-	
-	private Cursor getTagLiveFolderResults(Uri uri) {
-		
-		mAccountManager = AccountManager.get(getContext());
-		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
-		
-		Resources res = this.getContext().getResources();
-		
-		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
-		qb.setTables(TAG_TABLE_NAME);
-		
-		String[] projection = new String[]{Tag.Name, Tag.Count};
-		String selection = Tag.Account + "=?";
-		String[] selectionArgs = new String[]{mAccount.name};
-		String sortOrder = Tag.Name + " ASC";
-		
-		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder);
-		c.setNotificationUri(getContext().getContentResolver(), uri);
-		
-		MatrixCursor mc = new MatrixCursor(new String[] { BaseColumns._ID, LiveFolders.NAME, 
-				LiveFolders.DESCRIPTION, LiveFolders.INTENT});
-		
-		if(c.moveToFirst()){
-			int nameColumn = c.getColumnIndex(Tag.Name);
-			int countColumn = c.getColumnIndex(Tag.Count);
-
-			int i = 0;
-			
-			do {
-				String name = c.getString(nameColumn);
-				
-				Uri.Builder data = new Uri.Builder();
-				data.scheme(Constants.CONTENT_SCHEME);
-				data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
-				data.appendEncodedPath("bookmarks");
-				data.appendQueryParameter("tagname", name);
-				
-				mc.addRow(new Object[] {i++, name, 
-					Integer.toString(c.getInt(countColumn)) + " " + res.getString(R.string.bookmark_count), data.build()});
-				
-			} while(c.moveToNext());	
-		}
-		c.close();
-		
-		return mc;
-	}
 
 	@Override
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
@@ -510,6 +580,9 @@ public class BookmarkContentProvider extends ContentProvider {
 			case Tags:
 				count = db.update(TAG_TABLE_NAME, values, selection, selectionArgs);
 				break;
+			case Notes:
+				count = db.update(NOTE_TABLE_NAME, values, selection, selectionArgs);
+				break;
 			default:
 				throw new IllegalArgumentException("Unknown URI " + uri);
 		}
@@ -518,67 +591,6 @@ public class BookmarkContentProvider extends ContentProvider {
 		
 		getContext().getContentResolver().notifyChange(uri, null, !syncOnly);
 		return count;
-	}
-	
-	private Cursor getBookmarkLiveFolderResults(Uri uri) {
-		
-		mAccountManager = AccountManager.get(getContext());
-		mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
-		
-		String tagname = uri.getQueryParameter("tagname");
-		
-		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
-		qb.setTables(BOOKMARK_TABLE_NAME);
-		
-		ArrayList<String> selectionlist = new ArrayList<String>();
-		
-		String[] projection = new String[]{Bookmark.Description, Bookmark.Url, BaseColumns._ID};
-		String selection = "(" + Bookmark.Tags + " LIKE ? OR " +
-			Bookmark.Tags + " LIKE ? OR " +
-			Bookmark.Tags + " LIKE ? OR " +
-			Bookmark.Tags + " = ?) AND " +
-			Bookmark.Account + "=?";
-		
-		selectionlist.add("% " + tagname + " %");
-		selectionlist.add("% " + tagname);
-		selectionlist.add(tagname + " %");
-		selectionlist.add(tagname);
-		selectionlist.add(mAccount.name);
-
-		
-		String sortOrder = Bookmark.Description + " ASC";
-		
-		Cursor c = qb.query(rdb, projection, selection, selectionlist.toArray(new String[]{}), null, null, sortOrder);
-		c.setNotificationUri(getContext().getContentResolver(), uri);
-		
-		MatrixCursor mc = new MatrixCursor(new String[] { BaseColumns._ID, LiveFolders.NAME, 
-				LiveFolders.DESCRIPTION, LiveFolders.INTENT});
-		
-		if(c.moveToFirst()){
-			int descColumn = c.getColumnIndex(Bookmark.Description);
-			int urlColumn = c.getColumnIndex(Bookmark.Url);
-			int idColumn = c.getColumnIndex(BaseColumns._ID);
-
-			int i = 0;
-			
-			do {
-				
-				Uri.Builder data = new Uri.Builder();
-				data.scheme(Constants.CONTENT_SCHEME);
-				data.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
-				data.appendEncodedPath("bookmarks");
-				data.appendEncodedPath(Integer.toString(c.getInt(idColumn)));
-				
-				mc.addRow(new Object[] {i++, c.getString(descColumn), 
-					c.getString(urlColumn), data.build()});
-				
-			} while(c.moveToNext());	
-		}
-		c.close();
-		
-		
-		return mc;
 	}
 	
 	@Override
@@ -592,6 +604,9 @@ public class BookmarkContentProvider extends ContentProvider {
 				break;
 			case Tags:
 				result = bulkLoad(TAG_TABLE_NAME, values);
+				break;
+			case Notes:
+				result = bulkLoad(NOTE_TABLE_NAME, values);
 				break;
 			default:
 				throw new IllegalArgumentException("Unknown Uri: " + uri);
@@ -629,14 +644,15 @@ public class BookmarkContentProvider extends ContentProvider {
         UriMatcher matcher =  new UriMatcher(UriMatcher.NO_MATCH);
         matcher.addURI(AUTHORITY, "bookmark", Bookmarks);
         matcher.addURI(AUTHORITY, "tag", Tags);
+        matcher.addURI(AUTHORITY, "note", Notes);
         matcher.addURI(AUTHORITY, "main/" + SearchManager.SUGGEST_URI_PATH_QUERY, SearchSuggest);
         matcher.addURI(AUTHORITY, "main/" + SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SearchSuggest);
         matcher.addURI(AUTHORITY, "tag/" + SearchManager.SUGGEST_URI_PATH_QUERY, TagSearchSuggest);
         matcher.addURI(AUTHORITY, "tag/" + SearchManager.SUGGEST_URI_PATH_QUERY + "/*", TagSearchSuggest);
         matcher.addURI(AUTHORITY, "bookmark/" + SearchManager.SUGGEST_URI_PATH_QUERY, BookmarkSearchSuggest);
         matcher.addURI(AUTHORITY, "bookmark/" + SearchManager.SUGGEST_URI_PATH_QUERY + "/*", BookmarkSearchSuggest);
-        matcher.addURI(AUTHORITY, "tag/livefolder", TagLiveFolder);
-        matcher.addURI(AUTHORITY, "bookmark/livefolder", BookmarkLiveFolder);
+        matcher.addURI(AUTHORITY, "note/" + SearchManager.SUGGEST_URI_PATH_QUERY, NoteSearchSuggest);
+        matcher.addURI(AUTHORITY, "note/" + SearchManager.SUGGEST_URI_PATH_QUERY + "/*", NoteSearchSuggest);
         return matcher;
     }
 }

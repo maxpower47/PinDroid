@@ -5,12 +5,14 @@ import java.net.URLEncoder;
 
 import com.pindroid.activity.AddBookmark;
 import com.pindroid.activity.BrowseBookmarks;
+import com.pindroid.activity.BrowseNotes;
 import com.pindroid.activity.BrowseTags;
 import com.pindroid.activity.ViewBookmark;
 import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.BookmarkContentProvider;
+import com.pindroid.providers.NoteContent.Note;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -29,7 +31,6 @@ public class IntentHelper {
 		try {
 			readUrl = Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(url, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	Uri readLink = Uri.parse(readUrl);
@@ -87,6 +88,22 @@ public class IntentHelper {
 		return viewBookmark;
 	}
 	
+	public static Intent ViewNote(Note n, String account, Context context) {
+		Intent viewBookmark = new Intent(context, com.pindroid.activity.ViewNote.class);
+		viewBookmark.setAction(Intent.ACTION_VIEW);
+		viewBookmark.addCategory(Intent.CATEGORY_DEFAULT);
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.appendEncodedPath("notes");
+		
+		data.appendEncodedPath(Integer.toString(n.getId()));
+
+		viewBookmark.setData(data.build());
+		
+		return viewBookmark;
+	}
+	
 	public static Intent EditBookmark(Bookmark b, String account, Context context) {
 		Intent editBookmark = new Intent(context, AddBookmark.class);
 		editBookmark.setAction(Intent.ACTION_EDIT);
@@ -111,6 +128,20 @@ public class IntentHelper {
 		
 		if(tag != null && !tag.equals(""))
 			data.appendQueryParameter("tagname", tag);
+		
+		i.setData(data.build());
+		
+		return i;
+	}
+	
+	public static Intent ViewNotes(String tag, String account, Context context) {
+		Intent i = new Intent(context, BrowseNotes.class);
+		i.setAction(Intent.ACTION_VIEW);
+		i.addCategory(Intent.CATEGORY_DEFAULT);
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.appendEncodedPath("notes");
 		
 		i.setData(data.build());
 		

@@ -44,8 +44,10 @@ import com.pindroid.client.PinboardApi;
 import com.pindroid.client.TooManyRequestsException;
 import com.pindroid.client.Update;
 import com.pindroid.platform.BookmarkManager;
+import com.pindroid.platform.NoteManager;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.providers.NoteContent.Note;
 import com.pindroid.providers.TagContent.Tag;
 
 /**
@@ -131,16 +133,32 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			if(!tagList.isEmpty()){
 				TagManager.BulkInsert(tagList, username, mContext);
 			}
-
-            
-            setServerSyncMarker(account, update.getLastUpdate());
-            
+			
+			SyncNotes();
+        
             setServerSyncMarker(account, update.getLastUpdate());
 
             syncResult.stats.numEntries += addBookmarkList.size();
     	} else {
     		Log.d(TAG, "No update needed.  Last update time before last sync.");
     	}
+    }
+    
+    private void SyncNotes() throws AuthenticationException, IOException, TooManyRequestsException{
+    	
+		final ArrayList<Note> noteList = PinboardApi.getNoteList(mAccount, mContext);
+		NoteManager.TruncateNotes(mAccount.name, mContext);
+		
+		for(Note n : noteList){
+			//NoteManager.UpsertNote(n, mAccount.name, mContext);
+			
+			Note t = PinboardApi.getNote(n.getPid(), mAccount, mContext);
+			n.setText(t.getText());
+		}
+		
+		if(!noteList.isEmpty()){
+			NoteManager.BulkInsert(noteList, mAccount.name, mContext);
+		}
     }
     
     private void UploadBookmarks(Account account, SyncResult syncResult) 

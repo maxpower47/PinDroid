@@ -25,6 +25,7 @@
     <!-- Label for this package -->
     <string name="label">Pinboard</string>
     <string name="pindroid">PinDroid</string>
+    <string name="pinboard_lower">pinboard</string>
 
     <!-- Title string for Login activity-->
     <string name="ui_activity_title">Sign in</string>
@@ -56,6 +57,7 @@
     <string name="main_menu_my_bookmarks">My Bookmarks</string>
     <string name="main_menu_my_unread_bookmarks">My Unread</string>
     <string name="main_menu_my_tags">My Tags</string>
+    <string name="main_menu_my_notes">My Notes</string>
     <string name="main_menu_network_bookmarks">Network Bookmarks</string>
     <string name="main_menu_recent_bookmarks">Recent Bookmarks</string>
 
@@ -107,6 +109,9 @@
     <string name="tag_sort_count_asc">Count (Least First)</string>
     <string name="tag_sort_count_desc">Count (Most First)</string>
     
+    <!-- BrowseNotes -->
+    <string name="browse_my_notes_title">My Notes</string>
+    
     <!-- AddBookmark -->
     <string name="add_bookmark_add_title">Add Bookmark</string>
     <string name="add_bookmark_edit_title">Edit Bookmark</string>
@@ -149,12 +154,6 @@
     
     <string name="bookmark_count">bookmark(s)</string>
     
-    <!-- Live Folders -->
-    <string name="tag_live_folder_name">My Tags</string>
-    <string name="tag_live_folder_label">Pinboard Tags</string>
-    <string name="bookmark_live_folder_label">Pinboard Bookmarks</string>
-    <string name="tag_live_folder_chooser_title">Choose A Tag For The Folder</string>
-    
     <!-- Content Provider -->
     <string name="bookmark_content_provider_label">Bookmarks</string>  
     
@@ -176,9 +175,12 @@
     <string name="menu_view_deletebookmark_title">Delete</string>
     <string name="menu_view_sendbookmark_title">Share</string>
     
+    <!-- ViewNote -->
+    <string name="view_note_title">View Note Details</string>
+    <string name="view_note_account_title">By</string>
+    
     <!-- Widget -->
     <string name="search_widget_label">PinDroid 4x1</string>
-    <string name="unread_widget_label">PinDroid Unread 1x1</string>
     
     <!-- Preferences -->
     <string name="preferences_title">PinDroid Settings</string>
@@ -279,6 +281,25 @@
     <string name="pref_donate_title">Donate</string>
     <string name="pref_donate_key">pref_donate</string>
     <string name="pref_donate_summary">Support PinDroid</string>
+    
+    
+    <string name="perm_read_bookmarks_label">Read PinDroid bookmarks</string>
+    <string name="perm_read_bookmarks_description">Grants the ability to read the PinDroid bookmark store</string>
+    <string name="perm_write_bookmarks_label">Write PinDroid bookmarks</string>
+    <string name="perm_write_bookmarks_description">Grants the ability to write to the PinDroid bookmark store</string>
+    
+    <!-- Image alt text, for accessibility -->
+    <string name="alt_action_search_btn">Search</string>
+    <string name="alt_bookmark_list_private">Private</string>
+    <string name="alt_bookmark_view_private">Private</string>
+    
+    <string name="alt_widget_main">PinDroid</string>
+    <string name="alt_widget_my_bookmarks">My Bookmarks</string>
+    <string name="alt_widget_unread_bookmarks">Unread Bookmarks</string>
+    <string name="alt_widget_unread_bookmark_count">Unread Bookmark Count</string>
+    <string name="alt_widget_my_tags">My Tags</string>
+    <string name="alt_widget_add_bookmark">Add Bookmark</string>
+    <string name="alt_widget_search">Search</string>
     
     <!-- AboutActivity -->
     <string name="about_activity_title">About PinDroid</string>

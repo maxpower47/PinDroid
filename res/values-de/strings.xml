@@ -101,10 +101,6 @@
   <string name="tag_search_results_title">Tag Suchergebnisse für \"%1$s\"</string>
   <string name="search_results_global_tag_title">Globale Tag Ergebnisse für \"%1$s\"</string>
   <string name="bookmark_count">Lesezeichen</string>
-  <string name="tag_live_folder_name">Meine Tags</string>
-  <string name="tag_live_folder_label">Pinboard Tags</string>
-  <string name="bookmark_live_folder_label">Pinboard Lesezeichen</string>
-  <string name="tag_live_folder_chooser_title">Wähle einen Tag für diesen Ordner</string>
   <string name="bookmark_content_provider_label">Lesezeichen</string>
   <string name="sync_receiver_label">PinDroid Lesezeichen Synchronisierung</string>
   <string name="syncing_toast">Synchronisiere…</string>
@@ -119,7 +115,6 @@
   <string name="menu_view_deletebookmark_title">Löschen</string>
   <string name="menu_view_sendbookmark_title">Teilen</string>
   <string name="search_widget_label">PinDroid 4x1</string>
-  <string name="unread_widget_label">PinDroid Ungelesene 1x1</string>
   <string name="preferences_title">PinDroid Einstellungen</string>
   <string name="account_preferences_cat_title">Allgemeine Einstellungen</string>
   <string name="account_preferences_key">account_settings</string>

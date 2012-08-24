@@ -55,29 +55,6 @@ public class BookmarkViewBinder implements SimpleCursorAdapter.ViewBinder {
                 	((ImageView)v).setImageResource(R.drawable.padlock);
                 } else v.setVisibility(View.GONE);
             	break;
-            case R.id.bookmark_source:
-    	        String src = c.getString(columnIndex);
-    	    	
-    	        if(src != null && src.contains("twitter")) {
-    	        	v.setVisibility(View.VISIBLE);
-    	        	((ImageView)v).setImageResource(R.drawable.twitter);
-    	        } else if(src != null && src.contains("instapaper")) {
-    	        	v.setVisibility(View.VISIBLE);
-    	        	((ImageView)v).setImageResource(R.drawable.instapaper);
-    	        } else if(src != null && src.contains("apple")) {
-    	        	v.setVisibility(View.VISIBLE);
-    	        	((ImageView)v).setImageResource(R.drawable.apple);
-    	        } else if(src != null && src.contains("google")) {
-    	        	v.setVisibility(View.VISIBLE);
-    	        	((ImageView)v).setImageResource(R.drawable.google);
-    	        } else if(src != null && src.contains("readitlater")) {
-    	        	v.setVisibility(View.VISIBLE);
-    	        	((ImageView)v).setImageResource(R.drawable.ril);
-    	        } else if(src != null && src.contains("delicious")) {
-    	        	v.setVisibility(View.VISIBLE);
-    	        	((ImageView)v).setImageResource(R.drawable.delicious);
-    	        } else v.setVisibility(View.GONE);
-    	        break;
         }
 
 		return true;

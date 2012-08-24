@@ -56,8 +56,6 @@ public class Constants {
      */
     public static final String AUTHTOKEN_TYPE = "com.pindroid";
     
-    //public static final String PREFS_LAST_SYNC = "last_sync";
-    
     public static final String PREFS_AUTH_TYPE = "authentication_type";
     public static final String AUTH_TYPE_PINBOARD = "pinboard";
     

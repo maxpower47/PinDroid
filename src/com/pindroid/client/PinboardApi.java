@@ -52,8 +52,11 @@ import android.util.Log;
 
 import com.pindroid.Constants;
 import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.providers.NoteContent.Note;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.xml.SaxBookmarkParser;
+import com.pindroid.xml.SaxNoteListParser;
+import com.pindroid.xml.SaxNoteParser;
 import com.pindroid.xml.SaxTagParser;
 
 public class PinboardApi {
@@ -70,6 +73,8 @@ public class PinboardApi {
     public static final String DELETE_BOOKMARK_URI = "v1/posts/delete";
     public static final String ADD_BOOKMARKS_URI = "v1/posts/add";
     public static final String FETCH_SECRET_URI = "v1/user/secret";
+    public static final String FETCH_NOTE_LIST_URI = "v1/notes/list";
+    public static final String FETCH_NOTE_DETAILS_URI = "v1/notes/";
   
     private static final String SCHEME = "https";
     private static final String PINBOARD_AUTHORITY = "api.pinboard.in";
@@ -482,6 +487,70 @@ public class PinboardApi {
             throw new IOException();
         }
         return token;
+    }
+    
+    /**
+     * Retrieves a list of all notes for a user from Pinboard.
+     * 
+     * @param account The account being synced.
+     * @param context The current application context.
+     * @return A list of the users notes.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
+     * @throws TooManyRequestsException 
+     */
+    public static ArrayList<Note> getNoteList(Account account, Context context) 
+    	throws IOException, AuthenticationException, TooManyRequestsException {
+    	
+    	ArrayList<Note> noteList = new ArrayList<Note>();
+
+    	InputStream responseStream = null;
+    	final TreeMap<String, String> params = new TreeMap<String, String>();
+    	  	
+    	responseStream = PinboardApiCall(FETCH_NOTE_LIST_URI, params, account, context);
+    	final SaxNoteListParser parser = new SaxNoteListParser(responseStream);
+    	
+    	try {
+			noteList = parser.parse();
+		} catch (ParseException e) {
+            Log.e(TAG, "Server error in fetching bookmark list");
+            throw new IOException();
+		}
+
+        responseStream.close();
+        return noteList;
+    }
+    
+    /**
+     * Retrieves details for a note for a user from Pinboard.
+     * 
+     * @param account The account being synced.
+     * @param context The current application context.
+     * @return A note.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
+     * @throws TooManyRequestsException 
+     */
+    public static Note getNote(String pid, Account account, Context context) 
+    	throws IOException, AuthenticationException, TooManyRequestsException {
+    	
+    	Note note = new Note();
+
+    	InputStream responseStream = null;
+    	final TreeMap<String, String> params = new TreeMap<String, String>();
+    	  	
+    	responseStream = PinboardApiCall(FETCH_NOTE_DETAILS_URI + pid, params, account, context);
+    	final SaxNoteParser parser = new SaxNoteParser(responseStream);
+    	
+    	try {
+			note = parser.parse();
+		} catch (ParseException e) {
+            Log.e(TAG, "Server error in fetching bookmark list");
+            throw new IOException();
+		}
+
+        responseStream.close();
+        return note;
     }
     
     /**

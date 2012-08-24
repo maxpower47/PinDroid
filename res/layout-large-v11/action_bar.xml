@@ -21,14 +21,4 @@
  * USA
  */
  -->
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="vertical"
-	style="@style/TabletLandFrame">
-	<fragment class="com.pindroid.fragment.AddBookmarkFragment"
-		android:id="@+id/add_bookmark_fragment"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent">
-	</fragment>
-</LinearLayout>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"/>

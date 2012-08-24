@@ -23,21 +23,21 @@ package com.pindroid.activity;
 
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
-import com.pindroid.fragment.BrowseTagsFragment;
+import com.pindroid.fragment.BrowseNotesFragment;
+import com.pindroid.providers.NoteContent.Note;
 
-import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 
-public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragment.OnTagSelectedListener {
+public class BrowseNotes extends FragmentBaseActivity implements BrowseNotesFragment.OnNoteSelectedListener {
 	
     @Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.browse_tags);
+        setContentView(R.layout.browse_notes);
 
         Intent intent = getIntent();
         
@@ -47,15 +47,11 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 		if(data != null)
 			username = data.getUserInfo();
         
-		BrowseTagsFragment frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
+		BrowseNotesFragment frag = (BrowseNotesFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
         frag.setAccount(username);
 		
 		if(Intent.ACTION_VIEW.equals(action)) {
-			setTitle(getString(R.string.browse_my_tags_title));
-		} else if(Intent.ACTION_SEARCH.equals(action)) {
-			String query = intent.getStringExtra(SearchManager.QUERY);
-			frag.setQuery(query);
-			setTitle(getString(R.string.tag_search_results_title, query));
+			setTitle(getString(R.string.browse_my_notes_title));
 		}
     }
     
@@ -69,7 +65,9 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 	    return true;
 	}
 
-	public void onTagSelected(String tag) {		
-		startActivity(IntentHelper.ViewBookmarks(tag, username, this));
+	public void onNoteView(Note n) {
+		if(n != null){
+			startActivity(IntentHelper.ViewNote(n, username, this));
+		}
 	}
 }

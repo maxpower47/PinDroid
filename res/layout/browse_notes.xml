@@ -24,31 +24,11 @@
  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:orientation="horizontal">
-	<fragment class="com.pindroid.fragment.BrowseTagsFragment"
-		android:id="@+id/tagcontent"
-	    android:layout_width="0dp"
-	    android:layout_height="fill_parent"
-	    android:layout_weight="15" />
-	<FrameLayout 
+	android:orientation="vertical">
+	<include android:id="@+id/include_action_bar" layout="@layout/action_bar" />
+	<fragment class="com.pindroid.fragment.BrowseNotesFragment"
 		android:id="@+id/listcontent"
-		android:layout_width="0dp"
-		android:layout_weight="30"
-	    android:layout_height="fill_parent" />
-	<Button
-	    android:id="@+id/panel_collapse_button"
-   		android:layout_height="fill_parent"
-   		android:layout_width="25dp"
-   		android:background="@drawable/panel_collapse_button"
-   		android:onClick="collapsePanel" />
-	<fragment class="com.pindroid.fragment.ViewBookmarkFragment"
-		android:id="@+id/maincontent"
-		android:layout_width="0dp"
-		android:layout_weight="60"
-	    android:layout_height="fill_parent" />
-	<fragment class="com.pindroid.fragment.AddBookmarkFragment"
-		android:id="@+id/addcontent"
-		android:layout_width="0dp"
-		android:layout_weight="60"
-	    android:layout_height="fill_parent"/>
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent" >
+	</fragment>
 </LinearLayout>
