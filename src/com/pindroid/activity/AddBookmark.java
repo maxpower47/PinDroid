@@ -109,7 +109,10 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 				Toast.makeText(this, R.string.add_bookmark_invalid_url, Toast.LENGTH_LONG).show();
 			}
 			
-			bookmark.setDescription(intent.getStringExtra(Constants.EXTRA_DESCRIPTION));
+			if(intent.hasExtra(Constants.EXTRA_DESCRIPTION)){
+				bookmark.setDescription(intent.getStringExtra(Constants.EXTRA_DESCRIPTION));
+			}
+			
 			bookmark.setNotes(intent.getStringExtra(Constants.EXTRA_NOTES));
 			bookmark.setTagString(intent.getStringExtra(Constants.EXTRA_TAGS));
 			bookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, privateDefault));
