@@ -12,9 +12,9 @@
     <item>100</item>
   </string-array>
   <string-array name="pref_view_bookmark_default_action_entries">
-    <item>Avaa selaimessa</item>
-    <item>Näytä tiedot</item>
-    <item>Lue</item>
+    <item>브라우저에서 열기</item>
+    <item>자세히 보기</item>
+    <item>읽기</item>
   </string-array>
   <string-array name="pref_view_bookmark_default_action_values">
     <item>browser</item>
@@ -22,18 +22,18 @@
     <item>read</item>
   </string-array>
   <string-array name="pref_reading_background_entries">
-    <item>Valkoinen</item>
-    <item>Musta</item>
+    <item>밝음</item>
+    <item>어두움</item>
   </string-array>
   <string-array name="pref_reading_background_values">
     <item>-1</item>
     <item>-16777216</item>
   </string-array>
   <string-array name="pref_reading_font_entries">
-    <item>Roboto (sans)</item>
-    <item>News Cycle (sans)</item>
-    <item>Alegreya (serif)</item>
-    <item>Cuisine (kiinteävälinen)</item>
+    <item>Roboto (산세리프)</item>
+    <item>News Cycle (산세리프)</item>
+    <item>Alegreya (세리프)</item>
+    <item>Cousine (고정폭)</item>
   </string-array>
   <string-array name="pref_reading_font_values">
     <item>Roboto-Regular</item>
@@ -42,9 +42,9 @@
     <item>Cousine-Regular-Latin</item>
   </string-array>
   <string-array name="pref_reading_margins_entries">
-    <item>Pieni</item>
-    <item>Normaali</item>
-    <item>Suuri</item>
+    <item>좁음</item>
+    <item>중간</item>
+    <item>넓음</item>
   </string-array>
   <string-array name="pref_reading_margins_values">
     <item>10</item>
@@ -52,9 +52,9 @@
     <item>40</item>
   </string-array>
   <string-array name="pref_reading_fontsize_entries">
-    <item>Pieni</item>
-    <item>Normaali</item>
-    <item>Suuri</item>
+    <item>작음</item>
+    <item>중간</item>
+    <item>넓음</item>
   </string-array>
   <string-array name="pref_reading_fontsize_values">
     <item>12</item>
@@ -62,9 +62,9 @@
     <item>20</item>
   </string-array>
   <string-array name="pref_reading_linespace_entries">
-    <item>Vähemmän</item>
-    <item>Normaali</item>
-    <item>Lisää</item>
+    <item>좁음</item>
+    <item>중간</item>
+    <item>넓음</item>
   </string-array>
   <string-array name="pref_reading_linespace_values">
     <item>0</item>
@@ -72,14 +72,14 @@
     <item>10</item>
   </string-array>
   <string-array name="pref_synctime_entries">
-    <item>5 min</item>
-    <item>15 min</item>
-    <item>30 min</item>
-    <item>1 tunti</item>
-    <item>3 tuntia</item>
-    <item>6 tuntia</item>
-    <item>12 tuntia</item>
-    <item>24 tuntia</item>
+    <item>5분</item>
+    <item>15분</item>
+    <item>30분</item>
+    <item>1시간</item>
+    <item>3시간</item>
+    <item>6시간</item>
+    <item>12시간</item>
+    <item>24시간</item>
   </string-array>
   <string-array name="pref_synctime_values">
     <item>5</item>
