@@ -34,6 +34,7 @@ public class Constants {
     
     public static final String CONTENT_SCHEME = "content";
     
+    public static final String EXTRA_BOOKMARK = "com.pindroid.bookmark";
     public static final String EXTRA_DESCRIPTION = "com.pindroid.bookmark.description";
     public static final String EXTRA_NOTES = "com.pindroid.bookmark.notes";
     public static final String EXTRA_TAGS = "com.pindroid.bookmark.tags";

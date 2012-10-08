@@ -82,7 +82,9 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		init();
 		
 		if(android.os.Build.VERSION.SDK_INT >= 14) {
-			getActionBar().setHomeButtonEnabled(true);
+			if(getActionBar() != null) {
+				getActionBar().setHomeButtonEnabled(true);
+			}
 		}
 
 		Intent intent = getIntent();
