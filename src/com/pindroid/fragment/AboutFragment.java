@@ -45,7 +45,7 @@ public class AboutFragment extends Fragment {
 		base.setTitle(R.string.about_activity_title);
 		
 		WebView content = (WebView) base.findViewById(R.id.about_text_view);
-		content.loadData(getString(R.string.about_text), "text/html", "utf-8");
+		content.loadDataWithBaseURL(null, getString(R.string.about_text), "text/html", "utf-8", null);
 		
 
 	}
