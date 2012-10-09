@@ -57,6 +57,9 @@
     <string name="share_menu_add_bookmark">Pinboard - Add Bookmark</string>
     <string name="share_menu_read_later">Pinboard - Read Later</string>
     
+    <string name="login_no_account">No Pinboard Account Setup</string>
+    <string name="save_later_saved">Bookmark Saved</string>
+    
     <!-- Main -->
     <string name="main_menu_my_bookmarks">My Bookmarks</string>
     <string name="main_menu_my_unread_bookmarks">My Unread</string>

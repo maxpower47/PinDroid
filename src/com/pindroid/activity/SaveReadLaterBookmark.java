@@ -42,37 +42,42 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
-		Intent intent = getIntent();
-
-		if(Intent.ACTION_SEND.equals(intent.getAction()) && intent.hasExtra(Intent.EXTRA_TEXT)){
-			bookmark = new Bookmark();
-			
-			ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(this);
-			
-			String url = StringUtils.getUrl(reader.getText().toString());
-			bookmark.setUrl(url);
-			
-			if(reader.getSubject() != null)
-				bookmark.setDescription(reader.getSubject());
-			
-			if(url.equals("")) {
-				Toast.makeText(this, R.string.add_bookmark_invalid_url, Toast.LENGTH_LONG).show();
+		if(mAccount != null){
+			Intent intent = getIntent();
+	
+			if(Intent.ACTION_SEND.equals(intent.getAction()) && intent.hasExtra(Intent.EXTRA_TEXT)){
+				bookmark = new Bookmark();
+				
+				ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(this);
+				
+				String url = StringUtils.getUrl(reader.getText().toString());
+				bookmark.setUrl(url);
+				
+				if(reader.getSubject() != null)
+					bookmark.setDescription(reader.getSubject());
+				
+				if(url.equals("")) {
+					Toast.makeText(this, R.string.add_bookmark_invalid_url, Toast.LENGTH_LONG).show();
+					finish();
+				}
+	
+				bookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, privateDefault));
+				bookmark.setToRead(true);
+				bookmark.setTime(new Date().getTime());
+				bookmark.setTagString("");
+				bookmark.setAccount(mAccount.name);
+				
+				Intent i = new Intent(this, SaveBookmarkService.class);
+				i.putExtra(Constants.EXTRA_BOOKMARK, bookmark);
+				
+				startService(i);
+				
+				Toast.makeText(this, R.string.save_later_saved, Toast.LENGTH_SHORT).show();
+				
 				finish();
 			}
-
-			bookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, privateDefault));
-			bookmark.setToRead(true);
-			bookmark.setTime(new Date().getTime());
-			bookmark.setTagString("");
-			bookmark.setAccount(mAccount.name);
-			
-			Intent i = new Intent(this, SaveBookmarkService.class);
-			i.putExtra(Constants.EXTRA_BOOKMARK, bookmark);
-			
-			startService(i);
-			
-			Toast.makeText(this, "Bookmark Saved", Toast.LENGTH_SHORT).show();
-			
+		} else {
+			Toast.makeText(this, R.string.login_no_account, Toast.LENGTH_SHORT).show();
 			finish();
 		}
 	}
