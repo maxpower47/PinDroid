@@ -114,7 +114,6 @@
   <string name="menu_view_sendbookmark_title">Compartir</string>
   <string name="preferences_title">Configuración de PinDroid</string>
   <string name="account_preferences_cat_title">Configuración general</string>
-  <string name="account_preferences_key">Configuración_de_la_cuenta</string>
   <string name="account_preferences_title">Configuración de la cuenta</string>
   <string name="account_preferences_summary">Configuración de la sincronización y las notificaciones.</string>
   <string name="pref_cat_general_title">Configuración general</string>
@@ -122,7 +121,6 @@
   <string name="pref_cat_save_title">Guardar configuración</string>
   <string name="pref_cat_help_title">Ayuda</string>
   <string name="pref_synctime_title">Frecuencia de sincronización</string>
-  <string name="pref_synctime_key">Configurar hora de frecuencia</string>
   <string name="pref_synctime_summary">Frecuencia de sincronización de marcadores.</string>
   <string name="pref_view_bookmark_default_action_title">Agregar a favoritos </string>
   <string name="pref_view_bookmark_default_action_summary">Acción predeterminada para marcadores.</string>
