@@ -63,6 +63,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	static final String STATE_TAGNAME = "tagname";
 	static final String STATE_UNREAD = "unread";
 	static final String STATE_QUERY = "query";
+	static final String STATE_PATH = "path";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -120,6 +121,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			    tagname = savedInstanceState.getString(STATE_TAGNAME);
 			    unread = savedInstanceState.getBoolean(STATE_UNREAD);
 			    query = savedInstanceState.getString(STATE_QUERY);
+			    path = savedInstanceState.getString(STATE_PATH);
 			}
 			
 			bookmarkFrag = fm.findFragmentById(R.id.listcontent);
@@ -138,7 +140,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			tagFrag.setAccount(username);
 		}
 		
-		if(path.contains("tags")){
+		if(path != null && path.contains("tags")){
 			t.hide(fm.findFragmentById(R.id.maincontent));
 			findViewById(R.id.panel_collapse_button).setVisibility(View.GONE);
 		} else{
@@ -189,6 +191,10 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		savedInstanceState.putString(STATE_TAGNAME, tagname);
 		savedInstanceState.putBoolean(STATE_UNREAD, unread);
 		savedInstanceState.putString(STATE_QUERY, query);
+		
+		if(((BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.tagcontent)).isVisible()){
+			savedInstanceState.putString(STATE_PATH, path);
+		}
 
 	    super.onSaveInstanceState(savedInstanceState);
 	}
@@ -199,7 +205,9 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	    if(findViewById(R.id.maincontent) != null) {
 	    	lastSelected = (Bookmark)savedInstanceState.getSerializable(STATE_LASTBOOKMARK);
 	    	lastViewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_LASTVIEWTYPE);
-	    	setBookmarkView(lastSelected, lastViewType);
+	    	if(lastSelected != null) {
+	    		setBookmarkView(lastSelected, lastViewType);
+	    	}
 	    }
 	}
 	
@@ -362,6 +370,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	}
 
 	public void onTagSelected(String tag) {
+		tagname = tag;
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
 		frag.setQuery(username, tag, false);
