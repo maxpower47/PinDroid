@@ -205,7 +205,10 @@
         	android:authorities="com.pindroid.providers.BookmarkContentProvider"
         	android:readPermission="com.pindroid.READ_BOOKMARKS"
         	android:writePermission="com.pindroid.WRITE_BOOKMARKS"
-        	android:syncable="true" />
+        	android:syncable="true">
+        	<path-permission android:pathPrefix="/main/search_suggest_query"
+    			android:readPermission="android.permission.GLOBAL_SEARCH" />
+        	</provider>
         <receiver 
         	android:name=".widget.SearchWidgetProvider"
         	android:label="@string/search_widget_label"
