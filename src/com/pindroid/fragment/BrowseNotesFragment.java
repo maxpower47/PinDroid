@@ -34,7 +34,6 @@ import android.widget.ListView;
 
 import com.pindroid.R;
 import com.pindroid.platform.NoteManager;
-import com.pindroid.platform.TagManager;
 import com.pindroid.providers.NoteContent.Note;
 
 public class BrowseNotesFragment extends ListFragment

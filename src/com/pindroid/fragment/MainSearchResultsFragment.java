@@ -22,22 +22,14 @@
 package com.pindroid.fragment;
 
 import com.pindroid.R;
-import com.pindroid.activity.BrowseBookmarks;
 import com.pindroid.activity.FragmentBaseActivity;
-import com.pindroid.activity.ViewBookmark;
-
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.support.v4.app.ListFragment;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

@@ -25,7 +25,6 @@ import java.util.ArrayList;
 
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.NoteContent.Note;
-import com.pindroid.providers.TagContent.Tag;
 
 import android.content.ContentValues;
 import android.content.Context;
