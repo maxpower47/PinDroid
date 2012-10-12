@@ -86,7 +86,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 				getActionBar().setHomeButtonEnabled(true);
 			}
 		}
-
+		
 		Intent intent = getIntent();
 		
 		if(Intent.ACTION_SEARCH.equals(intent.getAction()) && !intent.hasExtra("MainSearchResults")){
