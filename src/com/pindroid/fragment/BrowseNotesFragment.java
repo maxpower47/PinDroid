@@ -34,6 +34,7 @@ import android.widget.ListView;
 
 import com.pindroid.R;
 import com.pindroid.platform.NoteManager;
+import com.pindroid.platform.TagManager;
 import com.pindroid.providers.NoteContent.Note;
 
 public class BrowseNotesFragment extends ListFragment
@@ -43,6 +44,7 @@ public class BrowseNotesFragment extends ListFragment
 	private SimpleCursorAdapter mAdapter;
 	
 	private String username = null;
+	private String query = null;
 	
 	private OnNoteSelectedListener noteSelectedListener;
 	
@@ -94,9 +96,17 @@ public class BrowseNotesFragment extends ListFragment
 		this.username = account;
 	}
 	
+	public void setQuery(String query) {
+		this.query = query;
+	}
+	
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		if(username != null && !username.equals("")) {
-			return NoteManager.GetNotes(username, sortfield, this.getActivity());
+			if(query != null) {
+				return NoteManager.SearchNotes(query, username, this.getActivity());
+			} else {
+				return NoteManager.GetNotes(username, sortfield, this.getActivity());
+			}
 		}
 		else return null;
 	}

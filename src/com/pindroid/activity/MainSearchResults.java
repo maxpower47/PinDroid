@@ -47,4 +47,8 @@ public class MainSearchResults extends FragmentBaseActivity implements MainSearc
 	public void onGlobalTagSearch() {
 		startActivity(IntentHelper.SearchGlobalTags(getIntent().getStringExtra(SearchManager.QUERY), mAccount.name, this));
 	}
+
+	public void onNoteSearch() {
+		startActivity(IntentHelper.SearchNotes(getIntent().getStringExtra(SearchManager.QUERY), mAccount.name, this));
+	}
 }

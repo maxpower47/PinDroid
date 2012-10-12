@@ -152,11 +152,13 @@
     
     <string name="search_results_bookmark">Bookmark Results</string>
     <string name="search_results_tag">Tag Results</string>
+    <string name="search_results_note">Note Results</string>
     <string name="search_results_global_tag">Global Tag Results</string>
     
     <string name="bookmark_search_results_title">Bookmark Search Results For \"%1$s\"</string>
     <string name="unread_search_results_title">Unread Search Results For \"%1$s\"</string>
     <string name="tag_search_results_title">Tag Search Results For \"%1$s\"</string>
+    <string name="note_search_results_title">Note Search Results For \"%1$s\"</string>
     <string name="search_results_global_tag_title">Global Tag Results For \"%1$s\"</string>
     
     <string name="bookmark_count">bookmark(s)</string>

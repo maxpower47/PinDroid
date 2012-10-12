@@ -204,6 +204,14 @@ public class IntentHelper {
 		return i;
 	}
 	
+	public static Intent SearchNotes(String query, String account, Context context) {
+		Intent i = new Intent(context, BrowseNotes.class);
+		i.setAction(Intent.ACTION_SEARCH);
+		i.putExtra(SearchManager.QUERY, query);
+		i.putExtra("MainSearchResults", "1");
+		return i;
+	}
+	
 	public static Intent SearchGlobalTags(String query, String account, Context context) {
 		Intent i = new Intent(context, BrowseBookmarks.class);
 		i.setAction(Intent.ACTION_SEARCH);

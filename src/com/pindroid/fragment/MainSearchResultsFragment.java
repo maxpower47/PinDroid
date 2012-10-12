@@ -51,6 +51,7 @@ public class MainSearchResultsFragment extends ListFragment {
 	public interface OnSearchActionListener {
 		public void onBookmarkSearch();
 		public void onTagSearch();
+		public void onNoteSearch();
 		public void onGlobalTagSearch();
 	}
 	
@@ -62,53 +63,10 @@ public class MainSearchResultsFragment extends ListFragment {
 		base.setTitle(R.string.main_search_results_title);
 		
 		String[] MENU_ITEMS = new String[] {getString(R.string.search_results_bookmark),
-				getString(R.string.search_results_tag), getString(R.string.search_results_global_tag)};
+				getString(R.string.search_results_tag), getString(R.string.search_results_note),
+				getString(R.string.search_results_global_tag)};
 		
 		setListAdapter(new ArrayAdapter<String>(base, R.layout.main_view, MENU_ITEMS));
-
-		final Intent intent = base.getIntent();
-		
-		if(Intent.ACTION_SEARCH.equals(intent.getAction())){
-			if(intent.hasExtra(SearchManager.QUERY)){
-				Intent i = new Intent(base, MainSearchResultsFragment.class);
-				i.putExtras(intent.getExtras());
-				startActivity(i);
-				base.finish();
-			} else {
-				base.onSearchRequested();
-			}
-		} else if(Intent.ACTION_VIEW.equals(intent.getAction())) {
-			
-			Uri data = intent.getData();
-			String path = null;
-			String tagname = null;
-			
-			if(data != null) {
-				path = data.getPath();
-				tagname = data.getQueryParameter("tagname");
-			}
-			
-			if(data.getScheme() == null || !data.getScheme().equals("content")){
-				Intent i = new Intent(Intent.ACTION_VIEW, data);
-				
-				startActivity(i);
-				base.finish();				
-			} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment())) {
-				Intent viewBookmark = new Intent(base, ViewBookmark.class);
-				viewBookmark.setData(data);
-				
-				Log.d("View Bookmark Uri", data.toString());
-				startActivity(viewBookmark);
-				base.finish();
-			} else if(tagname != null) {
-				Intent viewTags = new Intent(base, BrowseBookmarks.class);
-				viewTags.setData(data);
-				
-				Log.d("View Tags Uri", data.toString());
-				startActivity(viewTags);
-				base.finish();
-			}
-		} 
 		
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
@@ -120,6 +78,8 @@ public class MainSearchResultsFragment extends ListFragment {
 		    	} else if(position == 1){
 		    		searchActionListener.onTagSearch();
 		    	} else if(position == 2){
+		    		searchActionListener.onNoteSearch();
+		    	} else if(position == 3){
 		    		searchActionListener.onGlobalTagSearch();
 		    	}
 		    }

@@ -26,6 +26,7 @@ import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseNotesFragment;
 import com.pindroid.providers.NoteContent.Note;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,6 +53,10 @@ public class BrowseNotes extends FragmentBaseActivity implements BrowseNotesFrag
 		
 		if(Intent.ACTION_VIEW.equals(action)) {
 			setTitle(getString(R.string.browse_my_notes_title));
+		} else if(Intent.ACTION_SEARCH.equals(action)) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			frag.setQuery(query);
+			setTitle(getString(R.string.note_search_results_title, query));
 		}
     }
     

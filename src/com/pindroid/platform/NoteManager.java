@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.NoteContent.Note;
+import com.pindroid.providers.TagContent.Tag;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -178,5 +179,33 @@ public class NoteManager {
 			n.setAccount(c.getString(c.getColumnIndex(Note.Account)));
 		
 		return n;
+	}
+	
+	public static CursorLoader SearchNotes(String query, String username, Context context) {
+		final String[] projection = new String[] {Note._ID, Note.Title, Note.Text, Note.Hash, Note.Pid, Note.Account, Note.Added, Note.Updated};
+		String selection = null;
+		
+		final String sortorder = Note.Updated + " ASC";
+		final ArrayList<String> selectionlist = new ArrayList<String>();
+		
+		ArrayList<String> queryList = new ArrayList<String>();
+		
+		for(String s : query.split(" ")) {
+			queryList.add("(" + Note.Title + " LIKE ? OR " + 
+					Note.Text + " LIKE ?)");
+			selectionlist.add("%" + s + "%");
+			selectionlist.add("%" + s + "%");
+		}
+		
+		selectionlist.add(username);
+		
+		if(query != null && query != "") {
+			selection = "(" + TextUtils.join(" OR ", queryList) + ")" + 
+				" AND " + Note.Account + "=?";
+		} else {
+			selection = Note.Account + "=?";
+		}
+		
+		return new CursorLoader(context, Note.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), sortorder);
 	}
 }

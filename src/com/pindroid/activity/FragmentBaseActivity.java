@@ -127,6 +127,14 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 				Log.d("View Tags Uri", data.toString());
 				startActivity(viewTags);
 				finish();
+			} else if(path.contains("notes") && TextUtils.isDigitsOnly(data.getLastPathSegment()) && intent.hasExtra(SearchManager.USER_QUERY)){
+				Intent viewNote = new Intent(this, ViewNote.class);
+				viewNote.setAction(Intent.ACTION_VIEW);
+				viewNote.setData(data);
+				viewNote.removeExtra(SearchManager.USER_QUERY);
+				Log.d("View Note Uri", data.toString());
+				startActivity(viewNote);
+				finish();
 			}
 		} else if(Constants.ACTION_SEARCH_SUGGESTION_EDIT.equals(intent.getAction())){
 			Uri data = intent.getData();
