@@ -390,6 +390,8 @@ public class BookmarkContentProvider extends ContentProvider {
 		    	Uri data;
 		    	Uri.Builder builder = new Uri.Builder();
 		    	
+		    	String action = Constants.ACTION_SEARCH_SUGGESTION_VIEW;
+		    	
 		    	if(defaultAction.equals("browser")) {
 		    		data = Uri.parse(c.getString(urlColumn));
 		    	} else if(defaultAction.equals("read")){
@@ -400,7 +402,14 @@ public class BookmarkContentProvider extends ContentProvider {
 						e.printStackTrace();
 					}
 		        	data = Uri.parse(readUrl);
-		    	} else {
+		    	} else if(defaultAction.equals("edit")) {
+		    		action = Constants.ACTION_SEARCH_SUGGESTION_EDIT;
+		    		builder.scheme(Constants.CONTENT_SCHEME);
+		    		builder.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
+		    		builder.appendEncodedPath("bookmarks");
+		    		builder.appendEncodedPath(c.getString(idColumn));
+		    		data = builder.build();
+		    	}else {
 		    		builder.scheme(Constants.CONTENT_SCHEME);
 		    		builder.encodedAuthority(mAccount.name + "@" + BookmarkContentProvider.AUTHORITY);
 		    		builder.appendEncodedPath("bookmarks");
@@ -412,7 +421,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				
 				suggestions.put(title, new SearchSuggestionContent(title, 
 					c.getString(urlColumn), R.drawable.ic_main, R.drawable.ic_bookmark, 
-					data.toString()));
+					data.toString(), action));
 				
 			} while(c.moveToNext());	
 		}
@@ -469,7 +478,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				
 				suggestions.put(name, new SearchSuggestionContent(name, 
 					tagCount,
-					R.drawable.ic_main, R.drawable.ic_tag, data.build().toString()));
+					R.drawable.ic_main, R.drawable.ic_tag, data.build().toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
 				
 			} while(c.moveToNext());	
 		}
@@ -527,7 +536,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				
 				suggestions.put(title, new SearchSuggestionContent(title, 
 					text,
-					R.drawable.ic_main, R.drawable.ic_tag, data.toString()));
+					R.drawable.ic_main, R.drawable.ic_tag, data.toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
 				
 			} while(c.moveToNext());	
 		}
@@ -545,24 +554,24 @@ public class BookmarkContentProvider extends ContentProvider {
     	if(icons) {
 			mc = new MatrixCursor(new String[] {BaseColumns._ID, 
 					SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, 
-					SearchManager.SUGGEST_COLUMN_INTENT_DATA, 
+					SearchManager.SUGGEST_COLUMN_INTENT_DATA, SearchManager.SUGGEST_COLUMN_INTENT_ACTION,
 					SearchManager.SUGGEST_COLUMN_ICON_1, SearchManager.SUGGEST_COLUMN_ICON_2});
 	
 			int i = 0;
 			
 			for(SearchSuggestionContent s : list.values()) {
-				mc.addRow(new Object[]{ i++, s.getText1(), s.getText2(), s.getIntentData(), 
+				mc.addRow(new Object[]{ i++, s.getText1(), s.getText2(), s.getIntentData(), s.getIntentAction(),
 					s.getIcon1(), s.getIcon2() });
 			}
     	} else {
 			mc = new MatrixCursor(new String[] {BaseColumns._ID, 
 					SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, 
-					SearchManager.SUGGEST_COLUMN_INTENT_DATA});
+					SearchManager.SUGGEST_COLUMN_INTENT_DATA, SearchManager.SUGGEST_COLUMN_INTENT_ACTION});
 	
 			int i = 0;
 			
 			for(SearchSuggestionContent s : list.values()) {
-				mc.addRow(new Object[]{ i++, s.getText1(), s.getText2(), s.getIntentData() });
+				mc.addRow(new Object[]{ i++, s.getText1(), s.getText2(), s.getIntentData(), s.getIntentAction() });
 			}
     	}
 		

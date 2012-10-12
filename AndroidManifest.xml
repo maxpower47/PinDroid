@@ -133,6 +133,11 @@
         </activity>
         <activity android:name=".activity.AddBookmark"
         	android:label="@string/share_menu_add_bookmark">
+        	<intent-filter>
+        		<action android:name="android.intent.action.EDIT" />
+        		<category android:name="android.intent.category.DEFAULT" />
+        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/bookmarks/*"/>
+        	</intent-filter>
             <intent-filter>
         		<action android:name="android.intent.action.SEND" />
         		<category android:name="android.intent.category.DEFAULT" />

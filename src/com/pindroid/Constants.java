@@ -50,7 +50,8 @@ public class Constants {
 
     public static final int BOOKMARK_PAGE_SIZE = 500;
     
-    public static final String ACTION_SEARCH_SUGGESTION = "com.pindroid.intent.action.SearchSuggestion";
+    public static final String ACTION_SEARCH_SUGGESTION_VIEW = "com.pindroid.intent.action.SearchSuggestionView";
+    public static final String ACTION_SEARCH_SUGGESTION_EDIT = "com.pindroid.intent.action.SearchSuggestionEdit";
     
     /**
      * Authtoken type string.
@@ -68,5 +69,5 @@ public class Constants {
     public static final String MANUAL_URL = "http://code.google.com/p/pindroid/wiki/Manual";
     public static final String DONATION_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EUS2Z3WVWK6ZU";
     
-    public static enum BookmarkViewType {VIEW, READ, WEB};
+    public static enum BookmarkViewType {VIEW, READ, WEB, EDIT};
 }

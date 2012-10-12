@@ -117,6 +117,8 @@ public class BrowseBookmarksFragment extends ListFragment
 			    		viewBookmark(b);
 			    	} else if(base.defaultAction.equals("read")) {
 			    		readBookmark(b);
+			    	} else if(base.defaultAction.equals("edit")){
+			    		editBookmark(b);
 			    	} else {
 			    		openBookmarkInBrowser(b);
 			    	}   	
@@ -277,6 +279,10 @@ public class BrowseBookmarksFragment extends ListFragment
 	
 	private void viewBookmark(Bookmark b) {
 		bookmarkSelectedListener.onBookmarkView(b);
+	}
+	
+	private void editBookmark(Bookmark b) {
+		bookmarkSelectedListener.onBookmarkEdit(b);
 	}
     
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {

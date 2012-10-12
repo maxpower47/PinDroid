@@ -25,12 +25,8 @@
   <string-array name="pref_view_bookmark_default_action_entries">
     <item>Abrir en el navegador</item>
     <item>Ver detalles</item>
+    <item>Editar</item>
     <item>Leer</item>
-  </string-array>
-  <string-array name="pref_view_bookmark_default_action_values">
-    <item>browser</item>
-    <item>view</item>
-    <item>read</item>
   </string-array>
   <string-array name="pref_synctime_entries">
     <item>5 minutos</item>
@@ -41,15 +37,5 @@
     <item>6 horas</item>
     <item>12 horas</item>
     <item>24 horas</item>
-  </string-array>
-  <string-array name="pref_synctime_values">
-    <item>5</item>
-    <item>15</item>
-    <item>30</item>
-    <item>60</item>
-    <item>180</item>
-    <item>360</item>
-    <item>720</item>
-    <item>0</item>
   </string-array>
 </resources>

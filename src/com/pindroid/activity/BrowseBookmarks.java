@@ -192,7 +192,8 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		savedInstanceState.putBoolean(STATE_UNREAD, unread);
 		savedInstanceState.putString(STATE_QUERY, query);
 		
-		if(((BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.tagcontent)).isVisible()){
+		BrowseTagsFragment tagFrag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.tagcontent);
+		if(tagFrag != null && tagFrag.isVisible()){
 			savedInstanceState.putString(STATE_PATH, path);
 		}
 
@@ -206,7 +207,11 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	    	lastSelected = (Bookmark)savedInstanceState.getSerializable(STATE_LASTBOOKMARK);
 	    	lastViewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_LASTVIEWTYPE);
 	    	if(lastSelected != null) {
-	    		setBookmarkView(lastSelected, lastViewType);
+	    		if(!lastViewType.equals(BookmarkViewType.EDIT)){
+	    			setBookmarkView(lastSelected, lastViewType);
+	    		} else {
+	    			onBookmarkEdit(lastSelected);
+	    		}
 	    	}
 	    }
 	}
@@ -284,6 +289,9 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	public void onBookmarkEdit(Bookmark b) {		
 		if(b != null){
 			if(findViewById(R.id.maincontent) != null) {
+				lastSelected = b;
+				lastViewType = BookmarkViewType.EDIT;
+				
 				AddBookmarkFragment addFrag = (AddBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.addcontent);
 				addFrag.loadBookmark(b, null);
 				addFrag.refreshView();

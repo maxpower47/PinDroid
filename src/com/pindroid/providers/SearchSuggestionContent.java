@@ -30,6 +30,7 @@ public class SearchSuggestionContent {
 	private int icon1;
 	private int icon2;
 	private String intentData;
+	private String intentAction;
 	
 	public String getText1() {
 		return text1;
@@ -51,12 +52,17 @@ public class SearchSuggestionContent {
 		return intentData;
 	}
 	
-	public SearchSuggestionContent(String t1, String t2, int i1, int i2, String data) {
+	public String getIntentAction() {
+		return intentAction;
+	}
+	
+	public SearchSuggestionContent(String t1, String t2, int i1, int i2, String data, String action) {
 		text1 = t1;
 		text2 = t2;
 		icon1 = i1;
 		icon2 = i2;
 		intentData = data;
+		intentAction = action;
 	}
 	
 	public static class Comparer implements Comparator<SearchSuggestionContent> {

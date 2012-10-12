@@ -6,28 +6,15 @@
     <item>50</item>
     <item>100</item>
   </string-array>
-  <string-array name="pref_contact_bookmark_results_values">
-    <item>10</item>
-    <item>50</item>
-    <item>100</item>
-  </string-array>
   <string-array name="pref_view_bookmark_default_action_entries">
     <item>브라우저에서 열기</item>
     <item>자세히 보기</item>
+    <item>편집</item>
     <item>읽기</item>
-  </string-array>
-  <string-array name="pref_view_bookmark_default_action_values">
-    <item>browser</item>
-    <item>view</item>
-    <item>read</item>
   </string-array>
   <string-array name="pref_reading_background_entries">
     <item>밝음</item>
     <item>어두움</item>
-  </string-array>
-  <string-array name="pref_reading_background_values">
-    <item>-1</item>
-    <item>-16777216</item>
   </string-array>
   <string-array name="pref_reading_font_entries">
     <item>Roboto (산세리프)</item>
@@ -35,41 +22,20 @@
     <item>Alegreya (세리프)</item>
     <item>Cousine (고정폭)</item>
   </string-array>
-  <string-array name="pref_reading_font_values">
-    <item>Roboto-Regular</item>
-    <item>NewsCycle-Regular</item>
-    <item>Alegreya-Regular</item>
-    <item>Cousine-Regular-Latin</item>
-  </string-array>
   <string-array name="pref_reading_margins_entries">
     <item>좁음</item>
     <item>중간</item>
     <item>넓음</item>
-  </string-array>
-  <string-array name="pref_reading_margins_values">
-    <item>10</item>
-    <item>20</item>
-    <item>40</item>
   </string-array>
   <string-array name="pref_reading_fontsize_entries">
     <item>작음</item>
     <item>중간</item>
     <item>넓음</item>
   </string-array>
-  <string-array name="pref_reading_fontsize_values">
-    <item>12</item>
-    <item>16</item>
-    <item>20</item>
-  </string-array>
   <string-array name="pref_reading_linespace_entries">
     <item>좁음</item>
     <item>중간</item>
     <item>넓음</item>
-  </string-array>
-  <string-array name="pref_reading_linespace_values">
-    <item>0</item>
-    <item>5</item>
-    <item>10</item>
   </string-array>
   <string-array name="pref_synctime_entries">
     <item>5분</item>
@@ -80,15 +46,5 @@
     <item>6시간</item>
     <item>12시간</item>
     <item>24시간</item>
-  </string-array>
-  <string-array name="pref_synctime_values">
-    <item>5</item>
-    <item>15</item>
-    <item>30</item>
-    <item>60</item>
-    <item>180</item>
-    <item>360</item>
-    <item>720</item>
-    <item>0</item>
   </string-array>
 </resources>

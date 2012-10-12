@@ -119,6 +119,8 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 			    		viewBookmark(lastSelected);
 			    	} else if(base.defaultAction.equals("read")) {
 			    		readBookmark(lastSelected);
+			    	} else if(base.defaultAction.equals("edit")){
+			    		addBookmark(lastSelected);
 			    	} else {
 			    		openBookmarkInBrowser(lastSelected);
 			    	}   	
@@ -191,7 +193,7 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 				viewBookmark(b);
 				return true;
 			case R.id.menu_bookmark_context_add:				
-				bookmarkSelectedListener.onBookmarkAdd(b);
+				addBookmark(b);
 				return true;
 			case R.id.menu_bookmark_context_read:
 				readBookmark(b);
@@ -210,7 +212,7 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		
 	    switch (item.getItemId()) {
 	    case R.id.menu_addbookmark:
-			bookmarkSelectedListener.onBookmarkAdd(lastSelected);
+			addBookmark(lastSelected);
 			return true;
 	    }
 	    
@@ -231,6 +233,10 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	
 	private void readBookmark(Bookmark b){
 		bookmarkSelectedListener.onBookmarkRead(b);
+	}
+	
+	private void addBookmark(Bookmark b){
+		bookmarkSelectedListener.onBookmarkAdd(b);
 	}
 
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {

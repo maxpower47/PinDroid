@@ -25,11 +25,13 @@
     <string-array name="pref_view_bookmark_default_action_entries">
         <item>Open in browser</item>
         <item>View details</item>
+        <item>Edit</item>
         <item>Read</item>
     </string-array>
     <string-array name="pref_view_bookmark_default_action_values">
         <item>browser</item>
         <item>view</item>
+        <item>edit</item>
         <item>read</item>
     </string-array> 
     <string-array name="pref_reading_background_entries">

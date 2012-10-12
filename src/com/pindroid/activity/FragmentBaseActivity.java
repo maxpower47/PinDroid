@@ -98,7 +98,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 			} else {
 				onSearchRequested();
 			}
-		} else if(Constants.ACTION_SEARCH_SUGGESTION.equals(intent.getAction())) {
+		} else if(Constants.ACTION_SEARCH_SUGGESTION_VIEW.equals(intent.getAction())) {
 			Uri data = intent.getData();
 			String path = null;
 			String tagname = null;
@@ -128,6 +128,16 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 				startActivity(viewTags);
 				finish();
 			}
+		} else if(Constants.ACTION_SEARCH_SUGGESTION_EDIT.equals(intent.getAction())){
+			Uri data = intent.getData();
+
+			Intent editBookmark = new Intent(this, AddBookmark.class);
+			editBookmark.setAction(Intent.ACTION_EDIT);
+			editBookmark.setData(data);
+			editBookmark.removeExtra(SearchManager.USER_QUERY);
+			Log.d("Edit Bookmark Uri", data.toString());
+			startActivity(editBookmark);
+			finish();
 		}
 	}
 	
