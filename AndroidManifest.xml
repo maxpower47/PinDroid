@@ -163,7 +163,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.Preferences"
-        	android:label="@string/preferences_title" />
+        	android:label="@string/preferences_title">
+        	<intent-filter>
+       			<action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
+       			<category android:name="android.intent.category.DEFAULT" />
+    		</intent-filter>    	
+        </activity>
         <activity android:name=".activity.AboutActivity" 
         	android:label="@string/about_activity_title"
         	android:exported="false">
