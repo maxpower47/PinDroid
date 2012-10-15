@@ -150,6 +150,9 @@
     <string name="bookmark_search_label">Pinboard Bookmarks</string>
     <string name="bookmark_search_hint">Tags, Titles, Notes</string>
     
+    <string name="note_search_label">Pinboard Notes</string>
+    <string name="note_search_hint">Notes</string>
+    
     <string name="search_results_bookmark">Bookmark Results</string>
     <string name="search_results_tag">Tag Results</string>
     <string name="search_results_note">Note Results</string>

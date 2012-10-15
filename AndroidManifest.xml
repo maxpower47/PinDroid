@@ -102,6 +102,10 @@
         		<category android:name="android.intent.category.DEFAULT" />
         		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/notes"/>
 			</intent-filter>
+			<intent-filter>
+            	<action android:name="android.intent.action.SEARCH" />
+        	</intent-filter>
+        	<meta-data android:name="android.app.searchable" android:resource="@xml/note_searchable"/>
         </activity>
         <activity android:name=".activity.ViewBookmark"
         	android:label="@string/view_bookmark_title"
@@ -122,6 +126,10 @@
         		<category android:name="android.intent.category.DEFAULT" />
         		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:pathPattern="/bookmarks/.*"/>
         	</intent-filter>
+        	<intent-filter>
+            	<action android:name="android.intent.action.SEARCH" />
+        	</intent-filter>
+        	<meta-data android:name="android.app.searchable" android:resource="@xml/main_searchable"/>
         </activity>
         <activity android:name=".activity.MainSearchResults"
         	android:label="@string/main_search_results_title"
