@@ -132,10 +132,10 @@
   <string name="pref_searchicons_summary_on">검색 제안에 아이콘을 표시합니다.</string>
   <string name="pref_searchicons_switch_off">아니요</string>
   <string name="pref_searchicons_switch_on">네</string>
-  <string name="pref_save_private_default_title">기본적으로 개인용으로 추가Private Default</string>
-  <string name="pref_save_private_default_summary">새 북마크를 추가할 때 기본값으로 개인용(Private)으로 추가합니다.</string>
-  <string name="pref_save_private_default_summary_off">새 북마크를 추가할 때 기본값으로 공개용(Public)으로 추가합니다.</string>
-  <string name="pref_save_private_default_summary_on">새 북마크를 추가할 때 기본값으로 개인용(Private)으로 추가합니다.</string>
+  <string name="pref_save_private_default_title">기본적으로 비공개로 추가</string>
+  <string name="pref_save_private_default_summary">새 북마크를 추가할 때 기본값으로 비공개(Private)로 추가합니다.</string>
+  <string name="pref_save_private_default_summary_off">새 북마크를 추가할 때 기본값으로 공개(Public)로 추가합니다.</string>
+  <string name="pref_save_private_default_summary_on">새 북마크를 추가할 때 기본값으로 비공개(Private)로 추가합니다.</string>
   <string name="pref_save_private_default_switch_off">아니요</string>
   <string name="pref_save_private_default_switch_on">네</string>
   <string name="pref_save_toread_default_title">기본적으로 안읽었다고 표시</string>
@@ -175,8 +175,8 @@
   <string name="perm_write_bookmarks_label">PinDroid 북마크 쓰기</string>
   <string name="perm_write_bookmarks_description">Pindroid 북마크를 추가할 수 있습니다.</string>
   <string name="alt_action_search_btn">검색</string>
-  <string name="alt_bookmark_list_private">개인용</string>
-  <string name="alt_bookmark_view_private">개인용</string>
+  <string name="alt_bookmark_list_private">비공개</string>
+  <string name="alt_bookmark_view_private">비공개</string>
   <string name="alt_widget_main">PinDroid</string>
   <string name="alt_widget_my_bookmarks">내 북마크</string>
   <string name="alt_widget_unread_bookmarks">읽지 않은 북마크</string>
