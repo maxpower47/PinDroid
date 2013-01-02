@@ -45,7 +45,7 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 		if(mAccount != null){
 			Intent intent = getIntent();
 	
-			if(Intent.ACTION_SEND.equals(intent.getAction()) && intent.hasExtra(Intent.EXTRA_TEXT)){
+			if((Intent.ACTION_SEND.equals(intent.getAction()) || Constants.ACTION_READLATER.equals(intent.getAction())) && intent.hasExtra(Intent.EXTRA_TEXT)){
 				bookmark = new Bookmark();
 				
 				ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(this);

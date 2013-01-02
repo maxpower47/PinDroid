@@ -44,6 +44,8 @@ public class Constants {
     public static final String EXTRA_TIME = "com.pindroid.bookmark.time";
     public static final String EXTRA_UPDATE = "com.pindroid.bookmark.update";
     
+    public static final String ACTION_READLATER = "com.pindroid.action.ReadLater";
+    
     public static final String SYNC_MARKER_KEY = "com.pindroid.BookmarkSyncAdapter.marker";
     
     public static final int HTTP_STATUS_TOO_MANY_REQUESTS = 429;
