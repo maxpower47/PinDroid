@@ -57,6 +57,7 @@ import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.xml.SaxBookmarkParser;
 import com.pindroid.xml.SaxNoteListParser;
 import com.pindroid.xml.SaxNoteParser;
+import com.pindroid.xml.SaxResultParser;
 import com.pindroid.xml.SaxTagParser;
 
 public class PinboardApi {
@@ -198,10 +199,11 @@ public class PinboardApi {
      * @throws TooManyRequestsException 
      * @throws AuthenticationException If an authentication error was encountered.
      * @throws PinboardException If a server error is encountered.
+     * @throws ParseException 
      * @throws Exception If an unknown error is encountered.
      */
     public static Boolean addBookmark(Bookmark bookmark, Account account, Context context) 
-    	throws IOException, AuthenticationException, TooManyRequestsException, PinboardException {
+    	throws IOException, AuthenticationException, TooManyRequestsException, PinboardException, ParseException {
 
     	String url = bookmark.getUrl();
     	if(url.endsWith("/")) {
@@ -224,16 +226,17 @@ public class PinboardApi {
 		}
 		
 		String uri = ADD_BOOKMARKS_URI;
-		String response = null;
 		InputStream responseStream = null;
 
     	responseStream = PinboardApiCall(uri, params, account, context);
-    	response = convertStreamToString(responseStream);
+    	
+    	SaxResultParser parser = new SaxResultParser(responseStream);
+    	PinboardApiResult result = parser.parse();
     	responseStream.close();
 
-        if (response.contains("<result code=\"done\" />")) {
+        if (result.getCode().equalsIgnoreCase("done")) {
             return true;
-        } else if (response.contains("<result code=\"something went wrong\" />")) {
+        } else if (result.getCode().equalsIgnoreCase("something went wrong")) {
         	Log.e(TAG, "Pinboard server error in adding bookmark");
         	throw new PinboardException();
         } else {
@@ -252,22 +255,24 @@ public class PinboardApi {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      * @throws TooManyRequestsException 
+     * @throws ParseException 
      */
     public static Boolean deleteBookmark(Bookmark bookmark, Account account, Context context) 
-    	throws IOException, AuthenticationException, TooManyRequestsException {
+    	throws IOException, AuthenticationException, TooManyRequestsException, ParseException {
 
     	TreeMap<String, String> params = new TreeMap<String, String>();
-    	String response = null;
     	InputStream responseStream = null;
     	String url = DELETE_BOOKMARK_URI;
 
     	params.put("url", bookmark.getUrl());
 
     	responseStream = PinboardApiCall(url, params, account, context);
-    	response = convertStreamToString(responseStream);
+
+    	SaxResultParser parser = new SaxResultParser(responseStream);
+    	PinboardApiResult result = parser.parse();
     	responseStream.close();
     	
-        if (response.contains("<result code=\"done\"") || response.contains("<result code=\"item not found\"")) {
+        if (result.getCode().equalsIgnoreCase("done") || result.getCode().equalsIgnoreCase("item not found")) {
             return true;
         } else {
             Log.e(TAG, "Server error in fetching bookmark list");

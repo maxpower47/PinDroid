@@ -22,9 +22,9 @@
 package com.pindroid.syncadapter;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
-import org.apache.http.ParseException;
 import org.apache.http.auth.AuthenticationException;
 
 import android.annotation.TargetApi;
@@ -163,7 +163,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     }
     
     private void UploadBookmarks(Account account, SyncResult syncResult) 
-		throws AuthenticationException, IOException, TooManyRequestsException{
+		throws AuthenticationException, IOException, TooManyRequestsException, ParseException{
     
     	final ArrayList<Bookmark> bookmarks = BookmarkManager.GetLocalBookmarks(account.name, mContext);
     	
@@ -185,7 +185,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     }
     
     private void DeleteBookmarks(Account account, SyncResult syncResult) 
-		throws AuthenticationException, IOException, TooManyRequestsException{
+		throws AuthenticationException, IOException, TooManyRequestsException, ParseException{
 	
 		final ArrayList<Bookmark> bookmarks = BookmarkManager.GetDeletedBookmarks(account.name, mContext);
 		
