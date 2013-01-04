@@ -41,6 +41,7 @@ import android.util.Log;
 
 import com.pindroid.Constants;
 import com.pindroid.client.PinboardApi;
+import com.pindroid.client.PinboardException;
 import com.pindroid.client.TooManyRequestsException;
 import com.pindroid.client.Update;
 import com.pindroid.platform.BookmarkManager;
@@ -168,14 +169,19 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	
     	for(Bookmark b : bookmarks)
     	{
-			PinboardApi.addBookmark(b, account, mContext);
-
-			Log.d(TAG, "Bookmark edited: " + (b.getHash() == null ? "" : b.getHash()));
-			b.setSynced(true);
-			BookmarkManager.SetSynced(b, true, account.name, mContext);
-    	}
-    	
-    	syncResult.stats.numEntries += bookmarks.size();
+    		try{
+				PinboardApi.addBookmark(b, account, mContext);
+	
+				Log.d(TAG, "Bookmark edited: " + (b.getHash() == null ? "" : b.getHash()));
+				b.setSynced(true);
+				BookmarkManager.SetSynced(b, true, account.name, mContext);
+				
+				syncResult.stats.numEntries++;
+    		}
+    		catch(PinboardException e){
+    			Log.d(TAG, "Error editing bookmark: " + (b.getHash() == null ? "" : b.getHash()));
+    		}
+    	}	
     }
     
     private void DeleteBookmarks(Account account, SyncResult syncResult) 

@@ -194,13 +194,14 @@ public class PinboardApi {
      * @param account The account being synced.
      * @param context The current application context.
      * @return A boolean indicating whether or not the api call was successful.
-     * @throws IOException If a server error was encountered.
+     * @throws IOException If an IO error was encountered.
      * @throws TooManyRequestsException 
      * @throws AuthenticationException If an authentication error was encountered.
+     * @throws PinboardException If a server error is encountered.
      * @throws Exception If an unknown error is encountered.
      */
     public static Boolean addBookmark(Bookmark bookmark, Account account, Context context) 
-    	throws IOException, AuthenticationException, TooManyRequestsException {
+    	throws IOException, AuthenticationException, TooManyRequestsException, PinboardException {
 
     	String url = bookmark.getUrl();
     	if(url.endsWith("/")) {
@@ -232,8 +233,11 @@ public class PinboardApi {
 
         if (response.contains("<result code=\"done\" />")) {
             return true;
+        } else if (response.contains("<result code=\"something went wrong\" />")) {
+        	Log.e(TAG, "Pinboard server error in adding bookmark");
+        	throw new PinboardException();
         } else {
-        	Log.e(TAG, "Server error in adding bookmark");
+        	Log.e(TAG, "IO error in adding bookmark");
             throw new IOException();
         }
     }
