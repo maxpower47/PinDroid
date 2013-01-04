@@ -59,6 +59,7 @@ import com.pindroid.xml.SaxNoteListParser;
 import com.pindroid.xml.SaxNoteParser;
 import com.pindroid.xml.SaxResultParser;
 import com.pindroid.xml.SaxTagParser;
+import com.pindroid.xml.SaxTokenParser;
 import com.pindroid.xml.SaxUpdateParser;
 
 public class PinboardApi {
@@ -93,6 +94,7 @@ public class PinboardApi {
      * @param context The context of the calling Activity.
      * @return The boolean result indicating whether the user was
      *         successfully authenticated.
+     * @throws  
      */
     public static String pinboardAuthenticate(String username, String password) {
         final HttpResponse resp;
@@ -117,22 +119,17 @@ public class PinboardApi {
             	
         		final HttpEntity entity = resp.getEntity();
         		
-        		InputStream instream = entity.getContent();
-        		String response = convertStreamToString(instream);
-            	if (response.contains("<?xml")) {
-            		int start = response.indexOf("<result>");
-                	int end = response.indexOf("</result>", start);
-                	
-                	String authToken = response.substring(start + 8, end);
-    	        
-	                if (Log.isLoggable(TAG, Log.VERBOSE)) {
-	                    Log.v(TAG, "Successful authentication");
-	                    Log.v(TAG, "AuthToken: " + authToken);
-	                }
-	                
-	                return authToken;
-            	} else return null;
+        		InputStream instream = entity.getContent();		
+            	SaxTokenParser parser = new SaxTokenParser(instream);
+            	PinboardAuthToken token = parser.parse();
+            	instream.close();
+
+                if (Log.isLoggable(TAG, Log.VERBOSE)) {
+                    Log.v(TAG, "Successful authentication");
+                    Log.v(TAG, "AuthToken: " + token.getToken());
+                }
                 
+                return token.getToken();
             } else {
                 if (Log.isLoggable(TAG, Log.VERBOSE)) {
                     Log.v(TAG, "Error authenticating" + resp.getStatusLine());
@@ -144,7 +141,12 @@ public class PinboardApi {
                 Log.v(TAG, "IOException when getting authtoken", e);
             }
             return null;
-        } finally {
+        } catch (ParseException e) {
+        	if (Log.isLoggable(TAG, Log.VERBOSE)) {
+                Log.v(TAG, "ParseException when getting authtoken", e);
+            }
+            return null;
+		} finally {
             if (Log.isLoggable(TAG, Log.VERBOSE)) {
                 Log.v(TAG, "getAuthtoken completing");
             }
@@ -166,7 +168,6 @@ public class PinboardApi {
     public static Update lastUpdate(Account account, Context context)
     	throws IOException, AuthenticationException, TooManyRequestsException, ParseException {
 
-    	String response = null;
     	InputStream responseStream = null;
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	
@@ -463,29 +464,21 @@ public class PinboardApi {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      * @throws TooManyRequestsException 
+     * @throws ParseException 
      */
     public static String getSecretToken(Account account, Context context) 
-    	throws IOException, AuthenticationException, TooManyRequestsException {
+    	throws IOException, AuthenticationException, TooManyRequestsException, ParseException {
 
     	InputStream responseStream = null;
     	final TreeMap<String, String> params = new TreeMap<String, String>();
     	String response = null;
-    	String token = null;
     	  	
     	responseStream = PinboardApiCall(FETCH_SECRET_URI, params, account, context);
-    	response = convertStreamToString(responseStream);
+    	SaxTokenParser parser = new SaxTokenParser(responseStream);
+    	PinboardAuthToken token = parser.parse();
     	responseStream.close();
 
-        if (response.contains("<?xml")) {
-        	
-        	int start = response.indexOf("<result>");
-        	int end = response.indexOf("</result>", start);
-        	token = response.substring(start + 8, end);
-        } else {
-            Log.e(TAG, "Server error in fetching bookmark list");
-            throw new IOException();
-        }
-        return token;
+        return token.getToken();
     }
     
     /**

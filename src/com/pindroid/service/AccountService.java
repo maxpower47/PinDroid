@@ -22,6 +22,7 @@
 package com.pindroid.service;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import org.apache.http.auth.AuthenticationException;
@@ -71,6 +72,8 @@ public class AccountService extends IntentService {
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (TooManyRequestsException e){
+					e.printStackTrace();
+				} catch (ParseException e) {
 					e.printStackTrace();
 				}
 			}
