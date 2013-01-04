@@ -46,6 +46,7 @@ import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.authenticator.AuthenticatorActivity;
+import com.pindroid.providers.BookmarkContentProvider;
 
 public abstract class FragmentBaseActivity extends FragmentActivity {
 	
@@ -64,9 +65,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	public String readingMargins;
 	public String readingFontSize;
 	public String readingLineSpace;
-	
-	private boolean first = true;
-	
+
 	Bundle savedState;
 	
 	@Override
@@ -89,16 +88,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		
 		Intent intent = getIntent();
 		
-		if(Intent.ACTION_SEARCH.equals(intent.getAction()) && !intent.hasExtra("MainSearchResults")){
-			if(intent.hasExtra(SearchManager.QUERY)){
-				Intent i = new Intent(this, MainSearchResults.class);
-				i.putExtras(intent.getExtras());
-				startActivity(i);
-				finish();
-			} else {
-				onSearchRequested();
-			}
-		} else if(Constants.ACTION_SEARCH_SUGGESTION_VIEW.equals(intent.getAction())) {
+		if(Constants.ACTION_SEARCH_SUGGESTION_VIEW.equals(intent.getAction())) {
 			Uri data = intent.getData();
 			String path = null;
 			String tagname = null;
@@ -156,9 +146,13 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 			startActivityForResult(i, 0);
 			
 			return;
-		} else {
-			if(mAccount == null || username == null)
-				loadAccounts();
+		} else {			
+			if(getIntent().getData() == null || getIntent().getData().getUserInfo() == null){
+				Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, true, null, null, null, null);
+				startActivityForResult(i, 1);
+			} else{
+				username = getIntent().getData().getUserInfo();
+			}
 		}
 	}
 	
@@ -170,19 +164,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	public void onResume(){
 		super.onResume();
 		
-		if(!first) {
-			loadSettings();
-			init();
-		}
-		first = false;
-	}
-	
-	private void loadAccounts(){
-		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
-			mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
-		}
-		
-		username = mAccount.name;
+		loadSettings();
 	}
 	
 	@TargetApi(11)
@@ -192,7 +174,30 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	    	SearchView searchView = (SearchView)menu.findItem(R.id.menu_search).getActionView();
 	    	searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 	    	searchView.setSubmitButtonEnabled(false);
+	    	
+	    	searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+	    	    public boolean onQueryTextSubmit(String query) {
+	    	    	startSearch(query);
+	    	    	return true;
+	    	    }
+
+	    	    public boolean onQueryTextChange(final String s) {
+	    	    	return false;
+	    	    }
+	    	});
 	    }
+	}
+
+	private void startSearch(final String query) {
+		Intent i = new Intent(this, MainSearchResults.class);
+		i.putExtra("query", query);
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
+		i.setData(data.build());
+		startActivity(i);
+		finish();
 	}
 	
 	private void loadSettings(){
@@ -224,7 +229,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	            startActivity(intent);
 	            return true;
 		    case R.id.menu_addbookmark:
-				startActivity(IntentHelper.AddBookmark(null, mAccount.name, this));
+				startActivity(IntentHelper.AddBookmark(null, username, this));
 				return true;
 		    case R.id.menu_search:
 		    	onSearchRequested();
@@ -239,10 +244,26 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	}
 	
 	public boolean isMyself() {
-		if(mAccount != null && username != null)
-			return mAccount.name.equals(username);
-		else return false;
+		//if(mAccount != null && username != null)
+		//	return mAccount.name.equals(username);
+		//else return false;
+		
+		for(Account account : mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)){
+			if(username.equals(account.name))
+				return true;
+		}
+		
+		return false;
 	}
+	
+    
+    public Account getAccount(){
+    	for(Account account : AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE))
+			   if (account.name.equals(username))
+				   return account;
+    	
+    	return null;		   
+    }
 	
 	@Override
 	public void setTitle(CharSequence title){
@@ -256,6 +277,8 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){	
 		if(resultCode == Activity.RESULT_CANCELED){
 			finish();
+		} else if(requestCode == 1){
+			username = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 		}
 	}
 }

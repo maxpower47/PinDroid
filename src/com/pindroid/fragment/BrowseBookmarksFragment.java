@@ -97,7 +97,7 @@ public class BrowseBookmarksFragment extends ListFragment
 		setListAdapter(mAdapter);
 		mAdapter.setViewBinder(new BookmarkViewBinder());
 
-		if(base.mAccount != null) {				
+		if(username != null) {				
 	
 	    	getLoaderManager().initLoader(0, null, this);
 	    	
@@ -170,12 +170,12 @@ public class BrowseBookmarksFragment extends ListFragment
 			}
 		}
 
-		Uri data = base.getIntent().getData();
-		if(data != null && data.getUserInfo() != null && data.getUserInfo() != "") {
-			username = data.getUserInfo();
-		} else if(base.getIntent().hasExtra("username")){
-			username = base.getIntent().getStringExtra("username");
-		} else username = base.mAccount.name;
+		//Uri data = base.getIntent().getData();
+		//if(data != null && data.getUserInfo() != null && data.getUserInfo() != "") {
+		//	username = data.getUserInfo();
+		//} else if(base.getIntent().hasExtra("username")){
+		//	username = base.getIntent().getStringExtra("username");
+		//} else username = base.mAccount.name;
 	}
 	
 	@Override

@@ -76,6 +76,6 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 	}
 
 	public void onTagSelected(String tag) {		
-		startActivity(IntentHelper.ViewBookmarks(tag, username, this));
+		startActivity(IntentHelper.ViewBookmarks(tag, username, null, this));
 	}
 }

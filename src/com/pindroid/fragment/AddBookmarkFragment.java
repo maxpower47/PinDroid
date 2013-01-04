@@ -40,7 +40,9 @@ import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.TagSpan;
 import com.pindroid.util.SpaceTokenizer;
+import com.pindroid.util.SyncUtils;
 
+import android.accounts.Account;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -120,14 +122,14 @@ public class AddBookmarkFragment extends Fragment {
 		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
 		
-		if(base.mAccount != null){
+		if(base.username != null){
 			CursorAdapter autoCompleteAdapter = new TagAutoCompleteCursorAdapter(base, R.layout.autocomplete_view, null, 
 					new String[]{Tag.Name, Tag.Count}, new int[]{R.id.autocomplete_name, R.id.autocomplete_count}, 0);
 
 			autoCompleteAdapter.setFilterQueryProvider(new FilterQueryProvider() {
 	            public Cursor runQuery(CharSequence constraint) {
 	            	return TagManager.GetTagsAsCursor((constraint != null ? constraint.toString() : null), 
-	            			base.mAccount.name, Tag.Count + " DESC, " + Tag.Name + " ASC", base);
+	            			base.username, Tag.Count + " DESC, " + Tag.Name + " ASC", base);
 	            }
 	        });
 
@@ -257,19 +259,19 @@ public class AddBookmarkFragment extends Fragment {
 		bookmark.setId(oldid);
 		
 		if(update){
-			BookmarkManager.UpdateBookmark(bookmark, base.mAccount.name, base);
+			BookmarkManager.UpdateBookmark(bookmark, base.username, base);
 			
 			for(Tag t : oldBookmark.getTags()){
 				if(!bookmark.getTags().contains(t)) {
-					TagManager.UpleteTag(t, base.mAccount.name, base);
+					TagManager.UpleteTag(t, base.username, base);
 				}
 			}
 		} else {
-			BookmarkManager.AddBookmark(bookmark, base.mAccount.name, base);
+			BookmarkManager.AddBookmark(bookmark, base.username, base);
 		}
 		
 		for(Tag t : bookmark.getTags()){   				
-			TagManager.UpsertTag(t, base.mAccount.name, base);
+			TagManager.UpsertTag(t, base.username, base);
 		}
     }
     
@@ -335,7 +337,9 @@ public class AddBookmarkFragment extends Fragment {
     		url = args[0];
 	
     		try {
-				return PinboardApi.getSuggestedTags(url, base.mAccount, base);
+    			Account account = base.getAccount();
+    			
+				return PinboardApi.getSuggestedTags(url, account, base);
 			} catch (AuthenticationException e) {
 				e.printStackTrace();
 			} catch (IOException e) {

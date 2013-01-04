@@ -117,7 +117,7 @@ public class IntentHelper {
 		return editBookmark;
 	}
 	
-	public static Intent ViewBookmarks(String tag, String account, Context context) {
+	public static Intent ViewBookmarks(String tag, String account, String feed, Context context) {
 		Intent i = new Intent(context, BrowseBookmarks.class);
 		i.setAction(Intent.ACTION_VIEW);
 		i.addCategory(Intent.CATEGORY_DEFAULT);
@@ -128,6 +128,9 @@ public class IntentHelper {
 		
 		if(tag != null && !tag.equals(""))
 			data.appendQueryParameter("tagname", tag);
+		
+		if(feed != null && !feed.equals(""))
+			data.appendQueryParameter("feed", feed);
 		
 		i.setData(data.build());
 		
@@ -193,6 +196,10 @@ public class IntentHelper {
 		i.setAction(Intent.ACTION_SEARCH);
 		i.putExtra(SearchManager.QUERY, query);
 		i.putExtra("MainSearchResults", "1");
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		i.setData(data.build());
 		return i;
 	}
 	
@@ -201,6 +208,10 @@ public class IntentHelper {
 		i.setAction(Intent.ACTION_SEARCH);
 		i.putExtra(SearchManager.QUERY, query);
 		i.putExtra("MainSearchResults", "1");
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		i.setData(data.build());
 		return i;
 	}
 	
@@ -209,6 +220,10 @@ public class IntentHelper {
 		i.setAction(Intent.ACTION_SEARCH);
 		i.putExtra(SearchManager.QUERY, query);
 		i.putExtra("MainSearchResults", "1");
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		i.setData(data.build());
 		return i;
 	}
 	

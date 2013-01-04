@@ -59,17 +59,14 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 			
 			if(data != null) {
 				path = data.getPath();
-				username = data.getUserInfo();
+				//username = data.getUserInfo();
 				
-			} else username = mAccount.name;
+			} //else username = mAccount.name;
 			
 			bookmark = new Bookmark();
 			
 			if(path.contains("/bookmarks")){
-				if(isMyself()){		
-					int id = Integer.parseInt(data.getLastPathSegment());
-					bookmark.setId(id);
-				} else {
+				if(data.getQueryParameter("url") != null && !data.getQueryParameter("url").equals("")){		
 					bookmark.setDescription(data.getQueryParameter("title"));
 					bookmark.setUrl(data.getQueryParameter("url"));
 					bookmark.setNotes(data.getQueryParameter("notes"));
@@ -77,6 +74,9 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 					if(!data.getQueryParameter("tags").equals("null"))
 						bookmark.setTagString(data.getQueryParameter("tags"));
 					bookmark.setAccount(data.getQueryParameter("account"));
+				} else {
+					int id = Integer.parseInt(data.getLastPathSegment());
+					bookmark.setId(id);
 				}
 			}
 			
@@ -101,7 +101,7 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 		    case R.id.menu_addbookmark:
-				startActivity(IntentHelper.AddBookmark(bookmark.getUrl(), mAccount.name, this));
+				startActivity(IntentHelper.AddBookmark(bookmark.getUrl(), username, this));
 				return true;
 		    default:
 		        return super.onOptionsItemSelected(item);
@@ -109,15 +109,15 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	}
 	
 	public void onViewTagSelected(String tag) {		
-		startActivity(IntentHelper.ViewBookmarks(tag, mAccount.name, this));
+		startActivity(IntentHelper.ViewBookmarks(tag, username, null, this));
 	}
 
 	public void onUserTagSelected(String tag, String user) {
-		startActivity(IntentHelper.ViewBookmarks(tag, user, this));
+		startActivity(IntentHelper.ViewBookmarks(tag, username, user, this));
 	}
 
 	public void onAccountSelected(String account) {
-		startActivity(IntentHelper.ViewBookmarks(null, account, this));
+		startActivity(IntentHelper.ViewBookmarks(null, username, account, this));
 	}
 
 	public void onBookmarkView(Bookmark b) {
@@ -158,10 +158,10 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	}
 
 	public void onBookmarkEdit(Bookmark b) {
-		startActivity(IntentHelper.EditBookmark(b, mAccount.name, this));	
+		startActivity(IntentHelper.EditBookmark(b, username, this));	
 	}
 
 	public void onBookmarkDelete(Bookmark b) {
-		BookmarkManager.LazyDelete(b, mAccount.name, this);
+		BookmarkManager.LazyDelete(b, username, this);
 	}
 }

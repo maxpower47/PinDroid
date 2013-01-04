@@ -54,6 +54,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	private String tagname = "";
 	private Boolean unread = false;
 	private String path = "";
+	private String feed = "";
 	private Bookmark lastSelected = null;
 	private BookmarkViewType lastViewType = null;
 	
@@ -99,16 +100,17 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	    		}
 			} else {
 				if(data != null) {
-					if(data.getUserInfo() != "") {
-						username = data.getUserInfo();
-					} else username = mAccount.name;
+					//if(data.getUserInfo() != "") {
+					//	username = data.getUserInfo();
+					//} else username = mAccount.name;
 					tagname = data.getQueryParameter("tagname");
+					feed = data.getQueryParameter("feed");
 					unread = data.getQueryParameter("unread") != null;
 					path = data.getPath();
 				}
 			}
 			
-			if(isMyself()) {
+			if(feed == null || feed.equals("")) {
 				bookmarkFrag = new BrowseBookmarksFragment();
 			} else {
 				bookmarkFrag = new BrowseBookmarkFeedFragment();
@@ -127,17 +129,17 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			bookmarkFrag = fm.findFragmentById(R.id.listcontent);
 		}
 		
-		if(isMyself()){
+		if(feed == null || feed.equals("")){
 			if(query != null && !query.equals("")){
 				((BrowseBookmarksFragment) bookmarkFrag).setSearchQuery(query, username, tagname, unread);
 			} else {
 				((BrowseBookmarksFragment) bookmarkFrag).setQuery(username, tagname, unread);
 			} 
 		} else {
-			if(query != null && !query.equals("")){
-				((BrowseBookmarkFeedFragment) bookmarkFrag).setQuery(username, tagname);
+			if(query == null || query.equals("")){
+				((BrowseBookmarkFeedFragment) bookmarkFrag).setQuery(username, tagname, feed);
 			} else {
-				((BrowseBookmarkFeedFragment) bookmarkFrag).setQuery(username, query);
+				((BrowseBookmarkFeedFragment) bookmarkFrag).setQuery(username, query, feed);
 			}
 		}
 		
@@ -278,7 +280,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 
 	public void onBookmarkAdd(Bookmark b) {
 		if(b != null){
-			startActivity(IntentHelper.AddBookmark(b.getUrl(), mAccount.name, this));
+			startActivity(IntentHelper.AddBookmark(b.getUrl(), username, this));
 		}
 	}
 
@@ -292,7 +294,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	public void onBookmarkMark(Bookmark b) {
     	if(b != null && isMyself() && b.getToRead()) {
     		b.setToRead(false);
-			BookmarkManager.UpdateBookmark(b, mAccount.name, this);
+			BookmarkManager.UpdateBookmark(b, username, this);
     	}
 	}
 
@@ -317,13 +319,13 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 				transaction.hide(getSupportFragmentManager().findFragmentById(R.id.maincontent));
 				transaction.commit();
 			} else {
-				startActivity(IntentHelper.EditBookmark(b, mAccount.name, this));
+				startActivity(IntentHelper.EditBookmark(b, username, this));
 			}
 		}
 	}
 
 	public void onBookmarkDelete(Bookmark b) {
-		BookmarkManager.LazyDelete(b, mAccount.name, this);
+		BookmarkManager.LazyDelete(b, username, this);
 	}
 
 	public void onViewTagSelected(String tag) {
@@ -335,33 +337,33 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			transaction.addToBackStack(null);
 			transaction.commit();
 		} else {
-			startActivity(IntentHelper.ViewBookmarks(tag, username, this));
+			startActivity(IntentHelper.ViewBookmarks(tag, username, null, this));
 		}
 	}
 
 	public void onUserTagSelected(String tag, String user) {
 		if(isTwoPane()) {
 			BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
-			frag.setQuery(user, tag);
+			frag.setQuery(username, tag, user);
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			transaction.replace(R.id.listcontent, frag);
 			transaction.addToBackStack(null);
 			transaction.commit();
 		} else {
-			startActivity(IntentHelper.ViewBookmarks(tag, user, this));
+			startActivity(IntentHelper.ViewBookmarks(tag, user, null, this));
 		}
 	}
 
 	public void onAccountSelected(String account) {
 		if(isTwoPane()) {
 			BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
-			frag.setQuery(account, null);
+			frag.setQuery(username, null, account);
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			transaction.replace(R.id.listcontent, frag);
 			transaction.addToBackStack(null);
 			transaction.commit();
 		} else {
-			startActivity(IntentHelper.ViewBookmarks(null, account, this));
+			startActivity(IntentHelper.ViewBookmarks(null, account, null, this));
 		}
 	}
 

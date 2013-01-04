@@ -32,7 +32,9 @@ import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.listadapter.BookmarkViewBinder;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.util.SyncUtils;
 
+import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.SearchManager;
@@ -66,6 +68,7 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	private String username = null;
 	private String tagname = null;
 	private Intent intent = null;
+	private String feed = null;
 	String path = null;
 	
 	Bookmark lastSelected = null;
@@ -98,7 +101,7 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		setListAdapter(mAdapter);
 		mAdapter.setViewBinder(new BookmarkViewBinder());
 
-		if(base.mAccount != null) {
+		if(username != null) {
 			setListShown(false);
 			
 	    	getLoaderManager().initLoader(0, null, this);
@@ -147,9 +150,10 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	    super.onSaveInstanceState(savedInstanceState);
 	}
 	
-	public void setQuery(String username, String tagname){
+	public void setQuery(String username, String tagname, String feed){
 		this.username = username;
 		this.tagname = tagname;
+		this.feed = feed;
 	}
 	
 	@Override
@@ -171,12 +175,12 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 			}
 		}
 		
-		Uri data = base.getIntent().getData();
-		if(data != null && data.getUserInfo() != null && data.getUserInfo() != "") {
-			username = data.getUserInfo();
-		} else if(base.getIntent().hasExtra("username")){
-			username = base.getIntent().getStringExtra("username");
-		} else username = base.mAccount.name;
+		//Uri data = base.getIntent().getData();
+		//if(data != null && data.getUserInfo() != null && data.getUserInfo() != "") {
+		//	username = data.getUserInfo();
+		//} else if(base.getIntent().hasExtra("username")){
+		//	username = base.getIntent().getStringExtra("username");
+		//} else username = base.mAccount.name;
 	}
 	
 	@Override
@@ -242,13 +246,9 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
 			String query = intent.getStringExtra(SearchManager.QUERY);
-			return new LoaderDrone(base, "global", query);
-		} else if(username.equals("recent")) {
-			return new LoaderDrone(base, "recent", null);
-		} else if(username.equals("network")) {
-			return new LoaderDrone(base, "network", null);
+			return new LoaderDrone(base, "global", query, null);
 		} else {			
-			return new LoaderDrone(base, username, tagname);
+			return new LoaderDrone(base, username, tagname, feed);
 		}
 	}
 	
@@ -271,14 +271,16 @@ public class BrowseBookmarkFeedFragment extends ListFragment
         
 		private String user = "";
 		private String tag = "";
+		private String feed = "";
 
 		private FragmentBaseActivity base = null;
 		
-        public LoaderDrone(Context context, String u, String t) {
+        public LoaderDrone(Context context, String u, String t, String f) {
         	super(context);
         	
         	user = u;
             tag = t;
+            feed = f;
             base = (FragmentBaseActivity)context;
         	
             onForceLoad();
@@ -292,13 +294,16 @@ public class BrowseBookmarkFeedFragment extends ListFragment
  	    	   user = "";
         
  		   try {
- 			   if(user.equals("network")) {
- 				   String token = AccountManager.get(getContext()).getUserData(base.mAccount, Constants.PREFS_SECRET_TOKEN);
- 				   results = PinboardFeed.fetchNetworkRecent(base.mAccount.name, token);
- 			   } else if(user.equals("recent")) {
+ 			   if(feed.equals("network")) {
+ 				   Account account = base.getAccount();
+
+ 				   String token = AccountManager.get(getContext()).getUserData(account, Constants.PREFS_SECRET_TOKEN);
+
+ 				   results = PinboardFeed.fetchNetworkRecent(user, token);
+ 			   } else if(feed.equals("recent")) {
  				  results = PinboardFeed.fetchRecent();
  			   } else {
- 				  results = PinboardFeed.fetchUserRecent(user, tag);
+ 				  results = PinboardFeed.fetchUserRecent(feed, tag);
  			   }
 
  		   }catch (ParseException e) {
