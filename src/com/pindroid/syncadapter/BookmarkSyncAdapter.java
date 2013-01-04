@@ -109,7 +109,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     }
     
     private void InsertBookmarks(Account account, SyncResult syncResult) 
-    	throws AuthenticationException, IOException, TooManyRequestsException{
+    	throws AuthenticationException, IOException, TooManyRequestsException, ParseException{
     	
     	long lastUpdate = getServerSyncMarker(account);
     	final String username = account.name;

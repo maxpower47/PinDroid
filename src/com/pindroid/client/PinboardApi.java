@@ -59,6 +59,7 @@ import com.pindroid.xml.SaxNoteListParser;
 import com.pindroid.xml.SaxNoteParser;
 import com.pindroid.xml.SaxResultParser;
 import com.pindroid.xml.SaxTagParser;
+import com.pindroid.xml.SaxUpdateParser;
 
 public class PinboardApi {
 	
@@ -160,31 +161,20 @@ public class PinboardApi {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      * @throws TooManyRequestsException 
+     * @throws ParseException 
      */
     public static Update lastUpdate(Account account, Context context)
-    	throws IOException, AuthenticationException, TooManyRequestsException {
+    	throws IOException, AuthenticationException, TooManyRequestsException, ParseException {
 
     	String response = null;
     	InputStream responseStream = null;
     	TreeMap<String, String> params = new TreeMap<String, String>();
-    	Update update = null;
     	
     	responseStream = PinboardApiCall(LAST_UPDATE_URI, params, account, context);
-    	response = convertStreamToString(responseStream);
+    	SaxUpdateParser parser = new SaxUpdateParser(responseStream);
+    	Update update = parser.parse();
     	responseStream.close();
-    	
-    	try{
-	        if (response.contains("<?xml")) {
-	        	update = Update.valueOf(response);
-	        } else {
-	            Log.e(TAG, "Server error in fetching bookmark list");
-	            throw new IOException();
-	        }
-    	}
-    	catch(Exception e) {
-    		Log.e(TAG, "Server error in fetching bookmark list");
-    		throw new IOException();
-    	}
+
         return update;
     }
     

@@ -21,8 +21,6 @@
 
 package com.pindroid.client;
 
-import com.pindroid.util.DateParser;
-
 public class Update {
 	private long lastUpdate;
 	
@@ -30,26 +28,11 @@ public class Update {
 		return lastUpdate;
 	}
 	
-	public Update(long update){
-		lastUpdate = update;
+	public void setLastUpdate(long lastUpdate){
+		this.lastUpdate = lastUpdate;
 	}
 	
-	public static Update valueOf(String updateResponse){
-        try {
-        	int start = updateResponse.indexOf("<update");
-        	int end = updateResponse.indexOf("/>", start);
-        	String updateElement = updateResponse.substring(start, end);
-        	int timestart = updateElement.indexOf("time=");
-        	int timeend = updateElement.indexOf("\"", timestart + 7);
-        	String time = updateElement.substring(timestart + 6, timeend);
-
-			long updateTime = DateParser.parse(time).getTime();
-			
-			return new Update(updateTime);
-		} catch (java.text.ParseException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
+	public Update(){
+		
+	}	
 }
