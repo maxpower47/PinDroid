@@ -247,6 +247,17 @@
 				<action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED"></action>
 			</intent-filter>
 		</receiver>
+		<receiver android:name=".receiver.PackageReceiver"
+			android:exported="false">
+			<intent-filter>
+				<action android:name="android.intent.action.PACKAGE_ADDED"></action>
+				<action android:name="android.intent.action.PACKAGE_REMOVED"></action>
+				<data android:scheme="package"/>
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.MY_PACKAGE_REPLACED"></action>
+			</intent-filter>
+		</receiver>
 		<service android:name=".service.AccountService" />
 		<service android:name=".service.SaveBookmarkService" />
     </application>
