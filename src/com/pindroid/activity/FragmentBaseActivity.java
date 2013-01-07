@@ -51,7 +51,7 @@ import com.pindroid.providers.BookmarkContentProvider;
 public abstract class FragmentBaseActivity extends FragmentActivity {
 	
 	protected AccountManager mAccountManager;
-	public Account mAccount;
+	//public Account mAccount;
 	public Context mContext;
 	public String username = null;
 	protected SharedPreferences settings;
@@ -148,7 +148,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 			return;
 		} else {			
 			if(getIntent().getData() == null || getIntent().getData().getUserInfo() == null){
-				Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, true, null, null, null, null);
+				Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
 				startActivityForResult(i, 1);
 			} else{
 				username = getIntent().getData().getUserInfo();
@@ -188,6 +188,15 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	    	});
 	    }
 	}
+	
+	// ******************************************
+	// ******************************************
+	// ******************************************
+	//TODO test searching on < 3.0 devices
+	//TODO test on tablet
+	// ******************************************
+	// ******************************************
+	// ******************************************
 
 	private void startSearch(final String query) {
 		Intent i = new Intent(this, MainSearchResults.class);
@@ -244,10 +253,6 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	}
 	
 	public boolean isMyself() {
-		//if(mAccount != null && username != null)
-		//	return mAccount.name.equals(username);
-		//else return false;
-		
 		for(Account account : mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)){
 			if(username.equals(account.name))
 				return true;

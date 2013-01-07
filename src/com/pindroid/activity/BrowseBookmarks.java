@@ -95,8 +95,12 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	    			username = intent.getStringExtra("username");
 	    		}
 	    		
-	    		if(data != null && data.getUserInfo() != null){
-	    			username = data.getUserInfo();
+	    		if(data != null){
+	    			feed = data.getQueryParameter("feed");
+	    			
+	    			if(data.getUserInfo() != null){
+	    				username = data.getUserInfo();
+	    			}
 	    		}
 			} else {
 				if(data != null) {

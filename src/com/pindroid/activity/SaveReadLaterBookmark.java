@@ -42,7 +42,7 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
-		if(mAccount != null){
+		if(username != null){
 			Intent intent = getIntent();
 	
 			if((Intent.ACTION_SEND.equals(intent.getAction()) || Constants.ACTION_READLATER.equals(intent.getAction())) && intent.hasExtra(Intent.EXTRA_TEXT)){
@@ -65,7 +65,7 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 				bookmark.setToRead(true);
 				bookmark.setTime(new Date().getTime());
 				bookmark.setTagString("");
-				bookmark.setAccount(mAccount.name);
+				bookmark.setAccount(username);
 				
 				Intent i = new Intent(this, SaveBookmarkService.class);
 				i.putExtra(Constants.EXTRA_BOOKMARK, bookmark);

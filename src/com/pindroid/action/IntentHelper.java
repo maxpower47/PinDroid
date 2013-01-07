@@ -235,8 +235,9 @@ public class IntentHelper {
 		
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority("global" + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("bookmarks");
+		data.appendQueryParameter("feed", "global");
 		i.setData(data.build());
 		
 		return i;

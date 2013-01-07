@@ -246,7 +246,7 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
 			String query = intent.getStringExtra(SearchManager.QUERY);
-			return new LoaderDrone(base, "global", query, null);
+			return new LoaderDrone(base, username, query, feed);
 		} else {			
 			return new LoaderDrone(base, username, tagname, feed);
 		}
@@ -290,8 +290,8 @@ public class BrowseBookmarkFeedFragment extends ListFragment
         public Cursor loadInBackground() {
             Cursor results = null;
             
- 	       if(user.equals("global"))
- 	    	   user = "";
+ 	       if(feed.equals("global"))
+ 	    	   feed = "";
         
  		   try {
  			   if(feed.equals("network")) {

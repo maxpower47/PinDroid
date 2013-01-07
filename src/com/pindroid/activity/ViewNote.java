@@ -50,20 +50,20 @@ public class ViewNote extends FragmentBaseActivity {
 			
 			if(data != null) {
 				path = data.getPath();
-				username = data.getUserInfo();
+				//username = data.getUserInfo();
 				
-			} else username = mAccount.name;
+			} //else username = mAccount.name;
 			
 			note = new Note();
 			
 			if(path.contains("/notes")){
-				if(isMyself()){		
-					int id = Integer.parseInt(data.getLastPathSegment());
-					note.setId(id);
-				} else {
+				if(data.getQueryParameter("account") != null && !data.getQueryParameter("account").equals("")){		
 					note.setTitle(data.getQueryParameter("title"));
 					note.setText(data.getQueryParameter("text"));
 					note.setAccount(data.getQueryParameter("account"));
+				} else {
+					int id = Integer.parseInt(data.getLastPathSegment());
+					note.setId(id);
 				}
 			}
 			
