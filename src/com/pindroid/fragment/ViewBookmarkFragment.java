@@ -79,7 +79,8 @@ public class ViewBookmarkFragment extends Fragment {
 	private TextView mTags;
 	private TextView mTime;
 	private TextView mUsername;
-	private ImageView mIcon;
+	private ImageView mPrivateIcon;
+	private ImageView mSyncedIcon;
 	private WebView mWebContent;
 	private Bookmark bookmark;
 	private BookmarkViewType viewType;
@@ -116,7 +117,8 @@ public class ViewBookmarkFragment extends Fragment {
 		mTags = (TextView) getView().findViewById(R.id.view_bookmark_tags);
 		mTime = (TextView) getView().findViewById(R.id.view_bookmark_time);
 		mUsername = (TextView) getView().findViewById(R.id.view_bookmark_account);
-		mIcon = (ImageView) getView().findViewById(R.id.view_bookmark_icon);
+		mPrivateIcon = (ImageView) getView().findViewById(R.id.view_bookmark_private);
+		mSyncedIcon = (ImageView) getView().findViewById(R.id.view_bookmark_synced);
 		mWebContent = (WebView) getView().findViewById(R.id.web_view);
 		readSection = getView().findViewById(R.id.read_bookmark_section);
 		readTitle = (TextView) getView().findViewById(R.id.read_bookmark_title);
@@ -291,12 +293,20 @@ public class ViewBookmarkFragment extends Fragment {
 					mTime.setText(d.toString());
 					mUsername.setText(bookmark.getAccount());
 					
-					if(mIcon != null){
-						if(!bookmark.getShared()) {
-							mIcon.setImageResource(R.drawable.padlock);
-						} else if(bookmark.getToRead()) {
-							mIcon.setImageResource(R.drawable.book_open);
-						}
+					if(mPrivateIcon != null){
+						if(!bookmark.getShared())
+							mPrivateIcon.setVisibility(View.VISIBLE);
+						else mPrivateIcon.setVisibility(View.INVISIBLE);
+					}
+					
+					if(mSyncedIcon != null){
+						if(bookmark.getSynced() != 0)
+							mSyncedIcon.setVisibility(View.VISIBLE);
+						else mSyncedIcon.setVisibility(View.INVISIBLE);
+						
+						if(bookmark.getSynced() == -1)
+							mSyncedIcon.setImageResource(R.drawable.sync_fail);
+						else mSyncedIcon.setImageResource(R.drawable.sync);
 					}
 					
 	        		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();

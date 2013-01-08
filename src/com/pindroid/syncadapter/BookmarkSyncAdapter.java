@@ -173,13 +173,15 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 				PinboardApi.addBookmark(b, account, mContext);
 	
 				Log.d(TAG, "Bookmark edited: " + (b.getHash() == null ? "" : b.getHash()));
-				b.setSynced(true);
-				BookmarkManager.SetSynced(b, true, account.name, mContext);
+				b.setSynced(1);
+				BookmarkManager.SetSynced(b, 1, account.name, mContext);
 				
 				syncResult.stats.numEntries++;
     		}
     		catch(PinboardException e){
     			Log.d(TAG, "Error editing bookmark: " + (b.getHash() == null ? "" : b.getHash()));
+				b.setSynced(-1);
+				BookmarkManager.SetSynced(b, -1, account.name, mContext);
     		}
     	}	
     }

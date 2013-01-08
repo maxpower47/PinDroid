@@ -66,7 +66,7 @@ public class BookmarkContent {
         private boolean mShared = true;
         private boolean mRead = false;
         private long mTime = 0;
-        private boolean mSynced = false;
+        private int mSynced = 0;
         private boolean mDeleted = false;
 
         public int getId(){
@@ -169,11 +169,11 @@ public class BookmarkContent {
         	mAccount = account;
         }
         
-        public boolean getSynced(){
+        public int getSynced(){
         	return mSynced;
         }
         
-        public void setSynced(boolean synced){
+        public void setSynced(int synced){
         	mSynced = synced;
         }
         
@@ -206,7 +206,7 @@ public class BookmarkContent {
             mTime = time;
         }
         
-        public Bookmark(int id, String account, String url, String description, String notes, String tags, String hash, String meta, long time, boolean read, boolean share, boolean synced, boolean deleted) {
+        public Bookmark(int id, String account, String url, String description, String notes, String tags, String hash, String meta, long time, boolean read, boolean share, int synced, boolean deleted) {
             mId = id;
         	mUrl = url;
             mDescription = description;
@@ -252,7 +252,7 @@ public class BookmarkContent {
         	this.mTags = null;
         	this.mTime = 0;
         	this.mUrl = null;
-        	this.mSynced = false;
+        	this.mSynced = 0;
         	this.mDeleted = false;
         }
 	}

@@ -83,7 +83,7 @@ public class SaxBookmarkParser {
 
             	currentBookmark.setToRead(toread != null && toread.equals("yes"));
             	currentBookmark.setShared(!(shared != null && shared.equals("no")));
-            	currentBookmark.setSynced(true);
+            	currentBookmark.setSynced(1);
             	
             	bookmarks.add(currentBookmark.copy());
             }

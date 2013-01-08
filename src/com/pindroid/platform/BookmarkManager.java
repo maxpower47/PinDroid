@@ -71,7 +71,7 @@ public class BookmarkManager {
 		String[] selectionargs = new String[]{username};
 		
 		selectionargs = new String[]{username};
-		selection = Bookmark.Account + "=? AND " + Bookmark.Synced + "=0 AND " + Bookmark.Deleted + "=0";
+		selection = Bookmark.Account + "=? AND " + Bookmark.Synced + "<>1 AND " + Bookmark.Deleted + "=0";
 		
 		Uri bookmarks = Bookmark.CONTENT_URI;
 
@@ -93,7 +93,7 @@ public class BookmarkManager {
 				Bookmark b = new Bookmark(c.getInt(idColumn), "", c.getString(urlColumn), 
 						c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn), c.getString(hashColumn), 
 						c.getString(metaColumn), 0, c.getInt(readColumn) == 0 ? false : true,
-						c.getInt(shareColumn) == 0 ? false : true, false, false);
+						c.getInt(shareColumn) == 0 ? false : true, 0, false);
 
 				bookmarkList.add(b);
 
@@ -134,7 +134,7 @@ public class BookmarkManager {
 				Bookmark b = new Bookmark(c.getInt(idColumn), "", c.getString(urlColumn), 
 						c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn), c.getString(hashColumn), 
 						c.getString(metaColumn), 0, c.getInt(readColumn) == 0 ? false : true,
-						c.getInt(shareColumn) == 0 ? false : true, false, true);
+						c.getInt(shareColumn) == 0 ? false : true, 0, true);
 
 				bookmarkList.add(b);
 
@@ -169,7 +169,7 @@ public class BookmarkManager {
 			
 			final boolean read = c.getInt(readColumn) == 0 ? false : true;
 			final boolean share = c.getInt(shareColumn) == 0 ? false : true;
-			final boolean synced = c.getInt(syncedColumn) == 0 ? false : true;
+			final int synced = c.getInt(syncedColumn);
 			final boolean deleted = c.getInt(deletedColumn) == 0 ? false : true;
 
 			Bookmark b = new Bookmark(id, c.getString(accountColumn), c.getString(urlColumn), 
@@ -210,7 +210,7 @@ public class BookmarkManager {
 			
 			final boolean read = c.getInt(readColumn) == 0 ? false : true;
 			final boolean share = c.getInt(shareColumn) == 0 ? false : true;
-			final boolean synced = c.getInt(syncedColumn) == 0 ? false : true;
+			final int synced = c.getInt(syncedColumn);
 			final boolean deleted = c.getInt(deletedColumn) == 0 ? false : true;
 
 			Bookmark b = new Bookmark(c.getInt(idColumn), c.getString(accountColumn), c.getString(urlColumn), 
@@ -269,7 +269,7 @@ public class BookmarkManager {
 			values.put(Bookmark.Account, account);
 			values.put(Bookmark.ToRead, b.getToRead() ? 1 : 0);
 			values.put(Bookmark.Shared, b.getShared() ? 1 : 0);
-			values.put(Bookmark.Synced, true);
+			values.put(Bookmark.Synced, 1);
 			values.put(Bookmark.Deleted, false);
 			
 			bcv[i] = values;
@@ -301,13 +301,13 @@ public class BookmarkManager {
 		
 		values.put(Bookmark.ToRead, bookmark.getToRead() ? 1 : 0);
 		values.put(Bookmark.Shared, bookmark.getShared() ? 1 : 0);
-		values.put(Bookmark.Synced, false);
+		values.put(Bookmark.Synced, 0);
 		values.put(Bookmark.Deleted, false);
 		
 		context.getContentResolver().update(Bookmark.CONTENT_URI, values, selection, selectionargs);
 	}
 	
-	public static void SetSynced(Bookmark bookmark, boolean synced, String account, Context context){
+	public static void SetSynced(Bookmark bookmark, int synced, String account, Context context){
 		final String url = bookmark.getUrl();
 		
 		String hash = "";
@@ -472,7 +472,7 @@ public class BookmarkManager {
 			b.setShared(c.getInt(c.getColumnIndex(Bookmark.Shared)) == 1 ? true : false);
 		
 		if(c.getColumnIndex(Bookmark.Synced) != -1)
-			b.setSynced(c.getInt(c.getColumnIndex(Bookmark.Synced)) == 1 ? true : false);
+			b.setSynced(c.getInt(c.getColumnIndex(Bookmark.Synced)));
 		
 		if(c.getColumnIndex(Bookmark.Deleted) != -1)
 			b.setDeleted(c.getInt(c.getColumnIndex(Bookmark.Deleted)) == 1 ? true : false);
