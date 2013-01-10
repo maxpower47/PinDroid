@@ -114,7 +114,7 @@
   <string name="menu_view_editbookmark_title">Editieren</string>
   <string name="menu_view_deletebookmark_title">Löschen</string>
   <string name="menu_view_sendbookmark_title">Teilen</string>
-  <string name="search_widget_label">PinDroid 4x1</string>
+  <string name="search_widget_label">PinDroid</string>
   <string name="preferences_title">PinDroid Einstellungen</string>
   <string name="account_preferences_cat_title">Allgemeine Einstellungen</string>
   <string name="account_preferences_title">Account Einstellungen</string>

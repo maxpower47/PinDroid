@@ -3,7 +3,6 @@
 <resources>
   <string name="label">Pinboard</string>
   <string name="pindroid">PinDroid</string>
-  <string name="pinboard_lower">pinboard</string>
   <string name="ui_activity_title">로그인</string>
   <string name="ui_activity_authenticating">인증하는 중</string>
   <string name="login_activity_username_label">아이디</string>
@@ -110,7 +109,7 @@
   <string name="menu_view_sendbookmark_title">공유</string>
   <string name="view_note_title">노트 자세히 보기</string>
   <string name="view_note_account_title">작성자</string>
-  <string name="search_widget_label">PinDroid 4x1</string>
+  <string name="search_widget_label">PinDroid</string>
   <string name="preferences_title">PinDroid 설정</string>
   <string name="account_preferences_cat_title">일반 설정</string>
   <string name="account_preferences_title">계정 설정</string>

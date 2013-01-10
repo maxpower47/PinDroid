@@ -21,10 +21,7 @@
  * USA
  */
  -->
-<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minWidth="294dp"
-    android:minHeight="64dp"
-    android:updatePeriodMillis="1800000"
-    android:previewImage="@drawable/search_widget_preview"
-    android:initialLayout="@layout/search_appwidget" >
-</appwidget-provider>
+ <resources>
+ 	<dimen name="widget_margin">8dp</dimen>
+ 	<dimen name="widget_height">-1dp</dimen>
+ </resources>

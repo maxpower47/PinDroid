@@ -41,6 +41,8 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -110,20 +112,18 @@ public class SearchWidgetProvider extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.search_widget_unread_button, unreadPendingIntent);
             
             int count = BookmarkManager.GetUnreadCount(username, context);
-
+            
             String countText = Integer.toString(count);
             if(count > 99) {
             	countText = "+";
             }
 
             if(count > 0) {
-            	views.setViewVisibility(R.id.search_widget_unread_count, View.VISIBLE);
-                views.setViewVisibility(R.id.search_widget_unread_count_background, View.VISIBLE);
+            	views.setViewVisibility(R.id.search_widget_unread_count_layout, View.VISIBLE);
             	
             	views.setTextViewText(R.id.search_widget_unread_count, countText);
             } else {
-            	views.setViewVisibility(R.id.search_widget_unread_count, View.GONE);
-            	views.setViewVisibility(R.id.search_widget_unread_count_background, View.GONE);
+            	views.setViewVisibility(R.id.search_widget_unread_count_layout, View.GONE);
             }
 
             // Tell the AppWidgetManager to perform an update on the current App Widget

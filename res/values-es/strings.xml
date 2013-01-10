@@ -24,7 +24,6 @@
 <resources>
   <string name="label">Pinboard</string>
   <string name="pindroid">PinDroid</string>
-  <string name="pinboard_lower">pinboard</string>
   <string name="ui_activity_title">Ingresar</string>
   <string name="ui_activity_authenticating">Autentificación</string>
   <string name="login_activity_username_label">Nombre de usuario</string>
@@ -131,7 +130,7 @@
   <string name="menu_view_sendbookmark_title">Compartir</string>
   <string name="view_note_title">Ver detalles de la nota</string>
   <string name="view_note_account_title">De</string>
-  <string name="search_widget_label">PinDroid 4x1</string>
+  <string name="search_widget_label">PinDroid</string>
   <string name="preferences_title">Configuración de PinDroid</string>
   <string name="account_preferences_cat_title">Configuración general</string>
   <string name="account_preferences_title">Configuración de la cuenta</string>

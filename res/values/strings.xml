@@ -25,7 +25,6 @@
     <!-- Label for this package -->
     <string name="label">Pinboard</string>
     <string name="pindroid">PinDroid</string>
-    <string name="pinboard_lower">pinboard</string>
 
     <!-- Title string for Login activity-->
     <string name="ui_activity_title">Sign in</string>
@@ -192,7 +191,7 @@
     <string name="view_note_account_title">By</string>
     
     <!-- Widget -->
-    <string name="search_widget_label">PinDroid 4x1</string>
+    <string name="search_widget_label">PinDroid</string>
     
     <!-- Preferences -->
     <string name="preferences_title">PinDroid Settings</string>
