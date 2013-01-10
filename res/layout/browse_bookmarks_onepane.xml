@@ -29,5 +29,6 @@
 	<LinearLayout 
 		android:id="@+id/listcontent"
 		android:layout_width="fill_parent"
-	    android:layout_height="fill_parent" />
+	    android:layout_height="fill_parent"
+	    android:background="#00000000" />
 </LinearLayout>

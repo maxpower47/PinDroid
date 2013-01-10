@@ -21,4 +21,7 @@
  * USA
  */
  -->
-<merge xmlns:android="http://schemas.android.com/apk/res/android"/>
+<resources>
+	<color name="bookmark_view_bg">@color/bookmark_view_bg_twopane</color>
+	<color name="tag_view_bg">@color/tag_view_bg_twopane</color>
+</resources>

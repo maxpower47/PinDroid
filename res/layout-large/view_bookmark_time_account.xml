@@ -21,13 +21,28 @@
  * USA
  */
  -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:background="#000000">
-	<include layout="@layout/add_bookmark_form" />
-</LinearLayout>
+    android:layout_height="fill_parent">
+    <TableRow>
+       	<TextView
+			android:id="@+id/view_bookmark_time_title"
+			style="@style/ViewBookmarkFieldTitle"
+			android:text="@string/view_bookmark_time_title"/>
+       	<TextView
+       	    android:id="@+id/view_bookmark_account_title"
+       	    style="@style/ViewBookmarkFieldTitle"
+       	    android:layout_marginLeft="30dp"
+       	    android:paddingTop="5dip"
+       	    android:text="@string/view_bookmark_account_title" />
+    </TableRow>
+    <TableRow>
+        <TextView
+			android:id="@+id/view_bookmark_time"
+			style="@style/ViewBookmarkFieldContent" />
+       	<TextView
+			android:id="@+id/view_bookmark_account"
+			android:layout_marginLeft="30dp"
+			style="@style/ViewBookmarkFieldContent" />
+    </TableRow>
+</TableLayout>

@@ -48,7 +48,8 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		DisplayMetrics outMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
 		
-		if(findViewById(R.id.main_tablet_detect) != null){
+
+		if(getResources().getBoolean(R.bool.has_two_panes)){
 			startActivity(IntentHelper.ViewTabletTags(mAccount.name, this));
 		} else {
 			startActivity(IntentHelper.ViewTags(mAccount.name, this));

@@ -21,13 +21,13 @@
  * USA
  */
  -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:background="#000000">
-	<include layout="@layout/add_bookmark_form" />
-</LinearLayout>
+ <resources>
+ 	<dimen name="add_switch_margin_left">50dp</dimen>
+ 	<dimen name="add_switch_margin_right">50dp</dimen>
+ 	<dimen name="action_bar_width">-1dp</dimen>
+ 	<integer name="add_bookmark_note_lines">5</integer>
+ 	<dimen name="bookmark_list_view_height">50dp</dimen>
+	<dimen name="view_bookmark_padding_top">20dp</dimen>
+	<dimen name="view_bookmark_padding_left">10dp</dimen>
+	<dimen name="view_bookmark_title_text">28sp</dimen>
+ </resources>

@@ -35,4 +35,6 @@
 	
 	<color name="tag_list_default_bg">#000000</color>
 	<color name="tag_list_activated_bg">#BF8600</color>
+	<color name="bookmark_view_bg">#00000000</color>
+	<color name="tag_view_bg">#00000000</color>
 </resources>

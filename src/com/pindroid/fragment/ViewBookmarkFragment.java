@@ -40,7 +40,6 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -187,12 +186,10 @@ public class ViewBookmarkFragment extends Fragment {
 	    inflater.inflate(R.menu.view_menu, menu);
 	    
 	    if(android.os.Build.VERSION.SDK_INT >= 14) {
-	    	Log.d("bookmark", Boolean.toString(bookmark == null));
 	    	if(bookmark != null){
 	    		if(isMyself() && bookmark.getId() != 0){
 					try{		
-						int id = bookmark.getId();
-						bookmark = BookmarkManager.GetById(id, base);
+						bookmark = BookmarkManager.GetById(bookmark.getId(), base);
 						
 			    		ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_view_sendbookmark).getActionProvider();
 			    		shareActionProvider.setShareIntent(IntentHelper.SendBookmark(bookmark.getUrl(), bookmark.getDescription()));

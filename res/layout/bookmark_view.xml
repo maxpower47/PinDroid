@@ -23,8 +23,10 @@
  -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="horizontal"
+	android:minHeight="@dimen/bookmark_list_view_height"
 	android:layout_height="fill_parent"
-	android:layout_width="fill_parent">
+	android:layout_width="fill_parent"
+	android:background="@color/bookmark_view_bg">
 	<ImageView   
 		android:layout_width="4dip"
 		android:layout_height="fill_parent"

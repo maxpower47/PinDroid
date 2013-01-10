@@ -30,6 +30,7 @@
 		android:text="@string/add_title_private"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginLeft="@dimen/add_switch_margin_left"
 		android:paddingTop="5dip" />
 	<LinearLayout
 		style="@style/LayoutRight">
@@ -38,6 +39,7 @@
 			android:text="@string/add_title_toread"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_marginRight="@dimen/add_switch_margin_right"
 			android:paddingTop="5dip" />
 	</LinearLayout>
 </LinearLayout>

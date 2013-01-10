@@ -209,7 +209,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 	    super.onRestoreInstanceState(savedInstanceState);
 	    
-	    if(findViewById(R.id.maincontent) != null) {
+	    if(isTwoPane()) {
 	    	lastSelected = (Bookmark)savedInstanceState.getSerializable(STATE_LASTBOOKMARK);
 	    	lastViewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_LASTVIEWTYPE);
 	    	if(lastSelected != null) {
@@ -235,10 +235,14 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			else findViewById(R.id.panel_collapse_button).setVisibility(View.VISIBLE);
 		}
 	}
+	
+	private boolean isTwoPane(){
+		return getResources().getBoolean(R.bool.has_two_panes);
+	}
 
 	public void onBookmarkView(Bookmark b) {
 		if(b != null){
-			if(findViewById(R.id.maincontent) != null || findViewById(R.id.tagcontent) != null) {
+			if(isTwoPane() || findViewById(R.id.tagcontent) != null) {
 				lastSelected = b;
 				lastViewType = BookmarkViewType.VIEW;
 				setBookmarkView(b, BookmarkViewType.VIEW);
@@ -250,7 +254,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 
 	public void onBookmarkRead(Bookmark b) {
 		if(b != null){
-			if(findViewById(R.id.maincontent) != null) {
+			if(isTwoPane()) {
 				lastSelected = b;
 				lastViewType = BookmarkViewType.READ;
 				setBookmarkView(b, BookmarkViewType.READ);
@@ -262,7 +266,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 
 	public void onBookmarkOpen(Bookmark b) {
 		if(b != null){
-			if(findViewById(R.id.maincontent) != null) {
+			if(isTwoPane()) {
 				lastSelected = b;
 				lastViewType = BookmarkViewType.WEB;
 				setBookmarkView(b, BookmarkViewType.WEB);
@@ -294,7 +298,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 
 	public void onBookmarkEdit(Bookmark b) {		
 		if(b != null){
-			if(findViewById(R.id.maincontent) != null) {
+			if(isTwoPane()) {
 				lastSelected = b;
 				lastViewType = BookmarkViewType.EDIT;
 				
@@ -323,7 +327,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	}
 
 	public void onViewTagSelected(String tag) {
-		if(findViewById(R.id.maincontent) != null) {
+		if(isTwoPane()) {
 			BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
 			frag.setQuery(username, tag, false);
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -336,7 +340,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	}
 
 	public void onUserTagSelected(String tag, String user) {
-		if(findViewById(R.id.maincontent) != null) {
+		if(isTwoPane()) {
 			BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
 			frag.setQuery(user, tag);
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -349,7 +353,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	}
 
 	public void onAccountSelected(String account) {
-		if(findViewById(R.id.maincontent) != null) {
+		if(isTwoPane()) {
 			BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
 			frag.setQuery(account, null);
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

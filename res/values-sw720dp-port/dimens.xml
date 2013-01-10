@@ -21,20 +21,6 @@
  * USA
  */
  -->
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="vertical"
-	style="@style/TabletLandFrame">
-	<include android:id="@+id/include_action_bar" layout="@layout/action_bar" />
-	<fragment class="com.pindroid.fragment.MainFragment"
-		android:id="@+id/listcontent"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent" >
-	</fragment>
-	<TextView
-		android:id="@+id/main_tablet_detect"
-		android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-		android:visibility="gone" />
-</LinearLayout>
+ <resources>
+ 	<dimen name="bookmark_list_view_height">50dp</dimen>
+ </resources>

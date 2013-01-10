@@ -34,7 +34,9 @@
 		<LinearLayout
 			android:layout_width="fill_parent" 
 			android:layout_height="wrap_content"
-			android:orientation="vertical">
+			android:orientation="vertical"
+			android:paddingTop="@dimen/view_bookmark_padding_top"
+			android:paddingLeft="@dimen/view_bookmark_padding_left">
 			<LinearLayout
 				android:layout_width="fill_parent" 
 				android:layout_height="fill_parent"
@@ -65,7 +67,7 @@
 					android:id="@+id/view_bookmark_title"
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent"
-					android:textSize="24sp"
+					android:textSize="@dimen/view_bookmark_title_text"
 					android:paddingLeft="10dip" />
 			</LinearLayout>
 			<TextView
@@ -86,21 +88,7 @@
 			<TextView
 				android:id="@+id/view_bookmark_tags"
 				style="@style/ViewBookmarkFieldContent" />
-			<TextView
-				android:id="@+id/view_bookmark_time_title"
-				style="@style/ViewBookmarkFieldTitle"
-				android:text="@string/view_bookmark_time_title"/>
-			<TextView
-				android:id="@+id/view_bookmark_time"
-				style="@style/ViewBookmarkFieldContent" />
-			<TextView
-				android:id="@+id/view_bookmark_account_title"
-				style="@style/ViewBookmarkFieldTitle"
-				android:paddingTop="5dip"
-				android:text="@string/view_bookmark_account_title"/>
-			<TextView
-				android:id="@+id/view_bookmark_account"
-				style="@style/ViewBookmarkFieldContent" />
+			<include layout="@layout/view_bookmark_time_account" />
 		</LinearLayout>
 	</ScrollView>
 	<WebView

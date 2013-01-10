@@ -21,10 +21,6 @@
  * USA
  */
  -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item 
-		android:id="@+id/menu_settings" 
-		android:title="@string/menu_settings_title" 
-		android:icon="@android:drawable/ic_menu_preferences"
-		android:orderInCategory="99" />
-</menu>
+ <resources>
+ 	<dimen name="bookmark_list_view_height">0dp</dimen>
+ </resources>

@@ -24,4 +24,12 @@
  <resources>
  	<dimen name="widget_margin">8dp</dimen>
  	<dimen name="widget_height">-1dp</dimen>
+ 	<dimen name="add_switch_margin_left">0dp</dimen>
+ 	<dimen name="add_switch_margin_right">0dp</dimen>
+ 	<dimen name="action_bar_width">265dp</dimen>
+ 	<integer name="add_bookmark_note_lines">2</integer>
+ 	<dimen name="bookmark_list_view_height">0dp</dimen>
+ 	<dimen name="view_bookmark_padding_top">0dp</dimen>
+ 	<dimen name="view_bookmark_padding_left">0dp</dimen>
+ 	<dimen name="view_bookmark_title_text">24sp</dimen>
  </resources>
