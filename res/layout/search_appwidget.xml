@@ -25,13 +25,11 @@
 	android:layout_width="match_parent"
 	android:layout_height="@dimen/widget_height"
 	android:padding="@dimen/widget_margin">
-	
     <LinearLayout
     	android:layout_width="match_parent"
     	android:layout_height="match_parent"
     	android:orientation="horizontal"
     	android:background="@drawable/appwidget_dark_bg">
-	    	
 	     <ImageView
 	        android:id="@+id/search_widget_icon"
 	   		android:src="@drawable/ic_main"
@@ -58,7 +56,6 @@
 	        android:layout_width="1dip"
 	        android:layout_height="match_parent"
 	        android:background="@drawable/appwidget_divider"/>
-	    
 	    <RelativeLayout 
 	        android:layout_width="0dp"
 		    android:layout_height="match_parent"
@@ -71,15 +68,14 @@
 		        android:scaleType="center"
 		        android:background="@drawable/appwidget_button_center"
 		        android:contentDescription="@string/alt_widget_unread_bookmarks"/>
-		    <RelativeLayout 
+		    <FrameLayout 
 		        android:id="@+id/search_widget_unread_count_layout"
-		        android:layout_width="18dp"
-			    android:layout_height="18dp"
-			    android:layout_marginBottom="10dp"
-			    android:layout_marginRight="10dp"
+		        android:layout_width="28dp"
+			    android:layout_height="33dp"
+			    android:paddingTop="15dp"
+			    android:paddingLeft="10dp"
 			    android:visibility="gone"
-			    android:layout_alignRight="@id/search_widget_unread_button"
-				android:layout_alignBottom="@id/search_widget_unread_button">
+			    android:layout_centerInParent="true">
 			    <ImageView 
 			    	android:id="@+id/search_widget_unread_count_background"
 			    	android:src="@drawable/widget_unread_count"
@@ -93,9 +89,8 @@
 					android:scaleType="center"
 					android:textStyle="bold"
 					android:textColor="#FFFFFF"
-					android:gravity="center"
-					android:layout_centerInParent="true" />
-			</RelativeLayout>
+					android:gravity="center" />
+			</FrameLayout>
 	    </RelativeLayout>
 	    <ImageView
 	        android:layout_width="1dip"
@@ -136,9 +131,5 @@
 	        android:scaleType="center"
 	    	android:background="@drawable/appwidget_button_right"
 	        android:contentDescription="@string/alt_widget_search"/>
-        
-        
-    </LinearLayout>
-    
-    
+    </LinearLayout>   
 </FrameLayout>
