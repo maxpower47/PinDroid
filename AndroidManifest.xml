@@ -170,6 +170,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activity.StandaloneSaveReadLaterBookmark" 
+        	android:theme="@android:style/Theme.NoDisplay"
+        	android:label="@string/share_menu_read_later">
             <intent-filter>
                 <action android:name="com.pindroid.action.ReadLater" />
                 <category android:name="android.intent.category.DEFAULT" />
