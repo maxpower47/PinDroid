@@ -37,6 +37,12 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
     @Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        if(getResources().getBoolean(R.bool.has_two_panes)){
+			startActivity(IntentHelper.ViewTabletTags(mAccount.name, this));
+			finish();
+		}
+        
         setContentView(R.layout.browse_tags);
 
         Intent intent = getIntent();
