@@ -601,7 +601,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				throw new IllegalArgumentException("Unknown URI " + uri);
 		}
 		
-		boolean syncOnly = values.size() == 1 && values.containsKey(Bookmark.Synced) && values.getAsBoolean(Bookmark.Synced);
+		boolean syncOnly = values.size() == 1 && values.containsKey(Bookmark.Synced) && values.getAsInteger(Bookmark.Synced) == 1;
 		
 		getContext().getContentResolver().notifyChange(uri, null, !syncOnly);
 		return count;
