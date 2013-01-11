@@ -44,13 +44,11 @@
     </string-array>
     <string-array name="pref_reading_font_entries">
         <item>Roboto (sans)</item>
-        <item>News Cycle (sans)</item>
         <item>Alegreya (serif)</item>
         <item>Cousine (fixed-width)</item>
     </string-array>
     <string-array name="pref_reading_font_values">
         <item>Roboto-Regular</item>
-        <item>NewsCycle-Regular</item>
         <item>Alegreya-Regular</item>
         <item>Cousine-Regular-Latin</item>
     </string-array>

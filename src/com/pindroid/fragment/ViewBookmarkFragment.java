@@ -398,9 +398,13 @@ public class ViewBookmarkFragment extends Fragment {
 		}
 		
 		readView.setPadding(Integer.parseInt(base.readingMargins), 15, Integer.parseInt(base.readingMargins), 15);
-
-		Typeface tf = Typeface.createFromAsset(base.getAssets(), "fonts/" + base.readingFont + ".ttf");
-		readView.setTypeface(tf);
+		
+		try{
+			Typeface tf = Typeface.createFromAsset(base.getAssets(), "fonts/" + base.readingFont + ".ttf");
+			readView.setTypeface(tf);
+		} catch(Exception e){
+			readView.setTypeface(Typeface.DEFAULT);
+		}
 		
 		readView.setTextSize(Float.parseFloat(base.readingFontSize));
 		readView.setLineSpacing(Float.parseFloat(base.readingLineSpace), 1);
