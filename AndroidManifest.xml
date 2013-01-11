@@ -24,8 +24,8 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pindroid"
-    android:versionCode="49"
-    android:versionName="2.1.3"
+    android:versionCode="50"
+    android:versionName="2.1.4"
     android:installLocation="auto">
     <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="17" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
