@@ -193,6 +193,14 @@
     <!-- Widget -->
     <string name="search_widget_label">PinDroid Large</string>
     <string name="small_widget_label">PinDroid Small</string>
+    <string name="small_widget_button_default">unread</string>
+    <string name="small_widget_configuration_description">Customize your widget.</string>
+    
+    <string name="small_widget_my_bookmarks">My Bookmarks</string>
+    <string name="small_widget_my_unread">My Unread</string>
+    <string name="small_widget_my_tags">My Tags</string>
+    <string name="small_widget_add_bookmark">Add Bookmark</string>
+    <string name="small_widget_search_bookmarks">Search Bookmarks</string>
     
     <!-- Preferences -->
     <string name="preferences_title">PinDroid Settings</string>

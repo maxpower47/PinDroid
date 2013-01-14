@@ -195,6 +195,13 @@
         	</intent-filter>
         	<meta-data android:name="android.app.searchable" android:resource="@xml/main_searchable"/>
         </activity>
+        <activity android:name=".activity.SmallWidgetConfigure"
+       		android:theme="@android:style/Theme.Dialog"
+            android:excludeFromRecents="true">
+    		<intent-filter>
+        		<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+    		</intent-filter>
+		</activity>
         <!-- The authenticator service -->
         <service
             android:name=".authenticator.AuthenticationService"

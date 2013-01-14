@@ -26,11 +26,8 @@ import com.pindroid.R;
 import com.pindroid.Constants;
 import com.pindroid.action.IntentHelper;
 
-import com.pindroid.activity.BrowseBookmarks;
-import com.pindroid.activity.BrowseTags;
 import com.pindroid.activity.Main;
 import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.BookmarkContentProvider;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -40,7 +37,6 @@ import android.appwidget.AppWidgetProvider;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -62,44 +58,14 @@ public class SearchWidgetProvider extends AppWidgetProvider {
         for (int i = 0; i < n; i++) {
             int appWidgetId = appWidgetIds[i];
 
-            Intent bookmarkIntent = new Intent(context, BrowseBookmarks.class);
-            bookmarkIntent.setAction(Intent.ACTION_VIEW);
-            bookmarkIntent.addCategory(Intent.CATEGORY_DEFAULT);
-    		Uri.Builder bookmarkData = new Uri.Builder();
-    		bookmarkData.scheme(Constants.CONTENT_SCHEME);
-    		bookmarkData.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
-    		bookmarkData.appendEncodedPath("bookmarks");
-    		bookmarkIntent.setData(bookmarkData.build());
-    		
-    		Intent tagIntent = new Intent(context, BrowseTags.class);
-    		tagIntent.setAction(Intent.ACTION_VIEW);
-    		tagIntent.addCategory(Intent.CATEGORY_DEFAULT);
-    		Uri.Builder tagData = new Uri.Builder();
-    		tagData.scheme(Constants.CONTENT_SCHEME);
-    		tagData.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
-    		tagData.appendEncodedPath("tags");
-    		tagIntent.setData(tagData.build());
-    		
     		Intent searchIntent = new Intent(context, Main.class);
     		searchIntent.setAction(Intent.ACTION_SEARCH);
     		
-    		Intent addIntent = IntentHelper.AddBookmark(null, username, context);
-    		
-    		Intent unreadIntent = new Intent(context, BrowseBookmarks.class);
-    		unreadIntent.setAction(Intent.ACTION_VIEW);
-    		unreadIntent.addCategory(Intent.CATEGORY_DEFAULT);
-    		Uri.Builder data = new Uri.Builder();
-    		data.scheme(Constants.CONTENT_SCHEME);
-    		data.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
-    		data.appendEncodedPath("bookmarks");
-    		data.appendQueryParameter("unread", "1");
-    		unreadIntent.setData(data.build());
-    		
-            PendingIntent bookmarkPendingIntent = PendingIntent.getActivity(context, 0, bookmarkIntent, 0);
-            PendingIntent tagPendingIntent = PendingIntent.getActivity(context, 0, tagIntent, 0);
+    		PendingIntent bookmarkPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.ViewBookmarks(null, username, context), 0);
+            PendingIntent unreadPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.ViewUnread(username, context), 0);
+            PendingIntent tagPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.ViewTags(username, context), 0);
             PendingIntent searchPendingIntent = PendingIntent.getActivity(context, 0, searchIntent, 0);
-            PendingIntent addPendingIntent = PendingIntent.getActivity(context, 0, addIntent, 0);
-            PendingIntent unreadPendingIntent = PendingIntent.getActivity(context, 0, unreadIntent, 0);
+            PendingIntent addPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.AddBookmark(null, username, context), 0);
 
             // Get the layout for the App Widget and attach an on-click listener to the button
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.search_appwidget);

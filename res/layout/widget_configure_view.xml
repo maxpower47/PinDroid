@@ -21,11 +21,9 @@
  * USA
  */
  -->
-<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minWidth="50dp"
-    android:minHeight="50dp"
-    android:updatePeriodMillis="1800000"
-    android:previewImage="@drawable/small_widget_preview"
-    android:configure="com.pindroid.activity.SmallWidgetConfigure"
-    android:initialLayout="@layout/small_appwidget" >
-</appwidget-provider>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content"
+	android:layout_width="fill_parent"
+	android:scrollHorizontally="true"
+	android:textSize="24sp"
+	android:padding="10dip"/>
