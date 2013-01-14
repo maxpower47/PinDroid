@@ -191,7 +191,8 @@
     <string name="view_note_account_title">By</string>
     
     <!-- Widget -->
-    <string name="search_widget_label">PinDroid</string>
+    <string name="search_widget_label">PinDroid Large</string>
+    <string name="small_widget_label">PinDroid Small</string>
     
     <!-- Preferences -->
     <string name="preferences_title">PinDroid Settings</string>
