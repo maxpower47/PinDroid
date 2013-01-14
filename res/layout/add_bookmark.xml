@@ -26,7 +26,7 @@
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
 	style="@style/TabletLandFrame">
-	<include android:id="@+id/include_action_bar" layout="@layout/action_bar" />
+	<include layout="@layout/action_bar" />
 	<fragment class="com.pindroid.fragment.AddBookmarkFragment"
 		android:id="@+id/add_bookmark_fragment"
 	    android:layout_width="fill_parent"

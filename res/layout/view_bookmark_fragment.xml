@@ -61,6 +61,7 @@
 						android:layout_marginTop="5dp"
 						android:id="@+id/view_bookmark_synced"
 						android:src="@drawable/sync"
+						android:contentDescription="@string/bookmark_unsynced_alt"
 						android:visibility="invisible" />
 				</LinearLayout>
 			    <TextView

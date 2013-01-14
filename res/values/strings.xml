@@ -320,6 +320,7 @@
     <string name="alt_widget_my_tags">My Tags</string>
     <string name="alt_widget_add_bookmark">Add Bookmark</string>
     <string name="alt_widget_search">Search</string>
+    <string name="alt_widget_divider">Divider</string>
     
     <!-- AboutActivity -->
     <string name="about_activity_title">About PinDroid</string>

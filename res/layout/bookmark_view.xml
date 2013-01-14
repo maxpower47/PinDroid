@@ -52,6 +52,7 @@
 			android:layout_width="16dip"
 			android:layout_height="16dip"
 			android:layout_marginTop="5dp"
+			android:contentDescription="@string/bookmark_unsynced_alt"
 			android:id="@+id/bookmark_synced"
 			android:src="@drawable/sync"
 			android:visibility="invisible" />

@@ -59,6 +59,7 @@
 		    <ImageView 
 		    	android:id="@+id/small_widget_unread_count_background"
 		    	android:src="@drawable/widget_unread_count"
+		    	android:contentDescription="@string/alt_widget_unread_bookmark_count"
 		    	android:layout_width="match_parent"
 		        android:layout_height="match_parent"/>
 			<TextView

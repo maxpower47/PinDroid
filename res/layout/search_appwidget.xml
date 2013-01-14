@@ -42,6 +42,8 @@
 	     <ImageView
 	        android:layout_width="1dip"
 	        android:layout_height="match_parent"
+	        android:focusable="false"
+	        android:contentDescription="@string/alt_widget_divider"
 	        android:background="@drawable/appwidget_divider"/>
 	    <ImageButton
 	    	android:id="@+id/search_widget_bookmarks_button"
@@ -55,6 +57,8 @@
 	    <ImageView
 	        android:layout_width="1dip"
 	        android:layout_height="match_parent"
+	        android:focusable="false"
+	        android:contentDescription="@string/alt_widget_divider"
 	        android:background="@drawable/appwidget_divider"/>
 	    <RelativeLayout 
 	        android:layout_width="0dp"
@@ -79,6 +83,7 @@
 			    <ImageView 
 			    	android:id="@+id/search_widget_unread_count_background"
 			    	android:src="@drawable/widget_unread_count"
+			    	android:contentDescription="@string/alt_widget_unread_bookmark_count"
 			    	android:layout_width="match_parent"
 			        android:layout_height="match_parent"/>
 				<TextView
@@ -95,6 +100,8 @@
 	    <ImageView
 	        android:layout_width="1dip"
 	        android:layout_height="match_parent"
+	        android:focusable="false"
+	        android:contentDescription="@string/alt_widget_divider"
 	        android:background="@drawable/appwidget_divider"/>
 	    <ImageButton
 	    	android:id="@+id/search_widget_tags_button"
@@ -108,6 +115,8 @@
 	    <ImageView
 	        android:layout_width="1dip"
 	        android:layout_height="match_parent"
+	        android:focusable="false"
+	        android:contentDescription="@string/alt_widget_divider"
 	        android:background="@drawable/appwidget_divider"/>
 	    <ImageButton
 	    	android:id="@+id/search_widget_add_button"
@@ -121,6 +130,8 @@
 	    <ImageView
 	        android:layout_width="1dip"
 	        android:layout_height="match_parent"
+	        android:focusable="false"
+	        android:contentDescription="@string/alt_widget_divider"
 	        android:background="@drawable/appwidget_divider"/>
 	    <ImageButton
 	    	android:id="@+id/search_widget_search_button"

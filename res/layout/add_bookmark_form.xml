@@ -112,5 +112,5 @@
         android:textSize="18sp"
         android:paddingLeft="12dp"
         android:paddingBottom="10dp" />
-    <include android:id="@+id/include_add_switches" layout="@layout/add_switches" />
+    <include layout="@layout/add_switches" />
 </LinearLayout>

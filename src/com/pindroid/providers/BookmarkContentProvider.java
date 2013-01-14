@@ -24,6 +24,7 @@ package com.pindroid.providers;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -46,7 +47,6 @@ import android.content.SharedPreferences;
 import android.content.UriMatcher;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.MatrixCursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -267,20 +267,20 @@ public class BookmarkContentProvider extends ContentProvider {
 			case Bookmarks:
 				return getBookmarks(uri, projection, selection, selectionArgs, sortOrder);
 			case SearchSuggest:
-				String query = uri.getLastPathSegment().toLowerCase();
+				String query = uri.getLastPathSegment().toLowerCase(Locale.ENGLISH);
 				return getSearchSuggestions(query);
 			case Tags:
 				return getTags(uri, projection, selection, selectionArgs, sortOrder);
 			case TagSearchSuggest:
-				String tagQuery = uri.getLastPathSegment().toLowerCase();
+				String tagQuery = uri.getLastPathSegment().toLowerCase(Locale.ENGLISH);
 				return getSearchCursor(getTagSearchSuggestions(tagQuery));
 			case BookmarkSearchSuggest:
-				String bookmarkQuery = uri.getLastPathSegment().toLowerCase();
+				String bookmarkQuery = uri.getLastPathSegment().toLowerCase(Locale.ENGLISH);
 				return getSearchCursor(getBookmarkSearchSuggestions(bookmarkQuery));
 			case Notes:
 				return getNotes(uri, projection, selection, selectionArgs, sortOrder);
 			case NoteSearchSuggest:
-				String noteQuery = uri.getLastPathSegment().toLowerCase();
+				String noteQuery = uri.getLastPathSegment().toLowerCase(Locale.ENGLISH);
 				return getSearchCursor(getNoteSearchSuggestions(noteQuery));
 			default:
 				throw new IllegalArgumentException("Unknown Uri: " + uri);
@@ -638,10 +638,8 @@ public class BookmarkContentProvider extends ContentProvider {
 		db.beginTransaction();
 		
 		try{
-			final DatabaseUtils.InsertHelper ih = new DatabaseUtils.InsertHelper(db, table);
-			
 			for(ContentValues v : values) {
-				ih.insert(v);
+				db.insert(table, null, v);
 			}
 			
 			db.setTransactionSuccessful();

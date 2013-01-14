@@ -52,6 +52,7 @@
         android:icon="@drawable/ic_main"
         android:label="@string/label"
         android:theme="@style/ThemeSelector"
+        android:allowBackup="true"
         android:hardwareAccelerated="true">
         <activity
         	android:name=".activity.Main"
