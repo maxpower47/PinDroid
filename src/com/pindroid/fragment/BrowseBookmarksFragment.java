@@ -268,8 +268,6 @@ public class BrowseBookmarksFragment extends ListFragment
 	}
 	
 	private void readBookmark(Bookmark b){
-		if(base.markAsRead)
-			markBookmark(b);
 		bookmarkSelectedListener.onBookmarkRead(b);
 	}
 	

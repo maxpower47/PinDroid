@@ -151,6 +151,10 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	}
 
 	public void onBookmarkMark(Bookmark b) {
+    	if(b != null && isMyself() && b.getToRead()) {
+    		b.setToRead(false);
+			BookmarkManager.UpdateBookmark(b, mAccount.name, this);
+    	}
 	}
 
 	public void onBookmarkEdit(Bookmark b) {

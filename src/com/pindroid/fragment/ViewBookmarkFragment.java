@@ -226,8 +226,6 @@ public class ViewBookmarkFragment extends Fragment {
 		    	bookmarkSelectedListener.onBookmarkView(bookmark);
 				return true;
 		    case R.id.menu_view_read:
-		    	if(isMyself() && bookmark.getToRead() && base.markAsRead)
-		    		bookmarkSelectedListener.onBookmarkMark(bookmark);
 				bookmarkSelectedListener.onBookmarkRead(bookmark);
 				return true;
 		    case R.id.menu_view_openbookmark:
@@ -356,6 +354,9 @@ public class ViewBookmarkFragment extends Fragment {
 				}
 			} else if(viewType == BookmarkViewType.READ){
 				new GetArticleTask().execute(bookmark.getUrl());
+				
+				if(isMyself() && bookmark.getToRead() && base.markAsRead)
+		    		bookmarkSelectedListener.onBookmarkMark(bookmark);
 			} else if(viewType == BookmarkViewType.WEB){
 				showInWebView();
 			}
