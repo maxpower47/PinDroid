@@ -203,6 +203,14 @@
         		<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
     		</intent-filter>
 		</activity>
+		<activity android:name=".activity.ChooseTagShortcut"
+			android:label="@string/shortcut_activity_label"
+			android:icon="@drawable/ic_shortcut">
+  			<intent-filter>
+    			<action android:name="android.intent.action.CREATE_SHORTCUT" />
+    			<category android:name="android.intent.category.DEFAULT" />
+  			</intent-filter>
+		</activity>
         <!-- The authenticator service -->
         <service
             android:name=".authenticator.AuthenticationService"

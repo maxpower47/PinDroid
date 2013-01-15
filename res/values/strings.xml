@@ -170,6 +170,9 @@
     
     <string name="sync_receiver_label">PinDroid Bookmark Sync</string>
     <string name="syncing_toast">Syncing…</string>
+    
+    <!-- Shortcuts -->
+    <string name="shortcut_activity_label">Pinboard Tag</string>
 
     <!-- ViewBookmark -->
     <string name="view_bookmark_title">View Bookmark Details</string>

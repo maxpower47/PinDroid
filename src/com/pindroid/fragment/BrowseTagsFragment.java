@@ -48,6 +48,7 @@ public class BrowseTagsFragment extends ListFragment
 	
 	private String username = null;
 	private String query = null;
+	private boolean hasMenu = true;
 	
 	private OnTagSelectedListener tagSelectedListener;
 	private OnItemClickListener clickListener;
@@ -66,7 +67,7 @@ public class BrowseTagsFragment extends ListFragment
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 
-		setHasOptionsMenu(true);
+		setHasOptionsMenu(hasMenu);
 		
 		mAdapter = new SimpleCursorAdapter(this.getActivity(), 
 				R.layout.tag_view, null, 
@@ -91,6 +92,10 @@ public class BrowseTagsFragment extends ListFragment
 	
 	public void setQuery(String query) {
 		this.query = query;
+	}
+	
+	public void setHasMenu(boolean hasMenu) {
+		this.hasMenu = hasMenu;
 	}
 	
 	private OnItemClickListener viewListener = new OnItemClickListener() {
