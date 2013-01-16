@@ -34,9 +34,11 @@ public class BookmarkViewBinder implements SimpleCursorAdapter.ViewBinder {
 	public boolean setViewValue(View v, Cursor c, int columnIndex) {
         switch(v.getId()) {
             case R.id.bookmark_description:
+            case R.id.bookmark_feed_description:
             	((TextView)v).setText(c.getString(columnIndex));
             	break;
             case R.id.bookmark_tags:
+            case R.id.bookmark_feed_tags:
             	((TextView)v).setText(c.getString(columnIndex));
             	break;
             case R.id.bookmark_unread:
