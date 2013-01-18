@@ -27,7 +27,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:background="#000000">
-	<include layout="@layout/add_bookmark_form" />
+    android:focusableInTouchMode="true">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+		<include layout="@layout/add_bookmark_form" />
+	</ScrollView>
 </LinearLayout>
