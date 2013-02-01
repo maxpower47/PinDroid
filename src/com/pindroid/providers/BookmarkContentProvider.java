@@ -86,7 +86,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	
 	public static final String AUTHORITY = "com.pindroid.providers.BookmarkContentProvider";
 	
-	private static class DatabaseHelper extends SQLiteOpenHelper {
+	public static class DatabaseHelper extends SQLiteOpenHelper {
 		
 		DatabaseHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -607,6 +607,10 @@ public class BookmarkContentProvider extends ContentProvider {
 		return count;
 	}
 	
+	public DatabaseHelper getDatabaseHelper(){
+		return dbHelper;
+	}
+	
 	@Override
 	public int bulkInsert(Uri uri, ContentValues[] values){
 		
@@ -667,4 +671,5 @@ public class BookmarkContentProvider extends ContentProvider {
         matcher.addURI(AUTHORITY, "note/" + SearchManager.SUGGEST_URI_PATH_QUERY + "/*", NoteSearchSuggest);
         return matcher;
     }
+
 }
