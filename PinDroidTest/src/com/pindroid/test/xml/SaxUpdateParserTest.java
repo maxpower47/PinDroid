@@ -19,21 +19,40 @@
  * USA
  */
 
-package com.pindroid.test.util;
+package com.pindroid.test.xml;
 
-import com.pindroid.util.IntUtils;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
+
+import com.pindroid.client.Update;
+import com.pindroid.xml.SaxUpdateParser;
 
 import android.test.AndroidTestCase;
 
-public class IntUtilsTest extends AndroidTestCase  {
+public class SaxUpdateParserTest extends AndroidTestCase  {
+	
+	private String updateTest = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><update time=\"2011-03-24T19:02:07Z\" />";
 
-	public IntUtilsTest(){
+	public SaxUpdateParserTest(){
 		super();
 	}
 	
-	public void testIntParsing(){
-		assertEquals(1, IntUtils.parseUInt("1"));
-		assertEquals(1, IntUtils.parseUInt("01"));
-		assertEquals(2165, IntUtils.parseUInt("2165"));
+	public void testUpdateParsing() throws ParseException{
+
+		InputStream is = new ByteArrayInputStream(updateTest.getBytes());
+		
+		SaxUpdateParser parser = new SaxUpdateParser(is);
+		
+		Update r = parser.parse();
+			
+		assertEquals(1300993327000l, r.getLastUpdate());
+		
+		try {
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

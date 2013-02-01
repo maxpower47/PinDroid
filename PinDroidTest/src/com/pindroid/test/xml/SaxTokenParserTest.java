@@ -19,21 +19,41 @@
  * USA
  */
 
-package com.pindroid.test.util;
+package com.pindroid.test.xml;
 
-import com.pindroid.util.IntUtils;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
+
+import com.pindroid.client.PinboardAuthToken;
+import com.pindroid.xml.SaxTokenParser;
 
 import android.test.AndroidTestCase;
 
-public class IntUtilsTest extends AndroidTestCase  {
+public class SaxTokenParserTest extends AndroidTestCase  {
+	
+	private String tokenTest = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><result>XOG86E7JIYMI</result>";
 
-	public IntUtilsTest(){
+	public SaxTokenParserTest(){
 		super();
 	}
 	
-	public void testIntParsing(){
-		assertEquals(1, IntUtils.parseUInt("1"));
-		assertEquals(1, IntUtils.parseUInt("01"));
-		assertEquals(2165, IntUtils.parseUInt("2165"));
+	public void testUpdateParsing() throws ParseException{
+
+		InputStream is = new ByteArrayInputStream(tokenTest.getBytes());
+		
+		SaxTokenParser parser = new SaxTokenParser(is);
+		
+		PinboardAuthToken r = parser.parse();
+			
+		assertEquals("XOG86E7JIYMI", r.getToken());
+		
+		try {
+			is.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
