@@ -156,6 +156,12 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		this.feed = feed;
 	}
 	
+	public void refresh(){
+		try{
+			getLoaderManager().restartLoader(0, null, this);
+		} catch(Exception e){}
+	}
+	
 	@Override
 	public void onResume(){
 		super.onResume();

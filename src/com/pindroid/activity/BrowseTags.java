@@ -21,6 +21,7 @@
 
 package com.pindroid.activity;
 
+import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseTagsFragment;
@@ -33,6 +34,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 
 public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragment.OnTagSelectedListener {
+	
+	private BrowseTagsFragment frag;
 	
     @Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,10 +54,10 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
         String action = intent.getAction();
 
 		if(data != null)
-			username = data.getUserInfo();
+			app.setUsername(data.getUserInfo());
         
-		BrowseTagsFragment frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
-        frag.setAccount(username);
+		frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
+        frag.setAccount(app.getUsername());
 		
 		if(Intent.ACTION_VIEW.equals(action)) {
 			setTitle(getString(R.string.browse_my_tags_title));
@@ -76,6 +79,16 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 	}
 
 	public void onTagSelected(String tag) {		
-		startActivity(IntentHelper.ViewBookmarks(tag, username, null, this));
+		startActivity(IntentHelper.ViewBookmarks(tag, app.getUsername(), null, this));
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
+			frag.setAccount(app.getUsername());
+			frag.refresh();
+		}
 	}
 }

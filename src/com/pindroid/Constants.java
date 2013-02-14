@@ -57,6 +57,8 @@ public class Constants {
     
     public static final String SUGGEST_COLUMN_TEXT_2_URL = "suggest_text_2_url";
     
+    public static final int REQUEST_CODE_ACCOUNT_CHANGE = 1;
+    
     /**
      * Authtoken type string.
      */

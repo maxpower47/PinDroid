@@ -23,7 +23,6 @@ package com.pindroid.fragment;
 
 import android.app.Activity;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
@@ -150,6 +149,12 @@ public class BrowseBookmarksFragment extends ListFragment
 		this.unread = unread;
 	}
 	
+	public void refresh(){
+		try{
+			getLoaderManager().restartLoader(0, null, this);
+		} catch(Exception e){}
+	}
+	
 	@Override
 	public void onResume(){
 		super.onResume();
@@ -257,7 +262,7 @@ public class BrowseBookmarksFragment extends ListFragment
 	    }
 	    
 	    if(result) {
-	    	getLoaderManager().restartLoader(0, null, this);
+	    	refresh();
 	    } else result = super.onOptionsItemSelected(item);
 	    
 	    return result;

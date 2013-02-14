@@ -46,10 +46,10 @@ public class BrowseNotes extends FragmentBaseActivity implements BrowseNotesFrag
         String action = intent.getAction();
 
 		if(data != null)
-			username = data.getUserInfo();
+			app.setUsername(data.getUserInfo());
         
 		BrowseNotesFragment frag = (BrowseNotesFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
-        frag.setAccount(username);
+        frag.setAccount(app.getUsername());
 		
 		if(Intent.ACTION_VIEW.equals(action)) {
 			setTitle(getString(R.string.browse_my_notes_title));
@@ -72,7 +72,7 @@ public class BrowseNotes extends FragmentBaseActivity implements BrowseNotesFrag
 
 	public void onNoteView(Note n) {
 		if(n != null){
-			startActivity(IntentHelper.ViewNote(n, username, this));
+			startActivity(IntentHelper.ViewNote(n, app.getUsername(), this));
 		}
 	}
 }

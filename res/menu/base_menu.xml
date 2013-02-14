@@ -22,6 +22,10 @@
  */
  -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item 
+		android:id="@+id/menu_choose_account" 
+		android:title="@string/menu_choose_account_title" 
+		android:orderInCategory="98" />
 	<item 
 		android:id="@+id/menu_settings" 
 		android:title="@string/menu_settings_title" 

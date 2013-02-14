@@ -50,6 +50,7 @@
     
     <application
         android:icon="@drawable/ic_main"
+        android:name=".application.PindroidApplication"
         android:label="@string/label"
         android:theme="@style/ThemeSelector"
         android:allowBackup="true"

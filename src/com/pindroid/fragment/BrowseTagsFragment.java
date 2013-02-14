@@ -98,6 +98,12 @@ public class BrowseTagsFragment extends ListFragment
 		this.hasMenu = hasMenu;
 	}
 	
+	public void refresh(){
+		try{
+			getLoaderManager().restartLoader(0, null, this);
+		} catch(Exception e){}
+	}
+	
 	private OnItemClickListener viewListener = new OnItemClickListener() {
 	    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 	    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
@@ -137,7 +143,7 @@ public class BrowseTagsFragment extends ListFragment
 	    }
 	    
 	    if(result) {
-	    	getLoaderManager().restartLoader(0, null, this);
+	    	refresh();
 	    } else result = super.onOptionsItemSelected(item);
 	    
 	    return result;

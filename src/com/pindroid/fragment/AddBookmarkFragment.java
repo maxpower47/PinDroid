@@ -122,7 +122,7 @@ public class AddBookmarkFragment extends Fragment {
 		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
 		
-		if(base.username != null){
+		if(base.app.getUsername() != null){
 			CursorAdapter autoCompleteAdapter = new TagAutoCompleteCursorAdapter(base, R.layout.autocomplete_view, null, 
 					new String[]{Tag.Name, Tag.Count}, new int[]{R.id.autocomplete_name, R.id.autocomplete_count}, 0);
 
@@ -259,19 +259,19 @@ public class AddBookmarkFragment extends Fragment {
 		bookmark.setId(oldid);
 		
 		if(update){
-			BookmarkManager.UpdateBookmark(bookmark, base.username, base);
+			BookmarkManager.UpdateBookmark(bookmark, base.app.getUsername(), base);
 			
 			for(Tag t : oldBookmark.getTags()){
 				if(!bookmark.getTags().contains(t)) {
-					TagManager.UpleteTag(t, base.username, base);
+					TagManager.UpleteTag(t, base.app.getUsername(), base);
 				}
 			}
 		} else {
-			BookmarkManager.AddBookmark(bookmark, base.username, base);
+			BookmarkManager.AddBookmark(bookmark, base.app.getUsername(), base);
 		}
 		
 		for(Tag t : bookmark.getTags()){   				
-			TagManager.UpsertTag(t, base.username, base);
+			TagManager.UpsertTag(t, base.app.getUsername(), base);
 		}
     }
     

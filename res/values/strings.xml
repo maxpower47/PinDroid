@@ -103,6 +103,7 @@
     <string name="menu_sort_tag_title">Sort Tags</string>
     <string name="menu_search_title">Search</string>
     <string name="menu_settings_title">Settings</string>
+    <string name="menu_choose_account_title">Change Account</string>
     
     <string name="bookmark_unsynced_alt">Unsynced Indicator</string>
     <string name="bookmark_unread_alt">Unread Indicator</string>

@@ -38,11 +38,11 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	
 
 	public void onMyBookmarksSelected() {
-		startActivity(IntentHelper.ViewBookmarks("", username, null, this));	
+		startActivity(IntentHelper.ViewBookmarks("", app.getUsername(), null, this));	
 	}
 
 	public void onMyUnreadSelected() {
-		startActivity(IntentHelper.ViewUnread(username, this));
+		startActivity(IntentHelper.ViewUnread(app.getUsername(), this));
 	}
 
 	public void onMyTagsSelected() {
@@ -51,21 +51,21 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		
 
 		if(getResources().getBoolean(R.bool.has_two_panes)){
-			startActivity(IntentHelper.ViewTabletTags(username, this));
+			startActivity(IntentHelper.ViewTabletTags(app.getUsername(), this));
 		} else {
-			startActivity(IntentHelper.ViewTags(username, this));
+			startActivity(IntentHelper.ViewTags(app.getUsername(), this));
 		}	
 	}
 	
 	public void onMyNotesSelected() {
-		startActivity(IntentHelper.ViewNotes("", username, this));	
+		startActivity(IntentHelper.ViewNotes("", app.getUsername(), this));	
 	}
 
 	public void onMyNetworkSelected() {
-		startActivity(IntentHelper.ViewBookmarks("", username, "network", this));	
+		startActivity(IntentHelper.ViewBookmarks("", app.getUsername(), "network", this));	
 	}
 
 	public void onRecentSelected() {
-		startActivity(IntentHelper.ViewBookmarks("", username, "recent", this));	
+		startActivity(IntentHelper.ViewBookmarks("", app.getUsername(), "recent", this));	
 	}
 }

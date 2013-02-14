@@ -30,6 +30,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
@@ -45,6 +46,7 @@ import android.widget.TextView;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
+import com.pindroid.application.PindroidApplication;
 import com.pindroid.authenticator.AuthenticatorActivity;
 import com.pindroid.providers.BookmarkContentProvider;
 
@@ -53,7 +55,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	protected AccountManager mAccountManager;
 	//public Account mAccount;
 	public Context mContext;
-	public String username = null;
+	//public String username = null;
 	protected SharedPreferences settings;
 	
 	public boolean privateDefault;
@@ -68,10 +70,14 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 
 	Bundle savedState;
 	
+	public PindroidApplication app;
+	
 	@Override
 	@TargetApi(14)
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		
+		app = (PindroidApplication)getApplicationContext();
 		
 		mContext = this;
 		mAccountManager = AccountManager.get(this);
@@ -139,6 +145,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		}
 	}
 	
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	private void init(){
 		
 		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length < 1) {		
@@ -147,11 +154,11 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 			
 			return;
 		} else {			
-			if(getIntent().getData() == null || getIntent().getData().getUserInfo() == null){
+			if(getIntent().getData() != null && getIntent().getData().getUserInfo() != null){
+				app.setUsername(getIntent().getData().getUserInfo());
+			} else if(app.getUsername() == null || app.getUsername().equals("")){
 				Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
-				startActivityForResult(i, 1);
-			} else{
-				username = getIntent().getData().getUserInfo();
+				startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
 			}
 		}
 	}
@@ -203,7 +210,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		i.putExtra("query", query);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(username + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority(app.getUsername() + "@" + BookmarkContentProvider.AUTHORITY);
 		i.setData(data.build());
 		startActivity(i);
 		finish();
@@ -229,6 +236,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	    return true;
 	}
 	
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
@@ -238,7 +246,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	            startActivity(intent);
 	            return true;
 		    case R.id.menu_addbookmark:
-				startActivity(IntentHelper.AddBookmark(null, username, this));
+				startActivity(IntentHelper.AddBookmark(null, app.getUsername(), this));
 				return true;
 		    case R.id.menu_search:
 		    	onSearchRequested();
@@ -247,6 +255,10 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 				Intent prefs = new Intent(this, Preferences.class);
 				startActivity(prefs);
 		        return true;
+		    case R.id.menu_choose_account:
+				Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+				startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+		    	return true;
 		    default:
 		        return super.onOptionsItemSelected(item);
 	    }
@@ -254,7 +266,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	
 	public boolean isMyself() {
 		for(Account account : mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)){
-			if(username.equals(account.name))
+			if(app.getUsername().equals(account.name))
 				return true;
 		}
 		
@@ -264,7 +276,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
     
     public Account getAccount(){
     	for(Account account : AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE))
-			   if (account.name.equals(username))
+			   if (account.name.equals(app.getUsername()))
 				   return account;
     	
     	return null;		   
@@ -279,11 +291,12 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		}
 	}
 	
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){	
 		if(resultCode == Activity.RESULT_CANCELED){
 			finish();
-		} else if(requestCode == 1){
-			username = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+		} else if(requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
+			app.setUsername(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));
 		}
 	}
 }

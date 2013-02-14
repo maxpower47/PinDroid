@@ -37,18 +37,18 @@ public class MainSearchResults extends FragmentBaseActivity implements MainSearc
 	}
 
 	public void onBookmarkSearch() {
-		startActivity(IntentHelper.SearchBookmarks(getIntent().getStringExtra(SearchManager.QUERY), username, this));
+		startActivity(IntentHelper.SearchBookmarks(getIntent().getStringExtra(SearchManager.QUERY), app.getUsername(), this));
 	}
 
 	public void onTagSearch() {
-		startActivity(IntentHelper.SearchTags(getIntent().getStringExtra(SearchManager.QUERY), username, this));
+		startActivity(IntentHelper.SearchTags(getIntent().getStringExtra(SearchManager.QUERY), app.getUsername(), this));
 	}
 
 	public void onGlobalTagSearch() {
-		startActivity(IntentHelper.SearchGlobalTags(getIntent().getStringExtra(SearchManager.QUERY), username, this));
+		startActivity(IntentHelper.SearchGlobalTags(getIntent().getStringExtra(SearchManager.QUERY), app.getUsername(), this));
 	}
 
 	public void onNoteSearch() {
-		startActivity(IntentHelper.SearchNotes(getIntent().getStringExtra(SearchManager.QUERY), username, this));
+		startActivity(IntentHelper.SearchNotes(getIntent().getStringExtra(SearchManager.QUERY), app.getUsername(), this));
 	}
 }
