@@ -39,13 +39,13 @@ public class ChooseTagShortcut extends FragmentBaseActivity implements BrowseTag
         setContentView(R.layout.browse_tags);
           
 		BrowseTagsFragment frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
-        frag.setAccount(username);
+        frag.setAccount(app.getUsername());
         frag.setHasMenu(false);
 
     }
     
 	public void onTagSelected(String tag) {		
-		final Intent shortcutIntent = IntentHelper.ViewBookmarks(tag, username, this);
+		final Intent shortcutIntent = IntentHelper.ViewBookmarks(tag, app.getUsername(), null, this);
         final ShortcutIconResource iconResource = Intent.ShortcutIconResource.fromContext(this, R.drawable.ic_shortcut);
         final Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);

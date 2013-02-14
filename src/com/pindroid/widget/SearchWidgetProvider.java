@@ -61,7 +61,7 @@ public class SearchWidgetProvider extends AppWidgetProvider {
     		Intent searchIntent = new Intent(context, Main.class);
     		searchIntent.setAction(Intent.ACTION_SEARCH);
     		
-    		PendingIntent bookmarkPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.ViewBookmarks(null, username, context), 0);
+    		PendingIntent bookmarkPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.ViewBookmarks(null, username, null, context), 0);
             PendingIntent unreadPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.ViewUnread(username, context), 0);
             PendingIntent tagPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.ViewTags(username, context), 0);
             PendingIntent searchPendingIntent = PendingIntent.getActivity(context, 0, searchIntent, 0);

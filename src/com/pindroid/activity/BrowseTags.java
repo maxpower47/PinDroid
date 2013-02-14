@@ -42,7 +42,7 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
         super.onCreate(savedInstanceState);
         
         if(getResources().getBoolean(R.bool.has_two_panes)){
-			startActivity(IntentHelper.ViewTabletTags(mAccount.name, this));
+			startActivity(IntentHelper.ViewTabletTags(app.getUsername(), this));
 			finish();
 		}
         
