@@ -27,6 +27,8 @@ import com.pindroid.fragment.MainFragment;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 public class Main extends FragmentBaseActivity implements MainFragment.OnMainActionListener {
 
@@ -67,5 +69,15 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 
 	public void onRecentSelected() {
 		startActivity(IntentHelper.ViewBookmarks("", app.getUsername(), "recent", this));	
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_menu, menu);
+
+	    setupSearch(menu);
+	    return true;
 	}
 }

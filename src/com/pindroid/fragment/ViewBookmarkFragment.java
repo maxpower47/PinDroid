@@ -55,7 +55,6 @@ import android.widget.TextView;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
-import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.client.NetworkUtilities;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.platform.BookmarkManager;
@@ -65,10 +64,9 @@ import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.AccountSpan;
 import com.pindroid.ui.TagSpan;
+import com.pindroid.util.SettingsHelper;
 
 public class ViewBookmarkFragment extends Fragment {
-
-	private FragmentBaseActivity base;
 	
 	private View container;
 	private ScrollView mBookmarkView;
@@ -105,8 +103,6 @@ public class ViewBookmarkFragment extends Fragment {
 	    if (savedInstanceState != null) {
 	        viewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_VIEWTYPE);
 	    } 
-		
-		base = (FragmentBaseActivity)getActivity();
 		
 		container = (View) getView().findViewById(R.id.view_bookmark_container);
 		mBookmarkView = (ScrollView) getView().findViewById(R.id.bookmark_scroll_view);
@@ -189,7 +185,7 @@ public class ViewBookmarkFragment extends Fragment {
 	    	if(bookmark != null){
 	    		if(isMyself() && bookmark.getId() != 0){
 					try{		
-						bookmark = BookmarkManager.GetById(bookmark.getId(), base);
+						bookmark = BookmarkManager.GetById(bookmark.getId(), getActivity());
 						
 			    		ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_view_sendbookmark).getActionProvider();
 			    		shareActionProvider.setShareIntent(IntentHelper.SendBookmark(bookmark.getUrl(), bookmark.getDescription()));
@@ -270,7 +266,7 @@ public class ViewBookmarkFragment extends Fragment {
     		if(isMyself() && bookmark.getId() != 0){
 				try{		
 					int id = bookmark.getId();
-					bookmark = BookmarkManager.GetById(id, base);
+					bookmark = BookmarkManager.GetById(id, getActivity());
 				}
 				catch(ContentNotFoundException e){}
     		}
@@ -355,7 +351,7 @@ public class ViewBookmarkFragment extends Fragment {
 			} else if(viewType == BookmarkViewType.READ){
 				new GetArticleTask().execute(bookmark.getUrl());
 				
-				if(isMyself() && bookmark.getToRead() && base.markAsRead)
+				if(isMyself() && bookmark.getToRead() && SettingsHelper.getMarkAsRead(getActivity()))
 		    		bookmarkSelectedListener.onBookmarkMark(bookmark);
 			} else if(viewType == BookmarkViewType.WEB){
 				showInWebView();
@@ -386,10 +382,17 @@ public class ViewBookmarkFragment extends Fragment {
 	@Override
 	public void onResume(){
 		super.onResume();
-		readView.setBackgroundColor(Integer.parseInt(base.readingBackground));
-		readTitle.setBackgroundColor(Integer.parseInt(base.readingBackground));
 		
-		if(Integer.parseInt(base.readingBackground) == Color.BLACK){
+		String readingMargins = SettingsHelper.getReadingMargins(getActivity());
+		String readingBackground = SettingsHelper.getReadingBackground(getActivity());
+		String readingFont = SettingsHelper.getReadingFont(getActivity());
+		String readingFontSize = SettingsHelper.getReadingFontSize(getActivity());
+		String readingLineSpace = SettingsHelper.getReadingLineSpace(getActivity());
+		
+		readView.setBackgroundColor(Integer.parseInt(readingBackground));
+		readTitle.setBackgroundColor(Integer.parseInt(readingBackground));
+		
+		if(Integer.parseInt(readingBackground) == Color.BLACK){
 			readView.setTextColor(Color.parseColor("#999999"));
 			readTitle.setTextColor(Color.parseColor("#999999"));
 		}
@@ -398,17 +401,17 @@ public class ViewBookmarkFragment extends Fragment {
 			readTitle.setTextColor(Color.parseColor("#222222"));
 		}
 		
-		readView.setPadding(Integer.parseInt(base.readingMargins), 15, Integer.parseInt(base.readingMargins), 15);
+		readView.setPadding(Integer.parseInt(readingMargins), 15, Integer.parseInt(readingMargins), 15);
 		
 		try{
-			Typeface tf = Typeface.createFromAsset(base.getAssets(), "fonts/" + base.readingFont + ".ttf");
+			Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/" + readingFont + ".ttf");
 			readView.setTypeface(tf);
 		} catch(Exception e){
 			readView.setTypeface(Typeface.DEFAULT);
 		}
 		
-		readView.setTextSize(Float.parseFloat(base.readingFontSize));
-		readView.setLineSpacing(Float.parseFloat(base.readingLineSpace), 1);
+		readView.setTextSize(Float.parseFloat(readingFontSize));
+		readView.setLineSpacing(Float.parseFloat(readingLineSpace), 1);
 		
 	}
 	
@@ -432,7 +435,7 @@ public class ViewBookmarkFragment extends Fragment {
 	        					InputStream src = imageFetch(source);
 	        					d = Drawable.createFromStream(src, "src");
 	        					if(d != null){
-	        						int containerWidth = container.getWidth() - (Integer.parseInt(base.readingMargins) * 2);
+	        						int containerWidth = container.getWidth() - (Integer.parseInt(SettingsHelper.getReadingMargins(getActivity())) * 2);
 	        						int width = Math.min(containerWidth, d.getIntrinsicWidth());
 	        						
 	        						int height = d.getIntrinsicHeight();

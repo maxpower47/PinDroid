@@ -32,7 +32,7 @@ import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.listadapter.BookmarkViewBinder;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.util.SyncUtils;
+import com.pindroid.util.SettingsHelper;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -41,7 +41,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
@@ -63,7 +62,6 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser {
 	
 	private SimpleCursorAdapter mAdapter;
-	private FragmentBaseActivity base;
 	
 	private String username = null;
 	private String tagname = null;
@@ -89,12 +87,11 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	        tagname = savedInstanceState.getString(STATE_TAGNAME);
 	    } 
 
-		base = (FragmentBaseActivity)getActivity();
-		intent = base.getIntent();
+		intent = getActivity().getIntent();
 		
 		setHasOptionsMenu(true);
 		
-		mAdapter = new SimpleCursorAdapter(base, R.layout.bookmark_feed_view, null, 
+		mAdapter = new SimpleCursorAdapter(getActivity(), R.layout.bookmark_feed_view, null, 
 				new String[]{Bookmark.Description, Bookmark.Tags}, 
 				new int[]{R.id.bookmark_feed_description, R.id.bookmark_feed_tags}, 0);
 		
@@ -118,11 +115,13 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 					final Cursor c = (Cursor)lv.getItemAtPosition(position);
 					lastSelected = BookmarkManager.CursorToBookmark(c);
 	
-			    	if(base.defaultAction.equals("view")) {
+					String defaultAction = SettingsHelper.getDefaultAction(getActivity());
+					
+			    	if(defaultAction.equals("view")) {
 			    		viewBookmark(lastSelected);
-			    	} else if(base.defaultAction.equals("read")) {
+			    	} else if(defaultAction.equals("read")) {
 			    		readBookmark(lastSelected);
-			    	} else if(base.defaultAction.equals("edit")){
+			    	} else if(defaultAction.equals("edit")){
 			    		addBookmark(lastSelected);
 			    	} else {
 			    		openBookmarkInBrowser(lastSelected);
@@ -134,7 +133,7 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 				public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 					menu.setHeaderTitle("Actions");
-					MenuInflater inflater = base.getMenuInflater();
+					MenuInflater inflater = getActivity().getMenuInflater();
 					
 					inflater.inflate(R.menu.browse_bookmark_context_menu_other, menu);
 				}
@@ -172,25 +171,18 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
 			String query = intent.getStringExtra(SearchManager.QUERY);
-			base.setTitle(getString(R.string.search_results_global_tag_title, query));
+			getActivity().setTitle(getString(R.string.search_results_global_tag_title, query));
 		} else if(username.equals("recent")) {
-			base.setTitle(getString(R.string.browse_recent_bookmarks_title));
+			getActivity().setTitle(getString(R.string.browse_recent_bookmarks_title));
 		} else if(username.equals("network")) {
-			base.setTitle(getString(R.string.browse_network_bookmarks_title));
+			getActivity().setTitle(getString(R.string.browse_network_bookmarks_title));
 		} else {	
 			if(tagname != null && tagname != "") {
-				base.setTitle(getString(R.string.browse_user_bookmarks_tagged_title, username, tagname));
+				getActivity().setTitle(getString(R.string.browse_user_bookmarks_tagged_title, username, tagname));
 			} else {
-				base.setTitle(getString(R.string.browse_user_bookmarks_title, username));
+				getActivity().setTitle(getString(R.string.browse_user_bookmarks_title, username));
 			}
 		}
-		
-		//Uri data = base.getIntent().getData();
-		//if(data != null && data.getUserInfo() != null && data.getUserInfo() != "") {
-		//	username = data.getUserInfo();
-		//} else if(base.getIntent().hasExtra("username")){
-		//	username = base.getIntent().getStringExtra("username");
-		//} else username = base.mAccount.name;
 	}
 	
 	@Override
@@ -256,9 +248,9 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
 			String query = intent.getStringExtra(SearchManager.QUERY);
-			return new LoaderDrone(base, username, query, feed);
+			return new LoaderDrone(getActivity(), username, query, feed);
 		} else {			
-			return new LoaderDrone(base, username, tagname, feed);
+			return new LoaderDrone(getActivity(), username, tagname, feed);
 		}
 	}
 	

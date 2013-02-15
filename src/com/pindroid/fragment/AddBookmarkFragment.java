@@ -40,7 +40,6 @@ import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.TagSpan;
 import com.pindroid.util.SpaceTokenizer;
-import com.pindroid.util.SyncUtils;
 
 import android.accounts.Account;
 import android.app.Activity;
@@ -217,7 +216,7 @@ public class AddBookmarkFragment extends Fragment {
     		description = getResources().getString(R.string.add_bookmark_default_title);
     	
     	if(url.equals("")) {
-    		Toast.makeText(base, R.string.add_bookmark_blank_url, Toast.LENGTH_LONG).show();
+    		Toast.makeText(getActivity(), R.string.add_bookmark_blank_url, Toast.LENGTH_LONG).show();
     		return;
     	}	
     	
@@ -259,19 +258,19 @@ public class AddBookmarkFragment extends Fragment {
 		bookmark.setId(oldid);
 		
 		if(update){
-			BookmarkManager.UpdateBookmark(bookmark, base.app.getUsername(), base);
+			BookmarkManager.UpdateBookmark(bookmark, base.app.getUsername(), getActivity());
 			
 			for(Tag t : oldBookmark.getTags()){
 				if(!bookmark.getTags().contains(t)) {
-					TagManager.UpleteTag(t, base.app.getUsername(), base);
+					TagManager.UpleteTag(t, base.app.getUsername(), getActivity());
 				}
 			}
 		} else {
-			BookmarkManager.AddBookmark(bookmark, base.app.getUsername(), base);
+			BookmarkManager.AddBookmark(bookmark, base.app.getUsername(), getActivity());
 		}
 		
 		for(Tag t : bookmark.getTags()){   				
-			TagManager.UpsertTag(t, base.app.getUsername(), base);
+			TagManager.UpsertTag(t, base.app.getUsername(), getActivity());
 		}
     }
     
@@ -339,7 +338,7 @@ public class AddBookmarkFragment extends Fragment {
     		try {
     			Account account = base.getAccount();
     			
-				return PinboardApi.getSuggestedTags(url, account, base);
+				return PinboardApi.getSuggestedTags(url, account, getActivity());
 			} catch (AuthenticationException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
