@@ -47,6 +47,7 @@ import com.pindroid.fragment.ViewBookmarkFragment;
 import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.fragment.BookmarkBrowser;
 
 public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkSelectedListener, 
 	OnBookmarkActionListener, OnBookmarkSaveListener, OnTagSelectedListener {
@@ -134,6 +135,22 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			bookmarkFrag = fm.findFragmentById(R.id.listcontent);
 		}
 		
+		if(feed == null || feed.equals("")){
+			if(query != null && !query.equals("")){
+				((BrowseBookmarksFragment) bookmarkFrag).setSearchQuery(query, app.getUsername(), tagname, unread);
+			} else {
+				((BrowseBookmarksFragment) bookmarkFrag).setQuery(app.getUsername(), tagname, unread);
+			}
+			
+			((BrowseBookmarksFragment) bookmarkFrag).refresh();
+		} else {
+			if(query == null || query.equals("")){
+				((BrowseBookmarkFeedFragment) bookmarkFrag).setQuery(app.getUsername(), tagname, feed);
+			} else {
+				((BrowseBookmarkFeedFragment) bookmarkFrag).setQuery(app.getUsername(), query, feed);
+			}
+		}
+		
 		BrowseTagsFragment tagFrag = (BrowseTagsFragment) fm.findFragmentById(R.id.tagcontent);
 		
 		if(path != null && path.contains("tags")){
@@ -151,37 +168,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		}
 		
 		t.commit();
-		
-		loadFragments();
     }
-	
-	private void loadFragments(){
-		
-		FragmentManager fm = getSupportFragmentManager();
-		
-		if(feed == null || feed.equals("")){
-			if(query != null && !query.equals("")){
-				((BrowseBookmarksFragment) bookmarkFrag).setSearchQuery(query, app.getUsername(), tagname, unread);
-			} else {
-				((BrowseBookmarksFragment) bookmarkFrag).setQuery(app.getUsername(), tagname, unread);
-			}
-			
-			((BrowseBookmarksFragment) bookmarkFrag).refresh();
-		} else {
-			if(query == null || query.equals("")){
-				((BrowseBookmarkFeedFragment) bookmarkFrag).setQuery(app.getUsername(), tagname, feed);
-			} else {
-				((BrowseBookmarkFeedFragment) bookmarkFrag).setQuery(app.getUsername(), query, feed);
-			}
-			
-			((BrowseBookmarkFeedFragment) bookmarkFrag).refresh();
-		}
-		
-		BrowseTagsFragment tagFrag = (BrowseTagsFragment) fm.findFragmentById(R.id.tagcontent);
-		if(tagFrag != null){
-			tagFrag.setAccount(app.getUsername());
-		}
-	}
 	
 	@Override
 	public boolean onSearchRequested() {
@@ -472,7 +459,15 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		super.onActivityResult(requestCode, resultCode, data);
 		
 		if(requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
-			loadFragments();
+			FragmentManager fm = getSupportFragmentManager();
+
+			((BookmarkBrowser) bookmarkFrag).setUsername(app.getUsername());
+			((BookmarkBrowser) bookmarkFrag).refresh();
+			
+			BrowseTagsFragment tagFrag = (BrowseTagsFragment) fm.findFragmentById(R.id.tagcontent);
+			if(tagFrag != null){
+				tagFrag.refresh();
+			}
 		}
 	}
 }

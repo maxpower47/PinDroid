@@ -60,7 +60,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.support.v4.widget.SimpleCursorAdapter;
 
 public class BrowseBookmarkFeedFragment extends ListFragment 
-	implements LoaderManager.LoaderCallbacks<Cursor> {
+	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser {
 	
 	private SimpleCursorAdapter mAdapter;
 	private FragmentBaseActivity base;
@@ -154,6 +154,10 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		this.username = username;
 		this.tagname = tagname;
 		this.feed = feed;
+	}
+	
+	public void setUsername(String username){
+		this.username = username;
 	}
 	
 	public void refresh(){

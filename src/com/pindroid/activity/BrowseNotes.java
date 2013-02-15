@@ -21,6 +21,7 @@
 
 package com.pindroid.activity;
 
+import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseNotesFragment;
@@ -35,6 +36,8 @@ import android.view.MenuInflater;
 
 public class BrowseNotes extends FragmentBaseActivity implements BrowseNotesFragment.OnNoteSelectedListener {
 	
+	private BrowseNotesFragment frag;
+	
     @Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +51,7 @@ public class BrowseNotes extends FragmentBaseActivity implements BrowseNotesFrag
 		if(data != null)
 			app.setUsername(data.getUserInfo());
         
-		BrowseNotesFragment frag = (BrowseNotesFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
+		frag = (BrowseNotesFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
         frag.setAccount(app.getUsername());
 		
 		if(Intent.ACTION_VIEW.equals(action)) {
@@ -73,6 +76,16 @@ public class BrowseNotes extends FragmentBaseActivity implements BrowseNotesFrag
 	public void onNoteView(Note n) {
 		if(n != null){
 			startActivity(IntentHelper.ViewNote(n, app.getUsername(), this));
+		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
+			frag.setAccount(app.getUsername());
+			frag.refresh();
 		}
 	}
 }

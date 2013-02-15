@@ -48,7 +48,7 @@ import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
 public class BrowseBookmarksFragment extends ListFragment 
-	implements LoaderManager.LoaderCallbacks<Cursor> {
+	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser {
 	
 	private SimpleCursorAdapter mAdapter;
 	private FragmentBaseActivity base;
@@ -147,6 +147,10 @@ public class BrowseBookmarksFragment extends ListFragment
 		this.username = username;
 		this.tagname = tagname;
 		this.unread = unread;
+	}
+	
+	public void setUsername(String username){
+		this.username = username;
 	}
 	
 	public void refresh(){
