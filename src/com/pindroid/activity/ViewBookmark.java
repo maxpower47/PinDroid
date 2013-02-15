@@ -58,10 +58,8 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 			Uri data = intent.getData();
 			
 			if(data != null) {
-				path = data.getPath();
-				//username = data.getUserInfo();
-				
-			} //else username = mAccount.name;
+				path = data.getPath();				
+			}
 			
 			bookmark = new Bookmark();
 			

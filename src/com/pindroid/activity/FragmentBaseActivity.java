@@ -51,7 +51,6 @@ import com.pindroid.providers.BookmarkContentProvider;
 public abstract class FragmentBaseActivity extends FragmentActivity {
 	
 	protected AccountManager mAccountManager;
-	public Context mContext;
 
 	Bundle savedState;
 	
@@ -64,7 +63,6 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		
 		app = (PindroidApplication)getApplicationContext();
 		
-		mContext = this;
 		mAccountManager = AccountManager.get(this);
 
 		init();
@@ -140,8 +138,17 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 			if(getIntent().getData() != null && getIntent().getData().getUserInfo() != null){
 				app.setUsername(getIntent().getData().getUserInfo());
 			} else if(app.getUsername() == null || app.getUsername().equals("")){
-				Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
-				startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+				
+				if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+					Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+					startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+				} else {
+					if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
+						Account account = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+						
+						app.setUsername(account.name);
+					}
+				}
 			}
 		}
 	}
@@ -220,7 +227,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 				startActivity(prefs);
 		        return true;
 		    case R.id.menu_choose_account:
-				Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+				Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, true, null, null, null, null);
 				startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
 		    	return true;
 		    default:
