@@ -27,6 +27,7 @@ import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.service.SaveBookmarkService;
+import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
 
 import android.content.Intent;
@@ -61,7 +62,7 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 					finish();
 				}
 	
-				bookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, privateDefault));
+				bookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, SettingsHelper.getPrivateDefault(this)));
 				bookmark.setToRead(true);
 				bookmark.setTime(new Date().getTime());
 				bookmark.setTagString("");

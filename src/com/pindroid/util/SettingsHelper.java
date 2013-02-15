@@ -27,6 +27,14 @@ import android.preference.PreferenceManager;
 
 public class SettingsHelper {
 	
+    public static boolean getPrivateDefault(Context context) {
+    	return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("pref_save_private_default", false);
+    }
+    
+    public static boolean getToReadDefault(Context context) {
+    	return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("pref_save_toread_default", false);
+    }
+	
     public static String getDefaultAction(Context context) {
     	return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_view_bookmark_default_action", "browser");
     }

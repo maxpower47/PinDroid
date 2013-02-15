@@ -39,6 +39,7 @@ import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.TagSpan;
+import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.SpaceTokenizer;
 
 import android.accounts.Account;
@@ -203,8 +204,8 @@ public class AddBookmarkFragment extends Fragment {
 	}
 	
 	private void setDefaultValues(){   	
-    	mPrivate.setChecked(base.privateDefault);
-    	mToRead.setChecked(base.toreadDefault);
+    	mPrivate.setChecked(SettingsHelper.getPrivateDefault(getActivity()));
+    	mToRead.setChecked(SettingsHelper.getToReadDefault(getActivity()));
 	}
 	
     private void save() {

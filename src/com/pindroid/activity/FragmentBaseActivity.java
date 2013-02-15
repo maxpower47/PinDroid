@@ -28,11 +28,9 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -53,20 +51,7 @@ import com.pindroid.providers.BookmarkContentProvider;
 public abstract class FragmentBaseActivity extends FragmentActivity {
 	
 	protected AccountManager mAccountManager;
-	//public Account mAccount;
 	public Context mContext;
-	//public String username = null;
-	protected SharedPreferences settings;
-	
-	public boolean privateDefault;
-	public boolean toreadDefault;
-	public String defaultAction;
-	public boolean markAsRead;
-	public String readingBackground;
-	public String readingFont;
-	public String readingMargins;
-	public String readingFontSize;
-	public String readingLineSpace;
 
 	Bundle savedState;
 	
@@ -81,9 +66,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		
 		mContext = this;
 		mAccountManager = AccountManager.get(this);
-		settings = PreferenceManager.getDefaultSharedPreferences(this);
-		
-		loadSettings();
+
 		init();
 		
 		if(android.os.Build.VERSION.SDK_INT >= 14) {
@@ -167,13 +150,6 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		onSearchRequested();
 	}
 	
-	@Override
-	public void onResume(){
-		super.onResume();
-		
-		loadSettings();
-	}
-	
 	@TargetApi(11)
 	public void setupSearch(Menu menu){
 	    if(android.os.Build.VERSION.SDK_INT >= 11) {
@@ -214,18 +190,6 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		i.setData(data.build());
 		startActivity(i);
 		finish();
-	}
-	
-	private void loadSettings(){
-    	privateDefault = settings.getBoolean("pref_save_private_default", false);
-    	toreadDefault = settings.getBoolean("pref_save_toread_default", false);
-    	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
-    	markAsRead = settings.getBoolean("pref_markasread", false);
-    	readingBackground = settings.getString("pref_reading_background", "-1");
-    	readingFont = settings.getString("pref_reading_font", "Roboto-Regular");
-    	readingMargins = settings.getString("pref_reading_margins", "20");
-    	readingFontSize = settings.getString("pref_reading_fontsize", "16");
-    	readingLineSpace = settings.getString("pref_reading_linespace", "5");
 	}
 
 	@Override
