@@ -437,7 +437,10 @@ public class BookmarkManager {
 		return new CursorLoader(context, Bookmark.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), sortorder);
 	}
 	
-	public static int GetUnreadCount(String username, Context context){		
+	public static int GetUnreadCount(String username, Context context){
+		if(username == null || username.equals(""))
+			return 0;
+		
 		final String[] projection = new String[] {Bookmark._ID};
 		final String selection = Bookmark.Account + "=? AND " + Bookmark.ToRead + "=1";
 		final String[] selectionargs = new String[]{username};

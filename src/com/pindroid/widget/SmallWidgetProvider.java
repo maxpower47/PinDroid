@@ -23,15 +23,12 @@
 package com.pindroid.widget;
 
 import com.pindroid.R;
-import com.pindroid.Constants;
 
 import com.pindroid.action.IntentHelper;
 import com.pindroid.activity.Main;
 import com.pindroid.activity.SmallWidgetConfigure;
 import com.pindroid.platform.BookmarkManager;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -54,16 +51,8 @@ public class SmallWidgetProvider extends AppWidgetProvider {
     }
     
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-    	
-		AccountManager mAccountManager = AccountManager.get(context);
-		Account mAccount = null;
-		String username = "";
-		
-		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
-			mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
-			username = mAccount.name;
-		}
-    	
+
+		String username = SmallWidgetConfigure.loadAccountPref(context, appWidgetId);
     	String button = SmallWidgetConfigure.loadButtonPref(context, appWidgetId);
 		
 		Intent searchIntent = new Intent(context, Main.class);
