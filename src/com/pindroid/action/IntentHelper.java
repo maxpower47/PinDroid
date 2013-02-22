@@ -7,6 +7,7 @@ import com.pindroid.activity.AddBookmark;
 import com.pindroid.activity.BrowseBookmarks;
 import com.pindroid.activity.BrowseNotes;
 import com.pindroid.activity.BrowseTags;
+import com.pindroid.activity.Main;
 import com.pindroid.activity.ViewBookmark;
 import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
@@ -238,6 +239,18 @@ public class IntentHelper {
 		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("bookmarks");
 		data.appendQueryParameter("feed", "global");
+		i.setData(data.build());
+		
+		return i;
+	}
+	
+	public static Intent WidgetSearch(String account, Context context){
+		Intent i = new Intent(context, Main.class);
+		i.setAction(Intent.ACTION_SEARCH);
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.appendEncodedPath("search");
 		i.setData(data.build());
 		
 		return i;

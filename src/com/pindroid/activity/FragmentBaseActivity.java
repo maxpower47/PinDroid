@@ -75,7 +75,19 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		
 		Intent intent = getIntent();
 		
-		if(Constants.ACTION_SEARCH_SUGGESTION_VIEW.equals(intent.getAction())) {
+		if(Intent.ACTION_SEARCH.equals(intent.getAction()) && !intent.hasExtra("MainSearchResults")){
+			if(intent.hasExtra("username"))
+				app.setUsername(intent.getStringExtra("username"));
+			
+			if(intent.hasExtra(SearchManager.QUERY)){
+				Intent i = new Intent(this, MainSearchResults.class);
+				i.putExtras(intent.getExtras());
+				startActivity(i);
+				finish();
+			} else {
+				onSearchRequested();
+			}
+		} else if(Constants.ACTION_SEARCH_SUGGESTION_VIEW.equals(intent.getAction())) {
 			Uri data = intent.getData();
 			String path = null;
 			String tagname = null;

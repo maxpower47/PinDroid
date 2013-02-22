@@ -25,7 +25,6 @@ package com.pindroid.widget;
 import com.pindroid.R;
 
 import com.pindroid.action.IntentHelper;
-import com.pindroid.activity.Main;
 import com.pindroid.activity.SmallWidgetConfigure;
 import com.pindroid.platform.BookmarkManager;
 
@@ -34,7 +33,6 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -54,14 +52,11 @@ public class SmallWidgetProvider extends AppWidgetProvider {
 
 		String username = SmallWidgetConfigure.loadAccountPref(context, appWidgetId);
     	String button = SmallWidgetConfigure.loadButtonPref(context, appWidgetId);
-		
-		Intent searchIntent = new Intent(context, Main.class);
-		searchIntent.setAction(Intent.ACTION_SEARCH);
 
 		PendingIntent bookmarkPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.ViewBookmarks(null, username, null, context), 0);
         PendingIntent unreadPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.ViewUnread(username, context), 0);
         PendingIntent tagPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.ViewTags(username, context), 0);
-        PendingIntent searchPendingIntent = PendingIntent.getActivity(context, 0, searchIntent, 0);
+        PendingIntent searchPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.WidgetSearch(username, context), 0);
         PendingIntent addPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.AddBookmark(null, username, context), 0);
 
         // Get the layout for the App Widget and attach an on-click listener to the button
