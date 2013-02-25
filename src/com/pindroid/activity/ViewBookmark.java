@@ -106,6 +106,12 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	    }
 	}
 	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.removeItem(R.id.menu_choose_account);
+		return true;
+	}
+	
 	public void onViewTagSelected(String tag) {		
 		startActivity(IntentHelper.ViewBookmarks(tag, app.getUsername(), null, this));
 	}
