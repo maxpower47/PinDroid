@@ -66,7 +66,7 @@ public class BrowseTagsFragment extends ListFragment
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-
+		
 		setHasOptionsMenu(hasMenu);
 		
 		mAdapter = new SimpleCursorAdapter(this.getActivity(), 
@@ -150,7 +150,7 @@ public class BrowseTagsFragment extends ListFragment
 	}
 	
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		if(username != null && !username.equals("")) {
+		if(username != null) {
 			if(query != null) {
 				return TagManager.SearchTags(query, username, this.getActivity());
 			} else {

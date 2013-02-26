@@ -21,31 +21,52 @@
 
 package com.pindroid.activity;
 
+import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseTagsFragment;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 
-public class ChooseTagShortcut extends FragmentBaseActivity implements BrowseTagsFragment.OnTagSelectedListener {
+public class ChooseTagShortcut extends FragmentActivity implements BrowseTagsFragment.OnTagSelectedListener {
 
-    @Override
+	private String username = "";
+	BrowseTagsFragment frag;
+	
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.browse_tags);
+        
+		if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+			Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+		} else {
+			if(AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
+				Account account = AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+				
+				username = account.name;
+			}
+		}
           
-		BrowseTagsFragment frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
-        frag.setAccount(app.getUsername());
+		frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
+        frag.setAccount(username);
         frag.setHasMenu(false);
 
     }
     
 	public void onTagSelected(String tag) {		
-		final Intent shortcutIntent = IntentHelper.ViewBookmarks(tag, app.getUsername(), null, this);
+		final Intent shortcutIntent = IntentHelper.ViewBookmarks(tag, username, null, this);
         final ShortcutIconResource iconResource = Intent.ShortcutIconResource.fromContext(this, R.drawable.ic_shortcut);
         final Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
@@ -58,5 +79,16 @@ public class ChooseTagShortcut extends FragmentBaseActivity implements BrowseTag
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		return false;
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){	
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
+			username = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+			frag.setAccount(username);
+			frag.refresh();
+		}
 	}
 }
