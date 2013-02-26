@@ -83,6 +83,15 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 	}
 	
 	@Override
+	public void onResume(){
+		super.onResume();
+		if(!app.getUsername().equals(frag.getAccount())){
+			frag.setAccount(app.getUsername());
+			frag.refresh();	
+		}
+	}
+	
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		super.onActivityResult(requestCode, resultCode, data);
 		

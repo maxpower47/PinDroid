@@ -90,6 +90,10 @@ public class BrowseTagsFragment extends ListFragment
 		this.username = account;
 	}
 	
+	public String getAccount(){
+		return username;
+	}
+	
 	public void setQuery(String query) {
 		this.query = query;
 	}
