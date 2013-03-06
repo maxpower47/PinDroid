@@ -129,7 +129,7 @@ public class AddBookmarkFragment extends Fragment {
 			autoCompleteAdapter.setFilterQueryProvider(new FilterQueryProvider() {
 	            public Cursor runQuery(CharSequence constraint) {
 	            	return TagManager.GetTagsAsCursor((constraint != null ? constraint.toString() : null), 
-	            			base.username, Tag.Count + " DESC, " + Tag.Name + " ASC", base);
+	            			base.app.getUsername(), Tag.Count + " DESC, " + Tag.Name + " ASC", base);
 	            }
 	        });
 
