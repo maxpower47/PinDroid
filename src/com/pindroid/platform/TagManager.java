@@ -41,26 +41,19 @@ public class TagManager {
 		return new CursorLoader(context, Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);
 	}
 	
-	public static ArrayList<String> GetTagsAsArray(String account, String sortorder, Context context) {	
-		String[] projection = new String[] {Tag.Name};
-		String selection = Tag.Account + "=?";
-		String[] selectionargs = new String[]{account};
+	public static Cursor GetTagsAsCursor(String query, String account, String sortorder, Context context) {	
+		final String[] projection = new String[] { Tag._ID, Tag.Name, Tag.Count };
+		String selection = null;
+		String[] selectionargs = new String[]{account, query + "%"};
 		
-		ArrayList<String> result = new ArrayList<String>();
-
-		Cursor c = context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);
-		
-		if(c.moveToFirst()){
-			int nameColumn = c.getColumnIndex(Tag.Name);
-			
-			do{
-				result.add(c.getString(nameColumn));
-			} while(c.moveToNext());
+		if(query != null && query != "") {
+			selection = Tag.Account + "=?" + 
+				" AND " + Tag.Name + " LIKE ?";
+		} else {
+			selection = Tag.Account + "=?";
 		}
 		
-		c.close();
-		
-		return result;
+		return context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);
 	}
 	
 	public static void AddTag(Tag tag, String account, Context context){

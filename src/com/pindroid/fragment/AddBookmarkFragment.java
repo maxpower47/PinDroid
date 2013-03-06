@@ -33,6 +33,7 @@ import com.pindroid.action.GetWebpageTitleTask;
 import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.client.PinboardApi;
 import com.pindroid.client.TooManyRequestsException;
+import com.pindroid.listadapter.TagAutoCompleteCursorAdapter;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -41,9 +42,11 @@ import com.pindroid.ui.TagSpan;
 import com.pindroid.util.SpaceTokenizer;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.CursorAdapter;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -55,9 +58,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnFocusChangeListener;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.FilterQueryProvider;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -118,9 +121,16 @@ public class AddBookmarkFragment extends Fragment {
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
 		
 		if(base.mAccount != null){
-			String[] tagArray = new String[5];
-			tagArray = TagManager.GetTagsAsArray(base.mAccount.name, Tag.Name + " ASC", base).toArray(tagArray);
-			ArrayAdapter<String> autoCompleteAdapter = new ArrayAdapter<String>(base, R.layout.autocomplete_view, tagArray);
+			CursorAdapter autoCompleteAdapter = new TagAutoCompleteCursorAdapter(base, R.layout.autocomplete_view, null, 
+					new String[]{Tag.Name, Tag.Count}, new int[]{R.id.autocomplete_name, R.id.autocomplete_count}, 0);
+
+			autoCompleteAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+	            public Cursor runQuery(CharSequence constraint) {
+	            	return TagManager.GetTagsAsCursor((constraint != null ? constraint.toString() : null), 
+	            			base.mAccount.name, Tag.Count + " DESC, " + Tag.Name + " ASC", base);
+	            }
+	        });
+
 			mEditTags.setAdapter(autoCompleteAdapter);
 			mEditTags.setTokenizer(new SpaceTokenizer());
 		}
