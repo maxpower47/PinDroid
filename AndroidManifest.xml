@@ -203,6 +203,13 @@
         		<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
     		</intent-filter>
 		</activity>
+		<activity android:name=".activity.LargeWidgetConfigure"
+       		android:theme="@android:style/Theme.Dialog"
+            android:excludeFromRecents="true">
+    		<intent-filter>
+        		<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+    		</intent-filter>
+		</activity>
 		<activity android:name=".activity.ChooseTagShortcut"
 			android:label="@string/shortcut_activity_label"
 			android:icon="@drawable/ic_shortcut">
