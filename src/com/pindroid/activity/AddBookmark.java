@@ -100,6 +100,7 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 		
 		frag = (AddBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.add_bookmark_fragment);
 		frag.loadBookmark(bookmark, oldBookmark);
+		frag.setUsername(app.getUsername());
 	}
 	
 	public void saveHandler(View v) {

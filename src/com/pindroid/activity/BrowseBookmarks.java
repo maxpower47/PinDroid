@@ -315,6 +315,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 				
 				AddBookmarkFragment addFrag = (AddBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.addcontent);
 				addFrag.loadBookmark(b, null);
+				addFrag.setUsername(app.getUsername());
 				addFrag.refreshView();
 				FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 				if(getSupportFragmentManager().findFragmentById(R.id.tagcontent).isVisible()){

@@ -26,12 +26,12 @@ import java.text.ParseException;
 
 import com.pindroid.Constants;
 import com.pindroid.R;
-import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.client.PinboardFeed;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.listadapter.BookmarkViewBinder;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 
 import android.accounts.Account;
@@ -248,9 +248,9 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
 			String query = intent.getStringExtra(SearchManager.QUERY);
-			return new LoaderDrone(getActivity(), username, query, feed);
+			return new LoaderDrone(getActivity(), username, query, feed, AccountHelper.getAccount(username, getActivity()));
 		} else {			
-			return new LoaderDrone(getActivity(), username, tagname, feed);
+			return new LoaderDrone(getActivity(), username, tagname, feed, AccountHelper.getAccount(username, getActivity()));
 		}
 	}
 	
@@ -274,16 +274,15 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		private String user = "";
 		private String tag = "";
 		private String feed = "";
-
-		private FragmentBaseActivity base = null;
+		private Account account = null;
 		
-        public LoaderDrone(Context context, String u, String t, String f) {
+        public LoaderDrone(Context context, String u, String t, String f, Account a) {
         	super(context);
         	
         	user = u;
             tag = t;
             feed = f;
-            base = (FragmentBaseActivity)context;
+            account = a;
         	
             onForceLoad();
         }
@@ -297,8 +296,6 @@ public class BrowseBookmarkFeedFragment extends ListFragment
         
  		   try {
  			   if(feed.equals("network")) {
- 				   Account account = base.getAccount();
-
  				   String token = AccountManager.get(getContext()).getUserData(account, Constants.PREFS_SECRET_TOKEN);
 
  				   results = PinboardFeed.fetchNetworkRecent(user, token);

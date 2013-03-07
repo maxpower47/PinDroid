@@ -30,7 +30,6 @@ import org.apache.http.auth.AuthenticationException;
 
 import com.pindroid.R;
 import com.pindroid.action.GetWebpageTitleTask;
-import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.client.PinboardApi;
 import com.pindroid.client.TooManyRequestsException;
 import com.pindroid.listadapter.TagAutoCompleteCursorAdapter;
@@ -39,6 +38,7 @@ import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.TagSpan;
+import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.SpaceTokenizer;
 
@@ -69,8 +69,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddBookmarkFragment extends Fragment {
-
-	private FragmentBaseActivity base;
 	
 	private EditText mEditUrl;
 	private EditText mEditDescription;
@@ -86,6 +84,7 @@ public class AddBookmarkFragment extends Fragment {
 	private Bookmark bookmark;
 	private Bookmark oldBookmark;
 	private Boolean update = false;
+	private String username = null;
 	
 	private long updateTime = 0;
 	
@@ -102,8 +101,6 @@ public class AddBookmarkFragment extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		
-		base = (FragmentBaseActivity)getActivity();
 		
 		setHasOptionsMenu(true);
 		
@@ -122,14 +119,14 @@ public class AddBookmarkFragment extends Fragment {
 		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
 		
-		if(base.app.getUsername() != null){
-			CursorAdapter autoCompleteAdapter = new TagAutoCompleteCursorAdapter(base, R.layout.autocomplete_view, null, 
+		if(username != null){
+			CursorAdapter autoCompleteAdapter = new TagAutoCompleteCursorAdapter(getActivity(), R.layout.autocomplete_view, null, 
 					new String[]{Tag.Name, Tag.Count}, new int[]{R.id.autocomplete_name, R.id.autocomplete_count}, 0);
 
 			autoCompleteAdapter.setFilterQueryProvider(new FilterQueryProvider() {
 	            public Cursor runQuery(CharSequence constraint) {
 	            	return TagManager.GetTagsAsCursor((constraint != null ? constraint.toString() : null), 
-	            			base.app.getUsername(), Tag.Count + " DESC, " + Tag.Name + " ASC", base);
+	            			username, Tag.Count + " DESC, " + Tag.Name + " ASC", getActivity());
 	            }
 	        });
 
@@ -164,6 +161,10 @@ public class AddBookmarkFragment extends Fragment {
 		
 		if(oldB != null)
 			oldBookmark = oldB.copy();
+	}
+	
+	public void setUsername(String username){
+		this.username = username;
 	}
 	
 	public void refreshView(){
@@ -259,28 +260,26 @@ public class AddBookmarkFragment extends Fragment {
 		bookmark.setId(oldid);
 		
 		if(update){
-			BookmarkManager.UpdateBookmark(bookmark, base.app.getUsername(), getActivity());
+			BookmarkManager.UpdateBookmark(bookmark, username, getActivity());
 			
 			for(Tag t : oldBookmark.getTags()){
 				if(!bookmark.getTags().contains(t)) {
-					TagManager.UpleteTag(t, base.app.getUsername(), getActivity());
+					TagManager.UpleteTag(t, username, getActivity());
 				}
 			}
 		} else {
-			BookmarkManager.AddBookmark(bookmark, base.app.getUsername(), getActivity());
+			BookmarkManager.AddBookmark(bookmark, username, getActivity());
 		}
 		
 		for(Tag t : bookmark.getTags()){   				
-			TagManager.UpsertTag(t, base.app.getUsername(), getActivity());
+			TagManager.UpsertTag(t, username, getActivity());
 		}
     }
     
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		if(base.isMyself()) {
-			inflater.inflate(R.menu.add_bookmark_menu, menu);
-		}
+		inflater.inflate(R.menu.add_bookmark_menu, menu);
 	}
 	
 	@Override
@@ -337,7 +336,7 @@ public class AddBookmarkFragment extends Fragment {
     		url = args[0];
 	
     		try {
-    			Account account = base.getAccount();
+    			Account account = AccountHelper.getAccount(username, getActivity());
     			
 				return PinboardApi.getSuggestedTags(url, account, getActivity());
 			} catch (AuthenticationException e) {
