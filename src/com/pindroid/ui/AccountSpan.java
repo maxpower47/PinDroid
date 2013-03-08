@@ -25,33 +25,33 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 
 public class AccountSpan extends ClickableSpan {
-    public interface OnAccountClickListener {
-            public void onAccountClick(String tag);
-    }
+	public interface OnAccountClickListener {
+		public void onAccountClick(String tag);
+	}
 
-    private final String mAccount;
-    private OnAccountClickListener mOnAccountClickListener;
+	private final String mAccount;
+	private OnAccountClickListener mOnAccountClickListener;
 
-    public AccountSpan(String tag) {
-            super();
-            if (tag == null) {
-                    throw new NullPointerException();
-            }
-            mAccount = tag;
-    }
+	public AccountSpan(String tag) {
+		super();
+		if (tag == null) {
+			throw new NullPointerException();
+		}
+		mAccount = tag;
+	}
 
-    @Override
-    public void onClick(View widget) {
-            if (mOnAccountClickListener != null) {
-            	mOnAccountClickListener.onAccountClick(mAccount);
-            }
-    }
+	@Override
+	public void onClick(View widget) {
+		if (mOnAccountClickListener != null) {
+			mOnAccountClickListener.onAccountClick(mAccount);
+		}
+	}
 
-    public OnAccountClickListener getOnAccountClickListener() {
-            return mOnAccountClickListener;
-    }
+	public OnAccountClickListener getOnAccountClickListener() {
+		return mOnAccountClickListener;
+	}
 
-    public void setOnAccountClickListener(OnAccountClickListener onAccountClickListener) {
-            mOnAccountClickListener = onAccountClickListener;
-    }
+	public void setOnAccountClickListener(OnAccountClickListener onAccountClickListener) {
+		mOnAccountClickListener = onAccountClickListener;
+	}
 }

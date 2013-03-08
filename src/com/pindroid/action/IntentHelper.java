@@ -67,23 +67,14 @@ public class IntentHelper {
 		Intent viewBookmark = new Intent(context, ViewBookmark.class);
 		viewBookmark.setAction(Intent.ACTION_VIEW);
 		viewBookmark.addCategory(Intent.CATEGORY_DEFAULT);
-		viewBookmark.putExtra("com.pindroid.BookmarkViewType", type);
+		viewBookmark.putExtra(Constants.EXTRA_VIEWTYPE, type);
+		viewBookmark.putExtra(Constants.EXTRA_BOOKMARK, b);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
 		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("bookmarks");
-		
-		if(b.getId() != 0) {
-			data.appendEncodedPath(Integer.toString(b.getId()));
-		} else {
-			data.appendEncodedPath(Integer.toString(0));
-			data.appendQueryParameter("url", b.getUrl());
-			data.appendQueryParameter("title", b.getDescription());
-			data.appendQueryParameter("notes", b.getNotes());
-			data.appendQueryParameter("tags", b.getTagString());
-			data.appendQueryParameter("time", Long.toString(b.getTime()));
-			data.appendQueryParameter("account", b.getAccount());
-		}
+		data.appendEncodedPath(Integer.toString(b.getId()));
+
 		viewBookmark.setData(data.build());
 		
 		return viewBookmark;

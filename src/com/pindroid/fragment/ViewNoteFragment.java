@@ -61,7 +61,6 @@ public class ViewNoteFragment extends Fragment {
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.view_note_fragment, container, false);
     }
 
@@ -77,8 +76,7 @@ public class ViewNoteFragment extends Fragment {
 			try{		
 				int id = note.getId();
 				note = NoteManager.GetById(id, getActivity());
-			}
-			catch(ContentNotFoundException e){}
+			} catch(ContentNotFoundException e){}
 			
 			mTitle.setText(note.getTitle());
 			mText.setText(note.getText());

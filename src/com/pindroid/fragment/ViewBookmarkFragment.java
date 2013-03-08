@@ -27,6 +27,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Color;
@@ -91,11 +92,11 @@ public class ViewBookmarkFragment extends Fragment {
 	private static final String STATE_VIEWTYPE = "viewType";
 	
 	public interface OnBookmarkActionListener {
-		public void onViewTagSelected(String tag);
-		public void onUserTagSelected(String tag, String user);
+		public void onViewTagSelected(String tag, String user);
 		public void onAccountSelected(String account);
 	}
 	
+	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
@@ -123,18 +124,11 @@ public class ViewBookmarkFragment extends Fragment {
 		readView.setMovementMethod(LinkMovementMethod.getInstance());
 		
 		setHasOptionsMenu(true);
-		//setRetainInstance(true);
 	}
 	
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {
-    		bookmarkActionListener.onViewTagSelected(tag);
-        }
-    };
-    
-    TagSpan.OnTagClickListener userTagOnClickListener = new TagSpan.OnTagClickListener() {
-        public void onTagClick(String tag) {
-        	bookmarkActionListener.onUserTagSelected(tag, bookmark.getAccount());
+    		bookmarkActionListener.onViewTagSelected(tag, isMyself() ? null : bookmark.getAccount());
         }
     };
     
@@ -144,9 +138,9 @@ public class ViewBookmarkFragment extends Fragment {
         }
     };
     
-	public void setBookmark(Bookmark b, BookmarkViewType viewType) {
+	public void setBookmark(Bookmark bookmark, BookmarkViewType viewType) {
 		this.viewType = viewType;
-		bookmark = b;
+		this.bookmark = bookmark;
 		
 		ActivityCompat.invalidateOptionsMenu(this.getActivity());
 	}
@@ -245,7 +239,6 @@ public class ViewBookmarkFragment extends Fragment {
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.view_bookmark_fragment, container, false);
     }
     
@@ -262,26 +255,33 @@ public class ViewBookmarkFragment extends Fragment {
 
     public void loadBookmark(){
     	if(bookmark != null){
-    		
-    		if(isMyself() && bookmark.getId() != 0){
-				try{		
-					int id = bookmark.getId();
-					bookmark = BookmarkManager.GetById(id, getActivity());
-				}
-				catch(ContentNotFoundException e){}
-    		}
-    		
     		if(viewType == BookmarkViewType.VIEW){
 				mBookmarkView.setVisibility(View.VISIBLE);
 				readSection.setVisibility(View.GONE);
 				mWebContent.setVisibility(View.GONE);
-				if(isMyself()){
-					Date d = new Date(bookmark.getTime());
-					
+				
+				Date d = new Date(bookmark.getTime());
+				
+				if(bookmark.getDescription() != null && !bookmark.getDescription().equals("null"))
 					mTitle.setText(bookmark.getDescription());
-					mUrl.setText(bookmark.getUrl());
+				
+				mUrl.setText(bookmark.getUrl());
+				
+				if(bookmark.getNotes() != null && !bookmark.getNotes().equals("null"))
 					mNotes.setText(bookmark.getNotes());
-					mTime.setText(d.toString());
+				
+				mTime.setText(d.toString());
+				
+				mTags.setMovementMethod(LinkMovementMethod.getInstance());
+				SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
+				
+	    		for(Tag t : bookmark.getTags()) {
+	    			addTag(tagBuilder, t, tagOnClickListener);
+	    		}
+	    		
+	    		mTags.setText(tagBuilder);
+				
+				if(isMyself()){
 					mUsername.setText(bookmark.getAccount());
 					
 					if(mPrivateIcon != null){
@@ -298,39 +298,8 @@ public class ViewBookmarkFragment extends Fragment {
 						if(bookmark.getSynced() == -1)
 							mSyncedIcon.setImageResource(R.drawable.sync_fail);
 						else mSyncedIcon.setImageResource(R.drawable.sync);
-					}
-					
-	        		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
-	
-	        		for(Tag t : bookmark.getTags()) {
-	        			addTag(tagBuilder, t, tagOnClickListener);
-	        		}
-	        		
-	        		mTags.setText(tagBuilder);
-	        		mTags.setMovementMethod(LinkMovementMethod.getInstance());
-				} else {
-					
-					Date d = new Date(bookmark.getTime());
-					
-					if(bookmark.getDescription() != null && !bookmark.getDescription().equals("null"))
-						mTitle.setText(bookmark.getDescription());
-					
-					mUrl.setText(bookmark.getUrl());
-					
-					if(bookmark.getNotes() != null && !bookmark.getNotes().equals("null"))
-						mNotes.setText(bookmark.getNotes());
-					
-					mTime.setText(d.toString());
-					
-		    		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
-		
-		    		for(Tag t : bookmark.getTags()) {
-		    			addTag(tagBuilder, t, userTagOnClickListener);
-		    		}
-		    		
-		    		mTags.setText(tagBuilder);
-		    		mTags.setMovementMethod(LinkMovementMethod.getInstance());
-		
+					}	        		
+				} else {	
 		    		if(bookmark.getAccount() != null){
 						SpannableStringBuilder builder = new SpannableStringBuilder();
 						int start = builder.length();
@@ -344,7 +313,6 @@ public class ViewBookmarkFragment extends Fragment {
 						
 						mUsername.setText(builder);
 		    		}
-					
 					
 					mUsername.setMovementMethod(LinkMovementMethod.getInstance());
 				}

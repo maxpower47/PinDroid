@@ -26,7 +26,6 @@ import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.MainFragment;
 
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 
@@ -37,7 +36,6 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		super.onCreate(savedState);
 		setContentView(R.layout.main);
 	}
-	
 
 	public void onMyBookmarksSelected() {
 		startActivity(IntentHelper.ViewBookmarks("", app.getUsername(), null, this));	
@@ -48,10 +46,6 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	}
 
 	public void onMyTagsSelected() {
-		DisplayMetrics outMetrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
-		
-
 		if(getResources().getBoolean(R.bool.has_two_panes)){
 			startActivity(IntentHelper.ViewTabletTags(app.getUsername(), this));
 		} else {

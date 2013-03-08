@@ -50,22 +50,14 @@ public class ViewNote extends FragmentBaseActivity {
 			Uri data = intent.getData();
 			
 			if(data != null) {
-				path = data.getPath();
-				//username = data.getUserInfo();
-				
-			} //else username = mAccount.name;
+				path = data.getPath();				
+			}
 			
 			note = new Note();
 			
 			if(path.contains("/notes")){
-				if(data.getQueryParameter("account") != null && !data.getQueryParameter("account").equals("")){		
-					note.setTitle(data.getQueryParameter("title"));
-					note.setText(data.getQueryParameter("text"));
-					note.setAccount(data.getQueryParameter("account"));
-				} else {
-					int id = Integer.parseInt(data.getLastPathSegment());
-					note.setId(id);
-				}
+				int id = Integer.parseInt(data.getLastPathSegment());
+				note.setId(id);
 			}
 			
 			ViewNoteFragment frag = (ViewNoteFragment) getSupportFragmentManager().findFragmentById(R.id.view_note_fragment);

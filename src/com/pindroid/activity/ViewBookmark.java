@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
@@ -61,24 +62,11 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 				path = data.getPath();				
 			}
 			
-			bookmark = new Bookmark();
-			
 			if(path.contains("/bookmarks")){
-				if(data.getQueryParameter("url") != null && !data.getQueryParameter("url").equals("")){		
-					bookmark.setDescription(data.getQueryParameter("title"));
-					bookmark.setUrl(data.getQueryParameter("url"));
-					bookmark.setNotes(data.getQueryParameter("notes"));
-					bookmark.setTime(Long.parseLong(data.getQueryParameter("time")));
-					if(!data.getQueryParameter("tags").equals("null"))
-						bookmark.setTagString(data.getQueryParameter("tags"));
-					bookmark.setAccount(data.getQueryParameter("account"));
-				} else {
-					int id = Integer.parseInt(data.getLastPathSegment());
-					bookmark.setId(id);
-				}
+				bookmark = (Bookmark)intent.getSerializableExtra(Constants.EXTRA_BOOKMARK);
 			}
 			
-			BookmarkViewType type = (BookmarkViewType) intent.getSerializableExtra("com.pindroid.BookmarkViewType");
+			BookmarkViewType type = (BookmarkViewType) intent.getSerializableExtra(Constants.EXTRA_VIEWTYPE);
 			if(type == null)
 				type = BookmarkViewType.VIEW;
 			
@@ -112,11 +100,7 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 		return true;
 	}
 	
-	public void onViewTagSelected(String tag) {		
-		startActivity(IntentHelper.ViewBookmarks(tag, app.getUsername(), null, this));
-	}
-
-	public void onUserTagSelected(String tag, String user) {
+	public void onViewTagSelected(String tag, String user) {		
 		startActivity(IntentHelper.ViewBookmarks(tag, app.getUsername(), user, this));
 	}
 

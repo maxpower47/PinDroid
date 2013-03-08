@@ -107,9 +107,6 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	    		}
 			} else {
 				if(data != null) {
-					//if(data.getUserInfo() != "") {
-					//	username = data.getUserInfo();
-					//} else username = mAccount.name;
 					tagname = data.getQueryParameter("tagname");
 					feed = data.getQueryParameter("feed");
 					unread = data.getQueryParameter("unread") != null;
@@ -341,29 +338,16 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		BookmarkManager.LazyDelete(b, app.getUsername(), this);
 	}
 
-	public void onViewTagSelected(String tag) {
+	public void onViewTagSelected(String tag, String user) {
 		if(isTwoPane()) {
 			BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
-			frag.setQuery(app.getUsername(), tag, null);
-			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-			transaction.replace(R.id.listcontent, frag);
-			transaction.addToBackStack(null);
-			transaction.commit();
-		} else {
-			startActivity(IntentHelper.ViewBookmarks(tag, app.getUsername(), null, this));
-		}
-	}
-
-	public void onUserTagSelected(String tag, String user) {
-		if(isTwoPane()) {
-			BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
 			frag.setQuery(app.getUsername(), tag, user);
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			transaction.replace(R.id.listcontent, frag);
 			transaction.addToBackStack(null);
 			transaction.commit();
 		} else {
-			startActivity(IntentHelper.ViewBookmarks(tag, user, null, this));
+			startActivity(IntentHelper.ViewBookmarks(tag, app.getUsername(), user, this));
 		}
 	}
 
