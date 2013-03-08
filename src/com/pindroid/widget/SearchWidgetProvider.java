@@ -19,19 +19,14 @@
  * USA
  */
 
-
 package com.pindroid.widget;
 
 import com.pindroid.R;
-import com.pindroid.Constants;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.activity.LargeWidgetConfigure;
-import com.pindroid.activity.SmallWidgetConfigure;
 
 import com.pindroid.platform.BookmarkManager;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;

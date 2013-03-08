@@ -417,6 +417,11 @@ public class ViewBookmarkFragment extends Fragment {
 	
     public class GetArticleTask extends AsyncTask<String, Integer, Article>{
     	private String url;
+    	private int margins = 40;
+    	
+    	protected void onPreExecute() {
+    		margins = Integer.parseInt(SettingsHelper.getReadingMargins(getActivity())) * 2;
+    	}
 
     	@Override
     	protected Article doInBackground(String... args) {
@@ -435,7 +440,7 @@ public class ViewBookmarkFragment extends Fragment {
 	        					InputStream src = imageFetch(source);
 	        					d = Drawable.createFromStream(src, "src");
 	        					if(d != null){
-	        						int containerWidth = container.getWidth() - (Integer.parseInt(SettingsHelper.getReadingMargins(getActivity())) * 2);
+	        						int containerWidth = container.getWidth() - margins;
 	        						int width = Math.min(containerWidth, d.getIntrinsicWidth());
 	        						
 	        						int height = d.getIntrinsicHeight();

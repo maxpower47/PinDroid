@@ -135,10 +135,10 @@ public class BrowseBookmarksFragment extends ListFragment
 		}
 	}
 	
-	public void setQuery(String username, String tagname, boolean unread){
+	public void setQuery(String username, String tagname, String feed){
 		this.username = username;
 		this.tagname = tagname;
-		this.unread = unread;
+		this.unread = (feed != null && feed.equals("unread"));
 	}
 	
 	public void setSearchQuery(String query, String username, String tagname, boolean unread){
