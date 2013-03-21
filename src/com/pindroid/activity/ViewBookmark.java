@@ -37,6 +37,7 @@ import com.pindroid.fragment.ViewBookmarkFragment;
 import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.providers.ContentNotFoundException;
 
 public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActionListener,
 	OnBookmarkSelectedListener {
@@ -59,11 +60,21 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 			Uri data = intent.getData();
 			
 			if(data != null) {
-				path = data.getPath();				
+				path = data.getPath();
 			}
 			
 			if(path.contains("/bookmarks")){
-				bookmark = (Bookmark)intent.getSerializableExtra(Constants.EXTRA_BOOKMARK);
+				if(intent.hasExtra(Constants.EXTRA_BOOKMARK))
+					bookmark = (Bookmark)intent.getSerializableExtra(Constants.EXTRA_BOOKMARK);
+				else {
+					try {
+						int id = Integer.parseInt(data.getLastPathSegment());
+						bookmark = BookmarkManager.GetById(id, this);
+						
+					} catch (NumberFormatException e) {}
+					catch (ContentNotFoundException e) {}
+				}
+				
 			}
 			
 			BookmarkViewType type = (BookmarkViewType) intent.getSerializableExtra(Constants.EXTRA_VIEWTYPE);
