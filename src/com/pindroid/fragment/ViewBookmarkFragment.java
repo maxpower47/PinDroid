@@ -145,6 +145,15 @@ public class ViewBookmarkFragment extends Fragment {
 		ActivityCompat.invalidateOptionsMenu(this.getActivity());
 	}
 	
+	public void clearView() {
+		this.viewType = BookmarkViewType.VIEW;
+		this.bookmark = null;
+		
+		mBookmarkView.setVisibility(View.GONE);
+		readSection.setVisibility(View.GONE);
+		mWebContent.setVisibility(View.GONE);
+	}
+	
 	private void addTag(SpannableStringBuilder builder, Tag t, TagSpan.OnTagClickListener listener) {
 		int flags = 0;
 		
@@ -324,6 +333,8 @@ public class ViewBookmarkFragment extends Fragment {
 			} else if(viewType == BookmarkViewType.WEB){
 				showInWebView();
 			}
+    	} else {
+    		clearView();
     	}
     }
     

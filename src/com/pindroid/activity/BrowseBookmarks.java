@@ -456,6 +456,11 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			((BookmarkBrowser) bookmarkFrag).setUsername(app.getUsername());
 			((BookmarkBrowser) bookmarkFrag).refresh();
 			
+			ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) fm.findFragmentById(R.id.maincontent);
+			if(viewFrag != null) {
+				viewFrag.clearView();
+			}
+			
 			BrowseTagsFragment tagFrag = (BrowseTagsFragment) fm.findFragmentById(R.id.tagcontent);
 			if(tagFrag != null){
 				tagFrag.setAccount(app.getUsername());
