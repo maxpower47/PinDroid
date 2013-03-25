@@ -543,7 +543,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				
 				suggestions.put(title, new SearchSuggestionContent(title, 
 					text,
-					R.drawable.ic_main, R.drawable.ic_tag, data.toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
+					R.drawable.ic_main, R.drawable.ic_note, data.toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
 				
 			} while(c.moveToNext());	
 		}
