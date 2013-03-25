@@ -421,10 +421,9 @@ public class ViewBookmarkFragment extends Fragment {
 	        						}
 	        						d.setBounds(0, 0, width, height);
 	        					}
-	        				} catch (MalformedURLException e) {
-	        					e.printStackTrace(); 
-	        				} catch (IOException e) {
-	        					e.printStackTrace();  
+	        				} catch (Exception e) {
+	        					e.printStackTrace();
+	        					return null;
 	        				}
 	        				return d;
 	        			}
