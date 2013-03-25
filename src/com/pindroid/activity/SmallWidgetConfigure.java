@@ -67,6 +67,7 @@ public class SmallWidgetConfigure extends ListActivity {
 		String[] MENU_ITEMS = new String[] {getString(R.string.small_widget_my_bookmarks),
 				getString(R.string.small_widget_my_unread),
 				getString(R.string.small_widget_my_tags),
+				getString(R.string.small_widget_my_notes),
 				getString(R.string.small_widget_add_bookmark),
 				getString(R.string.small_widget_search_bookmarks)};
 		
@@ -86,8 +87,10 @@ public class SmallWidgetConfigure extends ListActivity {
 		    	} else if(position == 2){
 		    		saveButtonPref(context, mAppWidgetId, "tags", username);
 		    	} else if(position == 3){
-		    		saveButtonPref(context, mAppWidgetId, "add", username);
+		    		saveButtonPref(context, mAppWidgetId, "notes", username);
 		    	} else if(position == 4){
+		    		saveButtonPref(context, mAppWidgetId, "add", username);
+		    	} else if(position == 5){
 		    		saveButtonPref(context, mAppWidgetId, "search", username);
 		    	}
 

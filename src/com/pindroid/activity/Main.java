@@ -54,7 +54,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	}
 	
 	public void onMyNotesSelected() {
-		startActivity(IntentHelper.ViewNotes("", app.getUsername(), this));	
+		startActivity(IntentHelper.ViewNotes(app.getUsername(), this));	
 	}
 
 	public void onMyNetworkSelected() {

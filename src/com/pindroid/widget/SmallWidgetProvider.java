@@ -56,6 +56,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
 		PendingIntent bookmarkPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.ViewBookmarks(null, username, null, context), 0);
         PendingIntent unreadPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.ViewUnread(username, context), 0);
         PendingIntent tagPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.ViewTags(username, context), 0);
+        PendingIntent notePendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.ViewNotes(username, context), 0);
         PendingIntent searchPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.WidgetSearch(username, context), 0);
         PendingIntent addPendingIntent = PendingIntent.getActivity(context, 0, IntentHelper.AddBookmark(null, username, context), 0);
 
@@ -64,6 +65,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.small_widget_bookmarks_button, bookmarkPendingIntent);
         views.setOnClickPendingIntent(R.id.small_widget_unread_button, unreadPendingIntent);
         views.setOnClickPendingIntent(R.id.small_widget_tags_button, tagPendingIntent);
+        views.setOnClickPendingIntent(R.id.small_widget_notes_button, notePendingIntent);
         views.setOnClickPendingIntent(R.id.small_widget_search_button, searchPendingIntent);
         views.setOnClickPendingIntent(R.id.small_widget_add_button, addPendingIntent);
         
@@ -91,6 +93,9 @@ public class SmallWidgetProvider extends AppWidgetProvider {
     	} else if(button.equals("tags")){
     		hideAllButtons(views);
     		views.setViewVisibility(R.id.small_widget_tags_button, View.VISIBLE);
+    	} else if(button.equals("notes")){
+    		hideAllButtons(views);
+    		views.setViewVisibility(R.id.small_widget_notes_button, View.VISIBLE);
     	} else if(button.equals("add")){
     		hideAllButtons(views);
     		views.setViewVisibility(R.id.small_widget_add_button, View.VISIBLE);
@@ -115,6 +120,7 @@ public class SmallWidgetProvider extends AppWidgetProvider {
     	views.setViewVisibility(R.id.small_widget_bookmarks_button, View.GONE);
     	views.setViewVisibility(R.id.small_widget_unread_layout, View.GONE);
     	views.setViewVisibility(R.id.small_widget_tags_button, View.GONE);
+    	views.setViewVisibility(R.id.small_widget_notes_button, View.GONE);
     	views.setViewVisibility(R.id.small_widget_add_button, View.GONE);
     	views.setViewVisibility(R.id.small_widget_search_button, View.GONE);
     }

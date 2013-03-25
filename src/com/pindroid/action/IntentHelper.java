@@ -129,7 +129,7 @@ public class IntentHelper {
 		return i;
 	}
 	
-	public static Intent ViewNotes(String tag, String account, Context context) {
+	public static Intent ViewNotes(String account, Context context) {
 		Intent i = new Intent(context, BrowseNotes.class);
 		i.setAction(Intent.ACTION_VIEW);
 		i.addCategory(Intent.CATEGORY_DEFAULT);

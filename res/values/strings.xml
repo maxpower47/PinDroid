@@ -203,6 +203,7 @@
     <string name="small_widget_my_bookmarks">My Bookmarks</string>
     <string name="small_widget_my_unread">My Unread</string>
     <string name="small_widget_my_tags">My Tags</string>
+    <string name="small_widget_my_notes">My Notes</string>
     <string name="small_widget_add_bookmark">Add Bookmark</string>
     <string name="small_widget_search_bookmarks">Search Bookmarks</string>
     
@@ -322,6 +323,7 @@
     <string name="alt_widget_unread_bookmarks">Unread Bookmarks</string>
     <string name="alt_widget_unread_bookmark_count">Unread Bookmark Count</string>
     <string name="alt_widget_my_tags">My Tags</string>
+    <string name="alt_widget_my_notes">My Notes</string>
     <string name="alt_widget_add_bookmark">Add Bookmark</string>
     <string name="alt_widget_search">Search</string>
     <string name="alt_widget_divider">Divider</string>
