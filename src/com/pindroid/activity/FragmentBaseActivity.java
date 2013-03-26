@@ -276,9 +276,9 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){	
-		if(resultCode == Activity.RESULT_CANCELED){
+		if(resultCode == Activity.RESULT_CANCELED && requestCode != Constants.REQUEST_CODE_ACCOUNT_CHANGE){
 			finish();
-		} else if(requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
+		} else if(resultCode == Activity.RESULT_OK && requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
 			app.setUsername(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));
 		}
 	}
