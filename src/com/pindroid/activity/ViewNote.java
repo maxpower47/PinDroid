@@ -24,6 +24,7 @@ package com.pindroid.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
 
 import com.pindroid.R;
 import com.pindroid.fragment.ViewNoteFragment;
@@ -49,26 +50,24 @@ public class ViewNote extends FragmentBaseActivity {
 			Uri data = intent.getData();
 			
 			if(data != null) {
-				path = data.getPath();
-				username = data.getUserInfo();
-				
-			} else username = mAccount.name;
+				path = data.getPath();				
+			}
 			
 			note = new Note();
 			
 			if(path.contains("/notes")){
-				if(isMyself()){		
-					int id = Integer.parseInt(data.getLastPathSegment());
-					note.setId(id);
-				} else {
-					note.setTitle(data.getQueryParameter("title"));
-					note.setText(data.getQueryParameter("text"));
-					note.setAccount(data.getQueryParameter("account"));
-				}
+				int id = Integer.parseInt(data.getLastPathSegment());
+				note.setId(id);
 			}
 			
 			ViewNoteFragment frag = (ViewNoteFragment) getSupportFragmentManager().findFragmentById(R.id.view_note_fragment);
 	        frag.setNote(note);
 		}
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.removeItem(R.id.menu_choose_account);
+		return true;
 	}
 }

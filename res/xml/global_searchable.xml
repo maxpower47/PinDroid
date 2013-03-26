@@ -26,6 +26,6 @@
 	android:hint="@string/main_search_hint"
 	android:searchSuggestAuthority="com.pindroid.providers.BookmarkContentProvider"
 	android:searchSuggestIntentAction="com.pindroid.intent.action.SearchSuggestion"
-	android:searchSuggestPath="main" 
+	android:searchSuggestPath="global" 
 	android:includeInGlobalSearch="true" 
 	android:searchSettingsDescription="@string/main_search_description"/>

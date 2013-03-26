@@ -19,11 +19,9 @@
  * USA
  */
 
-
 package com.pindroid.fragment;
 
 import com.pindroid.R;
-import com.pindroid.activity.FragmentBaseActivity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,21 +31,15 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 public class AboutFragment extends Fragment {
-
-	private FragmentBaseActivity base;
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		
-		base = (FragmentBaseActivity)getActivity();
-		
-		base.setTitle(R.string.about_activity_title);
-		
-		WebView content = (WebView) base.findViewById(R.id.about_text_view);
-		content.loadDataWithBaseURL(null, getString(R.string.about_text), "text/html", "utf-8", null);
-		
 
+		getActivity().setTitle(R.string.about_activity_title);
+		
+		WebView content = (WebView) getActivity().findViewById(R.id.about_text_view);
+		content.loadDataWithBaseURL(null, getString(R.string.about_text), "text/html", "utf-8", null);
 	}
 	
     @Override

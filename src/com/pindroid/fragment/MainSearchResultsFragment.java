@@ -22,7 +22,6 @@
 package com.pindroid.fragment;
 
 import com.pindroid.R;
-import com.pindroid.activity.FragmentBaseActivity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.AdapterView;
@@ -35,8 +34,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class MainSearchResultsFragment extends ListFragment {
-	
-	private FragmentBaseActivity base;
 	
 	private OnSearchActionListener searchActionListener;
 	
@@ -51,14 +48,13 @@ public class MainSearchResultsFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		
-		base = (FragmentBaseActivity)getActivity();
-		base.setTitle(R.string.main_search_results_title);
+		getActivity().setTitle(R.string.main_search_results_title);
 		
 		String[] MENU_ITEMS = new String[] {getString(R.string.search_results_bookmark),
 				getString(R.string.search_results_tag), getString(R.string.search_results_note),
 				getString(R.string.search_results_global_tag)};
 		
-		setListAdapter(new ArrayAdapter<String>(base, R.layout.main_view, MENU_ITEMS));
+		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.main_view, MENU_ITEMS));
 		
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);

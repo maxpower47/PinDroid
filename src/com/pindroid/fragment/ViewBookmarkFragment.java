@@ -27,6 +27,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Color;
@@ -55,7 +56,6 @@ import android.widget.TextView;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
-import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.client.NetworkUtilities;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.platform.BookmarkManager;
@@ -65,10 +65,9 @@ import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.AccountSpan;
 import com.pindroid.ui.TagSpan;
+import com.pindroid.util.SettingsHelper;
 
 public class ViewBookmarkFragment extends Fragment {
-
-	private FragmentBaseActivity base;
 	
 	private View container;
 	private ScrollView mBookmarkView;
@@ -93,11 +92,11 @@ public class ViewBookmarkFragment extends Fragment {
 	private static final String STATE_VIEWTYPE = "viewType";
 	
 	public interface OnBookmarkActionListener {
-		public void onViewTagSelected(String tag);
-		public void onUserTagSelected(String tag, String user);
+		public void onViewTagSelected(String tag, String user);
 		public void onAccountSelected(String account);
 	}
 	
+	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
@@ -105,8 +104,6 @@ public class ViewBookmarkFragment extends Fragment {
 	    if (savedInstanceState != null) {
 	        viewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_VIEWTYPE);
 	    } 
-		
-		base = (FragmentBaseActivity)getActivity();
 		
 		container = (View) getView().findViewById(R.id.view_bookmark_container);
 		mBookmarkView = (ScrollView) getView().findViewById(R.id.bookmark_scroll_view);
@@ -127,18 +124,11 @@ public class ViewBookmarkFragment extends Fragment {
 		readView.setMovementMethod(LinkMovementMethod.getInstance());
 		
 		setHasOptionsMenu(true);
-		//setRetainInstance(true);
 	}
 	
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {
-    		bookmarkActionListener.onViewTagSelected(tag);
-        }
-    };
-    
-    TagSpan.OnTagClickListener userTagOnClickListener = new TagSpan.OnTagClickListener() {
-        public void onTagClick(String tag) {
-        	bookmarkActionListener.onUserTagSelected(tag, bookmark.getAccount());
+    		bookmarkActionListener.onViewTagSelected(tag, isMyself() ? null : bookmark.getAccount());
         }
     };
     
@@ -148,11 +138,20 @@ public class ViewBookmarkFragment extends Fragment {
         }
     };
     
-	public void setBookmark(Bookmark b, BookmarkViewType viewType) {
+	public void setBookmark(Bookmark bookmark, BookmarkViewType viewType) {
 		this.viewType = viewType;
-		bookmark = b;
+		this.bookmark = bookmark;
 		
 		ActivityCompat.invalidateOptionsMenu(this.getActivity());
+	}
+	
+	public void clearView() {
+		this.viewType = BookmarkViewType.VIEW;
+		this.bookmark = null;
+		
+		mBookmarkView.setVisibility(View.GONE);
+		readSection.setVisibility(View.GONE);
+		mWebContent.setVisibility(View.GONE);
 	}
 	
 	private void addTag(SpannableStringBuilder builder, Tag t, TagSpan.OnTagClickListener listener) {
@@ -189,7 +188,7 @@ public class ViewBookmarkFragment extends Fragment {
 	    	if(bookmark != null){
 	    		if(isMyself() && bookmark.getId() != 0){
 					try{		
-						bookmark = BookmarkManager.GetById(bookmark.getId(), base);
+						bookmark = BookmarkManager.GetById(bookmark.getId(), getActivity());
 						
 			    		ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_view_sendbookmark).getActionProvider();
 			    		shareActionProvider.setShareIntent(IntentHelper.SendBookmark(bookmark.getUrl(), bookmark.getDescription()));
@@ -249,7 +248,6 @@ public class ViewBookmarkFragment extends Fragment {
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.view_bookmark_fragment, container, false);
     }
     
@@ -266,26 +264,33 @@ public class ViewBookmarkFragment extends Fragment {
 
     public void loadBookmark(){
     	if(bookmark != null){
-    		
-    		if(isMyself() && bookmark.getId() != 0){
-				try{		
-					int id = bookmark.getId();
-					bookmark = BookmarkManager.GetById(id, base);
-				}
-				catch(ContentNotFoundException e){}
-    		}
-    		
     		if(viewType == BookmarkViewType.VIEW){
 				mBookmarkView.setVisibility(View.VISIBLE);
 				readSection.setVisibility(View.GONE);
 				mWebContent.setVisibility(View.GONE);
-				if(isMyself()){
-					Date d = new Date(bookmark.getTime());
-					
+				
+				Date d = new Date(bookmark.getTime());
+				
+				if(bookmark.getDescription() != null && !bookmark.getDescription().equals("null"))
 					mTitle.setText(bookmark.getDescription());
-					mUrl.setText(bookmark.getUrl());
+				
+				mUrl.setText(bookmark.getUrl());
+				
+				if(bookmark.getNotes() != null && !bookmark.getNotes().equals("null"))
 					mNotes.setText(bookmark.getNotes());
-					mTime.setText(d.toString());
+				
+				mTime.setText(d.toString());
+				
+				mTags.setMovementMethod(LinkMovementMethod.getInstance());
+				SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
+				
+	    		for(Tag t : bookmark.getTags()) {
+	    			addTag(tagBuilder, t, tagOnClickListener);
+	    		}
+	    		
+	    		mTags.setText(tagBuilder);
+				
+				if(isMyself()){
 					mUsername.setText(bookmark.getAccount());
 					
 					if(mPrivateIcon != null){
@@ -302,39 +307,8 @@ public class ViewBookmarkFragment extends Fragment {
 						if(bookmark.getSynced() == -1)
 							mSyncedIcon.setImageResource(R.drawable.sync_fail);
 						else mSyncedIcon.setImageResource(R.drawable.sync);
-					}
-					
-	        		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
-	
-	        		for(Tag t : bookmark.getTags()) {
-	        			addTag(tagBuilder, t, tagOnClickListener);
-	        		}
-	        		
-	        		mTags.setText(tagBuilder);
-	        		mTags.setMovementMethod(LinkMovementMethod.getInstance());
-				} else {
-					
-					Date d = new Date(bookmark.getTime());
-					
-					if(bookmark.getDescription() != null && !bookmark.getDescription().equals("null"))
-						mTitle.setText(bookmark.getDescription());
-					
-					mUrl.setText(bookmark.getUrl());
-					
-					if(bookmark.getNotes() != null && !bookmark.getNotes().equals("null"))
-						mNotes.setText(bookmark.getNotes());
-					
-					mTime.setText(d.toString());
-					
-		    		SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
-		
-		    		for(Tag t : bookmark.getTags()) {
-		    			addTag(tagBuilder, t, userTagOnClickListener);
-		    		}
-		    		
-		    		mTags.setText(tagBuilder);
-		    		mTags.setMovementMethod(LinkMovementMethod.getInstance());
-		
+					}	        		
+				} else {	
 		    		if(bookmark.getAccount() != null){
 						SpannableStringBuilder builder = new SpannableStringBuilder();
 						int start = builder.length();
@@ -349,17 +323,18 @@ public class ViewBookmarkFragment extends Fragment {
 						mUsername.setText(builder);
 		    		}
 					
-					
 					mUsername.setMovementMethod(LinkMovementMethod.getInstance());
 				}
 			} else if(viewType == BookmarkViewType.READ){
 				new GetArticleTask().execute(bookmark.getUrl());
 				
-				if(isMyself() && bookmark.getToRead() && base.markAsRead)
+				if(isMyself() && bookmark.getToRead() && SettingsHelper.getMarkAsRead(getActivity()))
 		    		bookmarkSelectedListener.onBookmarkMark(bookmark);
 			} else if(viewType == BookmarkViewType.WEB){
 				showInWebView();
 			}
+    	} else {
+    		clearView();
     	}
     }
     
@@ -386,10 +361,17 @@ public class ViewBookmarkFragment extends Fragment {
 	@Override
 	public void onResume(){
 		super.onResume();
-		readView.setBackgroundColor(Integer.parseInt(base.readingBackground));
-		readTitle.setBackgroundColor(Integer.parseInt(base.readingBackground));
 		
-		if(Integer.parseInt(base.readingBackground) == Color.BLACK){
+		String readingMargins = SettingsHelper.getReadingMargins(getActivity());
+		String readingBackground = SettingsHelper.getReadingBackground(getActivity());
+		String readingFont = SettingsHelper.getReadingFont(getActivity());
+		String readingFontSize = SettingsHelper.getReadingFontSize(getActivity());
+		String readingLineSpace = SettingsHelper.getReadingLineSpace(getActivity());
+		
+		readView.setBackgroundColor(Integer.parseInt(readingBackground));
+		readTitle.setBackgroundColor(Integer.parseInt(readingBackground));
+		
+		if(Integer.parseInt(readingBackground) == Color.BLACK){
 			readView.setTextColor(Color.parseColor("#999999"));
 			readTitle.setTextColor(Color.parseColor("#999999"));
 		}
@@ -398,22 +380,27 @@ public class ViewBookmarkFragment extends Fragment {
 			readTitle.setTextColor(Color.parseColor("#222222"));
 		}
 		
-		readView.setPadding(Integer.parseInt(base.readingMargins), 15, Integer.parseInt(base.readingMargins), 15);
+		readView.setPadding(Integer.parseInt(readingMargins), 15, Integer.parseInt(readingMargins), 15);
 		
 		try{
-			Typeface tf = Typeface.createFromAsset(base.getAssets(), "fonts/" + base.readingFont + ".ttf");
+			Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/" + readingFont + ".ttf");
 			readView.setTypeface(tf);
 		} catch(Exception e){
 			readView.setTypeface(Typeface.DEFAULT);
 		}
 		
-		readView.setTextSize(Float.parseFloat(base.readingFontSize));
-		readView.setLineSpacing(Float.parseFloat(base.readingLineSpace), 1);
+		readView.setTextSize(Float.parseFloat(readingFontSize));
+		readView.setLineSpacing(Float.parseFloat(readingLineSpace), 1);
 		
 	}
 	
     public class GetArticleTask extends AsyncTask<String, Integer, Article>{
     	private String url;
+    	private int margins = 40;
+    	
+    	protected void onPreExecute() {
+    		margins = Integer.parseInt(SettingsHelper.getReadingMargins(getActivity())) * 2;
+    	}
 
     	@Override
     	protected Article doInBackground(String... args) {
@@ -432,7 +419,7 @@ public class ViewBookmarkFragment extends Fragment {
 	        					InputStream src = imageFetch(source);
 	        					d = Drawable.createFromStream(src, "src");
 	        					if(d != null){
-	        						int containerWidth = container.getWidth() - (Integer.parseInt(base.readingMargins) * 2);
+	        						int containerWidth = container.getWidth() - margins;
 	        						int width = Math.min(containerWidth, d.getIntrinsicWidth());
 	        						
 	        						int height = d.getIntrinsicHeight();
@@ -445,10 +432,9 @@ public class ViewBookmarkFragment extends Fragment {
 	        						}
 	        						d.setBounds(0, 0, width, height);
 	        					}
-	        				} catch (MalformedURLException e) {
-	        					e.printStackTrace(); 
-	        				} catch (IOException e) {
-	        					e.printStackTrace();  
+	        				} catch (Exception e) {
+	        					e.printStackTrace();
+	        					return null;
 	        				}
 	        				return d;
 	        			}

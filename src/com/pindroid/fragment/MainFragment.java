@@ -25,8 +25,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -35,11 +33,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.pindroid.R;
-import com.pindroid.activity.FragmentBaseActivity;
 
 public class MainFragment extends ListFragment {
-
-	private FragmentBaseActivity base;
 	
 	private OnMainActionListener mainActionListener;
 	
@@ -56,7 +51,6 @@ public class MainFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		
-		base = (FragmentBaseActivity)getActivity();
 		setHasOptionsMenu(true);
 		
 		String[] MENU_ITEMS = new String[] {getString(R.string.main_menu_my_bookmarks),
@@ -66,7 +60,7 @@ public class MainFragment extends ListFragment {
 				getString(R.string.main_menu_recent_bookmarks),
 				getString(R.string.main_menu_network_bookmarks)};
 		
-		setListAdapter(new ArrayAdapter<String>(base, R.layout.main_view, MENU_ITEMS));
+		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.main_view, MENU_ITEMS));
 		
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
@@ -88,14 +82,6 @@ public class MainFragment extends ListFragment {
 		    	}
 		    }
 		});
-	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.main_menu, menu);
-		
-		base.setupSearch(menu);
 	}
 	
     @Override

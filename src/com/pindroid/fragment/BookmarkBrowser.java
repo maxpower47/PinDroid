@@ -19,28 +19,10 @@
  * USA
  */
 
-package com.pindroid.action;
+package com.pindroid.fragment;
 
-import android.accounts.Account;
-import android.content.Context;
-
-public class TaskArgs{
-	protected Account account;
-	protected Context context;
-	
-	public Account getAccount(){
-		return account;
-	}
-	
-	public Context getContext(){
-		return context;
-	}
-	
-	public TaskArgs(){
-	}
-	
-	public TaskArgs(Account a, Context c){
-		account = a;
-		context = c;
-	}
+public interface BookmarkBrowser {
+	public void refresh();
+	public void setUsername(String username);
+	public void setQuery(String username, String query, String feed);
 }

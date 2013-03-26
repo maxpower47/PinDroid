@@ -34,15 +34,16 @@ public class Constants {
     
     public static final String CONTENT_SCHEME = "content";
     
-    public static final String EXTRA_BOOKMARK = "com.pindroid.bookmark";
-    public static final String EXTRA_DESCRIPTION = "com.pindroid.bookmark.description";
-    public static final String EXTRA_NOTES = "com.pindroid.bookmark.notes";
-    public static final String EXTRA_TAGS = "com.pindroid.bookmark.tags";
-    public static final String EXTRA_PRIVATE = "com.pindroid.bookmark.private";
-    public static final String EXTRA_TOREAD = "com.pindroid.bookmark.toread";
-    public static final String EXTRA_ERROR = "com.pindroid.bookmark.error";
-    public static final String EXTRA_TIME = "com.pindroid.bookmark.time";
-    public static final String EXTRA_UPDATE = "com.pindroid.bookmark.update";
+    public static final String EXTRA_BOOKMARK = "com.pindroid.Bookmark";
+    public static final String EXTRA_DESCRIPTION = "com.pindroid.bookmark.Description";
+    public static final String EXTRA_NOTES = "com.pindroid.bookmark.Notes";
+    public static final String EXTRA_TAGS = "com.pindroid.bookmark.Tags";
+    public static final String EXTRA_PRIVATE = "com.pindroid.bookmark.Private";
+    public static final String EXTRA_TOREAD = "com.pindroid.bookmark.ToRead";
+    public static final String EXTRA_ERROR = "com.pindroid.bookmark.Error";
+    public static final String EXTRA_TIME = "com.pindroid.bookmark.Time";
+    public static final String EXTRA_UPDATE = "com.pindroid.bookmark.Update";
+    public static final String EXTRA_VIEWTYPE = "com.pindroid.bookmark.ViewType";
     
     public static final String ACTION_READLATER = "com.pindroid.action.ReadLater";
     
@@ -56,6 +57,8 @@ public class Constants {
     public static final String ACTION_SEARCH_SUGGESTION_EDIT = "com.pindroid.intent.action.SearchSuggestionEdit";
     
     public static final String SUGGEST_COLUMN_TEXT_2_URL = "suggest_text_2_url";
+    
+    public static final int REQUEST_CODE_ACCOUNT_CHANGE = 1;
     
     /**
      * Authtoken type string.

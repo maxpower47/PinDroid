@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
@@ -36,6 +37,7 @@ import com.pindroid.fragment.ViewBookmarkFragment;
 import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.providers.ContentNotFoundException;
 
 public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActionListener,
 	OnBookmarkSelectedListener {
@@ -59,28 +61,23 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 			
 			if(data != null) {
 				path = data.getPath();
-				username = data.getUserInfo();
-				
-			} else username = mAccount.name;
-			
-			bookmark = new Bookmark();
-			
-			if(path.contains("/bookmarks")){
-				if(isMyself()){		
-					int id = Integer.parseInt(data.getLastPathSegment());
-					bookmark.setId(id);
-				} else {
-					bookmark.setDescription(data.getQueryParameter("title"));
-					bookmark.setUrl(data.getQueryParameter("url"));
-					bookmark.setNotes(data.getQueryParameter("notes"));
-					bookmark.setTime(Long.parseLong(data.getQueryParameter("time")));
-					if(!data.getQueryParameter("tags").equals("null"))
-						bookmark.setTagString(data.getQueryParameter("tags"));
-					bookmark.setAccount(data.getQueryParameter("account"));
-				}
 			}
 			
-			BookmarkViewType type = (BookmarkViewType) intent.getSerializableExtra("com.pindroid.BookmarkViewType");
+			if(path.contains("/bookmarks")){
+				if(intent.hasExtra(Constants.EXTRA_BOOKMARK))
+					bookmark = (Bookmark)intent.getSerializableExtra(Constants.EXTRA_BOOKMARK);
+				else {
+					try {
+						int id = Integer.parseInt(data.getLastPathSegment());
+						bookmark = BookmarkManager.GetById(id, this);
+						
+					} catch (NumberFormatException e) {}
+					catch (ContentNotFoundException e) {}
+				}
+				
+			}
+			
+			BookmarkViewType type = (BookmarkViewType) intent.getSerializableExtra(Constants.EXTRA_VIEWTYPE);
 			if(type == null)
 				type = BookmarkViewType.VIEW;
 			
@@ -101,23 +98,25 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 		    case R.id.menu_addbookmark:
-				startActivity(IntentHelper.AddBookmark(bookmark.getUrl(), mAccount.name, this));
+				startActivity(IntentHelper.AddBookmark(bookmark.getUrl(), app.getUsername(), this));
 				return true;
 		    default:
 		        return super.onOptionsItemSelected(item);
 	    }
 	}
 	
-	public void onViewTagSelected(String tag) {		
-		startActivity(IntentHelper.ViewBookmarks(tag, mAccount.name, this));
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.removeItem(R.id.menu_choose_account);
+		return true;
 	}
-
-	public void onUserTagSelected(String tag, String user) {
-		startActivity(IntentHelper.ViewBookmarks(tag, user, this));
+	
+	public void onViewTagSelected(String tag, String user) {		
+		startActivity(IntentHelper.ViewBookmarks(tag, app.getUsername(), user, this));
 	}
 
 	public void onAccountSelected(String account) {
-		startActivity(IntentHelper.ViewBookmarks(null, account, this));
+		startActivity(IntentHelper.ViewBookmarks(null, app.getUsername(), account, this));
 	}
 
 	public void onBookmarkView(Bookmark b) {
@@ -153,15 +152,15 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	public void onBookmarkMark(Bookmark b) {
     	if(b != null && isMyself() && b.getToRead()) {
     		b.setToRead(false);
-			BookmarkManager.UpdateBookmark(b, mAccount.name, this);
+			BookmarkManager.UpdateBookmark(b, app.getUsername(), this);
     	}
 	}
 
 	public void onBookmarkEdit(Bookmark b) {
-		startActivity(IntentHelper.EditBookmark(b, mAccount.name, this));	
+		startActivity(IntentHelper.EditBookmark(b, app.getUsername(), this));	
 	}
 
 	public void onBookmarkDelete(Bookmark b) {
-		BookmarkManager.LazyDelete(b, mAccount.name, this);
+		BookmarkManager.LazyDelete(b, app.getUsername(), this);
 	}
 }

@@ -39,7 +39,8 @@ public class BookmarkManager {
 	
 	public static CursorLoader GetBookmarks(String username, String tagname, boolean unread, String sortorder, Context context){
 		final String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, 
-				Bookmark.Meta, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced, Bookmark.Deleted};
+				Bookmark.Meta, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced, Bookmark.Deleted,
+				Bookmark.Account, Bookmark.Time};
 		String selection = null;
 		String[] selectionargs = new String[]{username, "% " + tagname + " %", 
 				"% " + tagname, tagname + " %", tagname};
@@ -437,7 +438,10 @@ public class BookmarkManager {
 		return new CursorLoader(context, Bookmark.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), sortorder);
 	}
 	
-	public static int GetUnreadCount(String username, Context context){		
+	public static int GetUnreadCount(String username, Context context){
+		if(username == null || username.equals(""))
+			return 0;
+		
 		final String[] projection = new String[] {Bookmark._ID};
 		final String selection = Bookmark.Account + "=? AND " + Bookmark.ToRead + "=1";
 		final String[] selectionargs = new String[]{username};

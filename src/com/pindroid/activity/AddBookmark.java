@@ -21,7 +21,6 @@
 
 package com.pindroid.activity;
 
-import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.fragment.AddBookmarkFragment;
 import com.pindroid.fragment.AddBookmarkFragment.OnBookmarkSaveListener;
@@ -64,15 +63,6 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 			if(url.equals("")) {
 				Toast.makeText(this, R.string.add_bookmark_invalid_url, Toast.LENGTH_LONG).show();
 			}
-			
-			if(intent.hasExtra(Constants.EXTRA_DESCRIPTION)){
-				bookmark.setDescription(intent.getStringExtra(Constants.EXTRA_DESCRIPTION));
-			}
-			
-			bookmark.setNotes(intent.getStringExtra(Constants.EXTRA_NOTES));
-			bookmark.setTagString(intent.getStringExtra(Constants.EXTRA_TAGS));
-			bookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, privateDefault));
-			bookmark.setToRead(intent.getBooleanExtra(Constants.EXTRA_TOREAD, toreadDefault));
 
 			try{
 				Bookmark old = BookmarkManager.GetByUrl(bookmark.getUrl(), this);
@@ -99,6 +89,7 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 		
 		frag = (AddBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.add_bookmark_fragment);
 		frag.loadBookmark(bookmark, oldBookmark);
+		frag.setUsername(app.getUsername());
 	}
 	
 	public void saveHandler(View v) {

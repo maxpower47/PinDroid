@@ -21,14 +21,14 @@
  * USA
  */
  -->
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="vertical"
-	style="@style/TabletLandFrame">
-	<fragment class="com.pindroid.fragment.BrowseTagsFragment"
-		android:id="@+id/listcontent"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent" >
-	</fragment>
-</LinearLayout>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item 
+		android:id="@+id/menu_choose_account" 
+		android:title="@string/menu_choose_account_title" 
+		android:orderInCategory="98" />
+	<item 
+		android:id="@+id/menu_settings" 
+		android:title="@string/menu_settings_title" 
+		android:icon="@drawable/ic_menu_preferences"
+		android:orderInCategory="99" />
+</menu>

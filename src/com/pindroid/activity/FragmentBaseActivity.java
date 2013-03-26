@@ -28,10 +28,9 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -45,40 +44,27 @@ import android.widget.TextView;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
+import com.pindroid.application.PindroidApplication;
 import com.pindroid.authenticator.AuthenticatorActivity;
+import com.pindroid.providers.BookmarkContentProvider;
 
 public abstract class FragmentBaseActivity extends FragmentActivity {
 	
 	protected AccountManager mAccountManager;
-	public Account mAccount;
-	public Context mContext;
-	public String username = null;
-	protected SharedPreferences settings;
-	
-	public boolean privateDefault;
-	public boolean toreadDefault;
-	public String defaultAction;
-	public boolean markAsRead;
-	public String readingBackground;
-	public String readingFont;
-	public String readingMargins;
-	public String readingFontSize;
-	public String readingLineSpace;
-	
-	private boolean first = true;
-	
+
 	Bundle savedState;
+	
+	public PindroidApplication app;
 	
 	@Override
 	@TargetApi(14)
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
-		mContext = this;
-		mAccountManager = AccountManager.get(this);
-		settings = PreferenceManager.getDefaultSharedPreferences(this);
+		app = (PindroidApplication)getApplicationContext();
 		
-		loadSettings();
+		mAccountManager = AccountManager.get(this);
+
 		init();
 		
 		if(android.os.Build.VERSION.SDK_INT >= 14) {
@@ -90,6 +76,9 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		Intent intent = getIntent();
 		
 		if(Intent.ACTION_SEARCH.equals(intent.getAction()) && !intent.hasExtra("MainSearchResults")){
+			if(intent.hasExtra("username"))
+				app.setUsername(intent.getStringExtra("username"));
+			
 			if(intent.hasExtra(SearchManager.QUERY)){
 				Intent i = new Intent(this, MainSearchResults.class);
 				i.putExtras(intent.getExtras());
@@ -149,6 +138,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		}
 	}
 	
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	private void init(){
 		
 		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length < 1) {		
@@ -156,33 +146,27 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 			startActivityForResult(i, 0);
 			
 			return;
-		} else {
-			if(mAccount == null || username == null)
-				loadAccounts();
+		} else {			
+			if(getIntent().getData() != null && getIntent().getData().getUserInfo() != null){
+				app.setUsername(getIntent().getData().getUserInfo());
+			} else if(app.getUsername() == null || app.getUsername().equals("")){
+				
+				if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+					Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+					startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+				} else {
+					if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
+						Account account = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+						
+						app.setUsername(account.name);
+					}
+				}
+			}
 		}
 	}
 	
 	public void searchHandler(View v) {
 		onSearchRequested();
-	}
-	
-	@Override
-	public void onResume(){
-		super.onResume();
-		
-		if(!first) {
-			loadSettings();
-			init();
-		}
-		first = false;
-	}
-	
-	private void loadAccounts(){
-		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
-			mAccount = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
-		}
-		
-		username = mAccount.name;
 	}
 	
 	@TargetApi(11)
@@ -192,19 +176,39 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	    	SearchView searchView = (SearchView)menu.findItem(R.id.menu_search).getActionView();
 	    	searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 	    	searchView.setSubmitButtonEnabled(false);
+	    	
+	    	searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+	    	    public boolean onQueryTextSubmit(String query) {
+	    	    	startSearch(query);
+	    	    	return true;
+	    	    }
+
+	    	    public boolean onQueryTextChange(final String s) {
+	    	    	return false;
+	    	    }
+	    	});
 	    }
 	}
 	
-	private void loadSettings(){
-    	privateDefault = settings.getBoolean("pref_save_private_default", false);
-    	toreadDefault = settings.getBoolean("pref_save_toread_default", false);
-    	defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
-    	markAsRead = settings.getBoolean("pref_markasread", false);
-    	readingBackground = settings.getString("pref_reading_background", "-1");
-    	readingFont = settings.getString("pref_reading_font", "Roboto-Regular");
-    	readingMargins = settings.getString("pref_reading_margins", "20");
-    	readingFontSize = settings.getString("pref_reading_fontsize", "16");
-    	readingLineSpace = settings.getString("pref_reading_linespace", "5");
+	// ******************************************
+	// ******************************************
+	// ******************************************
+	//TODO test searching on < 3.0 devices
+	//TODO test on tablet
+	// ******************************************
+	// ******************************************
+	// ******************************************
+
+	private void startSearch(final String query) {
+		Intent i = new Intent(this, MainSearchResults.class);
+		i.putExtra("query", query);
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(app.getUsername() + "@" + BookmarkContentProvider.AUTHORITY);
+		i.setData(data.build());
+		startActivity(i);
+		finish();
 	}
 
 	@Override
@@ -215,6 +219,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	    return true;
 	}
 	
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
@@ -224,7 +229,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	            startActivity(intent);
 	            return true;
 		    case R.id.menu_addbookmark:
-				startActivity(IntentHelper.AddBookmark(null, mAccount.name, this));
+				startActivity(IntentHelper.AddBookmark(null, app.getUsername(), this));
 				return true;
 		    case R.id.menu_search:
 		    	onSearchRequested();
@@ -233,16 +238,32 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 				Intent prefs = new Intent(this, Preferences.class);
 				startActivity(prefs);
 		        return true;
+		    case R.id.menu_choose_account:
+				Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, true, null, null, null, null);
+				startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+		    	return true;
 		    default:
 		        return super.onOptionsItemSelected(item);
 	    }
 	}
 	
 	public boolean isMyself() {
-		if(mAccount != null && username != null)
-			return mAccount.name.equals(username);
-		else return false;
+		for(Account account : mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)){
+			if(app.getUsername().equals(account.name))
+				return true;
+		}
+		
+		return false;
 	}
+	
+    
+    public Account getAccount(){
+    	for(Account account : AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE))
+			   if (account.name.equals(app.getUsername()))
+				   return account;
+    	
+    	return null;		   
+    }
 	
 	@Override
 	public void setTitle(CharSequence title){
@@ -253,9 +274,12 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		}
 	}
 	
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){	
-		if(resultCode == Activity.RESULT_CANCELED){
+		if(resultCode == Activity.RESULT_CANCELED && requestCode != Constants.REQUEST_CODE_ACCOUNT_CHANGE){
 			finish();
+		} else if(resultCode == Activity.RESULT_OK && requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
+			app.setUsername(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));
 		}
 	}
 }
