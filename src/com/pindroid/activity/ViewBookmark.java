@@ -98,7 +98,7 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 		    case R.id.menu_addbookmark:
-				startActivity(IntentHelper.AddBookmark(bookmark.getUrl(), app.getUsername(), this));
+				startActivity(IntentHelper.AddBookmark(bookmark.getUrl(), null, this));
 				return true;
 		    default:
 		        return super.onOptionsItemSelected(item);
@@ -112,11 +112,11 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	}
 	
 	public void onViewTagSelected(String tag, String user) {		
-		startActivity(IntentHelper.ViewBookmarks(tag, app.getUsername(), user, this));
+		startActivity(IntentHelper.ViewBookmarks(tag, null, user, this));
 	}
 
 	public void onAccountSelected(String account) {
-		startActivity(IntentHelper.ViewBookmarks(null, app.getUsername(), account, this));
+		startActivity(IntentHelper.ViewBookmarks(null, null, account, this));
 	}
 
 	public void onBookmarkView(Bookmark b) {
@@ -157,10 +157,13 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	}
 
 	public void onBookmarkEdit(Bookmark b) {
-		startActivity(IntentHelper.EditBookmark(b, app.getUsername(), this));	
+		startActivity(IntentHelper.EditBookmark(b, null, this));	
 	}
 
 	public void onBookmarkDelete(Bookmark b) {
 		BookmarkManager.LazyDelete(b, app.getUsername(), this);
 	}
+	
+	@Override
+	protected void changeAccount(){}
 }

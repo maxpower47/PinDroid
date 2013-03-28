@@ -33,7 +33,6 @@ import android.view.MenuInflater;
 import android.view.View;
 
 import com.pindroid.Constants.BookmarkViewType;
-import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.AddBookmarkFragment;
@@ -258,7 +257,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 				lastViewType = BookmarkViewType.VIEW;
 				setBookmarkView(b, BookmarkViewType.VIEW);
 			} else {
-				startActivity(IntentHelper.ViewBookmark(b, BookmarkViewType.VIEW, app.getUsername(), this));
+				startActivity(IntentHelper.ViewBookmark(b, BookmarkViewType.VIEW, null, this));
 			}
 		}
 	}
@@ -270,7 +269,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 				lastViewType = BookmarkViewType.READ;
 				setBookmarkView(b, BookmarkViewType.READ);
 			} else {
-				startActivity(IntentHelper.ViewBookmark(b, BookmarkViewType.READ, app.getUsername(), this));
+				startActivity(IntentHelper.ViewBookmark(b, BookmarkViewType.READ, null, this));
 			}
 		}
 	}
@@ -289,7 +288,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 
 	public void onBookmarkAdd(Bookmark b) {
 		if(b != null){
-			startActivity(IntentHelper.AddBookmark(b.getUrl(), app.getUsername(), this));
+			startActivity(IntentHelper.AddBookmark(b.getUrl(), null, this));
 		}
 	}
 
@@ -329,7 +328,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 				transaction.hide(getSupportFragmentManager().findFragmentById(R.id.maincontent));
 				transaction.commit();
 			} else {
-				startActivity(IntentHelper.EditBookmark(b, app.getUsername(), this));
+				startActivity(IntentHelper.EditBookmark(b, null, this));
 			}
 		}
 	}
@@ -347,7 +346,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			transaction.addToBackStack(null);
 			transaction.commit();
 		} else {
-			startActivity(IntentHelper.ViewBookmarks(tag, app.getUsername(), user, this));
+			startActivity(IntentHelper.ViewBookmarks(tag, null, user, this));
 		}
 	}
 
@@ -360,7 +359,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			transaction.addToBackStack(null);
 			transaction.commit();
 		} else {
-			startActivity(IntentHelper.ViewBookmarks(null, account, null, this));
+			startActivity(IntentHelper.ViewBookmarks(null, null, account, this));
 		}
 	}
 
@@ -446,26 +445,22 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		}
 	}
 	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		super.onActivityResult(requestCode, resultCode, data);
-		
-		if(requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
-			FragmentManager fm = getSupportFragmentManager();
+	@Override 
+	protected void changeAccount() {
+		FragmentManager fm = getSupportFragmentManager();
 
-			((BookmarkBrowser) bookmarkFrag).setUsername(app.getUsername());
-			((BookmarkBrowser) bookmarkFrag).refresh();
-			
-			ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) fm.findFragmentById(R.id.maincontent);
-			if(viewFrag != null) {
-				viewFrag.clearView();
-			}
-			
-			BrowseTagsFragment tagFrag = (BrowseTagsFragment) fm.findFragmentById(R.id.tagcontent);
-			if(tagFrag != null){
-				tagFrag.setAccount(app.getUsername());
-				tagFrag.refresh();
-			}
+		((BookmarkBrowser) bookmarkFrag).setUsername(app.getUsername());
+		((BookmarkBrowser) bookmarkFrag).refresh();
+		
+		ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) fm.findFragmentById(R.id.maincontent);
+		if(viewFrag != null) {
+			viewFrag.clearView();
+		}
+		
+		BrowseTagsFragment tagFrag = (BrowseTagsFragment) fm.findFragmentById(R.id.tagcontent);
+		if(tagFrag != null){
+			tagFrag.setAccount(app.getUsername());
+			tagFrag.refresh();
 		}
 	}
 }

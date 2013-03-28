@@ -82,4 +82,7 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 			finish();
 		}
 	}
+	
+	@Override
+	protected void changeAccount(){}
 }

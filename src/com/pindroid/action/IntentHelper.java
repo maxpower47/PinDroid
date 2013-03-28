@@ -56,7 +56,7 @@ public class IntentHelper {
 		
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("bookmarks");
 		addBookmark.setData(data.build());
 		
@@ -71,7 +71,7 @@ public class IntentHelper {
 		viewBookmark.putExtra(Constants.EXTRA_BOOKMARK, b);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("bookmarks");
 		data.appendEncodedPath(Integer.toString(b.getId()));
 
@@ -86,7 +86,7 @@ public class IntentHelper {
 		viewBookmark.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("notes");
 		
 		data.appendEncodedPath(Integer.toString(n.getId()));
@@ -101,7 +101,7 @@ public class IntentHelper {
 		editBookmark.setAction(Intent.ACTION_EDIT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("bookmarks");
 		data.appendEncodedPath(Integer.toString(b.getId()));
 		editBookmark.setData(data.build());
@@ -115,7 +115,7 @@ public class IntentHelper {
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("bookmarks");
 		
 		if(tag != null && !tag.equals(""))
@@ -135,7 +135,7 @@ public class IntentHelper {
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("notes");
 		
 		i.setData(data.build());
@@ -149,7 +149,7 @@ public class IntentHelper {
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("bookmarks");
 		data.appendQueryParameter("unread", "1");
 		i.setData(data.build());
@@ -163,7 +163,7 @@ public class IntentHelper {
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("tags");
 		i.setData(data.build());
 		
@@ -176,7 +176,7 @@ public class IntentHelper {
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("tags");
 		i.setData(data.build());
 		
@@ -190,7 +190,7 @@ public class IntentHelper {
 		i.putExtra("MainSearchResults", "1");
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + BookmarkContentProvider.AUTHORITY);
 		i.setData(data.build());
 		return i;
 	}
@@ -202,7 +202,7 @@ public class IntentHelper {
 		i.putExtra("MainSearchResults", "1");
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + BookmarkContentProvider.AUTHORITY);
 		i.setData(data.build());
 		return i;
 	}
@@ -214,7 +214,7 @@ public class IntentHelper {
 		i.putExtra("MainSearchResults", "1");
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + BookmarkContentProvider.AUTHORITY);
 		i.setData(data.build());
 		return i;
 	}
@@ -227,7 +227,7 @@ public class IntentHelper {
 		
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("bookmarks");
 		data.appendQueryParameter("feed", "global");
 		i.setData(data.build());
@@ -240,7 +240,7 @@ public class IntentHelper {
 		i.setAction(Intent.ACTION_SEARCH);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + BookmarkContentProvider.AUTHORITY);
 		data.appendEncodedPath("search");
 		i.setData(data.build());
 		

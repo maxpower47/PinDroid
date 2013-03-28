@@ -412,7 +412,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		    		builder.appendEncodedPath("bookmarks");
 		    		builder.appendEncodedPath(c.getString(idColumn));
 		    		data = builder.build();
-		    	}else {
+		    	} else {
 		    		builder.scheme(Constants.CONTENT_SCHEME);
 		    		builder.encodedAuthority(app.getUsername() + "@" + BookmarkContentProvider.AUTHORITY);
 		    		builder.appendEncodedPath("bookmarks");

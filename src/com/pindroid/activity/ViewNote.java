@@ -70,4 +70,7 @@ public class ViewNote extends FragmentBaseActivity {
 		menu.removeItem(R.id.menu_choose_account);
 		return true;
 	}
+	
+	@Override
+	protected void changeAccount(){}
 }

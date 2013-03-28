@@ -38,4 +38,7 @@ public class AboutActivity extends FragmentBaseActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    return false;
 	}
+	
+	@Override
+	protected void changeAccount(){}
 }

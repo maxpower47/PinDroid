@@ -65,7 +65,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		
 		mAccountManager = AccountManager.get(this);
 
-		init();
+		//init();
 		
 		if(android.os.Build.VERSION.SDK_INT >= 14) {
 			if(getActionBar() != null) {
@@ -138,9 +138,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		}
 	}
 	
-	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	private void init(){
-		
 		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length < 1) {		
 			Intent i = new Intent(this, AuthenticatorActivity.class);
 			startActivityForResult(i, 0);
@@ -149,18 +147,30 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		} else {			
 			if(getIntent().getData() != null && getIntent().getData().getUserInfo() != null){
 				app.setUsername(getIntent().getData().getUserInfo());
+				changeAccount();
 			} else if(app.getUsername() == null || app.getUsername().equals("")){
+				requestAccount();
+			}
+		}
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		init();
+	}
+	
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	protected void requestAccount() {
+		if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+			Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+		} else {
+			if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
+				Account account = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 				
-				if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
-					Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
-					startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
-				} else {
-					if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
-						Account account = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
-						
-						app.setUsername(account.name);
-					}
-				}
+				app.setUsername(account.name);
 			}
 		}
 	}
@@ -229,7 +239,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	            startActivity(intent);
 	            return true;
 		    case R.id.menu_addbookmark:
-				startActivity(IntentHelper.AddBookmark(null, app.getUsername(), this));
+				startActivity(IntentHelper.AddBookmark(null, null, this));
 				return true;
 		    case R.id.menu_search:
 		    	onSearchRequested();
@@ -274,12 +284,16 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		}
 	}
 	
+	// signal to derived activity that the account may have changed
+	protected abstract void changeAccount();
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){	
 		if(resultCode == Activity.RESULT_CANCELED && requestCode != Constants.REQUEST_CODE_ACCOUNT_CHANGE){
 			finish();
 		} else if(resultCode == Activity.RESULT_OK && requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
 			app.setUsername(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));
+			changeAccount();
 		}
 	}
 }

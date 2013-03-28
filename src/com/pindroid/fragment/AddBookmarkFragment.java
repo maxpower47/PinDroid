@@ -179,6 +179,7 @@ public class AddBookmarkFragment extends Fragment {
 			
 			if(bookmark.getTagString() != null)
 				mEditTags.setText(bookmark.getTagString());
+			else mEditTags.setText("");
 			
 			mPrivate.setChecked(!bookmark.getShared());
 			mToRead.setChecked(bookmark.getToRead());
@@ -242,7 +243,7 @@ public class AddBookmarkFragment extends Fragment {
 		}
 		
 		int oldid = 0;
-		if(bookmark != null && bookmark.getId() != 0) {
+		if(bookmark != null && oldBookmark != null && bookmark.getId() != 0) {
 			oldid = bookmark.getId();
 			update = true;
 			oldBookmark = bookmark.copy();

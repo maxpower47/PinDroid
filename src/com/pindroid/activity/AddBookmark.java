@@ -50,26 +50,17 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 		Intent intent = getIntent();
 		
 		if(Intent.ACTION_SEND.equals(intent.getAction()) && intent.hasExtra(Intent.EXTRA_TEXT)){
+			requestAccount();
+			
 			bookmark = new Bookmark();
 			
-			ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(this);
+			loadBookmarkFromShareIntent();
 			
-			String url = StringUtils.getUrl(reader.getText().toString());
-			bookmark.setUrl(url);
-			
-			if(reader.getSubject() != null)
-				bookmark.setDescription(reader.getSubject());
-			
-			if(url.equals("")) {
+			if(bookmark.getUrl().equals("")) {
 				Toast.makeText(this, R.string.add_bookmark_invalid_url, Toast.LENGTH_LONG).show();
 			}
 
-			try{
-				Bookmark old = BookmarkManager.GetByUrl(bookmark.getUrl(), this);
-				bookmark = old.copy();
-			} catch(Exception e) {
-				
-			}
+			findExistingBookmark();
 			
 		} else if(Intent.ACTION_EDIT.equals(intent.getAction())){
 			int id = Integer.parseInt(intent.getData().getLastPathSegment());
@@ -92,6 +83,26 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 		frag.setUsername(app.getUsername());
 	}
 	
+	private void loadBookmarkFromShareIntent() {
+		ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(this);
+		
+		String url = StringUtils.getUrl(reader.getText().toString());
+		bookmark.setUrl(url);
+		
+		if(reader.getSubject() != null)
+			bookmark.setDescription(reader.getSubject());
+	}
+	
+	private void findExistingBookmark() {
+		try{
+			Bookmark old = BookmarkManager.GetByUrl(bookmark.getUrl(), app.getUsername(), this);
+			bookmark = old.copy();
+		} catch(ContentNotFoundException e) {
+			bookmark.clear();
+			loadBookmarkFromShareIntent();
+		}
+	}
+	
 	public void saveHandler(View v) {
 		frag.saveHandler(v);
 	}
@@ -106,5 +117,14 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 
 	public void onBookmarkCancel(Bookmark b) {
 		finish();
+	}
+	
+	@Override
+	protected void changeAccount() {
+		frag = (AddBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.add_bookmark_fragment);
+		findExistingBookmark();
+		frag.loadBookmark(bookmark, oldBookmark);
+		frag.setUsername(app.getUsername());
+		frag.refreshView();
 	}
 }

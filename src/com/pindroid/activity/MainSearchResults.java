@@ -38,19 +38,19 @@ public class MainSearchResults extends FragmentBaseActivity implements MainSearc
 	}
 
 	public void onBookmarkSearch() {
-		startActivity(IntentHelper.SearchBookmarks(getIntent().getStringExtra(SearchManager.QUERY), app.getUsername(), this));
+		startActivity(IntentHelper.SearchBookmarks(getIntent().getStringExtra(SearchManager.QUERY), null, this));
 	}
 
 	public void onTagSearch() {
-		startActivity(IntentHelper.SearchTags(getIntent().getStringExtra(SearchManager.QUERY), app.getUsername(), this));
+		startActivity(IntentHelper.SearchTags(getIntent().getStringExtra(SearchManager.QUERY), null, this));
 	}
 
 	public void onGlobalTagSearch() {
-		startActivity(IntentHelper.SearchGlobalTags(getIntent().getStringExtra(SearchManager.QUERY), app.getUsername(), this));
+		startActivity(IntentHelper.SearchGlobalTags(getIntent().getStringExtra(SearchManager.QUERY), null, this));
 	}
 
 	public void onNoteSearch() {
-		startActivity(IntentHelper.SearchNotes(getIntent().getStringExtra(SearchManager.QUERY), app.getUsername(), this));
+		startActivity(IntentHelper.SearchNotes(getIntent().getStringExtra(SearchManager.QUERY), null, this));
 	}
 	
 	@Override
@@ -58,4 +58,7 @@ public class MainSearchResults extends FragmentBaseActivity implements MainSearc
 		menu.removeItem(R.id.menu_choose_account);
 		return true;
 	}
+	
+	@Override
+	protected void changeAccount(){}
 }

@@ -21,7 +21,6 @@
 
 package com.pindroid.activity;
 
-import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseTagsFragment;
@@ -42,7 +41,7 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
         super.onCreate(savedInstanceState);
         
         if(getResources().getBoolean(R.bool.has_two_panes)){
-			startActivity(IntentHelper.ViewTabletTags(app.getUsername(), this));
+			startActivity(IntentHelper.ViewTabletTags(null, this));
 			finish();
 		}
         
@@ -79,7 +78,7 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 	}
 
 	public void onTagSelected(String tag) {		
-		startActivity(IntentHelper.ViewBookmarks(tag, app.getUsername(), null, this));
+		startActivity(IntentHelper.ViewBookmarks(tag, null, null, this));
 	}
 	
 	@Override
@@ -92,12 +91,8 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 	}
 	
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		super.onActivityResult(requestCode, resultCode, data);
-		
-		if(requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
-			frag.setAccount(app.getUsername());
-			frag.refresh();
-		}
+	protected void changeAccount(){
+		frag.setAccount(app.getUsername());
+		frag.refresh();
 	}
 }

@@ -21,7 +21,6 @@
 
 package com.pindroid.activity;
 
-import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseNotesFragment;
@@ -75,17 +74,13 @@ public class BrowseNotes extends FragmentBaseActivity implements BrowseNotesFrag
 
 	public void onNoteView(Note n) {
 		if(n != null){
-			startActivity(IntentHelper.ViewNote(n, app.getUsername(), this));
+			startActivity(IntentHelper.ViewNote(n, null, this));
 		}
 	}
 	
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		super.onActivityResult(requestCode, resultCode, data);
-		
-		if(requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
-			frag.setAccount(app.getUsername());
-			frag.refresh();
-		}
+	protected void changeAccount(){
+		frag.setAccount(app.getUsername());
+		frag.refresh();
 	}
 }

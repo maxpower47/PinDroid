@@ -38,32 +38,35 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	}
 
 	public void onMyBookmarksSelected() {
-		startActivity(IntentHelper.ViewBookmarks("", app.getUsername(), null, this));	
+		startActivity(IntentHelper.ViewBookmarks("", null, null, this));	
 	}
 
 	public void onMyUnreadSelected() {
-		startActivity(IntentHelper.ViewUnread(app.getUsername(), this));
+		startActivity(IntentHelper.ViewUnread(null, this));
 	}
 
 	public void onMyTagsSelected() {
 		if(getResources().getBoolean(R.bool.has_two_panes)){
-			startActivity(IntentHelper.ViewTabletTags(app.getUsername(), this));
+			startActivity(IntentHelper.ViewTabletTags(null, this));
 		} else {
-			startActivity(IntentHelper.ViewTags(app.getUsername(), this));
+			startActivity(IntentHelper.ViewTags(null, this));
 		}	
 	}
 	
 	public void onMyNotesSelected() {
-		startActivity(IntentHelper.ViewNotes(app.getUsername(), this));	
+		startActivity(IntentHelper.ViewNotes(null, this));	
 	}
 
 	public void onMyNetworkSelected() {
-		startActivity(IntentHelper.ViewBookmarks("", app.getUsername(), "network", this));	
+		startActivity(IntentHelper.ViewBookmarks("", null, "network", this));	
 	}
 
 	public void onRecentSelected() {
-		startActivity(IntentHelper.ViewBookmarks("", app.getUsername(), "recent", this));	
+		startActivity(IntentHelper.ViewBookmarks("", null, "recent", this));	
 	}
+	
+	@Override
+	protected void changeAccount(){}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
