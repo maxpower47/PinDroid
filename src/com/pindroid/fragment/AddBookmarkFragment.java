@@ -259,6 +259,8 @@ public class AddBookmarkFragment extends Fragment {
 		
 		bookmark.setId(oldid);
 		
+		bookmark.setAccount(username);
+		
 		if(update){
 			BookmarkManager.UpdateBookmark(bookmark, username, getActivity());
 			
