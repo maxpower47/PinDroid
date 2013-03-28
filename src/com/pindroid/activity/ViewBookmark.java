@@ -65,7 +65,7 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 			
 			if(path.contains("/bookmarks")){
 				if(intent.hasExtra(Constants.EXTRA_BOOKMARK))
-					bookmark = (Bookmark)intent.getSerializableExtra(Constants.EXTRA_BOOKMARK);
+					bookmark = intent.getParcelableExtra(Constants.EXTRA_BOOKMARK);
 				else {
 					try {
 						int id = Integer.parseInt(data.getLastPathSegment());

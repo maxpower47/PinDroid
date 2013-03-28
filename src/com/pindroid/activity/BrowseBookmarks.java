@@ -199,7 +199,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		if(lastSelected != null && lastViewType != null){
-			savedInstanceState.putSerializable(STATE_LASTBOOKMARK, lastSelected);
+			savedInstanceState.putParcelable(STATE_LASTBOOKMARK, lastSelected);
 	    	savedInstanceState.putSerializable(STATE_LASTVIEWTYPE, lastViewType);
 		}
 		
@@ -221,7 +221,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	    super.onRestoreInstanceState(savedInstanceState);
 	    
 	    if(isTwoPane()) {
-	    	lastSelected = (Bookmark)savedInstanceState.getSerializable(STATE_LASTBOOKMARK);
+	    	lastSelected = savedInstanceState.getParcelable(STATE_LASTBOOKMARK);
 	    	lastViewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_LASTVIEWTYPE);
 	    	if(lastSelected != null) {
 	    		if(!lastViewType.equals(BookmarkViewType.EDIT)){
