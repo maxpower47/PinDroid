@@ -52,7 +52,7 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
         Uri data = intent.getData();
         String action = intent.getAction();
 
-		if(data != null)
+		if(data != null && data.getUserInfo() != null)
 			app.setUsername(data.getUserInfo());
         
 		frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
@@ -84,7 +84,7 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 	@Override
 	public void onResume(){
 		super.onResume();
-		if(!app.getUsername().equals(frag.getAccount())){
+		if(app.getUsername() != null && !app.getUsername().equals(frag.getAccount())){
 			frag.setAccount(app.getUsername());
 			frag.refresh();	
 		}

@@ -47,7 +47,7 @@ public class BrowseNotes extends FragmentBaseActivity implements BrowseNotesFrag
         Uri data = intent.getData();
         String action = intent.getAction();
 
-		if(data != null)
+        if(data != null && data.getUserInfo() != null)
 			app.setUsername(data.getUserInfo());
         
 		frag = (BrowseNotesFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
