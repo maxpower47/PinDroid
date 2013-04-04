@@ -24,10 +24,14 @@
  <resources>
  	<dimen name="add_switch_margin_left">50dp</dimen>
  	<dimen name="add_switch_margin_right">50dp</dimen>
+ 	
  	<dimen name="action_bar_width">-1dp</dimen>
+ 	
  	<integer name="add_bookmark_note_lines">5</integer>
+ 	
  	<dimen name="bookmark_list_view_height">50dp</dimen>
+ 	
 	<dimen name="view_bookmark_padding_top">20dp</dimen>
 	<dimen name="view_bookmark_padding_left">10dp</dimen>
-	<dimen name="view_bookmark_title_text">28sp</dimen>
+	<dimen name="view_bookmark_title_text">24sp</dimen>
  </resources>

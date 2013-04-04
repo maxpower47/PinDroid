@@ -39,16 +39,18 @@
 		    android:scrollHorizontally="true"
 		    android:singleLine="true"
 		    android:ellipsize="end"
-		    android:textSize="20sp"
+		    android:textSize="@dimen/browse_bookmark_title_text"
 		    android:paddingLeft="5dip"
-		    android:paddingRight="10dip"/>
-			<TextView
-			    android:id="@+id/bookmark_feed_tags"
-			    android:layout_height="fill_parent"
-			    android:layout_width="wrap_content"
-			    android:scrollHorizontally="false"
-			    android:textSize="12sp"
-			    android:paddingLeft="10dip"
-			    android:paddingRight="10dip"/>
+		    android:paddingRight="10dip"
+		    android:textIsSelectable="false"/>
+		<TextView
+		    android:id="@+id/bookmark_feed_tags"
+		    android:layout_height="fill_parent"
+		    android:layout_width="wrap_content"
+		    android:scrollHorizontally="false"
+		    android:textSize="@dimen/browse_bookmark_tag_text"
+		    android:paddingLeft="10dip"
+		    android:paddingRight="10dip"
+		    android:textIsSelectable="false"/>
 	</LinearLayout>
 </LinearLayout>

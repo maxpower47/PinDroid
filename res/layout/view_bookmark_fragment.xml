@@ -69,26 +69,31 @@
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent"
 					android:textSize="@dimen/view_bookmark_title_text"
-					android:paddingLeft="10dip" />
+					android:paddingLeft="10dip"
+					android:textIsSelectable="true" />
 			</LinearLayout>
 			<TextView
 				android:id="@+id/view_bookmark_url"
 				style="@style/ViewBookmarkFieldContent"
-				android:autoLink="web" />
+				android:autoLink="web"
+				android:textIsSelectable="false" />
 			<TextView
 				android:id="@+id/view_bookmark_notes_title"
 				style="@style/ViewBookmarkFieldTitle"
 				android:text="@string/view_bookmark_notes_title"/>
 			<TextView
 				android:id="@+id/view_bookmark_notes"
-				style="@style/ViewBookmarkFieldContent" />
+				style="@style/ViewBookmarkFieldContent"
+				android:textIsSelectable="true" />
 			<TextView
 				android:id="@+id/view_bookmark_tags_title"
 				style="@style/ViewBookmarkFieldTitle"
 				android:text="@string/view_bookmark_tags_title"/>
 			<TextView
 				android:id="@+id/view_bookmark_tags"
-				style="@style/ViewBookmarkFieldContent" />
+				style="@style/ViewBookmarkFieldContent"
+				android:textSize="@dimen/view_bookmark_tag_content_text"
+				android:textIsSelectable="false" />
 			<include layout="@layout/view_bookmark_time_account" />
 		</LinearLayout>
 	</ScrollView>

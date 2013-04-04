@@ -140,7 +140,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	}
 	
 	private void init(){
-		if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length < 1) {		
+		if(getAccountCount() < 1) {		
 			Intent i = new Intent(this, AuthenticatorActivity.class);
 			startActivityForResult(i, 0);
 			
@@ -160,6 +160,10 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		super.onResume();
 		
 		init();
+		
+		if(app.getUsername() != null && getAccountCount() > 1){
+			setSubtitle(app.getUsername());
+		}
 	}
 	
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -168,7 +172,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 			Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
 			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
 		} else {
-			if(mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
+			if(getAccountCount()  > 0) {	
 				Account account = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 				
 				app.setUsername(account.name);
@@ -275,6 +279,11 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
     	
     	return null;		   
     }
+    
+    public int getAccountCount(){
+    	return mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length;
+    }
+	
 	
 	@Override
 	public void setTitle(CharSequence title){
@@ -283,6 +292,12 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		if(this.findViewById(R.id.action_bar_title) != null) {
 			((TextView)this.findViewById(R.id.action_bar_title)).setText(title);
 		}
+	}
+	
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void setSubtitle(String subtitle){
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+			getActionBar().setSubtitle(subtitle);
 	}
 	
 	// signal to derived activity that the account may have changed
@@ -294,6 +309,10 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 			finish();
 		} else if(resultCode == Activity.RESULT_OK && requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
 			app.setUsername(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));
+			
+			if(getAccountCount() > 1)
+				setSubtitle(app.getUsername());
+			
 			changeAccount();
 		}
 	}

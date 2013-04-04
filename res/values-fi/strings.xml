@@ -195,7 +195,6 @@
     	tai twiittaa @PinDroid&lt;br/&gt;&lt;br/&gt;
     	&lt;b&gt;Tunnetut ongelmat:&lt;/b&gt;
     	&lt;ul&gt;
-     		&lt;li&gt;Ainoastaan yksi Pinboard-tili on tällä hetkellä tuettu.. &lt;/li&gt;
      		&lt;li&gt;Tietyt ominaisuuksia DeliciousDroid:sta ei ole vielä siiretty rajoitusten takia Pinboards API:n, kuten yhteystietojen synkronointi, verkkokirjanmerkkilistojen katselu.. &lt;/li&gt;
     	&lt;/ul&gt;&lt;br/&gt;Lukunäkymä perustuu viewtext.org:iin
     &lt;/body&gt;

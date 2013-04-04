@@ -213,7 +213,6 @@
     	O házmelo saber por medio de Twitter @PinDroid&lt;br/&gt;&lt;br/&gt;
     	&lt;b&gt;Fallos conocidos:&lt;/b&gt;
     	&lt;ul&gt;
-     		&lt;li&gt;Solo se soporta una cuenta Pinboard. &lt;/li&gt;
      		&lt;li&gt;Ciertas características de DeliciousDroid no se han portado adecuadamente debido a las limitaciones del API de los Pinboards, incluyendo sincronización de contactos y visión de las listas de marcadores en red. &lt;/li&gt;
     	&lt;/ul&gt;&lt;br/&gt;
     	Read view powered por viewtext.org

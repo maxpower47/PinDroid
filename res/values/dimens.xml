@@ -24,12 +24,23 @@
  <resources>
  	<dimen name="widget_margin">8dp</dimen>
  	<dimen name="widget_height">80dp</dimen>
+ 	
  	<dimen name="add_switch_margin_left">0dp</dimen>
  	<dimen name="add_switch_margin_right">0dp</dimen>
+ 	
  	<dimen name="action_bar_width">265dp</dimen>
+ 	
  	<integer name="add_bookmark_note_lines">2</integer>
+ 	
  	<dimen name="bookmark_list_view_height">0dp</dimen>
+ 	
  	<dimen name="view_bookmark_padding_top">0dp</dimen>
  	<dimen name="view_bookmark_padding_left">0dp</dimen>
- 	<dimen name="view_bookmark_title_text">24sp</dimen>
+ 	<dimen name="view_bookmark_title_text">20sp</dimen>
+ 	<dimen name="view_bookmark_field_title_text">20sp</dimen>
+ 	<dimen name="view_bookmark_field_content_text">14sp</dimen>
+ 	<dimen name="view_bookmark_tag_content_text">18sp</dimen>
+ 	
+ 	<dimen name="browse_bookmark_title_text">18sp</dimen>
+ 	<dimen name="browse_bookmark_tag_text">12sp</dimen>
  </resources>
