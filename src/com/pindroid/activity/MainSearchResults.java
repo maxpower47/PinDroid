@@ -35,6 +35,7 @@ public class MainSearchResults extends FragmentBaseActivity implements MainSearc
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_search_results);
+		setTitle(R.string.main_search_results_title);
 	}
 
 	public void onBookmarkSearch() {
