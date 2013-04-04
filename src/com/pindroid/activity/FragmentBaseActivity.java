@@ -95,6 +95,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 			if(data != null) {
 				path = data.getPath();
 				tagname = data.getQueryParameter("tagname");
+				app.setUsername(data.getUserInfo());
 			}
 			
 			if(data.getScheme() == null || !data.getScheme().equals("content")){

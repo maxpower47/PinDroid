@@ -377,7 +377,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		
 		String selection = TextUtils.join(" AND ", bookmarkList);
 		
-		String[] projection = new String[] {BaseColumns._ID, Bookmark.Description, Bookmark.Url};
+		String[] projection = new String[] {BaseColumns._ID, Bookmark.Description, Bookmark.Url, Bookmark.Account};
 
 		Cursor c = getBookmarks(Bookmark.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), null, SuggestionLimit);
 		
@@ -385,12 +385,15 @@ public class BookmarkContentProvider extends ContentProvider {
 			int descColumn = c.getColumnIndex(Bookmark.Description);
 			int idColumn = c.getColumnIndex(BaseColumns._ID);
 			int urlColumn = c.getColumnIndex(Bookmark.Url);
+			int accountColumn = c.getColumnIndex(Bookmark.Account);
 			
 	    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getContext());
 	    	String defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
 
 			do {
-		    	Uri data;
+				String account = c.getString(accountColumn);
+		    	
+				Uri data;
 		    	Uri.Builder builder = new Uri.Builder();
 		    	
 		    	String action = Constants.ACTION_SEARCH_SUGGESTION_VIEW;
@@ -408,13 +411,13 @@ public class BookmarkContentProvider extends ContentProvider {
 		    	} else if(defaultAction.equals("edit")) {
 		    		action = Constants.ACTION_SEARCH_SUGGESTION_EDIT;
 		    		builder.scheme(Constants.CONTENT_SCHEME);
-		    		builder.encodedAuthority(app.getUsername() + "@" + BookmarkContentProvider.AUTHORITY);
+		    		builder.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
 		    		builder.appendEncodedPath("bookmarks");
 		    		builder.appendEncodedPath(c.getString(idColumn));
 		    		data = builder.build();
 		    	} else {
 		    		builder.scheme(Constants.CONTENT_SCHEME);
-		    		builder.encodedAuthority(app.getUsername() + "@" + BookmarkContentProvider.AUTHORITY);
+		    		builder.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
 		    		builder.appendEncodedPath("bookmarks");
 		    		builder.appendEncodedPath(c.getString(idColumn));
 		    		data = builder.build();
@@ -422,7 +425,8 @@ public class BookmarkContentProvider extends ContentProvider {
 				
 				String title = c.getString(descColumn);
 				
-				suggestions.put(title, new SearchSuggestionContent(title, 
+				
+				suggestions.put(title + "_bookmark_" + account, new SearchSuggestionContent(title, 
 					c.getString(urlColumn), c.getString(urlColumn), R.drawable.ic_main, R.drawable.ic_bookmark, 
 					data.toString(), action));
 				
@@ -461,27 +465,30 @@ public class BookmarkContentProvider extends ContentProvider {
 		
 		String selection = TextUtils.join(" AND ", tagList);
 
-		String[] projection = new String[] {BaseColumns._ID, Tag.Name, Tag.Count};
+		String[] projection = new String[] {BaseColumns._ID, Tag.Name, Tag.Count, Tag.Account};
 
 		Cursor c = getTags(Tag.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), null, SuggestionLimit);
 		
 		if(c.moveToFirst()){
 			int nameColumn = c.getColumnIndex(Tag.Name);
 			int countColumn = c.getColumnIndex(Tag.Count);
+			int accountColumn = c.getColumnIndex(Tag.Account);
 
 			do {
-				Uri.Builder data = new Uri.Builder();
-				data.scheme(Constants.CONTENT_SCHEME);
-				data.encodedAuthority(app.getUsername() + "@" + BookmarkContentProvider.AUTHORITY);
-				data.appendEncodedPath("bookmarks");
-				data.appendQueryParameter("tagname", c.getString(nameColumn));
-				
+				String account = c.getString(accountColumn);
 				int count = c.getInt(countColumn);
 				String name = c.getString(nameColumn);
 				
+				Uri.Builder data = new Uri.Builder();
+				data.scheme(Constants.CONTENT_SCHEME);
+				data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+				data.appendEncodedPath("bookmarks");
+				data.appendQueryParameter("tagname", name);
+
+				
 				String tagCount = Integer.toString(count) + " " + res.getString(R.string.bookmark_count);
 				
-				suggestions.put(name, new SearchSuggestionContent(name, 
+				suggestions.put(name + "_tag_" + account, new SearchSuggestionContent(name, 
 					tagCount,
 					R.drawable.ic_main, R.drawable.ic_tag, data.build().toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
 				
@@ -520,7 +527,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		
 		String selection = TextUtils.join(" AND ", noteList);
 
-		String[] projection = new String[] {BaseColumns._ID, Note.Title, Note.Text};
+		String[] projection = new String[] {BaseColumns._ID, Note.Title, Note.Text, Note.Account};
 
 		Cursor c = getNotes(Tag.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), null, SuggestionLimit);
 		
@@ -528,20 +535,24 @@ public class BookmarkContentProvider extends ContentProvider {
 			int titleColumn = c.getColumnIndex(Note.Title);
 			int textColumn = c.getColumnIndex(Note.Text);
 			int idColumn = c.getColumnIndex(BaseColumns._ID);
+			int accountColumn = c.getColumnIndex(Tag.Account);
 
 			do {
+				String title = c.getString(titleColumn);
+				String text = c.getString(textColumn);
+				String account = c.getString(accountColumn);
+				
 				Uri data;
 				Uri.Builder builder = new Uri.Builder();
 				builder.scheme(Constants.CONTENT_SCHEME);
-				builder.encodedAuthority(app.getUsername() + "@" + BookmarkContentProvider.AUTHORITY);
+				builder.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
 				builder.appendEncodedPath("notes");
 				builder.appendEncodedPath(c.getString(idColumn));
 	    		data = builder.build();
 				
-				String title = c.getString(titleColumn);
-				String text = c.getString(textColumn);
 				
-				suggestions.put(title, new SearchSuggestionContent(title, 
+				
+				suggestions.put(title + "_note_" + account, new SearchSuggestionContent(title, 
 					text,
 					R.drawable.ic_main, R.drawable.ic_note, data.toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
 				
