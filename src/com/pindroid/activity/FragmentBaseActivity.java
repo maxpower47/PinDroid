@@ -29,6 +29,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.net.Uri.Builder;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -148,6 +149,9 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		} else {			
 			if(getIntent().getData() != null && getIntent().getData().getUserInfo() != null){
 				app.setUsername(getIntent().getData().getUserInfo());
+				Builder b = getIntent().getData().buildUpon();
+				b.encodedAuthority(BookmarkContentProvider.AUTHORITY);
+				getIntent().setData(b.build());
 				changeAccount();
 			} else if(app.getUsername() == null || app.getUsername().equals("")){
 				requestAccount();
