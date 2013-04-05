@@ -94,12 +94,14 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 	}
 	
 	private void findExistingBookmark() {
-		try{
-			Bookmark old = BookmarkManager.GetByUrl(bookmark.getUrl(), app.getUsername(), this);
-			bookmark = old.copy();
-		} catch(ContentNotFoundException e) {
-			bookmark.clear();
-			loadBookmarkFromShareIntent();
+		if(bookmark != null) {
+			try{
+				Bookmark old = BookmarkManager.GetByUrl(bookmark.getUrl(), app.getUsername(), this);
+				bookmark = old.copy();
+			} catch(ContentNotFoundException e) {
+				bookmark.clear();
+				loadBookmarkFromShareIntent();
+			}
 		}
 	}
 	
