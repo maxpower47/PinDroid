@@ -36,8 +36,10 @@
  	
  	<dimen name="view_bookmark_padding_top">0dp</dimen>
  	<dimen name="view_bookmark_padding_left">0dp</dimen>
- 	<dimen name="view_bookmark_title_text">20sp</dimen>
- 	<dimen name="view_bookmark_field_title_text">20sp</dimen>
+ 	<dimen name="view_bookmark_padding_right">15dp</dimen>
+ 	<dimen name="view_bookmark_padding_bottom">15dp</dimen>
+ 	<dimen name="view_bookmark_title_text">18sp</dimen>
+ 	<dimen name="view_bookmark_field_title_text">16sp</dimen>
  	<dimen name="view_bookmark_field_content_text">14sp</dimen>
  	<dimen name="view_bookmark_tag_content_text">18sp</dimen>
  	

@@ -296,13 +296,13 @@ public class ViewBookmarkFragment extends Fragment {
 					if(mPrivateIcon != null){
 						if(!bookmark.getShared())
 							mPrivateIcon.setVisibility(View.VISIBLE);
-						else mPrivateIcon.setVisibility(View.INVISIBLE);
+						else mPrivateIcon.setVisibility(View.GONE);
 					}
 					
 					if(mSyncedIcon != null){
 						if(bookmark.getSynced() != 0)
 							mSyncedIcon.setVisibility(View.VISIBLE);
-						else mSyncedIcon.setVisibility(View.INVISIBLE);
+						else mSyncedIcon.setVisibility(View.GONE);
 						
 						if(bookmark.getSynced() == -1)
 							mSyncedIcon.setImageResource(R.drawable.sync_fail);
