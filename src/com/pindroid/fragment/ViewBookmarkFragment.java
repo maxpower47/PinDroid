@@ -73,7 +73,9 @@ public class ViewBookmarkFragment extends Fragment {
 	private ScrollView mBookmarkView;
 	private TextView mTitle;
 	private TextView mUrl;
+	private TextView mNotesTitle;
 	private TextView mNotes;
+	private TextView mTagsTitle;
 	private TextView mTags;
 	private TextView mTime;
 	private TextView mUsername;
@@ -109,7 +111,9 @@ public class ViewBookmarkFragment extends Fragment {
 		mBookmarkView = (ScrollView) getView().findViewById(R.id.bookmark_scroll_view);
 		mTitle = (TextView) getView().findViewById(R.id.view_bookmark_title);
 		mUrl = (TextView) getView().findViewById(R.id.view_bookmark_url);
+		mNotesTitle = (TextView) getView().findViewById(R.id.view_bookmark_notes_title);
 		mNotes = (TextView) getView().findViewById(R.id.view_bookmark_notes);
+		mTagsTitle = (TextView) getView().findViewById(R.id.view_bookmark_tags_title);
 		mTags = (TextView) getView().findViewById(R.id.view_bookmark_tags);
 		mTime = (TextView) getView().findViewById(R.id.view_bookmark_time);
 		mUsername = (TextView) getView().findViewById(R.id.view_bookmark_account);
@@ -276,19 +280,33 @@ public class ViewBookmarkFragment extends Fragment {
 				
 				mUrl.setText(bookmark.getUrl());
 				
-				if(bookmark.getNotes() != null && !bookmark.getNotes().equals("null"))
+				if(bookmark.getNotes() != null && !bookmark.getNotes().equals("null") && !bookmark.getNotes().equals("")) {
 					mNotes.setText(bookmark.getNotes());
+					mNotes.setVisibility(View.VISIBLE);
+					mNotesTitle.setVisibility(View.VISIBLE);
+				} else {
+					mNotes.setVisibility(View.GONE);
+					mNotesTitle.setVisibility(View.GONE);
+				}
 				
 				mTime.setText(d.toString());
 				
 				mTags.setMovementMethod(LinkMovementMethod.getInstance());
 				SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
 				
-	    		for(Tag t : bookmark.getTags()) {
-	    			addTag(tagBuilder, t, tagOnClickListener);
-	    		}
-	    		
-	    		mTags.setText(tagBuilder);
+				if(bookmark.getTags().size() > 0) {
+		    		for(Tag t : bookmark.getTags()) {
+		    			addTag(tagBuilder, t, tagOnClickListener);
+		    		}
+		    		
+		    		mTags.setText(tagBuilder);
+		    		
+		    		mTags.setVisibility(View.VISIBLE);
+					mTagsTitle.setVisibility(View.VISIBLE);
+				} else {
+					mTags.setVisibility(View.GONE);
+					mTagsTitle.setVisibility(View.GONE);
+				}
 				
 				if(isMyself()){
 					mUsername.setText(bookmark.getAccount());

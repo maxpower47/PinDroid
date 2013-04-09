@@ -111,7 +111,8 @@ public class BookmarkContent {
 			
 			if(mTags != null){
 				for(String s : mTags.split(" ")) {
-					result.add(new Tag(s));
+					if(!s.equals(""))
+						result.add(new Tag(s));
 				}
 			}
 			
