@@ -92,6 +92,14 @@
 					android:contentDescription="@string/alt_bookmark_view_private"
 					android:src="@drawable/padlock"
 					android:visibility="gone"/>
+				<ImageView
+					android:layout_width="16dp"
+					android:layout_height="16dp"
+					android:layout_marginLeft="5dp"
+					android:id="@+id/view_bookmark_unread"
+					android:contentDescription="@string/alt_bookmark_view_unread"
+					android:src="@drawable/unread"
+					android:visibility="gone"/>
 			</LinearLayout>
 		</LinearLayout>
 	</ScrollView>

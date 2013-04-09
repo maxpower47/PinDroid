@@ -81,6 +81,7 @@ public class ViewBookmarkFragment extends Fragment {
 	private TextView mUsername;
 	private ImageView mPrivateIcon;
 	private ImageView mSyncedIcon;
+	private ImageView mUnreadIcon;
 	private WebView mWebContent;
 	private Bookmark bookmark;
 	private BookmarkViewType viewType;
@@ -119,6 +120,7 @@ public class ViewBookmarkFragment extends Fragment {
 		mUsername = (TextView) getView().findViewById(R.id.view_bookmark_account);
 		mPrivateIcon = (ImageView) getView().findViewById(R.id.view_bookmark_private);
 		mSyncedIcon = (ImageView) getView().findViewById(R.id.view_bookmark_synced);
+		mUnreadIcon = (ImageView) getView().findViewById(R.id.view_bookmark_unread);
 		mWebContent = (WebView) getView().findViewById(R.id.web_view);
 		readSection = getView().findViewById(R.id.read_bookmark_section);
 		readTitle = (TextView) getView().findViewById(R.id.read_bookmark_title);
@@ -325,7 +327,13 @@ public class ViewBookmarkFragment extends Fragment {
 						if(bookmark.getSynced() == -1)
 							mSyncedIcon.setImageResource(R.drawable.sync_fail);
 						else mSyncedIcon.setImageResource(R.drawable.sync);
-					}	        		
+					}
+					
+					if(mUnreadIcon != null){
+						if(bookmark.getToRead())
+							mUnreadIcon.setVisibility(View.VISIBLE);
+						else mUnreadIcon.setVisibility(View.GONE);
+					}
 				} else {	
 		    		if(bookmark.getAccount() != null){
 						SpannableStringBuilder builder = new SpannableStringBuilder();

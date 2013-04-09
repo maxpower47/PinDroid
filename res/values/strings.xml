@@ -317,6 +317,7 @@
     <string name="alt_action_search_btn">Search</string>
     <string name="alt_bookmark_list_private">Private</string>
     <string name="alt_bookmark_view_private">Private</string>
+    <string name="alt_bookmark_view_unread">Unread</string>
     
     <string name="alt_widget_main">PinDroid</string>
     <string name="alt_widget_my_bookmarks">My Bookmarks</string>
