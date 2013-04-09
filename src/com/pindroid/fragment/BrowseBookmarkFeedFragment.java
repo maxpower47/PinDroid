@@ -172,9 +172,9 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
 			String query = intent.getStringExtra(SearchManager.QUERY);
 			getActivity().setTitle(getString(R.string.search_results_global_tag_title, query));
-		} else if(username.equals("recent")) {
+		} else if(feed.equals("recent")) {
 			getActivity().setTitle(getString(R.string.browse_recent_bookmarks_title));
-		} else if(username.equals("network")) {
+		} else if(feed.equals("network")) {
 			getActivity().setTitle(getString(R.string.browse_network_bookmarks_title));
 		} else {	
 			if(tagname != null && tagname != "") {
