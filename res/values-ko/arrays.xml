@@ -7,27 +7,8 @@
     <item>편집</item>
     <item>읽기</item>
   </string-array>
-  <string-array name="pref_reading_background_entries">
-    <item>밝음</item>
-    <item>어두움</item>
-  </string-array>
-  <string-array name="pref_reading_font_entries">
-    <item>Roboto (산세리프)</item>
-    <item>Alegreya (세리프)</item>
-    <item>Cousine (고정폭)</item>
-  </string-array>
-  <string-array name="pref_reading_margins_entries">
-    <item>좁음</item>
-    <item>중간</item>
-    <item>넓음</item>
-  </string-array>
   <string-array name="pref_reading_fontsize_entries">
     <item>작음</item>
-    <item>중간</item>
-    <item>넓음</item>
-  </string-array>
-  <string-array name="pref_reading_linespace_entries">
-    <item>좁음</item>
     <item>중간</item>
     <item>넓음</item>
   </string-array>

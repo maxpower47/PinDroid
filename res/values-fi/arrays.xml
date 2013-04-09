@@ -7,29 +7,10 @@
     <item>Muokkaa</item>
     <item>Lue</item>
   </string-array>
-  <string-array name="pref_reading_background_entries">
-    <item>Valkoinen</item>
-    <item>Musta</item>
-  </string-array>
-  <string-array name="pref_reading_font_entries">
-    <item>Roboto (sans)</item>
-    <item>Alegreya (serif)</item>
-    <item>Cuisine (kiinteävälinen)</item>
-  </string-array>
-  <string-array name="pref_reading_margins_entries">
-    <item>Pieni</item>
-    <item>Normaali</item>
-    <item>Suuri</item>
-  </string-array>
   <string-array name="pref_reading_fontsize_entries">
     <item>Pieni</item>
     <item>Normaali</item>
     <item>Suuri</item>
-  </string-array>
-  <string-array name="pref_reading_linespace_entries">
-    <item>Vähemmän</item>
-    <item>Normaali</item>
-    <item>Lisää</item>
   </string-array>
   <string-array name="pref_synctime_entries">
     <item>5 min</item>

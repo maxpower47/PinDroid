@@ -278,17 +278,9 @@
     <string name="pref_reading_font_key">pref_reading_font</string>
     <string name="pref_reading_font_summary">Font for read view</string>
     
-    <string name="pref_reading_margins_title">Margins</string>
-    <string name="pref_reading_margins_key">pref_reading_margins</string>
-    <string name="pref_reading_margins_summary">Side margins for read view</string>
-    
     <string name="pref_reading_fontsize_title">Font Size</string>
     <string name="pref_reading_fontsize_key">pref_reading_fontsize</string>
     <string name="pref_reading_fontsize_summary">Font size for read view</string>
-    
-    <string name="pref_reading_linespace_title">Line Spacing</string>
-    <string name="pref_reading_linespace_key">pref_reading_linespace</string>
-    <string name="pref_reading_linespace_summary">Space between lines in read view</string>
 
     
     <string name="pref_license_title">License</string>

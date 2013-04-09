@@ -76,5 +76,7 @@ public class Constants {
     public static final String MANUAL_URL = "http://code.google.com/p/pindroid/wiki/Manual";
     public static final String DONATION_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EUS2Z3WVWK6ZU";
     
+    public static final String INSTAPAPER_URL = "http://www.instapaper.com/text?u=";
+    
     public static enum BookmarkViewType {VIEW, READ, WEB, EDIT};
 }

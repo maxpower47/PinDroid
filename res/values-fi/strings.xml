@@ -155,12 +155,8 @@
   <string name="pref_reading_background_summary">Lukunäkymän taustaväri</string>
   <string name="pref_reading_font_title">Fontti</string>
   <string name="pref_reading_font_summary">Lukunäkymän fontti</string>
-  <string name="pref_reading_margins_title">Marginaalit</string>
-  <string name="pref_reading_margins_summary">Lukunäkymän sivumarginaalit</string>
   <string name="pref_reading_fontsize_title">Fonttikoko</string>
   <string name="pref_reading_fontsize_summary">Lukunäkymän fonttikoko</string>
-  <string name="pref_reading_linespace_title">Riviväli</string>
-  <string name="pref_reading_linespace_summary">Väli rivivälien välissä lukunäkymässä</string>
   <string name="pref_license_title">Lisenssi</string>
   <string name="pref_license_summary">Lisensoitu GPL v3</string>
   <string name="pref_help_title">Ohje</string>

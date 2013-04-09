@@ -155,12 +155,8 @@
   <string name="pref_reading_background_summary">읽을 때 배경색</string>
   <string name="pref_reading_font_title">글꼴</string>
   <string name="pref_reading_font_summary">읽을 때 글꼴</string>
-  <string name="pref_reading_margins_title">여백</string>
-  <string name="pref_reading_margins_summary">읽을 때 양쪽 여백</string>
   <string name="pref_reading_fontsize_title">글자 크기</string>
   <string name="pref_reading_fontsize_summary">읽을 때 글자의 크기</string>
-  <string name="pref_reading_linespace_title">줄 간격</string>
-  <string name="pref_reading_linespace_summary">읽을 때 줄 간격</string>
   <string name="pref_license_title">라이센스</string>
   <string name="pref_license_summary">GPL v3 을 따릅니다.</string>
   <string name="pref_help_title">도움말</string>

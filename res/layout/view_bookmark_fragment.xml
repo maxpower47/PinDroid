@@ -112,5 +112,4 @@
 		android:paddingLeft="10dip"
 		android:paddingTop="20dip" 
 		android:visibility="gone" />
-	<include android:id="@+id/read_bookmark_section" layout="@layout/read_view" />
 </FrameLayout>
