@@ -61,7 +61,6 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	
 	static final String STATE_LASTBOOKMARK = "lastBookmark";
 	static final String STATE_LASTVIEWTYPE = "lastViewType";
-	static final String STATE_USERNAME = "username";
 	static final String STATE_TAGNAME = "tagname";
 	static final String STATE_UNREAD = "unread";
 	static final String STATE_QUERY = "query";
@@ -122,7 +121,6 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			t.add(R.id.listcontent, bookmarkFrag);
 		} else {
 			if(savedInstanceState != null){
-				app.setUsername(savedInstanceState.getString(STATE_USERNAME));
 			    tagname = savedInstanceState.getString(STATE_TAGNAME);
 			    unread = savedInstanceState.getBoolean(STATE_UNREAD);
 			    query = savedInstanceState.getString(STATE_QUERY);
@@ -202,7 +200,6 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	    	savedInstanceState.putSerializable(STATE_LASTVIEWTYPE, lastViewType);
 		}
 		
-		savedInstanceState.putString(STATE_USERNAME, app.getUsername());
 		savedInstanceState.putString(STATE_TAGNAME, tagname);
 		savedInstanceState.putBoolean(STATE_UNREAD, unread);
 		savedInstanceState.putString(STATE_QUERY, query);
@@ -216,6 +213,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	    super.onSaveInstanceState(savedInstanceState);
 	}
 	
+	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 	    super.onRestoreInstanceState(savedInstanceState);
 	    

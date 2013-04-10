@@ -57,6 +57,8 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	
 	public PindroidApplication app;
 	
+	static final String STATE_USERNAME = "username";
+	
 	@Override
 	@TargetApi(14)
 	public void onCreate(Bundle savedInstanceState){
@@ -182,6 +184,20 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 				app.setUsername(account.name);
 			}
 		}
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {	
+		savedInstanceState.putString(STATE_USERNAME, app.getUsername());
+
+	    super.onSaveInstanceState(savedInstanceState);
+	}
+	
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+	    super.onRestoreInstanceState(savedInstanceState);
+
+	    app.setUsername(savedInstanceState.getString(STATE_USERNAME));
 	}
 	
 	public void searchHandler(View v) {
