@@ -152,7 +152,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 			if(getIntent().getData() != null && getIntent().getData().getUserInfo() != null){
 				app.setUsername(getIntent().getData().getUserInfo());
 				Builder b = getIntent().getData().buildUpon();
-				b.encodedAuthority(BookmarkContentProvider.AUTHORITY);
+				b.encodedAuthority(Constants.INTENT_URI);
 				getIntent().setData(b.build());
 				changeAccount();
 			} else if(app.getUsername() == null || app.getUsername().equals("")){
@@ -240,7 +240,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		i.putExtra("query", query);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(app.getUsername() + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority(app.getUsername() + "@" + Constants.INTENT_URI);
 		i.setData(data.build());
 		startActivity(i);
 		finish();

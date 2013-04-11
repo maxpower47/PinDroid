@@ -32,6 +32,8 @@ public class Constants {
     
     public static final Uri CONTENT_URI_BASE = Uri.parse("content://com.pindroid");
     
+    public static final String INTENT_URI = "com.pindroid.intent";
+    
     public static final String CONTENT_SCHEME = "content";
     
     public static final String EXTRA_BOOKMARK = "com.pindroid.Bookmark";

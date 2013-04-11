@@ -71,12 +71,12 @@
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/tags"/>
+        		<data android:scheme="content" android:host="com.pindroid.intent" android:path="/tags"/>
 			</intent-filter>
 			<intent-filter>
         		<action android:name="android.intent.action.PICK" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/tags"/>
+        		<data android:scheme="content" android:host="com.pindroid.intent" android:path="/tags"/>
 			</intent-filter>
 			<intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
@@ -87,12 +87,12 @@
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/bookmarks"/>
+        		<data android:scheme="content" android:host="com.pindroid.intent" android:path="/bookmarks"/>
         	</intent-filter>
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/network"/>
+        		<data android:scheme="content" android:host="com.pindroid.intent" android:path="/network"/>
         	</intent-filter>
             <intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
@@ -103,7 +103,7 @@
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/notes"/>
+        		<data android:scheme="content" android:host="com.pindroid.intent" android:path="/notes"/>
 			</intent-filter>
 			<intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
@@ -116,7 +116,7 @@
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:pathPattern="/bookmarks/.*"/>
+        		<data android:scheme="content" android:host="com.pindroid.intent" android:pathPattern="/bookmarks/.*"/>
         	</intent-filter>
         	<intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
@@ -127,7 +127,7 @@
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:pathPattern="/bookmarks/.*"/>
+        		<data android:scheme="content" android:host="com.pindroid.intent" android:pathPattern="/bookmarks/.*"/>
         	</intent-filter>
         	<intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
@@ -146,12 +146,12 @@
         	<intent-filter>
         		<action android:name="android.intent.action.EDIT" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/bookmarks/*"/>
+        		<data android:scheme="content" android:host="com.pindroid.intent" android:path="/bookmarks/*"/>
         	</intent-filter>
             <intent-filter>
         		<action android:name="android.intent.action.SEND" />
         		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.providers.BookmarkContentProvider" android:path="/bookmarks"/>
+        		<data android:scheme="content" android:host="com.pindroid.intent" android:path="/bookmarks"/>
         	</intent-filter>
         	<intent-filter>
                 <action android:name="android.intent.action.SEND" />

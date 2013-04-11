@@ -417,13 +417,13 @@ public class BookmarkContentProvider extends ContentProvider {
 		    	} else if(defaultAction.equals("edit")) {
 		    		action = Constants.ACTION_SEARCH_SUGGESTION_EDIT;
 		    		builder.scheme(Constants.CONTENT_SCHEME);
-		    		builder.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		    		builder.encodedAuthority(account + "@" + Constants.INTENT_URI);
 		    		builder.appendEncodedPath("bookmarks");
 		    		builder.appendEncodedPath(c.getString(idColumn));
 		    		data = builder.build();
 		    	} else {
 		    		builder.scheme(Constants.CONTENT_SCHEME);
-		    		builder.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		    		builder.encodedAuthority(account + "@" + Constants.INTENT_URI);
 		    		builder.appendEncodedPath("bookmarks");
 		    		builder.appendEncodedPath(c.getString(idColumn));
 		    		data = builder.build();
@@ -487,7 +487,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				
 				Uri.Builder data = new Uri.Builder();
 				data.scheme(Constants.CONTENT_SCHEME);
-				data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+				data.encodedAuthority(account + "@" + Constants.INTENT_URI);
 				data.appendEncodedPath("bookmarks");
 				data.appendQueryParameter("tagname", name);
 
@@ -551,7 +551,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				Uri data;
 				Uri.Builder builder = new Uri.Builder();
 				builder.scheme(Constants.CONTENT_SCHEME);
-				builder.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+				builder.encodedAuthority(account + "@" + Constants.INTENT_URI);
 				builder.appendEncodedPath("notes");
 				builder.appendEncodedPath(c.getString(idColumn));
 	    		data = builder.build();
