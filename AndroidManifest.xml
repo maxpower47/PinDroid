@@ -251,6 +251,7 @@
         	android:authorities="com.pindroid.providers.BookmarkContentProvider"
         	android:readPermission="com.pindroid.READ_BOOKMARKS"
         	android:writePermission="com.pindroid.WRITE_BOOKMARKS"
+        	android:exported="true"
         	android:syncable="true">
         	<path-permission android:pathPrefix="/global/search_suggest_query"
     			android:readPermission="android.permission.GLOBAL_SEARCH" />

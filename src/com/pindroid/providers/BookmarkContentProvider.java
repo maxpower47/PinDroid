@@ -79,6 +79,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	private static final int Notes = 6;
 	private static final int NoteSearchSuggest = 7;
 	private static final int GlobalSearchSuggest = 8;
+	private static final int UnreadCount = 9;
 	
 	private static final String SuggestionLimit = "10";
 	
@@ -200,6 +201,8 @@ public class BookmarkContentProvider extends ContentProvider {
 				return Tag.CONTENT_TYPE;
 			case Notes:
 				return Note.CONTENT_TYPE;
+			case UnreadCount:
+				return Bookmark.CONTENT_TYPE;
 			default:
 				throw new IllegalArgumentException("Unknown URL " + uri);
 		}
@@ -285,6 +288,9 @@ public class BookmarkContentProvider extends ContentProvider {
 			case NoteSearchSuggest:
 				String noteQuery = uri.getLastPathSegment().toLowerCase(Locale.ENGLISH);
 				return getSearchCursor(getNoteSearchSuggestions(noteQuery, true));
+			case UnreadCount:
+				SQLiteDatabase rdb = dbHelper.getReadableDatabase();
+				return rdb.rawQuery("select count(*) as Count, ACCOUNT as Account from " + BOOKMARK_TABLE_NAME + " where " + Bookmark.ToRead + "=1 group by " + Bookmark.Account, null);
 			default:
 				throw new IllegalArgumentException("Unknown Uri: " + uri);
 		}
@@ -679,6 +685,7 @@ public class BookmarkContentProvider extends ContentProvider {
         matcher.addURI(AUTHORITY, "bookmark", Bookmarks);
         matcher.addURI(AUTHORITY, "tag", Tags);
         matcher.addURI(AUTHORITY, "note", Notes);
+        matcher.addURI(AUTHORITY, "unreadcount", UnreadCount);
         matcher.addURI(AUTHORITY, "global/" + SearchManager.SUGGEST_URI_PATH_QUERY, GlobalSearchSuggest);
         matcher.addURI(AUTHORITY, "global/" + SearchManager.SUGGEST_URI_PATH_QUERY + "/*", GlobalSearchSuggest);
         matcher.addURI(AUTHORITY, "main/" + SearchManager.SUGGEST_URI_PATH_QUERY, SearchSuggest);
