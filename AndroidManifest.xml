@@ -297,5 +297,15 @@
 		</receiver>
 		<service android:name=".service.AccountService" />
 		<service android:name=".service.SaveBookmarkService" />
+		<service android:name=".dashclock.PinDroidExtension"
+            android:icon="@drawable/ic_pindroid_dashclock"
+            android:label="@string/dashclock_extension_title"
+            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA">
+            <intent-filter>
+                <action android:name="com.google.android.apps.dashclock.Extension" />
+            </intent-filter>
+            <meta-data android:name="protocolVersion" android:value="1" />
+            <meta-data android:name="description" android:value="@string/dashclock_extension_description" />
+        </service>
     </application>
 </manifest>
