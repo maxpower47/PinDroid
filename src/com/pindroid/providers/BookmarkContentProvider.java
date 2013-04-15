@@ -35,6 +35,7 @@ import com.pindroid.providers.NoteContent.Note;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.util.SyncUtils;
 
+import android.accounts.AccountManager;
 import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.ContentProvider;
@@ -294,6 +295,10 @@ public class BookmarkContentProvider extends ContentProvider {
 		}
 	}
 	
+	private int getAccountCount() {
+		return AccountManager.get(app).getAccountsByType(Constants.ACCOUNT_TYPE).length;
+	}
+	
 	private Cursor getBookmarks(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
 		return getBookmarks(uri, projection, selection, selectionArgs, sortOrder, null);
 	}
@@ -391,6 +396,8 @@ public class BookmarkContentProvider extends ContentProvider {
 			int urlColumn = c.getColumnIndex(Bookmark.Url);
 			int accountColumn = c.getColumnIndex(Bookmark.Account);
 			
+			int accountCount = getAccountCount();
+			
 	    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getContext());
 	    	String defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
 
@@ -430,7 +437,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				String line2 = c.getString(urlColumn);
 				String url = line2;
 				
-				if(!accountSpecific) {
+				if(!accountSpecific && accountCount > 1) {
 					line2 = account;
 					url = null;
 				}
@@ -482,6 +489,8 @@ public class BookmarkContentProvider extends ContentProvider {
 			int nameColumn = c.getColumnIndex(Tag.Name);
 			int countColumn = c.getColumnIndex(Tag.Count);
 			int accountColumn = c.getColumnIndex(Tag.Account);
+			
+			int accountCount = getAccountCount();
 
 			do {
 				String account = c.getString(accountColumn);
@@ -496,7 +505,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				
 				String tagCount = Integer.toString(count) + " " + res.getString(R.string.bookmark_count);
 				
-				if(!accountSpecific)
+				if(!accountSpecific && accountCount > 1)
 					tagCount = account;
 				
 				suggestions.put(name + "_tag_" + account, new SearchSuggestionContent(name, 
@@ -547,6 +556,8 @@ public class BookmarkContentProvider extends ContentProvider {
 			int textColumn = c.getColumnIndex(Note.Text);
 			int idColumn = c.getColumnIndex(BaseColumns._ID);
 			int accountColumn = c.getColumnIndex(Tag.Account);
+			
+			int accountCount = getAccountCount();
 
 			do {
 				String title = c.getString(titleColumn);
@@ -561,7 +572,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				builder.appendEncodedPath(c.getString(idColumn));
 	    		data = builder.build();
 				
-				if(!accountSpecific)
+				if(!accountSpecific && accountCount > 1)
 					text = account;
 				
 				suggestions.put(title + "_note_" + account, new SearchSuggestionContent(title, 
