@@ -21,6 +21,7 @@
 
 package com.pindroid.activity;
 
+import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.fragment.AddBookmarkFragment;
 import com.pindroid.fragment.AddBookmarkFragment.OnBookmarkSaveListener;
@@ -50,7 +51,9 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 		Intent intent = getIntent();
 		
 		if(Intent.ACTION_SEND.equals(intent.getAction()) && intent.hasExtra(Intent.EXTRA_TEXT)){
-			requestAccount();
+			
+			if(!intent.hasExtra(Constants.EXTRA_INTERNAL) || !intent.getBooleanExtra(Constants.EXTRA_INTERNAL, true))
+				requestAccount();
 			
 			bookmark = new Bookmark();
 			

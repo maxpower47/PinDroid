@@ -46,6 +46,7 @@ public class Constants {
     public static final String EXTRA_TIME = "com.pindroid.bookmark.Time";
     public static final String EXTRA_UPDATE = "com.pindroid.bookmark.Update";
     public static final String EXTRA_VIEWTYPE = "com.pindroid.bookmark.ViewType";
+    public static final String EXTRA_INTERNAL = "com.pindroid.Internal";
     
     public static final String ACTION_READLATER = "com.pindroid.action.ReadLater";
     

@@ -53,6 +53,7 @@ public class IntentHelper {
 		if(url != null)
 			addBookmark.putExtra(Intent.EXTRA_TEXT, url);
 		
+		addBookmark.putExtra(Constants.EXTRA_INTERNAL, true);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
 		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
