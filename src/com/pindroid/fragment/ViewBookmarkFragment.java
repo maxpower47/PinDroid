@@ -21,25 +21,15 @@
 
 package com.pindroid.fragment;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -60,10 +50,8 @@ import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
-import com.pindroid.client.NetworkUtilities;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.ArticleContent.Article;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.TagContent.Tag;
@@ -73,7 +61,6 @@ import com.pindroid.util.SettingsHelper;
 
 public class ViewBookmarkFragment extends Fragment {
 	
-	private View container;
 	private ScrollView mBookmarkView;
 	private TextView mTitle;
 	private TextView mUrl;
@@ -109,7 +96,6 @@ public class ViewBookmarkFragment extends Fragment {
 	        viewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_VIEWTYPE);
 	    } 
 		
-		container = (View) getView().findViewById(R.id.view_bookmark_container);
 		mBookmarkView = (ScrollView) getView().findViewById(R.id.bookmark_scroll_view);
 		mTitle = (TextView) getView().findViewById(R.id.view_bookmark_title);
 		mUrl = (TextView) getView().findViewById(R.id.view_bookmark_url);

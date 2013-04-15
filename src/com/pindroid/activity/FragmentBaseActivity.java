@@ -47,7 +47,6 @@ import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.application.PindroidApplication;
 import com.pindroid.authenticator.AuthenticatorActivity;
-import com.pindroid.providers.BookmarkContentProvider;
 
 public abstract class FragmentBaseActivity extends FragmentActivity {
 	

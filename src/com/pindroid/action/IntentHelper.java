@@ -12,7 +12,6 @@ import com.pindroid.activity.ViewBookmark;
 import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.NoteContent.Note;
 
 import android.app.SearchManager;
