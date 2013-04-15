@@ -52,6 +52,7 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 		
 		if(Intent.ACTION_SEND.equals(intent.getAction()) && intent.hasExtra(Intent.EXTRA_TEXT)){
 			
+			// we don't need to ask for an account if the intent was generated internally
 			if(!intent.hasExtra(Constants.EXTRA_INTERNAL) || !intent.getBooleanExtra(Constants.EXTRA_INTERNAL, true))
 				requestAccount();
 			

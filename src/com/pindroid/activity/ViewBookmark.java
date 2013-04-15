@@ -81,6 +81,11 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 			if(type == null)
 				type = BookmarkViewType.VIEW;
 			
+			// used for search suggestions, since we can't put the serializable extra in the string uri
+			// provided by the content provider
+			if(data.getQueryParameter(Constants.EXTRA_READVIEW) != null && data.getQueryParameter(Constants.EXTRA_READVIEW).equals("1"))
+				type = BookmarkViewType.READ;
+			
 			ViewBookmarkFragment frag = (ViewBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.view_bookmark_fragment);
 	        frag.setBookmark(bookmark, type);
 		}

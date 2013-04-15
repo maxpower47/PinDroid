@@ -21,8 +21,6 @@
 
 package com.pindroid.providers;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
@@ -37,6 +35,7 @@ import com.pindroid.providers.NoteContent.Note;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.util.SyncUtils;
 
+import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -52,6 +51,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
@@ -59,8 +59,6 @@ import android.util.Log;
 
 public class BookmarkContentProvider extends ContentProvider {
 	
-	//private AccountManager mAccountManager = null;
-	//private Account mAccount = null;
 	private static PindroidApplication app;
 	
 	private SQLiteDatabase db;
@@ -407,13 +405,12 @@ public class BookmarkContentProvider extends ContentProvider {
 		    	if(defaultAction.equals("browser")) {
 		    		data = Uri.parse(c.getString(urlColumn));
 		    	} else if(defaultAction.equals("read")){
-		        	String readUrl = "";
-					try {
-						readUrl = Constants.TEXT_EXTRACTOR_URL + URLEncoder.encode(c.getString(urlColumn), "UTF-8");
-					} catch (UnsupportedEncodingException e) {
-						e.printStackTrace();
-					}
-		        	data = Uri.parse(readUrl);
+		    		builder.scheme(Constants.CONTENT_SCHEME);
+		    		builder.encodedAuthority(account + "@" + Constants.INTENT_URI);
+		    		builder.appendEncodedPath("bookmarks");
+		    		builder.appendEncodedPath(c.getString(idColumn));
+		    		builder.appendQueryParameter(Constants.EXTRA_READVIEW, "1");
+		    		data = builder.build();
 		    	} else if(defaultAction.equals("edit")) {
 		    		action = Constants.ACTION_SEARCH_SUGGESTION_EDIT;
 		    		builder.scheme(Constants.CONTENT_SCHEME);
@@ -569,6 +566,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		return suggestions;
 	}
 	
+	@TargetApi(Build.VERSION_CODES.FROYO)
 	private Cursor getSearchCursor(Map<String, SearchSuggestionContent> list) {
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getContext());
     	Boolean icons = settings.getBoolean("pref_searchicons", true);
