@@ -427,10 +427,16 @@ public class BookmarkContentProvider extends ContentProvider {
 		    	}
 				
 				String title = c.getString(descColumn);
+				String line2 = c.getString(urlColumn);
+				String url = line2;
 				
+				if(!accountSpecific) {
+					line2 = account;
+					url = null;
+				}
 				
 				suggestions.put(title + "_bookmark_" + account, new SearchSuggestionContent(title, 
-					c.getString(urlColumn), c.getString(urlColumn), R.drawable.ic_main, R.drawable.ic_bookmark, 
+					line2, url, R.drawable.ic_main, R.drawable.ic_bookmark, 
 					data.toString(), action));
 				
 			} while(c.moveToNext());	
@@ -487,9 +493,11 @@ public class BookmarkContentProvider extends ContentProvider {
 				data.encodedAuthority(account + "@" + Constants.INTENT_URI);
 				data.appendEncodedPath("bookmarks");
 				data.appendQueryParameter("tagname", name);
-
 				
 				String tagCount = Integer.toString(count) + " " + res.getString(R.string.bookmark_count);
+				
+				if(!accountSpecific)
+					tagCount = account;
 				
 				suggestions.put(name + "_tag_" + account, new SearchSuggestionContent(name, 
 					tagCount,
@@ -553,7 +561,8 @@ public class BookmarkContentProvider extends ContentProvider {
 				builder.appendEncodedPath(c.getString(idColumn));
 	    		data = builder.build();
 				
-				
+				if(!accountSpecific)
+					text = account;
 				
 				suggestions.put(title + "_note_" + account, new SearchSuggestionContent(title, 
 					text,
