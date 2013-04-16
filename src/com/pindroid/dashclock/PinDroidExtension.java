@@ -71,7 +71,7 @@ public class PinDroidExtension extends DashClockExtension {
                 .visible(visible && total > 0)
                 .icon(R.drawable.ic_pindroid_dashclock)
                 .status(getString(R.string.dashclock_update_status, total))
-                .expandedTitle(getString(R.string.dashclock_update_status, total))
+                .expandedTitle(getString(R.string.dashclock_update_expanded_title, total))
                 .expandedBody(accounts > 1 ? body : null)
                 .clickIntent(ViewBookmarks()));
     }

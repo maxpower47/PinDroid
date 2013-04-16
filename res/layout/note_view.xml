@@ -34,5 +34,6 @@
 	    android:paddingTop="3dp"
 	    android:paddingBottom="5dp"
 	    android:layout_weight="1"
-	    android:textSize="26sp"/>
+	    android:textSize="26sp"
+	    android:textIsSelectable="false" />
 </LinearLayout>

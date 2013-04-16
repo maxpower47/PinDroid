@@ -73,7 +73,8 @@
 					android:scaleType="center"
 					android:textStyle="bold"
 					android:textColor="#FFFFFF"
-					android:gravity="center" />
+					android:gravity="center"
+					android:textIsSelectable="false"  />
 			</FrameLayout>
 	    </RelativeLayout>
 	   	<ImageButton

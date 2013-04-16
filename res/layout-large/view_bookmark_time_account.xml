@@ -39,10 +39,12 @@
     <TableRow>
         <TextView
 			android:id="@+id/view_bookmark_time"
-			style="@style/ViewBookmarkFieldContent" />
+			style="@style/ViewBookmarkFieldContent"
+			android:textIsSelectable="false"  />
        	<TextView
 			android:id="@+id/view_bookmark_account"
 			android:layout_marginLeft="30dp"
-			style="@style/ViewBookmarkFieldContent" />
+			style="@style/ViewBookmarkFieldContent"
+			android:textIsSelectable="false"  />
     </TableRow>
 </TableLayout>

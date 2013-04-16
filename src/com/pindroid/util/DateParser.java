@@ -21,17 +21,19 @@
 
 package com.pindroid.util;
 
+import android.annotation.SuppressLint;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+@SuppressLint("SimpleDateFormat")
 public class DateParser {
 	
 	public static final TimeZone tz = TimeZone.getTimeZone("GMT");
 	public static final Calendar c = Calendar.getInstance(tz);
 	
-    public static Date parse( String input ) throws java.text.ParseException {
+	public static Date parse( String input ) throws java.text.ParseException {
 
         //NOTE: SimpleDateFormat uses GMT[-+]hh:mm for the TZ which breaks
         //things a bit.  Before we go on we have to repair this.
@@ -63,21 +65,5 @@ public class DateParser {
         		IntUtils.parseUInt(input.substring(17, 19)));
 
         return c.getTimeInMillis();  
-    }
-    
-    public static String toString( Date date ) {
-        
-        SimpleDateFormat df = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ssz" );
-        
-        TimeZone tz = TimeZone.getTimeZone( "UTC" );
-        
-        df.setTimeZone( tz );
-
-        String output = df.format( date );
-
-        output = output.replaceAll( "UTC", "Z" );
-        
-        return output;
-        
     }
 }

@@ -31,7 +31,8 @@
 		android:text="@string/view_bookmark_time_title"/>
 	<TextView
 		android:id="@+id/view_bookmark_time"
-		style="@style/ViewBookmarkFieldContent" />
+		style="@style/ViewBookmarkFieldContent"
+		android:textIsSelectable="false"  />
 	<TextView
 		android:id="@+id/view_bookmark_account_title"
 		style="@style/ViewBookmarkFieldTitle"
@@ -39,5 +40,6 @@
 		android:text="@string/view_bookmark_account_title"/>
 	<TextView
 		android:id="@+id/view_bookmark_account"
-		style="@style/ViewBookmarkFieldContent" />
+		style="@style/ViewBookmarkFieldContent"
+		android:textIsSelectable="false"  />
 </LinearLayout>
