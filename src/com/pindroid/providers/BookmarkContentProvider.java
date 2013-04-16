@@ -79,6 +79,9 @@ public class BookmarkContentProvider extends ContentProvider {
 	private static final int NoteSearchSuggest = 7;
 	private static final int GlobalSearchSuggest = 8;
 	private static final int UnreadCount = 9;
+	private static final int NoteId = 10;
+	private static final int BookmarkId = 11;
+	
 	
 	private static final String SuggestionLimit = "10";
 	
@@ -193,17 +196,19 @@ public class BookmarkContentProvider extends ContentProvider {
 	public String getType(Uri uri) {
 		switch(sURIMatcher.match(uri)){
 			case Bookmarks:
+			case BookmarkId:
 				return Bookmark.CONTENT_TYPE;
 			case SearchSuggest:
 				return SearchManager.SUGGEST_MIME_TYPE;
 			case Tags:
 				return Tag.CONTENT_TYPE;
+			case NoteId:
 			case Notes:
 				return Note.CONTENT_TYPE;
 			case UnreadCount:
 				return Bookmark.CONTENT_TYPE;
 			default:
-				throw new IllegalArgumentException("Unknown URL " + uri);
+				throw new IllegalArgumentException("Unknown Uri " + uri);
 		}
 	}
 
@@ -265,9 +270,13 @@ public class BookmarkContentProvider extends ContentProvider {
 
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
+		Log.d("BookmarkContentProvider Query", uri.toString());
+		
 		switch(sURIMatcher.match(uri)) {
 			case Bookmarks:
 				return getBookmarks(uri, projection, selection, selectionArgs, sortOrder);
+			case BookmarkId:
+				return getBookmark(uri, projection, selection, selectionArgs, sortOrder);
 			case GlobalSearchSuggest:
 				String globalQquery = uri.getLastPathSegment().toLowerCase(Locale.ENGLISH);
 				return getSearchSuggestions(globalQquery, false);
@@ -284,6 +293,8 @@ public class BookmarkContentProvider extends ContentProvider {
 				return getSearchCursor(getBookmarkSearchSuggestions(bookmarkQuery, true));
 			case Notes:
 				return getNotes(uri, projection, selection, selectionArgs, sortOrder);
+			case NoteId:
+				return getNote(uri, projection, selection, selectionArgs, sortOrder);
 			case NoteSearchSuggest:
 				String noteQuery = uri.getLastPathSegment().toLowerCase(Locale.ENGLISH);
 				return getSearchCursor(getNoteSearchSuggestions(noteQuery, true));
@@ -297,6 +308,16 @@ public class BookmarkContentProvider extends ContentProvider {
 	
 	private int getAccountCount() {
 		return AccountManager.get(app).getAccountsByType(Constants.ACCOUNT_TYPE).length;
+	}
+	
+	private Cursor getBookmark(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
+		qb.setTables(BOOKMARK_TABLE_NAME);
+		qb.appendWhere(Bookmark._ID + "=" + uri.getPathSegments().get(Bookmark.BOOKMARK_ID_PATH_POSITION));
+		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder, null);
+		c.setNotificationUri(getContext().getContentResolver(), uri);
+		return c;
 	}
 	
 	private Cursor getBookmarks(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
@@ -321,6 +342,16 @@ public class BookmarkContentProvider extends ContentProvider {
 		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
 		qb.setTables(TAG_TABLE_NAME);
 		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder, limit);
+		c.setNotificationUri(getContext().getContentResolver(), uri);
+		return c;
+	}
+	
+	private Cursor getNote(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		SQLiteDatabase rdb = dbHelper.getReadableDatabase();
+		qb.setTables(NOTE_TABLE_NAME);
+		qb.appendWhere(Note._ID + "=" + uri.getPathSegments().get(Note.NOTE_ID_PATH_POSITION));
+		Cursor c = qb.query(rdb, projection, selection, selectionArgs, null, null, sortOrder, null);
 		c.setNotificationUri(getContext().getContentResolver(), uri);
 		return c;
 	}
@@ -701,8 +732,10 @@ public class BookmarkContentProvider extends ContentProvider {
     private static UriMatcher buildUriMatcher() {
         UriMatcher matcher =  new UriMatcher(UriMatcher.NO_MATCH);
         matcher.addURI(AUTHORITY, "bookmark", Bookmarks);
+        matcher.addURI(AUTHORITY, "bookmark/#", BookmarkId);
         matcher.addURI(AUTHORITY, "tag", Tags);
         matcher.addURI(AUTHORITY, "note", Notes);
+        matcher.addURI(AUTHORITY, "note/#", NoteId);
         matcher.addURI(AUTHORITY, "unreadcount", UnreadCount);
         matcher.addURI(AUTHORITY, "global/" + SearchManager.SUGGEST_URI_PATH_QUERY, GlobalSearchSuggest);
         matcher.addURI(AUTHORITY, "global/" + SearchManager.SUGGEST_URI_PATH_QUERY + "/*", GlobalSearchSuggest);

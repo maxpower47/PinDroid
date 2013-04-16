@@ -26,9 +26,11 @@ import java.util.ArrayList;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.NoteContent.Note;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.BaseColumns;
 import android.support.v4.content.CursorLoader;
 import android.text.TextUtils;
@@ -45,10 +47,10 @@ public class NoteManager {
 	
 	public static Note GetById(int id, Context context) throws ContentNotFoundException {		
 		final String[] projection = new String[] {Note.Account, Note.Title, Note.Text, Note.Pid, Note.Hash, Note.Added, Note.Updated};
-		String selection = BaseColumns._ID + "=?";
-		final String[] selectionargs = new String[]{Integer.toString(id)};
 		
-		Cursor c = context.getContentResolver().query(Note.CONTENT_URI, projection, selection, selectionargs, null);				
+		Uri uri = ContentUris.appendId(Note.CONTENT_URI.buildUpon(), id).build();
+		
+		Cursor c = context.getContentResolver().query(uri, projection, null, null, null);				
 		
 		if(c.moveToFirst()){
 			final int accountColumn = c.getColumnIndex(Note.Account);

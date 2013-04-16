@@ -38,6 +38,8 @@ public class BookmarkContent {
 		
 		public static final  String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.pindroid.bookmarks";
 		
+		public static final int BOOKMARK_ID_PATH_POSITION = 1;
+		
 		public static final String Account = "ACCOUNT";
 		public static final String Description = "DESCRIPTION";
 		public static final String Url = "URL";

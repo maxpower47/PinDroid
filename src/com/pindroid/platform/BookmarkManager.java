@@ -27,6 +27,7 @@ import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.util.Md5Hash;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -148,11 +149,11 @@ public class BookmarkManager {
 	
 	public static Bookmark GetById(int id, Context context) throws ContentNotFoundException {		
 		final String[] projection = new String[] {Bookmark.Account, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Time, Bookmark.Tags, Bookmark.Hash, Bookmark.Meta, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced, Bookmark.Deleted};
-		String selection = BaseColumns._ID + "=?";
-		final String[] selectionargs = new String[]{Integer.toString(id)};
-		selection += " AND " + Bookmark.Deleted + "=0";
+		String selection = Bookmark.Deleted + "=0";
 		
-		Cursor c = context.getContentResolver().query(Bookmark.CONTENT_URI, projection, selection, selectionargs, null);				
+		Uri uri = ContentUris.appendId(Bookmark.CONTENT_URI.buildUpon(), id).build();
+			
+		Cursor c = context.getContentResolver().query(uri, projection, selection, null, null);				
 		
 		if(c.moveToFirst()){
 			final int accountColumn = c.getColumnIndex(Bookmark.Account);
