@@ -72,7 +72,7 @@
         <item>3 hours</item>
         <item>6 hours</item>
         <item>12 hours</item>
-        <item>24 hours</item>
+        <item>Automatic</item>
     </string-array>
     <string-array name="pref_synctime_values">
         <item>5</item>
