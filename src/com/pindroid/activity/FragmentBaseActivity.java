@@ -66,8 +66,6 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		app = (PindroidApplication)getApplicationContext();
 		
 		mAccountManager = AccountManager.get(this);
-
-		//init();
 		
 		if(android.os.Build.VERSION.SDK_INT >= 14) {
 			if(getActionBar() != null) {
@@ -273,7 +271,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 				startActivity(prefs);
 		        return true;
 		    case R.id.menu_choose_account:
-				Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, true, null, null, null, null);
+				Intent i = AccountManager.newChooseAccountIntent(getAccount(), null, new String[]{Constants.ACCOUNT_TYPE}, true, null, null, null, null);
 				startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
 		    	return true;
 		    default:
