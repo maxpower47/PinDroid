@@ -196,7 +196,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(bookmarkFrag instanceof BrowseBookmarkFeedFragment && isTwoPane()) {
+		if(bookmarkFrag != null && bookmarkFrag instanceof BrowseBookmarkFeedFragment && isTwoPane()) {
 		    switch (item.getItemId()) {
 			    case R.id.menu_addbookmark:
 			    	startActivity(IntentHelper.AddBookmark(lastSelected.getUrl(), null, this));
