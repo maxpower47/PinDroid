@@ -62,4 +62,8 @@ public class SettingsHelper {
     public static String getReadingLineSpace(Context context) {
     	return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_reading_linespace", "5");
     }
+    
+    public static boolean getUseBrowser(Context context) {
+    	return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("pref_usebrowser", false);
+    }
 }

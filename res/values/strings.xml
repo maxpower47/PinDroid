@@ -233,6 +233,14 @@
     <string name="pref_view_bookmark_default_action_key">pref_view_bookmark_default_action</string>
     <string name="pref_view_bookmark_default_action_summary">Default action for bookmarks.</string>
     
+    <string name="pref_usebrowser_title">Open Links in Browser</string>
+    <string name="pref_usebrowser_key">pref_usebrowser</string>
+    <string name="pref_usebrowser_summary">Always open web links in browser app.</string>
+    <string name="pref_usebrowser_summary_off">Use internal browser when possible.</string>
+    <string name="pref_usebrowser_summary_on">Always open web links in browser app.</string>
+    <string name="pref_usebrowser_switch_off">No</string>
+    <string name="pref_usebrowser_switch_on">Yes</string>
+    
     <string name="pref_searchicons_title">Display Search Icons</string>
     <string name="pref_searchicons_key">pref_searchicons</string>
     <string name="pref_searchicons_summary">Display icons in search suggestions.</string>

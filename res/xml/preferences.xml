@@ -32,6 +32,11 @@
 			android:entryValues="@array/pref_view_bookmark_default_action_values"
 			android:defaultValue="browser" />
 		<CheckBoxPreference 
+			android:title="@string/pref_usebrowser_title"
+			android:defaultValue="true"
+			android:summary="@string/pref_usebrowser_summary"
+			android:key="@string/pref_usebrowser_key" />
+		<CheckBoxPreference 
 			android:title="@string/pref_searchicons_title"
 			android:defaultValue="true"
 			android:summary="@string/pref_searchicons_summary"

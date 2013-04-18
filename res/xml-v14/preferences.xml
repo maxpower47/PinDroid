@@ -32,6 +32,14 @@
 			android:entryValues="@array/pref_view_bookmark_default_action_values"
 			android:defaultValue="browser" />
 		<SwitchPreference 
+			android:title="@string/pref_usebrowser_title"
+			android:defaultValue="false"
+			android:switchTextOff="@string/pref_usebrowser_switch_off"
+			android:switchTextOn="@string/pref_usebrowser_switch_on"
+			android:summaryOff="@string/pref_usebrowser_summary_off"
+			android:summaryOn="@string/pref_usebrowser_summary_on"
+			android:key="@string/pref_usebrowser_key" />
+		<SwitchPreference 
 			android:title="@string/pref_searchicons_title"
 			android:defaultValue="true"
 			android:switchTextOff="@string/pref_searchicons_switch_off"

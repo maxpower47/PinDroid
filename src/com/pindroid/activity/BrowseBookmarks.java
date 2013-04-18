@@ -47,6 +47,7 @@ import com.pindroid.fragment.ViewBookmarkFragment;
 import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.util.SettingsHelper;
 import com.pindroid.fragment.BookmarkBrowser;
 
 public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkSelectedListener, 
@@ -288,7 +289,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 
 	public void onBookmarkOpen(Bookmark b) {
 		if(b != null){
-			if(isTwoPane()) {
+			if(isTwoPane() && !SettingsHelper.getUseBrowser(this)) {
 				lastSelected = b;
 				lastViewType = BookmarkViewType.WEB;
 				setBookmarkView(b, BookmarkViewType.WEB);
