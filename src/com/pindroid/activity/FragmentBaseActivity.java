@@ -173,6 +173,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	protected void requestAccount() {
 		if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
 			Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
 		} else {
 			if(getAccountCount()  > 0) {	
@@ -272,6 +273,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		        return true;
 		    case R.id.menu_choose_account:
 				Intent i = AccountManager.newChooseAccountIntent(getAccount(), null, new String[]{Constants.ACCOUNT_TYPE}, true, null, null, null, null);
+				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
 		    	return true;
 		    default:
