@@ -217,9 +217,9 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		boolean result = false;
 		
 	    switch (item.getItemId()) {
-	    case R.id.menu_addbookmark:
-			addBookmark(lastSelected);
-			return true;
+		    case R.id.menu_addbookmark:
+				addBookmark(lastSelected);
+				return true;
 	    }
 	    
 	    if(result) {

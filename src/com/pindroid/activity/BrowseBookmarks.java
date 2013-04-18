@@ -30,6 +30,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.pindroid.Constants.BookmarkViewType;
@@ -194,6 +195,19 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	}
 	
 	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if(bookmarkFrag instanceof BrowseBookmarkFeedFragment && isTwoPane()) {
+		    switch (item.getItemId()) {
+			    case R.id.menu_addbookmark:
+			    	startActivity(IntentHelper.AddBookmark(lastSelected.getUrl(), null, this));
+			    	return true;
+			    default:
+			        return super.onOptionsItemSelected(item);
+		    }
+		} else return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		if(lastSelected != null && lastViewType != null){
 			savedInstanceState.putParcelable(STATE_LASTBOOKMARK, lastSelected);
@@ -311,7 +325,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 				lastViewType = BookmarkViewType.EDIT;
 				
 				AddBookmarkFragment addFrag = (AddBookmarkFragment) getSupportFragmentManager().findFragmentById(R.id.addcontent);
-				addFrag.loadBookmark(b, null);
+				addFrag.loadBookmark(b, b);
 				addFrag.setUsername(app.getUsername());
 				addFrag.refreshView();
 				FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
