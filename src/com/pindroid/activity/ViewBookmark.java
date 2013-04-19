@@ -167,6 +167,7 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 
 	public void onBookmarkDelete(Bookmark b) {
 		BookmarkManager.LazyDelete(b, app.getUsername(), this);
+		finish();
 	}
 	
 	@Override
