@@ -316,7 +316,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setSubtitle(String subtitle){
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && getActionBar() != null)
 			getActionBar().setSubtitle(subtitle);
 	}
 	

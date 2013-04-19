@@ -31,6 +31,7 @@ import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
 import android.widget.Toast;
@@ -43,6 +44,17 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
+		if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+			requestAccount();
+		} else saveBookmark();
+	}
+	
+	@Override
+	protected void changeAccount(){
+		saveBookmark();
+	}
+	
+	private void saveBookmark(){
 		if(app.getUsername() != null){
 			Intent intent = getIntent();
 	
@@ -80,9 +92,6 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 		} else {
 			Toast.makeText(this, R.string.login_no_account, Toast.LENGTH_SHORT).show();
 			finish();
-		}
+		}	
 	}
-	
-	@Override
-	protected void changeAccount(){}
 }
