@@ -26,7 +26,8 @@ import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.MainFragment;
 
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 public class Main extends FragmentBaseActivity implements MainFragment.OnMainActionListener {
 
@@ -37,34 +38,43 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	}
 
 	public void onMyBookmarksSelected() {
-		startActivity(IntentHelper.ViewBookmarks("", mAccount.name, this));	
+		startActivity(IntentHelper.ViewBookmarks("", null, null, this));	
 	}
 
 	public void onMyUnreadSelected() {
-		startActivity(IntentHelper.ViewUnread(mAccount.name, this));
+		startActivity(IntentHelper.ViewUnread(null, this));
 	}
 
 	public void onMyTagsSelected() {
-		DisplayMetrics outMetrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
-		
-
 		if(getResources().getBoolean(R.bool.has_two_panes)){
-			startActivity(IntentHelper.ViewTabletTags(mAccount.name, this));
+			startActivity(IntentHelper.ViewTabletTags(null, this));
 		} else {
-			startActivity(IntentHelper.ViewTags(mAccount.name, this));
+			startActivity(IntentHelper.ViewTags(null, this));
 		}	
 	}
 	
 	public void onMyNotesSelected() {
-		startActivity(IntentHelper.ViewNotes("", mAccount.name, this));	
+		startActivity(IntentHelper.ViewNotes(null, this));	
 	}
 
 	public void onMyNetworkSelected() {
-		startActivity(IntentHelper.ViewBookmarks("", "network", this));	
+		startActivity(IntentHelper.ViewBookmarks("", null, "network", this));	
 	}
 
 	public void onRecentSelected() {
-		startActivity(IntentHelper.ViewBookmarks("", "recent", this));	
+		startActivity(IntentHelper.ViewBookmarks("", null, "recent", this));	
+	}
+	
+	@Override
+	protected void changeAccount(){}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_menu, menu);
+
+	    setupSearch(menu);
+	    return true;
 	}
 }

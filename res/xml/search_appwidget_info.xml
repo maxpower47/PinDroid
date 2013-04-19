@@ -26,5 +26,6 @@
     android:minHeight="64dp"
     android:updatePeriodMillis="1800000"
     android:previewImage="@drawable/search_widget_preview"
+    android:configure="com.pindroid.activity.LargeWidgetConfigure"
     android:initialLayout="@layout/search_appwidget" >
 </appwidget-provider>

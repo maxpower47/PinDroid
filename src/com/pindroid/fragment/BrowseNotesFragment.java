@@ -99,6 +99,12 @@ public class BrowseNotesFragment extends ListFragment
 		this.query = query;
 	}
 	
+	public void refresh(){
+		try{
+			getLoaderManager().restartLoader(0, null, this);
+		} catch(Exception e){}
+	}
+	
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		if(username != null && !username.equals("")) {
 			if(query != null) {

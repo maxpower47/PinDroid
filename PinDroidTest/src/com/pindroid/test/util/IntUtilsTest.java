@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
 /*
  * PinDroid - http://code.google.com/p/PinDroid/
  *
@@ -20,15 +18,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
- -->
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="vertical"
-	style="@style/TabletLandFrame">
-	<fragment class="com.pindroid.fragment.BrowseTagsFragment"
-		android:id="@+id/listcontent"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent" >
-	</fragment>
-</LinearLayout>
+
+package com.pindroid.test.util;
+
+import com.pindroid.util.IntUtils;
+
+import android.test.AndroidTestCase;
+
+public class IntUtilsTest extends AndroidTestCase  {
+
+	public IntUtilsTest(){
+		super();
+	}
+	
+	public void testIntParsing(){
+		assertEquals(1, IntUtils.parseUInt("1"));
+		assertEquals(1, IntUtils.parseUInt("01"));
+		assertEquals(2165, IntUtils.parseUInt("2165"));
+	}
+}

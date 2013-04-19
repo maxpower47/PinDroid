@@ -27,6 +27,7 @@ import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.util.Md5Hash;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -39,7 +40,8 @@ public class BookmarkManager {
 	
 	public static CursorLoader GetBookmarks(String username, String tagname, boolean unread, String sortorder, Context context){
 		final String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, 
-				Bookmark.Meta, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced, Bookmark.Deleted};
+				Bookmark.Meta, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced, Bookmark.Deleted,
+				Bookmark.Account, Bookmark.Time};
 		String selection = null;
 		String[] selectionargs = new String[]{username, "% " + tagname + " %", 
 				"% " + tagname, tagname + " %", tagname};
@@ -147,11 +149,11 @@ public class BookmarkManager {
 	
 	public static Bookmark GetById(int id, Context context) throws ContentNotFoundException {		
 		final String[] projection = new String[] {Bookmark.Account, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Time, Bookmark.Tags, Bookmark.Hash, Bookmark.Meta, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced, Bookmark.Deleted};
-		String selection = BaseColumns._ID + "=?";
-		final String[] selectionargs = new String[]{Integer.toString(id)};
-		selection += " AND " + Bookmark.Deleted + "=0";
+		String selection = Bookmark.Deleted + "=0";
 		
-		Cursor c = context.getContentResolver().query(Bookmark.CONTENT_URI, projection, selection, selectionargs, null);				
+		Uri uri = ContentUris.appendId(Bookmark.CONTENT_URI.buildUpon(), id).build();
+			
+		Cursor c = context.getContentResolver().query(uri, projection, selection, null, null);				
 		
 		if(c.moveToFirst()){
 			final int accountColumn = c.getColumnIndex(Bookmark.Account);
@@ -185,11 +187,10 @@ public class BookmarkManager {
 		}
 	}
 	
-	public static Bookmark GetByUrl(String url, Context context) throws ContentNotFoundException {		
+	public static Bookmark GetByUrl(String url, String username, Context context) throws ContentNotFoundException {		
 		final String[] projection = new String[] {Bookmark._ID, Bookmark.Account, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Time, Bookmark.Tags, Bookmark.Hash, Bookmark.Meta, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced, Bookmark.Deleted};
-		String selection = Bookmark.Url + "=?";
-		final String[] selectionargs = new String[]{ url };
-		selection += " AND " + Bookmark.Deleted + "=0";
+		String selection = Bookmark.Url + "=? AND " + Bookmark.Account + "=? AND " + Bookmark.Deleted + "=0";
+		final String[] selectionargs = new String[]{ url, username };
 		
 		Cursor c = context.getContentResolver().query(Bookmark.CONTENT_URI, projection, selection, selectionargs, null);				
 		
@@ -437,7 +438,10 @@ public class BookmarkManager {
 		return new CursorLoader(context, Bookmark.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), sortorder);
 	}
 	
-	public static int GetUnreadCount(String username, Context context){		
+	public static int GetUnreadCount(String username, Context context){
+		if(username == null || username.equals(""))
+			return 0;
+		
 		final String[] projection = new String[] {Bookmark._ID};
 		final String selection = Bookmark.Account + "=? AND " + Bookmark.ToRead + "=1";
 		final String[] selectionargs = new String[]{username};

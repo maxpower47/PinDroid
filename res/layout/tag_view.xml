@@ -36,7 +36,8 @@
 	    android:paddingBottom="5dp"
 	    android:paddingRight="5dp"
 	    android:layout_weight="1"
-	    android:textSize="26sp"/>
+	    android:textSize="26sp"
+	    android:textIsSelectable="false" />
 	<TextView
 	    android:id="@+id/tag_count"
 	    android:layout_height="fill_parent"
@@ -44,5 +45,6 @@
 	    android:layout_weight="0"
 	    android:textSize="24sp"
 	    android:paddingTop="6dp"
-	    android:paddingRight="15dp"/>
+	    android:paddingRight="15dp"
+	    android:textIsSelectable="false" />
 </LinearLayout>

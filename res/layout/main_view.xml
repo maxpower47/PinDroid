@@ -27,4 +27,5 @@
 	android:layout_width="fill_parent"
 	android:scrollHorizontally="true"
 	android:textSize="28sp"
-	android:padding="10dip"/>
+	android:padding="10dip"
+	android:textIsSelectable="false" />

@@ -7,11 +7,11 @@ import com.pindroid.activity.AddBookmark;
 import com.pindroid.activity.BrowseBookmarks;
 import com.pindroid.activity.BrowseNotes;
 import com.pindroid.activity.BrowseTags;
+import com.pindroid.activity.Main;
 import com.pindroid.activity.ViewBookmark;
 import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.NoteContent.Note;
 
 import android.app.SearchManager;
@@ -53,9 +53,10 @@ public class IntentHelper {
 		if(url != null)
 			addBookmark.putExtra(Intent.EXTRA_TEXT, url);
 		
+		addBookmark.putExtra(Constants.EXTRA_INTERNAL, true);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
 		data.appendEncodedPath("bookmarks");
 		addBookmark.setData(data.build());
 		
@@ -66,23 +67,14 @@ public class IntentHelper {
 		Intent viewBookmark = new Intent(context, ViewBookmark.class);
 		viewBookmark.setAction(Intent.ACTION_VIEW);
 		viewBookmark.addCategory(Intent.CATEGORY_DEFAULT);
-		viewBookmark.putExtra("com.pindroid.BookmarkViewType", type);
+		viewBookmark.putExtra(Constants.EXTRA_VIEWTYPE, type);
+		viewBookmark.putExtra(Constants.EXTRA_BOOKMARK, b);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
 		data.appendEncodedPath("bookmarks");
-		
-		if(b.getId() != 0) {
-			data.appendEncodedPath(Integer.toString(b.getId()));
-		} else {
-			data.appendEncodedPath(Integer.toString(0));
-			data.appendQueryParameter("url", b.getUrl());
-			data.appendQueryParameter("title", b.getDescription());
-			data.appendQueryParameter("notes", b.getNotes());
-			data.appendQueryParameter("tags", b.getTagString());
-			data.appendQueryParameter("time", Long.toString(b.getTime()));
-			data.appendQueryParameter("account", b.getAccount());
-		}
+		data.appendEncodedPath(Integer.toString(b.getId()));
+
 		viewBookmark.setData(data.build());
 		
 		return viewBookmark;
@@ -94,7 +86,7 @@ public class IntentHelper {
 		viewBookmark.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
 		data.appendEncodedPath("notes");
 		
 		data.appendEncodedPath(Integer.toString(n.getId()));
@@ -109,7 +101,7 @@ public class IntentHelper {
 		editBookmark.setAction(Intent.ACTION_EDIT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
 		data.appendEncodedPath("bookmarks");
 		data.appendEncodedPath(Integer.toString(b.getId()));
 		editBookmark.setData(data.build());
@@ -117,30 +109,33 @@ public class IntentHelper {
 		return editBookmark;
 	}
 	
-	public static Intent ViewBookmarks(String tag, String account, Context context) {
+	public static Intent ViewBookmarks(String tag, String account, String feed, Context context) {
 		Intent i = new Intent(context, BrowseBookmarks.class);
 		i.setAction(Intent.ACTION_VIEW);
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
 		data.appendEncodedPath("bookmarks");
 		
 		if(tag != null && !tag.equals(""))
 			data.appendQueryParameter("tagname", tag);
+		
+		if(feed != null && !feed.equals(""))
+			data.appendQueryParameter("feed", feed);
 		
 		i.setData(data.build());
 		
 		return i;
 	}
 	
-	public static Intent ViewNotes(String tag, String account, Context context) {
+	public static Intent ViewNotes(String account, Context context) {
 		Intent i = new Intent(context, BrowseNotes.class);
 		i.setAction(Intent.ACTION_VIEW);
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
 		data.appendEncodedPath("notes");
 		
 		i.setData(data.build());
@@ -154,7 +149,7 @@ public class IntentHelper {
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
 		data.appendEncodedPath("bookmarks");
 		data.appendQueryParameter("unread", "1");
 		i.setData(data.build());
@@ -168,7 +163,7 @@ public class IntentHelper {
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
 		data.appendEncodedPath("tags");
 		i.setData(data.build());
 		
@@ -181,7 +176,7 @@ public class IntentHelper {
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(account + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
 		data.appendEncodedPath("tags");
 		i.setData(data.build());
 		
@@ -193,6 +188,10 @@ public class IntentHelper {
 		i.setAction(Intent.ACTION_SEARCH);
 		i.putExtra(SearchManager.QUERY, query);
 		i.putExtra("MainSearchResults", "1");
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
+		i.setData(data.build());
 		return i;
 	}
 	
@@ -201,6 +200,10 @@ public class IntentHelper {
 		i.setAction(Intent.ACTION_SEARCH);
 		i.putExtra(SearchManager.QUERY, query);
 		i.putExtra("MainSearchResults", "1");
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
+		i.setData(data.build());
 		return i;
 	}
 	
@@ -209,6 +212,10 @@ public class IntentHelper {
 		i.setAction(Intent.ACTION_SEARCH);
 		i.putExtra(SearchManager.QUERY, query);
 		i.putExtra("MainSearchResults", "1");
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
+		i.setData(data.build());
 		return i;
 	}
 	
@@ -220,8 +227,21 @@ public class IntentHelper {
 		
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority("global" + "@" + BookmarkContentProvider.AUTHORITY);
+		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
 		data.appendEncodedPath("bookmarks");
+		data.appendQueryParameter("feed", "global");
+		i.setData(data.build());
+		
+		return i;
+	}
+	
+	public static Intent WidgetSearch(String account, Context context){
+		Intent i = new Intent(context, Main.class);
+		i.setAction(Intent.ACTION_SEARCH);
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
+		data.appendEncodedPath("search");
 		i.setData(data.build());
 		
 		return i;

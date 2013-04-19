@@ -27,6 +27,7 @@ import com.pindroid.fragment.MainSearchResultsFragment;
 
 import android.app.SearchManager;
 import android.os.Bundle;
+import android.view.Menu;
 
 public class MainSearchResults extends FragmentBaseActivity implements MainSearchResultsFragment.OnSearchActionListener {
 
@@ -34,21 +35,31 @@ public class MainSearchResults extends FragmentBaseActivity implements MainSearc
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_search_results);
+		setTitle(R.string.main_search_results_title);
 	}
 
 	public void onBookmarkSearch() {
-		startActivity(IntentHelper.SearchBookmarks(getIntent().getStringExtra(SearchManager.QUERY), mAccount.name, this));
+		startActivity(IntentHelper.SearchBookmarks(getIntent().getStringExtra(SearchManager.QUERY), null, this));
 	}
 
 	public void onTagSearch() {
-		startActivity(IntentHelper.SearchTags(getIntent().getStringExtra(SearchManager.QUERY), mAccount.name, this));
+		startActivity(IntentHelper.SearchTags(getIntent().getStringExtra(SearchManager.QUERY), null, this));
 	}
 
 	public void onGlobalTagSearch() {
-		startActivity(IntentHelper.SearchGlobalTags(getIntent().getStringExtra(SearchManager.QUERY), mAccount.name, this));
+		startActivity(IntentHelper.SearchGlobalTags(getIntent().getStringExtra(SearchManager.QUERY), null, this));
 	}
 
 	public void onNoteSearch() {
-		startActivity(IntentHelper.SearchNotes(getIntent().getStringExtra(SearchManager.QUERY), mAccount.name, this));
+		startActivity(IntentHelper.SearchNotes(getIntent().getStringExtra(SearchManager.QUERY), null, this));
 	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.removeItem(R.id.menu_choose_account);
+		return true;
+	}
+	
+	@Override
+	protected void changeAccount(){}
 }

@@ -94,7 +94,8 @@
         android:layout_height="fill_parent"
         android:layout_width="wrap_content"
         android:textSize="18sp"
-        android:paddingLeft="12dp" />
+        android:paddingLeft="12dp"
+        android:textIsSelectable="false" />
     <TextView
         android:id="@+id/add_title_popular_tags"
         style="@style/AddBookmarkFieldTitle"
@@ -112,6 +113,7 @@
         android:layout_width="wrap_content"
         android:textSize="18sp"
         android:paddingLeft="12dp"
-        android:paddingBottom="10dp" />
+        android:paddingBottom="10dp"
+        android:textIsSelectable="false" />
     <include layout="@layout/add_switches" />
 </LinearLayout>

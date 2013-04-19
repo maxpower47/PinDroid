@@ -176,12 +176,8 @@
   <string name="pref_reading_background_summary">Color de fondo en visión de lectura</string>
   <string name="pref_reading_font_title">Fuente</string>
   <string name="pref_reading_font_summary">Fuente de visión de lectura</string>
-  <string name="pref_reading_margins_title">Márgenes</string>
-  <string name="pref_reading_margins_summary">Márgenes laterales para la visión de lectura</string>
   <string name="pref_reading_fontsize_title">Tamaño de la fuente</string>
   <string name="pref_reading_fontsize_summary">Tamaño de fuente para visión de lectura</string>
-  <string name="pref_reading_linespace_title">Interlineado</string>
-  <string name="pref_reading_linespace_summary">Espacio entre líneas en la visión de lectura</string>
   <string name="pref_license_title">Licencia</string>
   <string name="pref_license_summary">Licenciado bajo el GPL v3</string>
   <string name="pref_help_title">Ayuda</string>
@@ -213,7 +209,6 @@
     	O házmelo saber por medio de Twitter @PinDroid&lt;br/&gt;&lt;br/&gt;
     	&lt;b&gt;Fallos conocidos:&lt;/b&gt;
     	&lt;ul&gt;
-     		&lt;li&gt;Solo se soporta una cuenta Pinboard. &lt;/li&gt;
      		&lt;li&gt;Ciertas características de DeliciousDroid no se han portado adecuadamente debido a las limitaciones del API de los Pinboards, incluyendo sincronización de contactos y visión de las listas de marcadores en red. &lt;/li&gt;
     	&lt;/ul&gt;&lt;br/&gt;
     	Read view powered por viewtext.org

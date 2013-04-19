@@ -39,11 +39,13 @@
 				android:layout_height="wrap_content"
 				android:layout_width="fill_parent"
 				android:textSize="24sp"
-				android:paddingLeft="10dip" />
+				android:paddingLeft="10dip"
+				android:textIsSelectable="true"  />
 			<TextView
 				android:id="@+id/view_note_text"
 				style="@style/ViewBookmarkFieldContent"
-				android:paddingRight="20dp" />
+				android:paddingRight="20dp"
+				android:textIsSelectable="true"  />
 			<TextView
 				android:id="@+id/view_note_account_title"
 				style="@style/ViewBookmarkFieldTitle"
@@ -51,7 +53,8 @@
 				android:text="@string/view_note_account_title"/>
 			<TextView
 				android:id="@+id/view_note_account"
-				style="@style/ViewBookmarkFieldContent" />
+				style="@style/ViewBookmarkFieldContent"
+				android:textIsSelectable="false"  />
 		</LinearLayout>
 	</ScrollView>
 </FrameLayout>

@@ -66,7 +66,7 @@ public class BrowseTagsFragment extends ListFragment
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-
+		
 		setHasOptionsMenu(hasMenu);
 		
 		mAdapter = new SimpleCursorAdapter(this.getActivity(), 
@@ -90,12 +90,22 @@ public class BrowseTagsFragment extends ListFragment
 		this.username = account;
 	}
 	
+	public String getAccount(){
+		return username;
+	}
+	
 	public void setQuery(String query) {
 		this.query = query;
 	}
 	
 	public void setHasMenu(boolean hasMenu) {
 		this.hasMenu = hasMenu;
+	}
+	
+	public void refresh(){
+		try{
+			getLoaderManager().restartLoader(0, null, this);
+		} catch(Exception e){}
 	}
 	
 	private OnItemClickListener viewListener = new OnItemClickListener() {
@@ -137,14 +147,14 @@ public class BrowseTagsFragment extends ListFragment
 	    }
 	    
 	    if(result) {
-	    	getLoaderManager().restartLoader(0, null, this);
+	    	refresh();
 	    } else result = super.onOptionsItemSelected(item);
 	    
 	    return result;
 	}
 	
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		if(username != null && !username.equals("")) {
+		if(username != null) {
 			if(query != null) {
 				return TagManager.SearchTags(query, username, this.getActivity());
 			} else {

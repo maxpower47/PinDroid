@@ -103,6 +103,7 @@
     <string name="menu_sort_tag_title">Sort Tags</string>
     <string name="menu_search_title">Search</string>
     <string name="menu_settings_title">Settings</string>
+    <string name="menu_choose_account_title">Change Account</string>
     
     <string name="bookmark_unsynced_alt">Unsynced Indicator</string>
     <string name="bookmark_unread_alt">Unread Indicator</string>
@@ -202,36 +203,45 @@
     <string name="small_widget_my_bookmarks">My Bookmarks</string>
     <string name="small_widget_my_unread">My Unread</string>
     <string name="small_widget_my_tags">My Tags</string>
+    <string name="small_widget_my_notes">My Notes</string>
     <string name="small_widget_add_bookmark">Add Bookmark</string>
     <string name="small_widget_search_bookmarks">Search Bookmarks</string>
     
     <!-- Preferences -->
     <string name="preferences_title">PinDroid Settings</string>
     
-    <string name="account_preferences_cat_title">General Settings</string>
+    <string name="account_preferences_cat_title">General settings</string>
     <string name="account_preferences_key">account_settings</string>
     <string name="account_preferences_title">Account Settings</string>
     <string name="account_preferences_summary">Sync and notification settings.</string>
     
-    <string name="pref_cat_general_title">General Settings</string>
-    <string name="pref_cat_sync_title">Sync Settings</string>
-    <string name="pref_cat_save_title">Save Settings</string>
-    <string name="pref_cat_reading_title">Reading Options</string>
+    <string name="pref_cat_general_title">General settings</string>
+    <string name="pref_cat_sync_title">Sync settings</string>
+    <string name="pref_cat_save_title">Save settings</string>
+    <string name="pref_cat_reading_title">Reading options</string>
     <string name="pref_cat_help_title">Help</string>
     
-    <string name="pref_accountsettings_title">Account Settings</string>
+    <string name="pref_accountsettings_title">Account settings</string>
     <string name="pref_accountsettings_key">pref_accountsettings</string>
     <string name="pref_accountsettings_summary">Manage your Pinboard account on this device.</string>
     
-    <string name="pref_synctime_title">Sync Frequency</string>
+    <string name="pref_synctime_title">Sync frequency</string>
     <string name="pref_synctime_key">pref_synctime</string>
     <string name="pref_synctime_summary">How often to sync bookmarks.</string>
     
-    <string name="pref_view_bookmark_default_action_title">Bookmark Action</string>
+    <string name="pref_view_bookmark_default_action_title">Bookmark action</string>
     <string name="pref_view_bookmark_default_action_key">pref_view_bookmark_default_action</string>
     <string name="pref_view_bookmark_default_action_summary">Default action for bookmarks.</string>
     
-    <string name="pref_searchicons_title">Display Search Icons</string>
+    <string name="pref_usebrowser_title">Open links in browser</string>
+    <string name="pref_usebrowser_key">pref_usebrowser</string>
+    <string name="pref_usebrowser_summary">Always open web links in browser app.</string>
+    <string name="pref_usebrowser_summary_off">Use internal browser when possible.</string>
+    <string name="pref_usebrowser_summary_on">Always open web links in browser app.</string>
+    <string name="pref_usebrowser_switch_off">No</string>
+    <string name="pref_usebrowser_switch_on">Yes</string>
+    
+    <string name="pref_searchicons_title">Display search icons</string>
     <string name="pref_searchicons_key">pref_searchicons</string>
     <string name="pref_searchicons_summary">Display icons in search suggestions.</string>
     <string name="pref_searchicons_summary_off">Don\'t display icons in search suggestions.</string>
@@ -239,7 +249,7 @@
     <string name="pref_searchicons_switch_off">No</string>
     <string name="pref_searchicons_switch_on">Yes</string>
     
-    <string name="pref_save_private_default_title">Private Default</string>
+    <string name="pref_save_private_default_title">Private default</string>
     <string name="pref_save_private_default_key">pref_save_private_default</string>
     <string name="pref_save_private_default_summary">Set new bookmarks as private by default.</string>
     <string name="pref_save_private_default_summary_off">Set new bookmarks as public by default.</string>
@@ -247,7 +257,7 @@
     <string name="pref_save_private_default_switch_off">No</string>
     <string name="pref_save_private_default_switch_on">Yes</string>
     
-    <string name="pref_save_toread_default_title">Unread Default</string>
+    <string name="pref_save_toread_default_title">Unread default</string>
     <string name="pref_save_toread_default_key">pref_save_toread_default</string>
     <string name="pref_save_toread_default_summary">Set new bookmarks as unread by default.</string>
     <string name="pref_save_toread_default_summary_off">Set new bookmarks as read by default.</string>
@@ -255,7 +265,7 @@
     <string name="pref_save_toread_default_switch_off">No</string>
     <string name="pref_save_toread_default_switch_on">Yes</string>
     
-    <string name="pref_markasread_title">Mark as Read</string>
+    <string name="pref_markasread_title">Mark as read</string>
     <string name="pref_markasread_key">pref_markasread</string>
     <string name="pref_markasread_summary">Mark unread bookmarks as read when you read them.</string>
     <string name="pref_markasread_summary_off">Leave unread bookmarks unread when you read them.</string>
@@ -263,7 +273,7 @@
     <string name="pref_markasread_switch_off">No</string>
     <string name="pref_markasread_switch_on">Yes</string>
     
-    <string name="pref_forcesync_title">Sync Now</string>
+    <string name="pref_forcesync_title">Sync now</string>
     <string name="pref_forcesync_key">pref_forcesync</string>
     <string name="pref_forcesync_summary">Start a bookmark sync.</string>
 
@@ -276,17 +286,9 @@
     <string name="pref_reading_font_key">pref_reading_font</string>
     <string name="pref_reading_font_summary">Font for read view</string>
     
-    <string name="pref_reading_margins_title">Margins</string>
-    <string name="pref_reading_margins_key">pref_reading_margins</string>
-    <string name="pref_reading_margins_summary">Side margins for read view</string>
-    
-    <string name="pref_reading_fontsize_title">Font Size</string>
+    <string name="pref_reading_fontsize_title">Font size</string>
     <string name="pref_reading_fontsize_key">pref_reading_fontsize</string>
     <string name="pref_reading_fontsize_summary">Font size for read view</string>
-    
-    <string name="pref_reading_linespace_title">Line Spacing</string>
-    <string name="pref_reading_linespace_key">pref_reading_linespace</string>
-    <string name="pref_reading_linespace_summary">Space between lines in read view</string>
 
     
     <string name="pref_license_title">License</string>
@@ -315,15 +317,22 @@
     <string name="alt_action_search_btn">Search</string>
     <string name="alt_bookmark_list_private">Private</string>
     <string name="alt_bookmark_view_private">Private</string>
+    <string name="alt_bookmark_view_unread">Unread</string>
     
     <string name="alt_widget_main">PinDroid</string>
     <string name="alt_widget_my_bookmarks">My Bookmarks</string>
     <string name="alt_widget_unread_bookmarks">Unread Bookmarks</string>
     <string name="alt_widget_unread_bookmark_count">Unread Bookmark Count</string>
     <string name="alt_widget_my_tags">My Tags</string>
+    <string name="alt_widget_my_notes">My Notes</string>
     <string name="alt_widget_add_bookmark">Add Bookmark</string>
     <string name="alt_widget_search">Search</string>
     <string name="alt_widget_divider">Divider</string>
+    
+    <string name="dashclock_extension_title">PinDroid</string>
+    <string name="dashclock_extension_description">Displays unread counts for PinDroid.</string>
+    <string name="dashclock_update_status">%1$s unread</string>
+    <string name="dashclock_update_expanded_title">%1$s unread</string>
     
     <!-- AboutActivity -->
     <string name="about_activity_title">About PinDroid</string>
@@ -336,7 +345,6 @@
     	Or, drop me a line on Twitter @PinDroid&lt;br/&gt;&lt;br/&gt;
     	&lt;b&gt;Known Issues:&lt;/b&gt;
     	&lt;ul&gt;
-     		&lt;li&gt;Only a single Pinboard account is currently supported. &lt;/li&gt;
      		&lt;li&gt;Certain features from DeliciousDroid have not been ported yet due to limitations in Pinboards API, including contact syncing and viewing network bookmark lists. &lt;/li&gt;
     	&lt;/ul&gt;&lt;br/&gt;
     	Read view powered by viewtext.org

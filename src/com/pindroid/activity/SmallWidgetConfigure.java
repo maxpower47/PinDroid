@@ -21,14 +21,19 @@
 
 package com.pindroid.activity;
 
+import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.widget.SmallWidgetProvider;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.annotation.TargetApi;
 import android.app.ListActivity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,8 +46,12 @@ public class SmallWidgetConfigure extends ListActivity {
 	int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 	
     private static final String PREFS_NAME = "com.pindroid.widget.SmallWidgetProvider";
-    private static final String PREF_PREFIX_KEY = "button_";
+    private static final String PREF_PREFIX_KEY_BUTTON = "button_";
+    private static final String PREF_PREFIX_KEY_ACCOUNT = "account_";
+    
+    private String username = "";
 	
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -58,6 +67,7 @@ public class SmallWidgetConfigure extends ListActivity {
 		String[] MENU_ITEMS = new String[] {getString(R.string.small_widget_my_bookmarks),
 				getString(R.string.small_widget_my_unread),
 				getString(R.string.small_widget_my_tags),
+				getString(R.string.small_widget_my_notes),
 				getString(R.string.small_widget_add_bookmark),
 				getString(R.string.small_widget_search_bookmarks)};
 		
@@ -71,15 +81,17 @@ public class SmallWidgetConfigure extends ListActivity {
 		    	final Context context = SmallWidgetConfigure.this;
 		    	
 		    	if(position == 0){
-		    		saveButtonPref(context, mAppWidgetId, "bookmark");
+		    		saveButtonPref(context, mAppWidgetId, "bookmark", username);
 		    	} else if(position == 1){
-		    		saveButtonPref(context, mAppWidgetId, "unread");
+		    		saveButtonPref(context, mAppWidgetId, "unread", username);
 		    	} else if(position == 2){
-		    		saveButtonPref(context, mAppWidgetId, "tags");
+		    		saveButtonPref(context, mAppWidgetId, "tags", username);
 		    	} else if(position == 3){
-		    		saveButtonPref(context, mAppWidgetId, "add");
+		    		saveButtonPref(context, mAppWidgetId, "notes", username);
 		    	} else if(position == 4){
-		    		saveButtonPref(context, mAppWidgetId, "search");
+		    		saveButtonPref(context, mAppWidgetId, "add", username);
+		    	} else if(position == 5){
+		    		saveButtonPref(context, mAppWidgetId, "search", username);
 		    	}
 
 	            // Push widget update to surface with newly set prefix
@@ -106,12 +118,24 @@ public class SmallWidgetConfigure extends ListActivity {
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
         }
+        
+		if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+			Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+		} else {
+			if(AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
+				Account account = AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+				
+				username = account.name;
+			}
+		}
     }
 	
     // Write the prefix to the SharedPreferences object for this widget
-    static void saveButtonPref(Context context, int appWidgetId, String text) {
+    static void saveButtonPref(Context context, int appWidgetId, String text, String username) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putString(PREF_PREFIX_KEY + appWidgetId, text);
+        prefs.putString(PREF_PREFIX_KEY_BUTTON + appWidgetId, text);
+        prefs.putString(PREF_PREFIX_KEY_ACCOUNT + appWidgetId, username);
         prefs.commit();
     }
 
@@ -119,7 +143,7 @@ public class SmallWidgetConfigure extends ListActivity {
     // If there is no preference saved, get the default from a resource
     public static String loadButtonPref(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String button = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null);
+        String button = prefs.getString(PREF_PREFIX_KEY_BUTTON + appWidgetId, null);
         if (button != null) {
             return button;
         } else {
@@ -127,9 +151,24 @@ public class SmallWidgetConfigure extends ListActivity {
         }
     }
     
+    public static String loadAccountPref(Context context, int appWidgetId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        String account = prefs.getString(PREF_PREFIX_KEY_ACCOUNT + appWidgetId, null);
+        return account;
+
+    }
+    
     public static void deleteTitlePref(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.remove(PREF_PREFIX_KEY + appWidgetId);
+        prefs.remove(PREF_PREFIX_KEY_BUTTON + appWidgetId);
+        prefs.remove(PREF_PREFIX_KEY_ACCOUNT + appWidgetId);
         prefs.commit();
     }
+    
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){	
+		if(requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
+			username = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+		}
+	}
 }

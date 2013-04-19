@@ -21,26 +21,24 @@
 
 package com.pindroid.providers;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.pindroid.providers.TagContent.Tag;
 
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.BaseColumns;
 
 public class BookmarkContent {
 
-	public static class Bookmark implements BaseColumns, Serializable {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 8170498291668576792L;
+	public static class Bookmark implements BaseColumns, Parcelable {
 
-		public static final Uri CONTENT_URI = Uri.parse("content://" + 
-				BookmarkContentProvider.AUTHORITY + "/bookmark");
+		public static final Uri CONTENT_URI = Uri.parse("content://" + BookmarkContentProvider.AUTHORITY + "/bookmark");
 		
 		public static final  String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.pindroid.bookmarks";
+		
+		public static final int BOOKMARK_ID_PATH_POSITION = 1;
 		
 		public static final String Account = "ACCOUNT";
 		public static final String Description = "DESCRIPTION";
@@ -114,7 +112,8 @@ public class BookmarkContent {
 			
 			if(mTags != null){
 				for(String s : mTags.split(" ")) {
-					result.add(new Tag(s));
+					if(!s.equals(""))
+						result.add(new Tag(s));
 				}
 			}
 			
@@ -255,5 +254,52 @@ public class BookmarkContent {
         	this.mSynced = 0;
         	this.mDeleted = false;
         }
+
+		public int describeContents() {
+			return 0;
+		}
+
+		public void writeToParcel(Parcel dest, int flags) {
+			dest.writeInt(mId);
+			dest.writeString(mAccount);
+			dest.writeString(mUrl);
+			dest.writeString(mDescription);
+			dest.writeString(mNotes);
+			dest.writeString(mTags);
+			dest.writeString(mHash);
+			dest.writeString(mMeta);
+			dest.writeLong(mTime);
+			dest.writeInt(mSynced);
+			dest.writeByte((byte) (mShared ? 1 : 0));
+			dest.writeByte((byte) (mRead ? 1 : 0));
+			dest.writeByte((byte) (mDeleted ? 1 : 0)); 
+		}
+		
+		public static final Parcelable.Creator<Bookmark> CREATOR
+			= new Parcelable.Creator<Bookmark>() {
+				public Bookmark createFromParcel(Parcel in) {
+	    	 		return new Bookmark(in);
+	    	 	}
+	    	 
+	    	 	public Bookmark[] newArray(int size) {
+	    	 		return new Bookmark[size];
+	    	 	}
+		};
+ 
+		private Bookmark(Parcel in) {
+			mId = in.readInt();
+			mAccount = in.readString();
+			mUrl = in.readString();
+			mDescription = in.readString();
+			mNotes = in.readString();
+			mTags = in.readString();
+			mHash = in.readString();
+			mMeta = in.readString();
+			mTime = in.readLong();
+			mSynced = in.readInt();
+			mShared = in.readByte() == 1;
+			mRead = in.readByte() == 1;
+			mDeleted = in.readByte() == 1;
+		 }
 	}
 }

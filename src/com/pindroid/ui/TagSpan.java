@@ -25,33 +25,33 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 
 public class TagSpan extends ClickableSpan {
-    public interface OnTagClickListener {
-            public void onTagClick(String tag);
-    }
+	public interface OnTagClickListener {
+		public void onTagClick(String tag);
+	}
 
-    private final String mTag;
-    private OnTagClickListener mOnTagClickListener;
+	private final String mTag;
+	private OnTagClickListener mOnTagClickListener;
 
-    public TagSpan(String tag) {
-            super();
-            if (tag == null) {
-                    throw new NullPointerException();
-            }
-            mTag = tag;
-    }
+	public TagSpan(String tag) {
+		super();
+		if (tag == null) {
+			throw new NullPointerException();
+		}
+		mTag = tag;
+	}
 
-    @Override
-    public void onClick(View widget) {
-            if (mOnTagClickListener != null) {
-                    mOnTagClickListener.onTagClick(mTag);
-            }
-    }
+	@Override
+	public void onClick(View widget) {
+		if (mOnTagClickListener != null) {
+			mOnTagClickListener.onTagClick(mTag);
+		}
+	}
 
-    public OnTagClickListener getOnTagClickListener() {
-            return mOnTagClickListener;
-    }
+	public OnTagClickListener getOnTagClickListener() {
+		return mOnTagClickListener;
+	}
 
-    public void setOnTagClickListener(OnTagClickListener onTagClickListener) {
-            mOnTagClickListener = onTagClickListener;
-    }
+	public void setOnTagClickListener(OnTagClickListener onTagClickListener) {
+		mOnTagClickListener = onTagClickListener;
+	}
 }

@@ -73,7 +73,8 @@
 					android:scaleType="center"
 					android:textStyle="bold"
 					android:textColor="#FFFFFF"
-					android:gravity="center" />
+					android:gravity="center"
+					android:textIsSelectable="false"  />
 			</FrameLayout>
 	    </RelativeLayout>
 	   	<ImageButton
@@ -85,6 +86,15 @@
 	        android:visibility="gone"
 	    	android:background="@drawable/appwidget_button"
 	        android:contentDescription="@string/alt_widget_my_tags"/>
+	   	<ImageButton
+	    	android:id="@+id/small_widget_notes_button"
+	    	android:src="@drawable/widget_note"
+	    	android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:scaleType="center"
+	        android:visibility="gone"
+	    	android:background="@drawable/appwidget_button"
+	        android:contentDescription="@string/alt_widget_my_notes"/>
 	    <ImageButton
 	    	android:id="@+id/small_widget_add_button"
 	    	android:src="@drawable/widget_add"

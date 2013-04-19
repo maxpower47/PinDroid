@@ -34,12 +34,14 @@ import android.view.MenuInflater;
 
 public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragment.OnTagSelectedListener {
 	
+	private BrowseTagsFragment frag;
+	
     @Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         if(getResources().getBoolean(R.bool.has_two_panes)){
-			startActivity(IntentHelper.ViewTabletTags(mAccount.name, this));
+			startActivity(IntentHelper.ViewTabletTags(null, this));
 			finish();
 		}
         
@@ -50,11 +52,11 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
         Uri data = intent.getData();
         String action = intent.getAction();
 
-		if(data != null)
-			username = data.getUserInfo();
+		if(data != null && data.getUserInfo() != null)
+			app.setUsername(data.getUserInfo());
         
-		BrowseTagsFragment frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
-        frag.setAccount(username);
+		frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
+        frag.setAccount(app.getUsername());
 		
 		if(Intent.ACTION_VIEW.equals(action)) {
 			setTitle(getString(R.string.browse_my_tags_title));
@@ -76,6 +78,21 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 	}
 
 	public void onTagSelected(String tag) {		
-		startActivity(IntentHelper.ViewBookmarks(tag, username, this));
+		startActivity(IntentHelper.ViewBookmarks(tag, null, null, this));
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		if(app.getUsername() != null && !app.getUsername().equals(frag.getAccount())){
+			frag.setAccount(app.getUsername());
+			frag.refresh();	
+		}
+	}
+	
+	@Override
+	protected void changeAccount(){
+		frag.setAccount(app.getUsername());
+		frag.refresh();
 	}
 }

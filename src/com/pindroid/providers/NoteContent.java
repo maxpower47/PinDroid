@@ -31,6 +31,8 @@ public class NoteContent {
 		
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.PinDroid.notes";
 		
+		public static final int NOTE_ID_PATH_POSITION = 1;
+		
 		public static final String Title = "TITLE";
 		public static final String Text = "TEXT";
 		public static final String Account = "ACCOUNT";

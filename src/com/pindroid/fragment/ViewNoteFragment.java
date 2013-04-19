@@ -30,14 +30,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pindroid.R;
-import com.pindroid.activity.FragmentBaseActivity;
 import com.pindroid.platform.NoteManager;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.NoteContent.Note;
 
 public class ViewNoteFragment extends Fragment {
-
-	private FragmentBaseActivity base;
 	
 	private TextView mTitle;
 	private TextView mText;
@@ -47,8 +44,6 @@ public class ViewNoteFragment extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		
-		base = (FragmentBaseActivity)getActivity();
 		
 		mTitle = (TextView) getView().findViewById(R.id.view_note_title);
 		mText = (TextView) getView().findViewById(R.id.view_note_text);
@@ -66,7 +61,6 @@ public class ViewNoteFragment extends Fragment {
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.view_note_fragment, container, false);
     }
 
@@ -81,9 +75,8 @@ public class ViewNoteFragment extends Fragment {
     	if(note != null){
 			try{		
 				int id = note.getId();
-				note = NoteManager.GetById(id, base);
-			}
-			catch(ContentNotFoundException e){}
+				note = NoteManager.GetById(id, getActivity());
+			} catch(ContentNotFoundException e){}
 			
 			mTitle.setText(note.getTitle());
 			mText.setText(note.getText());

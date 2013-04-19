@@ -21,9 +21,29 @@
  * USA
  */
  -->
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="10dp"
-    android:textSize="16sp" >
-</TextView>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_height="fill_parent"
+	android:layout_width="fill_parent"
+	android:gravity="center_vertical|left">
+	<TextView
+	    android:id="@+id/autocomplete_name"
+	    android:layout_height="fill_parent"
+	    android:layout_width="wrap_content"
+	    android:paddingLeft="10dp"
+	    android:paddingTop="3dp"
+	    android:paddingBottom="5dp"
+	    android:paddingRight="5dp"
+	    android:layout_weight="1"
+	    android:textSize="16sp"
+	    android:textIsSelectable="false" />
+	<TextView
+	    android:id="@+id/autocomplete_count"
+	    android:layout_height="fill_parent"
+	    android:layout_width="wrap_content"
+	    android:layout_weight="0"
+	    android:textSize="14sp"
+	    android:paddingTop="6dp"
+	    android:paddingRight="15dp"
+	    android:textIsSelectable="false" />
+</LinearLayout>

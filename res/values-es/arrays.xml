@@ -28,29 +28,10 @@
     <item>Editar</item>
     <item>Leer</item>
   </string-array>
-  <string-array name="pref_reading_background_entries">
-    <item>Blanco</item>
-    <item>Negro</item>
-  </string-array>
-  <string-array name="pref_reading_font_entries">
-    <item>Roboto (sans)</item>
-    <item>Alegreya (serif)</item>
-    <item>Cocina (ancho fijo)</item>
-  </string-array>
-  <string-array name="pref_reading_margins_entries">
-    <item>Pequeño</item>
-    <item>Normal</item>
-    <item>Grandes</item>
-  </string-array>
   <string-array name="pref_reading_fontsize_entries">
     <item>Pequeño</item>
     <item>Normal</item>
     <item>Grandes</item>
-  </string-array>
-  <string-array name="pref_reading_linespace_entries">
-    <item>Menos</item>
-    <item>Normal</item>
-    <item>Más</item>
   </string-array>
   <string-array name="pref_synctime_entries">
     <item>5 minutos</item>
@@ -60,6 +41,6 @@
     <item>3 horas</item>
     <item>6 horas</item>
     <item>12 horas</item>
-    <item>24 horas</item>
+    <item>Automático</item>
   </string-array>
 </resources>

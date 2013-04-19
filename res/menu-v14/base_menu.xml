@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
 /*
  * PinDroid - http://code.google.com/p/PinDroid/
  *
@@ -18,29 +20,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
-
-package com.pindroid.action;
-
-import android.accounts.Account;
-import android.content.Context;
-
-public class TaskArgs{
-	protected Account account;
-	protected Context context;
-	
-	public Account getAccount(){
-		return account;
-	}
-	
-	public Context getContext(){
-		return context;
-	}
-	
-	public TaskArgs(){
-	}
-	
-	public TaskArgs(Account a, Context c){
-		account = a;
-		context = c;
-	}
-}
+ -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item 
+		android:id="@+id/menu_choose_account" 
+		android:title="@string/menu_choose_account_title" 
+		android:orderInCategory="98" />
+	<item 
+		android:id="@+id/menu_settings" 
+		android:title="@string/menu_settings_title" 
+		android:icon="@drawable/ic_menu_preferences"
+		android:orderInCategory="99" />
+</menu>
