@@ -27,22 +27,20 @@ import java.util.Map.Entry;
 
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
+import com.pindroid.Constants;
 import com.pindroid.R;
+import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.util.AccountHelper;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 
 public class PinDroidExtension extends DashClockExtension {
-    public static final String CONTENT_AUTHORITY = "com.pindroid.providers.BookmarkContentProvider";
-    public static final String INTENT_AUTHORITY = "com.pindroid.intent";
-    
-    public static final Uri UNREAD_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY + "/unreadcount");
-    public static final String BOOKMARK_CONTENT_URI = "content://" + CONTENT_AUTHORITY + "/bookmark";
 
     @Override
     protected void onInitialize(boolean isReconnect) {
-    	addWatchContentUris(new String[] {BOOKMARK_CONTENT_URI});
+    	addWatchContentUris(new String[] {Bookmark.CONTENT_URI.toString()});
     }
     
     @Override
@@ -54,7 +52,7 @@ public class PinDroidExtension extends DashClockExtension {
     	
     	try {
 	        Map<String, Integer> counts = GetUnreadCount();
-	        accounts = counts.size();
+	        accounts = AccountHelper.getAccountCount(this);
 	        
 	        for(Entry<String, Integer> e : counts.entrySet()) {
 	        	body += e.getKey() + " (" + e.getValue() + ")\n";
@@ -82,7 +80,7 @@ public class PinDroidExtension extends DashClockExtension {
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme("content");
-		data.encodedAuthority(INTENT_AUTHORITY);
+		data.encodedAuthority(Constants.INTENT_URI);
 		data.appendEncodedPath("bookmarks");
 		data.appendQueryParameter("unread", "1");
 		i.setData(data.build());
@@ -93,7 +91,7 @@ public class PinDroidExtension extends DashClockExtension {
 		Map<String, Integer> result = new HashMap<String, Integer>();
 
 		final String[] projection = new String[] {"Count", "Account"};
-		final Cursor c = this.getContentResolver().query(UNREAD_CONTENT_URI, projection, null, null, null);	
+		final Cursor c = this.getContentResolver().query(Bookmark.UNREAD_CONTENT_URI, projection, null, null, null);	
 		
 		if(c.moveToFirst()){
 			do {			

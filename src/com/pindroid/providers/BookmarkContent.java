@@ -35,6 +35,7 @@ public class BookmarkContent {
 	public static class Bookmark implements BaseColumns, Parcelable {
 
 		public static final Uri CONTENT_URI = Uri.parse("content://" + BookmarkContentProvider.AUTHORITY + "/bookmark");
+		public static final Uri UNREAD_CONTENT_URI = Uri.parse("content://" + BookmarkContentProvider.AUTHORITY + "/unreadcount");
 		
 		public static final  String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.pindroid.bookmarks";
 		

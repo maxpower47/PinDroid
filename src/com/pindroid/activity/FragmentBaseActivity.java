@@ -47,6 +47,7 @@ import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.application.PindroidApplication;
 import com.pindroid.authenticator.AuthenticatorActivity;
+import com.pindroid.util.AccountHelper;
 
 public abstract class FragmentBaseActivity extends FragmentActivity {
 	
@@ -301,7 +302,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
     }
     
     public int getAccountCount(){
-    	return mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE).length;
+    	return AccountHelper.getAccountCount(this);
     }
 	
 	
