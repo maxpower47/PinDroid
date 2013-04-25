@@ -15,4 +15,8 @@ public class AccountHelper {
     	
     	return null;		   
     }
+    
+    public static int getAccountCount(Context context){
+    	return AccountManager.get(context).getAccountsByType(Constants.ACCOUNT_TYPE).length;
+    }
 }
