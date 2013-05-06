@@ -39,6 +39,7 @@ public class PinboardFeed {
     private static final String TAG = "PinboardFeed";
 
     public static final String FETCH_RECENT_URI = "http://feeds.pinboard.in/rss/recent/";
+    public static final String FETCH_POPULAR_URI = "http://feeds.pinboard.in/rss/popular/";
     public static final String FETCH_RECENT_USER_URI = "http://feeds.pinboard.in/rss";
     public static final String FETCH_NETWORK_URI = "http://feeds.pinboard.in/rss/";
     
@@ -68,6 +69,38 @@ public class PinboardFeed {
 
         } else {
         	Log.e(TAG, "Server error in fetching network recent list");
+            throw new IOException();
+        }
+
+        return bookmarkList;
+    }
+    
+    /**
+     * Retrieves a list of popular bookmarks for Pinboard.
+     * 
+     * @return The list of bookmarks received from the server.
+     * @throws JSONException If an error was encountered in deserializing the JSON object returned from 
+     * the server.
+     * @throws IOException If a server error was encountered.
+     * @throws AuthenticationException If an authentication error was encountered.
+     */
+    public static Cursor fetchPopular()
+    	throws IOException, ParseException {
+
+        final HttpGet post = new HttpGet(FETCH_POPULAR_URI);
+        
+        Cursor bookmarkList = null;
+
+        final HttpResponse resp = HttpClientFactory.getThreadSafeClient().execute(post);
+        InputStream responseStream = resp.getEntity().getContent();
+
+        if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+        	SaxFeedParser parser = new SaxFeedParser(responseStream);
+
+			bookmarkList = parser.parse();
+
+        } else {
+        	Log.e(TAG, "Server error in fetching network popular list");
             throw new IOException();
         }
 
