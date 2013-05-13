@@ -65,6 +65,10 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		startActivity(IntentHelper.ViewBookmarks("", null, "recent", this));	
 	}
 	
+	public void onPopularSelected() {
+		startActivity(IntentHelper.ViewBookmarks("", null, "popular", this));	
+	}
+	
 	@Override
 	protected void changeAccount(){}
 	

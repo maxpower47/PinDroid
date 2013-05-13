@@ -45,6 +45,7 @@ public class MainFragment extends ListFragment {
 		public void onMyNotesSelected();
 		public void onMyNetworkSelected();
 		public void onRecentSelected();
+		public void onPopularSelected();
 	}
 	
 	@Override
@@ -58,6 +59,7 @@ public class MainFragment extends ListFragment {
 				getString(R.string.main_menu_my_tags),
 				getString(R.string.main_menu_my_notes),
 				getString(R.string.main_menu_recent_bookmarks),
+				getString(R.string.main_menu_popular_bookmarks),
 				getString(R.string.main_menu_network_bookmarks)};
 		
 		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.main_view, MENU_ITEMS));
@@ -78,6 +80,8 @@ public class MainFragment extends ListFragment {
 		    	} else if(position == 4){
 		    		mainActionListener.onRecentSelected();
 		    	} else if(position == 5){
+		    		mainActionListener.onPopularSelected();
+		    	} else if(position == 6){
 		    		mainActionListener.onMyNetworkSelected();
 		    	}
 		    }

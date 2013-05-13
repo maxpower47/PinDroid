@@ -39,7 +39,7 @@ import android.text.TextUtils;
 public class BookmarkManager {
 	
 	public static CursorLoader GetBookmarks(String username, String tagname, boolean unread, String sortorder, Context context){
-		final String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, 
+		final String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, Bookmark.Notes,
 				Bookmark.Meta, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced, Bookmark.Deleted,
 				Bookmark.Account, Bookmark.Time};
 		String selection = null;

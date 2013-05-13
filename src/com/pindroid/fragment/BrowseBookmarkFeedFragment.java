@@ -174,6 +174,8 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 			getActivity().setTitle(getString(R.string.search_results_global_tag_title, query));
 		} else if(feed.equals("recent")) {
 			getActivity().setTitle(getString(R.string.browse_recent_bookmarks_title));
+		} else if(feed.equals("popular")) {
+			getActivity().setTitle(getString(R.string.browse_popular_bookmarks_title));
 		} else if(feed.equals("network")) {
 			getActivity().setTitle(getString(R.string.browse_network_bookmarks_title));
 		} else {	
@@ -301,7 +303,9 @@ public class BrowseBookmarkFeedFragment extends ListFragment
  				   results = PinboardFeed.fetchNetworkRecent(user, token);
  			   } else if(feed.equals("recent")) {
  				  results = PinboardFeed.fetchRecent();
- 			   } else {
+ 			   } else if(feed.equals("popular")) {
+  				  results = PinboardFeed.fetchPopular();
+  			   } else {
  				  results = PinboardFeed.fetchUserRecent(feed, tag);
  			   }
 
