@@ -51,9 +51,7 @@ import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
-import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.AccountSpan;
 import com.pindroid.ui.TagSpan;
@@ -173,16 +171,9 @@ public class ViewBookmarkFragment extends Fragment {
 	    inflater.inflate(R.menu.view_menu, menu);
 	    
 	    if(android.os.Build.VERSION.SDK_INT >= 14) {
-	    	if(bookmark != null){
-	    		if(isMyself() && bookmark.getId() != 0){
-					try{		
-						bookmark = BookmarkManager.GetById(bookmark.getId(), getActivity());
-						
-			    		ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_view_sendbookmark).getActionProvider();
-			    		shareActionProvider.setShareIntent(IntentHelper.SendBookmark(bookmark.getUrl(), bookmark.getDescription()));
-					}
-					catch(ContentNotFoundException e){}
-	    		}
+	    	if(bookmark != null){	
+			    ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_view_sendbookmark).getActionProvider();
+			    shareActionProvider.setShareIntent(IntentHelper.SendBookmark(bookmark.getUrl(), bookmark.getDescription()));
 	    	}
 	    }
 	}
