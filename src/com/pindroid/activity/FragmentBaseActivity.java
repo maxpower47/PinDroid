@@ -140,6 +140,8 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 			startActivity(editBookmark);
 			finish();
 		}
+		
+		init();
 	}
 	
 	private void init(){

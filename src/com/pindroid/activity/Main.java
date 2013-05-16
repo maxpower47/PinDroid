@@ -21,19 +21,28 @@
 
 package com.pindroid.activity;
 
+import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
+import com.pindroid.fragment.AddBookmarkFragment;
+import com.pindroid.fragment.AddBookmarkFragment.OnBookmarkSaveListener;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment;
 import com.pindroid.fragment.BrowseBookmarksFragment;
+import com.pindroid.fragment.ViewBookmarkFragment;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.fragment.BrowseNotesFragment;
 import com.pindroid.fragment.BrowseNotesFragment.OnNoteSelectedListener;
 import com.pindroid.fragment.BrowseTagsFragment;
 import com.pindroid.fragment.BrowseTagsFragment.OnTagSelectedListener;
 import com.pindroid.fragment.MainFragment;
+import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
+import com.pindroid.fragment.ViewNoteFragment;
+import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.NoteContent.Note;
+import com.pindroid.fragment.PindroidFragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -45,7 +54,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class Main extends FragmentBaseActivity implements MainFragment.OnMainActionListener, OnBookmarkSelectedListener, OnTagSelectedListener, OnNoteSelectedListener {
+public class Main extends FragmentBaseActivity implements MainFragment.OnMainActionListener, OnBookmarkSelectedListener, 
+		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnBookmarkSaveListener {
 	
 	private ListView mDrawerList;
 	private DrawerLayout mDrawerLayout;
@@ -68,6 +78,10 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		
 		mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+		
+		if (savedInstanceState == null) {
+            selectItem(0);
+        }
 	}
 	
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -78,33 +92,24 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {
-		Fragment frag = null;
-		
 		if(position == 0){
-			frag = new BrowseBookmarksFragment();
-			((BrowseBookmarksFragment)frag).setQuery(app.getUsername(), null, null);
+			onMyBookmarksSelected();
     	} else if(position == 1){
-    		frag = new BrowseBookmarksFragment();
-			((BrowseBookmarksFragment)frag).setQuery(app.getUsername(), null, "unread");
+    		onMyUnreadSelected();
     	} else if(position == 2){
-     		frag = new BrowseTagsFragment();
- 			((BrowseTagsFragment)frag).setAccount(app.getUsername());
+    		onMyTagsSelected();
      	} else if(position == 3){
-      		frag = new BrowseNotesFragment();
-  			((BrowseNotesFragment)frag).setAccount(app.getUsername());
+     		onMyNotesSelected();
       	} else if(position == 4){
-      		frag = new BrowseBookmarkFeedFragment();
-  			((BrowseBookmarkFeedFragment)frag).setQuery(app.getUsername(), null, "recent");
+      		onRecentSelected();
       	} else if(position == 5){
-      		frag = new BrowseBookmarkFeedFragment();
-  			((BrowseBookmarkFeedFragment)frag).setQuery(app.getUsername(), null, "popular");
+      		onPopularSelected();
       	} else if(position == 6){
-      		frag = new BrowseBookmarkFeedFragment();
-  			((BrowseBookmarkFeedFragment)frag).setQuery(app.getUsername(), null, "network");
+      		onMyNetworkSelected();
       	}
-		
-		
-		
+	}
+	
+	private void replaceMainFragment(Fragment frag, int position){
 		// Insert the fragment by replacing any existing fragment
 	    FragmentManager fragmentManager = getSupportFragmentManager();
 	    fragmentManager.beginTransaction()
@@ -113,43 +118,69 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 
 	    // Highlight the selected item, update the title, and close the drawer
 	    mDrawerList.setItemChecked(position, true);
-	    mDrawerLayout.closeDrawer(mDrawerList);   
+	    mDrawerLayout.closeDrawer(mDrawerList);
+	}
+	
+	private void replaceSubFragment(Fragment frag){
+		// Insert the fragment by replacing any existing fragment
+	    FragmentManager fragmentManager = getSupportFragmentManager();
+	    fragmentManager.beginTransaction()
+	                   .replace(R.id.content_frame, frag)
+	                   .addToBackStack(null)
+	                   .commit();
 	}
 
 	public void onMyBookmarksSelected() {
-		
+		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+		frag.setQuery(app.getUsername(), null, null);
+		replaceMainFragment(frag, 0);
 	}
 
 	public void onMyUnreadSelected() {
-		startActivity(IntentHelper.ViewUnread(null, this));
+		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+		frag.setQuery(app.getUsername(), null, "unread");
+		replaceMainFragment(frag, 1);
 	}
 
 	public void onMyTagsSelected() {
-		if(getResources().getBoolean(R.bool.has_two_panes)){
-			startActivity(IntentHelper.ViewTabletTags(null, this));
-		} else {
-			startActivity(IntentHelper.ViewTags(null, this));
-		}	
+		BrowseTagsFragment frag = new BrowseTagsFragment();
+		frag.setUsername(app.getUsername());
+		replaceMainFragment(frag, 2);
 	}
 	
 	public void onMyNotesSelected() {
-		startActivity(IntentHelper.ViewNotes(null, this));	
-	}
-
-	public void onMyNetworkSelected() {
-		startActivity(IntentHelper.ViewBookmarks("", null, "network", this));	
+		BrowseNotesFragment frag = new BrowseNotesFragment();
+		frag.setUsername(app.getUsername());
+		replaceMainFragment(frag, 3);
 	}
 
 	public void onRecentSelected() {
-		startActivity(IntentHelper.ViewBookmarks("", null, "recent", this));	
+		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
+		frag.setQuery(app.getUsername(), null, "recent");
+		replaceMainFragment(frag, 4);
 	}
 	
 	public void onPopularSelected() {
-		startActivity(IntentHelper.ViewBookmarks("", null, "popular", this));	
+		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
+		frag.setQuery(app.getUsername(), null, "popular");
+		replaceMainFragment(frag, 5);
+	}
+	
+	public void onMyNetworkSelected() {
+		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
+		frag.setQuery(app.getUsername(), null, "network");
+		replaceMainFragment(frag, 6);
 	}
 	
 	@Override
-	protected void changeAccount(){}
+	protected void changeAccount(){
+		Fragment f = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+		
+		if(f != null){
+			((PindroidFragment)f).setUsername(app.getUsername());
+			((PindroidFragment)f).refresh();
+		}
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -162,52 +193,84 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	}
 
 	public void onBookmarkView(Bookmark b) {
-		// TODO Auto-generated method stub
-		
+		ViewBookmarkFragment frag = new ViewBookmarkFragment();
+		frag.setBookmark(b, BookmarkViewType.VIEW);
+		replaceSubFragment(frag);
 	}
 
 	public void onBookmarkRead(Bookmark b) {
-		// TODO Auto-generated method stub
-		
+		ViewBookmarkFragment frag = new ViewBookmarkFragment();
+		frag.setBookmark(b, BookmarkViewType.READ);
+		replaceSubFragment(frag);
 	}
 
 	public void onBookmarkOpen(Bookmark b) {
-		// TODO Auto-generated method stub
-		
+		ViewBookmarkFragment frag = new ViewBookmarkFragment();
+		frag.setBookmark(b, BookmarkViewType.WEB);
+		replaceSubFragment(frag);
 	}
 
 	public void onBookmarkAdd(Bookmark b) {
-		// TODO Auto-generated method stub
-		
+		AddBookmarkFragment frag = new AddBookmarkFragment();
+		frag.loadBookmark(b, null);
+		frag.setUsername(app.getUsername());
+		replaceSubFragment(frag);
 	}
 
 	public void onBookmarkShare(Bookmark b) {
-		// TODO Auto-generated method stub
-		
+		if(b != null){
+			Intent sendIntent = IntentHelper.SendBookmark(b.getUrl(), b.getDescription());
+			startActivity(Intent.createChooser(sendIntent, getString(R.string.share_chooser_title)));
+		}
 	}
 
 	public void onBookmarkMark(Bookmark b) {
-		// TODO Auto-generated method stub
-		
+		if(b != null && isMyself() && b.getToRead()) {
+    		b.setToRead(false);
+			BookmarkManager.UpdateBookmark(b, app.getUsername(), this);
+    	}
 	}
 
 	public void onBookmarkEdit(Bookmark b) {
-		// TODO Auto-generated method stub
-		
+		AddBookmarkFragment frag = new AddBookmarkFragment();
+		frag.loadBookmark(b, b);
+		frag.setUsername(app.getUsername());
+		replaceSubFragment(frag);
 	}
 
 	public void onBookmarkDelete(Bookmark b) {
-		// TODO Auto-generated method stub
-		
+		BookmarkManager.LazyDelete(b, app.getUsername(), this);
 	}
 
 	public void onTagSelected(String tag) {
-		// TODO Auto-generated method stub
-		
+		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+		frag.setQuery(app.getUsername(), tag, null);
+		replaceSubFragment(frag);
 	}
 
 	public void onNoteView(Note n) {
-		// TODO Auto-generated method stub
-		
+		ViewNoteFragment frag = new ViewNoteFragment();
+		frag.setNote(n);
+		replaceSubFragment(frag);
+	}
+
+	public void onViewTagSelected(String tag, String user) {
+		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+		frag.setQuery(app.getUsername(), tag, user);
+		replaceSubFragment(frag);
+	}
+
+	public void onAccountSelected(String account) {
+		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
+		frag.setQuery(app.getUsername(), null, account);
+		replaceSubFragment(frag);
+	}
+
+	public void onBookmarkSave(Bookmark b) {
+		getSupportFragmentManager().popBackStack();
+	}
+
+	public void onBookmarkCancel(Bookmark b) {
+		getSupportFragmentManager().popBackStack();
 	}
 }

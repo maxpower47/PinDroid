@@ -48,7 +48,7 @@ import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.util.SettingsHelper;
 
 public class BrowseBookmarksFragment extends ListFragment 
-	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser {
+	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser, PindroidFragment {
 	
 	private SimpleCursorAdapter mAdapter;
 	

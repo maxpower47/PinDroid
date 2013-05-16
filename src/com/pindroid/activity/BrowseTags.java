@@ -56,7 +56,7 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 			app.setUsername(data.getUserInfo());
         
 		frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
-        frag.setAccount(app.getUsername());
+        frag.setUsername(app.getUsername());
 		
 		if(Intent.ACTION_VIEW.equals(action)) {
 			setTitle(getString(R.string.browse_my_tags_title));
@@ -85,14 +85,14 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 	public void onResume(){
 		super.onResume();
 		if(app.getUsername() != null && !app.getUsername().equals(frag.getAccount())){
-			frag.setAccount(app.getUsername());
+			frag.setUsername(app.getUsername());
 			frag.refresh();	
 		}
 	}
 	
 	@Override
 	protected void changeAccount(){
-		frag.setAccount(app.getUsername());
+		frag.setUsername(app.getUsername());
 		frag.refresh();
 	}
 }

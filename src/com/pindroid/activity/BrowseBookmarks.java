@@ -152,7 +152,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		BrowseTagsFragment tagFrag = (BrowseTagsFragment) fm.findFragmentById(R.id.tagcontent);
 		
 		if(tagFrag != null){
-			tagFrag.setAccount(app.getUsername());
+			tagFrag.setUsername(app.getUsername());
 		}
 		
 		if(path != null && path.contains("tags")){
@@ -472,7 +472,7 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 		
 		BrowseTagsFragment tagFrag = (BrowseTagsFragment) fm.findFragmentById(R.id.tagcontent);
 		if(tagFrag != null){
-			tagFrag.setAccount(app.getUsername());
+			tagFrag.setUsername(app.getUsername());
 			tagFrag.refresh();
 		}
 	}

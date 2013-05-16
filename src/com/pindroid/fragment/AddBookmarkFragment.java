@@ -64,7 +64,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AddBookmarkFragment extends Fragment {
+public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 	
 	private EditText mEditUrl;
 	private EditText mEditDescription;
@@ -406,5 +406,10 @@ public class AddBookmarkFragment extends Fragment {
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString() + " must implement OnBookmarkSaveListener");
 		}
+	}
+
+	public void refresh() {
+		// TODO Auto-generated method stub
+		
 	}
 }

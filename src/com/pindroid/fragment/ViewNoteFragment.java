@@ -55,8 +55,6 @@ public class ViewNoteFragment extends Fragment {
     
 	public void setNote(Note n) {
 		note = n;
-		
-		ActivityCompat.invalidateOptionsMenu(this.getActivity());
 	}
 	
     @Override

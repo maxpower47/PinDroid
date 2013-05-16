@@ -60,7 +60,7 @@ public class ChooseTagShortcut extends FragmentActivity implements BrowseTagsFra
 		}
           
 		frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
-        frag.setAccount(username);
+        frag.setUsername(username);
         frag.setHasMenu(false);
 
     }
@@ -87,7 +87,7 @@ public class ChooseTagShortcut extends FragmentActivity implements BrowseTagsFra
 		
 		if(requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
 			username = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-			frag.setAccount(username);
+			frag.setUsername(username);
 			frag.refresh();
 		}
 	}

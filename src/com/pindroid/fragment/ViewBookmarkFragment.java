@@ -57,7 +57,7 @@ import com.pindroid.ui.AccountSpan;
 import com.pindroid.ui.TagSpan;
 import com.pindroid.util.SettingsHelper;
 
-public class ViewBookmarkFragment extends Fragment {
+public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	
 	private ScrollView mBookmarkView;
 	private TextView mTitle;
@@ -129,7 +129,7 @@ public class ViewBookmarkFragment extends Fragment {
 		this.viewType = viewType;
 		this.bookmark = bookmark;
 		
-		ActivityCompat.invalidateOptionsMenu(this.getActivity());
+		//ActivityCompat.invalidateOptionsMenu(this.getActivity());
 	}
 	
 	public void clearView() {
@@ -370,5 +370,15 @@ public class ViewBookmarkFragment extends Fragment {
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString() + " must implement OnBookmarkActionListener and OnBookmarkSelectedListener");
 		}
+	}
+
+	public void setUsername(String username) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void refresh() {
+		// TODO Auto-generated method stub
+		
 	}
 }

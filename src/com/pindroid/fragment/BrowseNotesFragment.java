@@ -37,7 +37,7 @@ import com.pindroid.platform.NoteManager;
 import com.pindroid.providers.NoteContent.Note;
 
 public class BrowseNotesFragment extends ListFragment
-	implements LoaderManager.LoaderCallbacks<Cursor> {
+	implements LoaderManager.LoaderCallbacks<Cursor>, PindroidFragment {
 
 	private String sortfield = Note.Title + " ASC";
 	private SimpleCursorAdapter mAdapter;
@@ -91,8 +91,8 @@ public class BrowseNotesFragment extends ListFragment
 		noteSelectedListener.onNoteView(n);
 	}
 	
-	public void setAccount(String account) {
-		this.username = account;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 	public void setQuery(String query) {

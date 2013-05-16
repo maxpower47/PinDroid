@@ -59,7 +59,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.support.v4.widget.SimpleCursorAdapter;
 
 public class BrowseBookmarkFeedFragment extends ListFragment 
-	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser {
+	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser, PindroidFragment  {
 	
 	private SimpleCursorAdapter mAdapter;
 	

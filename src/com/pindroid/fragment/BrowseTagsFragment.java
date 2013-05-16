@@ -41,7 +41,7 @@ import com.pindroid.platform.TagManager;
 import com.pindroid.providers.TagContent.Tag;
 
 public class BrowseTagsFragment extends ListFragment
-	implements LoaderManager.LoaderCallbacks<Cursor> {
+	implements LoaderManager.LoaderCallbacks<Cursor>, PindroidFragment  {
 
 	private String sortfield = Tag.Name + " ASC";
 	private SimpleCursorAdapter mAdapter;
@@ -86,8 +86,8 @@ public class BrowseTagsFragment extends ListFragment
 		lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 	}
 	
-	public void setAccount(String account) {
-		this.username = account;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 	public String getAccount(){
