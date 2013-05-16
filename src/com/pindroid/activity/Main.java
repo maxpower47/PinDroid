@@ -23,22 +23,101 @@ package com.pindroid.activity;
 
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
+import com.pindroid.fragment.BrowseBookmarkFeedFragment;
+import com.pindroid.fragment.BrowseBookmarksFragment;
+import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
+import com.pindroid.fragment.BrowseNotesFragment;
+import com.pindroid.fragment.BrowseNotesFragment.OnNoteSelectedListener;
+import com.pindroid.fragment.BrowseTagsFragment;
+import com.pindroid.fragment.BrowseTagsFragment.OnTagSelectedListener;
 import com.pindroid.fragment.MainFragment;
+import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.providers.NoteContent.Note;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
-public class Main extends FragmentBaseActivity implements MainFragment.OnMainActionListener {
+public class Main extends FragmentBaseActivity implements MainFragment.OnMainActionListener, OnBookmarkSelectedListener, OnTagSelectedListener, OnNoteSelectedListener {
+	
+	private ListView mDrawerList;
+	private DrawerLayout mDrawerLayout;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedState);
 		setContentView(R.layout.main);
+		
+		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		
+		String[] MENU_ITEMS = new String[] {getString(R.string.main_menu_my_bookmarks),
+				getString(R.string.main_menu_my_unread_bookmarks),
+				getString(R.string.main_menu_my_tags),
+				getString(R.string.main_menu_my_notes),
+				getString(R.string.main_menu_recent_bookmarks),
+				getString(R.string.main_menu_popular_bookmarks),
+				getString(R.string.main_menu_network_bookmarks)};
+		
+		mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
+		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+	}
+	
+	private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+	}
+
+	/** Swaps fragments in the main content view */
+	private void selectItem(int position) {
+		Fragment frag = null;
+		
+		if(position == 0){
+			frag = new BrowseBookmarksFragment();
+			((BrowseBookmarksFragment)frag).setQuery(app.getUsername(), null, null);
+    	} else if(position == 1){
+    		frag = new BrowseBookmarksFragment();
+			((BrowseBookmarksFragment)frag).setQuery(app.getUsername(), null, "unread");
+    	} else if(position == 2){
+     		frag = new BrowseTagsFragment();
+ 			((BrowseTagsFragment)frag).setAccount(app.getUsername());
+     	} else if(position == 3){
+      		frag = new BrowseNotesFragment();
+  			((BrowseNotesFragment)frag).setAccount(app.getUsername());
+      	} else if(position == 4){
+      		frag = new BrowseBookmarkFeedFragment();
+  			((BrowseBookmarkFeedFragment)frag).setQuery(app.getUsername(), null, "recent");
+      	} else if(position == 5){
+      		frag = new BrowseBookmarkFeedFragment();
+  			((BrowseBookmarkFeedFragment)frag).setQuery(app.getUsername(), null, "popular");
+      	} else if(position == 6){
+      		frag = new BrowseBookmarkFeedFragment();
+  			((BrowseBookmarkFeedFragment)frag).setQuery(app.getUsername(), null, "network");
+      	}
+		
+		
+		
+		// Insert the fragment by replacing any existing fragment
+	    FragmentManager fragmentManager = getSupportFragmentManager();
+	    fragmentManager.beginTransaction()
+	                   .replace(R.id.content_frame, frag)
+	                   .commit();
+
+	    // Highlight the selected item, update the title, and close the drawer
+	    mDrawerList.setItemChecked(position, true);
+	    mDrawerLayout.closeDrawer(mDrawerList);   
 	}
 
 	public void onMyBookmarksSelected() {
-		startActivity(IntentHelper.ViewBookmarks("", null, null, this));	
+		
 	}
 
 	public void onMyUnreadSelected() {
@@ -80,5 +159,55 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 
 	    setupSearch(menu);
 	    return true;
+	}
+
+	public void onBookmarkView(Bookmark b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onBookmarkRead(Bookmark b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onBookmarkOpen(Bookmark b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onBookmarkAdd(Bookmark b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onBookmarkShare(Bookmark b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onBookmarkMark(Bookmark b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onBookmarkEdit(Bookmark b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onBookmarkDelete(Bookmark b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onTagSelected(String tag) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onNoteView(Note n) {
+		// TODO Auto-generated method stub
+		
 	}
 }
