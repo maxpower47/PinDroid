@@ -261,11 +261,6 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
-	        case android.R.id.home:
-	            Intent intent = new Intent(this, Main.class);
-	            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	            startActivity(intent);
-	            return true;
 		    case R.id.menu_addbookmark:
 				startActivity(IntentHelper.AddBookmark(null, null, this));
 				return true;

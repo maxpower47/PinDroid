@@ -23,5 +23,6 @@
  -->
 <resources>
     <item name="browse_bookmarks" type="layout">@layout/browse_bookmarks_twopane</item>
+    <item name="main" type="layout">@layout/main_twopane</item>
     <bool name="has_two_panes">true</bool>
 </resources>

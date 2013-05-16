@@ -48,10 +48,12 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -71,6 +73,9 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedState);
 		setContentView(R.layout.main);
+		
+		
+		
 		
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -143,76 +148,195 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
       	}
 	}
 	
-	private void replaceMainFragment(Fragment frag, int position){
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+          return true;
+        }
+        // Handle your other action bar items...
+
+        return super.onOptionsItemSelected(item);
+    }
+	
+    /* Called whenever we call invalidateOptionsMenu() */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // If the nav drawer is open, hide action items related to the content view
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        return super.onPrepareOptionsMenu(menu);
+    }
+	
+	private void replaceLeftFragment(Fragment frag, boolean backstack){
 		// Insert the fragment by replacing any existing fragment
 	    FragmentManager fragmentManager = getSupportFragmentManager();
-	    fragmentManager.beginTransaction()
-	                   .replace(R.id.content_frame, frag)
-	                   .commit();
-
-	    // Highlight the selected item, update the title, and close the drawer
+	    FragmentTransaction t = fragmentManager.beginTransaction();
+	    t.replace(R.id.list_frame, frag, "left");
+	    if(backstack)
+	    	t.addToBackStack(null);
+	    t.commit();
+	    
+	    clearRightFragment();
+	}
+	
+	private void clearRightFragment(){
+		// Insert the fragment by replacing any existing fragment
+	    FragmentManager fragmentManager = getSupportFragmentManager();
+	    Fragment f = fragmentManager.findFragmentByTag("right");
+	    
+	    if(f != null){
+		    FragmentTransaction t = fragmentManager.beginTransaction();
+		    t.remove(f);
+		    t.commit();
+	    }
+	}
+	
+	private void replaceRightFragment(Fragment frag, boolean backstack){
+		// Insert the fragment by replacing any existing fragment
+	    FragmentManager fragmentManager = getSupportFragmentManager();
+	    FragmentTransaction t = fragmentManager.beginTransaction();
+	    t.replace(R.id.content_frame, frag, "right");
+	    if(backstack)
+	    	t.addToBackStack(null);
+	    t.commit();
+	}
+	
+	private void clearDrawer(int position){		
+		// Highlight the selected item, update the title, and close the drawer
 	    mDrawerList.setItemChecked(position, true);
 	    mDrawerLayout.closeDrawer(mDrawerList);
 	}
 	
-	private void replaceSubFragment(Fragment frag){
-		// Insert the fragment by replacing any existing fragment
-	    FragmentManager fragmentManager = getSupportFragmentManager();
-	    fragmentManager.beginTransaction()
-	                   .replace(R.id.content_frame, frag)
-	                   .addToBackStack(null)
-	                   .commit();
+	private void clearBackStack(){
+		if(getSupportFragmentManager().getBackStackEntryCount() > 0){
+			int id = getSupportFragmentManager().getBackStackEntryAt(0).getId();
+			getSupportFragmentManager().popBackStackImmediate(id, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		}
+	}
+	
+	private boolean isTwoPane(){
+		return getResources().getBoolean(R.bool.has_two_panes);
 	}
 
 	public void onMyBookmarksSelected() {
 		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
 		frag.setQuery(app.getUsername(), null, null);
-		replaceMainFragment(frag, 0);
+		
+		clearBackStack();
+		
+		if(isTwoPane()){
+			replaceLeftFragment(frag, false);		    
+		} else {
+			replaceRightFragment(frag, false);
+		}
+		
+		clearDrawer(0);
 	}
 
 	public void onMyUnreadSelected() {
 		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
 		frag.setQuery(app.getUsername(), null, "unread");
-		replaceMainFragment(frag, 1);
+		
+		clearBackStack();
+		
+		if(isTwoPane()){
+			replaceLeftFragment(frag, false);		    
+		} else {
+			replaceRightFragment(frag, false);
+		}
+		
+		clearDrawer(1);
 	}
 
 	public void onMyTagsSelected() {
 		BrowseTagsFragment frag = new BrowseTagsFragment();
 		frag.setUsername(app.getUsername());
-		replaceMainFragment(frag, 2);
+		
+		clearBackStack();
+
+		if(isTwoPane()){
+			replaceLeftFragment(frag, false);		    
+		} else {
+			replaceRightFragment(frag, false);
+		}
+		
+		clearDrawer(2);
 	}
 	
 	public void onMyNotesSelected() {
 		BrowseNotesFragment frag = new BrowseNotesFragment();
 		frag.setUsername(app.getUsername());
-		replaceMainFragment(frag, 3);
+		
+		clearBackStack();
+
+		if(isTwoPane()){
+			replaceLeftFragment(frag, false);		    
+		} else {
+			replaceRightFragment(frag, false);
+		}
+		
+		clearDrawer(3);
 	}
 
 	public void onRecentSelected() {
 		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
 		frag.setQuery(app.getUsername(), null, "recent");
-		replaceMainFragment(frag, 4);
+		
+		clearBackStack();
+
+		if(isTwoPane()){
+			replaceLeftFragment(frag, false);		    
+		} else {
+			replaceRightFragment(frag, false);
+		}
+		
+		clearDrawer(4);
 	}
 	
 	public void onPopularSelected() {
 		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
 		frag.setQuery(app.getUsername(), null, "popular");
-		replaceMainFragment(frag, 5);
+		
+		clearBackStack();
+
+		if(isTwoPane()){
+			replaceLeftFragment(frag, false);		    
+		} else {
+			replaceRightFragment(frag, false);
+		}
+		
+		clearDrawer(5);
 	}
 	
 	public void onMyNetworkSelected() {
 		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
 		frag.setQuery(app.getUsername(), null, "network");
-		replaceMainFragment(frag, 6);
+		
+		clearBackStack();
+
+		if(isTwoPane()){
+			replaceLeftFragment(frag, false);		    
+		} else {
+			replaceRightFragment(frag, false);
+		}
+		
+		clearDrawer(6);
 	}
 	
 	@Override
 	protected void changeAccount(){
-		Fragment f = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+		Fragment cf = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+		Fragment lf = getSupportFragmentManager().findFragmentById(R.id.list_frame);
 		
-		if(f != null){
-			((PindroidFragment)f).setUsername(app.getUsername());
-			((PindroidFragment)f).refresh();
+		if(cf != null){
+			((PindroidFragment)cf).setUsername(app.getUsername());
+			((PindroidFragment)cf).refresh();
+		}
+		
+		if(lf != null){
+			((PindroidFragment)lf).setUsername(app.getUsername());
+			((PindroidFragment)lf).refresh();
 		}
 	}
 	
@@ -229,26 +353,26 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	public void onBookmarkView(Bookmark b) {
 		ViewBookmarkFragment frag = new ViewBookmarkFragment();
 		frag.setBookmark(b, BookmarkViewType.VIEW);
-		replaceSubFragment(frag);
+		replaceRightFragment(frag, true);
 	}
 
 	public void onBookmarkRead(Bookmark b) {
 		ViewBookmarkFragment frag = new ViewBookmarkFragment();
 		frag.setBookmark(b, BookmarkViewType.READ);
-		replaceSubFragment(frag);
+		replaceRightFragment(frag, true);
 	}
 
 	public void onBookmarkOpen(Bookmark b) {
 		ViewBookmarkFragment frag = new ViewBookmarkFragment();
 		frag.setBookmark(b, BookmarkViewType.WEB);
-		replaceSubFragment(frag);
+		replaceRightFragment(frag, true);
 	}
 
 	public void onBookmarkAdd(Bookmark b) {
 		AddBookmarkFragment frag = new AddBookmarkFragment();
 		frag.loadBookmark(b, null);
 		frag.setUsername(app.getUsername());
-		replaceSubFragment(frag);
+		replaceRightFragment(frag, true);
 	}
 
 	public void onBookmarkShare(Bookmark b) {
@@ -269,7 +393,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		AddBookmarkFragment frag = new AddBookmarkFragment();
 		frag.loadBookmark(b, b);
 		frag.setUsername(app.getUsername());
-		replaceSubFragment(frag);
+		replaceRightFragment(frag, true);
 	}
 
 	public void onBookmarkDelete(Bookmark b) {
@@ -279,25 +403,40 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	public void onTagSelected(String tag) {
 		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
 		frag.setQuery(app.getUsername(), tag, null);
-		replaceSubFragment(frag);
+		
+		if(isTwoPane()){
+			replaceRightFragment(frag, true);		    
+		} else {
+			replaceRightFragment(frag, true);
+		}
 	}
 
 	public void onNoteView(Note n) {
 		ViewNoteFragment frag = new ViewNoteFragment();
 		frag.setNote(n);
-		replaceSubFragment(frag);
+		replaceRightFragment(frag, true);
 	}
 
 	public void onViewTagSelected(String tag, String user) {
 		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
 		frag.setQuery(app.getUsername(), tag, user);
-		replaceSubFragment(frag);
+
+		if(isTwoPane()){
+			replaceLeftFragment(frag, true);		    
+		} else {
+			replaceRightFragment(frag, true);
+		}
 	}
 
 	public void onAccountSelected(String account) {
 		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
 		frag.setQuery(app.getUsername(), null, account);
-		replaceSubFragment(frag);
+
+		if(isTwoPane()){
+			replaceLeftFragment(frag, true);		    
+		} else {
+			replaceRightFragment(frag, true);
+		}
 	}
 
 	public void onBookmarkSave(Bookmark b) {
