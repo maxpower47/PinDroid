@@ -43,9 +43,12 @@ import com.pindroid.providers.NoteContent.Note;
 import com.pindroid.fragment.PindroidFragment;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,12 +56,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class Main extends FragmentBaseActivity implements MainFragment.OnMainActionListener, OnBookmarkSelectedListener, 
 		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnBookmarkSaveListener {
 	
 	private ListView mDrawerList;
 	private DrawerLayout mDrawerLayout;
+	private ActionBarDrawerToggle mDrawerToggle;
+	private CharSequence mDrawerTitle;
+    private CharSequence mTitle;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -67,6 +74,9 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		mTitle = mDrawerTitle = getTitle();
+		
+		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		
 		String[] MENU_ITEMS = new String[] {getString(R.string.main_menu_my_bookmarks),
 				getString(R.string.main_menu_my_unread_bookmarks),
@@ -78,6 +88,30 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		
 		mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+		
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the sliding drawer and the action bar app icon
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description for accessibility */
+                R.string.drawer_close  /* "close drawer" description for accessibility */
+                ) {
+            public void onDrawerClosed(View view) {
+                getActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
 		
 		if (savedInstanceState == null) {
             selectItem(0);
@@ -273,4 +307,28 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	public void onBookmarkCancel(Bookmark b) {
 		getSupportFragmentManager().popBackStack();
 	}
+	
+	@Override
+	public void setTitle(CharSequence title){
+		super.setTitle(title);
+		mTitle = title;
+
+		if(this.findViewById(R.id.action_bar_title) != null) {
+			((TextView)this.findViewById(R.id.action_bar_title)).setText(title);
+		}
+	}
+	
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggls
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
 }

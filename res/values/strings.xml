@@ -67,6 +67,9 @@
     <string name="main_menu_network_bookmarks">Network Bookmarks</string>
     <string name="main_menu_recent_bookmarks">Recent Bookmarks</string>
     <string name="main_menu_popular_bookmarks">Popular Bookmarks</string>
+    
+    <string name="drawer_open">Open drawer</string>
+    <string name="drawer_close">Close drawer</string>
 
 	<!-- MainSearchResults -->
     <string name="main_search_results_title">Search Results</string>
