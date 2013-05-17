@@ -62,6 +62,7 @@ public class BrowseBookmarksFragment extends ListFragment
 	ListView lv;
 	
 	private static final String STATE_USERNAME = "username";
+	private static final String STATE_TAGNAME = "tagname";
 	
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
 
@@ -82,6 +83,7 @@ public class BrowseBookmarksFragment extends ListFragment
 		
 	    if (savedInstanceState != null) {
 	        username = savedInstanceState.getString(STATE_USERNAME);
+	        tagname = savedInstanceState.getString(STATE_TAGNAME);
 	    }
 		
 		setHasOptionsMenu(true);
@@ -182,7 +184,7 @@ public class BrowseBookmarksFragment extends ListFragment
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 	    savedInstanceState.putString(STATE_USERNAME, username);
-	    
+	    savedInstanceState.putString(STATE_TAGNAME, tagname);
 	    super.onSaveInstanceState(savedInstanceState);
 	}
 	

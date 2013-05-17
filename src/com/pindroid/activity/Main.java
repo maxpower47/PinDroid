@@ -265,7 +265,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		clearBackStack();
 		
 		if(isTwoPane()){
-			replaceLeftFragment(frag, false);		    
+			replaceLeftFragment(frag, false);
 		} else {
 			replaceRightFragment(frag, false);
 		}
@@ -280,7 +280,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		clearBackStack();
 		
 		if(isTwoPane()){
-			replaceLeftFragment(frag, false);		    
+			replaceLeftFragment(frag, false);
 		} else {
 			replaceRightFragment(frag, false);
 		}
@@ -295,7 +295,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		clearBackStack();
 
 		if(isTwoPane()){
-			replaceLeftFragment(frag, false);		    
+			replaceLeftFragment(frag, false);
 		} else {
 			replaceRightFragment(frag, false);
 		}
@@ -310,7 +310,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		clearBackStack();
 
 		if(isTwoPane()){
-			replaceLeftFragment(frag, false);		    
+			replaceLeftFragment(frag, false);
 		} else {
 			replaceRightFragment(frag, false);
 		}
@@ -325,7 +325,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		clearBackStack();
 
 		if(isTwoPane()){
-			replaceLeftFragment(frag, false);		    
+			replaceLeftFragment(frag, false);
 		} else {
 			replaceRightFragment(frag, false);
 		}
@@ -340,7 +340,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		clearBackStack();
 
 		if(isTwoPane()){
-			replaceLeftFragment(frag, false);		    
+			replaceLeftFragment(frag, false);
 		} else {
 			replaceRightFragment(frag, false);
 		}
@@ -355,7 +355,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		clearBackStack();
 
 		if(isTwoPane()){
-			replaceLeftFragment(frag, false);		    
+			replaceLeftFragment(frag, false);
 		} else {
 			replaceRightFragment(frag, false);
 		}
@@ -385,23 +385,42 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 			((PindroidFragment)lf).refresh();
 		}
 	}
+	
+	public void onBookmarkSelected(Bookmark b, BookmarkViewType viewType){
+		ViewBookmarkFragment frag = new ViewBookmarkFragment();
+		frag.setBookmark(b, viewType);
+		
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		
+		
+		if(isTwoPane()){
+			FragmentTransaction t = fragmentManager.beginTransaction();
+
+			if(fragmentManager.findFragmentByTag("left") instanceof BrowseTagsFragment){
+				Fragment right = fragmentManager.findFragmentByTag("right");
+				Fragment newRight = duplicateFragment(right);
+				
+				t.replace(R.id.list_frame, newRight, "left");
+				t.addToBackStack(null);
+			}
+			
+			t.replace(R.id.content_frame, frag, "right");
+			t.commit();
+		} else {
+			replaceRightFragment(frag, true);
+		}
+	}
 
 	public void onBookmarkView(Bookmark b) {
-		ViewBookmarkFragment frag = new ViewBookmarkFragment();
-		frag.setBookmark(b, BookmarkViewType.VIEW);
-		replaceRightFragment(frag, true);
+		onBookmarkSelected(b, BookmarkViewType.VIEW);
 	}
 
 	public void onBookmarkRead(Bookmark b) {
-		ViewBookmarkFragment frag = new ViewBookmarkFragment();
-		frag.setBookmark(b, BookmarkViewType.READ);
-		replaceRightFragment(frag, true);
+		onBookmarkSelected(b, BookmarkViewType.READ);
 	}
 
 	public void onBookmarkOpen(Bookmark b) {
-		ViewBookmarkFragment frag = new ViewBookmarkFragment();
-		frag.setBookmark(b, BookmarkViewType.WEB);
-		replaceRightFragment(frag, true);
+		onBookmarkSelected(b, BookmarkViewType.WEB);
 	}
 
 	public void onBookmarkAdd(Bookmark b) {
@@ -441,7 +460,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		frag.setQuery(app.getUsername(), tag, null);
 		
 		if(isTwoPane()){
-			replaceRightFragment(frag, true);		    
+			replaceRightFragment(frag, false);		
 		} else {
 			replaceRightFragment(frag, true);
 		}
@@ -510,5 +529,23 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+    
+    private Fragment duplicateFragment(Fragment f)
+    {
+        try {
+            Fragment.SavedState oldState = getSupportFragmentManager().saveFragmentInstanceState(f);
+
+            Fragment newInstance = f.getClass().newInstance();
+            newInstance.setInitialSavedState(oldState);
+
+            return newInstance;
+        }
+        catch (Exception e) // InstantiationException, IllegalAccessException
+        {
+
+        }
+        
+        return null;
     }
 }
