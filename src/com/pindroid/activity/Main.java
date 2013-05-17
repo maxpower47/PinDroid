@@ -26,6 +26,7 @@ import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.AddBookmarkFragment;
 import com.pindroid.fragment.AddBookmarkFragment.OnBookmarkSaveListener;
+import com.pindroid.fragment.BookmarkBrowser;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment;
 import com.pindroid.fragment.BrowseBookmarksFragment;
 import com.pindroid.fragment.ViewBookmarkFragment;
@@ -418,8 +419,13 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	}
 
 	public void onViewTagSelected(String tag, String user) {
-		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
-		frag.setQuery(app.getUsername(), tag, user);
+		Fragment frag = null;
+		
+		if(user.equals(app.getUsername())){
+			frag = new BrowseBookmarksFragment();
+		} else frag = new BrowseBookmarkFeedFragment();
+		
+		((BookmarkBrowser)frag).setQuery(app.getUsername(), tag, user);
 
 		if(isTwoPane()){
 			replaceLeftFragment(frag, true);		    
