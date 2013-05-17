@@ -26,6 +26,7 @@
 		android:id="@+id/menu_sorttag" 
 		android:title="@string/menu_sort_tag_title" 
 		android:icon="@drawable/ic_menu_sort_alphabetically"
+		android:showAsAction="ifRoom"
 		android:orderInCategory="12">
 		<menu>
 			<item 

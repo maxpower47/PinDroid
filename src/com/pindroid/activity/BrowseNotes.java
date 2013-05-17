@@ -61,16 +61,6 @@ public class BrowseNotes extends FragmentBaseActivity implements BrowseNotesFrag
 			setTitle(getString(R.string.note_search_results_title, query));
 		}
     }
-    
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.main_menu, menu);
-	    
-	    setupSearch(menu);
-	    return true;
-	}
 
 	public void onNoteView(Note n) {
 		if(n != null){

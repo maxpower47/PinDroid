@@ -187,15 +187,6 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 	}
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.main_menu, menu);
-	    setupSearch(menu);
-	    return true;
-	}
-	
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(bookmarkFrag != null && bookmarkFrag instanceof BrowseBookmarkFeedFragment && isTwoPane()) {
 		    switch (item.getItemId()) {

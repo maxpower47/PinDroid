@@ -22,6 +22,7 @@
 package com.pindroid.activity;
 
 import com.pindroid.Constants.BookmarkViewType;
+import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.AddBookmarkFragment;
@@ -43,6 +44,7 @@ import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.NoteContent.Note;
 import com.pindroid.fragment.PindroidFragment;
 
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -53,7 +55,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -69,14 +70,13 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	private ActionBarDrawerToggle mDrawerToggle;
 	private CharSequence mDrawerTitle;
     private CharSequence mTitle;
+    private int lastSelected = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedState);
 		setContentView(R.layout.main);
-		
-		
-		
+
 		
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -90,7 +90,11 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 				getString(R.string.main_menu_my_notes),
 				getString(R.string.main_menu_recent_bookmarks),
 				getString(R.string.main_menu_popular_bookmarks),
-				getString(R.string.main_menu_network_bookmarks)};
+				getString(R.string.main_menu_network_bookmarks),
+				"Search",
+				"Add Bookmark",
+				"Change Account",
+				"Settings"};
 		
 		mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
@@ -132,21 +136,55 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {
-		if(position == 0){
-			onMyBookmarksSelected();
-    	} else if(position == 1){
-    		onMyUnreadSelected();
-    	} else if(position == 2){
-    		onMyTagsSelected();
-     	} else if(position == 3){
-     		onMyNotesSelected();
-      	} else if(position == 4){
-      		onRecentSelected();
-      	} else if(position == 5){
-      		onPopularSelected();
-      	} else if(position == 6){
-      		onMyNetworkSelected();
-      	}
+		switch(position){
+			case 0:
+				onMyBookmarksSelected();
+				break;
+			case 1:
+				onMyUnreadSelected();
+				break;
+			case 2:
+				onMyTagsSelected();
+				break;
+			case 3:
+				onMyNotesSelected();
+				break;
+			case 4:
+				onRecentSelected();
+				break;
+			case 5:
+				onPopularSelected();
+				break;
+			case 6:
+				onMyNetworkSelected();
+				break;
+			case 7:
+				onSearchSelected();
+				break;
+			case 8:
+				onBookmarkAdd(null);
+				mDrawerList.setItemChecked(8, false);
+				mDrawerList.setItemChecked(lastSelected, true);
+				mDrawerLayout.closeDrawer(mDrawerList);
+				break;
+			case 9:
+				Intent i = AccountManager.newChooseAccountIntent(getAccount(), null, new String[]{Constants.ACCOUNT_TYPE}, true, null, null, null, null);
+				startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+				mDrawerList.setItemChecked(9, false);
+				mDrawerList.setItemChecked(lastSelected, true);
+				mDrawerLayout.closeDrawer(mDrawerList);
+				break;
+			case 10:
+				Intent prefs = new Intent(this, Preferences.class);
+				startActivity(prefs);
+				mDrawerList.setItemChecked(10, false);
+				mDrawerList.setItemChecked(lastSelected, true);
+				mDrawerLayout.closeDrawer(mDrawerList);
+				break;
+		}
+
+		if(position < 7)
+			lastSelected = position;
 	}
 	
 	@Override
@@ -325,6 +363,13 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		clearDrawer(6);
 	}
 	
+	public void onSearchSelected() {
+		onSearchRequested();
+		mDrawerList.setItemChecked(7, false);
+		mDrawerList.setItemChecked(lastSelected, true);
+		mDrawerLayout.closeDrawer(mDrawerList);
+	}
+	
 	@Override
 	protected void changeAccount(){
 		Fragment cf = getSupportFragmentManager().findFragmentById(R.id.content_frame);
@@ -339,16 +384,6 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 			((PindroidFragment)lf).setUsername(app.getUsername());
 			((PindroidFragment)lf).refresh();
 		}
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main_menu, menu);
-
-	    setupSearch(menu);
-	    return true;
 	}
 
 	public void onBookmarkView(Bookmark b) {

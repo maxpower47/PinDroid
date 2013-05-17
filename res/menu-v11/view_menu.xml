@@ -27,7 +27,7 @@
 		android:title="@string/menu_view_title" 
 		android:showAsAction="ifRoom"
 		android:icon="@drawable/ic_menu_view"
-		android:orderInCategory="5" >
+		android:orderInCategory="1" >
 		<menu>
 		    <item 
 				android:id="@+id/menu_view_details" 
@@ -46,13 +46,13 @@
 	<item 
 		android:id="@+id/menu_view_editbookmark" 
 		android:title="@string/menu_view_editbookmark_title" 
-		android:showAsAction="ifRoom"
+		android:showAsAction="never"
 		android:icon="@drawable/ic_menu_edit"
 		android:orderInCategory="14" />
 	<item 
 		android:id="@+id/menu_view_deletebookmark" 
 		android:title="@string/menu_view_deletebookmark_title" 
-		android:showAsAction="ifRoom"
+		android:showAsAction="never"
 		android:icon="@drawable/ic_menu_delete"
 		android:orderInCategory="15" />
 	<item 
