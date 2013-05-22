@@ -36,15 +36,12 @@ import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.pindroid.Constants;
 import com.pindroid.R;
-import com.pindroid.action.IntentHelper;
 import com.pindroid.application.PindroidApplication;
 import com.pindroid.authenticator.AuthenticatorActivity;
 import com.pindroid.util.AccountHelper;
@@ -158,7 +155,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 				getIntent().setData(b.build());
 				changeAccount();
 			} else if(app.getUsername() == null || app.getUsername().equals("")){
-				requestAccount();
+				//requestAccount();
 			}
 		}
 	}
@@ -187,6 +184,52 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 				app.setUsername(account.name);
 			}
 		}
+	}
+	
+	public void searchHandler(View v) {
+		onSearchRequested();
+	}
+	
+	@TargetApi(11)
+	public void setupSearch(Menu menu){
+	    if(android.os.Build.VERSION.SDK_INT >= 11) {
+	    	SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+	    	SearchView searchView = (SearchView)menu.findItem(R.id.menu_search).getActionView();
+	    	searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+	    	searchView.setSubmitButtonEnabled(false);
+	    	
+	    	searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+	    	    public boolean onQueryTextSubmit(String query) {
+	    	    	startSearch(query);
+	    	    	return true;
+	    	    }
+
+	    	    public boolean onQueryTextChange(final String s) {
+	    	    	return false;
+	    	    }
+	    	});
+	    }
+	}
+	
+	// ******************************************
+	// ******************************************
+	// ******************************************
+	//TODO test searching on < 3.0 devices
+	//TODO test on tablet
+	// ******************************************
+	// ******************************************
+	// ******************************************
+
+	private void startSearch(final String query) {
+		Intent i = new Intent(this, MainSearchResults.class);
+		i.putExtra("query", query);
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority(app.getUsername() + "@" + Constants.INTENT_URI);
+		i.setData(data.build());
+		startActivity(i);
+		finish();
 	}
 	
 	@Override
@@ -244,17 +287,21 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	// signal to derived activity that the account may have changed
 	protected abstract void changeAccount();
 	
+	protected void setAccount(String username){
+		app.setUsername(username);
+		
+		if(getAccountCount() > 1)
+			setSubtitle(app.getUsername());
+		
+		changeAccount();
+	}
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){	
 		if(resultCode == Activity.RESULT_CANCELED && requestCode != Constants.REQUEST_CODE_ACCOUNT_CHANGE){
 			finish();
 		} else if(resultCode == Activity.RESULT_OK && requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
-			app.setUsername(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));
-			
-			if(getAccountCount() > 1)
-				setSubtitle(app.getUsername());
-			
-			changeAccount();
+			setAccount(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));	
 		}
 	}
 }

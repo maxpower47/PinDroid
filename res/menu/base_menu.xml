@@ -22,31 +22,23 @@
  */
  -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item 
-		android:id="@+id/menu_sortbookmark" 
-		android:title="@string/menu_sort_bookmark_title" 
-		android:icon="@drawable/ic_menu_sort_alphabetically"
+    <item 
+		android:id="@+id/menu_search" 
+		android:title="@string/menu_search_title" 
+		android:icon="@drawable/ic_menu_search"
+		android:showAsAction="ifRoom"
+		android:actionViewClass="android.widget.SearchView"
+		android:orderInCategory="2" />
+    <item 
+		android:id="@+id/menu_addbookmark" 
+		android:title="@string/menu_addbookmark_title" 
+		android:icon="@drawable/ic_menu_add"
 		android:showAsAction="never"
-		android:orderInCategory="12">
-		<menu>
-			<item 
-				android:id="@+id/menu_bookmark_sort_date_asc" 
-				android:title="@string/bookmark_sort_date_asc" />
-			<item 
-				android:id="@+id/menu_bookmark_sort_date_desc" 
-				android:title="@string/bookmark_sort_date_desc" />
-			<item 
-				android:id="@+id/menu_bookmark_sort_description_asc" 
-				android:title="@string/bookmark_sort_description_asc" />
-			<item 
-				android:id="@+id/menu_bookmark_sort_description_desc" 
-				android:title="@string/bookmark_sort_description_desc" />
-			<item 
-				android:id="@+id/menu_bookmark_sort_url_asc" 
-				android:title="@string/bookmark_sort_url_asc" />
-			<item 
-				android:id="@+id/menu_bookmark_sort_url_desc" 
-				android:title="@string/bookmark_sort_url_desc" />
-		</menu>
-	</item>
+		android:orderInCategory="98" />
+	<item 
+		android:id="@+id/menu_settings" 
+		android:title="@string/menu_settings_title" 
+		android:icon="@drawable/ic_menu_preferences"
+		android:showAsAction="never"
+		android:orderInCategory="99" />
 </menu>

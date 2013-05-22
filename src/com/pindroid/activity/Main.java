@@ -21,6 +21,9 @@
 
 package com.pindroid.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.Constants;
 import com.pindroid.R;
@@ -44,6 +47,7 @@ import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.NoteContent.Note;
 import com.pindroid.fragment.PindroidFragment;
 
+import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -55,17 +59,22 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class Main extends FragmentBaseActivity implements MainFragment.OnMainActionListener, OnBookmarkSelectedListener, 
 		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnBookmarkSaveListener {
 	
 	private ListView mDrawerList;
+	private LinearLayout mDrawerWrapper;
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private CharSequence mDrawerTitle;
@@ -78,7 +87,8 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		setContentView(R.layout.main);
 
 		
-		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+		mDrawerList = (ListView) findViewById(R.id.left_drawer_list);
+		mDrawerWrapper = (LinearLayout) findViewById(R.id.left_drawer);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mTitle = mDrawerTitle = getTitle();
 		
@@ -90,14 +100,35 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 				getString(R.string.main_menu_my_notes),
 				getString(R.string.main_menu_recent_bookmarks),
 				getString(R.string.main_menu_popular_bookmarks),
-				getString(R.string.main_menu_network_bookmarks),
-				"Search",
-				"Add Bookmark",
-				"Change Account",
-				"Settings"};
+				getString(R.string.main_menu_network_bookmarks)};
 		
 		mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+
+		Spinner spinner = (Spinner) findViewById(R.id.account_spinner);
+		// Create an ArrayAdapter using the string array and a default spinner layout
+		
+		ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, getAccountNames());
+		// Specify the layout to use when the list of choices appears
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// Apply the adapter to the spinner
+		spinner.setAdapter(adapter);
+		
+		setAccount((String)spinner.getSelectedItem());
+		
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+				setAccount((String)parent.getItemAtPosition(pos));
+				
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}		
+		});
+
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
@@ -158,29 +189,6 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 			case 6:
 				onMyNetworkSelected();
 				break;
-			case 7:
-				onSearchSelected();
-				break;
-			case 8:
-				onBookmarkAdd(null);
-				mDrawerList.setItemChecked(8, false);
-				mDrawerList.setItemChecked(lastSelected, true);
-				mDrawerLayout.closeDrawer(mDrawerList);
-				break;
-			case 9:
-				Intent i = AccountManager.newChooseAccountIntent(getAccount(), null, new String[]{Constants.ACCOUNT_TYPE}, true, null, null, null, null);
-				startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
-				mDrawerList.setItemChecked(9, false);
-				mDrawerList.setItemChecked(lastSelected, true);
-				mDrawerLayout.closeDrawer(mDrawerList);
-				break;
-			case 10:
-				Intent prefs = new Intent(this, Preferences.class);
-				startActivity(prefs);
-				mDrawerList.setItemChecked(10, false);
-				mDrawerList.setItemChecked(lastSelected, true);
-				mDrawerLayout.closeDrawer(mDrawerList);
-				break;
 		}
 
 		if(position < 7)
@@ -194,16 +202,27 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
         if (mDrawerToggle.onOptionsItemSelected(item)) {
           return true;
         }
-        // Handle your other action bar items...
-
-        return super.onOptionsItemSelected(item);
+	    switch (item.getItemId()) {
+		    case R.id.menu_addbookmark:
+		    	onBookmarkAdd(null);
+				return true;
+		    case R.id.menu_settings:
+				Intent prefs = new Intent(this, Preferences.class);
+				startActivity(prefs);
+		        return true;
+		    case R.id.menu_search:
+		    	onSearchRequested();
+		    	return true;
+		    default:
+		        return super.onOptionsItemSelected(item);
+	    }
     }
 	
     /* Called whenever we call invalidateOptionsMenu() */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerWrapper);
         return super.onPrepareOptionsMenu(menu);
     }
 	
@@ -244,7 +263,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	private void clearDrawer(int position){		
 		// Highlight the selected item, update the title, and close the drawer
 	    mDrawerList.setItemChecked(position, true);
-	    mDrawerLayout.closeDrawer(mDrawerList);
+	    mDrawerLayout.closeDrawer(mDrawerWrapper);
 	}
 	
 	private void clearBackStack(){
@@ -361,13 +380,6 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		}
 		
 		clearDrawer(6);
-	}
-	
-	public void onSearchSelected() {
-		onSearchRequested();
-		mDrawerList.setItemChecked(7, false);
-		mDrawerList.setItemChecked(lastSelected, true);
-		mDrawerLayout.closeDrawer(mDrawerList);
 	}
 	
 	@Override
@@ -530,6 +542,27 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
+    
+    private String[] getAccountNames(){
+    	
+    	List<String> accountNames = new ArrayList<String>();
+    	
+    	for(Account account : AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE)) {
+    		accountNames.add(account.name);
+    	}
+    	
+    	return accountNames.toArray(new String[]{});
+    }
+    
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.base_menu, menu);
+	    
+	    setupSearch(menu);
+	    
+	    return true;
+	}
     
     private Fragment duplicateFragment(Fragment f)
     {
