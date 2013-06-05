@@ -43,8 +43,11 @@ import com.pindroid.fragment.MainFragment;
 import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
 import com.pindroid.fragment.ViewNoteFragment;
 import com.pindroid.platform.BookmarkManager;
+import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.NoteContent.Note;
+import com.pindroid.util.SettingsHelper;
+import com.pindroid.util.StringUtils;
 import com.pindroid.fragment.PindroidFragment;
 
 import android.accounts.Account;
@@ -56,8 +59,10 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -79,10 +84,13 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	private ActionBarDrawerToggle mDrawerToggle;
 	private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private int lastSelected = 0;
+    private Spinner mAccountSpinner;
+    private int spinnerSelectionCount = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
+		Log.d("main", "onCreateStart");
+		
 		super.onCreate(savedState);
 		setContentView(R.layout.main);
 
@@ -91,6 +99,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		mDrawerWrapper = (LinearLayout) findViewById(R.id.left_drawer);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mTitle = mDrawerTitle = getTitle();
+		mAccountSpinner = (Spinner) findViewById(R.id.account_spinner);
 		
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		
@@ -105,22 +114,27 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-
-		Spinner spinner = (Spinner) findViewById(R.id.account_spinner);
-		// Create an ArrayAdapter using the string array and a default spinner layout
 		
 		ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, getAccountNames());
 		// Specify the layout to use when the list of choices appears
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		// Apply the adapter to the spinner
-		spinner.setAdapter(adapter);
+		mAccountSpinner.setAdapter(adapter);
 		
-		setAccount((String)spinner.getSelectedItem());
-		
-		spinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+		if(app.getUsername() == null || app.getUsername().equals("")) {
+			Log.d("spinnerDefaultAccount", (String)mAccountSpinner.getSelectedItem());
+			setAccount((String)mAccountSpinner.getSelectedItem());
+		}
+
+		mAccountSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-				setAccount((String)parent.getItemAtPosition(pos));
 				
+				// onItemSelected is called on initialization of the spinner, so prevent this from being called the first time
+				if(spinnerSelectionCount > 0) {
+					Log.d("spinnerOnItemSelected", (String)parent.getItemAtPosition(pos));
+					setAccount((String)parent.getItemAtPosition(pos));
+				}
+				spinnerSelectionCount++;
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {
@@ -157,6 +171,50 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		if (savedInstanceState == null) {
             selectItem(0);
         }
+		
+		
+		processIntent(getIntent());
+		
+		Log.d("main", "onCreateEnd");
+	}
+	
+	@Override
+	public void onNewIntent(Intent intent){
+		setIntent(intent);
+		processIntent(intent);
+	}
+	
+	private void processIntent(Intent intent){
+		Log.d("processIntent", intent.getDataString() == null ? "" : intent.getDataString());
+		Log.d("processIntent: currentUsername", app.getUsername());
+		
+		String action = intent.getAction();
+		String lastPath = (intent.getData() != null && intent.getData().getLastPathSegment() != null) ? intent.getData().getLastPathSegment() : "";
+		String intentUsername = (intent.getData() != null && intent.getData().getUserInfo() != null) ? intent.getData().getUserInfo() : "";
+		
+		if(!intentUsername.equals("") && !app.getUsername().equals(intentUsername)){
+			setAccount(intentUsername);
+			Log.d("processIntent: changeUsername", intentUsername);
+		}
+		
+		if(Intent.ACTION_VIEW.equals(action)) {
+			if(lastPath.equals("bookmarks")){
+				if(intent.getData().getQueryParameter("unread") != null && intent.getData().getQueryParameter("unread").equals("1")){
+					Log.d("processIntent", "unread");
+					onMyUnreadSelected();
+					
+				} else{
+					Log.d("processIntent", "bookmarks");
+					onMyBookmarksSelected();
+					
+				}	
+			} else if(lastPath.equals("tags")){
+				Log.d("processIntent", "tags");
+				onMyTagsSelected();
+			}
+		} else if(Intent.ACTION_SEND.equals(action)){
+			onBookmarkAdd(null);
+		}
 	}
 	
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -190,9 +248,6 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 				onMyNetworkSelected();
 				break;
 		}
-
-		if(position < 7)
-			lastSelected = position;
 	}
 	
 	@Override
@@ -384,6 +439,13 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	
 	@Override
 	protected void changeAccount(){
+
+		int position = ((ArrayAdapter<CharSequence>)mAccountSpinner.getAdapter()).getPosition(app.getUsername());
+		Log.d("spinnerSetSectionStart", Integer.toString(mAccountSpinner.getSelectedItemPosition()));
+		mAccountSpinner.setSelection(position);
+		Log.d("spinnerSetSection", Integer.toString(position));
+
+		
 		Fragment cf = getSupportFragmentManager().findFragmentById(R.id.content_frame);
 		Fragment lf = getSupportFragmentManager().findFragmentById(R.id.list_frame);
 		
@@ -517,6 +579,36 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 
 	public void onBookmarkCancel(Bookmark b) {
 		getSupportFragmentManager().popBackStack();
+	}
+	
+	private Bookmark loadBookmarkFromShareIntent() {
+		Bookmark bookmark = new Bookmark();
+		
+		ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(this);
+		
+		String url = StringUtils.getUrl(reader.getText().toString());
+		bookmark.setUrl(url);
+		
+		if(reader.getSubject() != null)
+			bookmark.setDescription(reader.getSubject());
+		
+		bookmark.setToRead(SettingsHelper.getToReadDefault(this));
+		bookmark.setShared(!SettingsHelper.getPrivateDefault(this));
+		
+		return bookmark;
+	}
+	
+	private Bookmark findExistingBookmark() {
+		Bookmark bookmark = new Bookmark();
+
+		try{
+			Bookmark old = BookmarkManager.GetByUrl(bookmark.getUrl(), app.getUsername(), this);
+			bookmark = old.copy();
+		} catch(ContentNotFoundException e) {
+			return null;
+		}
+
+		return bookmark;
 	}
 	
 	@Override

@@ -148,7 +148,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 			
 			return;
 		} else {			
-			if(getIntent().getData() != null && getIntent().getData().getUserInfo() != null){
+			/*if(getIntent().getData() != null && getIntent().getData().getUserInfo() != null){
 				app.setUsername(getIntent().getData().getUserInfo());
 				Builder b = getIntent().getData().buildUpon();
 				b.encodedAuthority(Constants.INTENT_URI);
@@ -156,7 +156,7 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 				changeAccount();
 			} else if(app.getUsername() == null || app.getUsername().equals("")){
 				//requestAccount();
-			}
+			}*/
 		}
 	}
 	
@@ -288,6 +288,8 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 	protected abstract void changeAccount();
 	
 	protected void setAccount(String username){
+		Log.d("setAccount", username);
+		
 		app.setUsername(username);
 		
 		if(getAccountCount() > 1)

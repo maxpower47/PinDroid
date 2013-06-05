@@ -48,7 +48,7 @@ public class IntentHelper {
 	}
 	
 	public static Intent AddBookmark(String url, String account, Context context) {
-		Intent addBookmark = new Intent(context, AddBookmark.class);
+		Intent addBookmark = new Intent(context, Main.class);
 		addBookmark.setAction(Intent.ACTION_SEND);
 		if(url != null)
 			addBookmark.putExtra(Intent.EXTRA_TEXT, url);
@@ -110,7 +110,7 @@ public class IntentHelper {
 	}
 	
 	public static Intent ViewBookmarks(String tag, String account, String feed, Context context) {
-		Intent i = new Intent(context, BrowseBookmarks.class);
+		Intent i = new Intent(context, Main.class);
 		i.setAction(Intent.ACTION_VIEW);
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
@@ -144,7 +144,7 @@ public class IntentHelper {
 	}
 	
 	public static Intent ViewUnread(String account, Context context) {
-		Intent i = new Intent(context, BrowseBookmarks.class);
+		Intent i = new Intent(context, Main.class);
 		i.setAction(Intent.ACTION_VIEW);
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
@@ -158,7 +158,7 @@ public class IntentHelper {
 	}
 	
 	public static Intent ViewTags(String account, Context context) {
-		Intent i = new Intent(context, BrowseTags.class);
+		Intent i = new Intent(context, Main.class);
 		i.setAction(Intent.ACTION_VIEW);
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();

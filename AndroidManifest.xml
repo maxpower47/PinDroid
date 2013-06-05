@@ -55,7 +55,8 @@
         android:theme="@style/ThemeSelector"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:requiredAccountType="com.pindroid">
+        android:requiredAccountType="com.pindroid"
+        android:launchMode="singleTop">
         <activity
         	android:name=".activity.Main"
         	android:label="@string/titleMain">
