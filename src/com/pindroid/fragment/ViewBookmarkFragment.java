@@ -115,7 +115,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {
-    		bookmarkActionListener.onViewTagSelected(tag, isMyself() ? null : bookmark.getAccount());
+    		bookmarkActionListener.onViewTagSelected(tag, bookmark.getAccount());
         }
     };
     
