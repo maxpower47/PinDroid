@@ -234,7 +234,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		if(!intentUsername.equals("") && !app.getUsername().equals(intentUsername)){
 			setAccount(intentUsername);
 			Log.d("processIntent: changeUsername", intentUsername);
-		}
+		} else setSpinnerAccount(app.getUsername());
 		
 		if(Intent.ACTION_VIEW.equals(action)) {
 			if(lastPath.equals("bookmarks")){
@@ -254,6 +254,14 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		} else if(Intent.ACTION_SEND.equals(action)){
 			onBookmarkAdd(null);
 		}
+	}
+	
+	private void setSpinnerAccount(String username){
+
+		int position = ((ArrayAdapter<CharSequence>)mAccountSpinner.getAdapter()).getPosition(username);
+		Log.d("spinnerSetSectionStart", Integer.toString(mAccountSpinner.getSelectedItemPosition()));
+		mAccountSpinner.setSelection(position);
+		Log.d("spinnerSetSection", Integer.toString(position));
 	}
 	
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -479,10 +487,8 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	@Override
 	protected void changeAccount(){
 
-		int position = ((ArrayAdapter<CharSequence>)mAccountSpinner.getAdapter()).getPosition(app.getUsername());
-		Log.d("spinnerSetSectionStart", Integer.toString(mAccountSpinner.getSelectedItemPosition()));
-		mAccountSpinner.setSelection(position);
-		Log.d("spinnerSetSection", Integer.toString(position));
+		
+		setSpinnerAccount(app.getUsername());
 
 		
 		Fragment cf = getSupportFragmentManager().findFragmentById(R.id.content_frame);

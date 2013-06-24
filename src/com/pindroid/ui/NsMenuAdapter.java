@@ -33,12 +33,6 @@ import android.widget.TextView;
 
 public class NsMenuAdapter extends ArrayAdapter<NsMenuItemModel> {
 
-	/*
-	 * public NsMenuAdapter(Context context, int resource, int
-	 * textViewResourceId, String[] objects) { super(context,
-	 * R.layout.ns_menu_row, textViewResourceId, objects); }
-	 */
-
 	public NsMenuAdapter(Context context) {
 		super(context, 0);
 	}
