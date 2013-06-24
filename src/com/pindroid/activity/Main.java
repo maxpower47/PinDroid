@@ -46,6 +46,8 @@ import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.NoteContent.Note;
+import com.pindroid.ui.NsMenuAdapter;
+import com.pindroid.ui.NsMenuItemModel;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
 import com.pindroid.fragment.PindroidFragment;
@@ -86,6 +88,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
     private CharSequence mTitle;
     private Spinner mAccountSpinner;
     private int spinnerSelectionCount = 0;
+    
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -102,19 +105,25 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		mAccountSpinner = (Spinner) findViewById(R.id.account_spinner);
 		
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-		
-		String[] MENU_ITEMS = new String[] {getString(R.string.main_menu_my_bookmarks),
-				getString(R.string.main_menu_my_unread_bookmarks),
-				getString(R.string.main_menu_my_tags),
-				getString(R.string.main_menu_my_notes),
-				getString(R.string.main_menu_recent_bookmarks),
-				getString(R.string.main_menu_popular_bookmarks),
-				getString(R.string.main_menu_network_bookmarks)};
-		
-		mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.main_view, MENU_ITEMS));
-		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+		
+		_initMenu();
+		
+		if (savedInstanceState == null) {
+            selectItem(1);
+        }
+		
+		processIntent(getIntent());
+		
+		Log.d("main", "onCreateEnd");
+	}
+	
+	private void _initMenu() {
+		
+		// Set up account spinner 
 		ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, getAccountNames());
 		// Specify the layout to use when the list of choices appears
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -142,10 +151,46 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 				
 			}		
 		});
-
 		
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+		
+		// Set up menu
+		NsMenuAdapter mAdapter = new NsMenuAdapter(this);
+		mAdapter.addHeader(R.string.main_menu_my_header);
+
+		String[] myMenuItems = getResources().getStringArray(R.array.main_menu_my);
+		String[] feedMenuItems = getResources().getStringArray(R.array.main_menu_feeds);
+
+		String[] myMenuItemsIcon = getResources().getStringArray(R.array.main_menu_my_icons);
+
+		int res = 0;
+		for (String item : myMenuItems) {
+
+			int id_title = getResources().getIdentifier(item, "string", this.getPackageName());
+			int id_icon = getResources().getIdentifier(myMenuItemsIcon[res], "drawable", this.getPackageName());
+
+			NsMenuItemModel mItem = new NsMenuItemModel(id_title, id_icon);
+			if (res==1) mItem.counter = BookmarkManager.GetUnreadCount(app.getUsername(), this);
+			mAdapter.addItem(mItem);
+			res++;
+		}
+		
+		mAdapter.addHeader(R.string.main_menu_feeds_header);
+		
+		for (String item : feedMenuItems) {
+
+			int id_title = getResources().getIdentifier(item, "string", this.getPackageName());
+			//int id_icon = getResources().getIdentifier(menuItemsIcon[res], "drawable", this.getPackageName());
+
+			NsMenuItemModel mItem = new NsMenuItemModel(id_title);
+			mAdapter.addItem(mItem);
+			res++;
+		}
+
+		if (mDrawerList != null)
+			mDrawerList.setAdapter(mAdapter);
+		 
+		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+		
 		
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
@@ -168,14 +213,8 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 		
-		if (savedInstanceState == null) {
-            selectItem(0);
-        }
-		
-		
-		processIntent(getIntent());
-		
-		Log.d("main", "onCreateEnd");
+
+
 	}
 	
 	@Override
@@ -226,26 +265,26 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {
 		switch(position){
-			case 0:
+			case 1:
 				onMyBookmarksSelected();
 				break;
-			case 1:
+			case 2:
 				onMyUnreadSelected();
 				break;
-			case 2:
+			case 3:
 				onMyTagsSelected();
 				break;
-			case 3:
-				onMyNotesSelected();
-				break;
 			case 4:
-				onRecentSelected();
-				break;
-			case 5:
-				onPopularSelected();
+				onMyNotesSelected();
 				break;
 			case 6:
 				onMyNetworkSelected();
+				break;
+			case 7:
+				onRecentSelected();	
+				break;
+			case 8:
+				onPopularSelected();
 				break;
 		}
 	}
