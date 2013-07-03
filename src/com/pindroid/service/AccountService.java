@@ -21,23 +21,18 @@
 
 package com.pindroid.service;
 
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
-
-import org.apache.http.auth.AuthenticationException;
-
-import com.pindroid.Constants;
-import com.pindroid.client.PinboardApi;
-import com.pindroid.client.TooManyRequestsException;
-import com.pindroid.platform.BookmarkManager;
-import com.pindroid.platform.TagManager;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
+
+import com.pindroid.Constants;
+import com.pindroid.client.PinboardApi;
+import com.pindroid.platform.BookmarkManager;
+import com.pindroid.platform.TagManager;
 
 public class AccountService extends IntentService {
 
@@ -67,13 +62,7 @@ public class AccountService extends IntentService {
 				try {
 					String token = PinboardApi.getSecretToken(a, this);		
 					mAccountManager.setUserData(a, Constants.PREFS_SECRET_TOKEN, token);
-				} catch (AuthenticationException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (TooManyRequestsException e){
-					e.printStackTrace();
-				} catch (ParseException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}

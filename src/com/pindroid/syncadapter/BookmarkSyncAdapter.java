@@ -24,6 +24,7 @@ package com.pindroid.syncadapter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.auth.AuthenticationException;
 
@@ -103,13 +104,16 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
         		syncResult.delayUntil = e.getBackoff();
         	}
         	Log.d(TAG, "Too Many Requests.  Backing off for " + e.getBackoff() + " seconds.");
-        } finally {
+        } catch (PinboardException e) {
+        	syncResult.stats.numSkippedEntries++;
+            Log.e(TAG, "PinboardException", e);
+		} finally {
         	Log.d(TAG, "Finished Sync");
         }
     }
     
     private void InsertBookmarks(Account account, SyncResult syncResult) 
-    	throws AuthenticationException, IOException, TooManyRequestsException, ParseException{
+    	throws AuthenticationException, IOException, TooManyRequestsException, ParseException, PinboardException{
     	
     	long lastUpdate = getServerSyncMarker(account);
     	final String username = account.name;
@@ -126,6 +130,9 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			final ArrayList<Bookmark> addBookmarkList = getBookmarkList();	
 			BookmarkManager.TruncateBookmarks(accounts, mContext, false);		
 			if(!addBookmarkList.isEmpty()){
+				List<Bookmark> unsyncedBookmarks = BookmarkManager.GetLocalBookmarks(username, mContext);
+				addBookmarkList.removeAll(unsyncedBookmarks);
+				
 				BookmarkManager.BulkInsert(addBookmarkList, username, mContext);
 			}
 			
@@ -145,7 +152,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	}
     }
     
-    private void SyncNotes() throws AuthenticationException, IOException, TooManyRequestsException{
+    private void SyncNotes() throws AuthenticationException, IOException, TooManyRequestsException, PinboardException{
     	
 		final ArrayList<Note> noteList = PinboardApi.getNoteList(mAccount, mContext);
 		NoteManager.TruncateNotes(mAccount.name, mContext);
@@ -187,7 +194,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     }
     
     private void DeleteBookmarks(Account account, SyncResult syncResult) 
-		throws AuthenticationException, IOException, TooManyRequestsException, ParseException{
+		throws AuthenticationException, IOException, TooManyRequestsException, ParseException, PinboardException{
 	
 		final ArrayList<Bookmark> bookmarks = BookmarkManager.GetDeletedBookmarks(account.name, mContext);
 		
@@ -203,7 +210,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 	}
     
     private ArrayList<Bookmark> getBookmarkList()
-    	throws AuthenticationException, IOException, TooManyRequestsException {
+    	throws AuthenticationException, IOException, TooManyRequestsException, PinboardException {
     	int pageSize = Constants.BOOKMARK_PAGE_SIZE;
     	ArrayList<Bookmark> results = new ArrayList<Bookmark>();   	
 

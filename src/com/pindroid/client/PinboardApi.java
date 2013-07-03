@@ -162,9 +162,10 @@ public class PinboardApi {
      * @throws AuthenticationException If an authentication error was encountered.
      * @throws TooManyRequestsException 
      * @throws ParseException 
+     * @throws PinboardException 
      */
     public static Update lastUpdate(Account account, Context context)
-    	throws IOException, AuthenticationException, TooManyRequestsException, ParseException {
+    	throws IOException, AuthenticationException, TooManyRequestsException, ParseException, PinboardException {
 
     	InputStream responseStream = null;
     	TreeMap<String, String> params = new TreeMap<String, String>();
@@ -245,9 +246,10 @@ public class PinboardApi {
      * @throws AuthenticationException If an authentication error was encountered.
      * @throws TooManyRequestsException 
      * @throws ParseException 
+     * @throws PinboardException 
      */
     public static Boolean deleteBookmark(Bookmark bookmark, Account account, Context context) 
-    	throws IOException, AuthenticationException, TooManyRequestsException, ParseException {
+    	throws IOException, AuthenticationException, TooManyRequestsException, ParseException, PinboardException {
 
     	TreeMap<String, String> params = new TreeMap<String, String>();
     	InputStream responseStream = null;
@@ -281,9 +283,10 @@ public class PinboardApi {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      * @throws TooManyRequestsException 
+     * @throws PinboardException 
      */
     public static ArrayList<Bookmark> getBookmark(ArrayList<String> hashes, Account account,
-        Context context) throws IOException, AuthenticationException, TooManyRequestsException {
+        Context context) throws IOException, AuthenticationException, TooManyRequestsException, PinboardException {
 
     	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
     	TreeMap<String, String> params = new TreeMap<String, String>();
@@ -324,9 +327,10 @@ public class PinboardApi {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      * @throws TooManyRequestsException 
+     * @throws PinboardException 
      */
     public static ArrayList<Bookmark> getAllBookmarks(String tagName, Account account, Context context) 
-    	throws IOException, AuthenticationException, TooManyRequestsException {
+    	throws IOException, AuthenticationException, TooManyRequestsException, PinboardException {
 
         return getAllBookmarks(tagName, 0, 0, account, context);
     }
@@ -343,9 +347,10 @@ public class PinboardApi {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      * @throws TooManyRequestsException 
+     * @throws PinboardException 
      */
     public static ArrayList<Bookmark> getAllBookmarks(String tagName, int start, int count, Account account, Context context) 
-	throws IOException, AuthenticationException, TooManyRequestsException {
+	throws IOException, AuthenticationException, TooManyRequestsException, PinboardException {
     	ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
 
     	InputStream responseStream = null;
@@ -391,9 +396,10 @@ public class PinboardApi {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      * @throws TooManyRequestsException 
+     * @throws PinboardException 
      */
     public static ArrayList<Tag> getSuggestedTags(String suggestUrl, Account account, Context context) 
-    	throws IOException, AuthenticationException, TooManyRequestsException {
+    	throws IOException, AuthenticationException, TooManyRequestsException, PinboardException {
     	
     	ArrayList<Tag> tagList = new ArrayList<Tag>();
     	
@@ -430,9 +436,10 @@ public class PinboardApi {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      * @throws TooManyRequestsException 
+     * @throws PinboardException 
      */
     public static ArrayList<Tag> getTags(Account account, Context context) 
-    	throws IOException, AuthenticationException, TooManyRequestsException {
+    	throws IOException, AuthenticationException, TooManyRequestsException, PinboardException {
     	
     	ArrayList<Tag> tagList = new ArrayList<Tag>();
 
@@ -463,9 +470,10 @@ public class PinboardApi {
      * @throws AuthenticationException If an authentication error was encountered.
      * @throws TooManyRequestsException 
      * @throws ParseException 
+     * @throws PinboardException 
      */
     public static String getSecretToken(Account account, Context context) 
-    	throws IOException, AuthenticationException, TooManyRequestsException, ParseException {
+    	throws IOException, AuthenticationException, TooManyRequestsException, ParseException, PinboardException {
 
     	InputStream responseStream = null;
     	final TreeMap<String, String> params = new TreeMap<String, String>();
@@ -487,9 +495,10 @@ public class PinboardApi {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      * @throws TooManyRequestsException 
+     * @throws PinboardException 
      */
     public static ArrayList<Note> getNoteList(Account account, Context context) 
-    	throws IOException, AuthenticationException, TooManyRequestsException {
+    	throws IOException, AuthenticationException, TooManyRequestsException, PinboardException {
     	
     	ArrayList<Note> noteList = new ArrayList<Note>();
 
@@ -519,9 +528,10 @@ public class PinboardApi {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      * @throws TooManyRequestsException 
+     * @throws PinboardException 
      */
     public static Note getNote(String pid, Account account, Context context) 
-    	throws IOException, AuthenticationException, TooManyRequestsException {
+    	throws IOException, AuthenticationException, TooManyRequestsException, PinboardException {
     	
     	Note note = new Note();
 
@@ -553,9 +563,10 @@ public class PinboardApi {
      * @throws IOException If a server error was encountered.
      * @throws AuthenticationException If an authentication error was encountered.
      * @throws TooManyRequestsException 
+     * @throws PinboardException 
      */
     private static InputStream PinboardApiCall(String url, TreeMap<String, String> params, 
-    		Account account, Context context) throws IOException, AuthenticationException, TooManyRequestsException{
+    		Account account, Context context) throws IOException, AuthenticationException, TooManyRequestsException, PinboardException{
 
     	final AccountManager am = AccountManager.get(context);
     	
@@ -628,6 +639,8 @@ public class PinboardApi {
     		throw new AuthenticationException();
     	} else if (statusCode == Constants.HTTP_STATUS_TOO_MANY_REQUESTS) {
     		throw new TooManyRequestsException(300);
+    	} else if (statusCode == HttpStatus.SC_REQUEST_URI_TOO_LONG) {
+    		throw new PinboardException();
     	} else {
     		throw new IOException();
     	}

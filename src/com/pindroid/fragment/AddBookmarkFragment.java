@@ -21,17 +21,13 @@
 
 package com.pindroid.fragment;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
-import org.apache.http.auth.AuthenticationException;
-
 import com.pindroid.R;
 import com.pindroid.action.GetWebpageTitleTask;
 import com.pindroid.client.PinboardApi;
-import com.pindroid.client.TooManyRequestsException;
 import com.pindroid.listadapter.TagAutoCompleteCursorAdapter;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
@@ -342,11 +338,7 @@ public class AddBookmarkFragment extends Fragment {
     			Account account = AccountHelper.getAccount(username, getActivity());
     			
 				return PinboardApi.getSuggestedTags(url, account, getActivity());
-			} catch (AuthenticationException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (TooManyRequestsException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return null;

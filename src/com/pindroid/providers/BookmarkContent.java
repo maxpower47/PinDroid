@@ -302,5 +302,30 @@ public class BookmarkContent {
 			mRead = in.readByte() == 1;
 			mDeleted = in.readByte() == 1;
 		 }
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((mHash == null) ? 0 : mHash.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Bookmark other = (Bookmark) obj;
+			if (mHash == null) {
+				if (other.mHash != null)
+					return false;
+			} else if (!mHash.equals(other.mHash))
+				return false;
+			return true;
+		}
 	}
 }
