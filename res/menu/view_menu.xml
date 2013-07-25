@@ -21,13 +21,14 @@
  * USA
  */
  -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item 
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:pindroid="http://schemas.android.com/apk/res-auto">
+    <item 
 		android:id="@+id/menu_view" 
 		android:title="@string/menu_view_title" 
-		android:showAsAction="ifRoom"
+		pindroid:showAsAction="ifRoom"
 		android:icon="@drawable/ic_menu_view"
-		android:orderInCategory="12" >
+		android:orderInCategory="1" >
 		<menu>
 		    <item 
 				android:id="@+id/menu_view_details" 
@@ -46,16 +47,20 @@
 	<item 
 		android:id="@+id/menu_view_editbookmark" 
 		android:title="@string/menu_view_editbookmark_title" 
+		pindroid:showAsAction="never"
 		android:icon="@drawable/ic_menu_edit"
 		android:orderInCategory="14" />
 	<item 
 		android:id="@+id/menu_view_deletebookmark" 
 		android:title="@string/menu_view_deletebookmark_title" 
+		pindroid:showAsAction="never"
 		android:icon="@drawable/ic_menu_delete"
 		android:orderInCategory="15" />
 	<item 
 		android:id="@+id/menu_view_sendbookmark" 
 		android:title="@string/menu_view_sendbookmark_title" 
+		pindroid:showAsAction="never"
 		android:icon="@drawable/ic_menu_share"
+		pindroid:actionProviderClass="android.support.v7.widget.ShareActionProvider"
 		android:orderInCategory="16" />
 </menu>

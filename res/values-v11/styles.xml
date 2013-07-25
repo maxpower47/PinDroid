@@ -28,7 +28,7 @@
         <item name="android:background">@color/actionbar_background</item>  
     </style>
 
-    <style name="ThemeSelector" parent="android:Theme.Holo">
+    <style name="ThemeSelector" parent="@style/Theme.AppCompat">
     	<item name="android:actionBarStyle">@style/ActionBar.Light</item>
     </style>
 </resources>

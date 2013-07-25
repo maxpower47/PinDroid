@@ -29,15 +29,16 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.net.Uri.Builder;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.pindroid.Constants;
@@ -46,7 +47,7 @@ import com.pindroid.application.PindroidApplication;
 import com.pindroid.authenticator.AuthenticatorActivity;
 import com.pindroid.util.AccountHelper;
 
-public abstract class FragmentBaseActivity extends FragmentActivity {
+public abstract class FragmentBaseActivity extends ActionBarActivity {
 	
 	protected AccountManager mAccountManager;
 
@@ -65,10 +66,8 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		
 		mAccountManager = AccountManager.get(this);
 		
-		if(android.os.Build.VERSION.SDK_INT >= 14) {
-			if(getActionBar() != null) {
-				getActionBar().setHomeButtonEnabled(true);
-			}
+		if(getSupportActionBar() != null) {
+			getSupportActionBar().setHomeButtonEnabled(true);
 		}
 		
 		Intent intent = getIntent();
@@ -190,26 +189,24 @@ public abstract class FragmentBaseActivity extends FragmentActivity {
 		onSearchRequested();
 	}
 	
-	@TargetApi(11)
 	public void setupSearch(Menu menu){
-	    if(android.os.Build.VERSION.SDK_INT >= 11) {
-	    	SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
-	    	SearchView searchView = (SearchView)menu.findItem(R.id.menu_search).getActionView();
-	    	searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-	    	searchView.setSubmitButtonEnabled(false);
-	    	
-	    	searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+    	SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+    	MenuItem searchItem = menu.findItem(R.id.menu_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+    	searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+    	searchView.setSubmitButtonEnabled(false);
+    	
+    	searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
-	    	    public boolean onQueryTextSubmit(String query) {
-	    	    	startSearch(query);
-	    	    	return true;
-	    	    }
+    	    public boolean onQueryTextSubmit(String query) {
+    	    	startSearch(query);
+    	    	return true;
+    	    }
 
-	    	    public boolean onQueryTextChange(final String s) {
-	    	    	return false;
-	    	    }
-	    	});
-	    }
+    	    public boolean onQueryTextChange(final String s) {
+    	    	return false;
+    	    }
+    	});
 	}
 	
 	// ******************************************

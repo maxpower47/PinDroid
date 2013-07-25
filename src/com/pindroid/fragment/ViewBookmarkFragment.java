@@ -28,6 +28,8 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -42,7 +44,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ScrollView;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import com.pindroid.Constants.BookmarkViewType;
@@ -164,16 +165,14 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	}
     
 	@Override
-	@TargetApi(14)
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 	    inflater.inflate(R.menu.view_menu, menu);
 	    
-	    if(android.os.Build.VERSION.SDK_INT >= 14) {
-	    	if(bookmark != null){	
-			    ShareActionProvider shareActionProvider = (ShareActionProvider) menu.findItem(R.id.menu_view_sendbookmark).getActionProvider();
-			    shareActionProvider.setShareIntent(IntentHelper.SendBookmark(bookmark.getUrl(), bookmark.getDescription()));
-	    	}
+	    if(bookmark != null){
+	    	MenuItem shareItem = menu.findItem(R.id.menu_view_sendbookmark);
+	    	ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+			shareActionProvider.setShareIntent(IntentHelper.SendBookmark(bookmark.getUrl(), bookmark.getDescription()));
 	    }
 	}
 	
@@ -214,11 +213,6 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		    case R.id.menu_view_deletebookmark:
 		    	bookmarkSelectedListener.onBookmarkDelete(bookmark);
 				return true;
-		    case R.id.menu_view_sendbookmark:
-		    	if(android.os.Build.VERSION.SDK_INT < 14 || item.getActionProvider() == null || !(item.getActionProvider() instanceof ShareActionProvider)) {
-		    		bookmarkSelectedListener.onBookmarkShare(bookmark);
-		    	}
-		    	return true;
 		    default:
 		        return super.onOptionsItemSelected(item);
 	    }

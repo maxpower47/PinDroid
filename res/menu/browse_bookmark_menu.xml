@@ -21,12 +21,13 @@
  * USA
  */
  -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:pindroid="http://schemas.android.com/apk/res-auto">
 	<item 
 		android:id="@+id/menu_sortbookmark" 
 		android:title="@string/menu_sort_bookmark_title" 
 		android:icon="@drawable/ic_menu_sort_alphabetically"
-		android:showAsAction="never"
+		pindroid:showAsAction="never"
 		android:orderInCategory="12">
 		<menu>
 			<item 
