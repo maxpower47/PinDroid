@@ -24,42 +24,10 @@ package com.pindroid.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pindroid.Constants.BookmarkViewType;
-import com.pindroid.Constants;
-import com.pindroid.R;
-import com.pindroid.action.IntentHelper;
-import com.pindroid.fragment.AddBookmarkFragment;
-import com.pindroid.fragment.AddBookmarkFragment.OnBookmarkSaveListener;
-import com.pindroid.fragment.BookmarkBrowser;
-import com.pindroid.fragment.BrowseBookmarkFeedFragment;
-import com.pindroid.fragment.BrowseBookmarksFragment;
-import com.pindroid.fragment.MainSearchResultsFragment;
-import com.pindroid.fragment.MainSearchResultsFragment.OnSearchActionListener;
-import com.pindroid.fragment.ViewBookmarkFragment;
-import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
-import com.pindroid.fragment.BrowseNotesFragment;
-import com.pindroid.fragment.BrowseNotesFragment.OnNoteSelectedListener;
-import com.pindroid.fragment.BrowseTagsFragment;
-import com.pindroid.fragment.BrowseTagsFragment.OnTagSelectedListener;
-import com.pindroid.fragment.MainFragment;
-import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
-import com.pindroid.fragment.ViewNoteFragment;
-import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.ContentNotFoundException;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.providers.NoteContent.Note;
-import com.pindroid.ui.NsMenuAdapter;
-import com.pindroid.ui.NsMenuItemModel;
-import com.pindroid.util.SettingsHelper;
-import com.pindroid.util.StringUtils;
-import com.pindroid.fragment.PindroidFragment;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -81,7 +49,36 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class Main extends FragmentBaseActivity implements MainFragment.OnMainActionListener, OnBookmarkSelectedListener, 
+import com.pindroid.Constants;
+import com.pindroid.Constants.BookmarkViewType;
+import com.pindroid.R;
+import com.pindroid.action.IntentHelper;
+import com.pindroid.fragment.AddBookmarkFragment;
+import com.pindroid.fragment.AddBookmarkFragment.OnBookmarkSaveListener;
+import com.pindroid.fragment.BookmarkBrowser;
+import com.pindroid.fragment.BrowseBookmarkFeedFragment;
+import com.pindroid.fragment.BrowseBookmarksFragment;
+import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
+import com.pindroid.fragment.BrowseNotesFragment;
+import com.pindroid.fragment.BrowseNotesFragment.OnNoteSelectedListener;
+import com.pindroid.fragment.BrowseTagsFragment;
+import com.pindroid.fragment.BrowseTagsFragment.OnTagSelectedListener;
+import com.pindroid.fragment.MainSearchResultsFragment;
+import com.pindroid.fragment.MainSearchResultsFragment.OnSearchActionListener;
+import com.pindroid.fragment.PindroidFragment;
+import com.pindroid.fragment.ViewBookmarkFragment;
+import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
+import com.pindroid.fragment.ViewNoteFragment;
+import com.pindroid.platform.BookmarkManager;
+import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.providers.ContentNotFoundException;
+import com.pindroid.providers.NoteContent.Note;
+import com.pindroid.ui.NsMenuAdapter;
+import com.pindroid.ui.NsMenuItemModel;
+import com.pindroid.util.SettingsHelper;
+import com.pindroid.util.StringUtils;
+
+public class Main extends FragmentBaseActivity implements OnBookmarkSelectedListener, 
 		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnBookmarkSaveListener, OnSearchActionListener {
 	
 	private ListView mDrawerList;
@@ -248,7 +245,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 					
 				} else{
 					Log.d("processIntent", "bookmarks");
-					onMyBookmarksSelected();
+					onMyBookmarksSelected(intent.getData().getQueryParameter("tagname"));
 					
 				}	
 			} else if(lastPath.equals("tags")){
@@ -278,7 +275,7 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 	private void selectItem(int position) {
 		switch(position){
 			case 1:
-				onMyBookmarksSelected();
+				onMyBookmarksSelected(null);
 				break;
 			case 2:
 				onMyUnreadSelected();
@@ -383,9 +380,9 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		return getResources().getBoolean(R.bool.has_two_panes);
 	}
 
-	public void onMyBookmarksSelected() {
+	public void onMyBookmarksSelected(String tagname) {
 		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
-		frag.setQuery(app.getUsername(), null, null);
+		frag.setQuery(app.getUsername(), tagname, null);
 		
 		clearBackStack();
 		

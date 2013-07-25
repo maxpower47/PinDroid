@@ -12,7 +12,6 @@ import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.activity.AddBookmark;
 import com.pindroid.activity.BrowseBookmarks;
-import com.pindroid.activity.BrowseTags;
 import com.pindroid.activity.Main;
 import com.pindroid.activity.ViewBookmark;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -170,18 +169,6 @@ public class IntentHelper {
 	
 	public static Intent SearchBookmarks(String query, String account, Context context) {
 		Intent i = new Intent(context, BrowseBookmarks.class);
-		i.setAction(Intent.ACTION_SEARCH);
-		i.putExtra(SearchManager.QUERY, query);
-		i.putExtra("MainSearchResults", "1");
-		Uri.Builder data = new Uri.Builder();
-		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
-		i.setData(data.build());
-		return i;
-	}
-	
-	public static Intent SearchTags(String query, String account, Context context) {
-		Intent i = new Intent(context, BrowseTags.class);
 		i.setAction(Intent.ACTION_SEARCH);
 		i.putExtra(SearchManager.QUERY, query);
 		i.putExtra("MainSearchResults", "1");

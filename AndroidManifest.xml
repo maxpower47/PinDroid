@@ -69,13 +69,6 @@
         	</intent-filter>
         	<meta-data android:name="android.app.searchable" android:resource="@xml/main_searchable"/>
         </activity>
-        <activity android:name=".activity.BrowseTags">
-			<intent-filter>
-        		<action android:name="android.intent.action.PICK" />
-        		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.intent" android:path="/tags"/>
-			</intent-filter>
-        </activity>
         <activity android:name=".activity.BrowseBookmarks" >
         	<intent-filter>
         		<action android:name="android.intent.action.VIEW" />
