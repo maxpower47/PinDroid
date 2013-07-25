@@ -85,4 +85,10 @@ public class BrowseTags extends FragmentBaseActivity implements BrowseTagsFragme
 		frag.setUsername(app.getUsername());
 		frag.refresh();
 	}
+
+	@Override
+	protected void startSearch(String query) {
+		// TODO Auto-generated method stub
+		
+	}
 }

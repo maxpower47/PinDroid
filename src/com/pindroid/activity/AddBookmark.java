@@ -137,4 +137,10 @@ public class AddBookmark extends FragmentBaseActivity implements OnBookmarkSaveL
 		frag.setUsername(app.getUsername());
 		frag.refreshView();
 	}
+
+	@Override
+	protected void startSearch(String query) {
+		// TODO Auto-generated method stub
+		
+	}
 }

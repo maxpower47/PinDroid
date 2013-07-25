@@ -28,7 +28,6 @@ import java.util.List;
 
 import org.apache.http.auth.AuthenticationException;
 
-import android.annotation.TargetApi;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
@@ -70,7 +69,6 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     @Override
-    @TargetApi(8)
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
     	
     	boolean upload = extras.containsKey(ContentResolver.SYNC_EXTRAS_UPLOAD);
@@ -100,9 +98,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
             syncResult.stats.numIoExceptions++;
             Log.e(TAG, "IOException", e);
         } catch (final TooManyRequestsException e) {
-        	if(android.os.Build.VERSION.SDK_INT >= 8) {
-        		syncResult.delayUntil = e.getBackoff();
-        	}
+        	syncResult.delayUntil = e.getBackoff();
         	Log.d(TAG, "Too Many Requests.  Backing off for " + e.getBackoff() + " seconds.");
         } catch (PinboardException e) {
         	syncResult.stats.numSkippedEntries++;

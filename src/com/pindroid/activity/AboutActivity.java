@@ -41,4 +41,10 @@ public class AboutActivity extends FragmentBaseActivity {
 	
 	@Override
 	protected void changeAccount(){}
+
+	@Override
+	protected void startSearch(String query) {
+		// TODO Auto-generated method stub
+		
+	}
 }

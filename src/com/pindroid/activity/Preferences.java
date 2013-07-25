@@ -45,8 +45,7 @@ public class Preferences extends PreferenceActivity {
 	
 	private Context mContext;
 	private Resources res;
-	
-	@TargetApi(Build.VERSION_CODES.FROYO)
+
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

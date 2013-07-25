@@ -166,4 +166,10 @@ public class ViewBookmark extends FragmentBaseActivity implements OnBookmarkActi
 	
 	@Override
 	protected void changeAccount(){}
+
+	@Override
+	protected void startSearch(String query) {
+		// TODO Auto-generated method stub
+		
+	}
 }

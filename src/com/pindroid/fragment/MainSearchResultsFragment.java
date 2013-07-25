@@ -36,12 +36,13 @@ import android.view.ViewGroup;
 public class MainSearchResultsFragment extends ListFragment {
 	
 	private OnSearchActionListener searchActionListener;
+	private String query;
 	
 	public interface OnSearchActionListener {
-		public void onBookmarkSearch();
-		public void onTagSearch();
-		public void onNoteSearch();
-		public void onGlobalTagSearch();
+		public void onBookmarkSearch(String query);
+		public void onTagSearch(String query);
+		public void onNoteSearch(String query);
+		public void onGlobalTagSearch(String query);
 	}
 	
 	@Override
@@ -54,7 +55,7 @@ public class MainSearchResultsFragment extends ListFragment {
 				getString(R.string.search_results_tag), getString(R.string.search_results_note),
 				getString(R.string.search_results_global_tag)};
 		
-		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.main_view, MENU_ITEMS));
+		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.result_view, MENU_ITEMS));
 		
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
@@ -62,24 +63,22 @@ public class MainSearchResultsFragment extends ListFragment {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		    	if(position == 0){
-		    		searchActionListener.onBookmarkSearch();
+		    		searchActionListener.onBookmarkSearch(query);
 		    	} else if(position == 1){
-		    		searchActionListener.onTagSearch();
+		    		searchActionListener.onTagSearch(query);
 		    	} else if(position == 2){
-		    		searchActionListener.onNoteSearch();
+		    		searchActionListener.onNoteSearch(query);
 		    	} else if(position == 3){
-		    		searchActionListener.onGlobalTagSearch();
+		    		searchActionListener.onGlobalTagSearch(query);
 		    	}
 		    }
 		});
 	}
 	
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.main_search_fragment, container, false);
-    }
-	
+	public void setQuery(String query){
+		this.query = query;
+	}
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);

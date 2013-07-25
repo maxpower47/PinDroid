@@ -76,10 +76,10 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
 				app.setUsername(intent.getStringExtra("username"));
 			
 			if(intent.hasExtra(SearchManager.QUERY)){
-				Intent i = new Intent(this, MainSearchResults.class);
-				i.putExtras(intent.getExtras());
-				startActivity(i);
-				finish();
+				//Intent i = new Intent(this, MainSearchResults.class);
+				//i.putExtras(intent.getExtras());
+				//startActivity(i);
+				//finish();
 			} else {
 				onSearchRequested();
 			}
@@ -217,16 +217,7 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
 	// ******************************************
 	// ******************************************
 
-	private void startSearch(final String query) {
-		Intent i = new Intent(this, MainSearchResults.class);
-		i.putExtra("query", query);
-		Uri.Builder data = new Uri.Builder();
-		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority(app.getUsername() + "@" + Constants.INTENT_URI);
-		i.setData(data.build());
-		startActivity(i);
-		finish();
-	}
+	protected abstract void startSearch(final String query);
 	
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {	

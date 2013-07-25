@@ -467,4 +467,10 @@ public class BrowseBookmarks extends FragmentBaseActivity implements OnBookmarkS
 			tagFrag.refresh();
 		}
 	}
+
+	@Override
+	protected void startSearch(String query) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -94,4 +94,10 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 			finish();
 		}	
 	}
+
+	@Override
+	protected void startSearch(String query) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -3,21 +3,20 @@ package com.pindroid.action;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import com.pindroid.activity.AddBookmark;
-import com.pindroid.activity.BrowseBookmarks;
-import com.pindroid.activity.BrowseNotes;
-import com.pindroid.activity.BrowseTags;
-import com.pindroid.activity.Main;
-import com.pindroid.activity.ViewBookmark;
-import com.pindroid.Constants;
-import com.pindroid.Constants.BookmarkViewType;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.providers.NoteContent.Note;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+
+import com.pindroid.Constants;
+import com.pindroid.Constants.BookmarkViewType;
+import com.pindroid.activity.AddBookmark;
+import com.pindroid.activity.BrowseBookmarks;
+import com.pindroid.activity.BrowseTags;
+import com.pindroid.activity.Main;
+import com.pindroid.activity.ViewBookmark;
+import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.providers.NoteContent.Note;
 
 public class IntentHelper {
 
@@ -129,20 +128,6 @@ public class IntentHelper {
 		return i;
 	}
 	
-	public static Intent ViewNotes(String account, Context context) {
-		Intent i = new Intent(context, BrowseNotes.class);
-		i.setAction(Intent.ACTION_VIEW);
-		i.addCategory(Intent.CATEGORY_DEFAULT);
-		Uri.Builder data = new Uri.Builder();
-		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
-		data.appendEncodedPath("notes");
-		
-		i.setData(data.build());
-		
-		return i;
-	}
-	
 	public static Intent ViewUnread(String account, Context context) {
 		Intent i = new Intent(context, Main.class);
 		i.setAction(Intent.ACTION_VIEW);
@@ -197,18 +182,6 @@ public class IntentHelper {
 	
 	public static Intent SearchTags(String query, String account, Context context) {
 		Intent i = new Intent(context, BrowseTags.class);
-		i.setAction(Intent.ACTION_SEARCH);
-		i.putExtra(SearchManager.QUERY, query);
-		i.putExtra("MainSearchResults", "1");
-		Uri.Builder data = new Uri.Builder();
-		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
-		i.setData(data.build());
-		return i;
-	}
-	
-	public static Intent SearchNotes(String query, String account, Context context) {
-		Intent i = new Intent(context, BrowseNotes.class);
 		i.setAction(Intent.ACTION_SEARCH);
 		i.putExtra(SearchManager.QUERY, query);
 		i.putExtra("MainSearchResults", "1");

@@ -21,59 +21,33 @@
 
 package com.pindroid.util;
 
-import com.pindroid.Constants;
-import com.pindroid.syncadapter.PeriodicSyncReceiver;
-
-import android.annotation.TargetApi;
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.SystemClock;
+
+import com.pindroid.Constants;
 
 public class SyncUtils {
 
-	@TargetApi(8)
 	public static void addPeriodicSync(String authority, Bundle extras, long frequency, Context context) {
-		long pollFrequencyMsec = frequency * 60000;
+		AccountManager am = AccountManager.get(context);
+		Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
 		
-		if(android.os.Build.VERSION.SDK_INT < 8) {
-			AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-	
-			int type = AlarmManager.ELAPSED_REALTIME_WAKEUP;
-			long triggerAtTime = SystemClock.elapsedRealtime() + pollFrequencyMsec;
-			long interval = pollFrequencyMsec;
-			PendingIntent operation = PeriodicSyncReceiver.createPendingIntent(context, authority, extras);
-	
-			manager.setInexactRepeating(type, triggerAtTime, interval, operation);
-		} else {	
-			AccountManager am = AccountManager.get(context);
-			Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
+		for(Account a : accounts) {
 			
-			for(Account a : accounts) {
-				
-				ContentResolver.addPeriodicSync(a, authority, extras, frequency * 60);
-			}
+			ContentResolver.addPeriodicSync(a, authority, extras, frequency * 60);
 		}
 	}
 	
-	@TargetApi(8)
     public static void removePeriodicSync(String authority, Bundle extras, Context context) {	
-    	if(android.os.Build.VERSION.SDK_INT >= 8) {
-			AccountManager am = AccountManager.get(context);
-			Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
-			
-			for(Account a : accounts) {
-				ContentResolver.removePeriodicSync(a, authority, extras);
-			}
-    	}
-    		
-        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent operation = PeriodicSyncReceiver.createPendingIntent(context, authority, extras);
-        manager.cancel(operation);
+		AccountManager am = AccountManager.get(context);
+		Account[] accounts = am.getAccountsByType(Constants.ACCOUNT_TYPE);
+		
+		for(Account a : accounts) {
+			ContentResolver.removePeriodicSync(a, authority, extras);
+		}
     }
     
     public static void clearSyncMarkers(Context context){

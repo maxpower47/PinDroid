@@ -27,16 +27,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.pindroid.R;
-import com.pindroid.Constants;
-import com.pindroid.application.PindroidApplication;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.providers.NoteContent.Note;
-import com.pindroid.providers.TagContent.Tag;
-import com.pindroid.util.SyncUtils;
-
 import android.accounts.AccountManager;
-import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -52,11 +43,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.pindroid.Constants;
+import com.pindroid.R;
+import com.pindroid.application.PindroidApplication;
+import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.providers.NoteContent.Note;
+import com.pindroid.providers.TagContent.Tag;
+import com.pindroid.util.SyncUtils;
 
 public class BookmarkContentProvider extends ContentProvider {
 	
@@ -617,15 +615,11 @@ public class BookmarkContentProvider extends ContentProvider {
 		return suggestions;
 	}
 	
-	@TargetApi(Build.VERSION_CODES.FROYO)
 	private Cursor getSearchCursor(Map<String, SearchSuggestionContent> list) {
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getContext());
     	Boolean icons = settings.getBoolean("pref_searchicons", true);
     	
-    	String suggestText2Url = Constants.SUGGEST_COLUMN_TEXT_2_URL;
-    	if(android.os.Build.VERSION.SDK_INT >= 8) {
-    		suggestText2Url = SearchManager.SUGGEST_COLUMN_TEXT_2_URL;
-    	}
+    	String suggestText2Url = SearchManager.SUGGEST_COLUMN_TEXT_2_URL;
 		
     	MatrixCursor mc;
     	

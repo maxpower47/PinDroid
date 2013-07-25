@@ -60,8 +60,6 @@ public class Constants {
     public static final String ACTION_SEARCH_SUGGESTION_VIEW = "com.pindroid.intent.action.SearchSuggestionView";
     public static final String ACTION_SEARCH_SUGGESTION_EDIT = "com.pindroid.intent.action.SearchSuggestionEdit";
     
-    public static final String SUGGEST_COLUMN_TEXT_2_URL = "suggest_text_2_url";
-    
     public static final int REQUEST_CODE_ACCOUNT_CHANGE = 1;
     
     /**

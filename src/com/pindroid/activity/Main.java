@@ -33,6 +33,8 @@ import com.pindroid.fragment.AddBookmarkFragment.OnBookmarkSaveListener;
 import com.pindroid.fragment.BookmarkBrowser;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment;
 import com.pindroid.fragment.BrowseBookmarksFragment;
+import com.pindroid.fragment.MainSearchResultsFragment;
+import com.pindroid.fragment.MainSearchResultsFragment.OnSearchActionListener;
 import com.pindroid.fragment.ViewBookmarkFragment;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.fragment.BrowseNotesFragment;
@@ -54,8 +56,10 @@ import com.pindroid.fragment.PindroidFragment;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -78,7 +82,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 public class Main extends FragmentBaseActivity implements MainFragment.OnMainActionListener, OnBookmarkSelectedListener, 
-		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnBookmarkSaveListener {
+		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnBookmarkSaveListener, OnSearchActionListener {
 	
 	private ListView mDrawerList;
 	private LinearLayout mDrawerWrapper;
@@ -656,6 +660,16 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
 		return bookmark;
 	}
 	
+	protected void startSearch(final String query) {
+		MainSearchResultsFragment frag = new MainSearchResultsFragment();
+		frag.setQuery(query);
+		if(isTwoPane()){
+			replaceLeftFragment(frag, true);
+		} else {
+			replaceRightFragment(frag, true);
+		}	
+	}
+	
 	@Override
 	public void setTitle(CharSequence title){
 		super.setTitle(title);
@@ -718,4 +732,50 @@ public class Main extends FragmentBaseActivity implements MainFragment.OnMainAct
         
         return null;
     }
+
+	public void onBookmarkSearch(String query) {
+		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+		frag.setSearchQuery(query, app.getUsername(), null, false);
+		
+		if(isTwoPane()){
+			replaceLeftFragment(frag, true);
+		} else {
+			replaceRightFragment(frag, true);
+		}
+	}
+
+	public void onTagSearch(String query) {
+		BrowseTagsFragment frag = new BrowseTagsFragment();
+		frag.setUsername(app.getUsername());
+		frag.setQuery(query);
+
+		if(isTwoPane()){
+			replaceLeftFragment(frag, true);
+		} else {
+			replaceRightFragment(frag, true);
+		}		
+	}
+
+	public void onNoteSearch(String query) {
+		BrowseNotesFragment frag = new BrowseNotesFragment();
+		frag.setUsername(app.getUsername());
+		frag.setQuery(query);
+
+		if(isTwoPane()){
+			replaceLeftFragment(frag, true);
+		} else {
+			replaceRightFragment(frag, true);
+		}	
+	}
+
+	public void onGlobalTagSearch(String query) {
+		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
+		frag.setQuery(app.getUsername(), query, "global");
+		
+		if(isTwoPane()){
+			replaceLeftFragment(frag, true);
+		} else {
+			replaceRightFragment(frag, true);
+		}
+	}
 }
