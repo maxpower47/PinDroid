@@ -167,6 +167,19 @@ public class IntentHelper {
 		return i;
 	}
 	
+	public static Intent ViewNotes(String account, Context context) {
+		Intent i = new Intent(context, Main.class);
+		i.setAction(Intent.ACTION_VIEW);
+		i.addCategory(Intent.CATEGORY_DEFAULT);
+		Uri.Builder data = new Uri.Builder();
+		data.scheme(Constants.CONTENT_SCHEME);
+		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
+		data.appendEncodedPath("notes");
+		i.setData(data.build());
+		
+		return i;
+	}
+	
 	public static Intent SearchBookmarks(String query, String account, Context context) {
 		Intent i = new Intent(context, BrowseBookmarks.class);
 		i.setAction(Intent.ACTION_SEARCH);

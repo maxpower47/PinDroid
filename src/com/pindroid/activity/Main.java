@@ -251,6 +251,9 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 			} else if(lastPath.equals("tags")){
 				Log.d("processIntent", "tags");
 				onMyTagsSelected();
+			} else if(lastPath.equals("notes")){
+					Log.d("processIntent", "notes");
+					onMyNotesSelected();
 			}
 		} else if(Intent.ACTION_SEND.equals(action)){
 			onBookmarkAdd(null);
