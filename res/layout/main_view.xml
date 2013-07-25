@@ -41,7 +41,7 @@
             android:layout_marginLeft="10dp"
             android:gravity="center"
             android:layout_marginTop="8dp"
-            android:src="@drawable/widget_note" ></ImageView>
+            android:src="@drawable/widget_note" />
 
         <!-- text -->
         <TextView
@@ -51,8 +51,9 @@
             android:layout_toRightOf="@+id/menurow_icon"
             android:layout_marginLeft="12dp"
             android:gravity="center_vertical"
-            android:minHeight="?android:attr/listPreferredItemHeightSmall"
-            android:textAppearance="?android:attr/textAppearanceListItemSmall" ></TextView>
+            android:minHeight="48dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" 
+            />
 
         <!-- counter -->
         <TextView
@@ -64,9 +65,9 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/menu_count_rectangle"
             android:gravity="center"
-            android:minHeight="?android:attr/listPreferredItemHeightSmall"
+            android:minHeight="48dp"
             android:padding="6dp"
-            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
             android:textStyle="bold" ></TextView>

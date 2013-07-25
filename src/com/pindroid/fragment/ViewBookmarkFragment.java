@@ -24,7 +24,6 @@ package com.pindroid.fragment;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -46,8 +45,8 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.Constants;
+import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
@@ -194,7 +193,6 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	}
 	
 	@Override
-	@TargetApi(14)
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle item selection
 	    switch (item.getItemId()) {

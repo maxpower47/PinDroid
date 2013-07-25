@@ -26,7 +26,6 @@
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
 	style="@style/TabletLandFrame">
-	<include android:id="@+id/include_action_bar" layout="@layout/action_bar" />
 	<fragment class="com.pindroid.fragment.ViewNoteFragment"
 		android:id="@+id/view_note_fragment"
 	    android:layout_width="fill_parent"

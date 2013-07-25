@@ -58,7 +58,6 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
 	static final String STATE_USERNAME = "username";
 	
 	@Override
-	@TargetApi(14)
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
@@ -275,10 +274,8 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
 		}
 	}
 	
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setSubtitle(String subtitle){
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && getActionBar() != null)
-			getActionBar().setSubtitle(subtitle);
+		getSupportActionBar().setSubtitle(subtitle);
 	}
 	
 	// signal to derived activity that the account may have changed

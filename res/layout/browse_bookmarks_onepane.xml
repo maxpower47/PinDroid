@@ -21,14 +21,9 @@
  * USA
  */
  -->
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/listcontent"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="vertical">
-	<include layout="@layout/action_bar" />
-	<LinearLayout 
-		android:id="@+id/listcontent"
-		android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:background="#00000000" />
-</LinearLayout>
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#00000000" />

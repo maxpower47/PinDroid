@@ -103,5 +103,7 @@
         <item name="android:layout_gravity">center_vertical</item>
     </style>
     
-    <style name="ThemeSelector" parent="@android:style/Theme.NoTitleBar"></style>
+    <style name="ThemeSelector" parent="@style/Theme.AppCompat">
+    	<item name="android:actionBarStyle">@style/ActionBar.Light</item>
+    </style>
 </resources>
