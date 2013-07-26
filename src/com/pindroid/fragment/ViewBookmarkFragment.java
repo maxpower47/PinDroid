@@ -25,12 +25,16 @@ import java.util.Date;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,7 +54,10 @@ import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
+import com.pindroid.platform.BookmarkManager;
+import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.AccountSpan;
 import com.pindroid.ui.TagSpan;
@@ -76,6 +83,8 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	
 	private OnBookmarkActionListener bookmarkActionListener;
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
+	
+	private ContentObserver observer = new MyObserver(new Handler());
 	
 	private static final String STATE_VIEWTYPE = "viewType";
 	
@@ -110,6 +119,8 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		mWebContent.getSettings().setJavaScriptEnabled(true);
 		
 		setHasOptionsMenu(true);
+		
+		loadBookmark();
 	}
 	
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
@@ -228,17 +239,11 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
     private boolean isMyself() {
     	return bookmark != null && bookmark.getId() != 0;
     }
-    
-    @Override
-    public void onStart(){
-    	super.onStart();
-    	
-    	loadBookmark();
-    }
 
     public void loadBookmark(){
     	if(bookmark != null){
     		if(viewType == BookmarkViewType.VIEW){
+
 				mBookmarkView.setVisibility(View.VISIBLE);
 				mWebContent.setVisibility(View.GONE);
 				
@@ -278,6 +283,15 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 				}
 				
 				if(isMyself()){
+					Uri.Builder ub = new Uri.Builder();
+					ub.scheme("content");
+					ub.authority(BookmarkContentProvider.AUTHORITY);
+					ub.appendPath("bookmark");
+					ub.appendPath(Integer.toString(bookmark.getId()));
+					
+					getActivity().getContentResolver().unregisterContentObserver(observer);
+					getActivity().getContentResolver().registerContentObserver(ub.build(), true, observer);
+					
 					mUsername.setText(bookmark.getAccount());
 					
 					if(mPrivateIcon != null){
@@ -356,6 +370,12 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		mWebContent.loadUrl(url);
     }
     
+    @Override
+    public void onDestroy(){
+    	super.onDestroy();
+    	getActivity().getContentResolver().unregisterContentObserver(observer);
+    }
+    
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -368,12 +388,25 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	}
 
 	public void setUsername(String username) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void refresh() {
-		// TODO Auto-generated method stub
-		
+
+	}
+	
+	class MyObserver extends ContentObserver {		
+		public MyObserver(Handler handler) {
+			super(handler);
+		}
+
+		@Override
+		public void onChange(boolean selfChange) {
+			try {
+				bookmark = BookmarkManager.GetByHash(bookmark.getHash(), bookmark.getAccount(), getActivity());
+			} catch (ContentNotFoundException e) {
+			}
+			loadBookmark();
+		}			
 	}
 }

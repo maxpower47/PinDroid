@@ -46,7 +46,7 @@ public class TagManager {
 		String selection = null;
 		String[] selectionargs = new String[]{account, query + "%"};
 		
-		if(query != null && query != "") {
+		if(query != null) {
 			selection = Tag.Account + "=?" + 
 				" AND " + Tag.Name + " LIKE ?";
 		} else {
@@ -87,8 +87,7 @@ public class TagManager {
 	
 	public static void UpsertTag(Tag tag, String account, Context context){
 		final String[] projection = new String[] {Tag.Name, Tag.Count};
-		final String selection = Tag.Name + "=? AND " +
-			Tag.Account + "=?";
+		final String selection = Tag.Name + "=? AND " +	Tag.Account + "=?";
 		final String[] selectionargs = new String[]{tag.getTagName(), account};
 		
 		final Cursor c = context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, null);
@@ -108,8 +107,7 @@ public class TagManager {
 	
 	public static void UpdateTag(Tag tag, String account, Context context){
 		
-		final String selection = Tag.Name + "=? AND " +
-							Tag.Account + "=?";
+		final String selection = Tag.Name + "=? AND " +	Tag.Account + "=?";
 		final String[] selectionargs = new String[]{tag.getTagName(), account};
 		
 		final ContentValues values = new ContentValues();
@@ -120,8 +118,7 @@ public class TagManager {
 	
 	public static void UpleteTag(Tag tag, String account, Context context){
 		final String[] projection = new String[] {Tag.Name, Tag.Count};
-		final String selection = Tag.Name + "=? AND " +
-			Tag.Account + "=?";
+		final String selection = Tag.Name + "=? AND " +	Tag.Account + "=?";
 		final String[] selectionargs = new String[]{tag.getTagName(), account};
 
 		final Cursor c = context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, null);
@@ -141,8 +138,7 @@ public class TagManager {
 	}
 
 	public static void DeleteTag(Tag tag, String account, Context context){
-		final String selection = Tag.Name + "=? AND " +
-			Tag.Account + "=?";
+		final String selection = Tag.Name + "=? AND " +	Tag.Account + "=?";
 		final String[] selectionargs = new String[]{tag.getTagName(), account};
 		
 		context.getContentResolver().delete(Tag.CONTENT_URI, selection, selectionargs);

@@ -27,28 +27,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:background="#000000">
+    android:focusableInTouchMode="true">
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
-        <include layout="@layout/add_bookmark_form" />
-    </ScrollView>
-    <LinearLayout
-        style="@style/AddBookmarkButtonBar">
-        <Button
-            android:id="@+id/add_button_save"
-            style="@style/AddBookmarkButton"
-            android:text="@string/add_button_save"
-            android:onClick="saveHandler" />
-        <LinearLayout
-            style="@style/LayoutRight">
-            <Button
-                android:id="@+id/add_button_cancel"
-                style="@style/AddBookmarkButton"
-                android:text="@string/add_button_cancel"
-                android:onClick="cancelHandler" />
-        </LinearLayout>
-    </LinearLayout>
+		<include layout="@layout/add_bookmark_form" />
+	</ScrollView>
 </LinearLayout>

@@ -636,6 +636,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		int count;
 		switch (sURIMatcher.match(uri)) {
 			case Bookmarks:
+			case BookmarkId:
 				count = db.update(BOOKMARK_TABLE_NAME, values, selection, selectionArgs);
 				break;
 			case Tags:

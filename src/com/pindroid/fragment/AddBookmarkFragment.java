@@ -121,7 +121,7 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 
 			autoCompleteAdapter.setFilterQueryProvider(new FilterQueryProvider() {
 	            public Cursor runQuery(CharSequence constraint) {
-	            	return TagManager.GetTagsAsCursor((constraint != null ? constraint.toString() : null), 
+	            	return TagManager.GetTagsAsCursor((constraint != null ? constraint.toString() : ""), 
 	            			username, Tag.Count + " DESC, " + Tag.Name + " ASC", getActivity());
 	            }
 	        });
