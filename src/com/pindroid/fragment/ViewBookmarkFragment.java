@@ -176,13 +176,14 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	}
 	
 	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
+	public void onPrepareOptionsMenu(Menu menu) {	
 		if(bookmark != null){
 			if(!isMyself()){
+				menu.removeItem(R.id.menu_addbookmark);
 				menu.removeItem(R.id.menu_view_editbookmark);
 				menu.removeItem(R.id.menu_view_deletebookmark);
 			} else {
-				menu.removeItem(R.id.menu_addbookmark);
+				menu.removeItem(R.id.menu_view_addbookmark);
 			}
 		} else {
 			menu.removeItem(R.id.menu_view);
@@ -210,6 +211,9 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		    	return true;
 		    case R.id.menu_view_deletebookmark:
 		    	bookmarkSelectedListener.onBookmarkDelete(bookmark);
+				return true;
+		    case R.id.menu_view_addbookmark:
+		    	bookmarkSelectedListener.onBookmarkAdd(bookmark.copyForSharing());
 				return true;
 		    default:
 		        return super.onOptionsItemSelected(item);

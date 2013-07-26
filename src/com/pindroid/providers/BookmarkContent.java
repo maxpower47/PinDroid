@@ -240,6 +240,13 @@ public class BookmarkContent {
         	return b;
         }
         
+        public Bookmark copyForSharing() {
+        	Bookmark b = new Bookmark();
+        	b.mDescription = this.mDescription;
+        	b.mUrl = this.mUrl;
+        	return b;
+        }
+        
         public void clear() {
         	this.mAccount = null;
         	this.mDescription = null;
