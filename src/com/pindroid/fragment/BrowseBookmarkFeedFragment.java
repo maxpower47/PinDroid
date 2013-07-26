@@ -26,6 +26,7 @@ import java.text.ParseException;
 
 import com.pindroid.Constants;
 import com.pindroid.R;
+import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.client.PinboardFeed;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.listadapter.BookmarkViewBinder;
@@ -232,15 +233,15 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	}
 		
 	private void openBookmarkInBrowser(Bookmark b) {
-		bookmarkSelectedListener.onBookmarkOpen(b);
+		bookmarkSelectedListener.onBookmarkSelected(b, BookmarkViewType.WEB);
 	}
 	
 	private void viewBookmark(Bookmark b) {
-		bookmarkSelectedListener.onBookmarkView(b);
+		bookmarkSelectedListener.onBookmarkSelected(b, BookmarkViewType.VIEW);
 	}
 	
 	private void readBookmark(Bookmark b){
-		bookmarkSelectedListener.onBookmarkRead(b);
+		bookmarkSelectedListener.onBookmarkSelected(b, BookmarkViewType.READ);
 	}
 	
 	private void addBookmark(Bookmark b){

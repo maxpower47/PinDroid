@@ -197,16 +197,16 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	    // Handle item selection
 	    switch (item.getItemId()) {
 		    case R.id.menu_view_details:
-		    	bookmarkSelectedListener.onBookmarkView(bookmark);
+		    	bookmarkSelectedListener.onBookmarkSelected(bookmark, BookmarkViewType.VIEW);
 				return true;
 		    case R.id.menu_view_read:
-				bookmarkSelectedListener.onBookmarkRead(bookmark);
+				bookmarkSelectedListener.onBookmarkSelected(bookmark, BookmarkViewType.READ);
 				return true;
 		    case R.id.menu_view_openbookmark:
-		    	bookmarkSelectedListener.onBookmarkOpen(bookmark);
+		    	bookmarkSelectedListener.onBookmarkSelected(bookmark, BookmarkViewType.WEB);
 				return true;
 		    case R.id.menu_view_editbookmark:
-		    	bookmarkSelectedListener.onBookmarkEdit(bookmark);
+		    	bookmarkSelectedListener.onBookmarkSelected(bookmark, BookmarkViewType.EDIT);
 		    	return true;
 		    case R.id.menu_view_deletebookmark:
 		    	bookmarkSelectedListener.onBookmarkDelete(bookmark);
@@ -331,8 +331,8 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		String readingBackground = SettingsHelper.getReadingBackground(getActivity());
 		String readingFont = SettingsHelper.getReadingFont(getActivity());
 		String readingFontSize = SettingsHelper.getReadingFontSize(getActivity());
-    	
-		mWebContent.clearView();
+		
+		mWebContent.loadUrl("about:blank");
 		mWebContent.clearCache(true);
 		mBookmarkView.setVisibility(View.GONE);
 		mWebContent.setVisibility(View.VISIBLE);

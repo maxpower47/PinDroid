@@ -55,11 +55,11 @@
         android:theme="@style/ThemeSelector"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:requiredAccountType="com.pindroid"
-        android:launchMode="singleTop">
+        android:requiredAccountType="com.pindroid">
         <activity
         	android:name=".activity.Main"
-        	android:label="@string/titleMain">
+        	android:label="@string/titleMain"
+        	android:launchMode="singleTop">
         	<intent-filter>
         		<action android:name="android.intent.action.MAIN" />
         		<category android:name="android.intent.category.LAUNCHER" />
@@ -67,69 +67,12 @@
         	<intent-filter>
             	<action android:name="android.intent.action.SEARCH" />
         	</intent-filter>
-        	<meta-data android:name="android.app.searchable" android:resource="@xml/main_searchable"/>
-        </activity>
-        <activity android:name=".activity.BrowseBookmarks" >
-        	<intent-filter>
-        		<action android:name="android.intent.action.VIEW" />
-        		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.intent" android:path="/bookmarks"/>
-        	</intent-filter>
-        	<intent-filter>
-        		<action android:name="android.intent.action.VIEW" />
-        		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.intent" android:path="/network"/>
-        	</intent-filter>
-            <intent-filter>
-            	<action android:name="android.intent.action.SEARCH" />
-        	</intent-filter>
-        	<meta-data android:name="android.app.searchable" android:resource="@xml/bookmark_searchable"/>
-        </activity>
-        <activity android:name=".activity.ViewBookmark"
-        	android:label="@string/view_bookmark_title"
-        	android:uiOptions="splitActionBarWhenNarrow">
-        	<intent-filter>
-        		<action android:name="android.intent.action.VIEW" />
-        		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.intent" android:pathPattern="/bookmarks/.*"/>
-        	</intent-filter>
-        	<intent-filter>
-            	<action android:name="android.intent.action.SEARCH" />
-        	</intent-filter>
-        	<meta-data android:name="android.app.searchable" android:resource="@xml/main_searchable"/>
-        </activity>
-        <activity android:name=".activity.ViewNote">
-        	<intent-filter>
-        		<action android:name="android.intent.action.VIEW" />
-        		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.intent" android:pathPattern="/bookmarks/.*"/>
-        	</intent-filter>
-        	<intent-filter>
-            	<action android:name="android.intent.action.SEARCH" />
-        	</intent-filter>
-        	<meta-data android:name="android.app.searchable" android:resource="@xml/main_searchable"/>
-        </activity>
-        <activity android:name=".activity.AddBookmark"
-        	android:label="@string/share_menu_add_bookmark">
-        	<intent-filter>
-        		<action android:name="android.intent.action.EDIT" />
-        		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.intent" android:path="/bookmarks/*"/>
-        	</intent-filter>
-            <intent-filter>
-        		<action android:name="android.intent.action.SEND" />
-        		<category android:name="android.intent.category.DEFAULT" />
-        		<data android:scheme="content" android:host="com.pindroid.intent" android:path="/bookmarks"/>
-        	</intent-filter>
         	<intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
             </intent-filter>
-            <intent-filter>
-            	<action android:name="android.intent.action.SEARCH" />
-        	</intent-filter>
-            <meta-data android:name="android.app.searchable" android:resource="@xml/main_searchable"/>
+        	<meta-data android:name="android.app.searchable" android:resource="@xml/global_searchable"/>
         </activity>
         <activity android:name=".activity.SaveReadLaterBookmark" 
         	android:theme="@android:style/Theme.NoDisplay"

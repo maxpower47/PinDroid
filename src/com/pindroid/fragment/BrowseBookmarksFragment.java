@@ -41,6 +41,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.listadapter.BookmarkViewBinder;
 import com.pindroid.platform.BookmarkManager;
@@ -67,13 +68,10 @@ public class BrowseBookmarksFragment extends ListFragment
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
 
 	public interface OnBookmarkSelectedListener {
-		public void onBookmarkView(Bookmark b);
-		public void onBookmarkRead(Bookmark b);
-		public void onBookmarkOpen(Bookmark b);
+		public void onBookmarkSelected(Bookmark b, BookmarkViewType type);
 		public void onBookmarkAdd(Bookmark b);
 		public void onBookmarkShare(Bookmark b);
 		public void onBookmarkMark(Bookmark b);
-		public void onBookmarkEdit(Bookmark b);
 		public void onBookmarkDelete(Bookmark b);
 	}
 	
@@ -202,7 +200,7 @@ public class BrowseBookmarksFragment extends ListFragment
 				viewBookmark(b);
 				return true;
 			case R.id.menu_bookmark_context_edit:
-				bookmarkSelectedListener.onBookmarkEdit(b);
+				bookmarkSelectedListener.onBookmarkSelected(b, BookmarkViewType.EDIT);
 				return true;
 			case R.id.menu_bookmark_context_delete:
 				bookmarkSelectedListener.onBookmarkDelete(b);
@@ -267,11 +265,11 @@ public class BrowseBookmarksFragment extends ListFragment
 	}
 	
 	private void openBookmarkInBrowser(Bookmark b) {
-		bookmarkSelectedListener.onBookmarkOpen(b);
+		bookmarkSelectedListener.onBookmarkSelected(b, BookmarkViewType.WEB);
 	}
 	
 	private void readBookmark(Bookmark b){
-		bookmarkSelectedListener.onBookmarkRead(b);
+		bookmarkSelectedListener.onBookmarkSelected(b, BookmarkViewType.READ);
 	}
 	
 	private void markBookmark(Bookmark b){
@@ -279,11 +277,11 @@ public class BrowseBookmarksFragment extends ListFragment
 	}
 	
 	private void viewBookmark(Bookmark b) {
-		bookmarkSelectedListener.onBookmarkView(b);
+		bookmarkSelectedListener.onBookmarkSelected(b, BookmarkViewType.VIEW);
 	}
 	
 	private void editBookmark(Bookmark b) {
-		bookmarkSelectedListener.onBookmarkEdit(b);
+		bookmarkSelectedListener.onBookmarkSelected(b, BookmarkViewType.EDIT);
 	}
     
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {

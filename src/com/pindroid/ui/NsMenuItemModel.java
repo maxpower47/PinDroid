@@ -53,6 +53,8 @@ public class NsMenuItemModel {
 		this(title, 0, false);
 	}
 	
-	
+	public void setCounter(int counter){
+		this.counter = counter;
+	}
 	
 }

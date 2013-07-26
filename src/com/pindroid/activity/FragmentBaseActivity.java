@@ -83,57 +83,6 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
 			} else {
 				onSearchRequested();
 			}
-		} else if(Constants.ACTION_SEARCH_SUGGESTION_VIEW.equals(intent.getAction())) {
-			Uri data = intent.getData();
-			String path = null;
-			String tagname = null;
-			
-			if(data != null) {
-				path = data.getPath();
-				tagname = data.getQueryParameter("tagname");
-				
-				if(data.getUserInfo() != null && !data.getUserInfo().equals(""))
-					app.setUsername(data.getUserInfo());
-			}
-			
-			if(data.getScheme() == null || !data.getScheme().equals("content")){
-				Intent i = new Intent(Intent.ACTION_VIEW, data);
-				startActivity(i);
-				finish();				
-			} else if(path.contains("bookmarks") && TextUtils.isDigitsOnly(data.getLastPathSegment()) && intent.hasExtra(SearchManager.USER_QUERY)) {
-				Intent viewBookmark = new Intent(this, ViewBookmark.class);
-				viewBookmark.setAction(Intent.ACTION_VIEW);
-				viewBookmark.setData(data);
-				viewBookmark.removeExtra(SearchManager.USER_QUERY);
-				Log.d("View Bookmark Uri", data.toString());
-				startActivity(viewBookmark);
-				finish();
-			} else if(tagname != null) {
-				Intent viewTags = new Intent(this, BrowseBookmarks.class);
-				viewTags.setData(data);
-				
-				Log.d("View Tags Uri", data.toString());
-				startActivity(viewTags);
-				finish();
-			} else if(path.contains("notes") && TextUtils.isDigitsOnly(data.getLastPathSegment()) && intent.hasExtra(SearchManager.USER_QUERY)){
-				Intent viewNote = new Intent(this, ViewNote.class);
-				viewNote.setAction(Intent.ACTION_VIEW);
-				viewNote.setData(data);
-				viewNote.removeExtra(SearchManager.USER_QUERY);
-				Log.d("View Note Uri", data.toString());
-				startActivity(viewNote);
-				finish();
-			}
-		} else if(Constants.ACTION_SEARCH_SUGGESTION_EDIT.equals(intent.getAction())){
-			Uri data = intent.getData();
-
-			Intent editBookmark = new Intent(this, AddBookmark.class);
-			editBookmark.setAction(Intent.ACTION_EDIT);
-			editBookmark.setData(data);
-			editBookmark.removeExtra(SearchManager.USER_QUERY);
-			Log.d("Edit Bookmark Uri", data.toString());
-			startActivity(editBookmark);
-			finish();
 		}
 		
 		init();

@@ -426,9 +426,6 @@ public class BookmarkContentProvider extends ContentProvider {
 			int accountColumn = c.getColumnIndex(Bookmark.Account);
 			
 			int accountCount = getAccountCount();
-			
-	    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getContext());
-	    	String defaultAction = settings.getString("pref_view_bookmark_default_action", "browser");
 
 			do {
 				String account = c.getString(accountColumn);
@@ -438,29 +435,12 @@ public class BookmarkContentProvider extends ContentProvider {
 		    	
 		    	String action = Constants.ACTION_SEARCH_SUGGESTION_VIEW;
 		    	
-		    	if(defaultAction.equals("browser")) {
-		    		data = Uri.parse(c.getString(urlColumn));
-		    	} else if(defaultAction.equals("read")){
-		    		builder.scheme(Constants.CONTENT_SCHEME);
-		    		builder.encodedAuthority(account + "@" + Constants.INTENT_URI);
-		    		builder.appendEncodedPath("bookmarks");
-		    		builder.appendEncodedPath(c.getString(idColumn));
-		    		builder.appendQueryParameter(Constants.EXTRA_READVIEW, "1");
-		    		data = builder.build();
-		    	} else if(defaultAction.equals("edit")) {
-		    		action = Constants.ACTION_SEARCH_SUGGESTION_EDIT;
-		    		builder.scheme(Constants.CONTENT_SCHEME);
-		    		builder.encodedAuthority(account + "@" + Constants.INTENT_URI);
-		    		builder.appendEncodedPath("bookmarks");
-		    		builder.appendEncodedPath(c.getString(idColumn));
-		    		data = builder.build();
-		    	} else {
-		    		builder.scheme(Constants.CONTENT_SCHEME);
-		    		builder.encodedAuthority(account + "@" + Constants.INTENT_URI);
-		    		builder.appendEncodedPath("bookmarks");
-		    		builder.appendEncodedPath(c.getString(idColumn));
-		    		data = builder.build();
-		    	}
+
+	    		builder.scheme(Constants.CONTENT_SCHEME);
+	    		builder.encodedAuthority(account + "@" + Constants.INTENT_URI);
+	    		builder.appendEncodedPath("bookmarks");
+	    		builder.appendEncodedPath(c.getString(idColumn));
+	    		data = builder.build();
 				
 				String title = c.getString(descColumn);
 				String line2 = c.getString(urlColumn);

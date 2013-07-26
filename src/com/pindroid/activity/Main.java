@@ -23,9 +23,11 @@ package com.pindroid.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -36,6 +38,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -70,6 +73,7 @@ import com.pindroid.fragment.ViewBookmarkFragment;
 import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
 import com.pindroid.fragment.ViewNoteFragment;
 import com.pindroid.platform.BookmarkManager;
+import com.pindroid.platform.NoteManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.NoteContent.Note;
@@ -229,6 +233,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		Log.d("processIntent: currentUsername", app.getUsername());
 		
 		String action = intent.getAction();
+		String path = intent.getData() != null ? intent.getData().getPath() : "";
 		String lastPath = (intent.getData() != null && intent.getData().getLastPathSegment() != null) ? intent.getData().getLastPathSegment() : "";
 		String intentUsername = (intent.getData() != null && intent.getData().getUserInfo() != null) ? intent.getData().getUserInfo() : "";
 		
@@ -256,7 +261,38 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 					onMyNotesSelected();
 			}
 		} else if(Intent.ACTION_SEND.equals(action)){
-			onBookmarkAdd(null);
+			Bookmark b = loadBookmarkFromShareIntent();
+			b = findExistingBookmark(b);
+			onBookmarkAdd(b, false);
+		} else if(Constants.ACTION_SEARCH_SUGGESTION_VIEW.equals(action)){
+			if(path.contains("bookmarks") && TextUtils.isDigitsOnly(lastPath) && intent.hasExtra(SearchManager.USER_QUERY)) {
+				try {
+					String defaultAction = SettingsHelper.getDefaultAction(this);
+					BookmarkViewType viewType = null;
+					try{
+						viewType = BookmarkViewType.valueOf(defaultAction.toUpperCase(Locale.US));
+					} catch(Exception e){
+						viewType = BookmarkViewType.VIEW;
+					}
+					
+					onBookmarkSelected(BookmarkManager.GetById(Integer.parseInt(lastPath), this), viewType);
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				} catch (ContentNotFoundException e) {
+					e.printStackTrace();
+				}
+			} else if(path.contains("bookmarks") && intent.hasExtra(SearchManager.USER_QUERY)){
+				if(intent.getData() != null && intent.getData().getQueryParameter("tagname") != null)
+				onTagSelected(intent.getData().getQueryParameter("tagname"));			
+			} else if(path.contains("notes") && TextUtils.isDigitsOnly(lastPath) && intent.hasExtra(SearchManager.USER_QUERY)){
+				try {
+					onNoteView(NoteManager.GetById(Integer.parseInt(lastPath), this));
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				} catch (ContentNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	
@@ -493,7 +529,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
 		
 		setSpinnerAccount(app.getUsername());
-
 		
 		Fragment cf = getSupportFragmentManager().findFragmentById(R.id.content_frame);
 		Fragment lf = getSupportFragmentManager().findFragmentById(R.id.list_frame);
@@ -510,47 +545,47 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 	
 	public void onBookmarkSelected(Bookmark b, BookmarkViewType viewType){
-		ViewBookmarkFragment frag = new ViewBookmarkFragment();
-		frag.setBookmark(b, viewType);
 		
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		
-		
-		if(isTwoPane()){
-			FragmentTransaction t = fragmentManager.beginTransaction();
-
-			if(fragmentManager.findFragmentByTag("left") instanceof BrowseTagsFragment){
-				Fragment right = fragmentManager.findFragmentByTag("right");
-				Fragment newRight = duplicateFragment(right);
-				
-				t.replace(R.id.list_frame, newRight, "left");
-				t.addToBackStack(null);
-			}
-			
-			t.replace(R.id.content_frame, frag, "right");
-			t.commit();
-		} else {
+		if(BookmarkViewType.EDIT.equals(viewType)){
+			AddBookmarkFragment frag = new AddBookmarkFragment();
+			frag.loadBookmark(b, b);
+			frag.setUsername(app.getUsername());
 			replaceRightFragment(frag, true);
+		} else {
+			ViewBookmarkFragment frag = new ViewBookmarkFragment();
+			frag.setBookmark(b, viewType);
+			
+			FragmentManager fragmentManager = getSupportFragmentManager();
+			
+			
+			if(isTwoPane()){
+				FragmentTransaction t = fragmentManager.beginTransaction();
+	
+				if(fragmentManager.findFragmentByTag("left") instanceof BrowseTagsFragment){
+					Fragment right = fragmentManager.findFragmentByTag("right");
+					Fragment newRight = duplicateFragment(right);
+					
+					t.replace(R.id.list_frame, newRight, "left");
+					t.addToBackStack(null);
+				}
+				
+				t.replace(R.id.content_frame, frag, "right");
+				t.commit();
+			} else {
+				replaceRightFragment(frag, true);
+			}
 		}
 	}
 
-	public void onBookmarkView(Bookmark b) {
-		onBookmarkSelected(b, BookmarkViewType.VIEW);
-	}
-
-	public void onBookmarkRead(Bookmark b) {
-		onBookmarkSelected(b, BookmarkViewType.READ);
-	}
-
-	public void onBookmarkOpen(Bookmark b) {
-		onBookmarkSelected(b, BookmarkViewType.WEB);
-	}
-
 	public void onBookmarkAdd(Bookmark b) {
+		onBookmarkAdd(b, true);
+	}
+	
+	public void onBookmarkAdd(Bookmark b, boolean back) {
 		AddBookmarkFragment frag = new AddBookmarkFragment();
 		frag.loadBookmark(b, null);
 		frag.setUsername(app.getUsername());
-		replaceRightFragment(frag, true);
+		replaceRightFragment(frag, back);
 	}
 
 	public void onBookmarkShare(Bookmark b) {
@@ -565,13 +600,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     		b.setToRead(false);
 			BookmarkManager.UpdateBookmark(b, app.getUsername(), this);
     	}
-	}
-
-	public void onBookmarkEdit(Bookmark b) {
-		AddBookmarkFragment frag = new AddBookmarkFragment();
-		frag.loadBookmark(b, b);
-		frag.setUsername(app.getUsername());
-		replaceRightFragment(frag, true);
 	}
 
 	public void onBookmarkDelete(Bookmark b) {
@@ -635,11 +663,15 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		
 		ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(this);
 		
-		String url = StringUtils.getUrl(reader.getText().toString());
-		bookmark.setUrl(url);
-		
-		if(reader.getSubject() != null)
-			bookmark.setDescription(reader.getSubject());
+		if(reader != null){
+			if(reader.getText() != null){
+				String url = StringUtils.getUrl(reader.getText().toString());
+				bookmark.setUrl(url);
+			}
+			
+			if(reader.getSubject() != null)
+				bookmark.setDescription(reader.getSubject());
+		}
 		
 		bookmark.setToRead(SettingsHelper.getToReadDefault(this));
 		bookmark.setShared(!SettingsHelper.getPrivateDefault(this));
@@ -647,14 +679,12 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		return bookmark;
 	}
 	
-	private Bookmark findExistingBookmark() {
-		Bookmark bookmark = new Bookmark();
+	private Bookmark findExistingBookmark(Bookmark bookmark) {
 
 		try{
 			Bookmark old = BookmarkManager.GetByUrl(bookmark.getUrl(), app.getUsername(), this);
 			bookmark = old.copy();
-		} catch(ContentNotFoundException e) {
-			return null;
+		} catch(Exception e) {
 		}
 
 		return bookmark;

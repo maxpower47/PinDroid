@@ -187,6 +187,7 @@ public class BookmarkManager {
 		}
 	}
 	
+	// TODO normalize url (remove trailing slash)
 	public static Bookmark GetByUrl(String url, String username, Context context) throws ContentNotFoundException {		
 		final String[] projection = new String[] {Bookmark._ID, Bookmark.Account, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Time, Bookmark.Tags, Bookmark.Hash, Bookmark.Meta, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced, Bookmark.Deleted};
 		String selection = Bookmark.Url + "=? AND " + Bookmark.Account + "=? AND " + Bookmark.Deleted + "=0";
