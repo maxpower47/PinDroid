@@ -50,7 +50,6 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
@@ -714,10 +713,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	public void setTitle(CharSequence title){
 		super.setTitle(title);
 		mTitle = title;
-
-		if(this.findViewById(R.id.action_bar_title) != null) {
-			((TextView)this.findViewById(R.id.action_bar_title)).setText(title);
-		}
+		getSupportActionBar().setTitle(title);
 	}
 	
     @Override
@@ -733,7 +729,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
         // Pass any configuration change to the drawer toggles
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
-    
+     
     private String[] getAccountNames(){
     	
     	List<String> accountNames = new ArrayList<String>();

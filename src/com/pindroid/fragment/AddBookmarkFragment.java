@@ -186,11 +186,15 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 				titleTask = new GetTitleTask().execute(bookmark.getUrl());
 
 			tagTask = new GetTagSuggestionsTask().execute(bookmark.getUrl());
+			
+			getActivity().setTitle(R.string.add_bookmark_edit_title);
 		} else {
 			if(!this.isHidden()){
 				mEditUrl.requestFocus();
 			}
 			setDefaultValues();
+			
+			getActivity().setTitle(R.string.add_bookmark_add_title);
 		}
 	}
 	

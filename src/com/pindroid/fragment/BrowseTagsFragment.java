@@ -84,6 +84,8 @@ public class BrowseTagsFragment extends ListFragment
 
 		lv.setItemsCanFocus(false);
 		lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		
+		getActivity().setTitle(getString(R.string.browse_my_tags_title));
 	}
 	
 	public void setUsername(String username) {

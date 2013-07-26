@@ -85,6 +85,8 @@ public class BrowseNotesFragment extends ListFragment
 		    	viewNote(n);
 		    }
 		});
+		
+		getActivity().setTitle(getString(R.string.browse_my_notes_title));
 	}
 	
 	private void viewNote(Note n) {

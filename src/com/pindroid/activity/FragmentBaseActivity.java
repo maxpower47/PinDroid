@@ -28,18 +28,15 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.pindroid.Constants;
 import com.pindroid.R;
@@ -203,16 +200,6 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
     public int getAccountCount(){
     	return AccountHelper.getAccountCount(this);
     }
-	
-	
-	@Override
-	public void setTitle(CharSequence title){
-		super.setTitle(title);
-
-		if(this.findViewById(R.id.action_bar_title) != null) {
-			((TextView)this.findViewById(R.id.action_bar_title)).setText(title);
-		}
-	}
 	
 	private void setSubtitle(String subtitle){
 		getSupportActionBar().setSubtitle(subtitle);

@@ -181,9 +181,9 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 			getActivity().setTitle(getString(R.string.browse_network_bookmarks_title));
 		} else {	
 			if(tagname != null && tagname != "") {
-				getActivity().setTitle(getString(R.string.browse_user_bookmarks_tagged_title, username, tagname));
+				getActivity().setTitle(getString(R.string.browse_user_bookmarks_tagged_title, feed, tagname));
 			} else {
-				getActivity().setTitle(getString(R.string.browse_user_bookmarks_title, username));
+				getActivity().setTitle(getString(R.string.browse_user_bookmarks_title, feed));
 			}
 		}
 	}
