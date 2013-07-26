@@ -113,10 +113,13 @@ public class NsMenuAdapter extends ArrayAdapter<NsMenuItemModel> {
 				holder.textHolder.setText(item.title);
 	    	
 	    	if (holder.textCounterHolder != null){
-	    		if (item.counter > 0){
+	    		if (item.counter > 0 && item.counter < 100){
 	    			holder.textCounterHolder.setVisibility(View.VISIBLE);
 	    			holder.textCounterHolder.setText("" + item.counter);
-	    		}else{
+	    		} else if(item.counter >= 100){
+	    			holder.textCounterHolder.setVisibility(View.VISIBLE);
+	    			holder.textCounterHolder.setText("99+");
+	    		} else {
 	    			holder.textCounterHolder.setVisibility(View.GONE);
 				}
 			}

@@ -91,10 +91,10 @@
         <item>main_menu_my_notes</item>
     </string-array>
     <string-array name="main_menu_my_icons">
-        <item>widget_bookmark</item>
-        <item>widget_unread</item>
-        <item>widget_tag</item>
-        <item>widget_note</item>
+        <item>main_menu_bookmark</item>
+        <item>main_menu_unread</item>
+        <item>main_menu_tag</item>
+        <item>main_menu_note</item>
     </string-array>
     <string-array name="main_menu_feeds">
         <item>main_menu_network_bookmarks</item>

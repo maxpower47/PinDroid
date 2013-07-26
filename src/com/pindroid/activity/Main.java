@@ -94,6 +94,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     private Spinner mAccountSpinner;
     private int spinnerSelectionCount = 0;
     
+    private NsMenuItemModel unreadItem;
+    
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -174,7 +176,10 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 			int id_icon = getResources().getIdentifier(myMenuItemsIcon[res], "drawable", this.getPackageName());
 
 			NsMenuItemModel mItem = new NsMenuItemModel(id_title, id_icon);
-			if (res==1) mItem.counter = BookmarkManager.GetUnreadCount(app.getUsername(), this);
+			if (res==1) {
+				unreadItem = mItem;
+				mItem.counter = BookmarkManager.GetUnreadCount(app.getUsername(), this);
+			}
 			mAdapter.addItem(mItem);
 			res++;
 		}
@@ -529,6 +534,11 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
 		
 		setSpinnerAccount(app.getUsername());
+		
+		if(unreadItem != null){
+			unreadItem.counter = BookmarkManager.GetUnreadCount(app.getUsername(), this);
+			((NsMenuAdapter)mDrawerList.getAdapter()).notifyDataSetChanged();
+		}
 		
 		Fragment cf = getSupportFragmentManager().findFragmentById(R.id.content_frame);
 		Fragment lf = getSupportFragmentManager().findFragmentById(R.id.list_frame);

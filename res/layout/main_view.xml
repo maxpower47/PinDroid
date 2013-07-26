@@ -52,6 +52,7 @@
             android:layout_marginLeft="12dp"
             android:gravity="center_vertical"
             android:minHeight="48dp"
+            android:textColor="#CDCDCD"
             android:textAppearance="?android:attr/textAppearanceMedium" 
             />
 
@@ -66,10 +67,10 @@
             android:background="@drawable/menu_count_rectangle"
             android:gravity="center"
             android:minHeight="48dp"
-            android:padding="6dp"
+            android:padding="4dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#FFFFFF"
-            android:textSize="12sp"
+            android:textSize="13sp"
             android:textStyle="bold" ></TextView>
     </RelativeLayout>
 
@@ -79,6 +80,6 @@
         android:layout_height="1dp"
         android:layout_marginBottom="1dp"
         android:layout_marginTop="1dp"
-        android:background="#DADADC" ></View>
+        android:background="#333333" ></View>
 
 </LinearLayout>
