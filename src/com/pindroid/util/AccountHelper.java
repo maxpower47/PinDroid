@@ -10,10 +10,17 @@ public class AccountHelper {
 
     public static Account getAccount(String username, Context context){
     	for(Account account : AccountManager.get(context).getAccountsByType(Constants.ACCOUNT_TYPE))
-			   if (account.name.equals(username))
-				   return account;
+    		if (account.name.equals(username))
+    			return account;
     	
     	return null;		   
+    }
+    
+    public static Account getFirstAccount(Context context){
+    	if(getAccountCount(context) > 0){
+    		return AccountManager.get(context).getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+    	} 
+    	return null;
     }
     
     public static int getAccountCount(Context context){

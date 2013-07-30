@@ -42,8 +42,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
@@ -574,16 +572,15 @@ public class PinboardApi {
 			throw new AuthenticationException();
 		
     	final String username = account.name;
-    	String authtoken = null;
+    	String authtoken = "00000000000000000000";  // need to provide a sane default value, since a token that is too short causes a 500 error instead of 401
     	
     	try {
-			authtoken = am.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, true);
-		} catch (OperationCanceledException e) {
-			// TODO Auto-generated catch block
+			String tempAuthtoken = am.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, true);
+			if(tempAuthtoken != null)
+				authtoken = tempAuthtoken;
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (AuthenticatorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new AuthenticationException("Error getting auth token");	
 		}
     	
     	params.put("auth_token", username + ":" + authtoken);
@@ -628,12 +625,9 @@ public class PinboardApi {
     		
         	try {
     			authtoken = am.blockingGetAuthToken(account, Constants.AUTHTOKEN_TYPE, true);
-    		} catch (OperationCanceledException e) {
-    			// TODO Auto-generated catch block
+    		} catch (Exception e) {
     			e.printStackTrace();
-    		} catch (AuthenticatorException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
+    			throw new AuthenticationException("Invalid auth token");
     		}
         	
     		throw new AuthenticationException();

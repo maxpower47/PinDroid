@@ -33,7 +33,6 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -82,25 +81,15 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
 			}
 		}
 		
-		init();
+		//init();
 	}
 	
 	private void init(){
-		if(getAccountCount() < 1) {		
+		if(AccountHelper.getAccountCount(this) < 1) {		
 			Intent i = new Intent(this, AuthenticatorActivity.class);
-			startActivityForResult(i, 0);
+			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_INIT);
 			
 			return;
-		} else {			
-			/*if(getIntent().getData() != null && getIntent().getData().getUserInfo() != null){
-				app.setUsername(getIntent().getData().getUserInfo());
-				Builder b = getIntent().getData().buildUpon();
-				b.encodedAuthority(Constants.INTENT_URI);
-				getIntent().setData(b.build());
-				changeAccount();
-			} else if(app.getUsername() == null || app.getUsername().equals("")){
-				//requestAccount();
-			}*/
 		}
 	}
 	
@@ -110,7 +99,7 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
 		
 		init();
 		
-		if(app.getUsername() != null && getAccountCount() > 1){
+		if(app.getUsername() != null && AccountHelper.getAccountCount(this) > 1){
 			setSubtitle(app.getUsername());
 		}
 	}
@@ -122,7 +111,7 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
 			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
 		} else {
-			if(getAccountCount()  > 0) {	
+			if(AccountHelper.getAccountCount(this)  > 0) {	
 				Account account = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 				
 				app.setUsername(account.name);
@@ -153,15 +142,6 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
     	    }
     	});
 	}
-	
-	// ******************************************
-	// ******************************************
-	// ******************************************
-	//TODO test searching on < 3.0 devices
-	//TODO test on tablet
-	// ******************************************
-	// ******************************************
-	// ******************************************
 
 	protected abstract void startSearch(final String query);
 	
@@ -188,19 +168,6 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
 		return false;
 	}
 	
-    
-    public Account getAccount(){
-    	for(Account account : AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE))
-			   if (account.name.equals(app.getUsername()))
-				   return account;
-    	
-    	return null;		   
-    }
-    
-    public int getAccountCount(){
-    	return AccountHelper.getAccountCount(this);
-    }
-	
 	private void setSubtitle(String subtitle){
 		getSupportActionBar().setSubtitle(subtitle);
 	}
@@ -209,11 +176,9 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
 	protected abstract void changeAccount();
 	
 	protected void setAccount(String username){
-		Log.d("setAccount", username);
-		
 		app.setUsername(username);
 		
-		if(getAccountCount() > 1)
+		if(AccountHelper.getAccountCount(this) > 1)
 			setSubtitle(app.getUsername());
 		
 		changeAccount();
@@ -225,6 +190,8 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
 			finish();
 		} else if(resultCode == Activity.RESULT_OK && requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
 			setAccount(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));	
+		} else if(resultCode == Activity.RESULT_OK && requestCode == Constants.REQUEST_CODE_ACCOUNT_INIT){
+			setAccount(AccountHelper.getFirstAccount(this).name);
 		}
 	}
 }

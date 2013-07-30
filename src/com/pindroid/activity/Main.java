@@ -78,6 +78,7 @@ import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.NoteContent.Note;
 import com.pindroid.ui.NsMenuAdapter;
 import com.pindroid.ui.NsMenuItemModel;
+import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
 
@@ -98,11 +99,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
-		Log.d("main", "onCreateStart");
-		
 		super.onCreate(savedState);
 		setContentView(R.layout.main);
-
 		
 		mDrawerList = (ListView) findViewById(R.id.left_drawer_list);
 		mDrawerWrapper = (LinearLayout) findViewById(R.id.left_drawer);
@@ -123,41 +121,31 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
         }
 		
 		processIntent(getIntent());
-		
-		Log.d("main", "onCreateEnd");
 	}
 	
 	private void _initMenu() {
-		
-		// Set up account spinner 
-		ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, getAccountNames());
-		// Specify the layout to use when the list of choices appears
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// Apply the adapter to the spinner
-		mAccountSpinner.setAdapter(adapter);
-		
-		if(app.getUsername() == null || app.getUsername().equals("")) {
-			Log.d("spinnerDefaultAccount", (String)mAccountSpinner.getSelectedItem());
-			setAccount((String)mAccountSpinner.getSelectedItem());
+
+		if(AccountHelper.getAccountCount(this) > 0){
+			if(app.getUsername() == null || app.getUsername().equals("")) {
+				setAccount(AccountHelper.getFirstAccount(this).name);
+			}
+			
+			setSpinnerAccount(app.getUsername());
 		}
 
 		mAccountSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 				
 				// onItemSelected is called on initialization of the spinner, so prevent this from being called the first time
-				if(spinnerSelectionCount > 0) {
-					Log.d("spinnerOnItemSelected", (String)parent.getItemAtPosition(pos));
+				if(spinnerSelectionCount++ > 0) {
 					setAccount((String)parent.getItemAtPosition(pos));
 				}
-				spinnerSelectionCount++;
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-				
+
 			}		
 		});
-		
 		
 		// Set up menu
 		NsMenuAdapter mAdapter = new NsMenuAdapter(this);
@@ -232,10 +220,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		processIntent(intent);
 	}
 	
-	private void processIntent(Intent intent){
-		Log.d("processIntent", intent.getDataString() == null ? "" : intent.getDataString());
-		Log.d("processIntent: currentUsername", app.getUsername());
-		
+	private void processIntent(Intent intent){		
 		String action = intent.getAction();
 		String path = intent.getData() != null ? intent.getData().getPath() : "";
 		String lastPath = (intent.getData() != null && intent.getData().getLastPathSegment() != null) ? intent.getData().getLastPathSegment() : "";
@@ -243,25 +228,18 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		
 		if(!intentUsername.equals("") && !app.getUsername().equals(intentUsername)){
 			setAccount(intentUsername);
-			Log.d("processIntent: changeUsername", intentUsername);
 		} else setSpinnerAccount(app.getUsername());
 		
 		if(Intent.ACTION_VIEW.equals(action)) {
 			if(lastPath.equals("bookmarks")){
 				if(intent.getData().getQueryParameter("unread") != null && intent.getData().getQueryParameter("unread").equals("1")){
-					Log.d("processIntent", "unread");
 					onMyUnreadSelected();
-					
 				} else{
-					Log.d("processIntent", "bookmarks");
 					onMyBookmarksSelected(intent.getData().getQueryParameter("tagname"));
-					
 				}	
 			} else if(lastPath.equals("tags")){
-				Log.d("processIntent", "tags");
 				onMyTagsSelected();
 			} else if(lastPath.equals("notes")){
-					Log.d("processIntent", "notes");
 					onMyNotesSelected();
 			}
 		} else if(Intent.ACTION_SEND.equals(action)){
@@ -301,11 +279,12 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 	
 	private void setSpinnerAccount(String username){
-
-		int position = ((ArrayAdapter<CharSequence>)mAccountSpinner.getAdapter()).getPosition(username);
-		Log.d("spinnerSetSectionStart", Integer.toString(mAccountSpinner.getSelectedItemPosition()));
+		ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, getAccountNames());
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mAccountSpinner.setAdapter(adapter);
+		int position = adapter.getPosition(username);
 		mAccountSpinner.setSelection(position);
-		Log.d("spinnerSetSection", Integer.toString(position));
+		spinnerSelectionCount = 0;
 	}
 	
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -369,6 +348,16 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerWrapper);
+        
+        if(drawerOpen){
+        	menu.removeItem(R.id.menu_search);
+        	menu.removeItem(R.id.menu_sortbookmark);
+        	menu.removeItem(R.id.menu_sorttag);
+        	menu.removeItem(R.id.menu_addbookmark);
+        	menu.removeItem(R.id.menu_addbookmark_save);
+        	menu.removeItem(R.id.menu_addbookmark_cancel);
+        }
+        
         return super.onPrepareOptionsMenu(menu);
     }
 	
@@ -530,8 +519,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	
 	@Override
 	protected void changeAccount(){
-
-		
 		setSpinnerAccount(app.getUsername());
 		
 		if(unreadItem != null){

@@ -192,16 +192,6 @@
     		</intent-filter>
     		<meta-data android:name="android.appwidget.provider" android:resource="@xml/small_appwidget_info" />
 		</receiver>
-		<receiver 
-        	android:name=".syncadapter.PeriodicSyncReceiver"
-        	android:label="@string/sync_receiver_label">
-		</receiver>
-		<receiver android:name=".receiver.AccountReceiver"
-			android:exported="false">
-			<intent-filter>
-				<action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED"></action>
-			</intent-filter>
-		</receiver>
 		<receiver android:name=".receiver.PackageReceiver"
 			android:exported="false">
 			<intent-filter>
@@ -213,7 +203,6 @@
 				<action android:name="android.intent.action.MY_PACKAGE_REPLACED"></action>
 			</intent-filter>
 		</receiver>
-		<service android:name=".service.AccountService" />
 		<service android:name=".service.SaveBookmarkService" />
 		<service android:name=".dashclock.PinDroidExtension"
             android:icon="@drawable/ic_pindroid_dashclock"

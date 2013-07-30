@@ -88,6 +88,8 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
         		UploadBookmarks(account, syncResult);
         		InsertBookmarks(account, syncResult);
         	}
+        	
+        	checkSecretToken(account);
         } catch (final ParseException e) {
             syncResult.stats.numParseExceptions++;
             Log.e(TAG, "ParseException", e);
@@ -218,6 +220,16 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 		} while(morePages);
 
 		return results;
+    }
+    
+    private void checkSecretToken(Account account) throws AuthenticationException, IOException, TooManyRequestsException, ParseException, PinboardException{
+    	
+    	String token = mAccountManager.getUserData(account, Constants.PREFS_SECRET_TOKEN);
+    	
+    	if(token == null){
+    		token = PinboardApi.getSecretToken(account, mContext);		
+			mAccountManager.setUserData(account, Constants.PREFS_SECRET_TOKEN, token);
+    	}
     }
     
     /**
