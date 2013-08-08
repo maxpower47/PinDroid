@@ -565,8 +565,14 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 					t.addToBackStack(null);
 				}
 				
-				t.replace(R.id.content_frame, frag, "right");
-				t.commit();
+				if(fragmentManager.findFragmentByTag("right") instanceof ViewBookmarkFragment){
+					ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) fragmentManager.findFragmentByTag("right");
+					viewFrag.setBookmark(b, viewType);
+					viewFrag.refresh();
+				} else {
+					t.replace(R.id.content_frame, frag, "right");
+					t.commit();
+				}
 			} else {
 				replaceRightFragment(frag, true);
 			}

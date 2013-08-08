@@ -34,7 +34,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,8 +54,8 @@ import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.AccountSpan;
@@ -120,7 +119,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		
 		setHasOptionsMenu(true);
 		
-		loadBookmark();
+		refresh();
 	}
 	
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
@@ -240,7 +239,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
     	return bookmark != null && bookmark.getId() != 0;
     }
 
-    public void loadBookmark(){
+    public void refresh(){
     	if(bookmark != null){
     		if(viewType == BookmarkViewType.VIEW){
 
@@ -390,10 +389,6 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	public void setUsername(String username) {
 
 	}
-
-	public void refresh() {
-
-	}
 	
 	class MyObserver extends ContentObserver {		
 		public MyObserver(Handler handler) {
@@ -406,7 +401,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 				bookmark = BookmarkManager.GetByHash(bookmark.getHash(), bookmark.getAccount(), getActivity());
 			} catch (ContentNotFoundException e) {
 			}
-			loadBookmark();
-		}			
+			refresh();
+		}
 	}
 }
