@@ -86,6 +86,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	private ContentObserver observer = new MyObserver(new Handler());
 	
 	private static final String STATE_VIEWTYPE = "viewType";
+	private static final String STATE_BOOKMARK = "bookmark";
 	
 	public interface OnBookmarkActionListener {
 		public void onViewTagSelected(String tag, String user);
@@ -95,7 +96,6 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
 	}
 	
 	@SuppressLint("SetJavaScriptEnabled")
@@ -103,9 +103,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		
-	    if (savedInstanceState != null) {
-	        viewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_VIEWTYPE);
-	    } 
+	    
 		
 		mBookmarkView = (ScrollView) getView().findViewById(R.id.bookmark_scroll_view);
 		mTitle = (TextView) getView().findViewById(R.id.view_bookmark_title);
@@ -123,9 +121,18 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		
 		mWebContent.getSettings().setJavaScriptEnabled(true);
 		
+		if (savedInstanceState != null) {
+	        viewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_VIEWTYPE);
+	        bookmark = (Bookmark)savedInstanceState.getParcelable(STATE_BOOKMARK);
+	        mWebContent.restoreState(savedInstanceState);
+	    } 
+		
 		setHasOptionsMenu(true);
 		
-		refresh();
+		if(savedInstanceState == null || viewType.equals(BookmarkViewType.VIEW)){
+			refresh();
+		} else setViews();
+
 	}
 	
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
@@ -143,8 +150,6 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	public void setBookmark(Bookmark bookmark, BookmarkViewType viewType) {
 		this.viewType = viewType;
 		this.bookmark = bookmark;
-		
-		//ActivityCompat.invalidateOptionsMenu(this.getActivity());
 	}
 	
 	public void clearView() {
@@ -174,9 +179,10 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
 	    savedInstanceState.putSerializable(STATE_VIEWTYPE, viewType);
-	    
-	    super.onSaveInstanceState(savedInstanceState);
+	    savedInstanceState.putParcelable(STATE_BOOKMARK, bookmark);
+	    mWebContent.saveState(savedInstanceState);
 	}
     
 	@Override
@@ -246,12 +252,30 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
     }
 
     public void refresh(){
+
+    	setViews();
+    	loadBookmark();
+    }
+    
+    private void setViews(){
     	if(bookmark != null){
     		if(viewType == BookmarkViewType.VIEW){
 
 				mBookmarkView.setVisibility(View.VISIBLE);
 				mWebContent.setVisibility(View.GONE);
-				
+			} else {
+				mBookmarkView.setVisibility(View.GONE);
+				mWebContent.setVisibility(View.VISIBLE);
+			}
+    	} else {
+    		clearView();
+    	}
+    }
+    
+    private void loadBookmark(){
+    	if(bookmark != null){
+    		if(viewType == BookmarkViewType.VIEW){
+
 				Date d = new Date(bookmark.getTime());
 				
 				if(bookmark.getDescription() != null && !bookmark.getDescription().equals("null"))
@@ -357,8 +381,6 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		
 		mWebContent.loadUrl("about:blank");
 		mWebContent.clearCache(true);
-		mBookmarkView.setVisibility(View.GONE);
-		mWebContent.setVisibility(View.VISIBLE);
 			
 		CookieManager cookieManager = CookieManager.getInstance(); 
 		CookieSyncManager.createInstance(getActivity());

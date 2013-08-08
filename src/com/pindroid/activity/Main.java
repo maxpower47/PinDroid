@@ -573,7 +573,11 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 					t.commit();
 				}
 			} else {
-				replaceRightFragment(frag, true);
+				if(fragmentManager.findFragmentByTag("right") instanceof ViewBookmarkFragment){
+					ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) fragmentManager.findFragmentByTag("right");
+					viewFrag.setBookmark(b, viewType);
+					viewFrag.refresh();
+				} else replaceRightFragment(frag, true);
 			}
 		}
 	}
