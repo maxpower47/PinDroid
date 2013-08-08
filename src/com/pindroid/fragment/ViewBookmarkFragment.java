@@ -92,6 +92,12 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		public void onAccountSelected(String account);
 	}
 	
+	@Override
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+	}
+	
 	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){

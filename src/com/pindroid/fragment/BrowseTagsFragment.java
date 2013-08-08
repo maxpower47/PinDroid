@@ -61,6 +61,7 @@ public class BrowseTagsFragment extends ListFragment
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		clickListener = viewListener;
+		setRetainInstance(true);
 	}
 	
 	@Override

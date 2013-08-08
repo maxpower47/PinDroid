@@ -39,7 +39,6 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -99,7 +98,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedState);
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
 		mDrawerList = (ListView) findViewById(R.id.left_drawer_list);

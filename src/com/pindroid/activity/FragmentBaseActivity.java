@@ -46,8 +46,6 @@ import com.pindroid.util.AccountHelper;
 public abstract class FragmentBaseActivity extends ActionBarActivity {
 	
 	protected AccountManager mAccountManager;
-
-	Bundle savedState;
 	
 	public PindroidApplication app;
 	

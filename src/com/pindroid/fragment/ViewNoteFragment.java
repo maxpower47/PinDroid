@@ -22,7 +22,6 @@
 package com.pindroid.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +41,12 @@ public class ViewNoteFragment extends Fragment {
 	private Note note;
 	
 	@Override
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+	}
+	
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		
@@ -50,7 +55,6 @@ public class ViewNoteFragment extends Fragment {
 		mUsername = (TextView) getView().findViewById(R.id.view_note_account);
 		
 		setHasOptionsMenu(true);
-		//setRetainInstance(true);
 	}
     
 	public void setNote(Note n) {
