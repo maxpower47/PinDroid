@@ -22,6 +22,6 @@
  */
  -->
 <resources>
-    <item name="browse_bookmarks" type="layout">@layout/browse_bookmarks_twopane_vert</item>
+    <item name="main" type="layout">@layout/main_twopane_vert</item>
     <bool name="has_two_panes">true</bool>
 </resources>
