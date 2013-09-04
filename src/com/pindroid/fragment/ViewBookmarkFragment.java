@@ -93,17 +93,10 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		public void onAccountSelected(String account);
 	}
 	
-	@Override
-	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-	}
-	
 	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		
-	    
 		
 		mBookmarkView = (ScrollView) getView().findViewById(R.id.bookmark_scroll_view);
 		mTitle = (TextView) getView().findViewById(R.id.view_bookmark_title);
@@ -129,7 +122,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		
 		setHasOptionsMenu(true);
 		
-		if(savedInstanceState == null || viewType.equals(BookmarkViewType.VIEW)){
+		if(savedInstanceState == null || (viewType != null && viewType.equals(BookmarkViewType.VIEW))){
 			refresh();
 		} else setViews();
 
@@ -182,7 +175,10 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		super.onSaveInstanceState(savedInstanceState);
 	    savedInstanceState.putSerializable(STATE_VIEWTYPE, viewType);
 	    savedInstanceState.putParcelable(STATE_BOOKMARK, bookmark);
-	    mWebContent.saveState(savedInstanceState);
+	    
+	    if(mWebContent != null){
+	    	mWebContent.saveState(savedInstanceState);
+	    }
 	}
     
 	@Override
@@ -378,6 +374,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		String readingBackground = SettingsHelper.getReadingBackground(getActivity());
 		String readingFont = SettingsHelper.getReadingFont(getActivity());
 		String readingFontSize = SettingsHelper.getReadingFontSize(getActivity());
+		String readingMargins = SettingsHelper.getReadingMargins(getActivity());
 		
 		mWebContent.loadUrl("about:blank");
 		mWebContent.clearCache(true);
@@ -389,6 +386,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		cookieManager.setCookie("http://www.instapaper.com", "iptcolor=" + readingBackground + "; expires=Sat, 25-Mar-2023 00:00:00 GMT;path=/;");
 		cookieManager.setCookie("http://www.instapaper.com", "iptfont=" + readingFont + "; expires=Sat, 25-Mar-2023 00:00:00 GMT;path=/;");
 		cookieManager.setCookie("http://www.instapaper.com", "iptsize=" + readingFontSize + "; expires=Sat, 25-Mar-2023 00:00:00 GMT;path=/;");
+		cookieManager.setCookie("http://www.instapaper.com", "iptwidth=" + readingMargins + "; expires=Sat, 25-Mar-2023 00:00:00 GMT;path=/;");
 
 		CookieSyncManager.getInstance().sync();
 

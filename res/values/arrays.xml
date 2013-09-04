@@ -48,11 +48,15 @@
         <item>Georgia</item>
         <item>Verdana</item>
         <item>Helvetica</item>
+        <item>Proxima Nova</item>
+        <item>Tisa</item>
     </string-array>
     <string-array name="pref_reading_font_values">
         <item>georgiamode</item>
         <item>verdanamode</item>
         <item>helveticamode</item>
+        <item>proximamode</item>
+        <item>tisamode</item>
     </string-array>
     <string-array name="pref_reading_fontsize_entries">
         <item>Small</item>
@@ -63,6 +67,16 @@
         <item>1</item>
         <item>3</item>
         <item>5</item>
+    </string-array>
+    <string-array name="pref_reading_margins_entries">
+        <item>Narrow</item>
+        <item>Normal</item>
+        <item>Wide</item>
+    </string-array>
+    <string-array name="pref_reading_margins_values">
+        <item>narrowmode</item>
+        <item>medwidthmode</item>
+        <item>widemode</item>
     </string-array>
     <string-array name="pref_synctime_entries">
         <item>5 mins</item>

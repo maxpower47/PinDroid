@@ -44,7 +44,7 @@ public class SettingsHelper {
     }
     
     public static String getReadingMargins(Context context) {
-    	return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_reading_margins", "20");
+    	return PreferenceManager.getDefaultSharedPreferences(context).getString("pref_reading_margins", "medwidthmode");
     }
     
     public static String getReadingBackground(Context context) {

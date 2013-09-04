@@ -101,6 +101,13 @@
 			android:defaultValue="georgiamode"
 			android:summary="@string/pref_reading_font_summary"
 			android:key="@string/pref_reading_font_key" />
+	   	<ListPreference 
+			android:title="@string/pref_reading_margins_title"
+			android:entries="@array/pref_reading_margins_entries"
+			android:entryValues="@array/pref_reading_margins_values"
+			android:defaultValue="medwidthmode"
+			android:summary="@string/pref_reading_margins_summary"
+			android:key="@string/pref_reading_margins_key" />
 	</PreferenceCategory>
 	<PreferenceCategory 
 		android:title="@string/pref_cat_help_title">

@@ -296,6 +296,10 @@
     <string name="pref_reading_fontsize_title">Font size</string>
     <string name="pref_reading_fontsize_key">pref_reading_fontsize</string>
     <string name="pref_reading_fontsize_summary">Font size for read view</string>
+    
+    <string name="pref_reading_margins_title">Margin size</string>
+    <string name="pref_reading_margins_key">pref_reading_margins</string>
+    <string name="pref_reading_margins_summary">Margin width for read view</string>
 
     
     <string name="pref_license_title">License</string>
