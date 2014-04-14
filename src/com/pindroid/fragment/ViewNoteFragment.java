@@ -43,7 +43,7 @@ public class ViewNoteFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
+		setRetainInstance(false);
 	}
 	
 	@Override
@@ -70,6 +70,10 @@ public class ViewNoteFragment extends Fragment {
     public void onStart(){
     	super.onStart();
     	
+    	loadNote();
+    }
+    
+    public void refresh() {
     	loadNote();
     }
 

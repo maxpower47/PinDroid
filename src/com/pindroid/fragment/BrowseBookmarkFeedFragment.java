@@ -76,13 +76,14 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	
 	static final String STATE_USERNAME = "username";
 	static final String STATE_TAGNAME = "tagname";
+	static final String STATE_FEED = "feed";
 	
 	private BrowseBookmarksFragment.OnBookmarkSelectedListener bookmarkSelectedListener;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
+		setRetainInstance(false);
 	}
 	
 	@Override
@@ -92,6 +93,7 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	    if (savedInstanceState != null) {
 	        username = savedInstanceState.getString(STATE_USERNAME);
 	        tagname = savedInstanceState.getString(STATE_TAGNAME);
+	        feed = savedInstanceState.getString(STATE_FEED);
 	    } 
 
 		intent = getActivity().getIntent();
@@ -152,6 +154,7 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 	    savedInstanceState.putString(STATE_USERNAME, username);
 	    savedInstanceState.putString(STATE_TAGNAME, tagname);
+	    savedInstanceState.putString(STATE_FEED, feed);
 	    
 	    super.onSaveInstanceState(savedInstanceState);
 	}
@@ -179,11 +182,11 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
 			String query = intent.getStringExtra(SearchManager.QUERY);
 			getActivity().setTitle(getString(R.string.search_results_global_tag_title, query));
-		} else if(feed.equals("recent")) {
+		} else if(feed != null && feed.equals("recent")) {
 			getActivity().setTitle(getString(R.string.browse_recent_bookmarks_title));
-		} else if(feed.equals("popular")) {
+		} else if(feed != null && feed.equals("popular")) {
 			getActivity().setTitle(getString(R.string.browse_popular_bookmarks_title));
-		} else if(feed.equals("network")) {
+		} else if(feed != null && feed.equals("network")) {
 			getActivity().setTitle(getString(R.string.browse_network_bookmarks_title));
 		} else {	
 			if(tagname != null && tagname != "") {

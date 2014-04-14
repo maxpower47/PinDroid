@@ -32,11 +32,11 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 	    <FrameLayout
-	        android:id="@+id/list_frame"
+	        android:id="@+id/left_frame"
 	        android:layout_width="250dp"
 	        android:layout_height="match_parent" />
 	    <FrameLayout
-	        android:id="@+id/content_frame"
+	        android:id="@+id/right_frame"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent" />
     </LinearLayout>

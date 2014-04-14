@@ -39,6 +39,7 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -364,7 +365,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		// Insert the fragment by replacing any existing fragment
 	    FragmentManager fragmentManager = getSupportFragmentManager();
 	    FragmentTransaction t = fragmentManager.beginTransaction();
-	    t.replace(R.id.list_frame, frag, "left");
+	    t.replace(R.id.left_frame, frag, "left");
 	    if(backstack)
 	    	t.addToBackStack(null);
 	    t.commit();
@@ -388,7 +389,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		// Insert the fragment by replacing any existing fragment
 	    FragmentManager fragmentManager = getSupportFragmentManager();
 	    FragmentTransaction t = fragmentManager.beginTransaction();
-	    t.replace(R.id.content_frame, frag, "right");
+	    t.replace(R.id.right_frame, frag, "right");
 	    if(backstack)
 	    	t.addToBackStack(null);
 	    t.commit();
@@ -420,7 +421,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if(isTwoPane()){
 			replaceLeftFragment(frag, false);
 		} else {
-			replaceRightFragment(frag, false);
+			replaceLeftFragment(frag, false);
 		}
 		
 		clearDrawer(0);
@@ -435,7 +436,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if(isTwoPane()){
 			replaceLeftFragment(frag, false);
 		} else {
-			replaceRightFragment(frag, false);
+			replaceLeftFragment(frag, false);
 		}
 		
 		clearDrawer(1);
@@ -450,7 +451,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if(isTwoPane()){
 			replaceLeftFragment(frag, false);
 		} else {
-			replaceRightFragment(frag, false);
+			replaceLeftFragment(frag, false);
 		}
 		
 		clearDrawer(2);
@@ -465,7 +466,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if(isTwoPane()){
 			replaceLeftFragment(frag, false);
 		} else {
-			replaceRightFragment(frag, false);
+			replaceLeftFragment(frag, false);
 		}
 		
 		clearDrawer(3);
@@ -480,7 +481,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if(isTwoPane()){
 			replaceLeftFragment(frag, false);
 		} else {
-			replaceRightFragment(frag, false);
+			replaceLeftFragment(frag, false);
 		}
 		
 		clearDrawer(4);
@@ -495,7 +496,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if(isTwoPane()){
 			replaceLeftFragment(frag, false);
 		} else {
-			replaceRightFragment(frag, false);
+			replaceLeftFragment(frag, false);
 		}
 		
 		clearDrawer(5);
@@ -510,7 +511,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if(isTwoPane()){
 			replaceLeftFragment(frag, false);
 		} else {
-			replaceRightFragment(frag, false);
+			replaceLeftFragment(frag, false);
 		}
 		
 		clearDrawer(6);
@@ -525,8 +526,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 			((NsMenuAdapter)mDrawerList.getAdapter()).notifyDataSetChanged();
 		}
 		
-		Fragment cf = getSupportFragmentManager().findFragmentById(R.id.content_frame);
-		Fragment lf = getSupportFragmentManager().findFragmentById(R.id.list_frame);
+		Fragment cf = getSupportFragmentManager().findFragmentById(R.id.right_frame);
+		Fragment lf = getSupportFragmentManager().findFragmentById(R.id.left_frame);
 		
 		if(cf != null){
 			((PindroidFragment)cf).setUsername(app.getUsername());
@@ -545,13 +546,17 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 			AddBookmarkFragment frag = new AddBookmarkFragment();
 			frag.loadBookmark(b, b);
 			frag.setUsername(app.getUsername());
-			replaceRightFragment(frag, true);
+			
+			if(isTwoPane()){
+				replaceRightFragment(frag, true);
+			} else {
+				replaceLeftFragment(frag, true);
+			}
 		} else {
 			ViewBookmarkFragment frag = new ViewBookmarkFragment();
 			frag.setBookmark(b, viewType);
 			
 			FragmentManager fragmentManager = getSupportFragmentManager();
-			
 			
 			if(isTwoPane()){
 				FragmentTransaction t = fragmentManager.beginTransaction();
@@ -560,7 +565,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 					Fragment right = fragmentManager.findFragmentByTag("right");
 					Fragment newRight = duplicateFragment(right);
 					
-					t.replace(R.id.list_frame, newRight, "left");
+					t.replace(R.id.left_frame, newRight, "left");
 					t.addToBackStack(null);
 				}
 				
@@ -569,15 +574,15 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 					viewFrag.setBookmark(b, viewType);
 					viewFrag.refresh();
 				} else {
-					t.replace(R.id.content_frame, frag, "right");
+					t.replace(R.id.right_frame, frag, "right");
 					t.commit();
 				}
 			} else {
-				if(fragmentManager.findFragmentByTag("right") instanceof ViewBookmarkFragment){
-					ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) fragmentManager.findFragmentByTag("right");
+				if(fragmentManager.findFragmentByTag("left") instanceof ViewBookmarkFragment){
+					ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) fragmentManager.findFragmentByTag("left");
 					viewFrag.setBookmark(b, viewType);
 					viewFrag.refresh();
-				} else replaceRightFragment(frag, true);
+				} else replaceLeftFragment(frag, true);
 			}
 		}
 	}
@@ -590,7 +595,12 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		AddBookmarkFragment frag = new AddBookmarkFragment();
 		frag.loadBookmark(b, null);
 		frag.setUsername(app.getUsername());
-		replaceRightFragment(frag, back);
+		
+		if(isTwoPane()){
+			replaceRightFragment(frag, false);		
+		} else {
+			replaceLeftFragment(frag, true);
+		}
 	}
 
 	public void onBookmarkShare(Bookmark b) {
@@ -618,14 +628,34 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if(isTwoPane()){
 			replaceRightFragment(frag, false);		
 		} else {
-			replaceRightFragment(frag, true);
+			replaceLeftFragment(frag, true);
 		}
 	}
 
 	public void onNoteView(Note n) {
 		ViewNoteFragment frag = new ViewNoteFragment();
 		frag.setNote(n);
-		replaceRightFragment(frag, true);
+		
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		
+		if(isTwoPane()){
+			FragmentTransaction t = fragmentManager.beginTransaction();
+			
+			if(fragmentManager.findFragmentByTag("right") instanceof ViewNoteFragment){
+				ViewNoteFragment viewFrag = (ViewNoteFragment) fragmentManager.findFragmentByTag("right");
+				viewFrag.setNote(n);
+				viewFrag.refresh();
+			} else {
+				t.replace(R.id.right_frame, frag, "right");
+				t.commit();
+			}
+		} else {
+			if(fragmentManager.findFragmentByTag("left") instanceof ViewNoteFragment){
+				ViewNoteFragment viewFrag = (ViewNoteFragment) fragmentManager.findFragmentByTag("left");
+				viewFrag.setNote(n);
+				viewFrag.refresh();
+			} else replaceLeftFragment(frag, true);
+		}
 	}
 
 	public void onViewTagSelected(String tag, String user) {
@@ -640,7 +670,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if(isTwoPane()){
 			replaceLeftFragment(frag, true);		    
 		} else {
-			replaceRightFragment(frag, true);
+			replaceLeftFragment(frag, true);
 		}
 	}
 
@@ -651,7 +681,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if(isTwoPane()){
 			replaceLeftFragment(frag, true);		    
 		} else {
-			replaceRightFragment(frag, true);
+			replaceLeftFragment(frag, true);
 		}
 	}
 
@@ -701,7 +731,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if(isTwoPane()){
 			replaceLeftFragment(frag, true);
 		} else {
-			replaceRightFragment(frag, true);
+			replaceLeftFragment(frag, true);
 		}	
 	}
 	
@@ -772,7 +802,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if(isTwoPane()){
 			replaceLeftFragment(frag, true);
 		} else {
-			replaceRightFragment(frag, true);
+			replaceLeftFragment(frag, true);
 		}
 	}
 
@@ -784,7 +814,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if(isTwoPane()){
 			replaceLeftFragment(frag, true);
 		} else {
-			replaceRightFragment(frag, true);
+			replaceLeftFragment(frag, true);
 		}		
 	}
 
@@ -796,7 +826,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if(isTwoPane()){
 			replaceLeftFragment(frag, true);
 		} else {
-			replaceRightFragment(frag, true);
+			replaceLeftFragment(frag, true);
 		}	
 	}
 
@@ -807,7 +837,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if(isTwoPane()){
 			replaceLeftFragment(frag, true);
 		} else {
-			replaceRightFragment(frag, true);
+			replaceLeftFragment(frag, true);
 		}
 	}
 }
