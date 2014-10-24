@@ -154,6 +154,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		String[] feedMenuItems = getResources().getStringArray(R.array.main_menu_feeds);
 
 		String[] myMenuItemsIcon = getResources().getStringArray(R.array.main_menu_my_icons);
+        String[] feedsMenuItemsIcon = getResources().getStringArray(R.array.main_menu_feeds_icons);
 
 		int res = 0;
 		for (String item : myMenuItems) {
@@ -171,16 +172,19 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		}
 		
 		mAdapter.addHeader(R.string.main_menu_feeds_header);
-		
+
+        res = 0;
 		for (String item : feedMenuItems) {
 
 			int id_title = getResources().getIdentifier(item, "string", this.getPackageName());
-			//int id_icon = getResources().getIdentifier(menuItemsIcon[res], "drawable", this.getPackageName());
+			int id_icon = getResources().getIdentifier(feedsMenuItemsIcon[res], "drawable", this.getPackageName());
 
-			NsMenuItemModel mItem = new NsMenuItemModel(id_title);
+			NsMenuItemModel mItem = new NsMenuItemModel(id_title, id_icon);
 			mAdapter.addItem(mItem);
 			res++;
 		}
+
+        mAdapter.addHeader(R.string.main_menu_tags_header);
 
 		if (mDrawerList != null)
 			mDrawerList.setAdapter(mAdapter);

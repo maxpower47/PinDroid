@@ -29,8 +29,6 @@
  	
  	<integer name="add_bookmark_note_lines">5</integer>
  	
- 	<dimen name="bookmark_list_view_height">50dp</dimen>
- 	
 	<dimen name="view_bookmark_padding_top">20dp</dimen>
 	<dimen name="view_bookmark_padding_left">10dp</dimen>
 	<dimen name="view_bookmark_title_text">24sp</dimen>

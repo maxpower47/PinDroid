@@ -24,8 +24,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent" 
 	android:layout_height="fill_parent"
-	android:id="@+id/view_bookmark_container"
-	android:background="#000000">
+	android:id="@+id/view_bookmark_container">
 	<ScrollView 
 	    android:id="@+id/bookmark_scroll_view"
 		android:layout_width="fill_parent" 
@@ -45,7 +44,8 @@
 				android:layout_width="fill_parent"
 				android:textSize="@dimen/view_bookmark_title_text"
 				android:paddingLeft="10dip"
-				android:textIsSelectable="true" />
+				android:textIsSelectable="true"
+                android:textColor="@color/text_title"/>
 			<TextView
 				android:id="@+id/view_bookmark_url"
 				style="@style/ViewBookmarkFieldContent"

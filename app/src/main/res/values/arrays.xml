@@ -115,4 +115,9 @@
         <item>main_menu_recent_bookmarks</item>
         <item>main_menu_popular_bookmarks</item>
     </string-array>
+    <string-array name="main_menu_feeds_icons">
+        <item>main_menu_network</item>
+        <item>main_menu_recent</item>
+        <item>main_menu_popular</item>
+    </string-array>
 </resources>

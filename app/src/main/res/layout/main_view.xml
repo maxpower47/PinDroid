@@ -35,12 +35,12 @@
         <!-- icon -->
         <ImageView
             android:id="@+id/menurow_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="16dp"
             android:gravity="center"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:src="@drawable/widget_note" />
 
         <!-- text -->
@@ -49,11 +49,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/menurow_icon"
-            android:layout_marginLeft="12dp"
+            android:layout_marginLeft="32dp"
             android:gravity="center_vertical"
             android:minHeight="48dp"
-            android:textColor="#CDCDCD"
-            android:textAppearance="?android:attr/textAppearanceMedium" 
+            android:textColor="@color/text_title"
+            android:textSize="14sp"
             />
 
         <!-- counter -->
@@ -71,15 +71,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#FFFFFF"
             android:textSize="13sp"
-            android:textStyle="bold" ></TextView>
+            android:textStyle="bold" />
     </RelativeLayout>
-
-    <!-- divider -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="1dp"
-        android:layout_marginTop="1dp"
-        android:background="#333333" ></View>
 
 </LinearLayout>

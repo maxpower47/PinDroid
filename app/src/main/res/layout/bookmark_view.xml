@@ -23,64 +23,68 @@
  -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="horizontal"
-	android:minHeight="@dimen/bookmark_list_view_height"
-	android:layout_height="fill_parent"
+	android:layout_height="@dimen/bookmark_list_view_height"
 	android:layout_width="fill_parent"
-	android:background="@color/bookmark_view_bg">
-	<ImageView   
-		android:layout_width="4dip"
-		android:layout_height="fill_parent"
-		android:id="@+id/bookmark_unread"
-		android:visibility="invisible"
-		android:contentDescription="@string/bookmark_unread_alt"
-		android:src="@drawable/unread_indicator"/>
+    android:gravity="center"
+    android:paddingBottom="5dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="5dp">
+
 	<LinearLayout
 		android:orientation="vertical"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
-		android:paddingLeft="4dp"
-		android:paddingTop="4dp"
-		android:paddingBottom="4dp">
-		<ImageView
-			android:layout_width="16dip"
-			android:layout_height="16dip"
-			android:id="@+id/bookmark_private"
-			android:contentDescription="@string/alt_bookmark_list_private"
-			android:src="@drawable/padlock"
-			android:visibility="invisible"/>
-		<ImageView
-			android:layout_width="16dip"
-			android:layout_height="16dip"
-			android:layout_marginTop="5dp"
-			android:contentDescription="@string/bookmark_unsynced_alt"
-			android:id="@+id/bookmark_synced"
-			android:src="@drawable/sync"
-			android:visibility="invisible" />
-	</LinearLayout>
-	<LinearLayout
-		android:orientation="vertical"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:paddingBottom="2dip">
+        android:gravity="center_vertical"
+        android:layout_weight="1">
 		<TextView
 		    android:id="@+id/bookmark_description"
 		    android:layout_height="wrap_content"
-		    android:layout_width="fill_parent"
+		    android:layout_width="wrap_content"
 		    android:scrollHorizontally="true"
 		    android:singleLine="true"
 		    android:ellipsize="end"
 		    android:textSize="@dimen/browse_bookmark_title_text"
-		    android:paddingLeft="5dip"
-		    android:paddingRight="10dip"
-		    android:textIsSelectable="false"/>
-			<TextView
-			    android:id="@+id/bookmark_tags"
-			    android:layout_height="fill_parent"
-			    android:layout_width="wrap_content"
-			    android:scrollHorizontally="false"
-			    android:textSize="@dimen/browse_bookmark_tag_text"
-			    android:paddingLeft="10dip"
-			    android:paddingRight="10dip"
-			    android:textIsSelectable="false"/>
+		    android:textIsSelectable="false"
+            android:textColor="@color/text_body"
+            android:text="lksjdfkldjs;lgkkgkljdhafgkjdhsfg;lkhds;flgkjd;slgfkj"/>
+        <TextView
+            android:id="@+id/bookmark_tags"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:scrollHorizontally="false"
+            android:textSize="@dimen/browse_bookmark_tag_text"
+            android:textIsSelectable="false"
+            android:textColor="@color/text_caption"
+            android:text="lkjsdf lkjsdflk lkjdgflkdfjg lskdjglkdsg"/>
 	</LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="16dp"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical">
+        <ImageView
+            android:layout_width="16dip"
+            android:layout_height="16dip"
+            android:id="@+id/bookmark_private"
+            android:contentDescription="@string/alt_bookmark_list_private"
+            android:src="@drawable/padlock"
+            android:visibility="invisible"/>
+        <ImageView
+            android:layout_width="16dip"
+            android:layout_height="16dip"
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/bookmark_unsynced_alt"
+            android:id="@+id/bookmark_synced"
+            android:src="@drawable/sync"
+            android:visibility="invisible" />
+        <ImageView
+            android:layout_width="16dip"
+            android:layout_height="16dip"
+            android:layout_marginTop="5dp"
+            android:id="@+id/bookmark_unread"
+            android:src="@drawable/unread"
+            android:visibility="invisible" />
+    </LinearLayout>
 </LinearLayout>

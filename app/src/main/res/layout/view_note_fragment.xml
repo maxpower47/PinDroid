@@ -24,8 +24,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent" 
 	android:layout_height="fill_parent"
-	android:id="@+id/view_note_container"
-	android:background="#000000">
+	android:id="@+id/view_note_container">
 	<ScrollView 
 	    android:id="@+id/note_scroll_view"
 		android:layout_width="fill_parent" 

@@ -47,7 +47,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="start"
-        android:background="#111">
+        android:background="@color/drawer_background">
         <Spinner
 		    android:id="@+id/account_spinner"
 		    android:layout_width="fill_parent"

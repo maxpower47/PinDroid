@@ -35,12 +35,14 @@
         <item name="android:textSize">@dimen/view_bookmark_field_title_text</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingTop">15dp</item>
+        <item name="android:textColor">@color/text_title</item>
     </style>
     <style name="ViewBookmarkFieldContent">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/view_bookmark_field_content_text</item>
         <item name="android:paddingLeft">20dp</item>
+        <item name="android:textColor">@color/text_body</item>
     </style>
 
     <style name="AddBookmarkFieldTitle">
@@ -109,7 +111,8 @@
         <item name="android:background">#151515</item>
     </style>
     
-    <style name="ThemeSelector" parent="@style/Theme.AppCompat">
+    <style name="ThemeSelector" parent="@style/Theme.AppCompat.Light.DarkActionBar">
     	<item name="colorPrimary">@color/actionbar_background</item>
+        <item name="colorPrimaryDark">@color/statusbar_background</item>
     </style>
 </resources>

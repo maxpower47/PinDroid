@@ -26,7 +26,8 @@
 	<color name="orange2">#FF9900</color>
 	<color name="yellow">#FFCC00</color>
 	<color name="bookmark_unread_indicator">#FF9900</color>
-    <color name="actionbar_background">#222222</color>
+    <color name="actionbar_background">#0066ff</color>
+    <color name="statusbar_background">#0052CC</color>
     <color name="actionbar_text">#FFF</color>
     <color name="actionbar_divider">#555</color>
     
@@ -37,4 +38,12 @@
 	<color name="tag_list_activated_bg">#BF8600</color>
 	<color name="bookmark_view_bg">#00000000</color>
 	<color name="tag_view_bg">#00000000</color>
+
+    <color name="text_title">#de000000</color>
+    <color name="text_body">#de000000</color>
+    <color name="text_caption">#8a000000</color>
+
+    <color name="drawer_background">#FFFFFF</color>
+
+    <color name="drawer_divider">#15000000</color>
 </resources>
