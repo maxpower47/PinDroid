@@ -102,8 +102,14 @@
         <item name="android:layout_marginLeft">5dp</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
+
+    <style name="TabletLandFrame">
+        <item name="android:paddingLeft">150dp</item>
+        <item name="android:paddingRight">150dp</item>
+        <item name="android:background">#151515</item>
+    </style>
     
     <style name="ThemeSelector" parent="@style/Theme.AppCompat">
-    	<item name="android:actionBarStyle">@style/ActionBar.Light</item>
+    	<item name="colorPrimary">@color/actionbar_background</item>
     </style>
 </resources>

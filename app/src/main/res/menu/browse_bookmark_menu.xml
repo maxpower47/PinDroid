@@ -26,7 +26,7 @@
 	<item 
 		android:id="@+id/menu_sortbookmark" 
 		android:title="@string/menu_sort_bookmark_title" 
-		android:icon="@drawable/ic_menu_sort_alphabetically"
+		android:icon="@drawable/ic_menu_sort"
 		pindroid:showAsAction="never"
 		android:orderInCategory="12">
 		<menu>
