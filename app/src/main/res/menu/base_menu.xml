@@ -30,12 +30,6 @@
 		pindroid:showAsAction="ifRoom"
 		pindroid:actionViewClass="android.support.v7.widget.SearchView"
 		android:orderInCategory="2" />
-    <item 
-		android:id="@+id/menu_addbookmark" 
-		android:title="@string/menu_addbookmark_title" 
-		android:icon="@drawable/ic_menu_add"
-		pindroid:showAsAction="never"
-		android:orderInCategory="98" />
 	<item 
 		android:id="@+id/menu_settings" 
 		android:title="@string/menu_settings_title" 

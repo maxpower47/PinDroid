@@ -346,9 +346,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
           return true;
         }
 	    switch (item.getItemId()) {
-		    case R.id.menu_addbookmark:
-		    	onBookmarkAdd(null);
-				return true;
 		    case R.id.menu_settings:
 				Intent prefs = new Intent(this, Preferences.class);
 				startActivity(prefs);
