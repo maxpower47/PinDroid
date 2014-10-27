@@ -34,7 +34,7 @@
     <!-- The navigation drawer -->
     <LinearLayout
         android:id="@+id/left_drawer"
-        android:layout_width="300dp"
+        android:layout_width="@dimen/drawer_width"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="start"

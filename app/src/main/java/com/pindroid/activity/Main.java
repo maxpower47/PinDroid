@@ -280,7 +280,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 				}
 			} else if(path.contains("bookmarks") && intent.hasExtra(SearchManager.USER_QUERY)){
 				if(intent.getData() != null && intent.getData().getQueryParameter("tagname") != null)
-				onTagSelected(intent.getData().getQueryParameter("tagname"));			
+				onTagSelected(intent.getData().getQueryParameter("tagname"), true);
 			} else if(path.contains("notes") && TextUtils.isDigitsOnly(lastPath) && intent.hasExtra(SearchManager.USER_QUERY)){
 				try {
 					onNoteView(NoteManager.GetById(Integer.parseInt(lastPath), this));
@@ -308,7 +308,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
                 selectItem(position);
             } else {
                 String tag = ((TextView) view.findViewById(R.id.menurow_title)).getText().toString();
-                onTagSelected(tag);
+                onTagSelected(tag, false);
                 clearDrawer(position);
             }
         }
@@ -327,13 +327,13 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 				onMyNotesSelected();
 				break;
 			case 4:
-				onMyNetworkSelected();
+                onPopularSelected();
 				break;
 			case 5:
 				onRecentSelected();	
 				break;
 			case 6:
-				onPopularSelected();
+                onMyNetworkSelected();
 				break;
 		}
 	}
@@ -639,14 +639,18 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		BookmarkManager.LazyDelete(b, app.getUsername(), this);
 	}
 
-	public void onTagSelected(String tag) {
+    public void onTagSelected(String tag) {
+        onTagSelected(tag, true);
+    }
+
+	public void onTagSelected(String tag, boolean backstack) {
 		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
 		frag.setQuery(app.getUsername(), tag, null);
 		
 		if(isTwoPane()){
 			replaceRightFragment(frag, false);		
 		} else {
-			replaceLeftFragment(frag, true);
+			replaceLeftFragment(frag, backstack);
 		}
 	}
 

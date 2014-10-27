@@ -45,4 +45,6 @@
  	
  	<dimen name="browse_bookmark_title_text">16sp</dimen>
  	<dimen name="browse_bookmark_tag_text">14sp</dimen>
+
+    <dimen name="drawer_width">300dp</dimen>
  </resources>

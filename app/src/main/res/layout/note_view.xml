@@ -23,17 +23,19 @@
  -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="horizontal"
-	android:layout_height="fill_parent"
+	android:layout_height="48dp"
 	android:layout_width="fill_parent"
-	android:gravity="center_vertical|left">
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+	android:gravity="center_vertical">
 	<TextView
 	    android:id="@+id/note_title"
 	    android:layout_height="fill_parent"
-	    android:layout_width="0dp"
-	    android:paddingLeft="10dp"
-	    android:paddingTop="3dp"
-	    android:paddingBottom="5dp"
+	    android:layout_width="fill_parent"
 	    android:layout_weight="1"
-	    android:textSize="26sp"
-	    android:textIsSelectable="false" />
+	    android:textSize="16sp"
+	    android:textIsSelectable="false"
+        android:text="lkjsdfkljlsdkfjls"
+        android:textColor="@color/text_title"
+        android:gravity="center_vertical" />
 </LinearLayout>
