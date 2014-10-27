@@ -31,16 +31,20 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 
+import com.melnykov.fab.FloatingActionButton;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.listadapter.BookmarkViewBinder;
@@ -50,6 +54,9 @@ import com.pindroid.util.SettingsHelper;
 
 public class BrowseBookmarksFragment extends ListFragment 
 	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser, PindroidFragment {
+
+    private ListView listView;
+    private FloatingActionButton actionButton;
 	
 	private SimpleCursorAdapter mAdapter;
 	
@@ -84,6 +91,11 @@ public class BrowseBookmarksFragment extends ListFragment
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
+
+        listView = (ListView) getView().findViewById(android.R.id.list);
+        actionButton = (FloatingActionButton) getView().findViewById(R.id.add_button);
+
+        actionButton.attachToListView(listView);
 		
 	    if (savedInstanceState != null) {
 	        username = savedInstanceState.getString(STATE_USERNAME);
@@ -138,6 +150,13 @@ public class BrowseBookmarksFragment extends ListFragment
 					inflater.inflate(R.menu.browse_bookmark_context_menu_self, menu);
 				}
 			});
+
+            actionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    bookmarkSelectedListener.onBookmarkAdd(null);
+                }
+            });
 		}
 	}
 	
@@ -306,6 +325,11 @@ public class BrowseBookmarksFragment extends ListFragment
 	public void onLoaderReset(Loader<Cursor> loader) {
 	    mAdapter.swapCursor(null);
 	}
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.browse_bookmark_fragment, container, false);
+    }
 	
 	@Override
 	public void onAttach(Activity activity) {

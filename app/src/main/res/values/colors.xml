@@ -22,18 +22,24 @@
  */
  -->
 <resources>
+    <color name="pindroid_blue">#0066ff</color>
+    <color name="pindroid_blue_dark">#0052CC</color>
+
 	<color name="orange1">#FF6600</color>
 	<color name="orange2">#FF9900</color>
 	<color name="yellow">#FFCC00</color>
 	<color name="bookmark_unread_indicator">#FF9900</color>
-    <color name="actionbar_background">#0066ff</color>
-    <color name="statusbar_background">#0052CC</color>
+    <color name="actionbar_background">@color/pindroid_blue</color>
+    <color name="statusbar_background">@color/pindroid_blue_dark</color>
     <color name="actionbar_text">#FFF</color>
     <color name="actionbar_divider">#555</color>
     
     <color name="bookmark_list_default_bg">#373737</color>
 	<color name="bookmark_list_activated_bg">#455082</color>
-	
+
+    <color name="add_bookmark_action_button">@color/pindroid_blue</color>
+    <color name="add_bookmark_action_button_pressed">@color/pindroid_blue_dark</color>
+
 	<color name="tag_list_default_bg">#000000</color>
 	<color name="tag_list_activated_bg">#BF8600</color>
 	<color name="bookmark_view_bg">#00000000</color>
