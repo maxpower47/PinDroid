@@ -252,8 +252,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 				} else{
 					onMyBookmarksSelected(intent.getData().getQueryParameter("tagname"));
 				}	
-			} else if(lastPath.equals("tags")){
-				onMyTagsSelected();
 			} else if(lastPath.equals("notes")){
 					onMyNotesSelected();
 			}
@@ -432,12 +430,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		frag.setQuery(app.getUsername(), tagname, null);
 		
 		clearBackStack();
-		
-		if(isTwoPane()){
-			replaceLeftFragment(frag, false);
-		} else {
-			replaceLeftFragment(frag, false);
-		}
+
+		replaceLeftFragment(frag, false);
 		
 		clearDrawer(0);
 	}
@@ -447,29 +441,10 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		frag.setQuery(app.getUsername(), null, "unread");
 		
 		clearBackStack();
-		
-		if(isTwoPane()){
-			replaceLeftFragment(frag, false);
-		} else {
-			replaceLeftFragment(frag, false);
-		}
+
+		replaceLeftFragment(frag, false);
 		
 		clearDrawer(1);
-	}
-
-	public void onMyTagsSelected() {
-		BrowseTagsFragment frag = new BrowseTagsFragment();
-		frag.setUsername(app.getUsername());
-		
-		clearBackStack();
-
-		if(isTwoPane()){
-			replaceLeftFragment(frag, false);
-		} else {
-			replaceLeftFragment(frag, false);
-		}
-		
-		clearDrawer(2);
 	}
 	
 	public void onMyNotesSelected() {
@@ -478,13 +453,9 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		
 		clearBackStack();
 
-		if(isTwoPane()){
-			replaceLeftFragment(frag, false);
-		} else {
-			replaceLeftFragment(frag, false);
-		}
+		replaceLeftFragment(frag, false);
 		
-		clearDrawer(3);
+		clearDrawer(2);
 	}
 
 	public void onRecentSelected() {
@@ -493,13 +464,9 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		
 		clearBackStack();
 
-		if(isTwoPane()){
-			replaceLeftFragment(frag, false);
-		} else {
-			replaceLeftFragment(frag, false);
-		}
+		replaceLeftFragment(frag, false);
 		
-		clearDrawer(4);
+		clearDrawer(5);
 	}
 	
 	public void onPopularSelected() {
@@ -508,13 +475,9 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		
 		clearBackStack();
 
-		if(isTwoPane()){
-			replaceLeftFragment(frag, false);
-		} else {
-			replaceLeftFragment(frag, false);
-		}
+		replaceLeftFragment(frag, false);
 		
-		clearDrawer(5);
+		clearDrawer(4);
 	}
 	
 	public void onMyNetworkSelected() {
@@ -523,11 +486,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		
 		clearBackStack();
 
-		if(isTwoPane()){
-			replaceLeftFragment(frag, false);
-		} else {
-			replaceLeftFragment(frag, false);
-		}
+		replaceLeftFragment(frag, false);
 		
 		clearDrawer(6);
 	}
@@ -575,15 +534,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 			
 			if(isTwoPane()){
 				FragmentTransaction t = fragmentManager.beginTransaction();
-	
-				if(fragmentManager.findFragmentByTag("left") instanceof BrowseTagsFragment){
-					Fragment right = fragmentManager.findFragmentByTag("right");
-					Fragment newRight = duplicateFragment(right);
-					
-					t.replace(R.id.left_frame, newRight, "left");
-					t.addToBackStack(null);
-				}
-				
+
 				if(fragmentManager.findFragmentByTag("right") instanceof ViewBookmarkFragment){
 					ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) fragmentManager.findFragmentByTag("right");
 					viewFrag.setBookmark(b, viewType);
@@ -643,12 +594,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	public void onTagSelected(String tag, boolean backstack) {
 		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
 		frag.setQuery(app.getUsername(), tag, null);
-		
-		if(isTwoPane()){
-			replaceRightFragment(frag, false);		
-		} else {
-			replaceLeftFragment(frag, backstack);
-		}
+
+		replaceLeftFragment(frag, backstack);
 	}
 
 	public void onNoteView(Note n) {
@@ -686,22 +633,14 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		
 		((BookmarkBrowser)frag).setQuery(app.getUsername(), tag, user);
 
-		if(isTwoPane()){
-			replaceLeftFragment(frag, true);		    
-		} else {
-			replaceLeftFragment(frag, true);
-		}
+		replaceLeftFragment(frag, true);
 	}
 
 	public void onAccountSelected(String account) {
 		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
 		frag.setQuery(app.getUsername(), null, account);
 
-		if(isTwoPane()){
-			replaceLeftFragment(frag, true);		    
-		} else {
-			replaceLeftFragment(frag, true);
-		}
+		replaceLeftFragment(frag, true);
 	}
 
 	public void onBookmarkSave(Bookmark b) {
@@ -747,11 +686,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	protected void startSearch(final String query) {
 		MainSearchResultsFragment frag = new MainSearchResultsFragment();
 		frag.setQuery(query);
-		if(isTwoPane()){
-			replaceLeftFragment(frag, true);
-		} else {
-			replaceLeftFragment(frag, true);
-		}	
+		replaceLeftFragment(frag, true);
 	}
 	
 	@Override
@@ -795,34 +730,12 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	    
 	    return true;
 	}
-    
-    private Fragment duplicateFragment(Fragment f)
-    {
-        try {
-            Fragment.SavedState oldState = getSupportFragmentManager().saveFragmentInstanceState(f);
-
-            Fragment newInstance = f.getClass().newInstance();
-            newInstance.setInitialSavedState(oldState);
-
-            return newInstance;
-        }
-        catch (Exception e) // InstantiationException, IllegalAccessException
-        {
-
-        }
-        
-        return null;
-    }
 
 	public void onBookmarkSearch(String query) {
 		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
 		frag.setSearchQuery(query, app.getUsername(), null, false);
-		
-		if(isTwoPane()){
-			replaceLeftFragment(frag, true);
-		} else {
-			replaceLeftFragment(frag, true);
-		}
+
+		replaceLeftFragment(frag, true);
 	}
 
 	public void onTagSearch(String query) {
@@ -830,11 +743,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		frag.setUsername(app.getUsername());
 		frag.setQuery(query);
 
-		if(isTwoPane()){
-			replaceLeftFragment(frag, true);
-		} else {
-			replaceLeftFragment(frag, true);
-		}		
+		replaceLeftFragment(frag, true);
 	}
 
 	public void onNoteSearch(String query) {
@@ -842,22 +751,14 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		frag.setUsername(app.getUsername());
 		frag.setQuery(query);
 
-		if(isTwoPane()){
-			replaceLeftFragment(frag, true);
-		} else {
-			replaceLeftFragment(frag, true);
-		}	
+		replaceLeftFragment(frag, true);
 	}
 
 	public void onGlobalTagSearch(String query) {
 		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
 		frag.setQuery(app.getUsername(), query, "global");
-		
-		if(isTwoPane()){
-			replaceLeftFragment(frag, true);
-		} else {
-			replaceLeftFragment(frag, true);
-		}
+
+		replaceLeftFragment(frag, true);
 	}
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
