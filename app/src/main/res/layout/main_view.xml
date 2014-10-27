@@ -64,14 +64,12 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/menu_count_rectangle"
             android:gravity="center"
             android:minHeight="48dp"
             android:padding="4dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF"
-            android:textSize="13sp"
-            android:textStyle="bold" />
+            android:textColor="@color/text_title"
+            android:textSize="14sp" />
     </RelativeLayout>
 
 </LinearLayout>

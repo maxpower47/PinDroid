@@ -48,6 +48,10 @@ public class NsMenuAdapter extends ArrayAdapter<NsMenuItemModel> {
 	public void addItem(int title) {
 		add(new NsMenuItemModel(title));
 	}
+
+    public void addItem(String title) {
+        add(new NsMenuItemModel(title));
+    }
 	
 	public void addItem(NsMenuItemModel itemModel) {
 		add(itemModel);
@@ -73,7 +77,7 @@ public class NsMenuAdapter extends ArrayAdapter<NsMenuItemModel> {
 		public final ImageView imageHolder;
 		public final TextView textCounterHolder;
 
-		public ViewHolder(TextView text1, ImageView image1,TextView textcounter1) {
+		public ViewHolder(TextView text1, ImageView image1, TextView textcounter1) {
 			this.textHolder = text1;
 			this.imageHolder = image1;
 			this.textCounterHolder=textcounter1;
@@ -111,7 +115,11 @@ public class NsMenuAdapter extends ArrayAdapter<NsMenuItemModel> {
 	    if(item != null && holder != null)
 	    {
 	    	if (holder.textHolder != null)
-				holder.textHolder.setText(item.title);
+                if(item.stringTitle != null) {
+                    holder.textHolder.setText(item.stringTitle);
+                } else {
+                    holder.textHolder.setText(item.title);
+                }
 	    	
 	    	if (holder.textCounterHolder != null){
 	    		if (item.counter > 0 && item.counter < 100){

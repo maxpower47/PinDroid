@@ -78,10 +78,10 @@
     <string name="main_search_results_title">Search Results</string>
       
     <!-- BrowseBookmarks -->
-    <string name="browse_my_bookmarks_title">My Bookmarks</string>
-    <string name="browse_my_unread_bookmarks_title">My Unread Bookmarks</string>
-    <string name="browse_my_bookmarks_tagged_title">My Bookmarks Tagged With %1$s</string>
-    <string name="browse_my_unread_bookmarks_tagged_title">My Unread Bookmarks Tagged With %1$s</string>
+    <string name="browse_my_bookmarks_title">Bookmarks</string>
+    <string name="browse_my_unread_bookmarks_title">Unread Bookmarks</string>
+    <string name="browse_my_bookmarks_tagged_title">%1$s</string>
+    <string name="browse_my_unread_bookmarks_tagged_title">Unread %1$s</string>
     <string name="browse_recent_bookmarks_title">Recent Bookmarks</string>
     <string name="browse_popular_bookmarks_title">Popular Bookmarks</string>
     <string name="browse_network_bookmarks_title">Network Bookmarks</string>
@@ -125,7 +125,7 @@
     <string name="tag_sort_count_desc">Count (Most First)</string>
     
     <!-- BrowseNotes -->
-    <string name="browse_my_notes_title">My Notes</string>
+    <string name="browse_my_notes_title">Notes</string>
     
     <!-- AddBookmark -->
     <string name="add_bookmark_add_title">Add Bookmark</string>

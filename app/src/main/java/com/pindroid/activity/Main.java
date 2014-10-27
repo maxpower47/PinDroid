@@ -30,7 +30,10 @@ import android.accounts.AccountManager;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -50,6 +53,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
@@ -73,6 +77,7 @@ import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
 import com.pindroid.fragment.ViewNoteFragment;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.NoteManager;
+import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.NoteContent.Note;
@@ -83,7 +88,7 @@ import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
 
 public class Main extends FragmentBaseActivity implements OnBookmarkSelectedListener, 
-		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnBookmarkSaveListener, OnSearchActionListener {
+		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnBookmarkSaveListener, OnSearchActionListener, LoaderManager.LoaderCallbacks<Cursor> {
 	
 	private ListView mDrawerList;
 	private LinearLayout mDrawerWrapper;
@@ -95,6 +100,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     private int spinnerSelectionCount = 0;
     
     private NsMenuItemModel unreadItem;
+
+    private Cursor tagData = null;
     
 
 	@Override
@@ -112,11 +119,30 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setHomeButtonEnabled(true);
-		
-		_initMenu();
+        getSupportLoaderManager().initLoader(0, null, this);
+
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the sliding drawer and the action bar app icon
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.string.drawer_open,  /* "open drawer" description for accessibility */
+                R.string.drawer_close  /* "close drawer" description for accessibility */
+        ) {
+            public void onDrawerClosed(View view) {
+                getSupportActionBar().setTitle(mTitle);
+                supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                getSupportActionBar().setTitle(mDrawerTitle);
+                supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
 		
 		if (savedInstanceState == null) {
-            selectItem(1);
+            selectItem(0);
         }
 		
 		processIntent(getIntent());
@@ -148,7 +174,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		
 		// Set up menu
 		NsMenuAdapter mAdapter = new NsMenuAdapter(this);
-		mAdapter.addHeader(R.string.main_menu_my_header);
 
 		String[] myMenuItems = getResources().getStringArray(R.array.main_menu_my);
 		String[] feedMenuItems = getResources().getStringArray(R.array.main_menu_feeds);
@@ -163,7 +188,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 			int id_icon = getResources().getIdentifier(myMenuItemsIcon[res], "drawable", this.getPackageName());
 
 			NsMenuItemModel mItem = new NsMenuItemModel(id_title, id_icon);
-			if (res==1) {
+			if (res == 1) {
 				unreadItem = mItem;
 				mItem.counter = BookmarkManager.GetUnreadCount(app.getUsername(), this);
 			}
@@ -186,34 +211,22 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
         mAdapter.addHeader(R.string.main_menu_tags_header);
 
-		if (mDrawerList != null)
-			mDrawerList.setAdapter(mAdapter);
+        res = 0;
+
+        if(tagData != null) {
+            while (tagData.moveToNext()) {
+
+                NsMenuItemModel mItem = new NsMenuItemModel(tagData.getString(1), R.drawable.main_menu_tag, false, tagData.getInt(2));
+                mAdapter.addItem(mItem);
+                res++;
+            }
+        }
+
+		if (mDrawerList != null) {
+            mDrawerList.setAdapter(mAdapter);
+        }
 		 
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-		
-		
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the sliding drawer and the action bar app icon
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                R.string.drawer_open,  /* "open drawer" description for accessibility */
-                R.string.drawer_close  /* "close drawer" description for accessibility */
-                ) {
-            public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(mTitle);
-                supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(mDrawerTitle);
-                supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-		
-
-
 	}
 	
 	@Override
@@ -291,32 +304,35 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
+            if(position <= 6) {
+                selectItem(position);
+            } else {
+                String tag = ((TextView) view.findViewById(R.id.menurow_title)).getText().toString();
+                onTagSelected(tag);
+                clearDrawer(position);
+            }
         }
 	}
 
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {
 		switch(position){
-			case 1:
+			case 0:
 				onMyBookmarksSelected(null);
 				break;
-			case 2:
+			case 1:
 				onMyUnreadSelected();
 				break;
-			case 3:
-				onMyTagsSelected();
-				break;
-			case 4:
+			case 2:
 				onMyNotesSelected();
 				break;
-			case 6:
+			case 4:
 				onMyNetworkSelected();
 				break;
-			case 7:
+			case 5:
 				onRecentSelected();	
 				break;
-			case 8:
+			case 6:
 				onPopularSelected();
 				break;
 		}
@@ -842,4 +858,17 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 			replaceLeftFragment(frag, true);
 		}
 	}
+
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return TagManager.GetTags("maxpower47", null, this);
+    }
+
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        tagData = data;
+        _initMenu();
+    }
+
+    public void onLoaderReset(Loader<Cursor> loader) {
+        //mAdapter.swapCursor(null);
+    }
 }

@@ -30,6 +30,7 @@ package com.pindroid.ui;
 public class NsMenuItemModel {
 
 	public int title;
+    public String stringTitle;
 	public int iconRes;
 	public int counter;
 	public boolean isHeader;
@@ -40,18 +41,37 @@ public class NsMenuItemModel {
 		this.isHeader = header;
 		this.counter = counter;
 	}
+
+    public NsMenuItemModel(String title, int iconRes, boolean header, int counter) {
+        this.stringTitle = title;
+        this.iconRes = iconRes;
+        this.isHeader = header;
+        this.counter = counter;
+    }
 	
 	public NsMenuItemModel(int title, int iconRes, boolean header){
 		this(title, iconRes, header, 0);
 	}
+
+    public NsMenuItemModel(String title, int iconRes, boolean header){
+        this(title, iconRes, header, 0);
+    }
 	
 	public NsMenuItemModel(int title, int iconRes) {
 		this(title, iconRes, false);
 	}
+
+    public NsMenuItemModel(String title, int iconRes) {
+        this(title, iconRes, false);
+    }
 	
 	public NsMenuItemModel(int title) {
 		this(title, 0, false);
 	}
+
+    public NsMenuItemModel(String title) {
+        this(title, 0, false);
+    }
 	
 	public void setCounter(int counter){
 		this.counter = counter;
