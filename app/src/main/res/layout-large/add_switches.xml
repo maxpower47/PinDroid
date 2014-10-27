@@ -25,7 +25,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:orientation="horizontal">
-	<Switch
+	<android.support.v7.widget.SwitchCompat
 		android:id="@+id/add_edit_private"
 		android:text="@string/add_title_private"
 		android:layout_width="wrap_content"
@@ -36,7 +36,7 @@
 		android:paddingTop="5dip" />
 	<LinearLayout
 		style="@style/LayoutRight">
-		<Switch
+		<android.support.v7.widget.SwitchCompat
 			android:id="@+id/add_edit_toread"
 			android:text="@string/add_title_toread"
 			android:layout_width="wrap_content"

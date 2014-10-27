@@ -24,7 +24,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
-    <Switch
+    <android.support.v7.widget.SwitchCompat
         android:id="@+id/add_edit_private"
         android:text="@string/add_title_private"
         android:layout_width="wrap_content"
@@ -32,7 +32,7 @@
         android:textOff="No"
         android:textOn="Yes"
         android:paddingTop="5dip"/>
-    <Switch
+    <android.support.v7.widget.SwitchCompat
         android:id="@+id/add_edit_toread"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
