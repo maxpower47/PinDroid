@@ -21,25 +21,25 @@
  * USA
  */
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:orientation="horizontal">
-	<CheckBox
-		android:id="@+id/add_edit_private"
-		android:text="@string/add_title_private"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginLeft="@dimen/add_switch_margin_left"
-		android:paddingTop="5dip" />
-	<LinearLayout
-		style="@style/LayoutRight">
-		<CheckBox
-			android:id="@+id/add_edit_toread"
-			android:text="@string/add_title_toread"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginRight="@dimen/add_switch_margin_right"
-			android:paddingTop="5dip" />
-	</LinearLayout>
-</LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+    <Switch
+        android:id="@+id/add_edit_private"
+        android:text="@string/add_title_private"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOff="No"
+        android:textOn="Yes"
+        android:paddingTop="5dip"/>
+    <Switch
+        android:id="@+id/add_edit_toread"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/add_edit_private"
+        android:layout_marginTop="10dip"
+        android:paddingTop="5dip"
+        android:text="@string/add_title_toread"
+        android:textOff="No"
+        android:textOn="Yes" />
+</RelativeLayout>

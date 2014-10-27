@@ -23,50 +23,50 @@
  -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:pindroid="http://schemas.android.com/apk/res-auto">
-    <item 
-		android:id="@+id/menu_view" 
-		android:title="@string/menu_view_title" 
-		pindroid:showAsAction="never"
-		android:icon="@drawable/ic_menu_view"
-		android:orderInCategory="1" >
-		<menu>
-		    <item 
-				android:id="@+id/menu_view_details" 
-				android:title="@string/menu_view_details_title" 
-				android:orderInCategory="0" />
-			<item 
-				android:id="@+id/menu_view_read" 
-				android:title="@string/menu_view_read_title" 
-				android:orderInCategory="1" />
-			<item 
-				android:id="@+id/menu_view_openbookmark" 
-				android:title="@string/menu_view_openbookmark_title"
-				android:orderInCategory="2" />
+    <item
+        android:id="@+id/menu_view"
+        android:title="@string/menu_view_title"
+        pindroid:showAsAction="ifRoom"
+        android:icon="@drawable/ic_menu_view"
+        android:orderInCategory="1" >
+        <menu>
+            <item
+                android:id="@+id/menu_view_details"
+                android:title="@string/menu_view_details_title"
+                android:orderInCategory="0" />
+            <item
+                android:id="@+id/menu_view_read"
+                android:title="@string/menu_view_read_title"
+                android:orderInCategory="1" />
+            <item
+                android:id="@+id/menu_view_openbookmark"
+                android:title="@string/menu_view_openbookmark_title"
+                android:orderInCategory="2" />
         </menu>
     </item>
-	<item 
-		android:id="@+id/menu_view_editbookmark" 
-		android:title="@string/menu_view_editbookmark_title" 
-		pindroid:showAsAction="never"
-		android:icon="@drawable/ic_menu_edit"
-		android:orderInCategory="14" />
-	<item 
-		android:id="@+id/menu_view_deletebookmark" 
-		android:title="@string/menu_view_deletebookmark_title" 
-		pindroid:showAsAction="never"
-		android:icon="@drawable/ic_menu_delete"
-		android:orderInCategory="15" />
-	<item 
-		android:id="@+id/menu_view_addbookmark" 
-		android:title="@string/menu_addbookmark_title" 
-		android:icon="@drawable/ic_menu_add"
-		pindroid:showAsAction="never"
-		android:orderInCategory="10" />
-	<item 
-		android:id="@+id/menu_view_sendbookmark" 
-		android:title="@string/menu_view_sendbookmark_title" 
-		pindroid:showAsAction="never"
-		android:icon="@drawable/ic_menu_share"
-		pindroid:actionProviderClass="android.support.v7.widget.ShareActionProvider"
-		android:orderInCategory="16" />
+    <item
+        android:id="@+id/menu_view_editbookmark"
+        android:title="@string/menu_view_editbookmark_title"
+        pindroid:showAsAction="never"
+        android:icon="@drawable/ic_menu_edit"
+        android:orderInCategory="14" />
+    <item
+        android:id="@+id/menu_view_deletebookmark"
+        android:title="@string/menu_view_deletebookmark_title"
+        pindroid:showAsAction="never"
+        android:icon="@drawable/ic_menu_delete"
+        android:orderInCategory="15" />
+    <item
+        android:id="@+id/menu_view_addbookmark"
+        android:title="@string/menu_addbookmark_title"
+        android:icon="@drawable/ic_menu_add"
+        pindroid:showAsAction="never"
+        android:orderInCategory="10" />
+    <item
+        android:id="@+id/menu_view_sendbookmark"
+        android:title="@string/menu_view_sendbookmark_title"
+        pindroid:showAsAction="never"
+        android:icon="@drawable/ic_menu_share"
+        pindroid:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+        android:orderInCategory="16" />
 </menu>
