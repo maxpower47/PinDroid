@@ -42,7 +42,6 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -345,7 +344,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
         }
 	    switch (item.getItemId()) {
 		    case R.id.menu_settings:
-				Intent prefs = new Intent(this, Preferences.class);
+				Intent prefs = new Intent(this, Settings.class);
 				startActivity(prefs);
 		        return true;
 		    case R.id.menu_search:
