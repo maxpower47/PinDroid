@@ -110,6 +110,12 @@
         <item name="android:paddingRight">150dp</item>
         <item name="android:background">#151515</item>
     </style>
+
+    <style name="AccountSpinner" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+    </style>
     
     <style name="ThemeSelector" parent="@style/Theme.AppCompat.Light.DarkActionBar">
     	<item name="colorPrimary">@color/actionbar_background</item>
@@ -117,5 +123,6 @@
         <item name="colorAccent">@color/pindroid_accent</item>
         <item name="android:textColor">@color/text_title</item>
         <item name="android:textColorSecondary">@color/text_body</item>
+        <item name="android:spinnerItemStyle">@style/AccountSpinner</item>
     </style>
 </resources>

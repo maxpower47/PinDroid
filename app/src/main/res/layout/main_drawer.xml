@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+* PinDroid - http://code.google.com/p/PinDroid/
+*
+* Copyright (C) 2010 Matt Schmidt
+*
+* PinDroid is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published
+* by the Free Software Foundation; either version 3 of the License,
+* or (at your option) any later version.
+*
+* PinDroid is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with PinDroid; if not, write to the Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+* USA
+*/
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/left_drawer"
+    android:layout_width="@dimen/drawer_width"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="start"
+    android:background="@color/drawer_background">
+
+    <ListView
+        android:id="@+id/left_drawer_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"/>
+</LinearLayout>

@@ -49,6 +49,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.HeaderViewListAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -97,6 +98,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     private CharSequence mTitle;
     private Spinner mAccountSpinner;
     private int spinnerSelectionCount = 0;
+    View accountSpinnerView;
     
     private NsMenuItemModel unreadItem;
 
@@ -112,7 +114,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		mDrawerWrapper = (LinearLayout) findViewById(R.id.left_drawer);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mTitle = mDrawerTitle = getTitle();
-		mAccountSpinner = (Spinner) findViewById(R.id.account_spinner);
+        accountSpinnerView = getLayoutInflater().inflate(R.layout.menu_spinner, null);
+		mAccountSpinner = (Spinner) accountSpinnerView.findViewById(R.id.account_spinner);
 		
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		
@@ -149,27 +152,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	
 	private void _initMenu() {
 
-		if(AccountHelper.getAccountCount(this) > 0){
-			if(app.getUsername() == null || app.getUsername().equals("")) {
-				setAccount(AccountHelper.getFirstAccount(this).name);
-			}
-			
-			setSpinnerAccount(app.getUsername());
-		}
-
-		mAccountSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
-			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-				
-				// onItemSelected is called on initialization of the spinner, so prevent this from being called the first time
-				if(spinnerSelectionCount++ > 0) {
-					setAccount((String)parent.getItemAtPosition(pos));
-				}
-			}
-
-			public void onNothingSelected(AdapterView<?> arg0) {
-
-			}		
-		});
 		
 		// Set up menu
 		NsMenuAdapter mAdapter = new NsMenuAdapter(this);
@@ -226,6 +208,30 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
         }
 		 
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        mDrawerList.addHeaderView(accountSpinnerView);
+
+		if(AccountHelper.getAccountCount(this) > 0){
+			if(app.getUsername() == null || app.getUsername().equals("")) {
+				setAccount(AccountHelper.getFirstAccount(this).name);
+			}
+
+			setSpinnerAccount(app.getUsername());
+		}
+
+        mAccountSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+
+				// onItemSelected is called on initialization of the spinner, so prevent this from being called the first time
+				if(spinnerSelectionCount++ > 0) {
+					setAccount((String)parent.getItemAtPosition(pos));
+				}
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+
+			}
+		});
 	}
 	
 	@Override
@@ -289,13 +295,13 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 			}
 		}
 	}
-	
+
 	private void setSpinnerAccount(String username){
 		ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, getAccountNames());
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		mAccountSpinner.setAdapter(adapter);
+        mAccountSpinner.setAdapter(adapter);
 		int position = adapter.getPosition(username);
-		mAccountSpinner.setSelection(position);
+        mAccountSpinner.setSelection(position);
 		spinnerSelectionCount = 0;
 	}
 	
@@ -496,7 +502,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		
 		if(unreadItem != null){
 			unreadItem.counter = BookmarkManager.GetUnreadCount(app.getUsername(), this);
-			((NsMenuAdapter)mDrawerList.getAdapter()).notifyDataSetChanged();
+            ((NsMenuAdapter)((HeaderViewListAdapter)mDrawerList.getAdapter()).getWrappedAdapter()).notifyDataSetChanged();
 		}
 		
 		Fragment cf = getSupportFragmentManager().findFragmentById(R.id.right_frame);
