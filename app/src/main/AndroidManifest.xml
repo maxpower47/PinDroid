@@ -100,7 +100,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.Settings"
-        	android:label="@string/preferences_title">
+        	android:label="@string/preferences_title"
+            android:parentActivityName=".activity.Main">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".activity.Main" />
         	<intent-filter>
        			<action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
        			<category android:name="android.intent.category.DEFAULT" />
