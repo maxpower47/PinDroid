@@ -65,6 +65,7 @@
     <string name="main_menu_my_unread_bookmarks">Unread</string>
     <string name="main_menu_my_tags">Tags</string>
     <string name="main_menu_my_notes">Notes</string>
+    <string name="main_menu_settings">Settings</string>
     <string name="main_menu_feeds_header">Feeds</string>
     <string name="main_menu_network_bookmarks">Network</string>
     <string name="main_menu_recent_bookmarks">Recent</string>

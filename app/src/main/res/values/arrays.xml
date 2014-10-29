@@ -102,11 +102,13 @@
         <item>main_menu_my_bookmarks</item>
         <item>main_menu_my_unread_bookmarks</item>
         <item>main_menu_my_notes</item>
+        <item>main_menu_settings</item>
     </string-array>
     <string-array name="main_menu_my_icons">
         <item>main_menu_bookmark</item>
         <item>main_menu_unread</item>
         <item>main_menu_note</item>
+        <item>main_menu_settings</item>
     </string-array>
     <string-array name="main_menu_feeds">
         <item>main_menu_popular_bookmarks</item>

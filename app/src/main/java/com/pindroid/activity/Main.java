@@ -144,7 +144,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 		
 		if (savedInstanceState == null) {
-            selectItem(0);
+            selectItem(1);
         }
 		
 		processIntent(getIntent());
@@ -307,7 +307,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if(position <= 6) {
+            if(position <= 8) {
                 selectItem(position);
             } else {
                 String tag = ((TextView) view.findViewById(R.id.menurow_title)).getText().toString();
@@ -320,22 +320,25 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {
 		switch(position){
-			case 0:
+			case 1:
 				onMyBookmarksSelected(null);
 				break;
-			case 1:
+			case 2:
 				onMyUnreadSelected();
 				break;
-			case 2:
+			case 3:
 				onMyNotesSelected();
 				break;
-			case 4:
+            case 4:
+                onSettingsSelected();
+                break;
+			case 6:
                 onPopularSelected();
 				break;
-			case 5:
+			case 7:
 				onRecentSelected();	
 				break;
-			case 6:
+			case 8:
                 onMyNetworkSelected();
 				break;
 		}
@@ -349,10 +352,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
           return true;
         }
 	    switch (item.getItemId()) {
-		    case R.id.menu_settings:
-				Intent prefs = new Intent(this, Settings.class);
-				startActivity(prefs);
-		        return true;
 		    case R.id.menu_search:
 		    	onSearchRequested();
 		    	return true;
@@ -438,7 +437,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
 		replaceLeftFragment(frag, false);
 		
-		clearDrawer(0);
+		clearDrawer(1);
 	}
 
 	public void onMyUnreadSelected() {
@@ -449,7 +448,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
 		replaceLeftFragment(frag, false);
 		
-		clearDrawer(1);
+		clearDrawer(2);
 	}
 	
 	public void onMyNotesSelected() {
@@ -460,8 +459,14 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
 		replaceLeftFragment(frag, false);
 		
-		clearDrawer(2);
+		clearDrawer(3);
 	}
+
+    public void onSettingsSelected() {
+        clearDrawer(4);
+        Intent prefs = new Intent(this, Settings.class);
+        startActivity(prefs);
+    }
 
 	public void onRecentSelected() {
 		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
@@ -471,7 +476,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
 		replaceLeftFragment(frag, false);
 		
-		clearDrawer(5);
+		clearDrawer(7);
 	}
 	
 	public void onPopularSelected() {
@@ -482,7 +487,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
 		replaceLeftFragment(frag, false);
 		
-		clearDrawer(4);
+		clearDrawer(6);
 	}
 	
 	public void onMyNetworkSelected() {
@@ -493,7 +498,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
 		replaceLeftFragment(frag, false);
 		
-		clearDrawer(6);
+		clearDrawer(8);
 	}
 	
 	@Override
