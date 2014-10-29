@@ -35,7 +35,6 @@
 	    android:layout_weight="1"
 	    android:textSize="16sp"
 	    android:textIsSelectable="false"
-        android:text="lkjsdfkljlsdkfjls"
         android:textColor="@color/text_title"
         android:gravity="center_vertical" />
 </LinearLayout>

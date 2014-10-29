@@ -59,8 +59,6 @@ import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
-import com.pindroid.fragment.AddBookmarkFragment;
-import com.pindroid.fragment.AddBookmarkFragment.OnBookmarkSaveListener;
 import com.pindroid.fragment.BookmarkBrowser;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment;
 import com.pindroid.fragment.BrowseBookmarksFragment;
@@ -88,7 +86,7 @@ import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
 
 public class Main extends FragmentBaseActivity implements OnBookmarkSelectedListener, 
-		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnBookmarkSaveListener, OnSearchActionListener, LoaderManager.LoaderCallbacks<Cursor> {
+		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnSearchActionListener, LoaderManager.LoaderCallbacks<Cursor> {
 	
 	private ListView mDrawerList;
 	private LinearLayout mDrawerWrapper;
@@ -263,7 +261,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		} else if(Intent.ACTION_SEND.equals(action)){
 			Bookmark b = loadBookmarkFromShareIntent();
 			b = findExistingBookmark(b);
-			onBookmarkAdd(b, false);
+			onBookmarkAdd(b);
 		} else if(Constants.ACTION_SEARCH_SUGGESTION_VIEW.equals(action)){
 			if(path.contains("bookmarks") && TextUtils.isDigitsOnly(lastPath) && intent.hasExtra(SearchManager.USER_QUERY)) {
 				try {
@@ -367,12 +365,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerWrapper);
         
         if(drawerOpen){
-        	menu.removeItem(R.id.menu_search);
-        	menu.removeItem(R.id.menu_sortbookmark);
-        	menu.removeItem(R.id.menu_sorttag);
-        	menu.removeItem(R.id.menu_addbookmark);
-        	menu.removeItem(R.id.menu_addbookmark_save);
-        	menu.removeItem(R.id.menu_addbookmark_cancel);
+            menu.clear();
         }
         
         return super.onPrepareOptionsMenu(menu);
@@ -527,15 +520,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	public void onBookmarkSelected(Bookmark b, BookmarkViewType viewType){
 		
 		if(BookmarkViewType.EDIT.equals(viewType)){
-			AddBookmarkFragment frag = new AddBookmarkFragment();
-			frag.loadBookmark(b, b);
-			frag.setUsername(app.getUsername());
-			
-			if(isTwoPane()){
-				replaceRightFragment(frag, true);
-			} else {
-				replaceLeftFragment(frag, true);
-			}
+            onBookmarkAdd(b, b);
 		} else {
 			ViewBookmarkFragment frag = new ViewBookmarkFragment();
 			frag.setBookmark(b, viewType);
@@ -564,20 +549,20 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
 	public void onBookmarkAdd(Bookmark b) {
-		onBookmarkAdd(b, true);
+        onBookmarkAdd(b, null);
 	}
-	
-	public void onBookmarkAdd(Bookmark b, boolean back) {
-		AddBookmarkFragment frag = new AddBookmarkFragment();
-		frag.loadBookmark(b, null);
-		frag.setUsername(app.getUsername());
-		
-		if(isTwoPane()){
-			replaceRightFragment(frag, false);		
-		} else {
-			replaceLeftFragment(frag, true);
-		}
-	}
+
+    public void onBookmarkAdd(Bookmark b, Bookmark oldBookmark) {
+        Intent intent = new Intent(this, AddBookmark.class);
+        intent.putExtra("bookmark", b);
+
+        if(oldBookmark != null) {
+            intent.putExtra("oldBookmark", oldBookmark);
+        }
+
+        intent.putExtra("username", app.getUsername());
+        startActivity(intent);
+    }
 
 	public void onBookmarkShare(Bookmark b) {
 		if(b != null){
@@ -651,14 +636,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		frag.setQuery(app.getUsername(), null, account);
 
 		replaceLeftFragment(frag, true);
-	}
-
-	public void onBookmarkSave(Bookmark b) {
-		getSupportFragmentManager().popBackStack();
-	}
-
-	public void onBookmarkCancel(Bookmark b) {
-		getSupportFragmentManager().popBackStack();
 	}
 	
 	private Bookmark loadBookmarkFromShareIntent() {

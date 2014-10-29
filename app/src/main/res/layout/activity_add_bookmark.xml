@@ -23,17 +23,12 @@
  -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
-    <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <fragment
+        android:name="com.pindroid.fragment.AddBookmarkFragment"
+        android:id="@+id/addbookmark_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="@dimen/add_bookmark_form_padding"
-        android:paddingRight="@dimen/add_bookmark_form_padding"
-        android:fillViewport="true">
-		<include layout="@layout/add_bookmark_form" />
-	</ScrollView>
+        android:layout_height="match_parent" />
 </LinearLayout>

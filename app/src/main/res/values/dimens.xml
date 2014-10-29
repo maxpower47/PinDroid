@@ -20,31 +20,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA
  */
- -->
- <resources>
+-->
+<resources>
+
     <dimen name="widget_margin">0dp</dimen>
     <dimen name="widget_height">64dp</dimen>
- 	
- 	<dimen name="add_switch_margin_left">0dp</dimen>
- 	<dimen name="add_switch_margin_right">0dp</dimen>
- 	
- 	<dimen name="action_bar_width">265dp</dimen>
- 	
- 	<integer name="add_bookmark_note_lines">2</integer>
- 	
- 	<dimen name="bookmark_list_view_height">72dp</dimen>
- 	
- 	<dimen name="view_bookmark_padding_top">0dp</dimen>
- 	<dimen name="view_bookmark_padding_left">0dp</dimen>
- 	<dimen name="view_bookmark_padding_right">15dp</dimen>
- 	<dimen name="view_bookmark_padding_bottom">15dp</dimen>
- 	<dimen name="view_bookmark_title_text">18sp</dimen>
- 	<dimen name="view_bookmark_field_title_text">16sp</dimen>
- 	<dimen name="view_bookmark_field_content_text">14sp</dimen>
- 	<dimen name="view_bookmark_tag_content_text">18sp</dimen>
- 	
- 	<dimen name="browse_bookmark_title_text">16sp</dimen>
- 	<dimen name="browse_bookmark_tag_text">14sp</dimen>
+    <dimen name="add_switch_margin_left">0dp</dimen>
+    <dimen name="add_switch_margin_right">0dp</dimen>
+    <dimen name="action_bar_width">265dp</dimen>
 
+    <integer name="add_bookmark_note_lines">2</integer>
+    <dimen name="add_bookmark_form_padding">0dp</dimen>
+
+    <dimen name="bookmark_list_view_height">72dp</dimen>
+    <dimen name="view_bookmark_padding_top">0dp</dimen>
+    <dimen name="view_bookmark_padding_left">0dp</dimen>
+    <dimen name="view_bookmark_padding_right">15dp</dimen>
+    <dimen name="view_bookmark_padding_bottom">15dp</dimen>
+    <dimen name="view_bookmark_title_text">18sp</dimen>
+    <dimen name="view_bookmark_field_title_text">16sp</dimen>
+    <dimen name="view_bookmark_field_content_text">14sp</dimen>
+    <dimen name="view_bookmark_tag_content_text">18sp</dimen>
+    <dimen name="browse_bookmark_title_text">16sp</dimen>
+    <dimen name="browse_bookmark_tag_text">14sp</dimen>
     <dimen name="drawer_width">300dp</dimen>
- </resources>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+</resources>
