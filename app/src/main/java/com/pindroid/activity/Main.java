@@ -42,14 +42,17 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.HeaderViewListAdapter;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -81,9 +84,12 @@ import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.NoteContent.Note;
 import com.pindroid.ui.NsMenuAdapter;
 import com.pindroid.ui.NsMenuItemModel;
+import com.pindroid.ui.ResizeAnimation;
 import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
+
+import org.w3c.dom.Text;
 
 public class Main extends FragmentBaseActivity implements OnBookmarkSelectedListener, 
 		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnSearchActionListener, LoaderManager.LoaderCallbacks<Cursor> {
@@ -94,9 +100,13 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	private ActionBarDrawerToggle mDrawerToggle;
 	private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private Spinner mAccountSpinner;
+    //private Spinner mAccountSpinner;
     private int spinnerSelectionCount = 0;
-    View accountSpinnerView;
+    LinearLayout accountSpinnerView;
+    ImageButton accountSpinnerButton;
+    boolean accountSpinnerOpen = false;
+    LinearLayout accountList;
+    TextView accountSelected;
     
     private NsMenuItemModel unreadItem;
 
@@ -112,9 +122,19 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		mDrawerWrapper = (LinearLayout) findViewById(R.id.left_drawer);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mTitle = mDrawerTitle = getTitle();
-        accountSpinnerView = getLayoutInflater().inflate(R.layout.menu_spinner, null);
-		mAccountSpinner = (Spinner) accountSpinnerView.findViewById(R.id.account_spinner);
-		
+        accountSpinnerView = (LinearLayout) getLayoutInflater().inflate(R.layout.menu_spinner, null);
+        accountSpinnerButton = (ImageButton) accountSpinnerView.findViewById(R.id.account_button);
+        accountList = (LinearLayout) accountSpinnerView.findViewById(R.id.account_list);
+        accountSelected = (TextView) accountSpinnerView.findViewById(R.id.account_selected);
+
+        if(AccountHelper.getAccountCount(this) > 0){
+            if(app.getUsername() == null || app.getUsername().equals("")) {
+                setAccount(AccountHelper.getFirstAccount(this).name);
+            }
+
+            setSpinnerAccount(app.getUsername());
+        }
+
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -208,28 +228,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         mDrawerList.addHeaderView(accountSpinnerView);
-
-		if(AccountHelper.getAccountCount(this) > 0){
-			if(app.getUsername() == null || app.getUsername().equals("")) {
-				setAccount(AccountHelper.getFirstAccount(this).name);
-			}
-
-			setSpinnerAccount(app.getUsername());
-		}
-
-        mAccountSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
-			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-
-				// onItemSelected is called on initialization of the spinner, so prevent this from being called the first time
-				if(spinnerSelectionCount++ > 0) {
-					setAccount((String)parent.getItemAtPosition(pos));
-				}
-			}
-
-			public void onNothingSelected(AdapterView<?> arg0) {
-
-			}
-		});
 	}
 	
 	@Override
@@ -295,13 +293,61 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
 	private void setSpinnerAccount(String username){
-		ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, getAccountNames());
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mAccountSpinner.setAdapter(adapter);
-		int position = adapter.getPosition(username);
-        mAccountSpinner.setSelection(position);
-		spinnerSelectionCount = 0;
+        accountSelected.setText(username);
+
+        accountList.removeAllViews();
+
+        final List<String> accounts = getAccountNames();
+        accounts.remove(app.getUsername());
+
+        if(accounts.size() > 0) {
+
+            accountSpinnerButton.setVisibility(View.VISIBLE);
+
+            for (String account : accounts) {
+                View accountView = getLayoutInflater().inflate(R.layout.account_list_view, null);
+                ((TextView) accountView.findViewById(R.id.account_title)).setText(account);
+
+                accountView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setAccount(((TextView) v.findViewById(R.id.account_title)).getText().toString());
+                    }
+                });
+
+                accountList.addView(accountView);
+            }
+
+            accountSpinnerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toggleAccountSpinner();
+                }
+            });
+        }
+
+        if(accountSpinnerOpen) {
+            toggleAccountSpinner();
+        }
+
+        clearDrawer(1);
 	}
+
+    private void toggleAccountSpinner() {
+        if (accountSpinnerOpen) {
+            accountSpinnerButton.setImageResource(R.drawable.expander_open_holo_dark);
+            ResizeAnimation animation = new ResizeAnimation(accountList, accountList.getChildCount() * (int) getResources().getDimension(R.dimen.account_list_height), 0, true, getResources().getDisplayMetrics());
+            animation.setDuration(200);
+            accountList.startAnimation(animation);
+        } else {
+            accountSpinnerButton.setImageResource(R.drawable.expander_close_holo_dark);
+            ResizeAnimation animation = new ResizeAnimation(accountList, 0, accountList.getChildCount() * (int) getResources().getDimension(R.dimen.account_list_height), true, getResources().getDisplayMetrics());
+            animation.setDuration(200);
+            accountList.startAnimation(animation);
+        }
+
+        accountSpinnerOpen = !accountSpinnerOpen;
+    }
 	
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -697,7 +743,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
      
-    private String[] getAccountNames(){
+    private List<String> getAccountNames(){
     	
     	List<String> accountNames = new ArrayList<String>();
     	
@@ -705,7 +751,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     		accountNames.add(account.name);
     	}
     	
-    	return accountNames.toArray(new String[]{});
+    	return accountNames;
     }
     
 	@Override

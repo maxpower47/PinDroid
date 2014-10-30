@@ -32,6 +32,8 @@
     <integer name="add_bookmark_note_lines">2</integer>
     <dimen name="add_bookmark_form_padding">0dp</dimen>
 
+    <dimen name="account_list_height">64dp</dimen>
+
     <dimen name="bookmark_list_view_height">72dp</dimen>
     <dimen name="view_bookmark_padding_top">0dp</dimen>
     <dimen name="view_bookmark_padding_left">0dp</dimen>
