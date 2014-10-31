@@ -35,6 +35,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -51,7 +52,7 @@ import com.pindroid.util.SyncUtils;
 /**
  * Activity which displays login screen to the user.
  */
-public class AuthenticatorActivity extends FragmentActivity {
+public class AuthenticatorActivity extends ActionBarActivity {
     public static final String PARAM_CONFIRMCREDENTIALS = "confirmCredentials";
     public static final String PARAM_PASSWORD = "password";
     public static final String PARAM_USERNAME = "username";
@@ -88,6 +89,8 @@ public class AuthenticatorActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+
+        getSupportActionBar().hide();
         
         mAccountAuthenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
 
@@ -101,9 +104,7 @@ public class AuthenticatorActivity extends FragmentActivity {
         mRequestNewAccount = mUsername == null;
         mConfirmCredentials = intent.getBooleanExtra(PARAM_CONFIRMCREDENTIALS, false);
 
-        requestWindowFeature(Window.FEATURE_LEFT_ICON);
         setContentView(R.layout.login_activity);
-        getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, android.R.drawable.ic_dialog_alert);
       
         mUsernameEdit = (EditText) findViewById(R.id.username_edit);
         mPasswordEdit = (EditText) findViewById(R.id.password_edit);
@@ -113,7 +114,6 @@ public class AuthenticatorActivity extends FragmentActivity {
         	mUsernameEdit.setText(mUsername);
         	mPasswordEdit.requestFocus();
         }
-        mMessage.setText(getMessage());
     }
 
     /**
@@ -223,11 +223,6 @@ public class AuthenticatorActivity extends FragmentActivity {
      * Returns the message to be displayed at the top of the login dialog box.
      */
     private CharSequence getMessage() {
-        if (TextUtils.isEmpty(mUsername)) {
-            // If no username, then we ask the user to log in using an
-            // appropriate service.
-            return getText(R.string.login_activity_newaccount_text);
-        }
         if (TextUtils.isEmpty(mPassword)) {
             // We have an account but no password
             return getText(R.string.login_activity_loginfail_text_pwmissing);

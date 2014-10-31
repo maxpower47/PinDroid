@@ -57,4 +57,6 @@
 
     <color name="search_suggestion_background_pressed">#E0E0E0</color>
     <color name="search_suggestion_background_default">#FFFFFF</color>
+
+    <color name="login_button_background">@color/pindroid_blue</color>
 </resources>

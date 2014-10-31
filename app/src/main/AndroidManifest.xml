@@ -198,8 +198,7 @@
         <activity
             android:name=".authenticator.AuthenticatorActivity"
             android:excludeFromRecents="true"
-            android:label="@string/ui_activity_title"
-            android:theme="@android:style/Theme.Dialog" >
+            android:label="@string/ui_activity_title" >
         </activity>
 
         <provider
