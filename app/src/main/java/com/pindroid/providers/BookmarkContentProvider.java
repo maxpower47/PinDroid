@@ -452,8 +452,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				}
 				
 				suggestions.put(title + "_bookmark_" + account, new SearchSuggestionContent(title, 
-					line2, url, R.drawable.ic_main, R.drawable.ic_bookmark, 
-					data.toString(), action));
+					line2, url, R.drawable.main_menu_bookmark,	data.toString(), action));
 				
 			} while(c.moveToNext());	
 		}
@@ -518,8 +517,7 @@ public class BookmarkContentProvider extends ContentProvider {
 					tagCount = account;
 				
 				suggestions.put(name + "_tag_" + account, new SearchSuggestionContent(name, 
-					tagCount,
-					R.drawable.ic_main, R.drawable.ic_tag, data.build().toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
+					tagCount, R.drawable.main_menu_tag, data.build().toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
 				
 			} while(c.moveToNext());	
 		}
@@ -585,8 +583,7 @@ public class BookmarkContentProvider extends ContentProvider {
 					text = account;
 				
 				suggestions.put(title + "_note_" + account, new SearchSuggestionContent(title, 
-					text,
-					R.drawable.ic_main, R.drawable.ic_note, data.toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
+					text, R.drawable.main_menu_note, data.toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
 				
 			} while(c.moveToNext());	
 		}
@@ -605,13 +602,13 @@ public class BookmarkContentProvider extends ContentProvider {
 			mc = new MatrixCursor(new String[] {BaseColumns._ID, 
 					SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2, SearchManager.SUGGEST_COLUMN_TEXT_2_URL,
 					SearchManager.SUGGEST_COLUMN_INTENT_DATA, SearchManager.SUGGEST_COLUMN_INTENT_ACTION,
-					SearchManager.SUGGEST_COLUMN_ICON_1, SearchManager.SUGGEST_COLUMN_ICON_2});
+					SearchManager.SUGGEST_COLUMN_ICON_2});
 	
 			int i = 0;
 			
 			for(SearchSuggestionContent s : list.values()) {
 				mc.addRow(new Object[]{ i++, s.getText1(), s.getText2(), s.getText2Url(), s.getIntentData(), s.getIntentAction(),
-					s.getIcon1(), s.getIcon2() });
+					s.getIcon2() });
 			}
     	} else {
 			mc = new MatrixCursor(new String[] {BaseColumns._ID, 

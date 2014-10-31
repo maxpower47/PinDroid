@@ -21,8 +21,7 @@
  * USA
  */
  -->
-<resources>
-    <item name="main" type="layout">@layout/main_onepane</item>
-    <bool name="has_two_panes">false</bool>
-    <item type="layout" name="abc_search_dropdown_item_icons_2line">@layout/search_suggestion</item>
-</resources>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:state_pressed="true" android:drawable="@color/search_suggestion_background_pressed" />
+	<item android:drawable="@color/search_suggestion_background_default" />
+</selector>

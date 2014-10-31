@@ -54,4 +54,7 @@
     <color name="drawer_divider">#15000000</color>
 
     <color name="add_bookmark_form_background">#FFFFFF</color>
+
+    <color name="search_suggestion_background_pressed">#E0E0E0</color>
+    <color name="search_suggestion_background_default">#FFFFFF</color>
 </resources>
