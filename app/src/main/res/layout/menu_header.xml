@@ -25,7 +25,8 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:orientation="vertical"
-    android:gravity="center_vertical" >
+    android:gravity="center_vertical"
+    android:paddingTop="8dp">
 
     <ImageView
         android:id="@+id/menu_divider"
