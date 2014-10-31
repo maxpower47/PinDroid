@@ -151,7 +151,7 @@
   <string name="about_activity_title">Über PinDroid</string>
   <string name="about_text">
     &lt;html&gt; 
-    &lt;body style="background-color:#000000;color:#BEBEBE"&gt;
+    &lt;body&gt;
     	PinDroid ist eine Portierung von DeliciousDroid für das Pinboard Lesezeichen System (bookmarking system).&lt;br/&gt;&lt;br/&gt;
     	Entwickelt, verwaltet und unterhalten von Matt Schmidt&lt;br/&gt;&lt;br/&gt;
     	Einen Fehler gefunden oder einen Vorschlag für eine neue Funktion?  Stelle dies unter &lt;a href=\'http://code.google.com/p/pindroid/issues\'&gt;http://code.google.com/p/pindroid/issues&lt;/a&gt;&lt;br/&gt;&lt;br/&gt; ein.
@@ -160,7 +160,7 @@
     	&lt;ul&gt;
      		&lt;li&gt;Einige Funktionen von DeliciousDroid wurden aufgrund des derzeit noch limitierten Funktionsumfangs der Pinboard API noch nicht portiert. Dies umfasst die Synchronisierung von Kontakten und die Anzeige von Lesezeichen des eigenen Netzwerks. &lt;/li&gt;
     	&lt;/ul&gt;&lt;br/&gt;
-    	Lese Ansicht wird bereitgestellt durch viewtext.org
+    	Lese Ansicht wird bereitgestellt durch Instapaper
     &lt;/body&gt;
     &lt;/html&gt;
     </string>

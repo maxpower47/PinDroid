@@ -307,7 +307,7 @@
     <!-- AboutActivity -->
     <string name="about_activity_title">About PinDroid</string>
     <string name="about_text">    &lt;html> 
-    &lt;body style="background-color:#000000;color:#BEBEBE">
+    &lt;body >
     	PinDroid is a port of DeliciousDroid for the Pinboard bookmarking system.&lt;br/>&lt;br/>
     	Developed, maintained, and supported by Matt Schmidt&lt;br/>&lt;br/>
     	Find a bug or have a suggestion for a new feature?  Open an issue at &lt;a href=\'http://code.google.com/p/pindroid/issues\'>http://code.google.com/p/pindroid/issues&lt;/a>&lt;br/>&lt;br/>
@@ -316,7 +316,7 @@
     	&lt;ul>
      		&lt;li>Certain features from DeliciousDroid have not been ported yet due to limitations in Pinboards API, including contact syncing and viewing network bookmark lists. &lt;/li>
     	&lt;/ul>&lt;br/>
-    	Read view powered by viewtext.org
+    	Read view powered by Instapaper
     &lt;/body>
     &lt;/html></string>
     <string name="title_activity_add_bookmark">AddBookmark</string>
