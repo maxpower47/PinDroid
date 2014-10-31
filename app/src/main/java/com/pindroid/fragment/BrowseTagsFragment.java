@@ -48,7 +48,6 @@ public class BrowseTagsFragment extends ListFragment
 	
 	private String username = null;
 	private String query = null;
-	private boolean hasMenu = true;
 	
 	private OnTagSelectedListener tagSelectedListener;
 	private OnItemClickListener clickListener;
@@ -67,9 +66,7 @@ public class BrowseTagsFragment extends ListFragment
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		
-		setHasOptionsMenu(hasMenu);
-		
+
 		mAdapter = new SimpleCursorAdapter(this.getActivity(), 
 				R.layout.tag_view, null, 
 				new String[] {Tag.Name, Tag.Count}, new int[] {R.id.tag_name, R.id.tag_count}, 0);
@@ -85,8 +82,6 @@ public class BrowseTagsFragment extends ListFragment
 
 		lv.setItemsCanFocus(false);
 		lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		
-		getActivity().setTitle(getString(R.string.browse_my_tags_title));
 	}
 	
 	public void setUsername(String username) {
@@ -99,10 +94,6 @@ public class BrowseTagsFragment extends ListFragment
 	
 	public void setQuery(String query) {
 		this.query = query;
-	}
-	
-	public void setHasMenu(boolean hasMenu) {
-		this.hasMenu = hasMenu;
 	}
 	
 	public void refresh(){
@@ -118,43 +109,6 @@ public class BrowseTagsFragment extends ListFragment
 	    	tagSelectedListener.onTagSelected(tagName);
 	    }
 	};
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.browse_tag_menu, menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	
-		boolean result = false;
-
-	    switch (item.getItemId()) {
-		    case R.id.menu_tag_sort_name_asc:
-		    	sortfield = Tag.Name + " ASC";
-				result = true;
-				break;
-		    case R.id.menu_tag_sort_name_desc:			
-		    	sortfield = Tag.Name + " DESC";
-		    	result = true;
-		    	break;
-		    case R.id.menu_tag_sort_count_asc:			
-		    	sortfield = Tag.Count + " ASC";
-		    	result = true;
-		    	break;
-		    case R.id.menu_tag_sort_count_desc:			
-		    	sortfield = Tag.Count + " DESC";
-		    	result = true;
-		    	break;
-	    }
-	    
-	    if(result) {
-	    	refresh();
-	    } else result = super.onOptionsItemSelected(item);
-	    
-	    return result;
-	}
 	
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		if(username != null) {

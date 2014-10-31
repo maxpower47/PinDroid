@@ -34,35 +34,26 @@ import android.content.Intent.ShortcutIconResource;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 
-public class ChooseTagShortcut extends FragmentActivity implements BrowseTagsFragment.OnTagSelectedListener {
+public class ChooseTagShortcut extends ActionBarActivity implements BrowseTagsFragment.OnTagSelectedListener {
 
 	private String username = "";
 	BrowseTagsFragment frag;
-	
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.browse_tags);
-        
-		if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
-			Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
-			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
-		} else {
-			if(AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE).length > 0) {	
-				Account account = AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE)[0];
-				
-				username = account.name;
-			}
-		}
+        getSupportActionBar().setTitle(R.string.shortcut_activity_title);
+
+		Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+		startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
           
 		frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
         frag.setUsername(username);
-        frag.setHasMenu(false);
-
     }
     
 	public void onTagSelected(String tag) {		

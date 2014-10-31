@@ -165,6 +165,7 @@
 
     <!-- Shortcuts -->
     <string name="shortcut_activity_label">Pinboard Tag</string>
+    <string name="shortcut_activity_title">Choose Tag</string>
 
     <!-- ViewBookmark -->
     <string name="view_bookmark_title">View Bookmark Details</string>
