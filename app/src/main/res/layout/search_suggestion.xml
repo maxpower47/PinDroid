@@ -22,7 +22,7 @@
  */
  -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:paddingLeft="@dimen/abc_dropdownitem_text_padding_left"
+    android:paddingLeft="20dp"
     android:paddingRight="4dip"
     android:background="@color/search_suggestion_background"
     android:layout_width="match_parent"
@@ -62,13 +62,13 @@
     <!-- The subtitle comes before the title, since the height of the title depends on whether the
          subtitle is visible or gone. -->
     <TextView android:id="@android:id/text2"
-        style="?android:attr/dropDownItemStyle"
-        android:textAppearance="?attr/textAppearanceSearchResultSubtitle"
         android:singleLine="true"
         android:layout_width="match_parent"
         android:layout_height="29dip"
         android:paddingBottom="4dip"
         android:gravity="top"
+        android:textColor="@color/text_caption"
+        android:textSize="14sp"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@android:id/icon2"
         android:layout_alignWithParentIfMissing="true"
@@ -78,12 +78,12 @@
     <!-- The title is placed above the subtitle, if there is one. If there is no
          subtitle, it fills the parent. -->
     <TextView android:id="@android:id/text1"
-        style="?android:attr/dropDownItemStyle"
-        android:textAppearance="?attr/textAppearanceSearchResultTitle"
         android:singleLine="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:textColor="@color/text_title"
+        android:textSize="16sp"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@android:id/icon2"
         android:layout_above="@android:id/text2" />
