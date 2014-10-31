@@ -42,20 +42,15 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.pindroid.Constants;
@@ -82,14 +77,13 @@ import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.NoteContent.Note;
+import com.pindroid.providers.TagContent;
 import com.pindroid.ui.NsMenuAdapter;
 import com.pindroid.ui.NsMenuItemModel;
 import com.pindroid.ui.ResizeAnimation;
 import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
-
-import org.w3c.dom.Text;
 
 public class Main extends FragmentBaseActivity implements OnBookmarkSelectedListener, 
 		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnSearchActionListener, LoaderManager.LoaderCallbacks<Cursor> {
@@ -100,8 +94,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	private ActionBarDrawerToggle mDrawerToggle;
 	private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    //private Spinner mAccountSpinner;
-    private int spinnerSelectionCount = 0;
     LinearLayout accountSpinnerView;
     ImageButton accountSpinnerButton;
     boolean accountSpinnerOpen = false;
@@ -169,8 +161,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 	
 	private void _initMenu() {
-
-		
 		// Set up menu
 		NsMenuAdapter mAdapter = new NsMenuAdapter(this);
 
@@ -227,7 +217,9 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		 
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        mDrawerList.addHeaderView(accountSpinnerView);
+        if(mDrawerList.getHeaderViewsCount() < 1) {
+            mDrawerList.addHeaderView(accountSpinnerView);
+        }
 	}
 	
 	@Override
@@ -795,7 +787,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return TagManager.GetTags("maxpower47", null, this);
+        return TagManager.GetTags(app.getUsername(), TagContent.Tag.Name + " ASC", this);
     }
 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -804,6 +796,5 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     }
 
     public void onLoaderReset(Loader<Cursor> loader) {
-        //mAdapter.swapCursor(null);
     }
 }

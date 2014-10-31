@@ -198,15 +198,6 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 		}
 	}
 	
-	public void saveHandler(View v) {
-		save();
-		bookmarkSaveListener.onBookmarkSave(bookmark);
-	}
-	
-	public void cancelHandler(View v) {    	
-    	bookmarkSaveListener.onBookmarkCancel(bookmark);
-	}
-	
 	private void setDefaultValues(){   	
     	mPrivate.setChecked(SettingsHelper.getPrivateDefault(getActivity()));
     	mToRead.setChecked(SettingsHelper.getToReadDefault(getActivity()));
@@ -310,7 +301,7 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
         	ArrayList<String> currentTags = new ArrayList<String>();
         	Collections.addAll(currentTags, currentTagString.split(" "));
         	
-        	if(tag != null && tag != "") {
+        	if(tag != null && !tag.equals("")) {
         		if(!currentTags.contains(tag)) {
 		        	currentTags.add(tag);
         		} else {
