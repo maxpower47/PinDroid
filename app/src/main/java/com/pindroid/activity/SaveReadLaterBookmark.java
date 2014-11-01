@@ -74,11 +74,8 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 				bookmark.setTime(new Date().getTime());
 				bookmark.setTagString("");
 				bookmark.setAccount(app.getUsername());
-				
-				Intent i = new Intent(this, SaveBookmarkService.class);
-				i.putExtra(Constants.EXTRA_BOOKMARK, bookmark);
-				
-				startService(i);
+
+				pushBookmarkToService(bookmark);
 				
 				Toast.makeText(this, R.string.save_later_saved, Toast.LENGTH_SHORT).show();
 				
@@ -88,6 +85,12 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 			Toast.makeText(this, R.string.login_no_account, Toast.LENGTH_SHORT).show();
 			finish();
 		}	
+	}
+
+	private void pushBookmarkToService(Bookmark bookmark) {
+		Intent intent = new Intent(this, SaveBookmarkService.class);
+		intent.putExtra(Constants.EXTRA_BOOKMARK, bookmark);
+		startService(intent);
 	}
 
 	@Override
