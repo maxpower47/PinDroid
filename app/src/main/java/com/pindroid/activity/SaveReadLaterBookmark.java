@@ -37,8 +37,6 @@ import android.support.v4.app.ShareCompat;
 import android.widget.Toast;
 
 public class SaveReadLaterBookmark extends FragmentBaseActivity {
-	
-	private Bookmark bookmark;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -59,7 +57,7 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 			Intent intent = getIntent();
 	
 			if((Intent.ACTION_SEND.equals(intent.getAction()) || Constants.ACTION_READLATER.equals(intent.getAction())) && intent.hasExtra(Intent.EXTRA_TEXT)){
-				bookmark = new Bookmark();
+				Bookmark bookmark = new Bookmark();
 				
 				ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(this);
 				
