@@ -67,7 +67,7 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 				if(reader.getSubject() != null)
 					bookmark.setDescription(reader.getSubject());
 				
-				if(url.equals("")) {
+				if ("".equals(url)) {
 					Toast.makeText(this, R.string.add_bookmark_invalid_url, Toast.LENGTH_LONG).show();
 					finish();
 				}
