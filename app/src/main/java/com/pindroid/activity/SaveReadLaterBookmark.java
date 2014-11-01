@@ -76,7 +76,7 @@ public class SaveReadLaterBookmark extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		if (requestCode != Constants.REQUEST_CODE_ACCOUNT_CHANGE) {
-			Log.e(TAG, "Unsupported resultCode");
+			Log.e(TAG, "Unsupported request code: " + requestCode);
 			finish();
 		} else {
 			if (resultCode == Activity.RESULT_CANCELED) {
