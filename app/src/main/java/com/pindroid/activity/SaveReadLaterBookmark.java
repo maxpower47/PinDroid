@@ -31,6 +31,7 @@ import android.util.Log;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.application.PindroidApplication;
+import com.pindroid.providers.BookmarkContent;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.service.SaveBookmarkService;
 import com.pindroid.util.AccountHelper;
@@ -56,7 +57,7 @@ public class SaveReadLaterBookmark extends Activity {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			requestAccount();
 		} else {
-			saveBookmark();
+			handleIntent();
 		}
 	}
 
@@ -82,12 +83,12 @@ public class SaveReadLaterBookmark extends Activity {
 				finish();
 			} else if (resultCode == Activity.RESULT_OK) {
 				app.setUsername(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));
-				saveBookmark();
+				handleIntent();
 			}
 		}
 	}
 
-	private void saveBookmark(){
+	private void handleIntent(){
 		if(app.getUsername() != null){
 			Intent intent = getIntent();
 	
@@ -98,28 +99,30 @@ public class SaveReadLaterBookmark extends Activity {
 				if ("".equals(url)) {
 					Toast.makeText(this, R.string.add_bookmark_invalid_url, Toast.LENGTH_LONG).show();
 					finish();
-					return;
+				} else {
+					saveBookmark(intent, reader, url);
 				}
-
-				Bookmark bookmark = new Bookmark();
-				bookmark.setUrl(url);
-				bookmark.setDescription(reader.getSubject());
-				bookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, SettingsHelper.getPrivateDefault(this)));
-				bookmark.setToRead(true);
-				bookmark.setTime(new Date().getTime());
-				bookmark.setTagString("");
-				bookmark.setAccount(app.getUsername());
-
-				pushBookmarkToService(bookmark);
-				
-				Toast.makeText(this, R.string.save_later_saved, Toast.LENGTH_SHORT).show();
-				
-				finish();
 			}
 		} else {
 			Toast.makeText(this, R.string.login_no_account, Toast.LENGTH_SHORT).show();
 			finish();
 		}	
+	}
+
+	private void saveBookmark(Intent intent, ShareCompat.IntentReader reader, String url) {
+		Bookmark bookmark = new Bookmark();
+		bookmark.setUrl(url);
+		bookmark.setDescription(reader.getSubject());
+		bookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, SettingsHelper.getPrivateDefault(this)));
+		bookmark.setToRead(true);
+		bookmark.setTime(new Date().getTime());
+		bookmark.setTagString("");
+		bookmark.setAccount(app.getUsername());
+
+		pushBookmarkToService(bookmark);
+
+		Toast.makeText(this, R.string.save_later_saved, Toast.LENGTH_SHORT).show();
+		finish();
 	}
 
 	private void pushBookmarkToService(Bookmark bookmark) {
