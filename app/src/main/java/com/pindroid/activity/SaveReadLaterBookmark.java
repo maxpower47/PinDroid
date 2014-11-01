@@ -68,10 +68,7 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 
 				Bookmark bookmark = new Bookmark();
 				bookmark.setUrl(url);
-				
-				if(reader.getSubject() != null)
-					bookmark.setDescription(reader.getSubject());
-				
+				bookmark.setDescription(reader.getSubject());
 				bookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, SettingsHelper.getPrivateDefault(this)));
 				bookmark.setToRead(true);
 				bookmark.setTime(new Date().getTime());
