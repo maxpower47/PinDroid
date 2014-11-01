@@ -57,21 +57,21 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 			Intent intent = getIntent();
 	
 			if((Intent.ACTION_SEND.equals(intent.getAction()) || Constants.ACTION_READLATER.equals(intent.getAction())) && intent.hasExtra(Intent.EXTRA_TEXT)){
-				Bookmark bookmark = new Bookmark();
-				
 				ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(this);
-				
 				String url = StringUtils.getUrl(reader.getText().toString());
+
+				if ("".equals(url)) {
+					Toast.makeText(this, R.string.add_bookmark_invalid_url, Toast.LENGTH_LONG).show();
+					finish();
+					return;
+				}
+
+				Bookmark bookmark = new Bookmark();
 				bookmark.setUrl(url);
 				
 				if(reader.getSubject() != null)
 					bookmark.setDescription(reader.getSubject());
 				
-				if ("".equals(url)) {
-					Toast.makeText(this, R.string.add_bookmark_invalid_url, Toast.LENGTH_LONG).show();
-					finish();
-				}
-	
 				bookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, SettingsHelper.getPrivateDefault(this)));
 				bookmark.setToRead(true);
 				bookmark.setTime(new Date().getTime());
