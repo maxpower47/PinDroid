@@ -46,15 +46,13 @@ import android.widget.Toast;
 public class SaveReadLaterBookmark extends Activity {
 	private static final String TAG = "SaveReadLaterBookmark";
 	private PindroidApplication app;
-	private AccountManager accountManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 
 		app = (PindroidApplication)getApplicationContext();
-		accountManager = AccountManager.get(this);
-		
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			requestAccount();
 		} else {
@@ -69,7 +67,7 @@ public class SaveReadLaterBookmark extends Activity {
 			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
 		} else if (AccountHelper.getAccountCount(this) > 0) {
-			Account account = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+			Account account = AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 			app.setUsername(account.name);
 		}
 	}
