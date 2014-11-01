@@ -23,10 +23,14 @@ package com.pindroid.activity;
 
 import java.util.Date;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.annotation.TargetApi;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.service.SaveBookmarkService;
+import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
 
@@ -45,6 +49,18 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 		if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
 			requestAccount();
 		} else saveBookmark();
+	}
+
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	protected void requestAccount() {
+		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+			Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+		} else if (AccountHelper.getAccountCount(this) > 0) {
+			Account account = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+			app.setUsername(account.name);
+		}
 	}
 	
 	@Override
