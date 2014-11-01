@@ -26,8 +26,11 @@ import java.util.Date;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.util.Log;
 import com.pindroid.Constants;
 import com.pindroid.R;
+import com.pindroid.application.PindroidApplication;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.service.SaveBookmarkService;
 import com.pindroid.util.AccountHelper;
@@ -40,34 +43,52 @@ import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
 import android.widget.Toast;
 
-public class SaveReadLaterBookmark extends FragmentBaseActivity {
+public class SaveReadLaterBookmark extends Activity {
+	private static final String TAG = "SaveReadLaterBookmark";
+	private PindroidApplication app;
+	private AccountManager accountManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+
+		app = (PindroidApplication)getApplicationContext();
+		accountManager = AccountManager.get(this);
 		
-		if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			requestAccount();
-		} else saveBookmark();
+		} else {
+			saveBookmark();
+		}
 	}
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	protected void requestAccount() {
-		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
 			Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
 			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
 		} else if (AccountHelper.getAccountCount(this) > 0) {
-			Account account = mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+			Account account = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0];
 			app.setUsername(account.name);
 		}
 	}
-	
+
 	@Override
-	protected void changeAccount(){
-		saveBookmark();
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		if (requestCode != Constants.REQUEST_CODE_ACCOUNT_CHANGE) {
+			Log.e(TAG, "Unsupported resultCode");
+			finish();
+		} else {
+			if (resultCode == Activity.RESULT_CANCELED) {
+				finish();
+			} else if (resultCode == Activity.RESULT_OK) {
+				app.setUsername(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));
+				saveBookmark();
+			}
+		}
 	}
-	
+
 	private void saveBookmark(){
 		if(app.getUsername() != null){
 			Intent intent = getIntent();
@@ -107,11 +128,5 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 		Intent intent = new Intent(this, SaveBookmarkService.class);
 		intent.putExtra(Constants.EXTRA_BOOKMARK, bookmark);
 		startService(intent);
-	}
-
-	@Override
-	protected void startSearch(String query) {
-		// TODO Auto-generated method stub
-		
 	}
 }
