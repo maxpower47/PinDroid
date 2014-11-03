@@ -23,10 +23,18 @@ package com.pindroid.activity;
 
 import java.util.Date;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.util.Log;
 import com.pindroid.Constants;
 import com.pindroid.R;
+import com.pindroid.application.PindroidApplication;
+import com.pindroid.providers.BookmarkContent;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.service.SaveBookmarkService;
+import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
 
@@ -36,58 +44,64 @@ import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
 import android.widget.Toast;
 
-public class SaveReadLaterBookmark extends FragmentBaseActivity {
-	
-	private Bookmark bookmark;
+public class SaveReadLaterBookmark extends Activity {
+	private static final String TAG = "SaveReadLaterBookmark";
+	private PindroidApplication app;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		
-		if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+
+		app = (PindroidApplication)getApplicationContext();
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			requestAccount();
-		} else saveBookmark();
+		} else {
+			handleIntent();
+		}
 	}
-	
+
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	protected void requestAccount() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+			Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+		} else if (AccountHelper.getAccountCount(this) > 0) {
+			Account account = AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE)[0];
+			app.setUsername(account.name);
+		}
+	}
+
 	@Override
-	protected void changeAccount(){
-		saveBookmark();
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		if (requestCode != Constants.REQUEST_CODE_ACCOUNT_CHANGE) {
+			Log.e(TAG, "Unsupported request code: " + requestCode);
+			finish();
+		} else {
+			if (resultCode == Activity.RESULT_CANCELED) {
+				finish();
+			} else if (resultCode == Activity.RESULT_OK) {
+				app.setUsername(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));
+				handleIntent();
+			}
+		}
 	}
-	
-	private void saveBookmark(){
+
+	private void handleIntent(){
 		if(app.getUsername() != null){
 			Intent intent = getIntent();
 	
 			if((Intent.ACTION_SEND.equals(intent.getAction()) || Constants.ACTION_READLATER.equals(intent.getAction())) && intent.hasExtra(Intent.EXTRA_TEXT)){
-				bookmark = new Bookmark();
-				
 				ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(this);
-				
 				String url = StringUtils.getUrl(reader.getText().toString());
-				bookmark.setUrl(url);
-				
-				if(reader.getSubject() != null)
-					bookmark.setDescription(reader.getSubject());
-				
-				if(url.equals("")) {
+
+				if ("".equals(url)) {
 					Toast.makeText(this, R.string.add_bookmark_invalid_url, Toast.LENGTH_LONG).show();
 					finish();
+				} else {
+					saveBookmark(intent, reader, url);
 				}
-	
-				bookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, SettingsHelper.getPrivateDefault(this)));
-				bookmark.setToRead(true);
-				bookmark.setTime(new Date().getTime());
-				bookmark.setTagString("");
-				bookmark.setAccount(app.getUsername());
-				
-				Intent i = new Intent(this, SaveBookmarkService.class);
-				i.putExtra(Constants.EXTRA_BOOKMARK, bookmark);
-				
-				startService(i);
-				
-				Toast.makeText(this, R.string.save_later_saved, Toast.LENGTH_SHORT).show();
-				
-				finish();
 			}
 		} else {
 			Toast.makeText(this, R.string.login_no_account, Toast.LENGTH_SHORT).show();
@@ -95,9 +109,25 @@ public class SaveReadLaterBookmark extends FragmentBaseActivity {
 		}	
 	}
 
-	@Override
-	protected void startSearch(String query) {
-		// TODO Auto-generated method stub
-		
+	private void saveBookmark(Intent intent, ShareCompat.IntentReader reader, String url) {
+		Bookmark bookmark = new Bookmark();
+		bookmark.setUrl(url);
+		bookmark.setDescription(reader.getSubject());
+		bookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, SettingsHelper.getPrivateDefault(this)));
+		bookmark.setToRead(true);
+		bookmark.setTime(new Date().getTime());
+		bookmark.setTagString("");
+		bookmark.setAccount(app.getUsername());
+
+		pushBookmarkToService(bookmark);
+
+		Toast.makeText(this, R.string.save_later_saved, Toast.LENGTH_SHORT).show();
+		finish();
+	}
+
+	private void pushBookmarkToService(Bookmark bookmark) {
+		Intent intent = new Intent(this, SaveBookmarkService.class);
+		intent.putExtra(Constants.EXTRA_BOOKMARK, bookmark);
+		startService(intent);
 	}
 }
