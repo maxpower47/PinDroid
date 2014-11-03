@@ -103,7 +103,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     private NsMenuItemModel unreadItem;
 
     private Cursor tagData = null;
-    
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -123,8 +122,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
             if(app.getUsername() == null || app.getUsername().equals("")) {
                 setAccount(AccountHelper.getFirstAccount(this).name);
             }
-
-            setSpinnerAccount(app.getUsername());
         }
 
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -236,7 +233,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		
 		if(!intentUsername.equals("") && !app.getUsername().equals(intentUsername)){
 			setAccount(intentUsername);
-		} else setSpinnerAccount(app.getUsername());
+		}
 		
 		if(Intent.ACTION_VIEW.equals(action)) {
 			if(lastPath.equals("bookmarks")){
@@ -283,63 +280,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 			}
 		}
 	}
-
-	private void setSpinnerAccount(String username){
-        accountSelected.setText(username);
-
-        accountList.removeAllViews();
-
-        final List<String> accounts = getAccountNames();
-        accounts.remove(app.getUsername());
-
-        if(accounts.size() > 0) {
-
-            accountSpinnerButton.setVisibility(View.VISIBLE);
-
-            for (String account : accounts) {
-                View accountView = getLayoutInflater().inflate(R.layout.account_list_view, null);
-                ((TextView) accountView.findViewById(R.id.account_title)).setText(account);
-
-                accountView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        setAccount(((TextView) v.findViewById(R.id.account_title)).getText().toString());
-                    }
-                });
-
-                accountList.addView(accountView);
-            }
-
-            accountSpinnerButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    toggleAccountSpinner();
-                }
-            });
-        }
-
-        if(accountSpinnerOpen) {
-            toggleAccountSpinner();
-        }
-
-        clearDrawer(1);
-	}
-
-    private void toggleAccountSpinner() {
-        if (accountSpinnerOpen) {
-            accountSpinnerButton.setImageResource(R.drawable.expander_open_holo_dark);
-            ResizeAnimation animation = new ResizeAnimation(accountList, accountList.getChildCount() * (int) getResources().getDimension(R.dimen.account_list_height), 0, true, getResources().getDisplayMetrics());
-            animation.setDuration(200);
-            accountList.startAnimation(animation);
-        } else {
-            accountSpinnerButton.setImageResource(R.drawable.expander_close_holo_dark);
-            ResizeAnimation animation = new ResizeAnimation(accountList, 0, accountList.getChildCount() * (int) getResources().getDimension(R.dimen.account_list_height), true, getResources().getDisplayMetrics());
-            animation.setDuration(200);
-            accountList.startAnimation(animation);
-        }
-
-        accountSpinnerOpen = !accountSpinnerOpen;
-    }
 	
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -534,13 +474,56 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	
 	@Override
 	protected void changeAccount(){
-		setSpinnerAccount(app.getUsername());
-		
-		if(unreadItem != null){
+
+        // reset account picker
+        if(accountSpinnerOpen) {
+            toggleAccountSpinner(false);
+        }
+
+        clearDrawer(1);
+
+        accountSelected.setText(app.getUsername());
+
+        accountList.removeAllViews();
+
+        final List<String> accounts = getAccountNames();
+        accounts.remove(app.getUsername());
+
+        if(accounts.size() > 0) {
+
+            accountSpinnerButton.setVisibility(View.VISIBLE);
+
+            for (String account : accounts) {
+                View accountView = getLayoutInflater().inflate(R.layout.account_list_view, null);
+                ((TextView) accountView.findViewById(R.id.account_title)).setText(account);
+
+                accountView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setAccount(((TextView) v.findViewById(R.id.account_title)).getText().toString());
+                    }
+                });
+
+                accountList.addView(accountView);
+            }
+
+            accountSpinnerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toggleAccountSpinner(true);
+                }
+            });
+        }
+
+        // reset tags in drawer
+        getSupportLoaderManager().restartLoader(0, null, this);
+
+        if(unreadItem != null){
 			unreadItem.counter = BookmarkManager.GetUnreadCount(app.getUsername(), this);
             ((NsMenuAdapter)((HeaderViewListAdapter)mDrawerList.getAdapter()).getWrappedAdapter()).notifyDataSetChanged();
 		}
-		
+
+        // reset current fragments
 		Fragment cf = getSupportFragmentManager().findFragmentById(R.id.right_frame);
 		Fragment lf = getSupportFragmentManager().findFragmentById(R.id.left_frame);
 		
@@ -554,7 +537,28 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 			((PindroidFragment)lf).refresh();
 		}
 	}
-	
+
+    private void toggleAccountSpinner(Boolean animate) {
+        accountSpinnerButton.setImageResource(accountSpinnerOpen ? R.drawable.expander_open_holo_dark : R.drawable.expander_close_holo_dark);
+
+        if(animate) {
+            ResizeAnimation animation;
+
+            if (accountSpinnerOpen) {
+                animation = new ResizeAnimation(accountList, accountList.getChildCount() * (int) getResources().getDimension(R.dimen.account_list_height), 0, true, getResources().getDisplayMetrics());
+            } else {
+                animation = new ResizeAnimation(accountList, 0, accountList.getChildCount() * (int) getResources().getDimension(R.dimen.account_list_height), true, getResources().getDisplayMetrics());
+            }
+
+            animation.setDuration(200);
+            accountList.startAnimation(animation);
+        } else {
+            accountList.getLayoutParams().height = accountSpinnerOpen ? 0 : accountList.getChildCount() * (int) getResources().getDimension(R.dimen.account_list_height);
+        }
+
+        accountSpinnerOpen = !accountSpinnerOpen;
+    }
+
 	public void onBookmarkSelected(Bookmark b, BookmarkViewType viewType){
 		
 		if(BookmarkViewType.EDIT.equals(viewType)){

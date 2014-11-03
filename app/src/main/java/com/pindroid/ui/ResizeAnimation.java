@@ -26,13 +26,11 @@ public class ResizeAnimation extends Animation {
     @Override
     protected void applyTransformation(float interpolatedTime, Transformation t) {
         int newHeight;
-        if (down)
+        if (down) {
             newHeight = (int) (offsetHeight * interpolatedTime);
-
-        else
+        } else {
             newHeight = (int) (offsetHeight * (1 - interpolatedTime));
-
-
+        }
 
         //The new view height is based on start height plus the height increment
         view.getLayoutParams().height = newHeight + originalHeight;
