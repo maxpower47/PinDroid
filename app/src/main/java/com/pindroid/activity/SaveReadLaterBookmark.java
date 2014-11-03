@@ -23,23 +23,18 @@ package com.pindroid.activity;
 
 import java.util.Date;
 
-import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.util.Log;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.application.PindroidApplication;
-import com.pindroid.providers.BookmarkContent;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.service.SaveBookmarkService;
-import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
 import android.widget.Toast;
@@ -54,24 +49,14 @@ public class SaveReadLaterBookmark extends Activity {
 
 		app = (PindroidApplication)getApplicationContext();
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			requestAccount();
-		} else {
-			handleIntent();
-		}
+		requestAccount();
 	}
 
-	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	protected void requestAccount() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
-			Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
-			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
-		} else if (AccountHelper.getAccountCount(this) > 0) {
-			Account account = AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE)[0];
-			app.setUsername(account.name);
-		}
-	}
+        Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+    }
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
