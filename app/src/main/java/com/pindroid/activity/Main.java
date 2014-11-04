@@ -121,7 +121,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
         if(AccountHelper.getAccountCount(this) > 0){
             if(app.getUsername() == null || app.getUsername().equals("")) {
                 setAccount(AccountHelper.getFirstAccount(this).name);
-            }
+            } else setAccount(app.getUsername());
         }
 
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -225,8 +225,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		processIntent(intent);
 	}
 	
-	private void processIntent(Intent intent){		
-		String action = intent.getAction();
+	private void processIntent(Intent intent){
+        String action = intent.getAction();
 		String path = intent.getData() != null ? intent.getData().getPath() : "";
 		String lastPath = (intent.getData() != null && intent.getData().getLastPathSegment() != null) ? intent.getData().getLastPathSegment() : "";
 		String intentUsername = (intent.getData() != null && intent.getData().getUserInfo() != null) ? intent.getData().getUserInfo() : "";
@@ -474,7 +474,6 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	
 	@Override
 	protected void changeAccount(){
-
         // reset account picker
         if(accountSpinnerOpen) {
             toggleAccountSpinner(false);
