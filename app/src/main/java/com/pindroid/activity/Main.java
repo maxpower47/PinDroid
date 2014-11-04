@@ -151,7 +151,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 		
 		if (savedInstanceState == null) {
-            selectItem(1);
+            onMyBookmarksSelected(null);
         }
 		
 		processIntent(getIntent());
@@ -284,7 +284,29 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if(position <= 8) {
-                selectItem(position);
+                switch(position){
+                    case 1:
+                        onMyBookmarksSelected(null);
+                        break;
+                    case 2:
+                        onMyUnreadSelected();
+                        break;
+                    case 3:
+                        onMyNotesSelected();
+                        break;
+                    case 4:
+                        onSettingsSelected();
+                        break;
+                    case 6:
+                        onPopularSelected();
+                        break;
+                    case 7:
+                        onRecentSelected();
+                        break;
+                    case 8:
+                        onMyNetworkSelected();
+                        break;
+                }
             } else {
                 String tag = ((TextView) view.findViewById(R.id.menurow_title)).getText().toString();
                 onTagSelected(tag, false);
@@ -293,34 +315,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
         }
 	}
 
-	/** Swaps fragments in the main content view */
-	private void selectItem(int position) {
-		switch(position){
-			case 1:
-				onMyBookmarksSelected(null);
-				break;
-			case 2:
-				onMyUnreadSelected();
-				break;
-			case 3:
-				onMyNotesSelected();
-				break;
-            case 4:
-                onSettingsSelected();
-                break;
-			case 6:
-                onPopularSelected();
-				break;
-			case 7:
-				onRecentSelected();	
-				break;
-			case 8:
-                onMyNetworkSelected();
-				break;
-		}
-	}
-	
-	@Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
@@ -356,7 +351,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	    t.replace(R.id.left_frame, frag, "left");
 	    if(backstack)
 	    	t.addToBackStack(null);
-	    t.commit();
+	    t.commitAllowingStateLoss();
 	    
 	    clearRightFragment();
 	}
@@ -369,18 +364,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	    if(f != null){
 		    FragmentTransaction t = fragmentManager.beginTransaction();
 		    t.remove(f);
-		    t.commit();
+            t.commitAllowingStateLoss();
 	    }
-	}
-	
-	private void replaceRightFragment(Fragment frag, boolean backstack){
-		// Insert the fragment by replacing any existing fragment
-	    FragmentManager fragmentManager = getSupportFragmentManager();
-	    FragmentTransaction t = fragmentManager.beginTransaction();
-	    t.replace(R.id.right_frame, frag, "right");
-	    if(backstack)
-	    	t.addToBackStack(null);
-	    t.commit();
 	}
 	
 	private void clearDrawer(int position){		
@@ -577,7 +562,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 					viewFrag.refresh();
 				} else {
 					t.replace(R.id.right_frame, frag, "right");
-					t.commit();
+                    t.commitAllowingStateLoss();
 				}
 			} else {
 				if(fragmentManager.findFragmentByTag("left") instanceof ViewBookmarkFragment){
@@ -649,7 +634,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 				viewFrag.refresh();
 			} else {
 				t.replace(R.id.right_frame, frag, "right");
-				t.commit();
+                t.commitAllowingStateLoss();
 			}
 		} else {
 			if(fragmentManager.findFragmentByTag("left") instanceof ViewNoteFragment){

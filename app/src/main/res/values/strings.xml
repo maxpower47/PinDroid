@@ -165,8 +165,9 @@
     <string name="syncing_toast">Syncing…</string>
 
     <!-- Shortcuts -->
-    <string name="shortcut_activity_label">Pinboard Tag</string>
+    <string name="shortcut_activity_label">PinDroid Shortcut</string>
     <string name="shortcut_activity_title">Choose Tag</string>
+    <string name="tag_shortcut_activity_label">PinDroid Tag</string>
 
     <!-- ViewBookmark -->
     <string name="view_bookmark_title">View Bookmark Details</string>
@@ -190,13 +191,12 @@
     <string name="search_widget_label">PinDroid Large</string>
     <string name="small_widget_label">PinDroid Small</string>
     <string name="small_widget_button_default">unread</string>
-    <string name="small_widget_configuration_description">Customize your widget.</string>
-    <string name="small_widget_my_bookmarks">My Bookmarks</string>
-    <string name="small_widget_my_unread">My Unread</string>
-    <string name="small_widget_my_tags">My Tags</string>
-    <string name="small_widget_my_notes">My Notes</string>
+    <string name="small_widget_configuration_description">Customize</string>
+    <string name="small_widget_my_bookmarks">Bookmarks</string>
+    <string name="small_widget_my_unread">Unread</string>
+    <string name="small_widget_my_notes">Notes</string>
     <string name="small_widget_add_bookmark">Add Bookmark</string>
-    <string name="small_widget_search_bookmarks">Search Bookmarks</string>
+    <string name="small_widget_search_bookmarks">Search</string>
 
     <!-- Preferences -->
     <string name="preferences_title">PinDroid Settings</string>
