@@ -32,31 +32,66 @@
 		<LinearLayout
 			android:layout_width="fill_parent" 
 			android:layout_height="wrap_content"
+            android:padding="16dp"
 			android:orientation="vertical">
-		    <TextView
-				android:id="@+id/view_note_title"
-				android:layout_height="wrap_content"
-				android:layout_width="fill_parent"
-				android:textSize="24sp"
-				android:paddingLeft="10dip"
-				android:textIsSelectable="true"  />
-			<TextView
-				android:id="@+id/view_note_text"
+            <LinearLayout
+                android:id="@+id/view_note_title_section"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-				android:paddingRight="20dp"
-				android:textIsSelectable="true"  />
-			<TextView
-				android:id="@+id/view_note_account_title"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/view_note_section_padding"
+                android:paddingBottom="@dimen/view_note_section_padding">
+                <ImageView
+                    android:layout_width="@dimen/view_note_icon_size"
+                    android:layout_height="@dimen/view_note_icon_size"
+                    android:src="@drawable/ic_note"/>
+                <TextView
+                    android:id="@+id/view_note_title"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="@dimen/view_note_body_margin_left"
+                    android:textSize="@dimen/view_note_title_text"
+                    android:textIsSelectable="true"
+                    android:textColor="@color/text_title"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/view_note_text_section"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-				android:paddingTop="5dp"
-				android:text="@string/view_note_account_title"/>
-			<TextView
-				android:id="@+id/view_note_account"
+                android:paddingTop="@dimen/view_note_section_padding"
+                android:paddingBottom="@dimen/view_note_section_padding"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/view_note_icon_size"
+                    android:layout_height="@dimen/view_note_icon_size"
+                    android:src="@drawable/ic_content"/>
+                <TextView
+                    android:id="@+id/view_note_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_note_body_margin_left"
+                    android:textSize="@dimen/view_note_body_text"
+                    android:textIsSelectable="true" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/view_note_account_section"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-				android:textIsSelectable="false"  />
+                android:paddingTop="@dimen/view_note_section_padding"
+                android:paddingBottom="@dimen/view_note_section_padding"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/view_note_icon_size"
+                    android:layout_height="@dimen/view_note_icon_size"
+                    android:src="@drawable/ic_account"/>
+                <TextView
+                    android:id="@+id/view_note_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/view_note_body_text"
+                    android:layout_marginLeft="@dimen/view_note_body_margin_left"
+                    android:textIsSelectable="false"  />
+            </LinearLayout>
 		</LinearLayout>
 	</ScrollView>
 </FrameLayout>
