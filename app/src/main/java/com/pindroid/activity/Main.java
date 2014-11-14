@@ -208,15 +208,15 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
             }
         }
 
+        if(mDrawerList.getHeaderViewsCount() < 1) {
+            mDrawerList.addHeaderView(accountSpinnerView);
+        }
+
 		if (mDrawerList != null) {
             mDrawerList.setAdapter(mAdapter);
         }
 		 
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-        if(mDrawerList.getHeaderViewsCount() < 1) {
-            mDrawerList.addHeaderView(accountSpinnerView);
-        }
 	}
 	
 	@Override

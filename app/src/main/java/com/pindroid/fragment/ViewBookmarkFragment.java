@@ -67,15 +67,13 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	private ScrollView mBookmarkView;
 	private TextView mTitle;
 	private TextView mUrl;
-	private TextView mNotesTitle;
+	private View notesSection;
 	private TextView mNotes;
-	private TextView mTagsTitle;
+	private View tagsSection;
 	private TextView mTags;
 	private TextView mTime;
 	private TextView mUsername;
-	private ImageView mPrivateIcon;
-	private ImageView mSyncedIcon;
-	private ImageView mUnreadIcon;
+    private ImageView bookmarkIcon;
 	private WebView mWebContent;
 	private Bookmark bookmark;
 	private BookmarkViewType viewType;
@@ -101,15 +99,13 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		mBookmarkView = (ScrollView) getView().findViewById(R.id.bookmark_scroll_view);
 		mTitle = (TextView) getView().findViewById(R.id.view_bookmark_title);
 		mUrl = (TextView) getView().findViewById(R.id.view_bookmark_url);
-		mNotesTitle = (TextView) getView().findViewById(R.id.view_bookmark_notes_title);
+		notesSection = getView().findViewById(R.id.view_bookmark_notes_section);
 		mNotes = (TextView) getView().findViewById(R.id.view_bookmark_notes);
-		mTagsTitle = (TextView) getView().findViewById(R.id.view_bookmark_tags_title);
+		tagsSection = getView().findViewById(R.id.view_bookmark_tag_section);
 		mTags = (TextView) getView().findViewById(R.id.view_bookmark_tags);
 		mTime = (TextView) getView().findViewById(R.id.view_bookmark_time);
 		mUsername = (TextView) getView().findViewById(R.id.view_bookmark_account);
-		mPrivateIcon = (ImageView) getView().findViewById(R.id.view_bookmark_private);
-		mSyncedIcon = (ImageView) getView().findViewById(R.id.view_bookmark_synced);
-		mUnreadIcon = (ImageView) getView().findViewById(R.id.view_bookmark_unread);
+		bookmarkIcon = (ImageView) getView().findViewById(R.id.view_bookmark_title_icon);
 		mWebContent = (WebView) getView().findViewById(R.id.web_view);
 		
 		mWebContent.getSettings().setJavaScriptEnabled(true);
@@ -148,9 +144,13 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	public void clearView() {
 		this.viewType = BookmarkViewType.VIEW;
 		this.bookmark = null;
-		
-		mBookmarkView.setVisibility(View.GONE);
-		mWebContent.setVisibility(View.GONE);
+
+        if(mBookmarkView != null) {
+            mBookmarkView.setVisibility(View.GONE);
+        }
+        if(mWebContent != null) {
+            mWebContent.setVisibility(View.GONE);
+        }
 	}
 	
 	private void addTag(SpannableStringBuilder builder, Tag t, TagSpan.OnTagClickListener listener) {
@@ -281,11 +281,9 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 				
 				if(bookmark.getNotes() != null && !bookmark.getNotes().equals("null") && !bookmark.getNotes().equals("")) {
 					mNotes.setText(bookmark.getNotes());
-					mNotes.setVisibility(View.VISIBLE);
-					mNotesTitle.setVisibility(View.VISIBLE);
+					notesSection.setVisibility(View.VISIBLE);
 				} else {
-					mNotes.setVisibility(View.GONE);
-					mNotesTitle.setVisibility(View.GONE);
+                    notesSection.setVisibility(View.GONE);
 				}
 				
 				mTime.setText(d.toString());
@@ -300,11 +298,9 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		    		
 		    		mTags.setText(tagBuilder);
 		    		
-		    		mTags.setVisibility(View.VISIBLE);
-					mTagsTitle.setVisibility(View.VISIBLE);
+		    		tagsSection.setVisibility(View.VISIBLE);
 				} else {
-					mTags.setVisibility(View.GONE);
-					mTagsTitle.setVisibility(View.GONE);
+                    tagsSection.setVisibility(View.GONE);
 				}
 				
 				if(isMyself()){
@@ -318,28 +314,20 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 					getActivity().getContentResolver().registerContentObserver(ub.build(), true, observer);
 					
 					mUsername.setText(bookmark.getAccount());
-					
-					if(mPrivateIcon != null){
-						if(!bookmark.getShared())
-							mPrivateIcon.setVisibility(View.VISIBLE);
-						else mPrivateIcon.setVisibility(View.GONE);
-					}
-					
-					if(mSyncedIcon != null){
-						if(bookmark.getSynced() != 0)
-							mSyncedIcon.setVisibility(View.VISIBLE);
-						else mSyncedIcon.setVisibility(View.GONE);
-						
-						if(bookmark.getSynced() == -1)
-							mSyncedIcon.setImageResource(R.drawable.sync_fail);
-						else mSyncedIcon.setImageResource(R.drawable.sync);
-					}
-					
-					if(mUnreadIcon != null){
-						if(bookmark.getToRead())
-							mUnreadIcon.setVisibility(View.VISIBLE);
-						else mUnreadIcon.setVisibility(View.GONE);
-					}
+
+					if(bookmark.getToRead() && bookmark.getShared()) {
+                        bookmarkIcon.setImageResource(R.drawable.ic_unread_grey);
+                    } else if(!bookmark.getToRead() && bookmark.getShared()) {
+                        bookmarkIcon.setImageResource(R.drawable.ic_bookmark_grey);
+                    } else if (bookmark.getToRead() && !bookmark.getShared()) {
+                        bookmarkIcon.setImageResource(R.drawable.ic_unread_private);
+                    } else if (!bookmark.getToRead() && !bookmark.getShared()) {
+                        bookmarkIcon.setImageResource(R.drawable.ic_bookmark_private);
+                    }
+
+
+
+
 				} else {	
 		    		if(bookmark.getAccount() != null){
 						SpannableStringBuilder builder = new SpannableStringBuilder();
