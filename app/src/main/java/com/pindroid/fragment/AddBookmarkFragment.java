@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
+import com.iangclifton.android.floatlabel.FloatLabel;
 import com.pindroid.R;
 import com.pindroid.action.GetWebpageTitleTask;
 import com.pindroid.client.PinboardApi;
@@ -72,9 +73,7 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 	private EditText mEditNotes;
 	private MultiAutoCompleteTextView mEditTags;
 	private TextView mRecommendedTags;
-	private ProgressBar mRecommendedProgress;
 	private TextView mPopularTags;
-	private ProgressBar mPopularProgress;
 	private CompoundButton mPrivate;
 	private CompoundButton mToRead;
 	private Bookmark bookmark;
@@ -100,15 +99,13 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 		
 		setHasOptionsMenu(true);
 		
-		mEditUrl = (EditText) getView().findViewById(R.id.add_edit_url);
-		mEditDescription = (EditText) getView().findViewById(R.id.add_edit_description);
+		mEditUrl = ((FloatLabel) getView().findViewById(R.id.add_edit_url)).getEditText();
+		mEditDescription = ((FloatLabel) getView().findViewById(R.id.add_edit_description)).getEditText();
 		mDescriptionProgress = (ProgressBar) getView().findViewById(R.id.add_description_progress);
-		mEditNotes = (EditText) getView().findViewById(R.id.add_edit_notes);
-		mEditTags = (MultiAutoCompleteTextView) getView().findViewById(R.id.add_edit_tags);
+		mEditNotes = ((FloatLabel) getView().findViewById(R.id.add_edit_notes)).getEditText();
+		mEditTags = (MultiAutoCompleteTextView)((FloatLabel) getView().findViewById(R.id.add_edit_tags)).getEditText();
 		mRecommendedTags = (TextView) getView().findViewById(R.id.add_recommended_tags);
-		mRecommendedProgress = (ProgressBar) getView().findViewById(R.id.add_recommended_tags_progress);
 		mPopularTags = (TextView) getView().findViewById(R.id.add_popular_tags);
-		mPopularProgress = (ProgressBar) getView().findViewById(R.id.add_popular_tags_progress);
 		mPrivate = (CompoundButton) getView().findViewById(R.id.add_edit_private);
 		mToRead = (CompoundButton) getView().findViewById(R.id.add_edit_toread);
 		
@@ -130,10 +127,11 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 			mEditTags.setTokenizer(new SpaceTokenizer());
 		}
 
+
 		mEditUrl.setOnFocusChangeListener(new OnFocusChangeListener(){
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(!hasFocus){
-					String url = mEditUrl.getText().toString();
+					String url = mEditUrl.getText().toString().trim();
 					
 					if(url != null && !url.equals("")) {
 						if(mEditDescription.getText().toString().equals("")) {
@@ -154,11 +152,13 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 	}
 	
 	public void loadBookmark(Bookmark b, Bookmark oldB){
-		if(b != null)
-			bookmark = b.copy();
+		if(b != null) {
+            bookmark = b.copy();
+        }
 		
-		if(oldB != null)
-			oldBookmark = oldB.copy();
+		if(oldB != null) {
+            oldBookmark = oldB.copy();
+        }
 	}
 	
 	public void setUsername(String username){
@@ -346,8 +346,6 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
     	protected void onPreExecute() {
     		mRecommendedTags.setVisibility(View.GONE);
     		mPopularTags.setVisibility(View.GONE);
-    		mRecommendedProgress.setVisibility(View.VISIBLE);
-    		mPopularProgress.setVisibility(View.VISIBLE);
     	}
     	
         protected void onPostExecute(ArrayList<Tag> result) {
@@ -369,8 +367,6 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
         		
         		mRecommendedTags.setVisibility(View.VISIBLE);
         		mPopularTags.setVisibility(View.VISIBLE);
-        		mRecommendedProgress.setVisibility(View.GONE);
-        		mPopularProgress.setVisibility(View.GONE);
         	} 	
         }
 

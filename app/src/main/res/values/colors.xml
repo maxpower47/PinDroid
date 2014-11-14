@@ -24,7 +24,7 @@
 <resources>
     <color name="pindroid_blue">#0066ff</color>
     <color name="pindroid_blue_dark">#0052CC</color>
-    <color name="pindroid_accent">#008900</color>
+    <color name="pindroid_accent">@color/pindroid_blue</color>
 
 	<color name="orange1">#FF6600</color>
 	<color name="orange2">#FF9900</color>

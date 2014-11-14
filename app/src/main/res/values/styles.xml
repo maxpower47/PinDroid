@@ -50,7 +50,7 @@
         <item name="android:orientation">horizontal</item>
         <item name="android:layout_weight">0</item>
     </style>
-    
+
     <style name="LoginFrame">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -104,7 +104,7 @@
     <style name="MySearchViewStyle" parent="Widget.AppCompat.SearchView">
         <item name="suggestionRowLayout">@layout/search_suggestion</item>
     </style>
-    
+
     <style name="ThemeSelector" parent="@style/Theme.AppCompat.Light.DarkActionBar">
     	<item name="colorPrimary">@color/actionbar_background</item>
         <item name="colorPrimaryDark">@color/statusbar_background</item>

@@ -21,8 +21,8 @@
  * USA
  */
  -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android.support.v7.mediarouter="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -31,9 +31,192 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/add_bookmark_form_padding"
-        android:paddingRight="@dimen/add_bookmark_form_padding"
         android:fillViewport="true">
-		<include layout="@layout/add_bookmark_form" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/add_bookmark_padding"
+            android:paddingBottom="@dimen/add_bookmark_padding"
+            android:background="@color/add_bookmark_form_background"
+            android:orientation="vertical">
+            <com.iangclifton.android.floatlabel.FloatLabel
+                android:id="@+id/add_edit_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/add_bookmark_padding"
+                android:paddingRight="@dimen/add_bookmark_padding"
+                android:layout_marginBottom="@dimen/add_bookmark_section_padding"
+                android:hint="@string/add_title_url"
+                android:textSize="26sp"
+                android:background="@null"
+                android:inputType="textUri|textNoSuggestions"
+                android:singleLine="true"
+                android:layout="@layout/float_label"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:src="@color/drawer_divider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/add_bookmark_padding"
+                android:paddingRight="@dimen/add_bookmark_padding"
+                android:layout_marginTop="@dimen/add_bookmark_section_padding"
+                android:layout_marginBottom="@dimen/add_bookmark_section_padding"
+                android:orientation="horizontal">
+                <com.iangclifton.android.floatlabel.FloatLabel
+                    android:id="@+id/add_edit_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/add_title_description"
+                    android:inputType="text"
+                    android:layout="@layout/float_label" />
+                <ProgressBar
+                    android:id="@+id/add_description_progress"
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:src="@color/drawer_divider" />
+
+            <com.iangclifton.android.floatlabel.FloatLabel
+                android:id="@+id/add_edit_notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/add_bookmark_padding"
+                android:paddingRight="@dimen/add_bookmark_padding"
+                android:layout_marginTop="@dimen/add_bookmark_section_padding"
+                android:layout_marginBottom="@dimen/add_bookmark_section_padding"
+                android:hint="@string/add_title_notes"
+                android:background="@null"
+                android:inputType="textCapSentences|textMultiLine"
+                android:minLines="@integer/add_bookmark_note_lines"
+                android:layout="@layout/float_label"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:src="@color/drawer_divider" />
+
+
+            <com.iangclifton.android.floatlabel.FloatLabel
+                android:id="@+id/add_edit_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/add_bookmark_padding"
+                android:paddingRight="@dimen/add_bookmark_padding"
+                android:layout_marginTop="@dimen/add_bookmark_section_padding"
+                android:layout_marginBottom="@dimen/add_bookmark_section_padding"
+                android:hint="@string/add_title_tags"
+                android:background="@null"
+                android:inputType="text"
+                android:layout="@layout/float_label_tags"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:paddingLeft="72dp"
+                android:src="@color/drawer_divider" />
+
+            <LinearLayout
+                android:id="@+id/add_recommended_tags_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/add_bookmark_padding"
+                android:paddingRight="@dimen/add_bookmark_padding"
+                android:paddingTop="@dimen/view_note_section_padding"
+                android:paddingBottom="@dimen/view_note_section_padding"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/view_note_icon_size"
+                    android:layout_height="@dimen/view_note_icon_size"
+                    android:src="@drawable/ic_recommended"/>
+                <TextView
+                    android:id="@+id/add_recommended_tags"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="@dimen/view_note_body_margin_left"
+                    android:textIsSelectable="false" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:paddingLeft="72dp"
+                android:src="@color/drawer_divider" />
+
+            <LinearLayout
+                android:id="@+id/add_popular_tags_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/add_bookmark_padding"
+                android:paddingRight="@dimen/add_bookmark_padding"
+                android:paddingTop="@dimen/view_note_section_padding"
+                android:paddingBottom="@dimen/view_note_section_padding"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/view_note_icon_size"
+                    android:layout_height="@dimen/view_note_icon_size"
+                    android:src="@drawable/ic_popular"/>
+                <TextView
+                    android:id="@+id/add_popular_tags"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="@dimen/view_note_body_margin_left"
+                    android:textIsSelectable="false" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:src="@color/drawer_divider" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/add_bookmark_section_padding"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal">
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/add_edit_private"
+                        android:text="@string/add_title_private"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android.support.v7.mediarouter:switchPadding="16dp"
+                        android:textOff="No"
+                        android:textOn="Yes" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal">
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/add_edit_toread"
+                        android:text="@string/add_title_toread"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android.support.v7.mediarouter:switchPadding="16dp"
+                        android:textOff="No"
+                        android:textOn="Yes" />
+                    </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
 	</ScrollView>
 </LinearLayout>

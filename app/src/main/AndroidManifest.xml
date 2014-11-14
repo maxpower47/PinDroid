@@ -22,6 +22,7 @@
  */
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.pindroid"
     android:installLocation="auto"
     android:versionCode="59"
@@ -59,7 +60,8 @@
         android:icon="@drawable/ic_main"
         android:label="@string/label"
         android:requiredAccountType="com.pindroid"
-        android:theme="@style/ThemeSelector" >
+        android:theme="@style/ThemeSelector"
+        tools:replace="android:theme, android:label, android:icon">
         <activity
             android:name=".activity.Main"
             android:label="@string/titleMain"
@@ -144,14 +146,6 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/main_searchable" />
-        </activity>
-        <activity
-            android:name=".activity.SmallWidgetConfigure"
-            android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.Dialog" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.LargeWidgetConfigure"
