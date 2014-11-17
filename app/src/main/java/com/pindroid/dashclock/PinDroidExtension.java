@@ -29,6 +29,8 @@ import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
 import com.pindroid.Constants;
 import com.pindroid.R;
+import com.pindroid.action.IntentHelper;
+import com.pindroid.activity.Main;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.util.AccountHelper;
 
@@ -49,6 +51,7 @@ public class PinDroidExtension extends DashClockExtension {
     	int total = 0;
         boolean visible = true;
         int accounts = 0;
+        String mainAccount = null;
     	
     	try {
 	        Map<String, Integer> counts = GetUnreadCount();
@@ -57,6 +60,10 @@ public class PinDroidExtension extends DashClockExtension {
 	        for(Entry<String, Integer> e : counts.entrySet()) {
 	        	body += e.getKey() + " (" + e.getValue() + ")\n";
 	        	total += e.getValue();
+
+                if(mainAccount == null) {
+                    mainAccount = e.getKey();
+                }
 	        }
 	        
 	        body = body.substring(0, body.length() - 1);
@@ -71,21 +78,8 @@ public class PinDroidExtension extends DashClockExtension {
                 .status(getString(R.string.dashclock_update_status, total))
                 .expandedTitle(getString(R.string.dashclock_update_expanded_title, total))
                 .expandedBody(accounts > 1 ? body : null)
-                .clickIntent(ViewBookmarks()));
+                .clickIntent(IntentHelper.ViewUnread(mainAccount, this.getBaseContext())));
     }
-    
-	public Intent ViewBookmarks() {
-		Intent i = new Intent();
-		i.setAction(Intent.ACTION_VIEW);
-		i.addCategory(Intent.CATEGORY_DEFAULT);
-		Uri.Builder data = new Uri.Builder();
-		data.scheme("content");
-		data.encodedAuthority(Constants.INTENT_URI);
-		data.appendEncodedPath("bookmarks");
-		data.appendQueryParameter("unread", "1");
-		i.setData(data.build());
-		return i;
-	}
 	
 	public Map<String, Integer> GetUnreadCount(){		
 		Map<String, Integer> result = new HashMap<String, Integer>();
