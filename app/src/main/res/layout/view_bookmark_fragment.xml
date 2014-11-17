@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+ -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
+	android:id="@+id/view_bookmark_container">
+	<ScrollView 
+	    android:id="@+id/bookmark_scroll_view"
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent"
+		android:visibility="gone">
+		<LinearLayout
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:padding="@dimen/view_bookmark_padding">
+
+            <LinearLayout
+                android:id="@+id/view_bookmark_title_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/view_bookmark_section_padding"
+                android:paddingBottom="@dimen/view_bookmark_section_padding">
+                <ImageView
+                    android:id="@+id/view_bookmark_title_icon"
+                    android:layout_width="@dimen/view_bookmark_icon_size"
+                    android:layout_height="@dimen/view_bookmark_icon_size"
+                    android:src="@drawable/ic_bookmark"/>
+                <TextView
+                    android:id="@+id/view_bookmark_title"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
+                    android:textSize="@dimen/view_bookmark_title_text"
+                    android:textIsSelectable="true"
+                    android:textColor="@color/text_title"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/view_bookmark_link_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/view_bookmark_section_padding"
+                android:paddingBottom="@dimen/view_bookmark_section_padding">
+                <ImageView
+                    android:layout_width="@dimen/view_bookmark_icon_size"
+                    android:layout_height="@dimen/view_bookmark_icon_size"
+                    android:src="@drawable/ic_link"/>
+                <TextView
+                    android:id="@+id/view_bookmark_url"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
+                    android:textSize="@dimen/view_bookmark_body_text"
+                    android:autoLink="web"
+                    android:textIsSelectable="false"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/view_bookmark_notes_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/view_bookmark_section_padding"
+                android:paddingBottom="@dimen/view_bookmark_section_padding"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/view_bookmark_icon_size"
+                    android:layout_height="@dimen/view_bookmark_icon_size"
+                    android:src="@drawable/ic_content"/>
+                <TextView
+                    android:id="@+id/view_bookmark_notes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
+                    android:textSize="@dimen/view_bookmark_body_text"
+                    android:textIsSelectable="true" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/view_bookmark_tag_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/view_bookmark_section_padding"
+                android:paddingBottom="@dimen/view_bookmark_section_padding"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/view_bookmark_icon_size"
+                    android:layout_height="@dimen/view_bookmark_icon_size"
+                    android:src="@drawable/ic_tag"/>
+                <TextView
+                    android:id="@+id/view_bookmark_tags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
+                    android:textSize="@dimen/view_bookmark_tag_text"
+                    android:lineSpacingExtra="4dp"
+                    android:textIsSelectable="false"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/view_bookmark_time_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/view_bookmark_section_padding"
+                android:paddingBottom="@dimen/view_bookmark_section_padding"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/view_bookmark_icon_size"
+                    android:layout_height="@dimen/view_bookmark_icon_size"
+                    android:src="@drawable/ic_time"/>
+                <TextView
+                    android:id="@+id/view_bookmark_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/view_bookmark_body_text"
+                    android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
+                    android:textIsSelectable="false"  />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/view_bookmark_account_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/view_bookmark_section_padding"
+                android:paddingBottom="@dimen/view_bookmark_section_padding"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/view_bookmark_icon_size"
+                    android:layout_height="@dimen/view_bookmark_icon_size"
+                    android:src="@drawable/ic_account"/>
+                <TextView
+                    android:id="@+id/view_bookmark_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/view_bookmark_body_text"
+                    android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
+                    android:textIsSelectable="false"  />
+            </LinearLayout>
+		</LinearLayout>
+	</ScrollView>
+	<WebView
+		android:id="@+id/web_view"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:textSize="14sp"
+		android:background="#000000"
+		android:paddingLeft="10dp"
+		android:paddingTop="20dp"
+		android:visibility="gone" />
+</FrameLayout>

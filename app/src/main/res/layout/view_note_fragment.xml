@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+ -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
+	android:id="@+id/view_note_container">
+	<ScrollView 
+	    android:id="@+id/note_scroll_view"
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent">
+		<LinearLayout
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+            android:padding="16dp"
+			android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/view_note_title_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/view_note_section_padding"
+                android:paddingBottom="@dimen/view_note_section_padding">
+                <ImageView
+                    android:layout_width="@dimen/view_note_icon_size"
+                    android:layout_height="@dimen/view_note_icon_size"
+                    android:src="@drawable/ic_note"/>
+                <TextView
+                    android:id="@+id/view_note_title"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="@dimen/view_note_body_margin_left"
+                    android:textSize="@dimen/view_note_title_text"
+                    android:textIsSelectable="true"
+                    android:textColor="@color/text_title"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/view_note_text_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/view_note_section_padding"
+                android:paddingBottom="@dimen/view_note_section_padding"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/view_note_icon_size"
+                    android:layout_height="@dimen/view_note_icon_size"
+                    android:src="@drawable/ic_content"/>
+                <TextView
+                    android:id="@+id/view_note_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_note_body_margin_left"
+                    android:textSize="@dimen/view_note_body_text"
+                    android:textIsSelectable="true" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/view_note_account_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/view_note_section_padding"
+                android:paddingBottom="@dimen/view_note_section_padding"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/view_note_icon_size"
+                    android:layout_height="@dimen/view_note_icon_size"
+                    android:src="@drawable/ic_account"/>
+                <TextView
+                    android:id="@+id/view_note_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/view_note_body_text"
+                    android:layout_marginLeft="@dimen/view_note_body_margin_left"
+                    android:textIsSelectable="false"  />
+            </LinearLayout>
+		</LinearLayout>
+	</ScrollView>
+</FrameLayout>

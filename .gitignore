@@ -1,7 +1,6 @@
-/bin
-/.gitignore
-/res/drawable-hdpi/Thumbs.db
-/res/drawable-mdpi/Thumbs.db
-/gen/
-/PinDroidTest/bin
-/PinDroidTest/gen/
+/.idea
+/local.properties
+/.gradle
+/build
+/app/build
+/app/*.apk

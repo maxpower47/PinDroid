@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+ -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingLeft="20dp"
+    android:paddingRight="4dip"
+    android:background="@color/search_suggestion_background"
+    android:layout_width="match_parent"
+    android:layout_height="56dp" >
+
+    <!-- Icons come first in the layout, since their placement doesn't depend on
+         the placement of the text views. -->
+    <ImageView android:id="@android:id/icon1"
+        android:layout_width="@dimen/abc_dropdownitem_icon_width"
+        android:layout_height="48dip"
+        android:scaleType="centerInside"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone" />
+
+    <ImageView android:id="@+id/edit_query"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:scaleType="centerInside"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone" />
+
+    <ImageView android:id="@android:id/icon2"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:scaleType="centerInside"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toLeftOf="@id/edit_query"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone" />
+
+
+    <!-- The subtitle comes before the title, since the height of the title depends on whether the
+         subtitle is visible or gone. -->
+    <TextView android:id="@android:id/text2"
+        android:singleLine="true"
+        android:layout_width="match_parent"
+        android:layout_height="29dip"
+        android:paddingBottom="4dip"
+        android:gravity="top"
+        android:textColor="@color/text_caption"
+        android:textSize="14sp"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@android:id/icon2"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone" />
+
+    <!-- The title is placed above the subtitle, if there is one. If there is no
+         subtitle, it fills the parent. -->
+    <TextView android:id="@android:id/text1"
+        android:singleLine="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textColor="@color/text_title"
+        android:textSize="16sp"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@android:id/icon2"
+        android:layout_above="@android:id/text2" />
+
+</RelativeLayout>

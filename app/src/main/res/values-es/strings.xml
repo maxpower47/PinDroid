@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+ -->
+<resources>
+  <string name="label">Pinboard</string>
+  <string name="pindroid">PinDroid</string>
+  <string name="ui_activity_title">Ingresar</string>
+  <string name="ui_activity_authenticating">Autentificación</string>
+  <string name="login_activity_username_label">Nombre de usuario</string>
+  <string name="login_activity_password_label">Contraseña</string>
+  <string name="login_activity_ok_button">Ingresar</string>
+  <string name="login_activity_loginfail_text_both">El nombre de usuario o la contraseña no son válidos. Intente de nuevo los datos de su cuenta Pinboard, por favor.</string>
+  <string name="login_activity_loginfail_text_pwonly">Ha introducido una contraseña incorrecta o su cuenta ha cambiado. Por favor, vuelva a introducir su contraseña.</string>
+  <string name="login_activity_loginfail_text_pwmissing">Introduce la contraseña de la cuenta de Pinboard.</string>
+  <string name="titleMain">Pinboard</string>
+  <string name="share_menu_add_bookmark">Pinboard - Añadir marcador</string>
+  <string name="share_menu_read_later">Pinboard - Leer más tarde</string>
+  <string name="login_no_account">Sin configuración de cuenta Pinboard</string>
+  <string name="save_later_saved">Marcador guardado</string>
+  <string name="main_menu_my_bookmarks">Mis Favoritos</string>
+  <string name="main_menu_my_unread_bookmarks">No leídos</string>
+  <string name="main_menu_my_tags">Mis etiquetas</string>
+  <string name="main_menu_my_notes">Mis notas</string>
+  <string name="main_menu_network_bookmarks">Marcadores de red</string>
+  <string name="main_menu_recent_bookmarks">Marcadores recientes</string>
+  <string name="main_search_results_title">Resultados de la búsqueda</string>
+  <string name="browse_my_bookmarks_title">Mis Favoritos</string>
+  <string name="browse_my_unread_bookmarks_title">Mis marcadores no leídos</string>
+  <string name="browse_my_bookmarks_tagged_title">Mis marcadores etiquetados con %1$s</string>
+  <string name="browse_my_unread_bookmarks_tagged_title">Mis marcadores no leídos etiquetados con %1$s</string>
+  <string name="browse_recent_bookmarks_title">Marcadores recientes</string>
+  <string name="browse_network_bookmarks_title">Marcadores de red</string>
+  <string name="browse_user_bookmarks_title">Marcadores para %1$s</string>
+  <string name="browse_user_bookmarks_tagged_title">Marcadores para %1$s etiquetados con %2$s</string>
+  <string name="bookmark_context_open">Abrir en el navegador</string>
+  <string name="bookmark_context_view">Ver detalles</string>
+  <string name="bookmark_context_read">Leer</string>
+  <string name="bookmark_context_markread">Marcar como leído</string>
+  <string name="bookmark_context_edit">Editar</string>
+  <string name="bookmark_context_delete">Eliminar</string>
+  <string name="bookmark_context_share">Compartir</string>
+  <string name="bookmark_context_add">Añadir</string>
+  <string name="share_chooser_title">Compartir enlace</string>
+  <string name="bookmark_sort_date_asc">Fecha (más antiguo primero)</string>
+  <string name="bookmark_sort_date_desc">Fecha (más reciente primero)</string>
+  <string name="bookmark_sort_description_asc">Descripción (A-Z)</string>
+  <string name="bookmark_sort_description_desc">Descripción (Z-A)</string>
+  <string name="bookmark_sort_url_asc">Dirección URL (A-Z)</string>
+  <string name="bookmark_sort_url_desc">Dirección URL (Z-A)</string>
+  <string name="menu_addbookmark_title">Añadir a Favoritos</string>
+  <string name="menu_sort_bookmark_title">Ordenar marcadores</string>
+  <string name="menu_sort_tag_title">Ordenar etiquetas</string>
+  <string name="menu_search_title">Búsqueda</string>
+  <string name="menu_settings_title">Configuración</string>
+  <string name="bookmark_unsynced_alt">Indicador sin sincronizar</string>
+  <string name="bookmark_unread_alt">Indicador no leído</string>
+  <string name="browse_my_tags_title">Mis etiquetas</string>
+  <string name="tag_sort_name_asc">Nombre (A-Z)</string>
+  <string name="tag_sort_name_desc">Nombre (Z-A)</string>
+  <string name="tag_sort_count_asc">Contar (menor primero)</string>
+  <string name="tag_sort_count_desc">Contar (mayor primero)</string>
+  <string name="browse_my_notes_title">Mis notas</string>
+  <string name="add_bookmark_add_title">Añadir a Marcadores</string>
+  <string name="add_bookmark_edit_title">Editar marcador</string>
+  <string name="add_bookmark_default_title">[sin título]</string>
+  <string name="add_button_save">Guardar</string>
+  <string name="add_button_cancel">Cancelar</string>
+  <string name="add_title_url">Dirección URL</string>
+  <string name="add_title_description">Descripción</string>
+  <string name="add_title_notes">Notas</string>
+  <string name="add_title_tags">Etiquetas</string>
+  <string name="add_title_recommended_tags">Etiquetas recomendadas</string>
+  <string name="add_title_popular_tags">Etiquetas populares</string>
+  <string name="add_title_private">¿Privado?</string>
+  <string name="add_title_toread">¿Leer?</string>
+  <string name="add_bookmark_invalid_url">Error: En blanco o URL no válidos</string>
+  <string name="add_bookmark_blank_url">Error: URL en blanco</string>
+  <string name="main_search_label">Pinboard</string>
+  <string name="main_search_hint">Etiquetas, Títulos, Notas</string>
+  <string name="main_search_description">Etiquetas, títulos y notas</string>
+  <string name="tag_search_label">Etiquetas en Pinboard</string>
+  <string name="tag_search_hint">Etiquetas</string>
+  <string name="bookmark_search_label">Marcadores en Pinboard</string>
+  <string name="bookmark_search_hint">Etiquetas, Títulos, Notas</string>
+  <string name="search_results_bookmark">Añadir a marcadores los resultados</string>
+  <string name="search_results_tag">Etiquetar los resultados</string>
+  <string name="search_results_note">Resultados de la nota</string>
+  <string name="search_results_global_tag">Resultados generales de la etiqueta</string>
+  <string name="bookmark_search_results_title">Agregar a marcadores los resultados de búsqueda para \"%1$s\"</string>
+  <string name="unread_search_results_title">Marcar como no léidos los resultados de búsqueda de \"%1$s\"</string>
+  <string name="tag_search_results_title">Resultados de búsqueda de etiqueta de \"%1$s\"</string>
+  <string name="note_search_results_title">Resultados de la búsqueda de nota para \"%1$s\"</string>
+  <string name="search_results_global_tag_title">Resultados generales de etiqueta para \"%1$s\"</string>
+  <string name="bookmark_count">marcadores</string>
+  <string name="bookmark_content_provider_label">Marcadores</string>
+  <string name="sync_receiver_label">Sincronización de los marcadores de PinDroid</string>
+  <string name="syncing_toast">Sincronizando…</string>
+  <string name="view_bookmark_title">Ver detalles de marcador</string>
+  <string name="view_bookmark_notes_title">Notas</string>
+  <string name="view_bookmark_tags_title">Etiquetas</string>
+  <string name="view_bookmark_time_title">Guardado en</string>
+  <string name="view_bookmark_account_title">Por</string>
+  <string name="menu_view_title">Ver</string>
+  <string name="menu_view_read_title">Leído</string>
+  <string name="menu_view_details_title">Detalles</string>
+  <string name="menu_view_openbookmark_title">Web</string>
+  <string name="menu_view_editbookmark_title">Editar</string>
+  <string name="menu_view_deletebookmark_title">Eliminar</string>
+  <string name="menu_view_sendbookmark_title">Compartir</string>
+  <string name="view_note_title">Ver detalles de la nota</string>
+  <string name="view_note_account_title">De</string>
+  <string name="search_widget_label">PinDroid</string>
+  <string name="preferences_title">Configuración de PinDroid</string>
+  <string name="account_preferences_cat_title">Configuración general</string>
+  <string name="account_preferences_title">Configuración de la cuenta</string>
+  <string name="account_preferences_summary">Configuración de la sincronización y las notificaciones.</string>
+  <string name="pref_cat_general_title">Configuración general</string>
+  <string name="pref_cat_sync_title">Configuración de sincronización</string>
+  <string name="pref_cat_save_title">Guardar configuración</string>
+  <string name="pref_cat_reading_title">Opciones de lectura</string>
+  <string name="pref_cat_help_title">Ayuda</string>
+  <string name="pref_accountsettings_title">Configuración de la cuenta</string>
+  <string name="pref_accountsettings_summary">Administra tu cuenta Pinboard en este dispositivo.</string>
+  <string name="pref_synctime_title">Frecuencia de sincronización</string>
+  <string name="pref_synctime_summary">Frecuencia de sincronización de marcadores.</string>
+  <string name="pref_view_bookmark_default_action_title">Agregar a favoritos </string>
+  <string name="pref_view_bookmark_default_action_summary">Acción predeterminada para marcadores.</string>
+  <string name="pref_searchicons_title">Mostrar iconos de búsqueda</string>
+  <string name="pref_searchicons_summary">Mostrar iconos en sugerencias de búsqueda.</string>
+  <string name="pref_searchicons_summary_off">No mostrar iconos en sugerencias de búsqueda.</string>
+  <string name="pref_searchicons_summary_on">Mostrar iconos en sugerencias de búsqueda.</string>
+  <string name="pref_searchicons_switch_off">No</string>
+  <string name="pref_searchicons_switch_on">Sí</string>
+  <string name="pref_save_private_default_title">Privada por defecto</string>
+  <string name="pref_save_private_default_summary">Establecer nuevos marcadores como privados por defecto.</string>
+  <string name="pref_save_private_default_summary_off">Establecer los nuevos marcadores como públicos por defecto.</string>
+  <string name="pref_save_private_default_summary_on">Establecer nuevos marcadores como privados por defecto.</string>
+  <string name="pref_save_private_default_switch_off">No</string>
+  <string name="pref_save_private_default_switch_on">Sí</string>
+  <string name="pref_save_toread_default_title">No léido por defecto</string>
+  <string name="pref_save_toread_default_summary">Establecer los nuevos marcadores como no leídos por defecto.</string>
+  <string name="pref_save_toread_default_summary_off">Establecer los nuevos marcadores como leídos por defecto.</string>
+  <string name="pref_save_toread_default_summary_on">Establecer los nuevos marcadores como no leídos por defecto.</string>
+  <string name="pref_save_toread_default_switch_off">No</string>
+  <string name="pref_save_toread_default_switch_on">Sí</string>
+  <string name="pref_markasread_title">Marcar como leído</string>
+  <string name="pref_markasread_summary">Marcar marcadores no leídos como leídos cuando los lea.</string>
+  <string name="pref_markasread_summary_off">Dejar los marcadores no leídos como no leídos cuando los lea.</string>
+  <string name="pref_markasread_summary_on">Marcar los marcadores no leídos como leídos cuando los lea.</string>
+  <string name="pref_markasread_switch_off">No</string>
+  <string name="pref_markasread_switch_on">Sí</string>
+  <string name="pref_forcesync_title">Sincronizar ahora</string>
+  <string name="pref_forcesync_summary">Iniciar sincronización de marcador.</string>
+  <string name="pref_reading_background_title">Fondo</string>
+  <string name="pref_reading_background_summary">Color de fondo en visión de lectura</string>
+  <string name="pref_reading_font_title">Fuente</string>
+  <string name="pref_reading_font_summary">Fuente de visión de lectura</string>
+  <string name="pref_reading_fontsize_title">Tamaño de la fuente</string>
+  <string name="pref_reading_fontsize_summary">Tamaño de fuente para visión de lectura</string>
+  <string name="pref_license_title">Licencia</string>
+  <string name="pref_license_summary">Licenciado bajo el GPL v3</string>
+  <string name="pref_help_title">Ayuda</string>
+  <string name="pref_help_summary">Ayuda sobre el uso de PinDroid</string>
+  <string name="pref_about_title">Acerca de</string>
+  <string name="pref_about_summary">Acerca de PinDroid</string>
+  <string name="pref_donate_title">Donar</string>
+  <string name="pref_donate_summary">Soporte de PinDroid</string>
+  <string name="perm_read_bookmarks_label">Leer marcadores de PinDroid</string>
+  <string name="perm_read_bookmarks_description">Otorga la posibilidad de leer el almacén de marcadores en PinDroid</string>
+  <string name="perm_write_bookmarks_label">Escribir marcadores de PinDroid</string>
+  <string name="perm_write_bookmarks_description">Otorga los permisos para escribir en el almacén de marcadores de PinDroid</string>
+  <string name="alt_action_search_btn">Buscar</string>
+  <string name="alt_bookmark_list_private">Privada</string>
+  <string name="alt_bookmark_view_private">Privada</string>
+  <string name="alt_widget_main">PinDroid</string>
+  <string name="alt_widget_my_bookmarks">Mis marcadores</string>
+  <string name="alt_widget_unread_bookmarks">Marcadores no leídos</string>
+  <string name="alt_widget_unread_bookmark_count">Contador de marcador no leídos</string>
+  <string name="alt_widget_my_tags">Mis etiquetas</string>
+  <string name="alt_widget_add_bookmark">Añadir marcador</string>
+  <string name="alt_widget_search">Buscar</string>
+</resources>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+ -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:pindroid="http://schemas.android.com/apk/res-auto">
+	<item 
+		android:id="@+id/menu_sortbookmark" 
+		android:title="@string/menu_sort_bookmark_title" 
+		android:icon="@drawable/ic_menu_sort"
+		pindroid:showAsAction="ifRoom"
+		android:orderInCategory="12">
+		<menu>
+			<item 
+				android:id="@+id/menu_bookmark_sort_date_asc" 
+				android:title="@string/bookmark_sort_date_asc" />
+			<item 
+				android:id="@+id/menu_bookmark_sort_date_desc" 
+				android:title="@string/bookmark_sort_date_desc" />
+			<item 
+				android:id="@+id/menu_bookmark_sort_description_asc" 
+				android:title="@string/bookmark_sort_description_asc" />
+			<item 
+				android:id="@+id/menu_bookmark_sort_description_desc" 
+				android:title="@string/bookmark_sort_description_desc" />
+			<item 
+				android:id="@+id/menu_bookmark_sort_url_asc" 
+				android:title="@string/bookmark_sort_url_asc" />
+			<item 
+				android:id="@+id/menu_bookmark_sort_url_desc" 
+				android:title="@string/bookmark_sort_url_desc" />
+		</menu>
+	</item>
+</menu>

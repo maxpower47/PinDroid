@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+ -->
+<resources>
+  <string name="ui_activity_title">Identifiez-vous</string>
+  <string name="login_activity_username_label">Nom d\'utilisateur</string>
+  <string name="login_activity_password_label">Mot de passe</string>
+  <string name="login_activity_ok_button">Identifiez-vous</string>
+  <string name="login_activity_loginfail_text_both">Le nom d\'utilisateur et/ou le mot de passe est incorrect. Un compte Pinboard est nécessaire. Veuillez retaper votre mot de passe.</string>
+  <string name="login_activity_loginfail_text_pwmissing">Entrez le mot de passe pour ce compte.</string>
+  <string name="main_menu_my_bookmarks">Mes Favoris</string>
+  <string name="main_menu_my_tags">Mes tags</string>
+  <string name="bookmark_context_read">Lire</string>
+  <string name="bookmark_context_edit">Modifier</string>
+  <string name="bookmark_context_delete">Supprimer</string>
+  <string name="bookmark_context_share">Partager</string>
+  <string name="bookmark_context_add">Ajouter</string>
+  <string name="share_chooser_title">Partager le lien</string>
+  <string name="bookmark_sort_date_asc">Date (du plus ancien au plus récent)</string>
+  <string name="bookmark_sort_date_desc">Date (du plus récent au plus ancien)</string>
+  <string name="bookmark_sort_description_asc">Description (A-Z)</string>
+  <string name="bookmark_sort_description_desc">Description (Z-A)</string>
+  <string name="bookmark_sort_url_asc">URL (A-Z)</string>
+  <string name="bookmark_sort_url_desc">URL (Z-A)</string>
+  <string name="menu_addbookmark_title">Ajouter un signet</string>
+  <string name="menu_search_title">Rechercher</string>
+  <string name="menu_settings_title">Paramètres</string>
+  <string name="browse_my_tags_title">Mes tags</string>
+  <string name="tag_sort_name_asc">Nom (A-Z)</string>
+  <string name="tag_sort_name_desc">Nom (Z-A)</string>
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+ -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:pindroid="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_view"
+        android:title="@string/menu_view_title"
+        pindroid:showAsAction="ifRoom"
+        android:icon="@drawable/ic_menu_view"
+        android:orderInCategory="1" >
+        <menu>
+            <item
+                android:id="@+id/menu_view_details"
+                android:title="@string/menu_view_details_title"
+                android:orderInCategory="0" />
+            <item
+                android:id="@+id/menu_view_read"
+                android:title="@string/menu_view_read_title"
+                android:orderInCategory="1" />
+            <item
+                android:id="@+id/menu_view_openbookmark"
+                android:title="@string/menu_view_openbookmark_title"
+                android:orderInCategory="2" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menu_view_editbookmark"
+        android:title="@string/menu_view_editbookmark_title"
+        pindroid:showAsAction="ifRoom"
+        android:icon="@drawable/ic_menu_edit"
+        android:orderInCategory="14" />
+    <item
+        android:id="@+id/menu_view_deletebookmark"
+        android:title="@string/menu_view_deletebookmark_title"
+        pindroid:showAsAction="never"
+        android:icon="@drawable/ic_menu_delete"
+        android:orderInCategory="16" />
+    <item
+        android:id="@+id/menu_view_addbookmark"
+        android:title="@string/menu_addbookmark_title"
+        android:icon="@drawable/ic_menu_add"
+        pindroid:showAsAction="never"
+        android:orderInCategory="10" />
+    <item
+        android:id="@+id/menu_view_sendbookmark"
+        android:title="@string/menu_view_sendbookmark_title"
+        pindroid:showAsAction="never"
+        android:icon="@drawable/ic_menu_share"
+        pindroid:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+        android:orderInCategory="15" />
+</menu>

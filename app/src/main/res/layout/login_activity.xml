@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+ -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/login_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/login_background" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center">
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:linksClickable="true"
+            android:textIsSelectable="false"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:text="@string/login_main_text"/>
+        <EditText
+            android:id="@+id/username_edit"
+            android:singleLine="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="320dp"
+            android:maxWidth="320dp"
+            android:padding="10dp"
+            android:background="@drawable/rounded_edit_text"
+            android:layout_marginBottom="16dp"
+            android:hint="@string/login_activity_username_label"
+            android:scrollHorizontally="true"
+            android:inputType="text|textNoSuggestions" />
+        <EditText
+            android:id="@+id/password_edit"
+            android:singleLine="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="320dp"
+            android:maxWidth="320dp"
+            android:layout_marginBottom="16dp"
+            android:padding="10dp"
+            android:background="@drawable/rounded_edit_text"
+            android:hint="@string/login_activity_password_label"
+            android:scrollHorizontally="true"
+            android:inputType="textPassword|textNoSuggestions" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:id="@+id/message"
+            android:linksClickable="true"
+            android:textIsSelectable="false"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:minWidth="320dp"
+            android:maxWidth="320dp"
+            android:background="@drawable/login_button"
+            android:id="@+id/ok_button"
+            android:text="@string/login_activity_ok_button"
+            android:textColor="#FFFFFF"
+            android:onClick="handleLogin" />
+        <TextView
+            android:id="@+id/message_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textIsSelectable="false"
+            android:text="@string/login_bottom_text"
+            android:autoLink="web"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</RelativeLayout>

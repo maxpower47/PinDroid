@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+ -->
+<resources>
+    <color name="pindroid_blue">#0066ff</color>
+    <color name="pindroid_blue_dark">#0052CC</color>
+    <color name="pindroid_accent">@color/pindroid_blue</color>
+
+	<color name="orange1">#FF6600</color>
+	<color name="orange2">#FF9900</color>
+	<color name="yellow">#FFCC00</color>
+	<color name="bookmark_unread_indicator">#FF9900</color>
+    <color name="actionbar_background">@color/pindroid_blue</color>
+    <color name="statusbar_background">@color/pindroid_blue_dark</color>
+    <color name="actionbar_text">#FFF</color>
+    <color name="actionbar_divider">#555</color>
+    
+    <color name="bookmark_list_default_bg">#373737</color>
+	<color name="bookmark_list_activated_bg">#455082</color>
+
+    <color name="add_bookmark_action_button">@color/pindroid_blue</color>
+    <color name="add_bookmark_action_button_pressed">@color/pindroid_blue_dark</color>
+
+	<color name="tag_list_default_bg">#000000</color>
+	<color name="tag_list_activated_bg">#BF8600</color>
+	<color name="bookmark_view_bg">#00000000</color>
+	<color name="tag_view_bg">#00000000</color>
+
+    <color name="text_title">#de000000</color>
+    <color name="text_body">#de000000</color>
+    <color name="text_caption">#8a000000</color>
+
+    <color name="drawer_background">#FFFFFF</color>
+    <color name="drawer_divider">#15000000</color>
+
+    <color name="add_bookmark_form_background">#FFFFFF</color>
+
+    <color name="search_suggestion_background_pressed">#E0E0E0</color>
+    <color name="search_suggestion_background_default">#FFFFFF</color>
+
+    <color name="login_button_background">@color/pindroid_blue</color>
+</resources>

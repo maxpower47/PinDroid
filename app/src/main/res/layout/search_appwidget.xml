@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+ -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="@dimen/widget_height"
+	android:paddingLeft="@dimen/widget_margin"
+    android:paddingRight="@dimen/widget_margin">
+    <LinearLayout
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:orientation="horizontal"
+    	android:background="@drawable/appwidget_dark_bg">
+	     <ImageView
+	        android:id="@+id/search_widget_icon"
+	   		android:src="@drawable/widget_main"
+	   		android:layout_width="24dp"
+	        android:layout_height="24dp"
+	        android:layout_marginLeft="12dp"
+			android:layout_gravity="center_vertical"
+	        android:layout_marginRight="8dp"
+	        android:contentDescription="@string/alt_widget_main"/>
+        <LinearLayout
+            android:layout_width="136dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:gravity="center_vertical"
+                android:textSize="16dp"
+                android:text="@string/pindroid"/>
+            <TextView
+                android:id="@+id/search_widget_account_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:gravity="center_vertical"
+                android:textSize="10dp"/>
+            </LinearLayout>
+	    <ImageButton
+	    	android:id="@+id/search_widget_bookmarks_button"
+	    	android:src="@drawable/widget_bookmark"
+	    	android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:scaleType="center"
+	        android:background="@drawable/appwidget_button_center"
+	        android:contentDescription="@string/alt_widget_my_bookmarks"/>
+	    <RelativeLayout 
+	        android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="1">
+		    <ImageButton
+		    	android:id="@+id/search_widget_unread_button"
+		    	android:src="@drawable/widget_unread"
+		    	android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        android:scaleType="center"
+		        android:background="@drawable/appwidget_button_center"
+		        android:contentDescription="@string/alt_widget_unread_bookmarks"/>
+		    <FrameLayout 
+		        android:id="@+id/search_widget_unread_count_layout"
+		        android:layout_width="30dp"
+			    android:layout_height="33dp"
+			    android:paddingTop="15dp"
+			    android:paddingLeft="12dp"
+			    android:visibility="gone"
+			    android:layout_centerInParent="true">
+			    <ImageView 
+			    	android:id="@+id/search_widget_unread_count_background"
+			    	android:src="@drawable/widget_unread_count"
+			    	android:contentDescription="@string/alt_widget_unread_bookmark_count"
+			    	android:layout_width="match_parent"
+			        android:layout_height="match_parent"/>
+				<TextView
+					android:id="@+id/search_widget_unread_count"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:includeFontPadding="false"
+					android:scaleType="center"
+					android:textStyle="bold"
+					android:textColor="#FFFFFF"
+					android:gravity="center"
+					android:textIsSelectable="false"/>
+			</FrameLayout>
+	    </RelativeLayout>
+	    <ImageButton
+	    	android:id="@+id/search_widget_add_button"
+	    	android:src="@drawable/widget_add"
+	    	android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:scaleType="center"
+	    	android:background="@drawable/appwidget_button_right"
+	        android:contentDescription="@string/alt_widget_add_bookmark"/>
+    </LinearLayout>   
+</FrameLayout>

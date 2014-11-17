@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.pindroid"
+    android:installLocation="auto"
+    android:versionCode="59"
+    android:versionName="2.4.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="21" />
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+
+    <permission
+        android:name="com.pindroid.READ_BOOKMARKS"
+        android:description="@string/perm_read_bookmarks_description"
+        android:label="@string/perm_read_bookmarks_label"
+        android:protectionLevel="normal" />
+    <permission
+        android:name="com.pindroid.WRITE_BOOKMARKS"
+        android:description="@string/perm_write_bookmarks_description"
+        android:label="@string/perm_write_bookmarks_label"
+        android:protectionLevel="normal" />
+
+    <application
+        android:name=".application.PindroidApplication"
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/ic_main"
+        android:label="@string/label"
+        android:requiredAccountType="com.pindroid"
+        android:theme="@style/ThemeSelector"
+        tools:replace="android:theme, android:label, android:icon">
+        <activity
+            android:name=".activity.Main"
+            android:label="@string/titleMain"
+            android:launchMode="singleTop" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/main_searchable" />
+        </activity>
+        <activity
+            android:name=".activity.GlobalSearchRecieverActivity"
+            android:theme="@android:style/Theme.NoDisplay" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/global_searchable" />
+        </activity>
+        <activity
+            android:name=".activity.SaveReadLaterBookmark"
+            android:label="@string/share_menu_read_later"
+            android:theme="@android:style/Theme.NoDisplay" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.StandaloneSaveReadLaterBookmark"
+            android:label="@string/share_menu_read_later"
+            android:theme="@android:style/Theme.NoDisplay" >
+            <intent-filter>
+                <action android:name="com.pindroid.action.ReadLater" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.Settings"
+            android:label="@string/preferences_title"
+            android:parentActivityName=".activity.Main" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.Main" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.LargeWidgetConfigure"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Dialog" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ChooseTagShortcut"
+            android:icon="@drawable/ic_shortcut"
+            android:label="@string/tag_shortcut_activity_label" >
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ScreenShortcut"
+            android:icon="@drawable/ic_main"
+            android:label="@string/shortcut_activity_label" >
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!-- The authenticator service -->
+        <service
+            android:name=".authenticator.AuthenticationService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+        <service
+            android:name=".syncadapter.BookmarkSyncService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/bookmarksyncadapter" />
+        </service>
+
+        <activity
+            android:name=".authenticator.AuthenticatorActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/ui_activity_title" >
+        </activity>
+
+        <provider
+            android:name=".providers.BookmarkContentProvider"
+            android:authorities="com.pindroid.providers.BookmarkContentProvider"
+            android:exported="true"
+            android:label="@string/bookmark_content_provider_label"
+            android:readPermission="com.pindroid.READ_BOOKMARKS"
+            android:syncable="true"
+            android:writePermission="com.pindroid.WRITE_BOOKMARKS" >
+            <path-permission
+                android:pathPrefix="/global/search_suggest_query"
+                android:readPermission="android.permission.GLOBAL_SEARCH" />
+        </provider>
+
+        <receiver
+            android:name=".widget.SearchWidgetProvider"
+            android:exported="false"
+            android:label="@string/search_widget_label" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/search_appwidget_info" />
+        </receiver>
+        <receiver
+            android:name=".receiver.PackageReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".service.SaveBookmarkService" />
+        <service
+            android:name=".dashclock.PinDroidExtension"
+            android:icon="@drawable/ic_pindroid_dashclock"
+            android:label="@string/dashclock_extension_title"
+            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA" >
+            <intent-filter>
+                <action android:name="com.google.android.apps.dashclock.Extension" />
+            </intent-filter>
+
+            <meta-data
+                android:name="protocolVersion"
+                android:value="2" />
+            <meta-data
+                android:name="worldReadable"
+                android:value="true" />
+            <meta-data
+                android:name="description"
+                android:value="@string/dashclock_extension_description" />
+        </service>
+
+        <activity
+            android:name=".activity.AddBookmark"
+            android:label="@string/title_activity_add_bookmark" >
+        </activity>
+    </application>
+
+</manifest>
