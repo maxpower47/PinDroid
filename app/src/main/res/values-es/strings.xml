@@ -32,7 +32,6 @@
   <string name="login_activity_loginfail_text_both">El nombre de usuario o la contraseña no son válidos. Intente de nuevo los datos de su cuenta Pinboard, por favor.</string>
   <string name="login_activity_loginfail_text_pwonly">Ha introducido una contraseña incorrecta o su cuenta ha cambiado. Por favor, vuelva a introducir su contraseña.</string>
   <string name="login_activity_loginfail_text_pwmissing">Introduce la contraseña de la cuenta de Pinboard.</string>
-  <string name="login_activity_newaccount_text">Acceda a su cuenta de Pinboard. \n\n ¿No tiene una cuenta de Pinboard? \ N Regístrese en http://pinboard.in/signup</string>
   <string name="titleMain">Pinboard</string>
   <string name="share_menu_add_bookmark">Pinboard - Añadir marcador</string>
   <string name="share_menu_read_later">Pinboard - Leer más tarde</string>
@@ -200,5 +199,4 @@
   <string name="alt_widget_my_tags">Mis etiquetas</string>
   <string name="alt_widget_add_bookmark">Añadir marcador</string>
   <string name="alt_widget_search">Buscar</string>
-  <string name="about_activity_title">Acerca de PinDroid</string>
 </resources>

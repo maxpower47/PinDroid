@@ -33,7 +33,6 @@
   <string name="login_activity_loginfail_text_pwonly">Du hast ein falsches Passwort eingegeben oder dein Account hat sich geändert.
         Bitte das Passwort noch einmal eingeben.</string>
   <string name="login_activity_loginfail_text_pwmissing">Passwort für dieses Konto eingeben.</string>
-  <string name="login_activity_newaccount_text">An Deinem Pinboard Account anmelden.\n\nDu hast kein Pinboard Account?\nMelde Dich hier an: http://pinboard.in/signup</string>
   <string name="titleMain">Pinboard</string>
   <string name="main_menu_my_bookmarks">Meine Lesezeichen</string>
   <string name="main_menu_my_unread_bookmarks">Meine Ungelesenen</string>
@@ -148,6 +147,5 @@
   <string name="pref_about_summary">Über PinDroid</string>
   <string name="pref_donate_title">Spenden</string>
   <string name="pref_donate_summary">Unterstütze PinDroid</string>
-  <string name="about_activity_title">Über PinDroid</string>
 
 </resources>

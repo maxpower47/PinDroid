@@ -11,7 +11,6 @@
   <string name="login_activity_loginfail_text_both">Käyttäjätunnus tai salasana ei ole kelvollinen. Pinboard-tili vaaditaan. Yritä uudelleen</string>
   <string name="login_activity_loginfail_text_pwonly">Olet kirjoittanut väärän salasanan tai tilisi on muuttunut. Kirjoita salasanasi uudelleen.</string>
   <string name="login_activity_loginfail_text_pwmissing">Kirjoita Pinboard-tilisi ja -salasana.</string>
-  <string name="login_activity_newaccount_text">Kirjaudu Pinboard-tilisi sisälle.\n\nEtkä omista Pinboard-tiliä? \nRekisteröidy osoitteessa http://pinboard.in/signup</string>
   <string name="titleMain">Pinboard</string>
   <string name="share_menu_add_bookmark">Pinboard - Add Bookmark</string>
   <string name="share_menu_read_later">Pinboard - Read Later</string>
@@ -180,5 +179,4 @@
   <string name="alt_widget_my_tags">My Tags</string>
   <string name="alt_widget_add_bookmark">Add Bookmark</string>
   <string name="alt_widget_search">Search</string>
-  <string name="about_activity_title">Tietoja PinDroid:sta</string>
 </resources>

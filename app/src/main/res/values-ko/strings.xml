@@ -11,7 +11,6 @@
   <string name="login_activity_loginfail_text_both">아이디나 비밀번호가 틀렸습니다. Pinboard 계정이 필요합니다. 다시 시도해주세요.</string>
   <string name="login_activity_loginfail_text_pwonly">비밀번호가 틀렸습니다. 다시 입력해주세요.</string>
   <string name="login_activity_loginfail_text_pwmissing">비밀번호를 입력해주세요.</string>
-  <string name="login_activity_newaccount_text">Pinboard 계정에 로그인하세요. 계정이 없으면 http://pinboard.in/signup 에서 가입하세요.</string>
   <string name="titleMain">Pinboard</string>
   <string name="share_menu_add_bookmark">Pinboard - 북마크 추가</string>
   <string name="share_menu_read_later">Pinboard - 나중에 읽기</string>
@@ -179,5 +178,4 @@
   <string name="alt_widget_my_tags">내 태그</string>
   <string name="alt_widget_add_bookmark">북마크 추가</string>
   <string name="alt_widget_search">검색</string>
-  <string name="about_activity_title">PinDroid에 대해서</string>
 </resources>
