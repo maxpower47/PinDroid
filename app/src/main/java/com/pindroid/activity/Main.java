@@ -309,6 +309,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
                 }
             } else {
                 String tag = ((TextView) view.findViewById(R.id.menurow_title)).getText().toString();
+                clearBackStack();
                 onTagSelected(tag, false);
                 clearDrawer(position);
             }
@@ -349,8 +350,9 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	    FragmentManager fragmentManager = getSupportFragmentManager();
 	    FragmentTransaction t = fragmentManager.beginTransaction();
 	    t.replace(R.id.left_frame, frag, "left");
-	    if(backstack)
-	    	t.addToBackStack(null);
+	    if(backstack) {
+            t.addToBackStack(null);
+        }
 	    t.commitAllowingStateLoss();
 	    
 	    clearRightFragment();
