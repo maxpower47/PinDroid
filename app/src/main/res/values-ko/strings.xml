@@ -180,19 +180,4 @@
   <string name="alt_widget_add_bookmark">북마크 추가</string>
   <string name="alt_widget_search">검색</string>
   <string name="about_activity_title">PinDroid에 대해서</string>
-  <string name="about_text">
-    &lt;html&gt; 
-    &lt;body&gt;
-    	PinDroid는 DeliciousDroid를 Pinboard용으로 이식한 버전입니다.&lt;br/&gt;&lt;br/&gt;
-    	개발 및 관리는 Matt Schmidt가 합니다.&lt;br/&gt;&lt;br/&gt;
-    	버그를 찾았거나 새로운 기능 제안은 &lt;a href=\'http://code.google.com/p/pindroid/issues\'&gt;http://code.google.com/p/pindroid/issues&lt;/a&gt;에서 해주세요. (영어)&lt;br/&gt;&lt;br/&gt;
-    	아니면, 트위터 @PinDroid에서 해도 됩니다.&lt;br/&gt;&lt;br/&gt;
-    	&lt;b&gt;알고있는 이슈:&lt;/b&gt;
-    	&lt;ul&gt;
-     		&lt;li&gt;Pinboard API의 한계로 DeliciousDroid의 연락처 동기화나 네트워크 북마크 목록보기와 같은 기능을 아직 이식하지 못했습니다.&lt;/li&gt;
-    	&lt;/ul&gt;&lt;br/&gt;
-    	읽기모드 제공 : Instapaper
-    &lt;/body&gt;
-    &lt;/html&gt;
-    </string>
 </resources>

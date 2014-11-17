@@ -201,18 +201,4 @@
   <string name="alt_widget_add_bookmark">Añadir marcador</string>
   <string name="alt_widget_search">Buscar</string>
   <string name="about_activity_title">Acerca de PinDroid</string>
-  <string name="about_text">&lt;html&gt; 
-    &lt;body&gt;
-    	PinDroid es un porte de la aplicación DeliciousDroid para el sistema de marcadores Pinboard.&lt;br/&gt;&lt;br/&gt;
-    	Desarrollado, mantenido y apoyado por Matt Schmidt&lt;br/&gt;&lt;br/&gt;
-    	¿Has encontrado un error o tienes nuevas ideas?  Abre una consulta en &lt;a href=\'http://code.google.com/p/pindroid/issues\'&gt;http://code.google.com/p/pindroid/issues&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;
-    	O házmelo saber por medio de Twitter @PinDroid&lt;br/&gt;&lt;br/&gt;
-    	&lt;b&gt;Fallos conocidos:&lt;/b&gt;
-    	&lt;ul&gt;
-     		&lt;li&gt;Ciertas características de DeliciousDroid no se han portado adecuadamente debido a las limitaciones del API de los Pinboards, incluyendo sincronización de contactos y visión de las listas de marcadores en red. &lt;/li&gt;
-    	&lt;/ul&gt;&lt;br/&gt;
-    	Read view powered por Instapaper
-    &lt;/body&gt;
-    &lt;/html&gt;
-    </string>
 </resources>

@@ -181,19 +181,4 @@
   <string name="alt_widget_add_bookmark">Add Bookmark</string>
   <string name="alt_widget_search">Search</string>
   <string name="about_activity_title">Tietoja PinDroid:sta</string>
-  <string name="about_text">
-
-    &lt;html&gt; 
-    &lt;body&gt;
-    	PinDroid on porttaus DeliciousDroid:sta Pinboardin kirjanmerkkijärjestelmää varten.&lt;br/&gt;&lt;br/&gt;
-    	Matt Schmidt on kehittänyt, ylläpitää ja tukee&lt;br/&gt;&lt;br/&gt;
-    	Löysitkö virheen tai ehdotus uudesta ominaisuudesta? Lähetä osoitteeseen &lt;a href=\'http://code.google.com/p/pindroid/issues\'&gt;http://code.google.com/p/pindroid/issues&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;
-    	tai twiittaa @PinDroid&lt;br/&gt;&lt;br/&gt;
-    	&lt;b&gt;Tunnetut ongelmat:&lt;/b&gt;
-    	&lt;ul&gt;
-     		&lt;li&gt;Tietyt ominaisuuksia DeliciousDroid:sta ei ole vielä siiretty rajoitusten takia Pinboards API:n, kuten yhteystietojen synkronointi, verkkokirjanmerkkilistojen katselu.. &lt;/li&gt;
-    	&lt;/ul&gt;&lt;br/&gt;Lukunäkymä perustuu Instapaper:iin
-    &lt;/body&gt;
-    &lt;/html&gt;
-    </string>
 </resources>

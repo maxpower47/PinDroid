@@ -35,7 +35,6 @@ import android.widget.Toast;
 
 import com.pindroid.Constants;
 import com.pindroid.R;
-import com.pindroid.activity.AboutActivity;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.util.SyncUtils;
 
@@ -124,7 +123,8 @@ public class SettingsFragment extends PreferenceFragment {
         Preference aboutPref = findPreference("pref_about");
         aboutPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
-                Intent i = new Intent(mContext, AboutActivity.class);
+                Uri link = Uri.parse(Constants.ABOUT_URL);
+                Intent i = new Intent(Intent.ACTION_VIEW, link);
 
                 startActivity(i);
                 return true;
