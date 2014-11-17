@@ -23,8 +23,8 @@
 -->
 <resources>
 
-    <dimen name="widget_margin">0dp</dimen>
-    <dimen name="widget_height">64dp</dimen>
+    <dimen name="widget_margin">2dp</dimen>
+    <dimen name="widget_height">56dp</dimen>
     <dimen name="add_switch_margin_left">0dp</dimen>
     <dimen name="add_switch_margin_right">0dp</dimen>
     <dimen name="action_bar_width">265dp</dimen>

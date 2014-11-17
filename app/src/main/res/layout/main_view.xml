@@ -40,8 +40,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="16dp"
             android:gravity="center"
-            android:layout_marginTop="12dp"
-            android:src="@drawable/widget_note" />
+            android:layout_marginTop="12dp" />
 
         <!-- text -->
         <TextView

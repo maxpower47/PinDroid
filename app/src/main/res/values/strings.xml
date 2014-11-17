@@ -24,7 +24,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- Label for this package -->
-    <string name="label">Pinboard</string>
+    <string name="label">PinDroid</string>
     <string name="pindroid">PinDroid</string>
 
     <!-- Title string for Login activity -->
