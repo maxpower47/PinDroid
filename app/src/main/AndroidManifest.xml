@@ -25,8 +25,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.pindroid"
     android:installLocation="auto"
-    android:versionCode="59"
-    android:versionName="2.4.0" >
+    android:versionCode="60"
+    android:versionName="3.0.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
