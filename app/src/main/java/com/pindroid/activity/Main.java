@@ -549,31 +549,34 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		
 		if(BookmarkViewType.EDIT.equals(viewType)){
             onBookmarkAdd(b, b);
-		} else {
-			ViewBookmarkFragment frag = new ViewBookmarkFragment();
-			frag.setBookmark(b, viewType);
-			
-			FragmentManager fragmentManager = getSupportFragmentManager();
-			
-			if(isTwoPane()){
-				FragmentTransaction t = fragmentManager.beginTransaction();
+		} else if(BookmarkViewType.WEB.equals(viewType) && SettingsHelper.getUseBrowser(this)) {
+            startActivity(IntentHelper.OpenInBrowser(b.getUrl()));
+        } else {
+            ViewBookmarkFragment frag = new ViewBookmarkFragment();
+            frag.setBookmark(b, viewType);
 
-				if(fragmentManager.findFragmentByTag("right") instanceof ViewBookmarkFragment){
-					ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) fragmentManager.findFragmentByTag("right");
-					viewFrag.setBookmark(b, viewType);
-					viewFrag.refresh();
-				} else {
-					t.replace(R.id.right_frame, frag, "right");
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            if(isTwoPane()){
+                FragmentTransaction t = fragmentManager.beginTransaction();
+
+                if(fragmentManager.findFragmentByTag("right") instanceof ViewBookmarkFragment){
+                    ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) fragmentManager.findFragmentByTag("right");
+                    viewFrag.setBookmark(b, viewType);
+                    viewFrag.refresh();
+                } else {
+                    t.replace(R.id.right_frame, frag, "right");
                     t.commitAllowingStateLoss();
-				}
-			} else {
-				if(fragmentManager.findFragmentByTag("left") instanceof ViewBookmarkFragment){
-					ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) fragmentManager.findFragmentByTag("left");
-					viewFrag.setBookmark(b, viewType);
-					viewFrag.refresh();
-				} else replaceLeftFragment(frag, true);
-			}
-		}
+                }
+            } else {
+                if(fragmentManager.findFragmentByTag("left") instanceof ViewBookmarkFragment){
+                    ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) fragmentManager.findFragmentByTag("left");
+                    viewFrag.setBookmark(b, viewType);
+                    viewFrag.refresh();
+                } else replaceLeftFragment(frag, true);
+            }
+
+        }
 	}
 
 	public void onBookmarkAdd(Bookmark b) {

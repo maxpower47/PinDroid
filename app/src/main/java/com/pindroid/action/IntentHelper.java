@@ -93,4 +93,9 @@ public class IntentHelper {
 		
 		return i;
 	}
+
+    public static Intent OpenInBrowser(String url){
+        Uri link = Uri.parse(url);
+        return new Intent(Intent.ACTION_VIEW, link);
+    }
 }
