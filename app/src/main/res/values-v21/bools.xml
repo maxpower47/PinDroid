@@ -21,25 +21,6 @@
  * USA
  */
  -->
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <!-- The main content view -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-	    <FrameLayout
-	        android:id="@+id/left_frame"
-	        android:layout_width="250dp"
-	        android:layout_height="match_parent" />
-	    <FrameLayout
-	        android:id="@+id/right_frame"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent" />
-    </LinearLayout>
-    <!-- The navigation drawer -->
-    <include layout="@layout/main_drawer" />
-</android.support.v4.widget.DrawerLayout>
+<resources>
+    <bool name="transparent_status_bar">true</bool>
+</resources>

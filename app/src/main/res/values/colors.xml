@@ -23,7 +23,7 @@
  -->
 <resources>
     <color name="pindroid_blue">#0066ff</color>
-    <color name="pindroid_blue_dark">#0052CC</color>
+    <color name="pindroid_blue_dark">#003E97</color>
     <color name="pindroid_accent">@color/pindroid_blue</color>
 
 	<color name="orange1">#FF6600</color>
@@ -50,7 +50,8 @@
     <color name="text_body">#de000000</color>
     <color name="text_caption">#8a000000</color>
 
-    <color name="drawer_background">#FFFFFF</color>
+    <color name="drawer_background">@color/pindroid_blue</color>
+    <color name="drawer_list_background">#FFFFFF</color>
     <color name="drawer_divider">#15000000</color>
 
     <color name="add_bookmark_form_background">#FFFFFF</color>

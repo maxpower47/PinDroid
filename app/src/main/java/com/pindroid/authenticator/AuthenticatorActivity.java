@@ -89,8 +89,6 @@ public class AuthenticatorActivity extends ActionBarActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
-        getSupportActionBar().hide();
         
         mAccountAuthenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
 

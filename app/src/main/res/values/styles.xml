@@ -105,8 +105,19 @@
         <item name="suggestionRowLayout">@layout/search_suggestion</item>
     </style>
 
-    <style name="ThemeSelector" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="PinDroidNoActionBar" parent="@style/Theme.AppCompat.Light.NoActionBar">
     	<item name="colorPrimary">@color/actionbar_background</item>
+        <item name="colorPrimaryDark">@color/actionbar_background</item>
+        <item name="colorAccent">@color/pindroid_accent</item>
+        <item name="android:textColor">@color/text_title</item>
+        <item name="android:textColorSecondary">@color/text_body</item>
+        <item name="android:spinnerItemStyle">@style/AccountSpinner</item>
+        <item name="searchViewStyle">@style/MySearchViewStyle</item>
+        <item name="android:windowTranslucentStatus">@bool/transparent_status_bar</item>
+    </style>
+
+    <style name="PinDroid" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/actionbar_background</item>
         <item name="colorPrimaryDark">@color/statusbar_background</item>
         <item name="colorAccent">@color/pindroid_accent</item>
         <item name="android:textColor">@color/text_title</item>

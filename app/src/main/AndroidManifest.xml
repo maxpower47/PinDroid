@@ -54,11 +54,12 @@
         android:icon="@drawable/ic_main"
         android:label="@string/label"
         android:requiredAccountType="com.pindroid"
-        android:theme="@style/ThemeSelector"
+        android:theme="@style/PinDroid"
         tools:replace="android:theme, android:label, android:icon">
         <activity
             android:name=".activity.Main"
             android:label="@string/titleMain"
+            android:theme="@style/PinDroidNoActionBar"
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -182,6 +183,7 @@
         <activity
             android:name=".authenticator.AuthenticatorActivity"
             android:excludeFromRecents="true"
+            android:theme="@style/PinDroidNoActionBar"
             android:label="@string/ui_activity_title" >
         </activity>
 

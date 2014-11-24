@@ -22,7 +22,7 @@
  */
  -->
 <resources>
-    <item name="main" type="layout">@layout/main_onepane</item>
+    <item name="main_content" type="layout">@layout/main_content_onepane</item>
     <bool name="has_two_panes">false</bool>
     <item type="layout" name="abc_search_dropdown_item_icons_2line">@layout/search_suggestion</item>
 </resources>
