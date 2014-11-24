@@ -50,6 +50,7 @@ import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -80,6 +81,8 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 	private Bookmark oldBookmark;
 	private Boolean update = false;
 	private String username = null;
+
+    private Boolean firstRun = true;
 	
 	private long updateTime = 0;
 	
@@ -96,8 +99,10 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		
-		setHasOptionsMenu(true);
+
+        firstRun = savedInstanceState == null;
+
+        setHasOptionsMenu(true);
 		
 		mEditUrl = ((FloatLabel) getView().findViewById(R.id.add_edit_url)).getEditText();
 		mEditDescription = ((FloatLabel) getView().findViewById(R.id.add_edit_description)).getEditText();
@@ -169,21 +174,29 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 		if(bookmark != null){
 			mEditUrl.setText(bookmark.getUrl());
 			
-			if(bookmark.getDescription() != null)
-				mEditDescription.setText(bookmark.getDescription());
+			if(bookmark.getDescription() != null) {
+                mEditDescription.setText(bookmark.getDescription());
+            }
 			
-			if(bookmark.getNotes() != null)
-				mEditNotes.setText(bookmark.getNotes());
+			if(bookmark.getNotes() != null) {
+                mEditNotes.setText(bookmark.getNotes());
+            }
 			
-			if(bookmark.getTagString() != null)
-				mEditTags.setText(bookmark.getTagString());
-			else mEditTags.setText("");
+			if(bookmark.getTagString() != null) {
+                mEditTags.setText(bookmark.getTagString());
+            }
+			else {
+                mEditTags.setText("");
+            }
+
+            if(firstRun) {
+                mPrivate.setChecked(!bookmark.getShared());
+                mToRead.setChecked(bookmark.getToRead());
+            }
 			
-			mPrivate.setChecked(!bookmark.getShared());
-			mToRead.setChecked(bookmark.getToRead());
-			
-			if(mEditDescription.getText().toString().equals(""))
-				titleTask = new GetTitleTask().execute(bookmark.getUrl());
+			if(mEditDescription.getText().toString().equals("")) {
+                titleTask = new GetTitleTask().execute(bookmark.getUrl());
+            }
 
 			tagTask = new GetTagSuggestionsTask().execute(bookmark.getUrl());
 			
@@ -192,7 +205,10 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 			if(!this.isHidden()){
 				mEditUrl.requestFocus();
 			}
-			setDefaultValues();
+
+            if(firstRun) {
+                setDefaultValues();
+            }
 			
 			getActivity().setTitle(R.string.add_bookmark_add_title);
 		}
