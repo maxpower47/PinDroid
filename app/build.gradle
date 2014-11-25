@@ -8,8 +8,8 @@ android {
         applicationId "com.pindroid"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 60
-        versionName "3.0.0"
+        versionCode 61
+        versionName "3.0.1"
         testApplicationId "com.pindroid.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
