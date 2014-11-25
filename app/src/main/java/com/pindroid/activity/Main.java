@@ -43,6 +43,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -795,5 +796,14 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     }
 
     public void onLoaderReset(Loader<Cursor> loader) {
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mDrawerLayout.isDrawerOpen(mDrawerWrapper)) {
+            mDrawerLayout.closeDrawer(mDrawerWrapper);
+        } else {
+            super.onBackPressed();
+        }
     }
 }
