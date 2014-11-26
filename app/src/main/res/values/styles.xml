@@ -113,7 +113,6 @@
         <item name="android:textColorSecondary">@color/text_body</item>
         <item name="android:spinnerItemStyle">@style/AccountSpinner</item>
         <item name="searchViewStyle">@style/MySearchViewStyle</item>
-        <item name="android:windowTranslucentStatus">@bool/transparent_status_bar</item>
     </style>
 
     <style name="PinDroid" parent="@style/Theme.AppCompat.Light.DarkActionBar">
