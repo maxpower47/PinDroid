@@ -145,6 +145,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:textSize="18sp"
+                    android:lineSpacingMultiplier="1.4"
                     android:layout_marginLeft="@dimen/view_note_body_margin_left"
                     android:textIsSelectable="false" />
             </LinearLayout>
@@ -173,6 +174,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:textSize="18sp"
+                    android:lineSpacingMultiplier="1.4"
                     android:layout_marginLeft="@dimen/view_note_body_margin_left"
                     android:textIsSelectable="false" />
             </LinearLayout>

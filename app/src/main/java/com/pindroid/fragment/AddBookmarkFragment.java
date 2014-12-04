@@ -390,7 +390,7 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 			int flags = 0;
 			
 			if (builder.length() != 0) {
-				builder.append("  ");
+				builder.append("   ");
 			}
 			
 			int start = builder.length();
