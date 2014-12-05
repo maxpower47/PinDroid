@@ -31,9 +31,11 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.SearchManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -112,6 +114,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(prefListner);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 		
@@ -165,10 +169,9 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        getSupportLoaderManager().restartLoader(0, null, this);
+    public void onDestroy() {
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(prefListner);
+        super.onDestroy();
     }
 	
 	private void _initMenu() {
@@ -821,4 +824,12 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
             super.onBackPressed();
         }
     }
+
+    SharedPreferences.OnSharedPreferenceChangeListener prefListner = new SharedPreferences.OnSharedPreferenceChangeListener(){
+        public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+            if(key.equals(getApplicationContext().getResources().getString(R.string.pref_drawertags_key))) {
+                getSupportLoaderManager().restartLoader(0, null, Main.this);
+            }
+        }
+    };
 }
