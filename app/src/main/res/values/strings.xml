@@ -118,6 +118,9 @@
     <string name="tag_sort_count_asc">Count (Least First)</string>
     <string name="tag_sort_count_desc">Count (Most First)</string>
 
+    <!-- SelectTags -->
+    <string name="select_tags_activity_title">Select Tags</string>
+
     <!-- BrowseNotes -->
     <string name="browse_my_notes_title">Notes</string>
 
@@ -253,6 +256,9 @@
     <string name="pref_markasread_summary_on">Mark unread bookmarks as read when you read them.</string>
     <string name="pref_markasread_switch_off">No</string>
     <string name="pref_markasread_switch_on">Yes</string>
+    <string name="pref_drawertags_title">Drawer tags</string>
+    <string name="pref_drawertags_key">pref_drawertags</string>
+    <string name="pref_drawertags_summary">Choose which tags to display in navigation drawer.</string>
     <string name="pref_forcesync_title">Sync now</string>
     <string name="pref_forcesync_key">pref_forcesync</string>
     <string name="pref_forcesync_summary">Start a bookmark sync.</string>

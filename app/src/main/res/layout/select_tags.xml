@@ -21,28 +21,13 @@
  * USA
  */
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="horizontal"
-	android:layout_height="48dp"
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
-	android:gravity="center_vertical|left"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-	android:background="@color/tag_view_bg">
-	<TextView
-	    android:id="@+id/tag_name"
-	    android:layout_height="fill_parent"
-	    android:layout_width="wrap_content"
-        android:gravity="center_vertical"
-	    android:layout_weight="1"
-	    android:textSize="16sp"
-	    android:textIsSelectable="false"/>
-	<TextView
-	    android:id="@+id/tag_count"
-	    android:layout_height="fill_parent"
-	    android:layout_width="wrap_content"
-	    android:layout_weight="0"
-        android:gravity="center_vertical"
-	    android:textSize="16sp"
-	    android:textIsSelectable="false" />
+	android:layout_height="fill_parent"
+	android:orientation="vertical">
+	<fragment class="com.pindroid.fragment.SelectTagsFragment"
+		android:id="@+id/listcontent"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent" >
+	</fragment>
 </LinearLayout>

@@ -55,6 +55,11 @@
             android:summaryOff="@string/pref_markasread_summary_off"
             android:summaryOn="@string/pref_markasread_summary_on"
             android:key="@string/pref_markasread_key" />
+        <Preference
+            android:title="@string/pref_drawertags_title"
+            android:summary="@string/pref_drawertags_summary">
+            <intent android:targetClass="com.pindroid.activity.SelectTags" android:targetPackage="com.pindroid" android:action="android.intent.action.PICK"/>
+        </Preference>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_cat_sync_title">

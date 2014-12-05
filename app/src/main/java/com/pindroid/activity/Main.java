@@ -22,16 +22,20 @@
 package com.pindroid.activity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.SearchManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -43,6 +47,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -160,9 +165,16 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		if (savedInstanceState == null) {
             onMyBookmarksSelected(null);
         }
-		
-		processIntent(getIntent());
+
+        processIntent(getIntent());
 	}
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        getSupportLoaderManager().restartLoader(0, null, this);
+    }
 	
 	private void _initMenu() {
 		// Set up menu
@@ -207,11 +219,15 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
         res = 0;
 
         if(tagData != null) {
+            Set<String> tags = SettingsHelper.getDrawerTags(this);
+
             while (tagData.moveToNext()) {
 
-                NsMenuItemModel mItem = new NsMenuItemModel(tagData.getString(1), R.drawable.main_menu_tag, false, tagData.getInt(2));
-                mAdapter.addItem(mItem);
-                res++;
+                if(tags.size() == 0 || tags.contains(tagData.getString(1))) {
+                    NsMenuItemModel mItem = new NsMenuItemModel(tagData.getString(1), R.drawable.main_menu_tag, false, tagData.getInt(2));
+                    mAdapter.addItem(mItem);
+                    res++;
+                }
             }
         }
 
@@ -791,6 +807,10 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     }
 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if(tagData != null) {
+            tagData.close();
+        }
+
         tagData = data;
         _initMenu();
     }

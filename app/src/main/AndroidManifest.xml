@@ -156,6 +156,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.SelectTags"
+            android:parentActivityName=".activity.Settings">
+        </activity>
         <!-- The authenticator service -->
         <service
             android:name=".authenticator.AuthenticationService"
