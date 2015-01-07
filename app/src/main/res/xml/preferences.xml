@@ -58,7 +58,7 @@
         <Preference
             android:title="@string/pref_drawertags_title"
             android:summary="@string/pref_drawertags_summary">
-            <intent android:targetClass="com.pindroid.activity.SelectTags" android:targetPackage="com.pindroid" android:action="android.intent.action.PICK"/>
+            <intent android:targetClass="com.pindroid.activity.SelectTags_" android:targetPackage="com.pindroid" android:action="android.intent.action.PICK"/>
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory

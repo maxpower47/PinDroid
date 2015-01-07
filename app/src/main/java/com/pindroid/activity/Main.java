@@ -445,8 +445,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
     public void onSettingsSelected() {
         clearDrawer(4);
-        Intent prefs = new Intent(this, Settings.class);
-        startActivity(prefs);
+        Settings_.intent(this).start();
     }
 
 	public void onRecentSelected() {

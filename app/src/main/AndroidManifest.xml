@@ -117,7 +117,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.Settings"
+            android:name=".activity.Settings_"
             android:label="@string/preferences_title"
             android:parentActivityName=".activity.Main" >
             <meta-data
@@ -157,7 +157,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.SelectTags"
+            android:name=".activity.SelectTags_"
+            android:label="@string/select_tags_activity_title"
             android:parentActivityName=".activity.Settings">
         </activity>
         <!-- The authenticator service -->

@@ -26,12 +26,14 @@ import android.support.v7.app.ActionBarActivity;
 
 import com.pindroid.R;
 
+import org.androidannotations.annotations.EActivity;
+
+@EActivity(R.layout.settings_activity)
 public class Settings extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_activity);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

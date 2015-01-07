@@ -21,51 +21,35 @@
 
 package com.pindroid.activity;
 
-import android.accounts.AccountManager;
-import android.content.Intent;
-import android.content.Intent.ShortcutIconResource;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
 
-import com.pindroid.Constants;
 import com.pindroid.R;
-import com.pindroid.action.IntentHelper;
 import com.pindroid.application.PindroidApplication;
-import com.pindroid.fragment.BrowseTagsFragment;
 import com.pindroid.fragment.SelectTagsFragment;
 
-import java.util.List;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.FragmentById;
+
 import java.util.Set;
 
+@EActivity(R.layout.select_tags)
 public class SelectTags extends ActionBarActivity implements SelectTagsFragment.OnTagsSelectedListener {
 
-	SelectTagsFragment frag;
+	@FragmentById(R.id.listcontent) SelectTagsFragment frag;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.select_tags);
-        getSupportActionBar().setTitle(R.string.select_tags_activity_title);
-
-		frag = (SelectTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
+    @AfterViews
+    void init() {
         frag.setUsername(((PindroidApplication)getApplication()).getUsername());
     }
 
 	public void onTagsSelected(Set<String> tags) {
-
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
         editor.putStringSet(getResources().getString(R.string.pref_drawertags_key), tags);
         editor.commit();
 
         finish();
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		return false;
 	}
 }
