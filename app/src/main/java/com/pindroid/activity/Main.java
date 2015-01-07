@@ -76,6 +76,7 @@ import com.pindroid.fragment.PindroidFragment;
 import com.pindroid.fragment.ViewBookmarkFragment;
 import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
 import com.pindroid.fragment.ViewNoteFragment;
+import com.pindroid.fragment.ViewNoteFragment_;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.NoteManager;
 import com.pindroid.platform.TagManager;
@@ -642,7 +643,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
 	public void onNoteView(Note n) {
-		ViewNoteFragment frag = new ViewNoteFragment();
+		ViewNoteFragment frag = new ViewNoteFragment_();
 		frag.setNote(n);
 		
 		FragmentManager fragmentManager = getSupportFragmentManager();
