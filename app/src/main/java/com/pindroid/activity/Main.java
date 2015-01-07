@@ -605,15 +605,11 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
     public void onBookmarkAdd(Bookmark b, Bookmark oldBookmark) {
-        Intent intent = new Intent(this, AddBookmark.class);
-        intent.putExtra("bookmark", b);
-
-        if(oldBookmark != null) {
-            intent.putExtra("oldBookmark", oldBookmark);
-        }
-
-        intent.putExtra("username", app.getUsername());
-        startActivity(intent);
+        AddBookmark_.intent(this)
+            .extra("bookmark", b)
+            .extra("username", app.getUsername())
+            .extra("oldBookmark", oldBookmark)
+            .start();
     }
 
 	public void onBookmarkShare(Bookmark b) {

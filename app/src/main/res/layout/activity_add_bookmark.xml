@@ -27,7 +27,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <fragment
-        android:name="com.pindroid.fragment.AddBookmarkFragment"
+        android:name="com.pindroid.fragment.AddBookmarkFragment_"
         android:id="@+id/addbookmark_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

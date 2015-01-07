@@ -21,9 +21,27 @@
 
 package com.pindroid.fragment;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
+import android.accounts.Account;
+import android.app.Activity;
+import android.database.Cursor;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.CursorAdapter;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnFocusChangeListener;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.FilterQueryProvider;
+import android.widget.MultiAutoCompleteTextView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iangclifton.android.floatlabel.FloatLabel;
 import com.pindroid.R;
@@ -39,45 +57,32 @@ import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.SpaceTokenizer;
 
-import android.accounts.Account;
-import android.app.Activity;
-import android.database.Cursor;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.CursorAdapter;
-import android.text.Html;
-import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnFocusChangeListener;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.FilterQueryProvider;
-import android.widget.MultiAutoCompleteTextView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.ViewById;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+
+@EFragment(R.layout.add_bookmark_fragment)
+@OptionsMenu(R.menu.add_bookmark_menu)
 public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 	
-	private EditText mEditUrl;
-	private EditText mEditDescription;
-	private ProgressBar mDescriptionProgress;
-	private EditText mEditNotes;
-	private MultiAutoCompleteTextView mEditTags;
-	private TextView mRecommendedTags;
-	private TextView mPopularTags;
-	private CompoundButton mPrivate;
-	private CompoundButton mToRead;
-	private Bookmark bookmark;
+	@ViewById(R.id.add_edit_url) FloatLabel mEditUrl;
+    @ViewById(R.id.add_edit_description) FloatLabel mEditDescription;
+    @ViewById(R.id.add_description_progress) ProgressBar mDescriptionProgress;
+    @ViewById(R.id.add_edit_notes) FloatLabel mEditNotes;
+    @ViewById(R.id.add_edit_tags) FloatLabel mEditTags;
+    @ViewById(R.id.add_recommended_tags) TextView mRecommendedTags;
+    @ViewById(R.id.add_popular_tags) TextView mPopularTags;
+    @ViewById(R.id.add_edit_private) CompoundButton mPrivate;
+    @ViewById(R.id.add_edit_toread) CompoundButton mToRead;
+
+    private Bookmark bookmark;
 	private Bookmark oldBookmark;
 	private Boolean update = false;
 	private String username = null;
@@ -95,25 +100,13 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 		public void onBookmarkSave(Bookmark b);
 		public void onBookmarkCancel(Bookmark b);
 	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState){
-		super.onActivityCreated(savedInstanceState);
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
 
         firstRun = savedInstanceState == null;
 
-        setHasOptionsMenu(true);
-		
-		mEditUrl = ((FloatLabel) getView().findViewById(R.id.add_edit_url)).getEditText();
-		mEditDescription = ((FloatLabel) getView().findViewById(R.id.add_edit_description)).getEditText();
-		mDescriptionProgress = (ProgressBar) getView().findViewById(R.id.add_description_progress);
-		mEditNotes = ((FloatLabel) getView().findViewById(R.id.add_edit_notes)).getEditText();
-		mEditTags = (MultiAutoCompleteTextView)((FloatLabel) getView().findViewById(R.id.add_edit_tags)).getEditText();
-		mRecommendedTags = (TextView) getView().findViewById(R.id.add_recommended_tags);
-		mPopularTags = (TextView) getView().findViewById(R.id.add_popular_tags);
-		mPrivate = (CompoundButton) getView().findViewById(R.id.add_edit_private);
-		mToRead = (CompoundButton) getView().findViewById(R.id.add_edit_toread);
-		
 		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
 		
@@ -128,18 +121,18 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 	            }
 	        });
 
-			mEditTags.setAdapter(autoCompleteAdapter);
-			mEditTags.setTokenizer(new SpaceTokenizer());
+            ((MultiAutoCompleteTextView)mEditTags.findViewById(R.id.edit_text)).setAdapter(autoCompleteAdapter);
+            ((MultiAutoCompleteTextView)mEditTags.findViewById(R.id.edit_text)).setTokenizer(new SpaceTokenizer());
 		}
 
 
-		mEditUrl.setOnFocusChangeListener(new OnFocusChangeListener(){
+		mEditUrl.getEditText().setOnFocusChangeListener(new OnFocusChangeListener(){
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(!hasFocus){
-					String url = mEditUrl.getText().toString().trim();
-					
+					String url = mEditUrl.getEditText().getText().toString().trim();
+
 					if(url != null && !url.equals("")) {
-						if(mEditDescription.getText().toString().equals("")) {
+						if(mEditDescription.getEditText().getText().toString().equals("")) {
 							titleTask = new GetTitleTask().execute(url);
 						}
 						tagTask = new GetTagSuggestionsTask().execute(url);
@@ -165,28 +158,28 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
             oldBookmark = oldB.copy();
         }
 	}
-	
+
 	public void setUsername(String username){
 		this.username = username;
 	}
-	
+
 	public void refreshView(){
 		if(bookmark != null){
-			mEditUrl.setText(bookmark.getUrl());
+			mEditUrl.getEditText().setText(bookmark.getUrl());
 			
 			if(bookmark.getDescription() != null) {
-                mEditDescription.setText(bookmark.getDescription());
+                mEditDescription.getEditText().setText(bookmark.getDescription());
             }
 			
 			if(bookmark.getNotes() != null) {
-                mEditNotes.setText(bookmark.getNotes());
+                mEditNotes.getEditText().setText(bookmark.getNotes());
             }
 			
 			if(bookmark.getTagString() != null) {
-                mEditTags.setText(bookmark.getTagString());
+                ((MultiAutoCompleteTextView)mEditTags.findViewById(R.id.edit_text)).setText(bookmark.getTagString());
             }
 			else {
-                mEditTags.setText("");
+                ((MultiAutoCompleteTextView)mEditTags.findViewById(R.id.edit_text)).setText("");
             }
 
             if(firstRun) {
@@ -194,7 +187,7 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
                 mToRead.setChecked(bookmark.getToRead());
             }
 			
-			if(mEditDescription.getText().toString().equals("")) {
+			if(mEditDescription.getEditText().getText().toString().equals("")) {
                 titleTask = new GetTitleTask().execute(bookmark.getUrl());
             }
 
@@ -221,8 +214,8 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 	
     private void save() {
     	
-    	String url = mEditUrl.getText().toString();
-    	String description = mEditDescription.getText().toString();
+    	String url = mEditUrl.getEditText().getText().toString();
+    	String description = mEditDescription.getEditText().getText().toString();
     	
     	if(description.equals(""))
     		description = getResources().getString(R.string.add_bookmark_default_title);
@@ -244,7 +237,7 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 		}
 		
 		String tagstring = "";
-		String[] tags = mEditTags.getText().toString().trim().split(" ");
+		String[] tags = ((MultiAutoCompleteTextView)mEditTags.findViewById(R.id.edit_text)).getText().toString().trim().split(" ");
 
 		for(String s : tags){
 			if(!s.equals("") && !s.equals(" "))
@@ -264,7 +257,7 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 		}
 			
 		bookmark = new Bookmark(url, description, 
-				mEditNotes.getText().toString(), tagstring.trim(),
+				mEditNotes.getEditText().getText().toString(), tagstring.trim(),
 				!mPrivate.isChecked(), mToRead.isChecked(), updateTime);
 		
 		bookmark.setId(oldid);
@@ -287,32 +280,21 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 			TagManager.UpsertTag(t, username, getActivity());
 		}
     }
-    
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.add_bookmark_menu, menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-	    case R.id.menu_addbookmark_save:
-	    	save();
-			bookmarkSaveListener.onBookmarkSave(bookmark);
-			return true;
-	    case R.id.menu_addbookmark_cancel:
-        	bookmarkSaveListener.onBookmarkCancel(bookmark);
-	        return true;
-	    default:
-	        return super.onOptionsItemSelected(item);
-	    }
-	}
+
+    @OptionsItem(R.id.menu_addbookmark_save)
+    void saveBookmark() {
+        save();
+        bookmarkSaveListener.onBookmarkSave(bookmark);
+    }
+
+    @OptionsItem(R.id.menu_addbookmark_cancel)
+    void cancel() {
+        bookmarkSaveListener.onBookmarkCancel(bookmark);
+    }
 	
     TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {
-        	String currentTagString = mEditTags.getText().toString();
+        	String currentTagString = ((MultiAutoCompleteTextView)mEditTags.findViewById(R.id.edit_text)).getText().toString();
         	
         	ArrayList<String> currentTags = new ArrayList<String>();
         	Collections.addAll(currentTags, currentTagString.split(" "));
@@ -323,8 +305,8 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
         		} else {
         			currentTags.remove(tag);
         		}
-        		mEditTags.setText(TextUtils.join(" ", currentTags.toArray()).trim());
-        		mEditTags.setSelection(mEditTags.getText().length());
+                ((MultiAutoCompleteTextView)mEditTags.findViewById(R.id.edit_text)).setText(TextUtils.join(" ", currentTags.toArray()).trim());
+                ((MultiAutoCompleteTextView)mEditTags.findViewById(R.id.edit_text)).setSelection(((MultiAutoCompleteTextView)mEditTags.findViewById(R.id.edit_text)).getText().length());
         	}
         }
     };
@@ -335,11 +317,11 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
     	}
     	
         protected void onPostExecute(String result) {
-        	mEditDescription.setText(Html.fromHtml(result));
+        	mEditDescription.getEditText().setText(Html.fromHtml(result));
         	mDescriptionProgress.setVisibility(View.GONE);
         }
     }
-    
+
     public class GetTagSuggestionsTask extends AsyncTask<String, Integer, ArrayList<Tag>>{
     	private String url;
     	
@@ -403,12 +385,7 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 			builder.setSpan(span, start, end, flags);
 		}
     }
-	
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.add_bookmark_fragment, container, false);
-    }
-    
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -420,7 +397,5 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 	}
 
 	public void refresh() {
-		// TODO Auto-generated method stub
-		
 	}
 }

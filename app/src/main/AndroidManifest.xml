@@ -252,7 +252,7 @@
         </service>
 
         <activity
-            android:name=".activity.AddBookmark"
+            android:name=".activity.AddBookmark_"
             android:label="@string/title_activity_add_bookmark" >
         </activity>
     </application>
