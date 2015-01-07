@@ -148,7 +148,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.ScreenShortcut"
+            android:name=".activity.ScreenShortcut_"
             android:icon="@drawable/ic_main"
             android:label="@string/shortcut_activity_label" >
             <intent-filter>
