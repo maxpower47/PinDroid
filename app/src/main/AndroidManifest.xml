@@ -139,7 +139,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.ChooseTagShortcut"
+            android:name=".activity.ChooseTagShortcut_"
             android:icon="@drawable/ic_shortcut"
             android:label="@string/tag_shortcut_activity_label" >
             <intent-filter>

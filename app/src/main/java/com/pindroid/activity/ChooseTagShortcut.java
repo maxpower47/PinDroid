@@ -37,22 +37,29 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.FragmentById;
+import org.androidannotations.annotations.OnActivityResult;
+
+@EActivity(R.layout.browse_tags)
 public class ChooseTagShortcut extends ActionBarActivity implements BrowseTagsFragment.OnTagSelectedListener {
 
 	private String username = "";
-	BrowseTagsFragment frag;
+	@FragmentById(R.id.listcontent) BrowseTagsFragment frag;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        setContentView(R.layout.browse_tags);
+
         getSupportActionBar().setTitle(R.string.shortcut_activity_title);
 
 		Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
 		startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
-          
-		frag = (BrowseTagsFragment) getSupportFragmentManager().findFragmentById(R.id.listcontent);
+    }
+
+    @AfterViews
+    void init() {
         frag.setUsername(username);
     }
     
@@ -66,20 +73,11 @@ public class ChooseTagShortcut extends ActionBarActivity implements BrowseTagsFr
         setResult(RESULT_OK, intent);
         finish();
 	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		return false;
-	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data){	
-		super.onActivityResult(requestCode, resultCode, data);
-		
-		if(requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
-			username = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-			frag.setUsername(username);
-			frag.refresh();
-		}
+
+	@OnActivityResult(Constants.REQUEST_CODE_ACCOUNT_CHANGE)
+	protected void onChooseAccount(Intent data){
+		username = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+		frag.setUsername(username);
+		frag.refresh();
 	}
 }
