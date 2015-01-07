@@ -36,6 +36,9 @@ import com.pindroid.R;
 import com.pindroid.platform.NoteManager;
 import com.pindroid.providers.NoteContent.Note;
 
+import org.androidannotations.annotations.EFragment;
+
+@EFragment
 public class BrowseNotesFragment extends ListFragment
 	implements LoaderManager.LoaderCallbacks<Cursor>, PindroidFragment {
 
@@ -60,8 +63,6 @@ public class BrowseNotesFragment extends ListFragment
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-
-		setHasOptionsMenu(true);
 		
 		mAdapter = new SimpleCursorAdapter(this.getActivity(), 
 				R.layout.note_view, null, 

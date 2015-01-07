@@ -68,6 +68,7 @@ import com.pindroid.fragment.BrowseBookmarksFragment;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.fragment.BrowseNotesFragment;
 import com.pindroid.fragment.BrowseNotesFragment.OnNoteSelectedListener;
+import com.pindroid.fragment.BrowseNotesFragment_;
 import com.pindroid.fragment.BrowseTagsFragment;
 import com.pindroid.fragment.BrowseTagsFragment.OnTagSelectedListener;
 import com.pindroid.fragment.MainSearchResultsFragment;
@@ -432,7 +433,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 	
 	public void onMyNotesSelected() {
-		BrowseNotesFragment frag = new BrowseNotesFragment();
+		BrowseNotesFragment frag = new BrowseNotesFragment_();
 		frag.setUsername(app.getUsername());
 		
 		clearBackStack();
@@ -783,7 +784,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
 	public void onNoteSearch(String query) {
-		BrowseNotesFragment frag = new BrowseNotesFragment();
+		BrowseNotesFragment frag = new BrowseNotesFragment_();
 		frag.setUsername(app.getUsername());
 		frag.setQuery(query);
 
