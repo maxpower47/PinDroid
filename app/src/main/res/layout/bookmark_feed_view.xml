@@ -21,7 +21,9 @@
  * USA
  */
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
 	android:orientation="horizontal"
 	android:layout_height="@dimen/bookmark_list_view_height"
 	android:layout_width="fill_parent"
@@ -46,7 +48,8 @@
 		    android:ellipsize="end"
 		    android:textSize="@dimen/browse_bookmark_title_text"
             android:textColor="@color/text_body"
-		    android:textIsSelectable="false"/>
+		    android:textIsSelectable="false"
+            tools:text="Sample Bookmark Title"/>
 		<TextView
 		    android:id="@+id/bookmark_feed_tags"
 		    android:layout_height="wrap_content"
@@ -54,6 +57,7 @@
 		    android:scrollHorizontally="false"
 		    android:textSize="@dimen/browse_bookmark_tag_text"
             android:textColor="@color/text_caption"
-		    android:textIsSelectable="false"/>
+		    android:textIsSelectable="false"
+            tools:text="test tag another test2"/>
 	</LinearLayout>
 </LinearLayout>

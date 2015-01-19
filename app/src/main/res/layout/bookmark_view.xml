@@ -21,7 +21,9 @@
  * USA
  */
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
 	android:orientation="horizontal"
 	android:layout_height="@dimen/bookmark_list_view_height"
 	android:layout_width="fill_parent"
@@ -48,7 +50,7 @@
 		    android:textSize="@dimen/browse_bookmark_title_text"
 		    android:textIsSelectable="false"
             android:textColor="@color/text_body"
-            android:text="lksjdfkldjs;lgkkgkljdhafgkjdhsfg;lkhds;flgkjd;slgfkj"/>
+            tools:text="Sample Bookmark Title"/>
         <TextView
             android:id="@+id/bookmark_tags"
             android:layout_height="wrap_content"
@@ -57,7 +59,7 @@
             android:textSize="@dimen/browse_bookmark_tag_text"
             android:textIsSelectable="false"
             android:textColor="@color/text_caption"
-            android:text="lkjsdf lkjsdflk lkjdgflkdfjg lskdjglkdsg"/>
+            tools:text="test tag another test2"/>
 	</LinearLayout>
 
     <LinearLayout
@@ -71,7 +73,8 @@
             android:id="@+id/bookmark_private"
             android:contentDescription="@string/alt_bookmark_list_private"
             android:src="@drawable/padlock"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            tools:visibility="visible"/>
         <ImageView
             android:layout_width="16dip"
             android:layout_height="16dip"
@@ -79,13 +82,15 @@
             android:contentDescription="@string/bookmark_unsynced_alt"
             android:id="@+id/bookmark_synced"
             android:src="@drawable/sync"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            tools:visibility="visible"/>
         <ImageView
             android:layout_width="16dip"
             android:layout_height="16dip"
             android:layout_marginTop="5dp"
             android:id="@+id/bookmark_unread"
             android:src="@drawable/unread"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            tools:visibility="visible"/>
     </LinearLayout>
 </LinearLayout>

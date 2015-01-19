@@ -21,7 +21,9 @@
  * USA
  */
  -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent" 
 	android:layout_height="fill_parent"
 	android:id="@+id/view_note_container">
@@ -52,7 +54,8 @@
                     android:layout_marginLeft="@dimen/view_note_body_margin_left"
                     android:textSize="@dimen/view_note_title_text"
                     android:textIsSelectable="true"
-                    android:textColor="@color/text_title"/>
+                    android:textColor="@color/text_title"
+                    tools:text="Sample Note Title"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/view_note_text_section"
@@ -71,7 +74,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/view_note_body_margin_left"
                     android:textSize="@dimen/view_note_body_text"
-                    android:textIsSelectable="true" />
+                    android:textIsSelectable="true"
+                    tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada urna ex, ac molestie dolor accumsan in. Nulla viverra, tellus vitae sollicitudin posuere, nulla neque condimentum mi, non facilisis neque mi vitae lectus. Fusce ut dolor ac ligula venenatis semper. Morbi blandit elementum leo, ac aliquet lacus consectetur non. Nunc condimentum dui quis posuere facilisis. Curabitur gravida enim in bibendum tempus. Sed porttitor dignissim leo, ut condimentum risus. Proin quis ullamcorper massa. Phasellus id erat ut tellus cursus congue. Nam augue enim, laoreet sit amet facilisis non, pharetra tempus quam. Vivamus consectetur ipsum eu nibh porttitor, a posuere lorem commodo."/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/view_note_account_section"
@@ -90,7 +94,8 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/view_note_body_text"
                     android:layout_marginLeft="@dimen/view_note_body_margin_left"
-                    android:textIsSelectable="false"  />
+                    android:textIsSelectable="false"
+                    tools:text="exampleaccount"/>
             </LinearLayout>
 		</LinearLayout>
 	</ScrollView>

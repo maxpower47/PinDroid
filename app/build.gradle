@@ -57,4 +57,5 @@ dependencies {
     compile 'com.iangclifton.android:floatlabel:1.0.1'
     apt "org.androidannotations:androidannotations:3.2"
     compile "org.androidannotations:androidannotations-api:3.2"
+    compile 'com.ns-developer:tagcloudview:0.1.0'
 }

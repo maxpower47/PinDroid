@@ -21,7 +21,9 @@
  * USA
  */
  -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent" 
 	android:layout_height="fill_parent"
 	android:id="@+id/view_bookmark_container">
@@ -29,7 +31,8 @@
 	    android:id="@+id/bookmark_scroll_view"
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent"
-		android:visibility="gone">
+		android:visibility="gone"
+        tools:visibility="visible">
 		<LinearLayout
 			android:layout_width="fill_parent" 
 			android:layout_height="wrap_content"
@@ -55,7 +58,8 @@
                     android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
                     android:textSize="@dimen/view_bookmark_title_text"
                     android:textIsSelectable="true"
-                    android:textColor="@color/text_title"/>
+                    android:textColor="@color/text_title"
+                    tools:text="Sample Bookmark Title"/>
             </LinearLayout>
 
             <LinearLayout
@@ -76,7 +80,8 @@
                     android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
                     android:textSize="@dimen/view_bookmark_body_text"
                     android:autoLink="web"
-                    android:textIsSelectable="false"/>
+                    android:textIsSelectable="false"
+                    tools:text="http://www.example.com"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/view_bookmark_notes_section"
@@ -95,7 +100,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
                     android:textSize="@dimen/view_bookmark_body_text"
-                    android:textIsSelectable="true" />
+                    android:textIsSelectable="true"
+                    tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada urna ex, ac molestie dolor accumsan in. Nulla viverra, tellus vitae sollicitudin posuere, nulla neque condimentum mi, non facilisis neque mi vitae lectus."/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/view_bookmark_tag_section"
@@ -115,7 +121,8 @@
                     android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
                     android:textSize="@dimen/view_bookmark_tag_text"
                     android:lineSpacingExtra="4dp"
-                    android:textIsSelectable="false"/>
+                    android:textIsSelectable="false"
+                    tools:text="test tag another test2"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/view_bookmark_time_section"
@@ -134,7 +141,8 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/view_bookmark_body_text"
                     android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
-                    android:textIsSelectable="false"  />
+                    android:textIsSelectable="false"
+                    tools:text="Mon Jan 19 08:15:22 EST 2015"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/view_bookmark_account_section"
@@ -153,7 +161,8 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/view_bookmark_body_text"
                     android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
-                    android:textIsSelectable="false"  />
+                    android:textIsSelectable="false"
+                    tools:text="exampleaccount"/>
             </LinearLayout>
 		</LinearLayout>
 	</ScrollView>

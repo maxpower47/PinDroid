@@ -21,7 +21,9 @@
  * USA
  */
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
 	android:orientation="horizontal"
 	android:layout_height="48dp"
 	android:layout_width="fill_parent"
@@ -35,7 +37,8 @@
 	    android:layout_weight="1"
 	    android:textSize="16sp"
 	    android:textIsSelectable="false"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical"
+        tools:text="tag"/>
 	<TextView
 	    android:id="@+id/autocomplete_count"
 	    android:layout_height="fill_parent"
@@ -44,5 +47,6 @@
 	    android:textSize="16sp"
 	    android:paddingRight="16dp"
 	    android:textIsSelectable="false"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical"
+        tools:text="5"/>
 </LinearLayout>

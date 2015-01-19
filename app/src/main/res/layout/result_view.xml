@@ -21,11 +21,14 @@
  * USA
  */
  -->
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/main_menu_description"
 	android:layout_height="wrap_content"
 	android:layout_width="fill_parent"
 	android:scrollHorizontally="true"
 	android:textSize="28sp"
 	android:padding="10dip"
-	android:textIsSelectable="false" />
+	android:textIsSelectable="false"
+    tools:text="Sample Title"/>

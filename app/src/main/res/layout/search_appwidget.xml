@@ -21,7 +21,9 @@
  * USA
  */
  -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="@dimen/widget_height"
 	android:paddingLeft="@dimen/widget_margin"
@@ -58,7 +60,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
                 android:gravity="center_vertical"
-                android:textSize="10dp"/>
+                android:textSize="10dp"
+                tools:text="exampleaccount"/>
             </LinearLayout>
 	    <ImageButton
 	    	android:id="@+id/search_widget_bookmarks_button"

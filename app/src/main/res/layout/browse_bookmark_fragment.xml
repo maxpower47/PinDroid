@@ -24,13 +24,15 @@
  <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical">
 	<ListView
 		android:id="@id/android:list"
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" />
+	    android:layout_height="match_parent"
+        tools:listitem="@layout/bookmark_view"/>
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/add_button"
         android:layout_width="wrap_content"

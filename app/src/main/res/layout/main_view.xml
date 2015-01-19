@@ -22,7 +22,9 @@
  */
  -->   
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_menu_row"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -40,7 +42,8 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="16dp"
             android:gravity="center"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            tools:src="@drawable/ic_bookmark"/>
 
         <!-- text -->
         <TextView
@@ -53,7 +56,7 @@
             android:minHeight="48dp"
             android:textColor="@color/text_title"
             android:textSize="14sp"
-            />
+            tools:text="Sample Menu Item" />
 
         <!-- counter -->
         <TextView
@@ -68,7 +71,8 @@
             android:padding="4dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/text_title"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="5"/>
     </RelativeLayout>
 
 </LinearLayout>
