@@ -21,11 +21,10 @@
 
 package com.pindroid.fragment;
 
-import java.util.Date;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.database.ContentObserver;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -59,8 +58,12 @@ import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.AccountSpan;
-import com.pindroid.ui.TagSpan;
+import com.pindroid.ui.TagView;
 import com.pindroid.util.SettingsHelper;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	
@@ -70,14 +73,14 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	private View notesSection;
 	private TextView mNotes;
 	private View tagsSection;
-	private TextView mTags;
+	private TagView mTags;
 	private TextView mTime;
 	private TextView mUsername;
     private ImageView bookmarkIcon;
 	private WebView mWebContent;
 	private Bookmark bookmark;
 	private BookmarkViewType viewType;
-	
+
 	private OnBookmarkActionListener bookmarkActionListener;
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
 	
@@ -102,7 +105,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		notesSection = getView().findViewById(R.id.view_bookmark_notes_section);
 		mNotes = (TextView) getView().findViewById(R.id.view_bookmark_notes);
 		tagsSection = getView().findViewById(R.id.view_bookmark_tag_section);
-		mTags = (TextView) getView().findViewById(R.id.view_bookmark_tags);
+		mTags = (TagView) getView().findViewById(R.id.view_bookmark_tags);
 		mTime = (TextView) getView().findViewById(R.id.view_bookmark_time);
 		mUsername = (TextView) getView().findViewById(R.id.view_bookmark_account);
 		bookmarkIcon = (ImageView) getView().findViewById(R.id.view_bookmark_title_icon);
@@ -124,9 +127,9 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 
 	}
 	
-    TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
+    TagView.OnTagClickListener tagOnClickListener = new TagView.OnTagClickListener() {
         public void onTagClick(String tag) {
-    		bookmarkActionListener.onViewTagSelected(tag, bookmark.getAccount());
+			bookmarkActionListener.onViewTagSelected(tag, bookmark.getAccount());
         }
     };
     
@@ -152,24 +155,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
             mWebContent.setVisibility(View.GONE);
         }
 	}
-	
-	private void addTag(SpannableStringBuilder builder, Tag t, TagSpan.OnTagClickListener listener) {
-		int flags = 0;
-		
-		if (builder.length() != 0) {
-			builder.append("  ");
-		}
-		
-		int start = builder.length();
-		builder.append(t.getTagName());
-		int end = builder.length();
-		
-		TagSpan span = new TagSpan(t.getTagName());
-		span.setOnTagClickListener(listener);
 
-		builder.setSpan(span, start, end, flags);
-	}
-	
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
@@ -287,16 +273,14 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 				}
 				
 				mTime.setText(d.toString());
-				
-				mTags.setMovementMethod(LinkMovementMethod.getInstance());
-				SpannableStringBuilder tagBuilder = new SpannableStringBuilder();
-				
+
 				if(bookmark.getTags().size() > 0) {
+					List<TagView.Tag> tags = new ArrayList<>();
+
 		    		for(Tag t : bookmark.getTags()) {
-		    			addTag(tagBuilder, t, tagOnClickListener);
+						tags.add(new TagView.Tag(t.getTagName(), Color.parseColor("#0099CC"), tagOnClickListener));
 		    		}
-		    		
-		    		mTags.setText(tagBuilder);
+					mTags.setTags(tags, " ");
 		    		
 		    		tagsSection.setVisibility(View.VISIBLE);
 				} else {

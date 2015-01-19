@@ -58,4 +58,5 @@ android {
         compile "org.androidannotations:androidannotations-api:3.2"
         compile 'com.ns-developer:tagcloudview:0.1.0'
         compile 'com.rengwuxian.materialedittext:library:1.8.0'
+        compile 'com.ns-developer:tagcloudview:0.1.0'
 }
