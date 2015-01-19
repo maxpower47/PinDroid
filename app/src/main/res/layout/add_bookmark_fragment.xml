@@ -21,7 +21,9 @@
  * USA
  */
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android.support.v7.mediarouter="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -39,19 +41,20 @@
             android:paddingBottom="@dimen/add_bookmark_padding"
             android:background="@color/add_bookmark_form_background"
             android:orientation="vertical">
-            <com.iangclifton.android.floatlabel.FloatLabel
+            <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/add_edit_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/add_bookmark_padding"
-                android:paddingRight="@dimen/add_bookmark_padding"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginBottom="@dimen/add_bookmark_section_padding"
                 android:hint="@string/add_title_url"
-                android:textSize="26sp"
+                android:textSize="20sp"
                 android:background="@null"
                 android:inputType="textUri|textNoSuggestions"
                 android:singleLine="true"
-                android:layout="@layout/float_label"/>
+                app:floatingLabel="highlight"
+                app:hideUnderline="true"/>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -66,14 +69,16 @@
                 android:layout_marginTop="@dimen/add_bookmark_section_padding"
                 android:layout_marginBottom="@dimen/add_bookmark_section_padding"
                 android:orientation="horizontal">
-                <com.iangclifton.android.floatlabel.FloatLabel
+                <com.rengwuxian.materialedittext.MaterialEditText
                     android:id="@+id/add_edit_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="20sp"
                     android:layout_weight="1"
                     android:hint="@string/add_title_description"
                     android:inputType="text"
-                    android:layout="@layout/float_label" />
+                    app:floatingLabel="highlight"
+                    app:hideUnderline="true" />
                 <ProgressBar
                     android:id="@+id/add_description_progress"
                     style="@style/Widget.AppCompat.ProgressBar"
@@ -88,19 +93,21 @@
                 android:layout_height="1dp"
                 android:src="@color/drawer_divider" />
 
-            <com.iangclifton.android.floatlabel.FloatLabel
+            <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/add_edit_notes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/add_bookmark_padding"
-                android:paddingRight="@dimen/add_bookmark_padding"
+                android:layout_marginLeft="@dimen/add_bookmark_padding"
+                android:layout_marginRight="@dimen/add_bookmark_padding"
                 android:layout_marginTop="@dimen/add_bookmark_section_padding"
                 android:layout_marginBottom="@dimen/add_bookmark_section_padding"
+                android:textSize="20sp"
                 android:hint="@string/add_title_notes"
                 android:background="@null"
                 android:inputType="textCapSentences|textMultiLine"
                 android:minLines="@integer/add_bookmark_note_lines"
-                android:layout="@layout/float_label"/>
+                app:floatingLabel="highlight"
+                app:hideUnderline="true"/>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -108,18 +115,21 @@
                 android:src="@color/drawer_divider" />
 
 
-            <com.iangclifton.android.floatlabel.FloatLabel
+            <com.rengwuxian.materialedittext.MaterialMultiAutoCompleteTextView
                 android:id="@+id/add_edit_tags"
+                style="@style/Base.Widget.AppCompat.AutoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/add_bookmark_padding"
-                android:paddingRight="@dimen/add_bookmark_padding"
+                android:layout_marginLeft="@dimen/add_bookmark_padding"
+                android:layout_marginRight="@dimen/add_bookmark_padding"
                 android:layout_marginTop="@dimen/add_bookmark_section_padding"
                 android:layout_marginBottom="@dimen/add_bookmark_section_padding"
                 android:hint="@string/add_title_tags"
-                android:background="@null"
+                android:textSize="20sp"
                 android:inputType="text"
-                android:layout="@layout/float_label_tags"/>
+                android:completionThreshold="1"
+                app:floatingLabel="highlight"
+                app:hideUnderline="true"/>
 
             <ImageView
                 android:layout_width="match_parent"

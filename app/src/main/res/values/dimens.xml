@@ -30,7 +30,7 @@
     <dimen name="action_bar_width">265dp</dimen>
 
     <dimen name="add_bookmark_padding">16dp</dimen>
-    <dimen name="add_bookmark_section_padding">12dp</dimen>
+    <dimen name="add_bookmark_section_padding">8dp</dimen>
     <integer name="add_bookmark_note_lines">2</integer>
     <dimen name="add_bookmark_form_padding">0dp</dimen>
 

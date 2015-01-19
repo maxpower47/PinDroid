@@ -32,30 +32,30 @@ android {
     }
 }
 
-apt {
-    arguments {
-        androidManifestFile variant.outputs[0].processResources.manifestFile
-        resourcePackageName "com.pindroid"
+    apt {
+        arguments {
+            androidManifestFile variant.outputs[0].processResources.manifestFile
+            resourcePackageName "com.pindroid"
+        }
     }
-}
 
-buildscript {
-    repositories {
-        mavenCentral()
+    buildscript {
+        repositories {
+            mavenCentral()
+        }
+        dependencies {
+            classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+        }
     }
+
     dependencies {
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
-    }
-}
-
-dependencies {
-    compile 'com.android.support:support-v4:21.0.3'
-    compile 'com.android.support:appcompat-v7:21.0.3'
-    compile 'com.android.support:support-v13:21.0.0'
-    compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    compile 'com.melnykov:floatingactionbutton:1.0.5'
-    compile 'com.iangclifton.android:floatlabel:1.0.1'
-    apt "org.androidannotations:androidannotations:3.2"
-    compile "org.androidannotations:androidannotations-api:3.2"
-    compile 'com.ns-developer:tagcloudview:0.1.0'
+        compile 'com.android.support:support-v4:21.0.3'
+        compile 'com.android.support:appcompat-v7:21.0.3'
+        compile 'com.android.support:support-v13:21.0.0'
+        compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
+        compile 'com.melnykov:floatingactionbutton:1.0.5'
+        apt "org.androidannotations:androidannotations:3.2"
+        compile "org.androidannotations:androidannotations-api:3.2"
+        compile 'com.ns-developer:tagcloudview:0.1.0'
+        compile 'com.rengwuxian.materialedittext:library:1.8.0'
 }
