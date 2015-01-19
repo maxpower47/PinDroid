@@ -43,6 +43,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.pindroid.R;
+import com.pindroid.providers.TagContent.Tag;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -57,6 +58,9 @@ public class TagView extends TextView {
 	private int tagPadding;
 	private int tagCornerRadius;
 	private boolean uppercaseTags = DEFAULT_UPPERCASE;
+
+	private OnTagClickListener listener;
+	private ColorGenerator colorGenerator;
 
 	public interface OnTagClickListener {
 		public void onTagClick(String tag);
@@ -106,13 +110,13 @@ public class TagView extends TextView {
 		Iterator<? extends Tag> it = tags.iterator();
 		while (it.hasNext()) {
 			Tag tag = it.next();
-			String tagContent = uppercaseTags ? tag.getTag().toUpperCase() : tag.getTag();
+			String tagContent = uppercaseTags ? tag.getTagName().toUpperCase() : tag.getTagName();
 			sb.append(tagContent);
-			sb.setSpan(createSpan(tagContent, tag.getColor()),
+			sb.setSpan(createSpan(tagContent, colorGenerator.getColor(tagContent)),
 					sb.length() - tagContent.length(),
 					sb.length(),
 					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			sb.setSpan(new ClickableTagSpan(tagContent, tag.getListener()),
+			sb.setSpan(new ClickableTagSpan(tagContent, listener),
 					sb.length() - tagContent.length(),
 					sb.length(),
 					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -120,6 +124,7 @@ public class TagView extends TextView {
 				sb.append(separator);
 			}
 		}
+		sb.append(" ");  // hack to fix incorrect line spacing with orphaned span on new line
 		setText(sb);
 	}
 
@@ -159,28 +164,21 @@ public class TagView extends TextView {
 		this.uppercaseTags = uppercaseTags;
 	}
 
-	public static class Tag {
-		private final String tagText;
-		private final int tagColor;
-		private final OnTagClickListener listener;
+	public OnTagClickListener getListener() {
+		return listener;
+	}
 
-		public Tag(String tagText, int tagColor, OnTagClickListener listener) {
-			this.tagText = tagText;
-			this.tagColor = tagColor;
-			this.listener = listener;
-		}
+	public void setListener(OnTagClickListener listener) {
+		this.listener = listener;
+	}
 
-		public String getTag() {
-			return tagText;
-		}
 
-		public int getColor() {
-			return tagColor;
-		}
+	public ColorGenerator getColorGenerator() {
+		return colorGenerator;
+	}
 
-		public OnTagClickListener getListener() {
-			return listener;
-		}
+	public void setColorGenerator(ColorGenerator colorGenerator) {
+		this.colorGenerator = colorGenerator;
 	}
 
 	private static class TagSpan extends ImageSpan {

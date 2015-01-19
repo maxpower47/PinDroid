@@ -41,7 +41,7 @@
     <dimen name="view_bookmark_padding">16dp</dimen>
     <dimen name="view_bookmark_title_text">18sp</dimen>
     <dimen name="view_bookmark_body_text">16sp</dimen>
-    <dimen name="view_bookmark_tag_text">16sp</dimen>
+    <dimen name="view_bookmark_tag_text">18sp</dimen>
     <dimen name="view_bookmark_section_padding">12dp</dimen>
     <dimen name="view_bookmark_body_margin_left">32dp</dimen>
     <dimen name="view_bookmark_icon_size">24dp</dimen>

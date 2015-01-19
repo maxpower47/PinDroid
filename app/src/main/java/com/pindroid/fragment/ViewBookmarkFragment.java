@@ -24,7 +24,6 @@ package com.pindroid.fragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.database.ContentObserver;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -56,14 +55,12 @@ import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.ContentNotFoundException;
-import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.ui.AccountSpan;
+import com.pindroid.ui.ColorGenerator;
 import com.pindroid.ui.TagView;
 import com.pindroid.util.SettingsHelper;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	
@@ -112,7 +109,10 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		mWebContent = (WebView) getView().findViewById(R.id.web_view);
 		
 		mWebContent.getSettings().setJavaScriptEnabled(true);
-		
+
+		mTags.setListener(tagOnClickListener);
+		mTags.setColorGenerator(ColorGenerator.DEFAULT);
+
 		if (savedInstanceState != null) {
 	        viewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_VIEWTYPE);
 	        bookmark = (Bookmark)savedInstanceState.getParcelable(STATE_BOOKMARK);
@@ -223,6 +223,15 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		        return super.onOptionsItemSelected(item);
 	    }
 	}
+
+	@Override
+	public void onResume(){
+		super.onResume();
+
+		if(!getResources().getBoolean(R.bool.has_two_panes)) {
+			getActivity().setTitle(getString(R.string.browse_my_bookmarks_title));
+		}
+	}
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -275,12 +284,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 				mTime.setText(d.toString());
 
 				if(bookmark.getTags().size() > 0) {
-					List<TagView.Tag> tags = new ArrayList<>();
-
-		    		for(Tag t : bookmark.getTags()) {
-						tags.add(new TagView.Tag(t.getTagName(), Color.parseColor("#0099CC"), tagOnClickListener));
-		    		}
-					mTags.setTags(tags, " ");
+					mTags.setTags(bookmark.getTags(), " ");
 		    		
 		    		tagsSection.setVisibility(View.VISIBLE);
 				} else {
