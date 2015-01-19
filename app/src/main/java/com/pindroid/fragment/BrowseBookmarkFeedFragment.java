@@ -59,21 +59,24 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.support.v4.widget.SimpleCursorAdapter;
 
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.InstanceState;
+
+@EFragment
 public class BrowseBookmarkFeedFragment extends ListFragment 
 	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser, PindroidFragment  {
 	
 	private SimpleCursorAdapter mAdapter;
 	
-	private String username = null;
-	private String tagname = null;
-	private Intent intent = null;
-	private String feed = null;
-	String path = null;
+	@InstanceState String username = null;
+	@InstanceState String tagname = null;
+	@InstanceState String feed = null;
 	
 	Bookmark lastSelected = null;
 	
 	ListView lv;
-	
+	private Intent intent = null;
+
 	static final String STATE_USERNAME = "username";
 	static final String STATE_TAGNAME = "tagname";
 	static final String STATE_FEED = "feed";
@@ -89,16 +92,8 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		
-	    if (savedInstanceState != null) {
-	        username = savedInstanceState.getString(STATE_USERNAME);
-	        tagname = savedInstanceState.getString(STATE_TAGNAME);
-	        feed = savedInstanceState.getString(STATE_FEED);
-	    } 
 
 		intent = getActivity().getIntent();
-		
-		setHasOptionsMenu(true);
 		
 		mAdapter = new SimpleCursorAdapter(getActivity(), R.layout.bookmark_feed_view, null, 
 				new String[]{Bookmark.Description, Bookmark.Tags}, 
@@ -150,15 +145,6 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		}
 	}
 
-	@Override
-	public void onSaveInstanceState(Bundle savedInstanceState) {
-	    savedInstanceState.putString(STATE_USERNAME, username);
-	    savedInstanceState.putString(STATE_TAGNAME, tagname);
-	    savedInstanceState.putString(STATE_FEED, feed);
-	    
-	    super.onSaveInstanceState(savedInstanceState);
-	}
-	
 	public void setQuery(String username, String tagname, String feed){
 		this.username = username;
 		this.tagname = tagname;
@@ -221,24 +207,6 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 				return true;
 		}
 		return false;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		boolean result = false;
-		
-	    switch (item.getItemId()) {
-		    case R.id.menu_addbookmark:
-				addBookmark(lastSelected);
-				return true;
-	    }
-	    
-	    if(result) {
-	    	getLoaderManager().restartLoader(0, null, this);
-	    } else result = super.onOptionsItemSelected(item);
-	    
-	    return result;
 	}
 		
 	private void openBookmarkInBrowser(Bookmark b) {

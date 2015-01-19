@@ -186,7 +186,7 @@
         </service>
 
         <activity
-            android:name=".authenticator.AuthenticatorActivity"
+            android:name=".authenticator.AuthenticatorActivity_"
             android:excludeFromRecents="true"
             android:theme="@style/PinDroidNoActionBar"
             android:label="@string/ui_activity_title" >

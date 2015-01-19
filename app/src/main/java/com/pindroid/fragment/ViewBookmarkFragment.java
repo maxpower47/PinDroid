@@ -60,21 +60,26 @@ import com.pindroid.ui.ColorGenerator;
 import com.pindroid.ui.TagView;
 import com.pindroid.util.SettingsHelper;
 
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ViewById;
+
 import java.util.Date;
 
+@EFragment(R.layout.view_bookmark_fragment)
 public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	
-	private ScrollView mBookmarkView;
-	private TextView mTitle;
-	private TextView mUrl;
-	private View notesSection;
-	private TextView mNotes;
-	private View tagsSection;
-	private TagView mTags;
-	private TextView mTime;
-	private TextView mUsername;
-    private ImageView bookmarkIcon;
-	private WebView mWebContent;
+	@ViewById(R.id.bookmark_scroll_view) ScrollView mBookmarkView;
+	@ViewById(R.id.view_bookmark_title) TextView mTitle;
+	@ViewById(R.id.view_bookmark_url) TextView mUrl;
+	@ViewById(R.id.view_bookmark_notes_section) View notesSection;
+	@ViewById(R.id.view_bookmark_notes) TextView mNotes;
+	@ViewById(R.id.view_bookmark_tag_section) View tagsSection;
+	@ViewById(R.id.view_bookmark_tags) TagView mTags;
+	@ViewById(R.id.view_bookmark_time) TextView mTime;
+	@ViewById(R.id.view_bookmark_account) TextView mUsername;
+	@ViewById(R.id.view_bookmark_title_icon) ImageView bookmarkIcon;
+	@ViewById(R.id.web_view) WebView mWebContent;
+
 	private Bookmark bookmark;
 	private BookmarkViewType viewType;
 
@@ -95,18 +100,6 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		
-		mBookmarkView = (ScrollView) getView().findViewById(R.id.bookmark_scroll_view);
-		mTitle = (TextView) getView().findViewById(R.id.view_bookmark_title);
-		mUrl = (TextView) getView().findViewById(R.id.view_bookmark_url);
-		notesSection = getView().findViewById(R.id.view_bookmark_notes_section);
-		mNotes = (TextView) getView().findViewById(R.id.view_bookmark_notes);
-		tagsSection = getView().findViewById(R.id.view_bookmark_tag_section);
-		mTags = (TagView) getView().findViewById(R.id.view_bookmark_tags);
-		mTime = (TextView) getView().findViewById(R.id.view_bookmark_time);
-		mUsername = (TextView) getView().findViewById(R.id.view_bookmark_account);
-		bookmarkIcon = (ImageView) getView().findViewById(R.id.view_bookmark_title_icon);
-		mWebContent = (WebView) getView().findViewById(R.id.web_view);
 		
 		mWebContent.getSettings().setJavaScriptEnabled(true);
 
@@ -232,12 +225,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 			getActivity().setTitle(getString(R.string.browse_my_bookmarks_title));
 		}
 	}
-	
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.view_bookmark_fragment, container, false);
-    }
-    
+
     private boolean isMyself() {
     	return bookmark != null && bookmark.getId() != 0;
     }

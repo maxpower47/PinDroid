@@ -24,24 +24,20 @@ package com.pindroid.fragment;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.melnykov.fab.FloatingActionButton;
@@ -52,25 +48,29 @@ import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.util.SettingsHelper;
 
-public class BrowseBookmarksFragment extends ListFragment 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.InstanceState;
+import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.ViewById;
+
+@EFragment(R.layout.browse_bookmark_fragment)
+@OptionsMenu(R.menu.browse_bookmark_menu)
+public class BrowseBookmarksFragment extends Fragment
 	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser, PindroidFragment {
 
-    private ListView listView;
-    private FloatingActionButton actionButton;
+    @ViewById(android.R.id.list) ListView listView;
+	@ViewById(R.id.floating_add_button) FloatingActionButton actionButton;
 	
 	private SimpleCursorAdapter mAdapter;
 	
 	private String sortfield = Bookmark.Time + " DESC";
 
-	private String username = null;
-	private String tagname = null;
+	@InstanceState String username = null;
+	@InstanceState String tagname = null;
+
 	private boolean unread = false;
 	private String query = null;
-	
-	ListView lv;
-	
-	private static final String STATE_USERNAME = "username";
-	private static final String STATE_TAGNAME = "tagname";
 	
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
 
@@ -88,43 +88,30 @@ public class BrowseBookmarksFragment extends ListFragment
 		setRetainInstance(false);
 	}
 	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState){
-		super.onActivityCreated(savedInstanceState);
-
-        listView = (ListView) getView().findViewById(android.R.id.list);
-        actionButton = (FloatingActionButton) getView().findViewById(R.id.add_button);
-
+	@AfterViews
+	public void init(){
         actionButton.attachToListView(listView);
-		
-	    if (savedInstanceState != null) {
-	        username = savedInstanceState.getString(STATE_USERNAME);
-	        tagname = savedInstanceState.getString(STATE_TAGNAME);
-	    }
-		
-		setHasOptionsMenu(true);
 		
 		mAdapter = new SimpleCursorAdapter(getActivity(), R.layout.bookmark_view, null, 
 				new String[]{Bookmark.Description, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced}, 
 				new int[]{R.id.bookmark_description, R.id.bookmark_tags, R.id.bookmark_unread, R.id.bookmark_private, R.id.bookmark_synced}, 0);
 		
-		setListAdapter(mAdapter);
+		listView.setAdapter(mAdapter);
 		mAdapter.setViewBinder(new BookmarkViewBinder());
 
 		if(username != null) {				
 	
 	    	getLoaderManager().initLoader(0, null, this);
-	    	
-			lv = getListView();
-			lv.setTextFilterEnabled(true);
-			lv.setFastScrollEnabled(true);
-			
-			lv.setItemsCanFocus(false);
-			lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		
-			lv.setOnItemClickListener(new OnItemClickListener() {
+
+			listView.setTextFilterEnabled(true);
+			listView.setFastScrollEnabled(true);
+
+			listView.setItemsCanFocus(false);
+			listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+			listView.setOnItemClickListener(new OnItemClickListener() {
 			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					final Cursor c = (Cursor)lv.getItemAtPosition(position);
+					final Cursor c = (Cursor)listView.getItemAtPosition(position);
 					Bookmark b = BookmarkManager.CursorToBookmark(c);
 					
 					String defaultAction = SettingsHelper.getDefaultAction(getActivity());
@@ -142,7 +129,7 @@ public class BrowseBookmarksFragment extends ListFragment
 			});
 			
 			/* Add Context-Menu listener to the ListView. */
-			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+			listView.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 				public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 					menu.setHeaderTitle("Actions");
 					MenuInflater inflater = getActivity().getMenuInflater();
@@ -205,16 +192,9 @@ public class BrowseBookmarksFragment extends ListFragment
 	}
 	
 	@Override
-	public void onSaveInstanceState(Bundle savedInstanceState) {
-	    savedInstanceState.putString(STATE_USERNAME, username);
-	    savedInstanceState.putString(STATE_TAGNAME, tagname);
-	    super.onSaveInstanceState(savedInstanceState);
-	}
-	
-	@Override
 	public boolean onContextItemSelected(MenuItem aItem) {
 		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem.getMenuInfo();
-		final Cursor c = (Cursor)lv.getItemAtPosition(menuInfo.position);
+		final Cursor c = (Cursor)listView.getItemAtPosition(menuInfo.position);
 		Bookmark b = BookmarkManager.CursorToBookmark(c);
 		
 		switch (aItem.getItemId()) {
@@ -242,12 +222,6 @@ public class BrowseBookmarksFragment extends ListFragment
 				return true;
 		}
 		return false;
-	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.browse_bookmark_menu, menu);
 	}
 	
 	@Override
@@ -326,11 +300,6 @@ public class BrowseBookmarksFragment extends ListFragment
 	    mAdapter.swapCursor(null);
 	}
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.browse_bookmark_fragment, container, false);
-    }
-	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);

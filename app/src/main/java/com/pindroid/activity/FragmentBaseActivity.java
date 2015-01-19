@@ -41,6 +41,7 @@ import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.application.PindroidApplication;
 import com.pindroid.authenticator.AuthenticatorActivity;
+import com.pindroid.authenticator.AuthenticatorActivity_;
 import com.pindroid.util.AccountHelper;
 
 public abstract class FragmentBaseActivity extends ActionBarActivity {
@@ -84,7 +85,7 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
 	
 	private void init(){
 		if(AccountHelper.getAccountCount(this) < 1) {		
-			Intent i = new Intent(this, AuthenticatorActivity.class);
+			Intent i = new Intent(this, AuthenticatorActivity_.class);
 			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_INIT);
 			
 			return;

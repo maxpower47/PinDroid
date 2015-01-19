@@ -4,30 +4,34 @@ import android.support.v7.app.ActionBarActivity;
 
 import com.pindroid.R;
 import com.pindroid.fragment.AddBookmarkFragment;
-import com.pindroid.providers.BookmarkContent;
+import com.pindroid.providers.BookmarkContent.Bookmark;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.FragmentById;
 
 @EActivity(R.layout.activity_add_bookmark)
 public class AddBookmark extends ActionBarActivity implements AddBookmarkFragment.OnBookmarkSaveListener {
 
     @FragmentById(R.id.addbookmark_fragment) AddBookmarkFragment addBookmarkFragment;
+	@Extra("username") String username;
+	@Extra("bookmark") Bookmark bookmark;
+	@Extra("oldBookmark") Bookmark oldBookmark;
 
     @AfterViews
     protected void init() {
-        addBookmarkFragment.setUsername(getIntent().getStringExtra("username"));
-        addBookmarkFragment.loadBookmark((BookmarkContent.Bookmark) getIntent().getParcelableExtra("bookmark"), (BookmarkContent.Bookmark) getIntent().getParcelableExtra("oldBookmark"));
+        addBookmarkFragment.setUsername(username);
+        addBookmarkFragment.loadBookmark(bookmark, oldBookmark);
     }
 
     @Override
-    public void onBookmarkSave(BookmarkContent.Bookmark b) {
+    public void onBookmarkSave(Bookmark b) {
         finish();
     }
 
     @Override
-    public void onBookmarkCancel(BookmarkContent.Bookmark b) {
+    public void onBookmarkCancel(Bookmark b) {
         finish();
     }
 }

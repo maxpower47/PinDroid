@@ -49,12 +49,15 @@ import com.pindroid.client.PinboardApi;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.util.SyncUtils;
 
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
+
 /**
  * Activity which displays login screen to the user.
  */
+@EActivity(R.layout.login_activity)
 public class AuthenticatorActivity extends ActionBarActivity {
     public static final String PARAM_CONFIRMCREDENTIALS = "confirmCredentials";
-    public static final String PARAM_PASSWORD = "password";
     public static final String PARAM_USERNAME = "username";
     public static final String PARAM_AUTHTOKEN_TYPE = "authtokenType";
 
@@ -73,15 +76,15 @@ public class AuthenticatorActivity extends ActionBarActivity {
      */
     private Boolean mConfirmCredentials = false;
 
-    private TextView mMessage;
-    private String mPassword;
-    private EditText mPasswordEdit;
+	@ViewById(R.id.username_edit) EditText mUsernameEdit;
+	@ViewById(R.id.password_edit) EditText mPasswordEdit;
+    @ViewById(R.id.message) TextView mMessage;
 
     /** Was the original caller asking for an entirely new account? */
     protected boolean mRequestNewAccount = false;
 
     private String mUsername;
-    private EditText mUsernameEdit;
+	private String mPassword;
 
     /**
      * {@inheritDoc}
@@ -101,12 +104,6 @@ public class AuthenticatorActivity extends ActionBarActivity {
         mUsername = intent.getStringExtra(PARAM_USERNAME);
         mRequestNewAccount = mUsername == null;
         mConfirmCredentials = intent.getBooleanExtra(PARAM_CONFIRMCREDENTIALS, false);
-
-        setContentView(R.layout.login_activity);
-      
-        mUsernameEdit = (EditText) findViewById(R.id.username_edit);
-        mPasswordEdit = (EditText) findViewById(R.id.password_edit);
-        mMessage = (TextView) findViewById(R.id.message);
 
         if (!TextUtils.isEmpty(mUsername)){
         	mUsernameEdit.setText(mUsername);
@@ -141,7 +138,7 @@ public class AuthenticatorActivity extends ActionBarActivity {
      * request. See onAuthenticationResult(). Sets the
      * AccountAuthenticatorResult which is sent back to the caller.
      * 
-     * @param the confirmCredentials result.
+     * @param authToken the confirmCredentials result.
      */
     protected void finishConfirmCredentials(String authToken) {
         Log.i(TAG, "finishConfirmCredentials()");
@@ -162,7 +159,7 @@ public class AuthenticatorActivity extends ActionBarActivity {
      * AccountAuthenticatorResult which is sent back to the caller. Also sets
      * the authToken in AccountManager for this account.
      * 
-     * @param the confirmCredentials result.
+     * @param authToken the confirmCredentials result.
      */
     protected void finishLogin(String authToken) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);

@@ -21,12 +21,6 @@
 
 package com.pindroid.activity;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.SearchManager;
@@ -36,15 +30,15 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -64,8 +58,10 @@ import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BookmarkBrowser;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment;
+import com.pindroid.fragment.BrowseBookmarkFeedFragment_;
 import com.pindroid.fragment.BrowseBookmarksFragment;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
+import com.pindroid.fragment.BrowseBookmarksFragment_;
 import com.pindroid.fragment.BrowseNotesFragment;
 import com.pindroid.fragment.BrowseNotesFragment.OnNoteSelectedListener;
 import com.pindroid.fragment.BrowseNotesFragment_;
@@ -76,6 +72,7 @@ import com.pindroid.fragment.MainSearchResultsFragment.OnSearchActionListener;
 import com.pindroid.fragment.PindroidFragment;
 import com.pindroid.fragment.ViewBookmarkFragment;
 import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
+import com.pindroid.fragment.ViewBookmarkFragment_;
 import com.pindroid.fragment.ViewNoteFragment;
 import com.pindroid.fragment.ViewNoteFragment_;
 import com.pindroid.platform.BookmarkManager;
@@ -91,6 +88,11 @@ import com.pindroid.ui.ResizeAnimation;
 import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 public class Main extends FragmentBaseActivity implements OnBookmarkSelectedListener, 
 		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnSearchActionListener, LoaderManager.LoaderCallbacks<Cursor> {
@@ -411,7 +413,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
 	public void onMyBookmarksSelected(String tagname) {
-		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+		BrowseBookmarksFragment frag = new BrowseBookmarksFragment_();
 		frag.setQuery(app.getUsername(), tagname, null);
 		
 		clearBackStack();
@@ -422,7 +424,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
 	public void onMyUnreadSelected() {
-		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+		BrowseBookmarksFragment frag = new BrowseBookmarksFragment_();
 		frag.setQuery(app.getUsername(), null, "unread");
 		
 		clearBackStack();
@@ -449,7 +451,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     }
 
 	public void onRecentSelected() {
-		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
+		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment_();
 		frag.setQuery(app.getUsername(), null, "recent");
 		
 		clearBackStack();
@@ -460,7 +462,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 	
 	public void onPopularSelected() {
-		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
+		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment_();
 		frag.setQuery(app.getUsername(), null, "popular");
 		
 		clearBackStack();
@@ -471,7 +473,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 	
 	public void onMyNetworkSelected() {
-		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
+		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment_();
 		frag.setQuery(app.getUsername(), null, "network");
 		
 		clearBackStack();
@@ -574,7 +576,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		} else if(BookmarkViewType.WEB.equals(viewType) && SettingsHelper.getUseBrowser(this)) {
             startActivity(IntentHelper.OpenInBrowser(b.getUrl()));
         } else {
-            ViewBookmarkFragment frag = new ViewBookmarkFragment();
+            ViewBookmarkFragment frag = new ViewBookmarkFragment_();
             frag.setBookmark(b, viewType);
 
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -583,7 +585,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
                 FragmentTransaction t = fragmentManager.beginTransaction();
 
                 if(fragmentManager.findFragmentByTag("right") instanceof ViewBookmarkFragment){
-                    ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) fragmentManager.findFragmentByTag("right");
+                    ViewBookmarkFragment viewFrag = (ViewBookmarkFragment_) fragmentManager.findFragmentByTag("right");
                     viewFrag.setBookmark(b, viewType);
                     viewFrag.refresh();
                 } else {
@@ -592,7 +594,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
                 }
             } else {
                 if(fragmentManager.findFragmentByTag("left") instanceof ViewBookmarkFragment){
-                    ViewBookmarkFragment viewFrag = (ViewBookmarkFragment) fragmentManager.findFragmentByTag("left");
+                    ViewBookmarkFragment viewFrag = (ViewBookmarkFragment_) fragmentManager.findFragmentByTag("left");
                     viewFrag.setBookmark(b, viewType);
                     viewFrag.refresh();
                 } else replaceLeftFragment(frag, true);
@@ -636,7 +638,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     }
 
 	public void onTagSelected(String tag, boolean backstack) {
-		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+		BrowseBookmarksFragment frag = new BrowseBookmarksFragment_();
 		frag.setQuery(app.getUsername(), tag, null);
 
 		replaceLeftFragment(frag, backstack);
@@ -672,8 +674,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		Fragment frag = null;
 		
 		if(user.equals(app.getUsername())){
-			frag = new BrowseBookmarksFragment();
-		} else frag = new BrowseBookmarkFeedFragment();
+			frag = new BrowseBookmarksFragment_();
+		} else frag = new BrowseBookmarkFeedFragment_();
 		
 		((BookmarkBrowser)frag).setQuery(app.getUsername(), tag, user);
 
@@ -681,7 +683,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
 	public void onAccountSelected(String account) {
-		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
+		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment_();
 		frag.setQuery(app.getUsername(), null, account);
 
 		replaceLeftFragment(frag, true);
@@ -768,7 +770,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
 	public void onBookmarkSearch(String query) {
-		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+		BrowseBookmarksFragment frag = new BrowseBookmarksFragment_();
 		frag.setSearchQuery(query, app.getUsername(), null, false);
 
 		replaceLeftFragment(frag, true);
@@ -791,7 +793,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
 	public void onGlobalTagSearch(String query) {
-		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment();
+		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment_();
 		frag.setQuery(app.getUsername(), query, "global");
 
 		replaceLeftFragment(frag, true);
