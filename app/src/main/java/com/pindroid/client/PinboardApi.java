@@ -21,12 +21,14 @@
 
 package com.pindroid.client;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.TreeMap;
-import java.util.zip.GZIPInputStream;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
+
+import com.pindroid.Constants;
+import com.pindroid.xml.SaxTokenParser;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -40,22 +42,11 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.content.Context;
-import android.net.Uri;
-import android.util.Log;
-
-import com.pindroid.Constants;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.providers.NoteContent.Note;
-import com.pindroid.providers.TagContent.Tag;
-import com.pindroid.xml.SaxBookmarkParser;
-import com.pindroid.xml.SaxNoteListParser;
-import com.pindroid.xml.SaxNoteParser;
-import com.pindroid.xml.SaxResultParser;
-import com.pindroid.xml.SaxTagParser;
-import com.pindroid.xml.SaxTokenParser;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
+import java.util.TreeMap;
+import java.util.zip.GZIPInputStream;
 
 public class PinboardApi {
 	

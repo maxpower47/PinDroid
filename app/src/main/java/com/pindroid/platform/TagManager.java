@@ -151,19 +151,6 @@ public class TagManager {
 		context.getContentResolver().delete(Tag.CONTENT_URI, selection, selectionargs);
 	}
 	
-	public static void TruncateOldTags(ArrayList<String> accounts, Context context){
-		
-		final ArrayList<String> selectionList = new ArrayList<String>();
-		
-		for(String s : accounts) {
-			selectionList.add(Tag.Account + " <> '" + s + "'");
-		}
-		
-		final String selection = TextUtils.join(" AND ", selectionList);
-		
-		context.getContentResolver().delete(Tag.CONTENT_URI, selection, null);
-	}
-	
 	public static CursorLoader SearchTags(String query, String username, Context context) {
 		final String[] projection = new String[] { Tag._ID, Tag.Name, Tag.Count };
 		String selection = null;

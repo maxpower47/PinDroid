@@ -107,40 +107,6 @@ public class NoteManager {
 		context.getContentResolver().delete(Note.CONTENT_URI, selection, selectionargs);
 	}
 	
-	public static void TruncateOldNotes(ArrayList<String> accounts, Context context){
-		
-		final ArrayList<String> selectionList = new ArrayList<String>();
-		
-		for(String s : accounts) {
-			selectionList.add(Note.Account + " <> '" + s + "'");
-		}
-		
-		final String selection = TextUtils.join(" AND ", selectionList);
-		
-		context.getContentResolver().delete(Note.CONTENT_URI, selection, null);
-	}
-	
-	public static void UpsertNote(Note note, String account, Context context){
-		final String[] projection = new String[] {Note.Pid, Note.Account, Note.Hash};
-		final String selection = Note.Pid + "=? AND " + Note.Account + "=?";
-		final String[] selectionargs = new String[]{note.getPid(), account};
-		
-		final Cursor c = context.getContentResolver().query(Note.CONTENT_URI, projection, selection, selectionargs, null);
-		
-		if(c.moveToFirst()){
-			final int hashColumn = c.getColumnIndex(Note.Hash);
-			final String hash = c.getString(hashColumn);
-			if(!hash.equals(note.getHash())){
-				note.setHash(null);
-			}
-			
-			UpdateNote(note, account, context);
-		} else {
-			AddNote(note, account, context);
-		}
-		c.close();
-	}
-	
 	public static void AddNote(Note note, String account, Context context){
 		final ContentValues values = new ContentValues();
 		

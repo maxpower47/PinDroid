@@ -21,14 +21,6 @@
 
 package com.pindroid.syncadapter;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.http.auth.AuthenticationException;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
@@ -41,7 +33,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.pindroid.Constants;
-import com.pindroid.client.PinboardApi;
 import com.pindroid.client.PinboardApiResult;
 import com.pindroid.client.PinboardClient;
 import com.pindroid.client.PinboardException;
@@ -52,8 +43,15 @@ import com.pindroid.platform.NoteManager;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.NoteContent.Note;
-import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.util.AccountHelper;
+
+import org.apache.http.auth.AuthenticationException;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * SyncAdapter implementation for syncing bookmarks.
@@ -161,8 +159,6 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 		NoteManager.TruncateNotes(mAccount.name, mContext);
 		
 		for(Note n : noteList){
-			//NoteManager.UpsertNote(n, mAccount.name, mContext);
-			
 			Note t = PinboardClient.get().getNote(AccountHelper.getAuthToken(mContext, mAccount), n.getPid());
 			n.setText(t.getText());
 		}
