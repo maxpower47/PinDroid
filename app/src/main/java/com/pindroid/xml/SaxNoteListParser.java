@@ -68,12 +68,12 @@ public class SaxNoteListParser {
         });
         root.getChild("note").getChild("created_at").setEndTextElementListener(new EndTextElementListener(){
             public void end(String body) {
-            	currentNote.setAdded(DateParser.parseTime(body));
+            	//currentNote.setAdded(DateParser.parseTime(body));
             }
         });
         root.getChild("note").getChild("updated_at").setEndTextElementListener(new EndTextElementListener(){
             public void end(String body) {
-            	currentNote.setUpdated(DateParser.parseTime(body));
+            	//currentNote.setUpdated(DateParser.parseTime(body));
             }
         });
         root.getChild("note").setEndElementListener(new EndElementListener(){

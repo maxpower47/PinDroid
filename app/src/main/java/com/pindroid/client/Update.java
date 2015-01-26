@@ -21,18 +21,18 @@
 
 package com.pindroid.client;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
+
 public class Update {
-	private long lastUpdate;
+	@SerializedName("update_time") private Date lastUpdate;
 	
-	public long getLastUpdate(){
+	public Date getLastUpdate(){
 		return lastUpdate;
 	}
 	
-	public void setLastUpdate(long lastUpdate){
+	public void setLastUpdate(Date lastUpdate){
 		this.lastUpdate = lastUpdate;
 	}
-	
-	public Update(){
-		
-	}	
 }

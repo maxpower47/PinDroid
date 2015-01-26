@@ -254,8 +254,6 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
     private void loadBookmark(){
     	if(bookmark != null){
     		if(viewType == BookmarkViewType.VIEW){
-
-				Date d = new Date(bookmark.getTime());
 				
 				if(bookmark.getDescription() != null && !bookmark.getDescription().equals("null"))
 					mTitle.setText(bookmark.getDescription());
@@ -269,7 +267,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
                     notesSection.setVisibility(View.GONE);
 				}
 				
-				mTime.setText(d.toString());
+				mTime.setText(bookmark.getTime().toString());
 
 				if(bookmark.getTags().size() > 0) {
 					mTags.setTags(bookmark.getTags(), " ");

@@ -22,6 +22,8 @@
 package com.pindroid.platform;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.NoteContent.Note;
@@ -63,7 +65,7 @@ public class NoteManager {
 
 			Note n = new Note(id, c.getString(titleColumn), c.getString(textColumn), 
 				c.getString(accountColumn), c.getString(hashColumn), c.getString(pidColumn),
-				c.getLong(addedColumn), c.getLong(updatedColumn));
+				new Date(c.getLong(addedColumn)), new Date(c.getLong(updatedColumn)));
 			
 			c.close();
 			
@@ -74,7 +76,7 @@ public class NoteManager {
 		}
 	}
 	
-	public static void BulkInsert(ArrayList<Note> list, String account, Context context) {
+	public static void BulkInsert(List<Note> list, String account, Context context) {
 		int notesize = list.size();
 		ContentValues[] ncv = new ContentValues[notesize];
 		
@@ -88,8 +90,8 @@ public class NoteManager {
 			values.put(Note.Account, account);
 			values.put(Note.Hash, n.getHash());
 			values.put(Note.Pid, n.getPid());
-			values.put(Note.Added, n.getAdded());
-			values.put(Note.Updated, n.getUpdated());
+			values.put(Note.Added, n.getAdded().getTime());
+			values.put(Note.Updated, n.getUpdated().getTime());
 			
 			ncv[i] = values;
 		}
@@ -146,8 +148,8 @@ public class NoteManager {
 		values.put(Note.Hash, note.getHash());
 		values.put(Note.Text, note.getText());
 		values.put(Note.Pid, note.getPid());
-		values.put(Note.Added, note.getAdded());
-		values.put(Note.Updated, note.getUpdated());
+		values.put(Note.Added, note.getAdded().getTime());
+		values.put(Note.Updated, note.getUpdated().getTime());
 		values.put(Note.Account, note.getAccount());
 	
 		context.getContentResolver().insert(Note.CONTENT_URI, values);
@@ -163,8 +165,8 @@ public class NoteManager {
 		values.put(Note.Hash, note.getHash());
 		values.put(Note.Text, note.getText());
 		values.put(Note.Pid, note.getPid());
-		values.put(Note.Added, note.getAdded());
-		values.put(Note.Updated, note.getUpdated());
+		values.put(Note.Added, note.getAdded().getTime());
+		values.put(Note.Updated, note.getUpdated().getTime());
 		values.put(Note.Account, note.getAccount());
 		
 		context.getContentResolver().update(Note.CONTENT_URI, values, selection, selectionargs);

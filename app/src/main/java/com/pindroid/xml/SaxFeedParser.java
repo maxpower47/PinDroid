@@ -73,7 +73,7 @@ public class SaxFeedParser {
         });
         item.getChild(nsDc, "date").setEndTextElementListener(new EndTextElementListener(){
             public void end(String body) {
-				currentBookmark.setTime(DateParser.parseTime(body.trim()));
+				//currentBookmark.setTime(DateParser.parseTime(body.trim()));
             }
         });
         item.getChild(ns, "link").setEndTextElementListener(new EndTextElementListener(){

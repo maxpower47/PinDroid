@@ -22,6 +22,8 @@
 package com.pindroid.platform;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import com.pindroid.providers.TagContent.Tag;
 
@@ -66,23 +68,20 @@ public class TagManager {
 		context.getContentResolver().insert(Tag.CONTENT_URI, values);
 	}
 	
-	public static void BulkInsert(ArrayList<Tag> list, String account, Context context) {
-		int tagsize = list.size();
-		ContentValues[] tcv = new ContentValues[tagsize];
+	public static void BulkInsert(Map<String, Long> list, String account, Context context) {
+		List<ContentValues> cvList = new ArrayList<>();
 		
-		for(int i = 0; i < tagsize; i++){	
-			Tag t = list.get(i);
-			
+		for(Map.Entry<String, Long> t : list.entrySet()){
 			ContentValues values = new ContentValues();
 			
-			values.put(Tag.Name, t.getTagName());
-			values.put(Tag.Count, t.getCount());
+			values.put(Tag.Name, t.getKey());
+			values.put(Tag.Count, t.getValue());
 			values.put(Tag.Account, account);
 			
-			tcv[i] = values;
+			cvList.add(values);
 		}
 		
-		context.getContentResolver().bulkInsert(Tag.CONTENT_URI, tcv);
+		context.getContentResolver().bulkInsert(Tag.CONTENT_URI, cvList.toArray(new ContentValues[list.size()]));
 	}
 	
 	public static void UpsertTag(Tag tag, String account, Context context){

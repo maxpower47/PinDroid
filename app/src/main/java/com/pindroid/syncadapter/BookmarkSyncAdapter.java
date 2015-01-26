@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.auth.AuthenticationException;
 
@@ -41,6 +42,8 @@ import android.util.Log;
 
 import com.pindroid.Constants;
 import com.pindroid.client.PinboardApi;
+import com.pindroid.client.PinboardApiResult;
+import com.pindroid.client.PinboardClient;
 import com.pindroid.client.PinboardException;
 import com.pindroid.client.TooManyRequestsException;
 import com.pindroid.client.Update;
@@ -50,6 +53,7 @@ import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.NoteContent.Note;
 import com.pindroid.providers.TagContent.Tag;
+import com.pindroid.util.AccountHelper;
 
 /**
  * SyncAdapter implementation for syncing bookmarks.
@@ -117,9 +121,9 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	final String username = account.name;
     	mAccount = account;
 
-    	final Update update = PinboardApi.lastUpdate(account, mContext);
-    	
-    	if(update.getLastUpdate() > lastUpdate) {
+    	final Update update = PinboardClient.get().getUpdate(AccountHelper.getAuthToken(getContext(), account));
+
+		if(update.getLastUpdate().getTime() > lastUpdate) {
 	
 			Log.d(TAG, "In Bookmark Load");
 			final ArrayList<String> accounts = new ArrayList<String>();
@@ -133,8 +137,9 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 				
 				BookmarkManager.BulkInsert(addBookmarkList, username, mContext);
 			}
-			
-			final ArrayList<Tag> tagList = PinboardApi.getTags(account, mContext);
+
+			final Map<String, Long> tagList = PinboardClient.get().getTags(AccountHelper.getAuthToken(mContext, account));
+
 			TagManager.TruncateTags(username, mContext);
 			if(!tagList.isEmpty()){
 				TagManager.BulkInsert(tagList, username, mContext);
@@ -142,7 +147,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 			
 			SyncNotes();
         
-            setServerSyncMarker(account, update.getLastUpdate());
+            setServerSyncMarker(account, update.getLastUpdate().getTime());
 
             syncResult.stats.numEntries += addBookmarkList.size();
     	} else {
@@ -152,13 +157,13 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     
     private void SyncNotes() throws AuthenticationException, IOException, TooManyRequestsException, PinboardException{
     	
-		final ArrayList<Note> noteList = PinboardApi.getNoteList(mAccount, mContext);
+		final List<Note> noteList = PinboardClient.get().getNotes(AccountHelper.getAuthToken(mContext, mAccount)).getNotes();
 		NoteManager.TruncateNotes(mAccount.name, mContext);
 		
 		for(Note n : noteList){
 			//NoteManager.UpsertNote(n, mAccount.name, mContext);
 			
-			Note t = PinboardApi.getNote(n.getPid(), mAccount, mContext);
+			Note t = PinboardClient.get().getNote(AccountHelper.getAuthToken(mContext, mAccount), n.getPid());
 			n.setText(t.getText());
 		}
 		
@@ -175,7 +180,11 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	for(Bookmark b : bookmarks)
     	{
     		try{
-				PinboardApi.addBookmark(b, account, mContext);
+				PinboardApiResult result = PinboardClient.get().addBookmark(AccountHelper.getAuthToken(mContext, account), b.toMap());
+
+				if(!result.success()) {
+					throw new Exception();
+				}
 	
 				Log.d(TAG, "Bookmark edited: " + (b.getHash() == null ? "" : b.getHash()));
 				b.setSynced(1);
@@ -183,7 +192,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 				
 				syncResult.stats.numEntries++;
     		}
-    		catch(PinboardException e){
+    		catch(Exception e){
     			Log.d(TAG, "Error editing bookmark: " + (b.getHash() == null ? "" : b.getHash()));
 				b.setSynced(-1);
 				BookmarkManager.SetSynced(b, -1, account.name, mContext);
@@ -198,7 +207,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 		
 		for(Bookmark b : bookmarks)
 		{
-			PinboardApi.deleteBookmark(b, account, mContext);
+			PinboardClient.get().deleteBookmark(AccountHelper.getAuthToken(mContext, account), b.getUrl());
 	
 			Log.d(TAG, "Bookmark deleted: " + (b.getHash() == null ? "" : b.getHash()));
 			BookmarkManager.DeleteBookmark(b, mContext);
@@ -210,13 +219,15 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     private ArrayList<Bookmark> getBookmarkList()
     	throws AuthenticationException, IOException, TooManyRequestsException, PinboardException {
     	int pageSize = Constants.BOOKMARK_PAGE_SIZE;
-    	ArrayList<Bookmark> results = new ArrayList<Bookmark>();   	
+    	ArrayList<Bookmark> results = new ArrayList<>();
 
 		int page = 0;
 		boolean morePages = true;
 		
 		do{
-			morePages = results.addAll(PinboardApi.getAllBookmarks(null, page++ * pageSize, pageSize, mAccount, mContext));
+			List<Bookmark> list = PinboardClient.get().getBookmarks(AccountHelper.getAuthToken(mContext, mAccount), Integer.toString(page++ * pageSize), Integer.toString(pageSize));
+
+			morePages = results.addAll(list);
 		} while(morePages);
 
 		return results;
@@ -227,7 +238,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
     	String token = mAccountManager.getUserData(account, Constants.PREFS_SECRET_TOKEN);
     	
     	if(token == null){
-    		token = PinboardApi.getSecretToken(account, mContext);		
+    		token = PinboardClient.get().getSecretToken(AccountHelper.getAuthToken(mContext, account)).getToken();
 			mAccountManager.setUserData(account, Constants.PREFS_SECRET_TOKEN, token);
     	}
     }

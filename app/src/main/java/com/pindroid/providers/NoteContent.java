@@ -24,6 +24,10 @@ package com.pindroid.providers;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
+
 public class NoteContent {
 
 	public static class Note implements BaseColumns {
@@ -41,14 +45,14 @@ public class NoteContent {
 		public static final String Hash = "HASH";
 		public static final String Pid = "PID";
 		
-        private String mTitle;
-        private String mText;
-        private String mHash;
-        private String mPid;
+        @SerializedName("title") private String mTitle;
+        @SerializedName("text") private String mText;
+        @SerializedName("hash") private String mHash;
+		@SerializedName("id") private String mPid;
         private int mId = 0;
         private String mAccount = null;
-        private long mAdded = 0;
-        private long mUpdated = 0;
+		@SerializedName("created_at") private Date mAdded;
+		@SerializedName("updated_at") private Date mUpdated;
 
         public int getId(){
         	return mId;
@@ -98,26 +102,26 @@ public class NoteContent {
         	mAccount = account;
         }
         
-        public long getAdded(){
+        public Date getAdded(){
         	return mAdded;
         }
         
-        public void setAdded(long added) {
+        public void setAdded(Date added) {
         	mAdded = added;
         }
         
-        public long getUpdated(){
+        public Date getUpdated(){
         	return mUpdated;
         }
         
-        public void setUpdated(long updated) {
+        public void setUpdated(Date updated) {
         	mUpdated = updated;
         }
         
         public Note() {
         }
         
-        public Note(int id, String title, String text, String account, String hash, String pid, long added, long updated) {
+        public Note(int id, String title, String text, String account, String hash, String pid, Date added, Date updated) {
         	mId = id;
             mTitle = title;
             mText = text;
@@ -146,8 +150,8 @@ public class NoteContent {
         	mText = null;
         	mHash = null;
         	mPid = null;
-        	mAdded = 0;
-        	mUpdated = 0;
+        	mAdded = null;
+        	mUpdated = null;
         }
 	}
 }

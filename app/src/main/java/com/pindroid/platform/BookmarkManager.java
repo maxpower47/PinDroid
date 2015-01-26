@@ -22,6 +22,7 @@
 package com.pindroid.platform;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -94,7 +95,7 @@ public class BookmarkManager {
 
 				Bookmark b = new Bookmark(c.getInt(idColumn), "", c.getString(urlColumn), 
 						c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn), c.getString(hashColumn), 
-						c.getString(metaColumn), 0, c.getInt(readColumn) == 0 ? false : true,
+						c.getString(metaColumn), new Date(), c.getInt(readColumn) == 0 ? false : true,
 						c.getInt(shareColumn) == 0 ? false : true, 0, false);
 
 				bookmarkList.add(b);
@@ -135,7 +136,7 @@ public class BookmarkManager {
 
 				Bookmark b = new Bookmark(c.getInt(idColumn), "", c.getString(urlColumn), 
 						c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn), c.getString(hashColumn), 
-						c.getString(metaColumn), 0, c.getInt(readColumn) == 0 ? false : true,
+						c.getString(metaColumn), new Date(), c.getInt(readColumn) == 0 ? false : true,
 						c.getInt(shareColumn) == 0 ? false : true, 0, true);
 
 				bookmarkList.add(b);
@@ -176,7 +177,7 @@ public class BookmarkManager {
 
 			Bookmark b = new Bookmark(id, c.getString(accountColumn), c.getString(urlColumn), 
 				c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn),
-				c.getString(hashColumn), c.getString(metaColumn), c.getLong(timeColumn), read, share, synced, deleted);
+				c.getString(hashColumn), c.getString(metaColumn), new Date(c.getLong(timeColumn)), read, share, synced, deleted);
 			
 			c.close();
 			
@@ -217,7 +218,7 @@ public class BookmarkManager {
 
 			Bookmark b = new Bookmark(c.getInt(idColumn), c.getString(accountColumn), c.getString(urlColumn), 
 				c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn),
-				c.getString(hashColumn), c.getString(metaColumn), c.getLong(timeColumn), read, share, synced, deleted);
+				c.getString(hashColumn), c.getString(metaColumn), new Date(c.getLong(timeColumn)), read, share, synced, deleted);
 			
 			c.close();
 			
@@ -257,7 +258,7 @@ public class BookmarkManager {
 
 			Bookmark b = new Bookmark(c.getInt(idColumn), c.getString(accountColumn), c.getString(urlColumn), 
 				c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn),
-				c.getString(hashColumn), c.getString(metaColumn), c.getLong(timeColumn), read, share, synced, deleted);
+				c.getString(hashColumn), c.getString(metaColumn), new Date(c.getLong(timeColumn)), read, share, synced, deleted);
 			
 			c.close();
 			
@@ -283,7 +284,7 @@ public class BookmarkManager {
 		values.put(Bookmark.Tags, bookmark.getTagString());
 		values.put(Bookmark.Hash, hash);
 		values.put(Bookmark.Meta, bookmark.getMeta());
-		values.put(Bookmark.Time, bookmark.getTime());
+		values.put(Bookmark.Time, bookmark.getTime().getTime());
 		values.put(Bookmark.Account, account);
 		values.put(Bookmark.ToRead, bookmark.getToRead() ? 1 : 0);
 		values.put(Bookmark.Shared, bookmark.getShared() ? 1 : 0);
@@ -307,7 +308,7 @@ public class BookmarkManager {
 			values.put(Bookmark.Tags, b.getTagString());
 			values.put(Bookmark.Hash, b.getHash());
 			values.put(Bookmark.Meta, b.getMeta());
-			values.put(Bookmark.Time, b.getTime());
+			values.put(Bookmark.Time, b.getTime().getTime());
 			values.put(Bookmark.Account, account);
 			values.put(Bookmark.ToRead, b.getToRead() ? 1 : 0);
 			values.put(Bookmark.Shared, b.getShared() ? 1 : 0);
@@ -338,8 +339,8 @@ public class BookmarkManager {
 		values.put(Bookmark.Tags, bookmark.getTagString());
 		values.put(Bookmark.Meta, bookmark.getMeta());
 		
-		if(bookmark.getTime() > 0)
-			values.put(Bookmark.Time, bookmark.getTime());
+		if(bookmark.getTime().getTime() > 0)
+			values.put(Bookmark.Time, bookmark.getTime().getTime());
 		
 		values.put(Bookmark.ToRead, bookmark.getToRead() ? 1 : 0);
 		values.put(Bookmark.Shared, bookmark.getShared() ? 1 : 0);
@@ -514,7 +515,7 @@ public class BookmarkManager {
 			b.setNotes(c.getString(c.getColumnIndex(Bookmark.Notes)));
 		
 		if(c.getColumnIndex(Bookmark.Time) != -1)
-			b.setTime(c.getLong(c.getColumnIndex(Bookmark.Time)));
+			b.setTime(new Date(c.getLong(c.getColumnIndex(Bookmark.Time))));
 		
 		if(c.getColumnIndex(Bookmark.Shared) != -1)
 			b.setShared(c.getInt(c.getColumnIndex(Bookmark.Shared)) == 1 ? true : false);

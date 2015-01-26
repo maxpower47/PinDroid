@@ -21,8 +21,10 @@
 
 package com.pindroid.client;
 
+import com.google.gson.annotations.SerializedName;
+
 public class PinboardApiResult {
-	private String code;
+	@SerializedName("result_code") private String code;
 	
 	public String getCode(){
 		return code;
@@ -31,11 +33,8 @@ public class PinboardApiResult {
 	public void setCode(String code){
 		this.code = code;
 	}
-	
-	public PinboardApiResult(){
-	}	
-	
-	public PinboardApiResult(String code){
-		this.code = code;
-	}	
+
+	public boolean success() {
+		return "done".equals(code);
+	}
 }

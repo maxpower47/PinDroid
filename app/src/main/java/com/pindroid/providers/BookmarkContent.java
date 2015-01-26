@@ -22,7 +22,11 @@
 package com.pindroid.providers;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.google.gson.annotations.SerializedName;
 import com.pindroid.providers.TagContent.Tag;
 
 import android.net.Uri;
@@ -56,15 +60,15 @@ public class BookmarkContent {
 		
 		private int mId = 0;
 		private String mAccount = null;
-        private String mUrl = null;
-        private String mDescription = null;
-        private String mNotes = null;
-        private String mTags = null;
-        private String mHash = null;
-        private String mMeta = null;
-        private boolean mShared = true;
-        private boolean mRead = false;
-        private long mTime = 0;
+        @SerializedName("href") private String mUrl = null;
+		@SerializedName("description") private String mDescription = null;
+		@SerializedName("extended") private String mNotes = null;
+		@SerializedName("tags") private String mTags = null;
+		@SerializedName("hash") private String mHash = null;
+		@SerializedName("meta") private String mMeta = null;
+		@SerializedName("shared") private Boolean mShared = true;
+		@SerializedName("toread") private Boolean mRead = false;
+		@SerializedName("time") private Date mTime;
         private int mSynced = 0;
         private boolean mDeleted = false;
 
@@ -137,11 +141,11 @@ public class BookmarkContent {
         	mMeta = meta;
         }
         
-        public long getTime(){
+        public Date getTime(){
         	return mTime;
         }
         
-        public void setTime(long time) {
+        public void setTime(Date time) {
         	mTime = time;
         }
         
@@ -196,7 +200,7 @@ public class BookmarkContent {
             mUrl = url;
         }
         
-        public Bookmark(String url, String description, String notes, String tags, boolean priv, boolean toread, long time) {
+        public Bookmark(String url, String description, String notes, String tags, boolean priv, boolean toread, Date time) {
             mUrl = url;
             mDescription = description;
             mNotes = notes;
@@ -206,7 +210,7 @@ public class BookmarkContent {
             mTime = time;
         }
         
-        public Bookmark(int id, String account, String url, String description, String notes, String tags, String hash, String meta, long time, boolean read, boolean share, int synced, boolean deleted) {
+        public Bookmark(int id, String account, String url, String description, String notes, String tags, String hash, String meta, Date time, boolean read, boolean share, int synced, boolean deleted) {
             mId = id;
         	mUrl = url;
             mDescription = description;
@@ -257,7 +261,7 @@ public class BookmarkContent {
         	this.mRead = false;
         	this.mShared = true;
         	this.mTags = null;
-        	this.mTime = 0;
+        	this.mTime = null;
         	this.mUrl = null;
         	this.mSynced = 0;
         	this.mDeleted = false;
@@ -276,7 +280,7 @@ public class BookmarkContent {
 			dest.writeString(mTags);
 			dest.writeString(mHash);
 			dest.writeString(mMeta);
-			dest.writeLong(mTime);
+			dest.writeLong(mTime.getTime());
 			dest.writeInt(mSynced);
 			dest.writeByte((byte) (mShared ? 1 : 0));
 			dest.writeByte((byte) (mRead ? 1 : 0));
@@ -303,7 +307,7 @@ public class BookmarkContent {
 			mTags = in.readString();
 			mHash = in.readString();
 			mMeta = in.readString();
-			mTime = in.readLong();
+			mTime = new Date(in.readLong());
 			mSynced = in.readInt();
 			mShared = in.readByte() == 1;
 			mRead = in.readByte() == 1;
@@ -333,6 +337,25 @@ public class BookmarkContent {
 			} else if (!mHash.equals(other.mHash))
 				return false;
 			return true;
+		}
+
+		public Map<String, String> toMap() {
+			Map<String, String> result = new HashMap<>();
+
+			result.put("description", mDescription);
+			result.put("extended", mNotes);
+			result.put("tags", mTags);
+			result.put("url", mUrl);
+
+			if(mShared){
+				result.put("shared", "yes");
+			} else result.put("shared", "no");
+
+			if(mRead){
+				result.put("toread", "yes");
+			}
+
+			return result;
 		}
 	}
 }

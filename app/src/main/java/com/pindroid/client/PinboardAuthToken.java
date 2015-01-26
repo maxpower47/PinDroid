@@ -21,8 +21,10 @@
 
 package com.pindroid.client;
 
+import com.google.gson.annotations.SerializedName;
+
 public class PinboardAuthToken {
-	private String token;
+	@SerializedName("result") private String token;
 	
 	public String getToken(){
 		return token;

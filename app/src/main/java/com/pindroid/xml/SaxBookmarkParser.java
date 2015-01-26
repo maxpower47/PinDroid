@@ -63,7 +63,7 @@ public class SaxBookmarkParser {
             		currentBookmark.setUrl(url);
             	}
             	if(time != null) {
-					currentBookmark.setTime(DateParser.parseTime(time));
+					//currentBookmark.setTime(DateParser.parseTime(time));
             	}
             	if(description != null) {
             		currentBookmark.setDescription(description);

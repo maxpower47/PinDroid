@@ -43,7 +43,9 @@ import android.widget.Toast;
 import com.pindroid.R;
 import com.pindroid.action.GetWebpageTitleTask;
 import com.pindroid.client.PinboardApi;
+import com.pindroid.client.PinboardClient;
 import com.pindroid.listadapter.TagAutoCompleteCursorAdapter;
+import com.pindroid.model.TagSuggestions;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -63,6 +65,7 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @EFragment(R.layout.add_bookmark_fragment)
 @OptionsMenu(R.menu.add_bookmark_menu)
@@ -88,7 +91,7 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 	private long updateTime = 0;
 	
 	private AsyncTask<String, Integer, String> titleTask;
-	private AsyncTask<String, Integer, ArrayList<Tag>> tagTask;
+	private AsyncTask<String, Integer, List<TagSuggestions>> tagTask;
 	
 	private OnBookmarkSaveListener bookmarkSaveListener;
 	
@@ -254,7 +257,7 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 			
 		bookmark = new Bookmark(url, description, 
 				mEditNotes.getText().toString(), tagstring.trim(),
-				!mPrivate.isChecked(), mToRead.isChecked(), updateTime);
+				!mPrivate.isChecked(), mToRead.isChecked(), new Date(updateTime));
 		
 		bookmark.setId(oldid);
 		
@@ -318,18 +321,22 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
         }
     }
 
-    public class GetTagSuggestionsTask extends AsyncTask<String, Integer, ArrayList<Tag>>{
+    public class GetTagSuggestionsTask extends AsyncTask<String, Integer, List<TagSuggestions>>{
     	private String url;
     	
     	@Override
-    	protected ArrayList<Tag> doInBackground(String... args) {
+    	protected List<TagSuggestions> doInBackground(String... args) {
     		url = args[0];
 	
     		if(getActivity() != null) {
 	    		try {
 	    			Account account = AccountHelper.getAccount(username, getActivity());
-	    			
-					return PinboardApi.getSuggestedTags(url, account, getActivity());
+
+					if(!url.startsWith("http")){
+						url = "http://" + url;
+					}
+
+					return PinboardClient.get().getTagSuggestions(AccountHelper.getAuthToken(getActivity(), account), url);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -342,19 +349,21 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
     		mPopularTags.setVisibility(View.GONE);
     	}
     	
-        protected void onPostExecute(ArrayList<Tag> result) {
+        protected void onPostExecute(List<TagSuggestions> result) {
         	        	
         	if(result != null) {
         		SpannableStringBuilder recommendedBuilder = new SpannableStringBuilder();
         		SpannableStringBuilder popularBuilder = new SpannableStringBuilder();
 
-        		for(Tag t : result) {
-        			if(t.getType().equals("recommended")) {
-        				addTag(recommendedBuilder, t);
-        			} else if(t.getType().equals("popular")) {
-        				addTag(popularBuilder, t);
-        			}
-        		}
+				for(TagSuggestions ts : result) {
+					for(String t : ts.getPopular()) {
+						addTag(popularBuilder, t);
+					}
+
+					for(String t : ts.getRecommended()) {
+						addTag(recommendedBuilder, t);
+					}
+				}
         		
         		mRecommendedTags.setText(recommendedBuilder);
         		mPopularTags.setText(popularBuilder);
@@ -364,7 +373,7 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
         	} 	
         }
 
-		private void addTag(SpannableStringBuilder builder, Tag t) {
+		private void addTag(SpannableStringBuilder builder, String t) {
 			int flags = 0;
 			
 			if (builder.length() != 0) {
@@ -372,10 +381,10 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 			}
 			
 			int start = builder.length();
-			builder.append(t.getTagName());
+			builder.append(t);
 			int end = builder.length();
 			
-			TagSpan span = new TagSpan(t.getTagName());
+			TagSpan span = new TagSpan(t);
 			span.setOnTagClickListener(tagOnClickListener);
 
 			builder.setSpan(span, start, end, flags);

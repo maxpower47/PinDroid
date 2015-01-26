@@ -100,7 +100,7 @@ public class SaveReadLaterBookmark extends Activity {
 		bookmark.setDescription(reader.getSubject());
 		bookmark.setShared(!intent.getBooleanExtra(Constants.EXTRA_PRIVATE, SettingsHelper.getPrivateDefault(this)));
 		bookmark.setToRead(true);
-		bookmark.setTime(new Date().getTime());
+		bookmark.setTime(new Date());
 		bookmark.setTagString("");
 		bookmark.setAccount(app.getUsername());
 
