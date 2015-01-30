@@ -49,6 +49,7 @@ import com.pindroid.client.PinboardApi;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.util.SyncUtils;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
@@ -104,12 +105,15 @@ public class AuthenticatorActivity extends ActionBarActivity {
         mUsername = intent.getStringExtra(PARAM_USERNAME);
         mRequestNewAccount = mUsername == null;
         mConfirmCredentials = intent.getBooleanExtra(PARAM_CONFIRMCREDENTIALS, false);
-
-        if (!TextUtils.isEmpty(mUsername)){
-        	mUsernameEdit.setText(mUsername);
-        	mPasswordEdit.requestFocus();
-        }
     }
+
+	@AfterViews
+	public void init() {
+		if (!TextUtils.isEmpty(mUsername)){
+			mUsernameEdit.setText(mUsername);
+			mPasswordEdit.requestFocus();
+		}
+	}
 
     /**
      * Handles onClick event on the Submit button. Sends username/password to
