@@ -52,6 +52,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.heinrichreimersoftware.materialdrawer.DrawerFrameLayout;
+import com.heinrichreimersoftware.materialdrawer.DrawerView;
+import com.heinrichreimersoftware.materialdrawer.structure.DrawerHeaderItem;
+import com.heinrichreimersoftware.materialdrawer.structure.DrawerItem;
+import com.heinrichreimersoftware.materialdrawer.structure.DrawerProfile;
 import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
@@ -97,11 +102,11 @@ import java.util.Set;
 public class Main extends FragmentBaseActivity implements OnBookmarkSelectedListener, 
 		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnSearchActionListener, LoaderManager.LoaderCallbacks<Cursor> {
 	
-	private ListView mDrawerList;
-	private LinearLayout mDrawerWrapper;
-	private DrawerLayout mDrawerLayout;
-	private ActionBarDrawerToggle mDrawerToggle;
-	private CharSequence mDrawerTitle;
+	//private ListView mDrawerList;
+	//private LinearLayout mDrawerWrapper;
+	private DrawerView mDrawerLayout;
+	//private ActionBarDrawerToggle mDrawerToggle;
+	//private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     LinearLayout accountSpinnerView;
     ImageView accountSpinnerButton;
@@ -123,10 +128,10 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 		
-		mDrawerList = (ListView) findViewById(R.id.left_drawer_list);
-		mDrawerWrapper = (LinearLayout) findViewById(R.id.left_drawer);
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mTitle = mDrawerTitle = getTitle();
+		//mDrawerList = (ListView) findViewById(R.id.left_drawer_list);
+		//mDrawerWrapper = (LinearLayout) findViewById(R.id.left_drawer);
+		mDrawerLayout = (DrawerView) findViewById(R.id.drawer);
+		mTitle = getTitle();
         accountSpinnerView = (LinearLayout) getLayoutInflater().inflate(R.layout.menu_spinner, null);
         accountSpinnerButton = (ImageView) accountSpinnerView.findViewById(R.id.account_button);
         accountList = (LinearLayout) accountSpinnerView.findViewById(R.id.account_list);
@@ -138,20 +143,45 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
             } else setAccount(app.getUsername());
         }
 
-		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.statusbar_background));
+		int i = 0;
+
+		for(Account account : AccountHelper.getAccounts(this)) {
+			mDrawerLayout.addProfile(new DrawerProfile()
+					.setId(i++)
+					.setName(account.name)
+					.setBackground(getDrawable(R.drawable.drawer_spinner)));
+
+			mDrawerLayout.
+		}
+
+
+		//mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        //mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.statusbar_background));
+
+
+		mDrawerLayout.setOnProfileSwitchListener(new DrawerProfile.OnProfileSwitchListener() {
+			@Override
+			public void onSwitch(DrawerProfile drawerProfile, long l, DrawerProfile drawerProfile2, long l2) {
+				setAccount(drawerProfile2.getName());
+			}
+		});
+
+		/*mDrawerLayout.addProfile(new DrawerProfile()
+				.setId(1)
+				.setName("blah")
+				.setBackground(getDrawable(R.drawable.drawer_spinner)));*/
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setHomeButtonEnabled(true);
         getSupportLoaderManager().initLoader(0, null, this);
-
+/*
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
         mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                R.string.drawer_open,  /* "open drawer" description for accessibility */
-                R.string.drawer_close  /* "close drawer" description for accessibility */
+                this,                  //host Activity
+                mDrawerLayout,         //DrawerLayout object
+                R.string.drawer_open,  //"open drawer" description for accessibility
+                R.string.drawer_close  // "close drawer" description for accessibility
         ) {
             public void onDrawerClosed(View view) {
                 getSupportActionBar().setTitle(mTitle);
@@ -163,7 +193,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
                 supportInvalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);*/
 		
 		if (savedInstanceState == null) {
             onMyBookmarksSelected(null);
@@ -179,6 +209,9 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     }
 	
 	private void _initMenu() {
+
+
+
 		// Set up menu
 		NsMenuAdapter mAdapter = new NsMenuAdapter(this);
 
@@ -201,9 +234,18 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 			}
 			mAdapter.addItem(mItem);
 			res++;
+
+
+
+			mDrawerLayout.addItem(new DrawerItem()
+					.setImage(getResources().getDrawable(id_icon))
+					.setTextPrimary(getResources().getString(id_title)));
 		}
 		
 		mAdapter.addHeader(R.string.main_menu_feeds_header);
+
+		mDrawerLayout.addItem(new DrawerHeaderItem()
+				.setTitle(getString(R.string.main_menu_feeds_header)));
 
         res = 0;
 		for (String item : feedMenuItems) {
@@ -214,9 +256,16 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 			NsMenuItemModel mItem = new NsMenuItemModel(id_title, id_icon);
 			mAdapter.addItem(mItem);
 			res++;
+
+			mDrawerLayout.addItem(new DrawerItem()
+					.setImage(getResources().getDrawable(id_icon))
+					.setTextPrimary(getResources().getString(id_title)));
 		}
 
         mAdapter.addHeader(R.string.main_menu_tags_header);
+
+		mDrawerLayout.addItem(new DrawerHeaderItem()
+				.setTitle(getString(R.string.main_menu_tags_header)));
 
         res = 0;
 
@@ -229,10 +278,14 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
                     NsMenuItemModel mItem = new NsMenuItemModel(tagData.getString(1), R.drawable.main_menu_tag, false, tagData.getInt(2));
                     mAdapter.addItem(mItem);
                     res++;
+
+					mDrawerLayout.addItem(new DrawerItem()
+							.setImage(getResources().getDrawable(R.drawable.main_menu_tag))
+							.setTextPrimary(tagData.getString(1)));
                 }
             }
         }
-
+/*
         if(mDrawerList.getHeaderViewsCount() < 1) {
             mDrawerList.addHeaderView(accountSpinnerView, null, false);
         }
@@ -241,7 +294,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
             mDrawerList.setAdapter(mAdapter);
         }
 		 
-		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());*/
 	}
 	
 	@Override
@@ -345,9 +398,9 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     public boolean onOptionsItemSelected(MenuItem item) {
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+       /* if (mDrawerToggle.onOptionsItemSelected(item)) {
           return true;
-        }
+        }*/
 	    switch (item.getItemId()) {
 		    case R.id.menu_search:
 		    	onSearchRequested();
@@ -361,11 +414,11 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerWrapper);
-        
+        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerWrapper);
+        /*
         if(drawerOpen){
             menu.clear();
-        }
+        }*/
         
         return super.onPrepareOptionsMenu(menu);
     }
@@ -397,8 +450,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	
 	private void clearDrawer(int position){		
 		// Highlight the selected item, update the title, and close the drawer
-	    mDrawerList.setItemChecked(position, true);
-	    mDrawerLayout.closeDrawer(mDrawerWrapper);
+	   // mDrawerList.setItemChecked(position, true);
+	    //mDrawerLayout.closeDrawer(mDrawerWrapper);
 	}
 	
 	private void clearBackStack(){
@@ -501,9 +554,20 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
         if(accounts.size() > 0) {
 
+
+
             accountSpinnerButton.setVisibility(View.VISIBLE);
 
+
+
             for (String account : accounts) {
+
+
+
+
+
+
+
                 View accountView = getLayoutInflater().inflate(R.layout.account_list_view, null);
                 ((TextView) accountView.findViewById(R.id.account_title)).setText(account);
 
@@ -530,7 +594,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
         if(unreadItem != null){
 			unreadItem.counter = BookmarkManager.GetUnreadCount(app.getUsername(), this);
-            ((NsMenuAdapter)((HeaderViewListAdapter)mDrawerList.getAdapter()).getWrappedAdapter()).notifyDataSetChanged();
+           // ((NsMenuAdapter)((HeaderViewListAdapter)mDrawerList.getAdapter()).getWrappedAdapter()).notifyDataSetChanged();
 		}
 
         // reset current fragments
@@ -738,14 +802,14 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
+        //mDrawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggles
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        //mDrawerToggle.onConfigurationChanged(newConfig);
     }
      
     private List<String> getAccountNames(){
@@ -817,11 +881,11 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
     @Override
     public void onBackPressed() {
-        if(mDrawerLayout.isDrawerOpen(mDrawerWrapper)) {
+        /*if(mDrawerLayout.isDrawerOpen(mDrawerWrapper)) {
             mDrawerLayout.closeDrawer(mDrawerWrapper);
-        } else {
+        } else {*/
             super.onBackPressed();
-        }
+        //}
     }
 
     SharedPreferences.OnSharedPreferenceChangeListener prefListner = new SharedPreferences.OnSharedPreferenceChangeListener(){

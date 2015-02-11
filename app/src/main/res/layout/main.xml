@@ -49,5 +49,10 @@
         <include layout="@layout/main_content" />
     </LinearLayout>
     <!-- The navigation drawer -->
-    <include layout="@layout/main_drawer" />
+    <com.heinrichreimersoftware.materialdrawer.DrawerView
+        android:id="@+id/drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"/>
 </android.support.v4.widget.DrawerLayout>

@@ -61,4 +61,5 @@ android {
         compile 'com.ns-developer:tagcloudview:0.1.0'
         compile 'com.squareup.retrofit:retrofit:1.9.0'
         compile 'de.greenrobot:eventbus:2.4.0'
+        compile 'com.heinrichreimersoftware.materialdrawer:library:2.0'
 }

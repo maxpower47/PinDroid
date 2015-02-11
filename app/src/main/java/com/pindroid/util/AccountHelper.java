@@ -17,6 +17,10 @@ public class AccountHelper {
     	
     	return null;		   
     }
+
+	public static Account[] getAccounts(Context context){
+		return AccountManager.get(context).getAccountsByType(Constants.ACCOUNT_TYPE);
+	}
     
     public static Account getFirstAccount(Context context){
     	if(getAccountCount(context) > 0){
