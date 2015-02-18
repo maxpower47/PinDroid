@@ -24,9 +24,11 @@ package com.pindroid.providers;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
+import com.pindroid.model.FeedBookmark;
 import com.pindroid.providers.TagContent.Tag;
 
 import android.net.Uri;
@@ -112,8 +114,8 @@ public class BookmarkContent {
         	mTags = tags;
         }
         
-        public ArrayList<Tag> getTags(){
-			ArrayList<Tag> result = new ArrayList<Tag>();
+        public List<Tag> getTags(){
+			List<Tag> result = new ArrayList<Tag>();
 			
 			if(mTags != null){
 				for(String s : mTags.split(" ")) {
@@ -225,6 +227,15 @@ public class BookmarkContent {
             mSynced = synced;
             mDeleted = deleted;
         }
+
+		public Bookmark(FeedBookmark feedBookmark) {
+			mUrl = feedBookmark.getUrl();
+			mDescription = feedBookmark.getDescription();
+			mNotes = feedBookmark.getNotes();
+			mTags = feedBookmark.getTagString();
+			mTime = feedBookmark.getTime();
+			mAccount = feedBookmark.getAccount();
+		}
         
         public Bookmark copy() {
         	Bookmark b = new Bookmark();

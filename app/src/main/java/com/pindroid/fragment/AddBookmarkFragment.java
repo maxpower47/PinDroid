@@ -42,7 +42,6 @@ import android.widget.Toast;
 
 import com.pindroid.R;
 import com.pindroid.action.GetWebpageTitleTask;
-import com.pindroid.client.PinboardApi;
 import com.pindroid.client.PinboardClient;
 import com.pindroid.listadapter.TagAutoCompleteCursorAdapter;
 import com.pindroid.model.TagSuggestions;

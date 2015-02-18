@@ -21,27 +21,12 @@
 
 package com.pindroid.fragment;
 
-import java.io.IOException;
-import java.text.ParseException;
-
-import com.pindroid.Constants;
-import com.pindroid.R;
-import com.pindroid.Constants.BookmarkViewType;
-import com.pindroid.client.PinboardFeed;
-import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
-import com.pindroid.listadapter.BookmarkViewBinder;
-import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.util.AccountHelper;
-import com.pindroid.util.SettingsHelper;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
@@ -53,33 +38,40 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
-import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.support.v4.widget.SimpleCursorAdapter;
 
+import com.pindroid.Constants;
+import com.pindroid.Constants.BookmarkViewType;
+import com.pindroid.R;
+import com.pindroid.client.PinboardFeedClient;
+import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
+import com.pindroid.model.FeedBookmark;
+import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.ui.BookmarkFeedAdapter;
+import com.pindroid.util.AccountHelper;
+import com.pindroid.util.SettingsHelper;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
+import org.androidannotations.annotations.ItemClick;
+
+import java.util.List;
 
 @EFragment
 public class BrowseBookmarkFeedFragment extends ListFragment 
-	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser, PindroidFragment  {
+	implements LoaderManager.LoaderCallbacks<List<FeedBookmark>>, BookmarkBrowser, PindroidFragment  {
 	
-	private SimpleCursorAdapter mAdapter;
+	@Bean BookmarkFeedAdapter adapter;
 	
 	@InstanceState String username = null;
 	@InstanceState String tagname = null;
 	@InstanceState String feed = null;
 	
-	Bookmark lastSelected = null;
-	
+	FeedBookmark lastSelected = null;
 	ListView lv;
-	private Intent intent = null;
-
-	static final String STATE_USERNAME = "username";
-	static final String STATE_TAGNAME = "tagname";
-	static final String STATE_FEED = "feed";
 	
 	private BrowseBookmarksFragment.OnBookmarkSelectedListener bookmarkSelectedListener;
 	
@@ -89,18 +81,10 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		setRetainInstance(false);
 	}
 	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState){
-		super.onActivityCreated(savedInstanceState);
-
-		intent = getActivity().getIntent();
+	@AfterViews
+	public void init(){
 		
-		mAdapter = new SimpleCursorAdapter(getActivity(), R.layout.bookmark_feed_view, null, 
-				new String[]{Bookmark.Description, Bookmark.Tags}, 
-				new int[]{R.id.bookmark_feed_description, R.id.bookmark_feed_tags}, 0);
-		
-		setListAdapter(mAdapter);
-		mAdapter.setViewBinder(new BookmarkViewBinder());
+		setListAdapter(adapter);
 
 		if(username != null) {
 			setListShown(false);
@@ -113,27 +97,7 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 
 			lv.setItemsCanFocus(false);
 			lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		
-			lv.setOnItemClickListener(new OnItemClickListener() {
-			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					final Cursor c = (Cursor)lv.getItemAtPosition(position);
-					lastSelected = BookmarkManager.CursorToBookmark(c);
-	
-					String defaultAction = SettingsHelper.getDefaultAction(getActivity());
-					
-			    	if(defaultAction.equals("view")) {
-			    		viewBookmark(lastSelected);
-			    	} else if(defaultAction.equals("read")) {
-			    		readBookmark(lastSelected);
-			    	} else if(defaultAction.equals("edit")){
-			    		addBookmark(lastSelected);
-			    	} else {
-			    		openBookmarkInBrowser(lastSelected);
-			    	}   	
-			    }
-			});
-			
-			/* Add Context-Menu listener to the ListView. */
+
 			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 				public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 					menu.setHeaderTitle("Actions");
@@ -142,6 +106,23 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 					inflater.inflate(R.menu.browse_bookmark_context_menu_other, menu);
 				}
 			});
+		}
+	}
+
+	@ItemClick
+	void listItemClicked(FeedBookmark feedBookmark) {
+		lastSelected = feedBookmark;
+
+		String defaultAction = SettingsHelper.getDefaultAction(getActivity());
+
+		if(defaultAction.equals("view")) {
+			viewBookmark(lastSelected.toBookmark());
+		} else if(defaultAction.equals("read")) {
+			readBookmark(lastSelected.toBookmark());
+		} else if(defaultAction.equals("edit")){
+			addBookmark(lastSelected.toBookmark());
+		} else {
+			openBookmarkInBrowser(lastSelected.toBookmark());
 		}
 	}
 
@@ -165,8 +146,8 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	public void onResume(){
 		super.onResume();
 		
-		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
-			String query = intent.getStringExtra(SearchManager.QUERY);
+		if(Intent.ACTION_SEARCH.equals(getActivity().getIntent().getAction())) {
+			String query = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
 			getActivity().setTitle(getString(R.string.search_results_global_tag_title, query));
 		} else if(feed != null && feed.equals("recent")) {
 			getActivity().setTitle(getString(R.string.browse_recent_bookmarks_title));
@@ -186,24 +167,23 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	@Override
 	public boolean onContextItemSelected(MenuItem aItem) {
 		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem.getMenuInfo();
-		final Cursor c = (Cursor)lv.getItemAtPosition(menuInfo.position);
-		Bookmark b = BookmarkManager.CursorToBookmark(c);
+		final FeedBookmark feedBookmark = (FeedBookmark)lv.getItemAtPosition(menuInfo.position);
 		
 		switch (aItem.getItemId()) {
 			case R.id.menu_bookmark_context_open:
-				openBookmarkInBrowser(b);
+				openBookmarkInBrowser(feedBookmark.toBookmark());
 				return true;
 			case R.id.menu_bookmark_context_view:				
-				viewBookmark(b);
+				viewBookmark(feedBookmark.toBookmark());
 				return true;
 			case R.id.menu_bookmark_context_add:				
-				addBookmark(b);
+				addBookmark(feedBookmark.toBookmark());
 				return true;
 			case R.id.menu_bookmark_context_read:
-				readBookmark(b);
+				readBookmark(feedBookmark.toBookmark());
 				return true;
 			case R.id.menu_bookmark_context_share:
-				bookmarkSelectedListener.onBookmarkShare(b);
+				bookmarkSelectedListener.onBookmarkShare(feedBookmark.toBookmark());
 				return true;
 		}
 		return false;
@@ -225,19 +205,18 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		bookmarkSelectedListener.onBookmarkAdd(b);
 	}
 
-	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		if(Intent.ACTION_SEARCH.equals(intent.getAction())) {		
-			String query = intent.getStringExtra(SearchManager.QUERY);
+	public Loader<List<FeedBookmark>> onCreateLoader(int id, Bundle args) {
+		if(Intent.ACTION_SEARCH.equals(getActivity().getIntent().getAction())) {
+			String query = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
 			return new LoaderDrone(getActivity(), username, query, feed, AccountHelper.getAccount(username, getActivity()));
-		} else {			
+		} else {
 			return new LoaderDrone(getActivity(), username, tagname, feed, AccountHelper.getAccount(username, getActivity()));
 		}
 	}
 	
-	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-	    mAdapter.swapCursor(data);
-	    
-	    // The list should now be shown.
+	public void onLoadFinished(Loader<List<FeedBookmark>> loader, List<FeedBookmark> data) {
+	    adapter.setFeedBookmarks(data);
+
         if (isResumed()) {
             setListShown(true);
         } else {
@@ -245,11 +224,11 @@ public class BrowseBookmarkFeedFragment extends ListFragment
         }
 	}
 	
-	public void onLoaderReset(Loader<Cursor> loader) {
-	    mAdapter.swapCursor(null);
+	public void onLoaderReset(Loader<List<FeedBookmark>> loader) {
+	    adapter.setFeedBookmarks(null);
 	}
 	
-	public static class LoaderDrone extends AsyncTaskLoader<Cursor> {
+	public static class LoaderDrone extends AsyncTaskLoader<List<FeedBookmark>> {
         
 		private String user = "";
 		private String tag = "";
@@ -268,28 +247,34 @@ public class BrowseBookmarkFeedFragment extends ListFragment
         }
 
         @Override
-        public Cursor loadInBackground() {
-            Cursor results = null;
-            
- 	       if(feed.equals("global"))
- 	    	   feed = "";
-        
+        public List<FeedBookmark> loadInBackground() {
+            List<FeedBookmark> results = null;
+
  		   try {
- 			   if(feed.equals("network")) {
- 				   String token = AccountManager.get(getContext()).getUserData(account, Constants.PREFS_SECRET_TOKEN);
+			   switch (feed) {
+				   case "network":
+					   String token = AccountManager.get(getContext()).getUserData(account, Constants.PREFS_SECRET_TOKEN);
+					   results = PinboardFeedClient.get().getNetworkRecent(token, user);
+					   break;
+				   case "recent":
+					   results = PinboardFeedClient.get().getRecent();
+					   break;
+				   case "popular":
+					   results = PinboardFeedClient.get().getPopular();
+					   break;
+				   case "global":
+					   results = PinboardFeedClient.get().searchGlobalTags(tag);
+					   break;
+				   default:
+					   if(tag != null && !"".equals(tag)) {
+						   results = PinboardFeedClient.get().getUserRecent(feed, tag);
+					   } else {
+						   results = PinboardFeedClient.get().getUserRecent(feed);
+					   }
+					   break;
+			   }
 
- 				   results = PinboardFeed.fetchNetworkRecent(user, token);
- 			   } else if(feed.equals("recent")) {
- 				  results = PinboardFeed.fetchRecent();
- 			   } else if(feed.equals("popular")) {
-  				  results = PinboardFeed.fetchPopular();
-  			   } else {
- 				  results = PinboardFeed.fetchUserRecent(feed, tag);
- 			   }
-
- 		   }catch (ParseException e) {
- 			   e.printStackTrace();
- 		   }catch (IOException e) {
+ 		   } catch (Exception e) {
  			   e.printStackTrace();
  		   }
 
