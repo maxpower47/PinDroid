@@ -92,13 +92,20 @@
     <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
     <orderEntry type="library" exported="" name="eventbus-2.4.0" level="project" />
     <orderEntry type="library" exported="" name="support-v13-21.0.0" level="project" />
+    <orderEntry type="library" exported="" name="recyclerview-v7-22.2.0" level="project" />
+    <orderEntry type="library" exported="" name="library-0.3.4" level="project" />
+    <orderEntry type="library" exported="" name="library-0.4.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-22.2.0" level="project" />
+    <orderEntry type="library" exported="" name="ultra-ptr-1.0.9" level="project" />
     <orderEntry type="library" exported="" name="retrofit-1.9.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="floatingactionbutton-1.0.5" level="project" />
     <orderEntry type="library" exported="" name="androidannotations-api-3.3.1" level="project" />
     <orderEntry type="library" exported="" name="library-1.8.0" level="project" />
     <orderEntry type="library" exported="" name="tagcloudview-0.1.0" level="project" />
+    <orderEntry type="library" exported="" name="recyclerview-flexibledivider-1.2.4" level="project" />
+    <orderEntry type="library" exported="" name="design-22.2.0" level="project" />
+    <orderEntry type="library" exported="" name="recyclerviewfastscroller-0.1.3" level="project" />
   </component>
 </module>

@@ -21,25 +21,25 @@
  * USA
  */
  -->
- <FrameLayout
+ <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical">
-	<ListView
+	android:layout_height="match_parent">
+	<com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
 		android:id="@id/android:list"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-        tools:listitem="@layout/bookmark_view"/>
-    <com.melnykov.fab.FloatingActionButton
+        tools:listitem="@layout/bookmark_view"
+        app:recyclerviewScrollbars="vertical"/>
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/floating_add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
         android:layout_margin="16dp"
-        fab:fab_colorNormal="@color/add_bookmark_action_button"
-        fab:fab_colorPressed="@color/add_bookmark_action_button_pressed"
+        app:layout_anchor="@id/android:list"
+        app:layout_anchorGravity="bottom|right|end"
+        app:layout_behavior="com.pindroid.ui.ScrollAwareFABBehavior"
         android:src="@drawable/ic_menu_add"/>
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

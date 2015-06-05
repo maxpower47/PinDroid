@@ -38,6 +38,7 @@ import com.pindroid.client.PinboardClient;
 import com.pindroid.client.PinboardException;
 import com.pindroid.client.TooManyRequestsException;
 import com.pindroid.client.Update;
+import com.pindroid.event.SyncCompleteEvent;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.NoteManager;
 import com.pindroid.platform.TagManager;
@@ -52,6 +53,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * SyncAdapter implementation for syncing bookmarks.
@@ -109,6 +112,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
             Log.e(TAG, "PinboardException", e);
 		} finally {
         	Log.d(TAG, "Finished Sync");
+            EventBus.getDefault().post(new SyncCompleteEvent());
         }
     }
     

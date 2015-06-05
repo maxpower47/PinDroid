@@ -21,13 +21,18 @@
 
 package com.pindroid.fragment;
 
+import android.accounts.Account;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -40,29 +45,46 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.melnykov.fab.FloatingActionButton;
+import android.support.v7.widget.RecyclerView;
+
+import com.marshalchen.ultimaterecyclerview.ObservableScrollState;
+import com.marshalchen.ultimaterecyclerview.ObservableScrollViewCallbacks;
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
+import com.pindroid.event.BookmarkSelectedEvent;
+import com.pindroid.event.SyncCompleteEvent;
+import com.pindroid.listadapter.BookmarkAdapter;
 import com.pindroid.listadapter.BookmarkViewBinder;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.providers.BookmarkContentProvider;
+import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
+import com.pindroid.util.SyncUtils;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
+import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
+
+import de.greenrobot.event.EventBus;
+import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
 
 @EFragment(R.layout.browse_bookmark_fragment)
 @OptionsMenu(R.menu.browse_bookmark_menu)
 public class BrowseBookmarksFragment extends Fragment
 	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser, PindroidFragment {
 
-    @ViewById(android.R.id.list) ListView listView;
+    @ViewById(android.R.id.list) UltimateRecyclerView listView;
 	@ViewById(R.id.floating_add_button) FloatingActionButton actionButton;
 	
-	private SimpleCursorAdapter mAdapter;
+	@Bean BookmarkAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 	
 	private String sortfield = Bookmark.Time + " DESC";
 
@@ -86,57 +108,32 @@ public class BrowseBookmarksFragment extends Fragment
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setRetainInstance(false);
+        EventBus.getDefault().register(this);
 	}
 	
 	@AfterViews
 	public void init(){
-        actionButton.attachToListView(listView);
-		
-		mAdapter = new SimpleCursorAdapter(getActivity(), R.layout.bookmark_view, null, 
-				new String[]{Bookmark.Description, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced}, 
-				new int[]{R.id.bookmark_description, R.id.bookmark_tags, R.id.bookmark_unread, R.id.bookmark_private, R.id.bookmark_synced}, 0);
-		
+		listView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        listView.setLayoutManager(mLayoutManager);
+
 		listView.setAdapter(mAdapter);
-		mAdapter.setViewBinder(new BookmarkViewBinder());
+
+        listView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).build());
 
 		if(username != null) {				
 	
 	    	getLoaderManager().initLoader(0, null, this);
 
-			listView.setTextFilterEnabled(true);
-			listView.setFastScrollEnabled(true);
-
-			listView.setItemsCanFocus(false);
-			listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-			listView.setOnItemClickListener(new OnItemClickListener() {
-			    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					final Cursor c = (Cursor)listView.getItemAtPosition(position);
-					Bookmark b = BookmarkManager.CursorToBookmark(c);
-					
-					String defaultAction = SettingsHelper.getDefaultAction(getActivity());
-	
-			    	if(defaultAction.equals("view")) {
-			    		viewBookmark(b);
-			    	} else if(defaultAction.equals("read")) {
-			    		readBookmark(b);
-			    	} else if(defaultAction.equals("edit")){
-			    		editBookmark(b);
-			    	} else {
-			    		openBookmarkInBrowser(b);
-			    	}   	
-			    }
-			});
-			
 			/* Add Context-Menu listener to the ListView. */
-			listView.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+			/*listView.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 				public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 					menu.setHeaderTitle("Actions");
 					MenuInflater inflater = getActivity().getMenuInflater();
 
 					inflater.inflate(R.menu.browse_bookmark_context_menu_self, menu);
 				}
-			});
+			});*/
 
             actionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -144,8 +141,39 @@ public class BrowseBookmarksFragment extends Fragment
                     bookmarkSelectedListener.onBookmarkAdd(null);
                 }
             });
+
+            listView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    //SyncUtils.clearSyncMarkers(getActivity());
+
+                    Bundle extras = new Bundle();
+
+                    ContentResolver.requestSync(AccountHelper.getAccount(username, getActivity()), BookmarkContentProvider.AUTHORITY, extras);
+                }
+            });
 		}
 	}
+
+    public void onEventMainThread(SyncCompleteEvent event) {
+        Log.d("sync", "finish");
+
+        listView.setRefreshing(false);
+    }
+
+    public void onEvent(BookmarkSelectedEvent event) {
+        String defaultAction = SettingsHelper.getDefaultAction(getActivity());
+
+        if(defaultAction.equals("view")) {
+            viewBookmark(event.getBookmark());
+        } else if(defaultAction.equals("read")) {
+            readBookmark(event.getBookmark());
+        } else if(defaultAction.equals("edit")){
+            editBookmark(event.getBookmark());
+        } else {
+            openBookmarkInBrowser(event.getBookmark());
+        }
+    }
 	
 	public void setQuery(String username, String tagname, String feed){
 		this.username = username;
@@ -190,11 +218,11 @@ public class BrowseBookmarksFragment extends Fragment
 			}
 		}
 	}
-	
+/*
 	@Override
 	public boolean onContextItemSelected(MenuItem aItem) {
 		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem.getMenuInfo();
-		final Cursor c = (Cursor)listView.getItemAtPosition(menuInfo.position);
+		final Cursor c = mAdapter.getItemAtPosition(menuInfo.position);
 		Bookmark b = BookmarkManager.CursorToBookmark(c);
 		
 		switch (aItem.getItemId()) {
@@ -223,7 +251,7 @@ public class BrowseBookmarksFragment extends Fragment
 		}
 		return false;
 	}
-	
+	*/
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -285,11 +313,11 @@ public class BrowseBookmarksFragment extends Fragment
     
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-		if(query != null) {    		
-			return BookmarkManager.SearchBookmarks(query, tagname, unread, username, getActivity());
-		} else {
+		//if(query != null) {
+			//return BookmarkManager.SearchBookmarks(query, tagname, unread, username, getActivity());
+		//} else {
 			return BookmarkManager.GetBookmarks(username, tagname, unread, sortfield, getActivity());
-		}
+		//}
 	}
 	
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {

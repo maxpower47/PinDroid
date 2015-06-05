@@ -23,6 +23,7 @@ package com.pindroid.platform;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -65,6 +66,62 @@ public class BookmarkManager {
 		
 		return new CursorLoader(context, Bookmark.CONTENT_URI, projection, selection, selectionargs, sortorder);
 	}
+
+    public static List<Bookmark> GetBookmarkArray(String username, String tagname, boolean unread, String sortorder, Context context){
+        final String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Hash,
+                Bookmark.Meta, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced, Bookmark.Deleted,
+                Bookmark.Account, Bookmark.Time};
+        String selection = null;
+        String[] selectionargs = new String[]{username, "% " + tagname + " %",
+                "% " + tagname, tagname + " %", tagname};
+
+        if(tagname != null && tagname != "") {
+            selection = Bookmark.Account + "=? AND " +
+                    "(" + Bookmark.Tags + " LIKE ? OR " +
+                    Bookmark.Tags + " LIKE ? OR " +
+                    Bookmark.Tags + " LIKE ? OR " +
+                    Bookmark.Tags + " = ?)";
+
+        } else {
+            selectionargs = new String[]{username};
+            selection = Bookmark.Account + "=?";
+        }
+        if(unread) {
+            selection += " AND " + Bookmark.ToRead + "=1";
+        }
+        selection += " AND " + Bookmark.Deleted + "=0";
+
+        Cursor c = context.getContentResolver().query(Bookmark.CONTENT_URI, projection, selection, selectionargs, sortorder);
+
+        List<Bookmark> bookmarkList = new ArrayList<>();
+
+        if(c.moveToFirst()){
+            int idColumn = c.getColumnIndex(Bookmark._ID);
+            int urlColumn = c.getColumnIndex(Bookmark.Url);
+            int descriptionColumn = c.getColumnIndex(Bookmark.Description);
+            int tagsColumn = c.getColumnIndex(Bookmark.Tags);
+            int metaColumn = c.getColumnIndex(Bookmark.Meta);
+            int readColumn = c.getColumnIndex(Bookmark.ToRead);
+            int shareColumn = c.getColumnIndex(Bookmark.Shared);
+            int notesColumn = c.getColumnIndex(Bookmark.Notes);
+            int hashColumn = c.getColumnIndex(Bookmark.Hash);
+
+            do {
+
+                Bookmark b = new Bookmark(c.getInt(idColumn), "", c.getString(urlColumn),
+                        c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn), c.getString(hashColumn),
+                        c.getString(metaColumn), new Date(), c.getInt(readColumn) == 0 ? false : true,
+                        c.getInt(shareColumn) == 0 ? false : true, 0, false);
+
+                bookmarkList.add(b);
+
+            } while(c.moveToNext());
+
+        }
+        c.close();
+
+        return bookmarkList;
+    }
 	
 	public static ArrayList<Bookmark> GetLocalBookmarks(String username, Context context){
 		ArrayList<Bookmark> bookmarkList = new ArrayList<Bookmark>();
