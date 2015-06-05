@@ -145,19 +145,13 @@ public class BrowseBookmarksFragment extends Fragment
             listView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    //SyncUtils.clearSyncMarkers(getActivity());
-
-                    Bundle extras = new Bundle();
-
-                    ContentResolver.requestSync(AccountHelper.getAccount(username, getActivity()), BookmarkContentProvider.AUTHORITY, extras);
+                    ContentResolver.requestSync(AccountHelper.getAccount(username, getActivity()), BookmarkContentProvider.AUTHORITY, new Bundle());
                 }
             });
 		}
 	}
 
     public void onEventMainThread(SyncCompleteEvent event) {
-        Log.d("sync", "finish");
-
         listView.setRefreshing(false);
     }
 
