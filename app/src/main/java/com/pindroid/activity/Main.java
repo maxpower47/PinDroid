@@ -630,7 +630,15 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
 	public void onBookmarkDelete(Bookmark b) {
-		BookmarkManager.LazyDelete(b, app.getUsername(), this);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        if((isTwoPane() && fragmentManager.findFragmentByTag("right") instanceof ViewBookmarkFragment) ||
+                fragmentManager.findFragmentByTag("left") instanceof ViewBookmarkFragment){
+
+            onBackPressed();
+        }
+
+        BookmarkManager.LazyDelete(b, app.getUsername(), this);
 	}
 
     public void onTagSelected(String tag) {
