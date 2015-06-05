@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class RecyclerViewAdapterBase<T, V extends View> extends RecyclerView.Adapter<ViewWrapper<V>> {
+public abstract class RecyclerCursorAdapter<T, V extends View> extends RecyclerView.Adapter<ViewWrapper<V>> {
 
     private Context mContext;
 
@@ -22,7 +22,7 @@ public abstract class RecyclerViewAdapterBase<T, V extends View> extends Recycle
 
     private DataSetObserver mDataSetObserver;
 
-    public RecyclerViewAdapterBase(Context context, Cursor cursor) {
+    public RecyclerCursorAdapter(Context context, Cursor cursor) {
         mContext = context;
         mCursor = cursor;
         mDataValid = cursor != null;

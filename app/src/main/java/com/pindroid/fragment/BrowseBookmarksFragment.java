@@ -21,36 +21,21 @@
 
 package com.pindroid.fragment;
 
-import android.accounts.Account;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.MenuInflater;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnCreateContextMenuListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 
-import android.support.v7.widget.RecyclerView;
-
-import com.marshalchen.ultimaterecyclerview.ObservableScrollState;
-import com.marshalchen.ultimaterecyclerview.ObservableScrollViewCallbacks;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
@@ -58,25 +43,21 @@ import com.pindroid.event.BookmarkDeletedEvent;
 import com.pindroid.event.BookmarkSelectedEvent;
 import com.pindroid.event.SyncCompleteEvent;
 import com.pindroid.listadapter.BookmarkAdapter;
-import com.pindroid.listadapter.BookmarkViewBinder;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
-import com.pindroid.util.SyncUtils;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
-import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
 import de.greenrobot.event.EventBus;
-import xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller;
 
 @EFragment(R.layout.browse_bookmark_fragment)
 @OptionsMenu(R.menu.browse_bookmark_menu)
@@ -333,19 +314,19 @@ public class BrowseBookmarksFragment extends Fragment
     
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-		//if(query != null) {
-			//return BookmarkManager.SearchBookmarks(query, tagname, unread, username, getActivity());
-		//} else {
+		if(query != null) {
+			return BookmarkManager.SearchBookmarks(query, tagname, unread, username, getActivity());
+		} else {
 			return BookmarkManager.GetBookmarks(username, tagname, unread, sortfield, getActivity());
-		//}
+		}
 	}
 	
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-	    mAdapter.swapCursor(data);
+	    mAdapter.changeCursor(data);
 	}
 	
 	public void onLoaderReset(Loader<Cursor> loader) {
-	    mAdapter.swapCursor(null);
+	    mAdapter.changeCursor(null);
 	}
 
 	@Override

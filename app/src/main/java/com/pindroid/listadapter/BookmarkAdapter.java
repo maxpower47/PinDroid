@@ -3,11 +3,9 @@ package com.pindroid.listadapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.ContextMenu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.pindroid.R;
 import com.pindroid.event.BookmarkSelectedEvent;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent;
@@ -20,7 +18,7 @@ import org.androidannotations.annotations.RootContext;
 import de.greenrobot.event.EventBus;
 
 @EBean
-public class BookmarkAdapter extends RecyclerViewAdapterBase<BookmarkContent.Bookmark, BookmarkView> {
+public class BookmarkAdapter extends RecyclerCursorAdapter<BookmarkContent.Bookmark, BookmarkView> {
 
     @RootContext Context context;
 

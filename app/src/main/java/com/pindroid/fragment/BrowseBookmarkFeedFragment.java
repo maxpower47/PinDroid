@@ -28,10 +28,12 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuInflater;
@@ -41,37 +43,45 @@ import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.client.PinboardFeedClient;
+import com.pindroid.event.BookmarkSelectedEvent;
+import com.pindroid.event.FeedBookmarkSelectedEvent;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.model.FeedBookmark;
 import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.ui.BookmarkFeedAdapter;
+import com.pindroid.listadapter.BookmarkFeedAdapter;
 import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.ItemClick;
+import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
-@EFragment
-public class BrowseBookmarkFeedFragment extends ListFragment 
+import de.greenrobot.event.EventBus;
+
+@EFragment(R.layout.browse_bookmark_feed_fragment)
+public class BrowseBookmarkFeedFragment extends Fragment
 	implements LoaderManager.LoaderCallbacks<List<FeedBookmark>>, BookmarkBrowser, PindroidFragment  {
 	
 	@Bean BookmarkFeedAdapter adapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 	
 	@InstanceState String username = null;
 	@InstanceState String tagname = null;
 	@InstanceState String feed = null;
 	
 	FeedBookmark lastSelected = null;
-	ListView lv;
+    @ViewById(android.R.id.list) UltimateRecyclerView listView;
 	
 	private BrowseBookmarksFragment.OnBookmarkSelectedListener bookmarkSelectedListener;
 	
@@ -80,24 +90,35 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 		super.onCreate(savedInstanceState);
 		setRetainInstance(false);
 	}
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 	
 	@AfterViews
 	public void init(){
+
+        listView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        listView.setLayoutManager(mLayoutManager);
 		
-		setListAdapter(adapter);
+		listView.setAdapter(adapter);
+        listView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).build());
 
 		if(username != null) {
-			setListShown(false);
-			
 	    	getLoaderManager().initLoader(0, null, this);
-	    	
-			lv = getListView();
-			lv.setTextFilterEnabled(true);
-			lv.setFastScrollEnabled(true);
 
-			lv.setItemsCanFocus(false);
-			lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
+			//lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+/*
 			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 				public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 					menu.setHeaderTitle("Actions");
@@ -105,26 +126,25 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 					
 					inflater.inflate(R.menu.browse_bookmark_context_menu_other, menu);
 				}
-			});
+			});*/
 		}
 	}
 
-	@ItemClick
-	void listItemClicked(FeedBookmark feedBookmark) {
-		lastSelected = feedBookmark;
+    public void onEvent(FeedBookmarkSelectedEvent event) {
+        lastSelected = event.getBookmark();
 
-		String defaultAction = SettingsHelper.getDefaultAction(getActivity());
+        String defaultAction = SettingsHelper.getDefaultAction(getActivity());
 
-		if(defaultAction.equals("view")) {
-			viewBookmark(lastSelected.toBookmark());
-		} else if(defaultAction.equals("read")) {
-			readBookmark(lastSelected.toBookmark());
-		} else if(defaultAction.equals("edit")){
-			addBookmark(lastSelected.toBookmark());
-		} else {
-			openBookmarkInBrowser(lastSelected.toBookmark());
-		}
-	}
+        if(defaultAction.equals("view")) {
+            viewBookmark(lastSelected.toBookmark());
+        } else if(defaultAction.equals("read")) {
+            readBookmark(lastSelected.toBookmark());
+        } else if(defaultAction.equals("edit")){
+            addBookmark(lastSelected.toBookmark());
+        } else {
+            openBookmarkInBrowser(lastSelected.toBookmark());
+        }
+    }
 
 	public void setQuery(String username, String tagname, String feed){
 		this.username = username;
@@ -167,7 +187,7 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	@Override
 	public boolean onContextItemSelected(MenuItem aItem) {
 		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem.getMenuInfo();
-		final FeedBookmark feedBookmark = (FeedBookmark)lv.getItemAtPosition(menuInfo.position);
+		final FeedBookmark feedBookmark = adapter.getItemAtPosition(menuInfo.position);
 		
 		switch (aItem.getItemId()) {
 			case R.id.menu_bookmark_context_open:
@@ -216,12 +236,6 @@ public class BrowseBookmarkFeedFragment extends ListFragment
 	
 	public void onLoadFinished(Loader<List<FeedBookmark>> loader, List<FeedBookmark> data) {
 	    adapter.setFeedBookmarks(data);
-
-        if (isResumed()) {
-            setListShown(true);
-        } else {
-            setListShownNoAnimation(true);
-        }
 	}
 	
 	public void onLoaderReset(Loader<List<FeedBookmark>> loader) {
