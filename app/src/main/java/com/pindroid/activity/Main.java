@@ -30,6 +30,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -56,6 +57,7 @@ import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
+import com.pindroid.event.BookmarkDeletedEvent;
 import com.pindroid.fragment.BookmarkBrowser;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment_;
@@ -93,6 +95,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+
+import de.greenrobot.event.EventBus;
 
 public class Main extends FragmentBaseActivity implements OnBookmarkSelectedListener, 
 		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnSearchActionListener, LoaderManager.LoaderCallbacks<Cursor> {
@@ -637,6 +641,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
             onBackPressed();
         }
+
+        EventBus.getDefault().post(new BookmarkDeletedEvent(b));
 
         BookmarkManager.LazyDelete(b, app.getUsername(), this);
 	}
