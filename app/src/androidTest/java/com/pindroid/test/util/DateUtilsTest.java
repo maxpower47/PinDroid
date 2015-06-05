@@ -73,10 +73,4 @@ public class DateUtilsTest extends AndroidTestCase  {
 		} catch (Exception e) {
 		}
 	}
-	
-	public void testToString(){		
-		Date d = new Date(1133155569000l);
-
-		assertEquals("2005-11-28T05:26:09Z", DateParser.toString(d));
-	}
 }
