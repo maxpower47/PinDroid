@@ -26,7 +26,7 @@
     	<item name="colorPrimary">@color/actionbar_background</item>
         <item name="colorPrimaryDark">@color/actionbar_background</item>
         <item name="colorAccent">@color/pindroid_accent</item>
-        <item name="android:textColor">@color/text_title</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
         <item name="android:textColorSecondary">@color/text_body</item>
         <item name="android:spinnerItemStyle">@style/AccountSpinner</item>
         <item name="searchViewStyle">@style/MySearchViewStyle</item>

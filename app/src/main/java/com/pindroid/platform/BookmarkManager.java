@@ -444,6 +444,24 @@ public class BookmarkManager {
 		context.getContentResolver().update(Bookmark.CONTENT_URI, values, selection, selectionargs);
 	}
 
+    public static void LazyUndelete(Bookmark bookmark, String account, Context context){
+        final String url = bookmark.getUrl();
+
+        String hash = "";
+        if(bookmark.getHash() == null || bookmark.getHash() == ""){
+            hash = Md5Hash.md5(url);
+        } else hash = bookmark.getHash();
+
+        final String selection = Bookmark.Hash + "=? AND " + Bookmark.Account + "=?";
+        final String[] selectionargs = new String[]{hash, account};
+
+        final ContentValues values = new ContentValues();
+        values.put(Bookmark.Deleted, false);
+        values.put(Bookmark.Synced, false);
+
+        context.getContentResolver().update(Bookmark.CONTENT_URI, values, selection, selectionargs);
+    }
+
 	public static void DeleteBookmark(Bookmark bookmark, Context context){
 		final int id = bookmark.getId();
 		String selection = "";

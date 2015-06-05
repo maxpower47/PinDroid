@@ -25,8 +25,10 @@ import android.accounts.Account;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -52,6 +54,7 @@ import com.marshalchen.ultimaterecyclerview.ObservableScrollViewCallbacks;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
+import com.pindroid.event.BookmarkDeletedEvent;
 import com.pindroid.event.BookmarkSelectedEvent;
 import com.pindroid.event.SyncCompleteEvent;
 import com.pindroid.listadapter.BookmarkAdapter;
@@ -108,8 +111,19 @@ public class BrowseBookmarksFragment extends Fragment
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setRetainInstance(false);
-        EventBus.getDefault().register(this);
 	}
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 	
 	@AfterViews
 	public void init(){
@@ -153,6 +167,18 @@ public class BrowseBookmarksFragment extends Fragment
 
     public void onEventMainThread(SyncCompleteEvent event) {
         listView.setRefreshing(false);
+    }
+
+    public void onEventMainThread(final BookmarkDeletedEvent event) {
+        Snackbar.make(listView, R.string.snackbar_deleted, Snackbar.LENGTH_LONG)
+                .setActionTextColor(getResources().getColorStateList(R.color.snackbar_button))
+                .setAction(R.string.snackbar_undo, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        BookmarkManager.LazyUndelete(event.getBookmark(), username, getActivity());
+                    }
+                })
+                .show();
     }
 
     public void onEvent(BookmarkSelectedEvent event) {

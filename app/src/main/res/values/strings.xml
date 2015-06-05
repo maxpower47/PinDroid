@@ -201,6 +201,9 @@
     <string name="small_widget_add_bookmark">Add Bookmark</string>
     <string name="small_widget_search_bookmarks">Search</string>
 
+    <string name="snackbar_deleted">Deleted</string>
+    <string name="snackbar_undo">Undo</string>
+
     <!-- Preferences -->
     <string name="preferences_title">PinDroid Settings</string>
     <string name="account_preferences_cat_title">General settings</string>
