@@ -40,6 +40,5 @@
         android:layout_margin="16dp"
         app:layout_anchor="@id/android:list"
         app:layout_anchorGravity="bottom|right|end"
-        app:layout_behavior="com.pindroid.ui.ScrollAwareFABBehavior"
         android:src="@drawable/ic_menu_add"/>
 </android.support.design.widget.CoordinatorLayout>
