@@ -32,28 +32,22 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ListView;
 
-import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.client.PinboardFeedClient;
-import com.pindroid.event.BookmarkSelectedEvent;
 import com.pindroid.event.FeedBookmarkSelectedEvent;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
+import com.pindroid.listadapter.BookmarkFeedAdapter;
 import com.pindroid.model.FeedBookmark;
 import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.listadapter.BookmarkFeedAdapter;
 import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
@@ -62,7 +56,6 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
-import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
@@ -81,7 +74,9 @@ public class BrowseBookmarkFeedFragment extends Fragment
 	@InstanceState String feed = null;
 	
 	FeedBookmark lastSelected = null;
-    @ViewById(android.R.id.list) UltimateRecyclerView listView;
+    @ViewById(android.R.id.list) RecyclerView listView;
+    @ViewById(R.id.bookmark_feed_refresh) SwipeRefreshLayout refreshLayout;
+    @ViewById(R.id.bookmark_feed_loading) View emptyView;
 	
 	private BrowseBookmarksFragment.OnBookmarkSelectedListener bookmarkSelectedListener;
 	
@@ -106,12 +101,19 @@ public class BrowseBookmarkFeedFragment extends Fragment
 	@AfterViews
 	public void init(){
 
-        listView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         listView.setLayoutManager(mLayoutManager);
 		
 		listView.setAdapter(adapter);
         listView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).build());
+
+        refreshLayout.setColorSchemeResources(R.color.pindroid_blue);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getLoaderManager().restartLoader(0, null, BrowseBookmarkFeedFragment.this);
+            }
+        });
 
 		if(username != null) {
 	    	getLoaderManager().initLoader(0, null, this);
@@ -226,6 +228,9 @@ public class BrowseBookmarkFeedFragment extends Fragment
 	}
 
 	public Loader<List<FeedBookmark>> onCreateLoader(int id, Bundle args) {
+        emptyView.setVisibility(View.VISIBLE);
+        listView.setVisibility(View.GONE);
+
 		if(Intent.ACTION_SEARCH.equals(getActivity().getIntent().getAction())) {
 			String query = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
 			return new LoaderDrone(getActivity(), username, query, feed, AccountHelper.getAccount(username, getActivity()));
@@ -236,6 +241,9 @@ public class BrowseBookmarkFeedFragment extends Fragment
 	
 	public void onLoadFinished(Loader<List<FeedBookmark>> loader, List<FeedBookmark> data) {
 	    adapter.setFeedBookmarks(data);
+        refreshLayout.setRefreshing(false);
+        emptyView.setVisibility(View.GONE);
+        listView.setVisibility(View.VISIBLE);
 	}
 	
 	public void onLoaderReset(Loader<List<FeedBookmark>> loader) {
