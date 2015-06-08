@@ -36,7 +36,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.event.BookmarkDeletedEvent;
@@ -64,8 +63,9 @@ import de.greenrobot.event.EventBus;
 public class BrowseBookmarksFragment extends Fragment
 	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser, PindroidFragment {
 
-    @ViewById(android.R.id.list) UltimateRecyclerView listView;
+    @ViewById(android.R.id.list) RecyclerView listView;
 	@ViewById(R.id.floating_add_button) FloatingActionButton actionButton;
+    @ViewById(R.id.bookmark_refresh) SwipeRefreshLayout refreshLayout;
 	
 	@Bean BookmarkAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -137,7 +137,8 @@ public class BrowseBookmarksFragment extends Fragment
                 }
             });
 
-            listView.setDefaultOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            refreshLayout.setColorSchemeResources(R.color.pindroid_blue);
+            refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
                     ContentResolver.requestSync(AccountHelper.getAccount(username, getActivity()), BookmarkContentProvider.AUTHORITY, new Bundle());
@@ -147,7 +148,7 @@ public class BrowseBookmarksFragment extends Fragment
 	}
 
     public void onEventMainThread(SyncCompleteEvent event) {
-        listView.setRefreshing(false);
+        refreshLayout.setRefreshing(false);
     }
 
     public void onEventMainThread(final BookmarkDeletedEvent event) {

@@ -27,10 +27,27 @@
     xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
-	<com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
-		android:id="@id/android:list"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-        tools:listitem="@layout/bookmark_feed_view"
-        app:recyclerviewScrollbars="vertical"/>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/bookmark_feed_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+	    <android.support.v7.widget.RecyclerView
+		    android:id="@id/android:list"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+            tools:listitem="@layout/bookmark_feed_view"
+            android:scrollbars="vertical"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <RelativeLayout
+        android:id="@+id/bookmark_feed_loading"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v4.widget.ContentLoadingProgressBar
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_centerInParent="true"
+            style="@style/Widget.AppCompat.ProgressBar"/>
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
