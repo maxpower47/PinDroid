@@ -21,44 +21,37 @@
  * USA
  */
  -->
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-	android:orientation="horizontal"
 	android:layout_height="@dimen/bookmark_list_view_height"
 	android:layout_width="fill_parent"
-    android:gravity="center"
     android:paddingBottom="5dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="5dp"
+    android:gravity="center_vertical"
     android:background="?android:attr/selectableItemBackground">
-	<LinearLayout
-		android:orientation="vertical"
-		android:layout_width="wrap_content"
-		android:layout_height="fill_parent"
-        android:gravity="center_vertical"
-        android:layout_weight="1">
-		<TextView
-		    android:id="@+id/bookmark_feed_description"
-		    android:layout_height="wrap_content"
-		    android:layout_width="wrap_content"
-            android:layout_marginBottom="4dp"
-		    android:scrollHorizontally="true"
-		    android:singleLine="true"
-		    android:ellipsize="end"
-		    android:textSize="@dimen/browse_bookmark_title_text"
-            android:textColor="@color/text_body"
-		    android:textIsSelectable="false"
-            tools:text="Sample Bookmark Title"/>
-		<TextView
-		    android:id="@+id/bookmark_feed_tags"
-		    android:layout_height="wrap_content"
-		    android:layout_width="wrap_content"
-		    android:scrollHorizontally="false"
-		    android:textSize="@dimen/browse_bookmark_tag_text"
-            android:textColor="@color/text_caption"
-		    android:textIsSelectable="false"
-            tools:text="test tag another test2"/>
-	</LinearLayout>
-</LinearLayout>
+    <TextView
+        android:id="@+id/bookmark_feed_description"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginBottom="4dp"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textSize="@dimen/browse_bookmark_title_text"
+        android:textColor="@color/text_body"
+        android:textIsSelectable="false"
+        tools:text="Sample Bookmark Title"/>
+    <TextView
+        android:id="@+id/bookmark_feed_tags"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/bookmark_feed_description"
+        android:scrollHorizontally="false"
+        android:textSize="@dimen/browse_bookmark_tag_text"
+        android:textColor="@color/text_caption"
+        android:textIsSelectable="false"
+        tools:text="test tag another test2"/>
+</RelativeLayout>

@@ -39,6 +39,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
+import com.kennyc.view.MultiStateView;
 import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
@@ -76,7 +77,7 @@ public class BrowseBookmarkFeedFragment extends Fragment
 	FeedBookmark lastSelected = null;
     @ViewById(android.R.id.list) RecyclerView listView;
     @ViewById(R.id.bookmark_feed_refresh) SwipeRefreshLayout refreshLayout;
-    @ViewById(R.id.bookmark_feed_loading) View emptyView;
+    @ViewById(R.id.bookmark_feed_multistate) MultiStateView multiStateView;
 	
 	private BrowseBookmarksFragment.OnBookmarkSelectedListener bookmarkSelectedListener;
 	
@@ -116,6 +117,7 @@ public class BrowseBookmarkFeedFragment extends Fragment
         });
 
 		if(username != null) {
+            multiStateView.setViewState(MultiStateView.ViewState.LOADING);
 	    	getLoaderManager().initLoader(0, null, this);
 
 
@@ -178,7 +180,7 @@ public class BrowseBookmarkFeedFragment extends Fragment
 		} else if(feed != null && feed.equals("network")) {
 			getActivity().setTitle(getString(R.string.browse_network_bookmarks_title));
 		} else {	
-			if(tagname != null && tagname != "") {
+			if(tagname != null && !tagname.equals("")) {
 				getActivity().setTitle(getString(R.string.browse_user_bookmarks_tagged_title, feed, tagname));
 			} else {
 				getActivity().setTitle(getString(R.string.browse_user_bookmarks_title, feed));
@@ -228,9 +230,6 @@ public class BrowseBookmarkFeedFragment extends Fragment
 	}
 
 	public Loader<List<FeedBookmark>> onCreateLoader(int id, Bundle args) {
-        emptyView.setVisibility(View.VISIBLE);
-        listView.setVisibility(View.GONE);
-
 		if(Intent.ACTION_SEARCH.equals(getActivity().getIntent().getAction())) {
 			String query = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
 			return new LoaderDrone(getActivity(), username, query, feed, AccountHelper.getAccount(username, getActivity()));
@@ -242,8 +241,7 @@ public class BrowseBookmarkFeedFragment extends Fragment
 	public void onLoadFinished(Loader<List<FeedBookmark>> loader, List<FeedBookmark> data) {
 	    adapter.setFeedBookmarks(data);
         refreshLayout.setRefreshing(false);
-        emptyView.setVisibility(View.GONE);
-        listView.setVisibility(View.VISIBLE);
+        multiStateView.setViewState(MultiStateView.ViewState.CONTENT);
 	}
 	
 	public void onLoaderReset(Loader<List<FeedBookmark>> loader) {

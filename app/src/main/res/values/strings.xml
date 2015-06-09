@@ -110,6 +110,8 @@
     <string name="menu_choose_account_title">Change Account</string>
     <string name="bookmark_unsynced_alt">Unsynced Indicator</string>
     <string name="bookmark_unread_alt">Unread Indicator</string>
+    <string name="bookmark_empty_text">You have no bookmarks</string>
+    <string name="unread_empty_text">You have no unread bookmarks</string>
 
     <!-- BrowseTags -->
     <string name="browse_my_tags_title">My Tags</string>

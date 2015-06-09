@@ -27,27 +27,24 @@
     xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/bookmark_feed_refresh"
+    <com.kennyc.view.MultiStateView
+        android:id="@+id/bookmark_feed_multistate"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-	    <android.support.v7.widget.RecyclerView
-		    android:id="@id/android:list"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-            tools:listitem="@layout/bookmark_feed_view"
-            android:scrollbars="vertical"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent"
+        app:msv_loadingView="@layout/list_loading"
+        tools:context=".MainActivity">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/bookmark_feed_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@id/android:list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/bookmark_feed_view"
+                android:scrollbars="vertical"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </com.kennyc.view.MultiStateView>
 
-    <RelativeLayout
-        android:id="@+id/bookmark_feed_loading"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <android.support.v4.widget.ContentLoadingProgressBar
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_centerInParent="true"
-            style="@style/Widget.AppCompat.ProgressBar"/>
-    </RelativeLayout>
+
 </android.support.design.widget.CoordinatorLayout>
