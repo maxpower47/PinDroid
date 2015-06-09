@@ -36,6 +36,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.kennyc.view.MultiStateView;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.event.BookmarkDeletedEvent;
@@ -66,6 +67,7 @@ public class BrowseBookmarksFragment extends Fragment
     @ViewById(android.R.id.list) RecyclerView listView;
 	@ViewById(R.id.floating_add_button) FloatingActionButton actionButton;
     @ViewById(R.id.bookmark_refresh) SwipeRefreshLayout refreshLayout;
+    @ViewById(R.id.bookmark_multistate) MultiStateView multiStateView;
 	
 	@Bean BookmarkAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -324,6 +326,16 @@ public class BrowseBookmarksFragment extends Fragment
 	
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 	    mAdapter.changeCursor(data);
+        if(mAdapter.getItemCount() < 1) {
+            if(unread) {
+                multiStateView.setViewForState(R.layout.unread_empty, MultiStateView.ViewState.EMPTY);
+            } else {
+                multiStateView.setViewForState(R.layout.bookmark_empty, MultiStateView.ViewState.EMPTY);
+            }
+            multiStateView.setViewState(MultiStateView.ViewState.EMPTY);
+        } else {
+            multiStateView.setViewState(MultiStateView.ViewState.CONTENT);
+        }
 	}
 	
 	public void onLoaderReset(Loader<Cursor> loader) {

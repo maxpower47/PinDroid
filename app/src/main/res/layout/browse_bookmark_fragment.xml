@@ -21,29 +21,37 @@
  * USA
  */
  -->
- <android.support.design.widget.CoordinatorLayout
+<com.kennyc.view.MultiStateView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent">
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/bookmark_refresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-	    <android.support.v7.widget.RecyclerView
-    		android:id="@id/android:list"
-    	    android:layout_width="match_parent"
-    	    android:layout_height="match_parent"
-            tools:listitem="@layout/bookmark_view"
-            android:scrollbars="vertical"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floating_add_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:layout_anchor="@id/android:list"
-        app:layout_anchorGravity="bottom|right|end"
-        android:src="@drawable/ic_menu_add"/>
-</android.support.design.widget.CoordinatorLayout>
+    android:id="@+id/bookmark_multistate"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:msv_loadingView="@layout/list_loading"
+    app:msv_emptyView="@layout/bookmark_empty">
+    <android.support.design.widget.CoordinatorLayout
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/bookmark_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@id/android:list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/bookmark_view"
+                android:scrollbars="vertical"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floating_add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_anchor="@id/android:list"
+            app:layout_anchorGravity="bottom|right|end"
+            android:src="@drawable/ic_menu_add"/>
+    </android.support.design.widget.CoordinatorLayout>
+</com.kennyc.view.MultiStateView>

@@ -50,6 +50,7 @@ android {
 
     repositories {
         jcenter()
+        maven { url 'https://dl.bintray.com/kennyc1012/maven' }
     }
 
     dependencies {
@@ -66,4 +67,5 @@ android {
         compile 'com.squareup.retrofit:retrofit:1.9.0'
         compile 'de.greenrobot:eventbus:2.4.0'
         compile 'com.yqritc:recyclerview-flexibledivider:1.2.4'
+        compile 'com.kennyc:multistateview:1.0.1'
 }
