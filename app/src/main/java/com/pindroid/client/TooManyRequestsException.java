@@ -30,9 +30,7 @@ public class TooManyRequestsException extends Exception {
 		return backoff;
 	}
 	
-	public TooManyRequestsException(){
-		
-	}
+	public TooManyRequestsException() { }
 	
 	public TooManyRequestsException(int backoff){
 		this.backoff = backoff;

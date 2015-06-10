@@ -40,8 +40,12 @@ import android.widget.TextView;
 import com.dd.CircularProgressButton;
 import com.pindroid.Constants;
 import com.pindroid.R;
+import com.pindroid.client.AuthenticationException;
 import com.pindroid.client.PinboardApi;
+import com.pindroid.client.PinboardAuthToken;
+import com.pindroid.client.PinboardClient;
 import com.pindroid.providers.BookmarkContentProvider;
+import com.pindroid.util.NetworkUtil;
 import com.pindroid.util.SyncUtils;
 
 import org.androidannotations.annotations.AfterViews;
@@ -208,25 +212,26 @@ public class AuthenticatorActivity extends AppCompatActivity {
      * Called when the authentication process completes (see attemptLogin()).
      */
     @UiThread
-    public void onAuthenticationResult(String result) {
-        if (result != null) {
-            if (!mConfirmCredentials) {
-                finishLogin(result);
-            } else {
-                finishConfirmCredentials(result);
-            }
+    public void onAuthenticationResult(PinboardAuthToken result) {
+        if (!mConfirmCredentials) {
+            finishLogin(result.getToken());
         } else {
-            Log.e(TAG, "onAuthenticationResult: failed to authenticate");
-            mLoginButton.setProgress(0);
-            if (mRequestNewAccount) {
-                // "Please enter a valid username/password.
-                mMessage.setText(getText(R.string.login_activity_loginfail_text_both));
-            } else {
-                // "Please enter a valid password." (Used when the
-                // account is already in the database but the password
-                // doesn't work.)
-                mMessage.setText(getText(R.string.login_activity_loginfail_text_pwonly));
-            }
+            finishConfirmCredentials(result.getToken());
+        }
+    }
+
+    @UiThread
+    public void onAuthenticationError() {
+        Log.e(TAG, "onAuthenticationResult: failed to authenticate");
+        mLoginButton.setProgress(0);
+        if (mRequestNewAccount) {
+            // "Please enter a valid username/password.
+            mMessage.setText(getText(R.string.login_activity_loginfail_text_both));
+        } else {
+            // "Please enter a valid password." (Used when the
+            // account is already in the database but the password
+            // doesn't work.)
+            mMessage.setText(getText(R.string.login_activity_loginfail_text_pwonly));
         }
     }
     
@@ -258,6 +263,11 @@ public class AuthenticatorActivity extends AppCompatActivity {
 
     @Background
     void authenticate() {
-        onAuthenticationResult(PinboardApi.pinboardAuthenticate(mUsername, mPassword));
+        //onAuthenticationResult(PinboardApi.pinboardAuthenticate(mUsername, mPassword));
+        try {
+            onAuthenticationResult(PinboardClient.get().authenticate(NetworkUtil.encodeCredentialsForBasicAuthorization(mUsername, mPassword)));
+        } catch (AuthenticationException e) {
+            onAuthenticationError();
+        }
     }
 }

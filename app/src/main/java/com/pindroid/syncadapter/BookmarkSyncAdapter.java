@@ -33,6 +33,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.pindroid.Constants;
+import com.pindroid.client.AuthenticationException;
 import com.pindroid.client.PinboardApiResult;
 import com.pindroid.client.PinboardClient;
 import com.pindroid.client.PinboardException;
@@ -45,8 +46,6 @@ import com.pindroid.platform.TagManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.NoteContent.Note;
 import com.pindroid.util.AccountHelper;
-
-import org.apache.http.auth.AuthenticationException;
 
 import java.io.IOException;
 import java.text.ParseException;

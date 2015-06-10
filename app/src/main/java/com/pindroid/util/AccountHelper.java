@@ -5,8 +5,7 @@ import android.accounts.AccountManager;
 import android.content.Context;
 
 import com.pindroid.Constants;
-
-import org.apache.http.auth.AuthenticationException;
+import com.pindroid.client.AuthenticationException;
 
 public class AccountHelper {
 
@@ -29,7 +28,7 @@ public class AccountHelper {
     	return AccountManager.get(context).getAccountsByType(Constants.ACCOUNT_TYPE).length;
     }
 
-	public static String getAuthToken(Context context, Account account) throws AuthenticationException{
+	public static String getAuthToken(Context context, Account account) throws AuthenticationException {
 		final AccountManager am = AccountManager.get(context);
 
 		if(account == null) {
@@ -45,7 +44,7 @@ public class AccountHelper {
 				authtoken = tempAuthtoken;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new AuthenticationException("Error getting auth token");
+			throw new AuthenticationException();
 		}
 
 		return username + ":" + authtoken;
