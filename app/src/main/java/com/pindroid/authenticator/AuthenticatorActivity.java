@@ -24,40 +24,41 @@ package com.pindroid.authenticator;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.view.Window;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.pindroid.R;
+import com.dd.CircularProgressButton;
 import com.pindroid.Constants;
+import com.pindroid.R;
 import com.pindroid.client.PinboardApi;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.util.SyncUtils;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.EditorAction;
+import org.androidannotations.annotations.SystemService;
+import org.androidannotations.annotations.TextChange;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 /**
  * Activity which displays login screen to the user.
  */
 @EActivity(R.layout.login_activity)
-public class AuthenticatorActivity extends ActionBarActivity {
+public class AuthenticatorActivity extends AppCompatActivity {
     public static final String PARAM_CONFIRMCREDENTIALS = "confirmCredentials";
     public static final String PARAM_USERNAME = "username";
     public static final String PARAM_AUTHTOKEN_TYPE = "authtokenType";
@@ -65,11 +66,11 @@ public class AuthenticatorActivity extends ActionBarActivity {
     private static final String TAG = "AuthenticatorActivity";
 
     private AccountManager mAccountManager;
-    private UserLoginTask mAuthTask = null;
-    private DialogFragment mProgressDialog = null;
     
     private AccountAuthenticatorResponse mAccountAuthenticatorResponse = null;
     private Bundle mResultBundle = null;
+
+    @SystemService InputMethodManager inputMethodManager;
 
     /**
      * If set we are just checking that the user knows their credentials; this
@@ -80,6 +81,7 @@ public class AuthenticatorActivity extends ActionBarActivity {
 	@ViewById(R.id.username_edit) EditText mUsernameEdit;
 	@ViewById(R.id.password_edit) EditText mPasswordEdit;
     @ViewById(R.id.message) TextView mMessage;
+    @ViewById(R.id.login_button) CircularProgressButton mLoginButton;
 
     /** Was the original caller asking for an entirely new account? */
     protected boolean mRequestNewAccount = false;
@@ -113,28 +115,38 @@ public class AuthenticatorActivity extends ActionBarActivity {
 			mUsernameEdit.setText(mUsername);
 			mPasswordEdit.requestFocus();
 		}
+        mLoginButton.setIndeterminateProgressMode(true);
 	}
 
     /**
      * Handles onClick event on the Submit button. Sends username/password to
      * the server for authentication.
-     * 
-     * @param view The Submit button for which this method is invoked
      */
-    public void handleLogin(View view) {
+    @Click(R.id.login_button)
+    public void handleLogin() {
         if (mRequestNewAccount) {
             mUsername = mUsernameEdit.getText().toString().trim();
         }
         mPassword = mPasswordEdit.getText().toString();
-        
-        if (TextUtils.isEmpty(mUsername) || TextUtils.isEmpty(mPassword)) {
-            mMessage.setText(getMessage());
-        } else {
-            showProgress();
-            // Start authenticating...
-            mAuthTask = new UserLoginTask();
-            mAuthTask.execute();
+
+        if(inputMethodManager.isAcceptingText()) {
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
+
+        mLoginButton.setProgress(50);
+        authenticate();
+    }
+
+    @EditorAction(R.id.password_edit)
+    void onEditorActionPassword(int actionId) {
+        if (mLoginButton.isEnabled() && actionId == EditorInfo.IME_ACTION_DONE) {
+            handleLogin();
+        }
+    }
+
+    @TextChange({R.id.username_edit, R.id.password_edit})
+    void textChanged() {
+        mLoginButton.setEnabled(!TextUtils.isEmpty(mUsernameEdit.getText()) && !TextUtils.isEmpty(mPasswordEdit.getText()));
     }
 
     /**
@@ -195,17 +207,17 @@ public class AuthenticatorActivity extends ActionBarActivity {
     /**
      * Called when the authentication process completes (see attemptLogin()).
      */
+    @UiThread
     public void onAuthenticationResult(String result) {
-    	mAuthTask = null;
-        hideProgress();
         if (result != null) {
-            if (!mConfirmCredentials) {            	
+            if (!mConfirmCredentials) {
                 finishLogin(result);
             } else {
                 finishConfirmCredentials(result);
             }
         } else {
             Log.e(TAG, "onAuthenticationResult: failed to authenticate");
+            mLoginButton.setProgress(0);
             if (mRequestNewAccount) {
                 // "Please enter a valid username/password.
                 mMessage.setText(getText(R.string.login_activity_loginfail_text_both));
@@ -216,47 +228,6 @@ public class AuthenticatorActivity extends ActionBarActivity {
                 mMessage.setText(getText(R.string.login_activity_loginfail_text_pwonly));
             }
         }
-    }
-
-    /**
-     * Returns the message to be displayed at the top of the login dialog box.
-     */
-    private CharSequence getMessage() {
-        if (TextUtils.isEmpty(mPassword)) {
-            // We have an account but no password
-            return getText(R.string.login_activity_loginfail_text_pwmissing);
-        }
-        return null;
-    }
-
-    /**
-     * Shows the progress UI for a lengthy operation.
-     */
-    protected void showProgress() {
-    	mProgressDialog = ProgressDialogFragment.newInstance();
-    	mProgressDialog.show(getSupportFragmentManager(), "dialog");
-    }
-    
-    /**
-     * Hides the progress UI for a lengthy operation.
-     */
-    private void hideProgress() {
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
-            mProgressDialog = null;
-        }
-    }
-    
-    public void cancel(){
-    	if (mAuthTask != null) {
-            mAuthTask.cancel(true);
-            finish();
-        }
-    }
-    
-    public void onAuthenticationCancel() {
-        mAuthTask = null;
-        hideProgress();
     }
     
     /**
@@ -284,63 +255,9 @@ public class AuthenticatorActivity extends ActionBarActivity {
         }
         super.finish();
     }
-    
-    /**
-     * Represents an asynchronous task used to authenticate a user against the
-     * SampleSync Service
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, String> {
 
-        @Override
-        protected String doInBackground(Void... params) {
-            // We do the actual work of authenticating the user
-            // in the NetworkUtilities class.
-            try {
-                return PinboardApi.pinboardAuthenticate(mUsername, mPassword);
-            } catch (Exception ex) {
-                Log.e(TAG, "UserLoginTask.doInBackground: failed to authenticate");
-                Log.i(TAG, ex.toString());
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final String authToken) {
-            // On a successful authentication, call back into the Activity to
-            // communicate the authToken (or null for an error).
-            onAuthenticationResult(authToken);
-        }
-
-        @Override
-        protected void onCancelled() {
-            // If the action was canceled (by the user clicking the cancel
-            // button in the progress dialog), then call back into the
-            // activity to let it know.
-            onAuthenticationCancel();
-        }
-    }
-    
-    public static class ProgressDialogFragment extends DialogFragment {
-
-    	public static ProgressDialogFragment newInstance() {
-    		ProgressDialogFragment frag = new ProgressDialogFragment ();
-    		return frag;
-    	}
-
-    	@Override
-    	public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-    		final ProgressDialog dialog = new ProgressDialog(getActivity());
-    		dialog.setMessage(getString(R.string.ui_activity_authenticating));
-    		dialog.setIndeterminate(true);
-    		dialog.setCancelable(true);
-            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                public void onCancel(DialogInterface dialog) {
-                    Log.i(TAG, "dialog cancel has been invoked");
-                    ((AuthenticatorActivity)getActivity()).cancel();
-                }
-            });
-    		return dialog;
-    	}
+    @Background
+    void authenticate() {
+        onAuthenticationResult(PinboardApi.pinboardAuthenticate(mUsername, mPassword));
     }
 }
