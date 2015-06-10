@@ -41,7 +41,6 @@ import com.dd.CircularProgressButton;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.client.AuthenticationException;
-import com.pindroid.client.PinboardApi;
 import com.pindroid.client.PinboardAuthToken;
 import com.pindroid.client.PinboardClient;
 import com.pindroid.providers.BookmarkContentProvider;
