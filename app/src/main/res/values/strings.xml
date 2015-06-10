@@ -310,6 +310,8 @@
     <string name="alt_widget_add_bookmark">Add Bookmark</string>
     <string name="alt_widget_search">Search</string>
     <string name="alt_widget_divider">Divider</string>
+    <string name="alt_login_background">Background Image</string>
+
     <string name="dashclock_extension_title">PinDroid</string>
     <string name="dashclock_extension_description">Displays unread counts for PinDroid.</string>
     <string name="dashclock_update_status">%1$s unread</string>

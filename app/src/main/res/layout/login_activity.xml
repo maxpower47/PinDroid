@@ -24,6 +24,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.pindroid.authenticator.AuthenticatorActivity">
@@ -32,6 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
+        android:contentDescription="@string/alt_login_background"
         android:src="@drawable/login_background" />
     <LinearLayout
         android:orientation="vertical"
@@ -73,6 +75,7 @@
             android:layout_marginBottom="16dp"
             android:padding="10dp"
             android:textColor="@color/text_body"
+            android:imeOptions="actionDone"
             android:background="@drawable/rounded_edit_text"
             android:hint="@string/login_activity_password_label"
             android:scrollHorizontally="true"
@@ -86,17 +89,19 @@
             android:textIsSelectable="false"
             android:textColor="#FFFFFF"
             android:textSize="14sp"/>
-        <Button
+        <com.dd.CircularProgressButton
+            android:id="@+id/login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:minWidth="320dp"
             android:maxWidth="320dp"
-            android:background="@drawable/login_button"
-            android:id="@+id/ok_button"
-            android:text="@string/login_activity_ok_button"
-            android:textColor="#FFFFFF"
-            android:onClick="handleLogin" />
+            android:enabled="false"
+            app:cpb_selectorIdle="@color/login_button_background"
+            app:cpb_textIdle="@string/login_activity_ok_button"
+            app:cpb_cornerRadius="6dp"
+            app:cpb_colorIndicator="@color/pindroid_blue"
+            android:textColor="#FFFFFF" />
         <TextView
             android:id="@+id/message_bottom"
             android:layout_width="wrap_content"
