@@ -1,9 +1,5 @@
 package com.pindroid.client;
 
-import android.accounts.AuthenticatorException;
-import android.content.Context;
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -13,9 +9,7 @@ import com.google.gson.JsonParseException;
 import com.pindroid.Constants;
 import com.pindroid.event.AuthenticationEvent;
 
-import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
-import org.apache.http.auth.AuthenticationException;
 import org.apache.http.client.utils.URLEncodedUtils;
 
 import java.lang.reflect.Type;
@@ -99,7 +93,7 @@ public class PinboardClient {
 					@Override
 					public Throwable handleError(RetrofitError cause) {
 						Response r = cause.getResponse();
-						if (HttpStatus.SC_UNAUTHORIZED == r.getStatus()) {
+						if (Constants.HTTP_STATUS_UNAUTHORIZED == r.getStatus()) {
 
 							for(NameValuePair n : URLEncodedUtils.parse(URI.create(r.getUrl()), Charset.defaultCharset().name())) {
 								if("auth_token".equals(n.getName())) {
@@ -110,7 +104,7 @@ public class PinboardClient {
 							return new AuthenticationException();
 						} else if (Constants.HTTP_STATUS_TOO_MANY_REQUESTS == r.getStatus()) {
 							return new TooManyRequestsException(300);
-						} else if (HttpStatus.SC_REQUEST_URI_TOO_LONG == r.getStatus()) {
+						} else if (Constants.HTTP_STATUS_REQUEST_URI_TOO_LONG == r.getStatus()) {
 							return new PinboardException();
 						}
 

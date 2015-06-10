@@ -30,7 +30,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.pindroid.Constants;
-import com.pindroid.client.PinboardApi;
+import com.pindroid.client.AuthenticationException;
+import com.pindroid.client.PinboardAuthToken;
+import com.pindroid.client.PinboardClient;
+import com.pindroid.util.NetworkUtil;
 
 /**
  * This class is an implementation of AbstractAccountAuthenticator for
@@ -62,22 +65,25 @@ class Authenticator extends AbstractAccountAuthenticator {
      */
     @Override
     public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) {
-        if (options != null && options.containsKey(AccountManager.KEY_PASSWORD)) {
-            final String password = options.getString(AccountManager.KEY_PASSWORD);
-            final String verified = onlineConfirmPassword(account, password);
-            final Bundle result = new Bundle();
-            boolean confirmed = verified != null;
-            result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, confirmed);
-            return result;
+        final Bundle result = new Bundle();
+
+        try {
+            if (options != null && options.containsKey(AccountManager.KEY_PASSWORD)) {
+                final String password = options.getString(AccountManager.KEY_PASSWORD);
+                final PinboardAuthToken verified = onlineConfirmPassword(account, password);
+                boolean confirmed = verified != null;
+                result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, confirmed);
+            }
+        } catch (AuthenticationException e) {
+            // Launch AuthenticatorActivity to confirm credentials
+            final Intent intent = new Intent(mContext, AuthenticatorActivity_.class);
+            intent.putExtra(AuthenticatorActivity.PARAM_USERNAME, account.name);
+            intent.putExtra(AuthenticatorActivity.PARAM_CONFIRMCREDENTIALS, true);
+            intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+            result.putParcelable(AccountManager.KEY_INTENT, intent);
         }
-        // Launch AuthenticatorActivity to confirm credentials
-        final Intent intent = new Intent(mContext, AuthenticatorActivity_.class);
-        intent.putExtra(AuthenticatorActivity.PARAM_USERNAME, account.name);
-        intent.putExtra(AuthenticatorActivity.PARAM_CONFIRMCREDENTIALS, true);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-        final Bundle bundle = new Bundle();
-        bundle.putParcelable(AccountManager.KEY_INTENT, intent);
-        return bundle;
+
+        return result;
     }
 
     /**
@@ -104,16 +110,17 @@ class Authenticator extends AbstractAccountAuthenticator {
         am.setPassword(account, null);
     	
         if (password != null) {
-            final String authToken = onlineConfirmPassword(account, password);
-            if (authToken != null) {
-            	
-            	am.setAuthToken(account, Constants.AUTHTOKEN_TYPE, authToken);
-            	
+            try {
+                final PinboardAuthToken authToken = onlineConfirmPassword(account, password);
+
+                am.setAuthToken(account, Constants.AUTHTOKEN_TYPE, authToken.getToken());
+
                 final Bundle result = new Bundle();
                 result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
                 result.putString(AccountManager.KEY_ACCOUNT_TYPE, Constants.ACCOUNT_TYPE);
-                result.putString(AccountManager.KEY_AUTHTOKEN, authToken);
+                result.putString(AccountManager.KEY_AUTHTOKEN, authToken.getToken());
                 return result;
+            } catch (AuthenticationException e) {
             }
         }
         // the password was missing or incorrect, return an Intent to an
@@ -148,8 +155,8 @@ class Authenticator extends AbstractAccountAuthenticator {
     /**
      * Validates user's password on the server
      */
-    private String onlineConfirmPassword(Account account, String password) {
-    	return PinboardApi.pinboardAuthenticate(account.name, password);
+    private PinboardAuthToken onlineConfirmPassword(Account account, String password) throws AuthenticationException {
+    	return PinboardClient.get().authenticate(NetworkUtil.encodeCredentialsForBasicAuthorization(account.name, password));
     }
 
     /**

@@ -5,12 +5,11 @@ import com.pindroid.model.TagSuggestions;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.NoteContent.Note;
 
-import org.apache.http.auth.AuthenticationException;
-
 import java.util.List;
 import java.util.Map;
 
 import retrofit.http.GET;
+import retrofit.http.Header;
 import retrofit.http.Path;
 import retrofit.http.Query;
 import retrofit.http.QueryMap;
@@ -43,4 +42,7 @@ public interface PinboardService {
 
 	@GET("/v1/user/secret")
 	PinboardAuthToken getSecretToken(@Query("auth_token") String authToken) throws AuthenticationException;
+
+    @GET("/v1/user/api_token")
+    PinboardAuthToken authenticate(@Header("Authorization") String authorization) throws AuthenticationException;
 }
