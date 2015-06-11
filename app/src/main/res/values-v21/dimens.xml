@@ -22,6 +22,6 @@
  */
 -->
 <resources>
-
     <dimen name="toolbar_padding_top">24dp</dimen>
+    <dimen name="fab_compat_margin">16dp</dimen>
 </resources>
