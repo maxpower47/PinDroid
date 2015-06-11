@@ -14,7 +14,6 @@ import org.apache.http.client.utils.URLEncodedUtils;
 
 import java.lang.reflect.Type;
 import java.net.URI;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
