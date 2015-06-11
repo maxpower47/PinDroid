@@ -21,11 +21,12 @@
 
 package com.pindroid.client;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
+import com.pindroid.Constants;
+
+import org.apache.commons.io.IOUtils;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * Provides utility methods for communicating with the server.
@@ -35,37 +36,34 @@ public class NetworkUtilities {
     /**
      * Gets the title of a web page.
      * 
-     * @param url The URL of the web page.
+     * @param urlString The URL of the web page.
      * @return A String containing the title of the web page.
      */
-    public static String getWebpageTitle(String url) {
+    public static String getWebpageTitle(String urlString) {
    	
-    	if(url != null && !url.equals("")) {
+    	if(urlString != null && !urlString.equals("")) {
     		
-    		if(!url.startsWith("http")){
-    			url = "http://" + url;
+    		if(!urlString.startsWith("http")){
+                urlString = "http://" + urlString;
     		}
-	
-	    	HttpResponse resp = null;
-	    	HttpGet post = null;
-	    	
-	    	try {
-				post = new HttpGet(url.replace("|", "%7C"));
-	
-				post.setHeader("User-Agent", "Mozilla/5.0");
-	
-				resp = HttpClientFactory.getThreadSafeClient().execute(post);
 
-		    	if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-		    		String response = EntityUtils.toString(resp.getEntity(), HTTP.UTF_8);
-		    		int start = response.indexOf("<title>") + 7;
-		    		int end = response.indexOf("</title>", start + 1);
-		    		String title = response.substring(start, end);
-		    		return title;
-		    	} else return "";
-			} catch (Exception e) {
-				return "";
-			}
-    	} else return "";
+            try {
+                URL url = new URL(urlString);
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+                conn.connect();
+
+                if (conn.getResponseCode() == Constants.HTTP_STATUS_OK) {
+                    String response = IOUtils.toString(conn.getInputStream());
+                    int start = response.indexOf("<title>") + 7;
+                    int end = response.indexOf("</title>", start + 1);
+                    return response.substring(start, end);
+                }
+            } catch (Exception e) {
+
+            }
+    	}
+        return "";
     }
 }

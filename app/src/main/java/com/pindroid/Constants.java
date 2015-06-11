@@ -53,6 +53,7 @@ public class Constants {
     
     public static final String SYNC_MARKER_KEY = "com.pindroid.BookmarkSyncAdapter.marker";
 
+    public static final int HTTP_STATUS_OK = 200;
     public static final int HTTP_STATUS_UNAUTHORIZED = 401;
     public static final int HTTP_STATUS_REQUEST_URI_TOO_LONG = 414;
     public static final int HTTP_STATUS_TOO_MANY_REQUESTS = 429;
