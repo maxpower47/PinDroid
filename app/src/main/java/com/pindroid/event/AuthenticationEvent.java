@@ -2,8 +2,8 @@ package com.pindroid.event;
 
 public class AuthenticationEvent {
 
-	private String account;
-	private String authToken;
+	private final String account;
+	private final String authToken;
 
 	public AuthenticationEvent(String accountAuthToken) {
 		this.account = accountAuthToken.split(":")[0];

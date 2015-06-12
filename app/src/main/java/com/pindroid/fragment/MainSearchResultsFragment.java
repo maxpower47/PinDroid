@@ -29,9 +29,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.support.v4.app.ListFragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 public class MainSearchResultsFragment extends ListFragment {
 	
@@ -39,10 +37,10 @@ public class MainSearchResultsFragment extends ListFragment {
 	private String query;
 	
 	public interface OnSearchActionListener {
-		public void onBookmarkSearch(String query);
-		public void onTagSearch(String query);
-		public void onNoteSearch(String query);
-		public void onGlobalTagSearch(String query);
+		void onBookmarkSearch(String query);
+		void onTagSearch(String query);
+		void onNoteSearch(String query);
+		void onGlobalTagSearch(String query);
 	}
 	
 	@Override
@@ -55,7 +53,7 @@ public class MainSearchResultsFragment extends ListFragment {
 				getString(R.string.search_results_tag), getString(R.string.search_results_note),
 				getString(R.string.search_results_global_tag)};
 		
-		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.result_view, MENU_ITEMS));
+		setListAdapter(new ArrayAdapter<>(getActivity(), R.layout.result_view, MENU_ITEMS));
 		
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);

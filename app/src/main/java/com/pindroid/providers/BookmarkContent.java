@@ -115,7 +115,7 @@ public class BookmarkContent {
         }
         
         public List<Tag> getTags(){
-			List<Tag> result = new ArrayList<Tag>();
+			List<Tag> result = new ArrayList<>();
 			
 			if(mTags != null){
 				for(String s : mTags.split(" ")) {

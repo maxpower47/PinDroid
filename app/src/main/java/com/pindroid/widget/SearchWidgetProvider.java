@@ -38,12 +38,9 @@ import android.widget.RemoteViews;
 public class SearchWidgetProvider extends AppWidgetProvider {
 	
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        final int n = appWidgetIds.length;
-
         // Perform this loop procedure for each App Widget that belongs to this provider
-        for (int i = 0; i < n; i++) {
-        	int appWidgetId = appWidgetIds[i];
-        	updateAppWidget(context, appWidgetManager, appWidgetId);
+        for (int appWidgetId : appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
     
@@ -84,9 +81,8 @@ public class SearchWidgetProvider extends AppWidgetProvider {
     
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        final int N = appWidgetIds.length;
-        for (int i=0; i<N; i++) {
-            LargeWidgetConfigure.deleteAccountPref(context, appWidgetIds[i]);
+        for (int appWidgetId : appWidgetIds) {
+            LargeWidgetConfigure.deleteAccountPref(context, appWidgetId);
         }
     }
 }

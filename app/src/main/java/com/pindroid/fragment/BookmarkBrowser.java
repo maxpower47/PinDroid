@@ -22,7 +22,7 @@
 package com.pindroid.fragment;
 
 public interface BookmarkBrowser {
-	public void refresh();
-	public void setUsername(String username);
-	public void setQuery(String username, String query, String feed);
+	void refresh();
+	void setUsername(String username);
+	void setQuery(String username, String query, String feed);
 }

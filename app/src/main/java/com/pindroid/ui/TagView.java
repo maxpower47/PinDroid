@@ -63,7 +63,7 @@ public class TagView extends TextView {
 	private ColorGenerator colorGenerator;
 
 	public interface OnTagClickListener {
-		public void onTagClick(String tag);
+		void onTagClick(String tag);
 	}
 
 	@SuppressWarnings("UnusedDeclaration")
@@ -217,7 +217,7 @@ public class TagView extends TextView {
 		private final Paint textContentPain;
 		private final Paint backgroundPaint;
 		private final RectF fBounds;
-		private Rect backgroundPadding;
+		private final Rect backgroundPadding;
 
 		public TagDrawable(String text, int tagPadding, float textSize, boolean bold, int textColor, int tagColor, float roundCornersFactor) {
 			this.backgroundPadding = new Rect(tagPadding, tagPadding, tagPadding, tagPadding);

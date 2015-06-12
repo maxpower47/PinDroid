@@ -36,7 +36,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.kennyc.view.MultiStateView;
@@ -68,9 +67,8 @@ public class BrowseBookmarkFeedFragment extends Fragment
 	implements LoaderManager.LoaderCallbacks<List<FeedBookmark>>, BookmarkBrowser, PindroidFragment  {
 	
 	@Bean BookmarkFeedAdapter adapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-	
-	@InstanceState String username = null;
+
+    @InstanceState String username = null;
 	@InstanceState String tagname = null;
 	@InstanceState String feed = null;
 	
@@ -102,7 +100,7 @@ public class BrowseBookmarkFeedFragment extends Fragment
 	@AfterViews
 	public void init(){
 
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         listView.setLayoutManager(mLayoutManager);
 		
 		listView.setAdapter(adapter);
@@ -139,14 +137,19 @@ public class BrowseBookmarkFeedFragment extends Fragment
 
         String defaultAction = SettingsHelper.getDefaultAction(getActivity());
 
-        if(defaultAction.equals("view")) {
-            viewBookmark(lastSelected.toBookmark());
-        } else if(defaultAction.equals("read")) {
-            readBookmark(lastSelected.toBookmark());
-        } else if(defaultAction.equals("edit")){
-            addBookmark(lastSelected.toBookmark());
-        } else {
-            openBookmarkInBrowser(lastSelected.toBookmark());
+        switch (defaultAction) {
+            case "view":
+                viewBookmark(lastSelected.toBookmark());
+                break;
+            case "read":
+                readBookmark(lastSelected.toBookmark());
+                break;
+            case "edit":
+                addBookmark(lastSelected.toBookmark());
+                break;
+            default:
+                openBookmarkInBrowser(lastSelected.toBookmark());
+                break;
         }
     }
 

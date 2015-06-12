@@ -1,6 +1,6 @@
 package com.pindroid.activity;
 
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import com.pindroid.R;
 import com.pindroid.fragment.AddBookmarkFragment;
@@ -12,7 +12,7 @@ import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.FragmentById;
 
 @EActivity(R.layout.activity_add_bookmark)
-public class AddBookmark extends ActionBarActivity implements AddBookmarkFragment.OnBookmarkSaveListener {
+public class AddBookmark extends AppCompatActivity implements AddBookmarkFragment.OnBookmarkSaveListener {
 
     @FragmentById(R.id.addbookmark_fragment) AddBookmarkFragment addBookmarkFragment;
 	@Extra("username") String username;

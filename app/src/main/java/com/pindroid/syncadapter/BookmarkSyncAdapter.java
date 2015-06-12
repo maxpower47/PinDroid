@@ -127,7 +127,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 		if(update.getLastUpdate().getTime() > lastUpdate) {
 	
 			Log.d(TAG, "In Bookmark Load");
-			final ArrayList<String> accounts = new ArrayList<String>();
+			final ArrayList<String> accounts = new ArrayList<>();
 			accounts.add(account.name);
 	
 			final ArrayList<Bookmark> addBookmarkList = getBookmarkList();	

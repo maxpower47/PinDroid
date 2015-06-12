@@ -27,16 +27,12 @@ import java.util.Map.Entry;
 
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
-import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
-import com.pindroid.activity.Main;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.util.AccountHelper;
 
-import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 
 public class PinDroidExtension extends DashClockExtension {
 
@@ -82,7 +78,7 @@ public class PinDroidExtension extends DashClockExtension {
     }
 	
 	public Map<String, Integer> GetUnreadCount(){		
-		Map<String, Integer> result = new HashMap<String, Integer>();
+		Map<String, Integer> result = new HashMap<>();
 
 		final String[] projection = new String[] {"Count", "Account"};
 		final Cursor c = this.getContentResolver().query(Bookmark.UNREAD_CONTENT_URI, projection, null, null, null);	

@@ -30,7 +30,6 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -764,7 +763,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
      
     private List<String> getAccountNames(){
     	
-    	List<String> accountNames = new ArrayList<String>();
+    	List<String> accountNames = new ArrayList<>();
     	
     	for(Account account : AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE)) {
     		accountNames.add(account.name);
@@ -838,7 +837,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
         }
     }
 
-    SharedPreferences.OnSharedPreferenceChangeListener prefListner = new SharedPreferences.OnSharedPreferenceChangeListener(){
+    final SharedPreferences.OnSharedPreferenceChangeListener prefListner = new SharedPreferences.OnSharedPreferenceChangeListener(){
         public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
             if(key.equals(getApplicationContext().getResources().getString(R.string.pref_drawertags_key))) {
                 getSupportLoaderManager().restartLoader(0, null, Main.this);

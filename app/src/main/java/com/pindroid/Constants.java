@@ -85,5 +85,5 @@ public class Constants {
     
     public static final String INSTAPAPER_URL = "http://www.instapaper.com/text?u=";
     
-    public static enum BookmarkViewType {VIEW, READ, WEB, EDIT};
+    public enum BookmarkViewType {VIEW, READ, WEB, EDIT}
 }

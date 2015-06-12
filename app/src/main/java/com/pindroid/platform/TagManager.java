@@ -156,9 +156,9 @@ public class TagManager {
 		String selection = null;
 		
 		final String sortorder = Tag.Name + " ASC";
-		final ArrayList<String> selectionlist = new ArrayList<String>();
+		final ArrayList<String> selectionlist = new ArrayList<>();
 		
-		ArrayList<String> queryList = new ArrayList<String>();
+		ArrayList<String> queryList = new ArrayList<>();
 		
 		for(String s : query.split(" ")) {
 			queryList.add(Tag.Name + " LIKE ?");
@@ -167,7 +167,7 @@ public class TagManager {
 		
 		selectionlist.add(username);
 		
-		if(query != null && query != "") {
+		if(query != null && !"".equals(query)) {
 			selection = "(" + TextUtils.join(" OR ", queryList) + ")" + 
 				" AND " + Tag.Account + "=?";
 		} else {
