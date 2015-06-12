@@ -24,7 +24,6 @@ package com.pindroid.fragment;
 import android.accounts.Account;
 import android.app.Activity;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
@@ -33,7 +32,6 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.widget.CompoundButton;
 import android.widget.FilterQueryProvider;
 import android.widget.ProgressBar;
@@ -41,7 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pindroid.R;
-import com.pindroid.action.GetWebpageTitleTask;
+import com.pindroid.client.NetworkUtilities;
 import com.pindroid.client.PinboardClient;
 import com.pindroid.listadapter.TagAutoCompleteCursorAdapter;
 import com.pindroid.model.TagSuggestions;
@@ -56,9 +54,12 @@ import com.pindroid.util.SpaceTokenizer;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.rengwuxian.materialedittext.MaterialMultiAutoCompleteTextView;
 
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.FocusChange;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -88,10 +89,7 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
     private Boolean firstRun = true;
 	
 	private long updateTime = 0;
-	
-	private AsyncTask<String, Integer, String> titleTask;
-	private AsyncTask<String, Integer, List<TagSuggestions>> tagTask;
-	
+
 	private OnBookmarkSaveListener bookmarkSaveListener;
 	
 	public interface OnBookmarkSaveListener {
@@ -122,28 +120,25 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
             mEditTags.setAdapter(autoCompleteAdapter);
             mEditTags.setTokenizer(new SpaceTokenizer());
 		}
-
-
-		mEditUrl.setOnFocusChangeListener(new OnFocusChangeListener(){
-			public void onFocusChange(View v, boolean hasFocus) {
-				if(!hasFocus){
-					String url = mEditUrl.getText().toString().trim();
-
-					if(url != null && !url.equals("")) {
-						if(mEditDescription.getText().toString().equals("")) {
-							titleTask = new GetTitleTask().execute(url);
-						}
-						tagTask = new GetTagSuggestionsTask().execute(url);
-					}
-				}
-			}
-		});
 	}
+
+    @FocusChange(R.id.add_edit_url)
+    public void urlFocusChanged(View urlView, boolean hasFocus) {
+        if(!hasFocus){
+            String url = mEditUrl.getText().toString().trim();
+
+            if(!url.equals("")) {
+                if(mEditDescription.getText().toString().equals("")) {
+                    getWebpageTitle(url);
+                }
+                getTagSuggestions(url);
+            }
+        }
+    }
 	
 	@Override
 	public void onStart(){
 		super.onStart();
-		
 		refreshView();
 	}
 	
@@ -186,10 +181,10 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
             }
 			
 			if(mEditDescription.getText().toString().equals("")) {
-                titleTask = new GetTitleTask().execute(bookmark.getUrl());
+                getWebpageTitle(bookmark.getUrl());
             }
 
-			tagTask = new GetTagSuggestionsTask().execute(bookmark.getUrl());
+			getTagSuggestions(bookmark.getUrl());
 			
 			getActivity().setTitle(R.string.add_bookmark_edit_title);
 		} else {
@@ -221,15 +216,8 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
     	if(url.equals("")) {
     		Toast.makeText(getActivity(), R.string.add_bookmark_blank_url, Toast.LENGTH_LONG).show();
     		return;
-    	}	
-    	
-    	if(titleTask != null)
-    		titleTask.cancel(true);
-    	
-    	if(tagTask != null)
-    		tagTask.cancel(true);
+    	}
 
-		
 		if(!url.startsWith("http")){
 			url = "http://" + url;
 		}
@@ -308,86 +296,83 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
         	}
         }
     };
-    
-    public class GetTitleTask extends GetWebpageTitleTask{    	
-    	protected void onPreExecute(){
-    		mDescriptionProgress.setVisibility(View.VISIBLE);
-    	}
-    	
-        protected void onPostExecute(String result) {
-        	mEditDescription.setText(Html.fromHtml(result));
-        	mDescriptionProgress.setVisibility(View.GONE);
+
+    public void getWebpageTitle(String url) {
+        mDescriptionProgress.setVisibility(View.VISIBLE);
+        loadWebpageTitle(url);
+    }
+
+    @Background
+    public void loadWebpageTitle(String url) {
+        updateWebpageTitle(NetworkUtilities.getWebpageTitle(url));
+    }
+
+    @UiThread
+    public void updateWebpageTitle(String title) {
+        mEditDescription.setText(Html.fromHtml(title));
+        mDescriptionProgress.setVisibility(View.GONE);
+    }
+
+    public void getTagSuggestions(String url) {
+        mRecommendedTags.setVisibility(View.GONE);
+        mPopularTags.setVisibility(View.GONE);
+        loadTagSuggestions(url);
+    }
+
+    @Background
+    public void loadTagSuggestions(String url) {
+        try {
+            Account account = AccountHelper.getAccount(username, getActivity());
+
+            if(!url.startsWith("http")){
+                url = "http://" + url;
+            }
+
+            updateTagSuggestions(PinboardClient.get().getTagSuggestions(AccountHelper.getAuthToken(getActivity(), account), url));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public class GetTagSuggestionsTask extends AsyncTask<String, Integer, List<TagSuggestions>>{
-    	private String url;
-    	
-    	@Override
-    	protected List<TagSuggestions> doInBackground(String... args) {
-    		url = args[0];
-	
-    		if(getActivity() != null) {
-	    		try {
-	    			Account account = AccountHelper.getAccount(username, getActivity());
+    @UiThread
+    public void updateTagSuggestions(List<TagSuggestions> suggestions) {
+        if(suggestions != null) {
+            SpannableStringBuilder recommendedBuilder = new SpannableStringBuilder();
+            SpannableStringBuilder popularBuilder = new SpannableStringBuilder();
 
-					if(!url.startsWith("http")){
-						url = "http://" + url;
-					}
+            for(TagSuggestions ts : suggestions) {
+                for(String t : ts.getPopular()) {
+                    addTag(popularBuilder, t);
+                }
 
-					return PinboardClient.get().getTagSuggestions(AccountHelper.getAuthToken(getActivity(), account), url);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-	    	}
-			return null;
-    	}
-    	
-    	protected void onPreExecute() {
-    		mRecommendedTags.setVisibility(View.GONE);
-    		mPopularTags.setVisibility(View.GONE);
-    	}
-    	
-        protected void onPostExecute(List<TagSuggestions> result) {
-        	        	
-        	if(result != null) {
-        		SpannableStringBuilder recommendedBuilder = new SpannableStringBuilder();
-        		SpannableStringBuilder popularBuilder = new SpannableStringBuilder();
+                for(String t : ts.getRecommended()) {
+                    addTag(recommendedBuilder, t);
+                }
+            }
 
-				for(TagSuggestions ts : result) {
-					for(String t : ts.getPopular()) {
-						addTag(popularBuilder, t);
-					}
+            mRecommendedTags.setText(recommendedBuilder);
+            mPopularTags.setText(popularBuilder);
 
-					for(String t : ts.getRecommended()) {
-						addTag(recommendedBuilder, t);
-					}
-				}
-        		
-        		mRecommendedTags.setText(recommendedBuilder);
-        		mPopularTags.setText(popularBuilder);
-        		
-        		mRecommendedTags.setVisibility(View.VISIBLE);
-        		mPopularTags.setVisibility(View.VISIBLE);
-        	} 	
+            mRecommendedTags.setVisibility(View.VISIBLE);
+            mPopularTags.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void addTag(SpannableStringBuilder builder, String t) {
+        int flags = 0;
+
+        if (builder.length() != 0) {
+            builder.append("   ");
         }
 
-		private void addTag(SpannableStringBuilder builder, String t) {
-			int flags = 0;
-			
-			if (builder.length() != 0) {
-				builder.append("   ");
-			}
-			
-			int start = builder.length();
-			builder.append(t);
-			int end = builder.length();
-			
-			TagSpan span = new TagSpan(t);
-			span.setOnTagClickListener(tagOnClickListener);
+        int start = builder.length();
+        builder.append(t);
+        int end = builder.length();
 
-			builder.setSpan(span, start, end, flags);
-		}
+        TagSpan span = new TagSpan(t);
+        span.setOnTagClickListener(tagOnClickListener);
+
+        builder.setSpan(span, start, end, flags);
     }
 
 	@Override
