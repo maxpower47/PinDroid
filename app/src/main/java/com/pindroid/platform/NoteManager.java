@@ -155,9 +155,9 @@ public class NoteManager {
 		String selection = null;
 		
 		final String sortorder = Note.Updated + " ASC";
-		final ArrayList<String> selectionlist = new ArrayList<String>();
+		final ArrayList<String> selectionlist = new ArrayList<>();
 		
-		ArrayList<String> queryList = new ArrayList<String>();
+		ArrayList<String> queryList = new ArrayList<>();
 		
 		for(String s : query.split(" ")) {
 			queryList.add("(" + Note.Title + " LIKE ? OR " + 
@@ -168,7 +168,7 @@ public class NoteManager {
 		
 		selectionlist.add(username);
 		
-		if(query != null && query != "") {
+		if(query != null && !"".equals(query)) {
 			selection = "(" + TextUtils.join(" OR ", queryList) + ")" + 
 				" AND " + Note.Account + "=?";
 		} else {

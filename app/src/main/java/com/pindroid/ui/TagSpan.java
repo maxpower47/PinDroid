@@ -26,7 +26,7 @@ import android.view.View;
 
 public class TagSpan extends ClickableSpan {
 	public interface OnTagClickListener {
-		public void onTagClick(String tag);
+		void onTagClick(String tag);
 	}
 
 	private final String mTag;

@@ -26,16 +26,11 @@ import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseTagsFragment;
 
-import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
+import android.support.v7.app.AppCompatActivity;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -43,7 +38,7 @@ import org.androidannotations.annotations.FragmentById;
 import org.androidannotations.annotations.OnActivityResult;
 
 @EActivity(R.layout.browse_tags)
-public class ChooseTagShortcut extends ActionBarActivity implements BrowseTagsFragment.OnTagSelectedListener {
+public class ChooseTagShortcut extends AppCompatActivity implements BrowseTagsFragment.OnTagSelectedListener {
 
 	private String username = "";
 	@FragmentById(R.id.listcontent) BrowseTagsFragment frag;

@@ -23,7 +23,6 @@ package com.pindroid.fragment;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -32,27 +31,21 @@ import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.pindroid.R;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.util.SettingsHelper;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class SelectTagsFragment extends ListFragment
 	implements LoaderManager.LoaderCallbacks<Cursor>, PindroidFragment  {
 
-	private String sortfield = Tag.Name + " ASC";
+	private final String sortfield = Tag.Name + " ASC";
 	private SimpleCursorAdapter mAdapter;
 	
 	private String username = null;
@@ -61,7 +54,7 @@ public class SelectTagsFragment extends ListFragment
 	private OnItemClickListener clickListener;
 	
 	public interface OnTagsSelectedListener {
-		public void onTagsSelected(Set<String> tags);
+		void onTagsSelected(Set<String> tags);
 	}
 	
 	@Override
@@ -120,7 +113,7 @@ public class SelectTagsFragment extends ListFragment
         switch (item.getItemId()) {
             case R.id.menu_selecttags_ok:
 
-                Set<String> tags = new HashSet<String>();
+                Set<String> tags = new HashSet<>();
 
                 SparseBooleanArray checked = getListView().getCheckedItemPositions();
 

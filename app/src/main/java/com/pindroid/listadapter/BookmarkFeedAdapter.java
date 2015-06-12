@@ -1,24 +1,17 @@
 package com.pindroid.listadapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
-import com.pindroid.event.BookmarkSelectedEvent;
 import com.pindroid.event.FeedBookmarkSelectedEvent;
 import com.pindroid.model.FeedBookmark;
-import com.pindroid.providers.BookmarkContent;
 import com.pindroid.ui.BookmarkFeedView;
 import com.pindroid.ui.BookmarkFeedView_;
-import com.pindroid.ui.BookmarkView;
-import com.pindroid.ui.BookmarkView_;
 
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;

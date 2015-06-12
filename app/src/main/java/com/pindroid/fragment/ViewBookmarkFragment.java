@@ -32,12 +32,10 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
@@ -63,8 +61,6 @@ import com.pindroid.util.SettingsHelper;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.Date;
-
 @EFragment(R.layout.view_bookmark_fragment)
 public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	
@@ -86,14 +82,14 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	private OnBookmarkActionListener bookmarkActionListener;
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
 	
-	private ContentObserver observer = new MyObserver(new Handler());
+	private final ContentObserver observer = new MyObserver(new Handler());
 	
 	private static final String STATE_VIEWTYPE = "viewType";
 	private static final String STATE_BOOKMARK = "bookmark";
 	
 	public interface OnBookmarkActionListener {
-		public void onViewTagSelected(String tag, String user);
-		public void onAccountSelected(String account);
+		void onViewTagSelected(String tag, String user);
+		void onAccountSelected(String account);
 	}
 	
 	@SuppressLint("SetJavaScriptEnabled")
@@ -108,7 +104,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 
 		if (savedInstanceState != null) {
 	        viewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_VIEWTYPE);
-	        bookmark = (Bookmark)savedInstanceState.getParcelable(STATE_BOOKMARK);
+	        bookmark = savedInstanceState.getParcelable(STATE_BOOKMARK);
 	        mWebContent.restoreState(savedInstanceState);
 	    } 
 		
@@ -120,13 +116,13 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 
 	}
 	
-    TagView.OnTagClickListener tagOnClickListener = new TagView.OnTagClickListener() {
+    final TagView.OnTagClickListener tagOnClickListener = new TagView.OnTagClickListener() {
         public void onTagClick(String tag) {
 			bookmarkActionListener.onViewTagSelected(tag, bookmark.getAccount());
         }
     };
     
-    AccountSpan.OnAccountClickListener accountOnClickListener = new AccountSpan.OnAccountClickListener() {
+    final AccountSpan.OnAccountClickListener accountOnClickListener = new AccountSpan.OnAccountClickListener() {
         public void onAccountClick(String account) {
         	bookmarkActionListener.onAccountSelected(account);
         }

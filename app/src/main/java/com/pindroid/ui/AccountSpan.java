@@ -26,7 +26,7 @@ import android.view.View;
 
 public class AccountSpan extends ClickableSpan {
 	public interface OnAccountClickListener {
-		public void onAccountClick(String tag);
+		void onAccountClick(String tag);
 	}
 
 	private final String mAccount;

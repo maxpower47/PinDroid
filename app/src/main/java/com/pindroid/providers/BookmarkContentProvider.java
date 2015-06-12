@@ -268,8 +268,6 @@ public class BookmarkContentProvider extends ContentProvider {
 
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
-		Log.d("BookmarkContentProvider Query", uri.toString());
-		
 		switch(sURIMatcher.match(uri)) {
 			case Bookmarks:
 				return getBookmarks(uri, projection, selection, selectionArgs, sortOrder);
@@ -370,15 +368,15 @@ public class BookmarkContentProvider extends ContentProvider {
 	private Cursor getSearchSuggestions(String query, boolean accountSpecific) {
 		Log.d("getSearchSuggestions", query);
 		
-		Map<String, SearchSuggestionContent> tagSuggestions = new TreeMap<String, SearchSuggestionContent>();
-		Map<String, SearchSuggestionContent> bookmarkSuggestions = new TreeMap<String, SearchSuggestionContent>();
-		Map<String, SearchSuggestionContent> noteSuggestions = new TreeMap<String, SearchSuggestionContent>();
+		Map<String, SearchSuggestionContent> tagSuggestions = new TreeMap<>();
+		Map<String, SearchSuggestionContent> bookmarkSuggestions = new TreeMap<>();
+		Map<String, SearchSuggestionContent> noteSuggestions = new TreeMap<>();
 			
 		tagSuggestions = getTagSearchSuggestions(query, accountSpecific);
 		bookmarkSuggestions = getBookmarkSearchSuggestions(query, accountSpecific);
 		noteSuggestions = getNoteSearchSuggestions(query, accountSpecific);
 	
-		SortedMap<String, SearchSuggestionContent> s = new TreeMap<String, SearchSuggestionContent>();
+		SortedMap<String, SearchSuggestionContent> s = new TreeMap<>();
 		s.putAll(tagSuggestions);
 		s.putAll(bookmarkSuggestions);
 		s.putAll(noteSuggestions);
@@ -387,18 +385,16 @@ public class BookmarkContentProvider extends ContentProvider {
 	}
 	
 	private Map<String, SearchSuggestionContent> getBookmarkSearchSuggestions(String query, boolean accountSpecific) {
-		Log.d("getBookmarkSearchSuggestions", query);
-		
 		String[] bookmarks = query.split(" ");
 		
-		Map<String, SearchSuggestionContent> suggestions = new TreeMap<String, SearchSuggestionContent>();
+		Map<String, SearchSuggestionContent> suggestions = new TreeMap<>();
 				
 		// Title/description/notes search suggestions
 		SQLiteQueryBuilder bookmarkqb = new SQLiteQueryBuilder();	
 		bookmarkqb.setTables(BOOKMARK_TABLE_NAME);
 		
-		ArrayList<String> bookmarkList = new ArrayList<String>();
-		final ArrayList<String> selectionlist = new ArrayList<String>();
+		ArrayList<String> bookmarkList = new ArrayList<>();
+		final ArrayList<String> selectionlist = new ArrayList<>();
 		
 		for(String s : bookmarks) {
 			bookmarkList.add("(" + Bookmark.Description + " LIKE ? OR " + 
@@ -468,14 +464,14 @@ public class BookmarkContentProvider extends ContentProvider {
 		
 		String[] tags = query.split(" ");
 		
-		Map<String, SearchSuggestionContent> suggestions = new TreeMap<String, SearchSuggestionContent>();
+		Map<String, SearchSuggestionContent> suggestions = new TreeMap<>();
 		
 		// Tag search suggestions
 		SQLiteQueryBuilder tagqb = new SQLiteQueryBuilder();	
 		tagqb.setTables(TAG_TABLE_NAME);
 		
-		ArrayList<String> tagList = new ArrayList<String>();
-		final ArrayList<String> selectionlist = new ArrayList<String>();
+		ArrayList<String> tagList = new ArrayList<>();
+		final ArrayList<String> selectionlist = new ArrayList<>();
 		
 		for(String s : tags){
 			tagList.add(Tag.Name + " LIKE ?");
@@ -527,18 +523,16 @@ public class BookmarkContentProvider extends ContentProvider {
 	}
 	
 	private Map<String, SearchSuggestionContent> getNoteSearchSuggestions(String query, boolean accountSpecific) {
-		Log.d("getNoteSearchSuggestions", query);
-		
 		String[] notes = query.split(" ");
 		
-		Map<String, SearchSuggestionContent> suggestions = new TreeMap<String, SearchSuggestionContent>();
+		Map<String, SearchSuggestionContent> suggestions = new TreeMap<>();
 		
 		// Tag search suggestions
 		SQLiteQueryBuilder noteqb = new SQLiteQueryBuilder();	
 		noteqb.setTables(NOTE_TABLE_NAME);
 		
-		ArrayList<String> noteList = new ArrayList<String>();
-		final ArrayList<String> selectionlist = new ArrayList<String>();
+		ArrayList<String> noteList = new ArrayList<>();
+		final ArrayList<String> selectionlist = new ArrayList<>();
 		
 		for(String s : notes) {
 			noteList.add("(" + Note.Title + " LIKE ? OR " + 

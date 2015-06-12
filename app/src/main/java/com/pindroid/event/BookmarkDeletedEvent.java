@@ -3,7 +3,7 @@ package com.pindroid.event;
 import com.pindroid.providers.BookmarkContent;
 
 public class BookmarkDeletedEvent {
-    private BookmarkContent.Bookmark bookmark;
+    private final BookmarkContent.Bookmark bookmark;
 
     public BookmarkDeletedEvent(BookmarkContent.Bookmark bookmark) {
         this.bookmark = bookmark;

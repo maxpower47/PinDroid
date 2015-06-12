@@ -23,15 +23,13 @@ package com.pindroid.activity;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,11 +38,10 @@ import android.view.View;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.application.PindroidApplication;
-import com.pindroid.authenticator.AuthenticatorActivity;
 import com.pindroid.authenticator.AuthenticatorActivity_;
 import com.pindroid.util.AccountHelper;
 
-public abstract class FragmentBaseActivity extends ActionBarActivity {
+public abstract class FragmentBaseActivity extends AppCompatActivity {
 	
 	protected AccountManager mAccountManager;
 	
@@ -87,9 +84,7 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
 		if(AccountHelper.getAccountCount(this) < 1) {		
 			Intent i = new Intent(this, AuthenticatorActivity_.class);
 			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_INIT);
-			
-			return;
-		}
+        }
 	}
 	
 	@Override

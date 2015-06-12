@@ -25,12 +25,12 @@ import java.util.Comparator;
 
 public class SearchSuggestionContent {
 
-	private String text1;
-	private String text2;
+	private final String text1;
+	private final String text2;
 	private String text2Url;
-	private int icon2;
-	private String intentData;
-	private String intentAction;
+	private final int icon2;
+	private final String intentData;
+	private final String intentAction;
 	
 	public String getText1() {
 		return text1;

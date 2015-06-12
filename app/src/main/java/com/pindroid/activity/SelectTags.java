@@ -23,7 +23,7 @@ package com.pindroid.activity;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import com.pindroid.R;
 import com.pindroid.application.PindroidApplication;
@@ -36,7 +36,7 @@ import org.androidannotations.annotations.FragmentById;
 import java.util.Set;
 
 @EActivity(R.layout.select_tags)
-public class SelectTags extends ActionBarActivity implements SelectTagsFragment.OnTagsSelectedListener {
+public class SelectTags extends AppCompatActivity implements SelectTagsFragment.OnTagsSelectedListener {
 
 	@FragmentById(R.id.listcontent) SelectTagsFragment frag;
 

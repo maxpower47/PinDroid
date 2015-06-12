@@ -70,9 +70,8 @@ public class BrowseBookmarksFragment extends Fragment
     @ViewById(R.id.bookmark_multistate) MultiStateView multiStateView;
 	
 	@Bean BookmarkAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-	
-	private String sortfield = Bookmark.Time + " DESC";
+
+    private String sortfield = Bookmark.Time + " DESC";
 
 	@InstanceState String username = null;
 	@InstanceState String tagname = null;
@@ -83,11 +82,11 @@ public class BrowseBookmarksFragment extends Fragment
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
 
 	public interface OnBookmarkSelectedListener {
-		public void onBookmarkSelected(Bookmark b, BookmarkViewType type);
-		public void onBookmarkAdd(Bookmark b);
-		public void onBookmarkShare(Bookmark b);
-		public void onBookmarkMark(Bookmark b);
-		public void onBookmarkDelete(Bookmark b);
+		void onBookmarkSelected(Bookmark b, BookmarkViewType type);
+		void onBookmarkAdd(Bookmark b);
+		void onBookmarkShare(Bookmark b);
+		void onBookmarkMark(Bookmark b);
+		void onBookmarkDelete(Bookmark b);
 	}
 	
 	@Override
@@ -111,7 +110,7 @@ public class BrowseBookmarksFragment extends Fragment
 	@AfterViews
 	public void init(){
 		listView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         listView.setLayoutManager(mLayoutManager);
 
 		listView.setAdapter(mAdapter);
@@ -168,14 +167,19 @@ public class BrowseBookmarksFragment extends Fragment
     public void onEvent(BookmarkSelectedEvent event) {
         String defaultAction = SettingsHelper.getDefaultAction(getActivity());
 
-        if(defaultAction.equals("view")) {
-            viewBookmark(event.getBookmark());
-        } else if(defaultAction.equals("read")) {
-            readBookmark(event.getBookmark());
-        } else if(defaultAction.equals("edit")){
-            editBookmark(event.getBookmark());
-        } else {
-            openBookmarkInBrowser(event.getBookmark());
+        switch (defaultAction) {
+            case "view":
+                viewBookmark(event.getBookmark());
+                break;
+            case "read":
+                readBookmark(event.getBookmark());
+                break;
+            case "edit":
+                editBookmark(event.getBookmark());
+                break;
+            default:
+                openBookmarkInBrowser(event.getBookmark());
+                break;
         }
     }
 	
@@ -211,11 +215,11 @@ public class BrowseBookmarksFragment extends Fragment
 				getActivity().setTitle(getString(R.string.unread_search_results_title, query));
 			} else getActivity().setTitle(getString(R.string.bookmark_search_results_title, query));
 		} else {
-			if(unread && tagname != null && tagname != "") {
+			if(unread && tagname != null && !"".equals(tagname)) {
 				getActivity().setTitle(getString(R.string.browse_my_unread_bookmarks_tagged_title, tagname));
 			} else if(unread && (tagname == null || tagname.equals(""))) {
 				getActivity().setTitle(getString(R.string.browse_my_unread_bookmarks_title));
-			} else if(tagname != null && tagname != "") {
+			} else if(tagname != null && !"".equals(tagname)) {
 				getActivity().setTitle(getString(R.string.browse_my_bookmarks_tagged_title, tagname));
 			} else {
 				getActivity().setTitle(getString(R.string.browse_my_bookmarks_title));

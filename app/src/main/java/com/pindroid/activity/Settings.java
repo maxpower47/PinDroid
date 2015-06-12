@@ -22,14 +22,14 @@
 package com.pindroid.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import com.pindroid.R;
 
 import org.androidannotations.annotations.EActivity;
 
 @EActivity(R.layout.settings_activity)
-public class Settings extends ActionBarActivity {
+public class Settings extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

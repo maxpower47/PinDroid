@@ -93,8 +93,7 @@ public class LargeWidgetConfigure extends ListActivity {
     
     public static String loadAccountPref(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String account = prefs.getString(PREF_PREFIX_KEY_ACCOUNT + appWidgetId, null);
-        return account;
+        return prefs.getString(PREF_PREFIX_KEY_ACCOUNT + appWidgetId, null);
 
     }
     

@@ -1,7 +1,6 @@
 package com.pindroid.ui;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 

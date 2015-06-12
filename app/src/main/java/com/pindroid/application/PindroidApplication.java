@@ -3,7 +3,6 @@ package com.pindroid.application;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Application;
-import android.util.Log;
 
 import com.pindroid.Constants;
 import com.pindroid.event.AuthenticationEvent;

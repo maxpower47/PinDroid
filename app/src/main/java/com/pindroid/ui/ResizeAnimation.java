@@ -1,17 +1,16 @@
 package com.pindroid.ui;
 
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
 public class ResizeAnimation extends Animation {
-    int originalHeight;
-    int targetHeight;
-    int offsetHeight;
-    View view;
-    boolean down;
+    final int originalHeight;
+    final int targetHeight;
+    final int offsetHeight;
+    final View view;
+    final boolean down;
 
     //This constructor allow us to set a starting height
     public ResizeAnimation(View view, int originalHeight, int targetHeight, boolean down, DisplayMetrics displayMetrics) {

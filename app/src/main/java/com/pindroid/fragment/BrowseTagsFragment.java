@@ -27,9 +27,6 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -43,7 +40,7 @@ import com.pindroid.providers.TagContent.Tag;
 public class BrowseTagsFragment extends ListFragment
 	implements LoaderManager.LoaderCallbacks<Cursor>, PindroidFragment  {
 
-	private String sortfield = Tag.Name + " ASC";
+	private final String sortfield = Tag.Name + " ASC";
 	private SimpleCursorAdapter mAdapter;
 	
 	private String username = null;
@@ -53,7 +50,7 @@ public class BrowseTagsFragment extends ListFragment
 	private OnItemClickListener clickListener;
 	
 	public interface OnTagSelectedListener {
-		public void onTagSelected(String tag);
+		void onTagSelected(String tag);
 	}
 	
 	@Override
@@ -102,7 +99,7 @@ public class BrowseTagsFragment extends ListFragment
 		} catch(Exception e){}
 	}
 	
-	private OnItemClickListener viewListener = new OnItemClickListener() {
+	private final OnItemClickListener viewListener = new OnItemClickListener() {
 	    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 	    	String tagName = ((TextView)view.findViewById(R.id.tag_name)).getText().toString();
 	    	

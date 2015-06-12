@@ -69,7 +69,7 @@ public class SettingsHelper {
     }
 
     public static Set<String> getDrawerTags(Context context) {
-        Set<String> tags = new HashSet<String>();
+        Set<String> tags = new HashSet<>();
         tags = PreferenceManager.getDefaultSharedPreferences(context).getStringSet(context.getResources().getString(R.string.pref_drawertags_key), tags);
         return tags;
     }

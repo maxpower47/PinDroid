@@ -42,7 +42,7 @@ import org.androidannotations.annotations.EFragment;
 public class BrowseNotesFragment extends ListFragment
 	implements LoaderManager.LoaderCallbacks<Cursor>, PindroidFragment {
 
-	private String sortfield = Note.Title + " ASC";
+	private final String sortfield = Note.Title + " ASC";
 	private SimpleCursorAdapter mAdapter;
 	
 	private String username = null;
@@ -51,7 +51,7 @@ public class BrowseNotesFragment extends ListFragment
 	private OnNoteSelectedListener noteSelectedListener;
 	
 	public interface OnNoteSelectedListener {
-		public void onNoteView(Note n);
+		void onNoteView(Note n);
 	}
 	
 	@Override

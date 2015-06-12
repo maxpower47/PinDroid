@@ -3,7 +3,7 @@ package com.pindroid.event;
 import com.pindroid.model.FeedBookmark;
 
 public class FeedBookmarkSelectedEvent {
-    private FeedBookmark bookmark;
+    private final FeedBookmark bookmark;
 
     public FeedBookmarkSelectedEvent(FeedBookmark bookmark) {
         this.bookmark = bookmark;

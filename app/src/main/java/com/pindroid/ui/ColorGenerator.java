@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class ColorGenerator {
 
-	public static ColorGenerator DEFAULT;
+	public static final ColorGenerator DEFAULT;
 
 	static {
 		DEFAULT = create(Arrays.asList(

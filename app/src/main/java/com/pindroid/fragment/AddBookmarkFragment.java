@@ -93,8 +93,8 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 	private OnBookmarkSaveListener bookmarkSaveListener;
 	
 	public interface OnBookmarkSaveListener {
-		public void onBookmarkSave(Bookmark b);
-		public void onBookmarkCancel(Bookmark b);
+		void onBookmarkSave(Bookmark b);
+		void onBookmarkCancel(Bookmark b);
 	}
 
     @Override
@@ -278,11 +278,11 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
         bookmarkSaveListener.onBookmarkCancel(bookmark);
     }
 	
-    TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
+    final TagSpan.OnTagClickListener tagOnClickListener = new TagSpan.OnTagClickListener() {
         public void onTagClick(String tag) {
         	String currentTagString = mEditTags.getText().toString();
         	
-        	ArrayList<String> currentTags = new ArrayList<String>();
+        	ArrayList<String> currentTags = new ArrayList<>();
         	Collections.addAll(currentTags, currentTagString.split(" "));
         	
         	if(tag != null && !tag.equals("")) {

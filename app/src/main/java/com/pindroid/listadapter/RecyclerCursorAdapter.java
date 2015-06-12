@@ -7,12 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class RecyclerCursorAdapter<T, V extends View> extends RecyclerView.Adapter<ViewWrapper<V>> {
-
-    private Context mContext;
 
     private Cursor mCursor;
 
@@ -23,7 +18,6 @@ public abstract class RecyclerCursorAdapter<T, V extends View> extends RecyclerV
     private DataSetObserver mDataSetObserver;
 
     public RecyclerCursorAdapter(Context context, Cursor cursor) {
-        mContext = context;
         mCursor = cursor;
         mDataValid = cursor != null;
         mRowIdColumn = mDataValid ? mCursor.getColumnIndex("_id") : -1;
@@ -80,7 +74,7 @@ public abstract class RecyclerCursorAdapter<T, V extends View> extends RecyclerV
 
     @Override
     public final ViewWrapper<V> onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewWrapper<V>(onCreateItemView(parent, viewType));
+        return new ViewWrapper<>(onCreateItemView(parent, viewType));
     }
 
     protected abstract V onCreateItemView(ViewGroup parent, int viewType);

@@ -19,7 +19,7 @@ import retrofit.converter.GsonConverter;
 
 public class PinboardFeedClient {
 	private static PinboardFeedService REST_CLIENT;
-	private static String ROOT = "https://feeds.pinboard.in";
+	private static final String ROOT = "https://feeds.pinboard.in";
 
 	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 

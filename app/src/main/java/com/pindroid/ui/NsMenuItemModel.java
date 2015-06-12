@@ -31,9 +31,9 @@ public class NsMenuItemModel {
 
 	public int title;
     public String stringTitle;
-	public int iconRes;
+	public final int iconRes;
 	public int counter;
-	public boolean isHeader;
+	public final boolean isHeader;
 
 	public NsMenuItemModel(int title, int iconRes, boolean header, int counter) {
 		this.title = title;

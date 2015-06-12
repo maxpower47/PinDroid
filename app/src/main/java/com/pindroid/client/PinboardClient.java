@@ -31,7 +31,7 @@ import retrofit.converter.GsonConverter;
 
 public class PinboardClient {
 	private static PinboardService REST_CLIENT;
-	private static String ROOT = "https://api.pinboard.in";
+	private static final String ROOT = "https://api.pinboard.in";
 
 	private static final String[] DATE_FORMATS = new String[] {
 			"yyyy-MM-dd'T'HH:mm:ss'Z'",

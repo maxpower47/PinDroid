@@ -25,7 +25,7 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -40,7 +40,7 @@ import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.ViewById;
 
 @EActivity(R.layout.small_widget_configure_activity)
-public class ScreenShortcut extends ActionBarActivity {
+public class ScreenShortcut extends AppCompatActivity {
 
 	private String username = "";
     @ViewById(R.id.shortcut_list) ListView listView;
@@ -63,7 +63,7 @@ public class ScreenShortcut extends ActionBarActivity {
                 getString(R.string.small_widget_add_bookmark),
                 getString(R.string.small_widget_search_bookmarks)};
 
-        listView.setAdapter(new ArrayAdapter<String>(this, R.layout.widget_configure_view, MENU_ITEMS));
+        listView.setAdapter(new ArrayAdapter<>(this, R.layout.widget_configure_view, MENU_ITEMS));
     }
 
     @ItemClick(R.id.shortcut_list)
