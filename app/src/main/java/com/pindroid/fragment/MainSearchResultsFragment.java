@@ -77,6 +77,10 @@ public class MainSearchResultsFragment extends ListFragment {
 		this.query = query;
 	}
 
+    public boolean useMainToolbar() {
+        return true;
+    }
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);

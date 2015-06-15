@@ -387,4 +387,8 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 
 	public void refresh() {
 	}
+
+    public boolean useMainToolbar() {
+        return true;
+    }
 }

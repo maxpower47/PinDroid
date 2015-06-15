@@ -63,6 +63,10 @@ public class ViewNoteFragment extends Fragment {
     	loadNote();
     }
 
+    public boolean useMainToolbar() {
+        return true;
+    }
+
     public void loadNote(){
     	if(note != null){
 			try{		

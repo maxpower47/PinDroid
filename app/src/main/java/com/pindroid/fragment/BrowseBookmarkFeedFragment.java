@@ -304,6 +304,10 @@ public class BrowseBookmarkFeedFragment extends Fragment
            return results;
         }
     }
+
+    public boolean useMainToolbar() {
+        return true;
+    }
 	
 	@Override
 	public void onAttach(Activity activity) {

@@ -158,6 +158,10 @@ public class SelectTagsFragment extends ListFragment
 	public void onLoaderReset(Loader<Cursor> loader) {
 	    mAdapter.swapCursor(null);
 	}
+
+    public boolean useMainToolbar() {
+        return true;
+    }
 	
 	@Override
 	public void onAttach(Activity activity) {

@@ -78,7 +78,7 @@ public class BrowseBookmarksFragment extends Fragment
 
 	private boolean unread = false;
 	private String query = null;
-	
+
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
 
 	public interface OnBookmarkSelectedListener {
@@ -88,7 +88,7 @@ public class BrowseBookmarksFragment extends Fragment
 		void onBookmarkMark(Bookmark b);
 		void onBookmarkDelete(Bookmark b);
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -345,6 +345,10 @@ public class BrowseBookmarksFragment extends Fragment
 	public void onLoaderReset(Loader<Cursor> loader) {
 	    mAdapter.changeCursor(null);
 	}
+
+    public boolean useMainToolbar() {
+        return true;
+    }
 
 	@Override
 	public void onAttach(Activity activity) {

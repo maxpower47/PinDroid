@@ -27,9 +27,13 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
@@ -58,13 +62,14 @@ import com.pindroid.ui.ColorGenerator;
 import com.pindroid.ui.TagView;
 import com.pindroid.util.SettingsHelper;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 @EFragment(R.layout.view_bookmark_fragment)
 public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	
-	@ViewById(R.id.bookmark_scroll_view) ScrollView mBookmarkView;
+	@ViewById(R.id.bookmark_scroll_view) NestedScrollView mBookmarkView;
 	@ViewById(R.id.view_bookmark_title) TextView mTitle;
 	@ViewById(R.id.view_bookmark_url) TextView mUrl;
 	@ViewById(R.id.view_bookmark_notes_section) View notesSection;
@@ -75,6 +80,8 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	@ViewById(R.id.view_bookmark_account) TextView mUsername;
 	@ViewById(R.id.view_bookmark_title_icon) ImageView bookmarkIcon;
 	@ViewById(R.id.web_view) WebView mWebContent;
+    @ViewById(R.id.view_toolbar) Toolbar toolbar;
+    @ViewById(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbarLayout;
 
 	private Bookmark bookmark;
 	private BookmarkViewType viewType;
@@ -115,6 +122,13 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		} else setViews();
 
 	}
+
+    @AfterViews
+    public void init() {
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        collapsingToolbarLayout.setTitle("Test");
+    }
 	
     final TagView.OnTagClickListener tagOnClickListener = new TagView.OnTagClickListener() {
         public void onTagClick(String tag) {
@@ -218,7 +232,7 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		super.onResume();
 
 		if(!getResources().getBoolean(R.bool.has_two_panes)) {
-			getActivity().setTitle(getString(R.string.browse_my_bookmarks_title));
+			toolbar.setTitle(getString(R.string.browse_my_bookmarks_title));
 		}
 	}
 
@@ -373,6 +387,10 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	public void setUsername(String username) {
 
 	}
+
+    public boolean useMainToolbar() {
+        return false;
+    }
 	
 	class MyObserver extends ContentObserver {		
 		public MyObserver(Handler handler) {

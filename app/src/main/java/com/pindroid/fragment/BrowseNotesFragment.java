@@ -80,13 +80,13 @@ public class BrowseNotesFragment extends ListFragment
 		lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
-		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				final Cursor c = (Cursor)lv.getItemAtPosition(position);
-				Note n = NoteManager.CursorToNote(c);
-				
-		    	viewNote(n);
-		    }
-		});
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Cursor c = (Cursor) lv.getItemAtPosition(position);
+                Note n = NoteManager.CursorToNote(c);
+
+                viewNote(n);
+            }
+        });
 		
 		getActivity().setTitle(getString(R.string.browse_my_notes_title));
 	}
@@ -127,6 +127,10 @@ public class BrowseNotesFragment extends ListFragment
 	public void onLoaderReset(Loader<Cursor> loader) {
 	    mAdapter.swapCursor(null);
 	}
+
+    public boolean useMainToolbar() {
+        return true;
+    }
 	
 	@Override
 	public void onAttach(Activity activity) {

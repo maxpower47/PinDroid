@@ -111,6 +111,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     boolean accountSpinnerOpen = false;
     LinearLayout accountList;
     TextView accountSelected;
+    Toolbar mainToolbar;
     
     private NsMenuItemModel unreadItem;
 
@@ -123,8 +124,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(prefListner);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
+        mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(mainToolbar);
 		
 		mDrawerList = (ListView) findViewById(R.id.left_drawer_list);
 		mDrawerWrapper = (LinearLayout) findViewById(R.id.left_drawer);
@@ -384,6 +385,13 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	    t.commitAllowingStateLoss();
 	    
 	    clearRightFragment();
+
+
+        if(((PindroidFragment)frag).useMainToolbar()) {
+            mainToolbar.setVisibility(View.VISIBLE);
+        } else {
+            mainToolbar.setVisibility(View.GONE);
+        }
 	}
 	
 	private void clearRightFragment(){
