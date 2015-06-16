@@ -34,17 +34,24 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pindroid.R;
+import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.TagContent.Tag;
 
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.FragmentArg;
+
+import de.greenrobot.event.EventBus;
+
+@EFragment
 public class BrowseTagsFragment extends ListFragment
-	implements LoaderManager.LoaderCallbacks<Cursor>, PindroidFragment  {
+	implements LoaderManager.LoaderCallbacks<Cursor>  {
 
 	private final String sortfield = Tag.Name + " ASC";
 	private SimpleCursorAdapter mAdapter;
 	
-	private String username = null;
-	private String query = null;
+	@FragmentArg String username;
+	@FragmentArg String query;
 	
 	private OnTagSelectedListener tagSelectedListener;
 	private OnItemClickListener clickListener;
@@ -59,6 +66,18 @@ public class BrowseTagsFragment extends ListFragment
 		clickListener = viewListener;
 		setRetainInstance(true);
 	}
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
@@ -80,18 +99,15 @@ public class BrowseTagsFragment extends ListFragment
 		lv.setItemsCanFocus(false);
 		lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 	}
-	
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
+
 	public String getAccount(){
 		return username;
 	}
-	
-	public void setQuery(String query) {
-		this.query = query;
-	}
+
+    public void onEvent(AccountChangedEvent event) {
+        this.username = event.getNewAccount();
+        refresh();
+    }
 	
 	public void refresh(){
 		try{

@@ -38,7 +38,7 @@ public class TagManager {
 	public static CursorLoader GetTags(String account, String sortorder, Context context) {		
 		final String[] projection = new String[] {Tag._ID, Tag.Name, Tag.Count};
 		final String selection = Tag.Account + "=?";
-		final String[] selectionargs = new String[]{account};
+		final String[] selectionargs = new String[]{ account == null ? "" : account};
 		
 		return new CursorLoader(context, Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);
 	}

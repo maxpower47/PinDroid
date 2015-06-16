@@ -38,13 +38,6 @@ import java.util.Set;
 @EActivity(R.layout.select_tags)
 public class SelectTags extends AppCompatActivity implements SelectTagsFragment.OnTagsSelectedListener {
 
-	@FragmentById(R.id.listcontent) SelectTagsFragment frag;
-
-    @AfterViews
-    void init() {
-        frag.setUsername(((PindroidApplication)getApplication()).getUsername());
-    }
-
 	public void onTagsSelected(Set<String> tags) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
         editor.putStringSet(getResources().getString(R.string.pref_drawertags_key), tags);

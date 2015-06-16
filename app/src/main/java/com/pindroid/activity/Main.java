@@ -23,7 +23,9 @@ package com.pindroid.activity;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -37,8 +39,11 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -56,6 +61,8 @@ import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
+import com.pindroid.authenticator.AuthenticatorActivity_;
+import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.event.BookmarkDeletedEvent;
 import com.pindroid.fragment.BookmarkBrowser;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment;
@@ -68,9 +75,9 @@ import com.pindroid.fragment.BrowseNotesFragment.OnNoteSelectedListener;
 import com.pindroid.fragment.BrowseNotesFragment_;
 import com.pindroid.fragment.BrowseTagsFragment;
 import com.pindroid.fragment.BrowseTagsFragment.OnTagSelectedListener;
+import com.pindroid.fragment.BrowseTagsFragment_;
 import com.pindroid.fragment.MainSearchResultsFragment;
 import com.pindroid.fragment.MainSearchResultsFragment.OnSearchActionListener;
-import com.pindroid.fragment.PindroidFragment;
 import com.pindroid.fragment.ViewBookmarkFragment;
 import com.pindroid.fragment.ViewBookmarkFragment.OnBookmarkActionListener;
 import com.pindroid.fragment.ViewBookmarkFragment_;
@@ -97,7 +104,7 @@ import java.util.Set;
 
 import de.greenrobot.event.EventBus;
 
-public class Main extends FragmentBaseActivity implements OnBookmarkSelectedListener, 
+public class Main extends AppCompatActivity implements OnBookmarkSelectedListener,
 		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnSearchActionListener, LoaderManager.LoaderCallbacks<Cursor> {
 	
 	private ListView mDrawerList;
@@ -111,6 +118,9 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     boolean accountSpinnerOpen = false;
     LinearLayout accountList;
     TextView accountSelected;
+    String username;
+
+    protected AccountManager mAccountManager;
     
     private NsMenuItemModel unreadItem;
 
@@ -119,6 +129,29 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+
+        mAccountManager = AccountManager.get(this);
+
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
+
+        Intent intent = getIntent();
+
+        if(Intent.ACTION_SEARCH.equals(intent.getAction()) && !intent.hasExtra("MainSearchResults")){
+            if(intent.hasExtra("username"))
+                EventBus.getDefault().postSticky(new AccountChangedEvent(intent.getStringExtra("username")));
+
+            if(intent.hasExtra(SearchManager.QUERY)){
+                //Intent i = new Intent(this, MainSearchResults.class);
+                //i.putExtras(intent.getExtras());
+                //startActivity(i);
+                //finish();
+            } else {
+                onSearchRequested();
+            }
+        }
+
 		setContentView(R.layout.main);
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(prefListner);
@@ -136,9 +169,11 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
         accountSelected = (TextView) accountSpinnerView.findViewById(R.id.account_selected);
 
         if(AccountHelper.getAccountCount(this) > 0){
-            if(app.getUsername() == null || app.getUsername().equals("")) {
-                setAccount(AccountHelper.getFirstAccount(this).name);
-            } else setAccount(app.getUsername());
+            if(username == null || username.equals("")) {
+                EventBus.getDefault().postSticky(new AccountChangedEvent(AccountHelper.getFirstAccount(this).name));
+            } else {
+                EventBus.getDefault().postSticky(new AccountChangedEvent(username));
+            }
         }
 
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -176,9 +211,34 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().registerSticky(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        init();
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Override
     public void onDestroy() {
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(prefListner);
         super.onDestroy();
+    }
+
+    private void init(){
+        if(AccountHelper.getAccountCount(this) < 1) {
+            Intent i = new Intent(this, AuthenticatorActivity_.class);
+            startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_INIT);
+        }
     }
 	
 	private void _initMenu() {
@@ -200,7 +260,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 			NsMenuItemModel mItem = new NsMenuItemModel(id_title, id_icon);
 			if (res == 1) {
 				unreadItem = mItem;
-				mItem.counter = BookmarkManager.GetUnreadCount(app.getUsername(), this);
+				mItem.counter = BookmarkManager.GetUnreadCount(username, this);
 			}
 			mAdapter.addItem(mItem);
 			res++;
@@ -259,8 +319,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		String lastPath = (intent.getData() != null && intent.getData().getLastPathSegment() != null) ? intent.getData().getLastPathSegment() : "";
 		String intentUsername = (intent.getData() != null && intent.getData().getUserInfo() != null) ? intent.getData().getUserInfo() : "";
 		
-		if(!intentUsername.equals("") && !app.getUsername().equals(intentUsername)){
-			setAccount(intentUsername);
+		if(!intentUsername.equals("")){
+            EventBus.getDefault().postSticky(new AccountChangedEvent(intentUsername));
 		}
 		
 		if(Intent.ACTION_VIEW.equals(action)) {
@@ -416,31 +476,29 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
 	public void onMyBookmarksSelected(String tagname) {
-		BrowseBookmarksFragment frag = new BrowseBookmarksFragment_();
-		frag.setQuery(app.getUsername(), tagname, null);
-		
-		clearBackStack();
+		BrowseBookmarksFragment frag = BrowseBookmarksFragment_.builder()
+                .tagname(tagname)
+                .build();
 
+		clearBackStack();
 		replaceLeftFragment(frag, false);
-		
 		clearDrawer(1);
 	}
 
 	public void onMyUnreadSelected() {
-		BrowseBookmarksFragment frag = new BrowseBookmarksFragment_();
-		frag.setQuery(app.getUsername(), null, "unread");
-		
-		clearBackStack();
+		BrowseBookmarksFragment frag = BrowseBookmarksFragment_.builder()
+                .unread(true)
+                .build();
 
+		clearBackStack();
 		replaceLeftFragment(frag, false);
-		
 		clearDrawer(2);
 	}
 	
 	public void onMyNotesSelected() {
-		BrowseNotesFragment frag = new BrowseNotesFragment_();
-		frag.setUsername(app.getUsername());
-		
+		BrowseNotesFragment frag = BrowseNotesFragment_.builder()
+                .build();
+
 		clearBackStack();
 
 		replaceLeftFragment(frag, false);
@@ -455,7 +513,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
 	public void onRecentSelected() {
 		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment_();
-		frag.setQuery(app.getUsername(), null, "recent");
+		frag.setQuery(username, null, "recent");
 		
 		clearBackStack();
 
@@ -466,7 +524,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	
 	public void onPopularSelected() {
 		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment_();
-		frag.setQuery(app.getUsername(), null, "popular");
+		frag.setQuery(username, null, "popular");
 		
 		clearBackStack();
 
@@ -477,7 +535,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	
 	public void onMyNetworkSelected() {
 		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment_();
-		frag.setQuery(app.getUsername(), null, "network");
+		frag.setQuery(username, null, "network");
 		
 		clearBackStack();
 
@@ -485,9 +543,18 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		
 		clearDrawer(8);
 	}
-	
-	@Override
-	protected void changeAccount(){
+
+    private void setSubtitle(String subtitle){
+        getSupportActionBar().setSubtitle(subtitle);
+    }
+
+	public void onEvent(AccountChangedEvent event){
+        username = event.getNewAccount();
+
+        if(AccountHelper.getAccountCount(this) > 1) {
+            setSubtitle(event.getNewAccount());
+        }
+
         // reset account picker
         if(accountSpinnerOpen) {
             toggleAccountSpinner(false);
@@ -495,12 +562,12 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
         clearDrawer(1);
 
-        accountSelected.setText(app.getUsername());
+        accountSelected.setText(event.getNewAccount());
 
         accountList.removeAllViews();
 
         final List<String> accounts = getAccountNames();
-        accounts.remove(app.getUsername());
+        accounts.remove(event.getNewAccount());
 
         if(accounts.size() > 0) {
 
@@ -513,7 +580,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
                 accountView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setAccount(((TextView) v.findViewById(R.id.account_title)).getText().toString());
+                        EventBus.getDefault().postSticky(new AccountChangedEvent(((TextView) v.findViewById(R.id.account_title)).getText().toString()));
                     }
                 });
 
@@ -532,22 +599,8 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
         getSupportLoaderManager().restartLoader(0, null, this);
 
         if(unreadItem != null){
-			unreadItem.counter = BookmarkManager.GetUnreadCount(app.getUsername(), this);
+			unreadItem.counter = BookmarkManager.GetUnreadCount(event.getNewAccount(), this);
             ((NsMenuAdapter)((HeaderViewListAdapter)mDrawerList.getAdapter()).getWrappedAdapter()).notifyDataSetChanged();
-		}
-
-        // reset current fragments
-		Fragment cf = getSupportFragmentManager().findFragmentById(R.id.right_frame);
-		Fragment lf = getSupportFragmentManager().findFragmentById(R.id.left_frame);
-		
-		if(cf != null){
-			((PindroidFragment)cf).setUsername(app.getUsername());
-			((PindroidFragment)cf).refresh();
-		}
-		
-		if(lf != null){
-			((PindroidFragment)lf).setUsername(app.getUsername());
-			((PindroidFragment)lf).refresh();
 		}
 	}
 
@@ -613,7 +666,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     public void onBookmarkAdd(Bookmark b, Bookmark oldBookmark) {
         AddBookmark_.intent(this)
             .extra("bookmark", b)
-            .extra("username", app.getUsername())
+            .extra("username", username)
             .extra("oldBookmark", oldBookmark)
             .start();
     }
@@ -628,7 +681,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	public void onBookmarkMark(Bookmark b) {
 		if(b != null && isMyself() && b.getToRead()) {
     		b.setToRead(false);
-			BookmarkManager.UpdateBookmark(b, app.getUsername(), this);
+			BookmarkManager.UpdateBookmark(b, username, this);
     	}
 	}
 
@@ -643,7 +696,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
         EventBus.getDefault().post(new BookmarkDeletedEvent(b));
 
-        BookmarkManager.LazyDelete(b, app.getUsername(), this);
+        BookmarkManager.LazyDelete(b, username, this);
 	}
 
     public void onTagSelected(String tag) {
@@ -651,8 +704,9 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
     }
 
 	public void onTagSelected(String tag, boolean backstack) {
-		BrowseBookmarksFragment frag = new BrowseBookmarksFragment_();
-		frag.setQuery(app.getUsername(), tag, null);
+		BrowseBookmarksFragment frag = BrowseBookmarksFragment_.builder()
+                .tagname(tag)
+                .build();
 
 		replaceLeftFragment(frag, backstack);
 	}
@@ -686,18 +740,18 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	public void onViewTagSelected(String tag, String user) {
 		Fragment frag = null;
 		
-		if(user.equals(app.getUsername())){
+		if(user.equals(username)){
 			frag = new BrowseBookmarksFragment_();
 		} else frag = new BrowseBookmarkFeedFragment_();
 		
-		((BookmarkBrowser)frag).setQuery(app.getUsername(), tag, user);
+		((BookmarkBrowser)frag).setQuery(username, tag, user);
 
 		replaceLeftFragment(frag, true);
 	}
 
 	public void onAccountSelected(String account) {
 		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment_();
-		frag.setQuery(app.getUsername(), null, account);
+		frag.setQuery(username, null, account);
 
 		replaceLeftFragment(frag, true);
 	}
@@ -726,13 +780,37 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	private Bookmark findExistingBookmark(Bookmark bookmark) {
 
 		try{
-			Bookmark old = BookmarkManager.GetByUrl(bookmark.getUrl(), app.getUsername(), this);
+			Bookmark old = BookmarkManager.GetByUrl(bookmark.getUrl(), username, this);
 			bookmark = old.copy();
 		} catch(Exception e) {
 		}
 
 		return bookmark;
 	}
+
+    public void searchHandler(View v) {
+        onSearchRequested();
+    }
+
+    public void setupSearch(Menu menu){
+        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(false);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            public boolean onQueryTextSubmit(String query) {
+                startSearch(query);
+                return true;
+            }
+
+            public boolean onQueryTextChange(final String s) {
+                return false;
+            }
+        });
+    }
 	
 	protected void startSearch(final String query) {
 		MainSearchResultsFragment frag = new MainSearchResultsFragment();
@@ -783,37 +861,39 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
 	public void onBookmarkSearch(String query) {
-		BrowseBookmarksFragment frag = new BrowseBookmarksFragment_();
-		frag.setSearchQuery(query, app.getUsername(), null, false);
+		BrowseBookmarksFragment frag = BrowseBookmarksFragment_.builder()
+                .query(query)
+                .build();
 
 		replaceLeftFragment(frag, true);
 	}
 
 	public void onTagSearch(String query) {
-		BrowseTagsFragment frag = new BrowseTagsFragment();
-		frag.setUsername(app.getUsername());
-		frag.setQuery(query);
+		BrowseTagsFragment frag = BrowseTagsFragment_.builder()
+                .username(username)
+                .query(query)
+                .build();
 
 		replaceLeftFragment(frag, true);
 	}
 
 	public void onNoteSearch(String query) {
-		BrowseNotesFragment frag = new BrowseNotesFragment_();
-		frag.setUsername(app.getUsername());
-		frag.setQuery(query);
+		BrowseNotesFragment frag = BrowseNotesFragment_.builder()
+                .query(query)
+                .build();
 
 		replaceLeftFragment(frag, true);
 	}
 
 	public void onGlobalTagSearch(String query) {
 		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment_();
-		frag.setQuery(app.getUsername(), query, "global");
+		frag.setQuery(username, query, "global");
 
 		replaceLeftFragment(frag, true);
 	}
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return TagManager.GetTags(app.getUsername(), TagContent.Tag.Name + " ASC", this);
+        return TagManager.GetTags(username, TagContent.Tag.Name + " ASC", this);
     }
 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -844,4 +924,25 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
             }
         }
     };
+
+    public boolean isMyself() {
+        for(Account account : mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)){
+            if(username.equals(account.name))
+                return true;
+        }
+
+        return false;
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(resultCode == Activity.RESULT_CANCELED && requestCode != Constants.REQUEST_CODE_ACCOUNT_CHANGE){
+            finish();
+        } else if(resultCode == Activity.RESULT_OK && requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
+            EventBus.getDefault().postSticky(new AccountChangedEvent(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)));
+        } else if(resultCode == Activity.RESULT_OK && requestCode == Constants.REQUEST_CODE_ACCOUNT_INIT){
+            EventBus.getDefault().postSticky(new AccountChangedEvent(AccountHelper.getFirstAccount(this).name));
+        }
+    }
 }

@@ -21,16 +21,10 @@
  * USA
  */
  -->
- <LinearLayout
+ <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/browse_tags_content"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="vertical">
-	<fragment class="com.pindroid.fragment.BrowseTagsFragment"
-		android:id="@+id/listcontent"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-        tools:layout="@android:layout/list_content">
-	</fragment>
-</LinearLayout>
+	android:layout_height="fill_parent">
+</FrameLayout>

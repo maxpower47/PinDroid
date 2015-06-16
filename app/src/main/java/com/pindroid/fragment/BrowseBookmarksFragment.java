@@ -39,6 +39,7 @@ import android.view.View;
 import com.kennyc.view.MultiStateView;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
+import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.event.BookmarkDeletedEvent;
 import com.pindroid.event.BookmarkSelectedEvent;
 import com.pindroid.event.SyncCompleteEvent;
@@ -52,7 +53,9 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
@@ -62,7 +65,7 @@ import de.greenrobot.event.EventBus;
 @EFragment(R.layout.browse_bookmark_fragment)
 @OptionsMenu(R.menu.browse_bookmark_menu)
 public class BrowseBookmarksFragment extends Fragment
-	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser, PindroidFragment {
+	implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @ViewById(android.R.id.list) RecyclerView listView;
 	@ViewById(R.id.floating_add_button) FloatingActionButton actionButton;
@@ -73,11 +76,10 @@ public class BrowseBookmarksFragment extends Fragment
 
     private String sortfield = Bookmark.Time + " DESC";
 
-	@InstanceState String username = null;
-	@InstanceState String tagname = null;
-
-	private boolean unread = false;
-	private String query = null;
+	String username;
+	@FragmentArg String tagname;
+	@FragmentArg boolean unread = false;
+	@FragmentArg String query;
 	
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
 
@@ -98,7 +100,7 @@ public class BrowseBookmarksFragment extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
+        EventBus.getDefault().registerSticky(this);
     }
 
     @Override
@@ -131,13 +133,6 @@ public class BrowseBookmarksFragment extends Fragment
 				}
 			});*/
 
-            actionButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View arg0) {
-                    bookmarkSelectedListener.onBookmarkAdd(null);
-                }
-            });
-
             refreshLayout.setColorSchemeResources(R.color.pindroid_blue);
             refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
@@ -147,6 +142,11 @@ public class BrowseBookmarksFragment extends Fragment
             });
 		}
 	}
+
+    @Click(R.id.floating_add_button)
+    public void onAddButton() {
+        bookmarkSelectedListener.onBookmarkAdd(null);
+    }
 
     public void onEventMainThread(SyncCompleteEvent event) {
         refreshLayout.setRefreshing(false);
@@ -182,24 +182,12 @@ public class BrowseBookmarksFragment extends Fragment
                 break;
         }
     }
-	
-	public void setQuery(String username, String tagname, String feed){
-		this.username = username;
-		this.tagname = tagname;
-		this.unread = (feed != null && feed.equals("unread"));
-	}
-	
-	public void setSearchQuery(String query, String username, String tagname, boolean unread){
-		this.query = query;
-		this.username = username;
-		this.tagname = tagname;
-		this.unread = unread;
-	}
-	
-	public void setUsername(String username){
-		this.username = username;
-	}
-	
+
+    public void onEvent(AccountChangedEvent event) {
+        this.username = event.getNewAccount();
+        refresh();
+    }
+
 	public void refresh(){
 		try{
 			getLoaderManager().restartLoader(0, null, this);

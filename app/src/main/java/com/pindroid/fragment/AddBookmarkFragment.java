@@ -41,6 +41,7 @@ import android.widget.Toast;
 import com.pindroid.R;
 import com.pindroid.client.NetworkUtilities;
 import com.pindroid.client.PinboardClient;
+import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.listadapter.TagAutoCompleteCursorAdapter;
 import com.pindroid.model.TagSuggestions;
 import com.pindroid.platform.BookmarkManager;
@@ -67,9 +68,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
+
 @EFragment(R.layout.add_bookmark_fragment)
 @OptionsMenu(R.menu.add_bookmark_menu)
-public class AddBookmarkFragment extends Fragment implements PindroidFragment {
+public class AddBookmarkFragment extends Fragment {
 	
 	@ViewById(R.id.add_edit_url) MaterialEditText mEditUrl;
     @ViewById(R.id.add_edit_description) MaterialEditText mEditDescription;
@@ -140,7 +143,14 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 	public void onStart(){
 		super.onStart();
 		refreshView();
-	}
+        EventBus.getDefault().registerSticky(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 	
 	public void loadBookmark(Bookmark b, Bookmark oldB){
 		if(b != null) {
@@ -151,6 +161,10 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
             oldBookmark = oldB.copy();
         }
 	}
+
+    public void onEvent(AccountChangedEvent event) {
+        this.username = event.getNewAccount();
+    }
 
 	public void setUsername(String username){
 		this.username = username;
@@ -383,8 +397,5 @@ public class AddBookmarkFragment extends Fragment implements PindroidFragment {
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString() + " must implement OnBookmarkSaveListener");
 		}
-	}
-
-	public void refresh() {
 	}
 }

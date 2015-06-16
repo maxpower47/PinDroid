@@ -41,14 +41,11 @@ import android.widget.Toast;
 
 public class SaveReadLaterBookmark extends Activity {
 	private static final String TAG = "SaveReadLaterBookmark";
-	private PindroidApplication app;
+    private String username;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-
-		app = (PindroidApplication)getApplicationContext();
-
 		requestAccount();
 	}
 
@@ -67,14 +64,14 @@ public class SaveReadLaterBookmark extends Activity {
 			if (resultCode == Activity.RESULT_CANCELED) {
 				finish();
 			} else if (resultCode == Activity.RESULT_OK) {
-				app.setUsername(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));
+				username = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 				handleIntent();
 			}
 		}
 	}
 
 	private void handleIntent(){
-		if(app.getUsername() != null){
+		if(username != null){
 			Intent intent = getIntent();
 	
 			if((Intent.ACTION_SEND.equals(intent.getAction()) || Constants.ACTION_READLATER.equals(intent.getAction())) && intent.hasExtra(Intent.EXTRA_TEXT)){
@@ -102,7 +99,7 @@ public class SaveReadLaterBookmark extends Activity {
 		bookmark.setToRead(true);
 		bookmark.setTime(new Date());
 		bookmark.setTagString("");
-		bookmark.setAccount(app.getUsername());
+		bookmark.setAccount(username);
 
 		pushBookmarkToService(bookmark);
 

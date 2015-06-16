@@ -43,6 +43,7 @@ import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.client.PinboardFeedClient;
+import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.event.FeedBookmarkSelectedEvent;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.listadapter.BookmarkFeedAdapter;
@@ -64,7 +65,7 @@ import de.greenrobot.event.EventBus;
 
 @EFragment(R.layout.browse_bookmark_feed_fragment)
 public class BrowseBookmarkFeedFragment extends Fragment
-	implements LoaderManager.LoaderCallbacks<List<FeedBookmark>>, BookmarkBrowser, PindroidFragment  {
+	implements LoaderManager.LoaderCallbacks<List<FeedBookmark>>, BookmarkBrowser  {
 	
 	@Bean BookmarkFeedAdapter adapter;
 
@@ -153,16 +154,18 @@ public class BrowseBookmarkFeedFragment extends Fragment
         }
     }
 
+    public void onEvent(AccountChangedEvent event) {
+        this.username = event.getNewAccount();
+
+        refresh();
+    }
+
 	public void setQuery(String username, String tagname, String feed){
 		this.username = username;
 		this.tagname = tagname;
 		this.feed = feed;
 	}
-	
-	public void setUsername(String username){
-		this.username = username;
-	}
-	
+
 	public void refresh(){
 		try{
 			getLoaderManager().restartLoader(0, null, this);

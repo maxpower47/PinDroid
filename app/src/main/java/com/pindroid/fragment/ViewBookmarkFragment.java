@@ -48,6 +48,7 @@ import com.pindroid.Constants;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
+import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -61,8 +62,10 @@ import com.pindroid.util.SettingsHelper;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
+import de.greenrobot.event.EventBus;
+
 @EFragment(R.layout.view_bookmark_fragment)
-public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
+public class ViewBookmarkFragment extends Fragment {
 	
 	@ViewById(R.id.bookmark_scroll_view) ScrollView mBookmarkView;
 	@ViewById(R.id.view_bookmark_title) TextView mTitle;
@@ -113,8 +116,19 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		if(savedInstanceState == null || (viewType != null && viewType.equals(BookmarkViewType.VIEW))){
 			refresh();
 		} else setViews();
-
 	}
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 	
     final TagView.OnTagClickListener tagOnClickListener = new TagView.OnTagClickListener() {
         public void onTagClick(String tag) {
@@ -221,6 +235,10 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 			getActivity().setTitle(getString(R.string.browse_my_bookmarks_title));
 		}
 	}
+
+    public void onEvent(AccountChangedEvent event) {
+        refresh();
+    }
 
     private boolean isMyself() {
     	return bookmark != null && bookmark.getId() != 0;
@@ -368,10 +386,6 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString() + " must implement OnBookmarkActionListener and OnBookmarkSelectedListener");
 		}
-	}
-
-	public void setUsername(String username) {
-
 	}
 	
 	class MyObserver extends ContentObserver {		

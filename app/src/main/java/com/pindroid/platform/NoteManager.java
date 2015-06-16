@@ -42,7 +42,7 @@ public class NoteManager {
 	public static CursorLoader GetNotes(String account, String sortorder, Context context) {		
 		final String[] projection = new String[] {Note._ID, Note.Title, Note.Text, Note.Hash, Note.Pid, Note.Account, Note.Added, Note.Updated};
 		final String selection = Note.Account + "=?";
-		final String[] selectionargs = new String[]{account};
+		final String[] selectionargs = new String[]{ account == null ? "" : account};
 		
 		return new CursorLoader(context, Note.CONTENT_URI, projection, selection, selectionargs, sortorder);
 	}

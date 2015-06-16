@@ -27,26 +27,31 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.pindroid.R;
+import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.platform.NoteManager;
 import com.pindroid.providers.NoteContent.Note;
 
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.FragmentArg;
+
+import de.greenrobot.event.EventBus;
 
 @EFragment
 public class BrowseNotesFragment extends ListFragment
-	implements LoaderManager.LoaderCallbacks<Cursor>, PindroidFragment {
+	implements LoaderManager.LoaderCallbacks<Cursor> {
 
 	private final String sortfield = Note.Title + " ASC";
 	private SimpleCursorAdapter mAdapter;
 	
-	private String username = null;
-	private String query = null;
+	String username;
+	@FragmentArg String query;
 	
 	private OnNoteSelectedListener noteSelectedListener;
 	
@@ -59,6 +64,18 @@ public class BrowseNotesFragment extends ListFragment
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 	}
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().registerSticky(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
@@ -80,13 +97,13 @@ public class BrowseNotesFragment extends ListFragment
 		lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
-		    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				final Cursor c = (Cursor)lv.getItemAtPosition(position);
-				Note n = NoteManager.CursorToNote(c);
-				
-		    	viewNote(n);
-		    }
-		});
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Cursor c = (Cursor) lv.getItemAtPosition(position);
+                Note n = NoteManager.CursorToNote(c);
+
+                viewNote(n);
+            }
+        });
 		
 		getActivity().setTitle(getString(R.string.browse_my_notes_title));
 	}
@@ -94,30 +111,24 @@ public class BrowseNotesFragment extends ListFragment
 	private void viewNote(Note n) {
 		noteSelectedListener.onNoteView(n);
 	}
-	
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
-	public void setQuery(String query) {
-		this.query = query;
-	}
+
+    public void onEvent(AccountChangedEvent event) {
+        this.username = event.getNewAccount();
+        refresh();
+    }
 	
 	public void refresh(){
 		try{
 			getLoaderManager().restartLoader(0, null, this);
-		} catch(Exception e){}
+		} catch(Exception e){ }
 	}
 	
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		if(username != null && !username.equals("")) {
-			if(query != null) {
-				return NoteManager.SearchNotes(query, username, this.getActivity());
-			} else {
-				return NoteManager.GetNotes(username, sortfield, this.getActivity());
-			}
-		}
-		else return null;
+        if(query != null) {
+            return NoteManager.SearchNotes(query, username, this.getActivity());
+        } else {
+            return NoteManager.GetNotes(username, sortfield, this.getActivity());
+        }
 	}
 	
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {

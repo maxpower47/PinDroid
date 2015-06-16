@@ -51,10 +51,13 @@ import android.util.Log;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.application.PindroidApplication;
+import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.NoteContent.Note;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.util.SyncUtils;
+
+import de.greenrobot.event.EventBus;
 
 public class BookmarkContentProvider extends ContentProvider {
 	
@@ -405,7 +408,7 @@ public class BookmarkContentProvider extends ContentProvider {
 			
 			if(accountSpecific){
 				bookmarkList.add(Bookmark.Account + "=?");
-				selectionlist.add(app.getUsername());
+				selectionlist.add(EventBus.getDefault().getStickyEvent(AccountChangedEvent.class).getNewAccount());
 			}
 		}
 		
@@ -479,7 +482,7 @@ public class BookmarkContentProvider extends ContentProvider {
 			
 			if(accountSpecific){
 				tagList.add(Bookmark.Account + "=?");
-				selectionlist.add(app.getUsername());
+				selectionlist.add(EventBus.getDefault().getStickyEvent(AccountChangedEvent.class).getNewAccount());
 			}
 		}
 		
@@ -542,7 +545,7 @@ public class BookmarkContentProvider extends ContentProvider {
 			
 			if(accountSpecific){
 				noteList.add(Bookmark.Account + "=?");
-				selectionlist.add(app.getUsername());
+				selectionlist.add(EventBus.getDefault().getStickyEvent(AccountChangedEvent.class).getNewAccount());
 			}
 		}
 		

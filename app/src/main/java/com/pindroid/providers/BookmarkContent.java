@@ -291,7 +291,7 @@ public class BookmarkContent {
 			dest.writeString(mTags);
 			dest.writeString(mHash);
 			dest.writeString(mMeta);
-			dest.writeLong(mTime.getTime());
+			dest.writeLong(mTime == null ? 0 : mTime.getTime());
 			dest.writeInt(mSynced);
 			dest.writeByte((byte) (mShared ? 1 : 0));
 			dest.writeByte((byte) (mRead ? 1 : 0));

@@ -35,6 +35,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.pindroid.R;
+import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.platform.TagManager;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.util.SettingsHelper;
@@ -42,8 +43,10 @@ import com.pindroid.util.SettingsHelper;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.greenrobot.event.EventBus;
+
 public class SelectTagsFragment extends ListFragment
-	implements LoaderManager.LoaderCallbacks<Cursor>, PindroidFragment  {
+	implements LoaderManager.LoaderCallbacks<Cursor>  {
 
 	private final String sortfield = Tag.Name + " ASC";
 	private SimpleCursorAdapter mAdapter;
@@ -62,6 +65,18 @@ public class SelectTagsFragment extends ListFragment
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 	}
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
@@ -86,11 +101,12 @@ public class SelectTagsFragment extends ListFragment
 
 
 	}
-	
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
+
+    public void onEvent(AccountChangedEvent event) {
+        this.username = event.getNewAccount();
+        refresh();
+    }
+
 	public String getAccount(){
 		return username;
 	}

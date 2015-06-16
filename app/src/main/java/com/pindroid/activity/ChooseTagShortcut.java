@@ -25,23 +25,27 @@ import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseTagsFragment;
+import com.pindroid.fragment.BrowseTagsFragment_;
 
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.FragmentById;
 import org.androidannotations.annotations.OnActivityResult;
+import org.androidannotations.annotations.ViewById;
 
 @EActivity(R.layout.browse_tags)
 public class ChooseTagShortcut extends AppCompatActivity implements BrowseTagsFragment.OnTagSelectedListener {
 
 	private String username = "";
-	@FragmentById(R.id.listcontent) BrowseTagsFragment frag;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,11 +57,6 @@ public class ChooseTagShortcut extends AppCompatActivity implements BrowseTagsFr
 		startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
     }
 
-    @AfterViews
-    void init() {
-        frag.setUsername(username);
-    }
-    
 	public void onTagSelected(String tag) {		
 		final Intent shortcutIntent = IntentHelper.ViewBookmarks(tag, username, null, this);
         final ShortcutIconResource iconResource = Intent.ShortcutIconResource.fromContext(this, R.drawable.ic_shortcut);
@@ -72,7 +71,14 @@ public class ChooseTagShortcut extends AppCompatActivity implements BrowseTagsFr
 	@OnActivityResult(Constants.REQUEST_CODE_ACCOUNT_CHANGE)
 	protected void onChooseAccount(Intent data){
 		username = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-		frag.setUsername(username);
-		frag.refresh();
+
+        BrowseTagsFragment frag = BrowseTagsFragment_.builder()
+                .username(username)
+                .build();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction t = fragmentManager.beginTransaction();
+        t.replace(R.id.browse_tags_content, frag, "browse_tags_content");
+        t.commitAllowingStateLoss();
 	}
 }
