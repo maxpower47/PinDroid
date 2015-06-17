@@ -27,6 +27,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.pindroid.R;
 import com.pindroid.application.PindroidApplication;
+import com.pindroid.event.DrawerTagsChangedEvent;
 import com.pindroid.fragment.SelectTagsFragment;
 
 import org.androidannotations.annotations.AfterViews;
@@ -35,6 +36,8 @@ import org.androidannotations.annotations.FragmentById;
 
 import java.util.Set;
 
+import de.greenrobot.event.EventBus;
+
 @EActivity(R.layout.select_tags)
 public class SelectTags extends AppCompatActivity implements SelectTagsFragment.OnTagsSelectedListener {
 
@@ -42,6 +45,8 @@ public class SelectTags extends AppCompatActivity implements SelectTagsFragment.
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
         editor.putStringSet(getResources().getString(R.string.pref_drawertags_key), tags);
         editor.commit();
+
+        EventBus.getDefault().post(new DrawerTagsChangedEvent());
 
         finish();
 	}

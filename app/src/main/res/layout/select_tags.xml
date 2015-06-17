@@ -27,7 +27,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical">
-	<fragment class="com.pindroid.fragment.SelectTagsFragment"
+	<fragment class="com.pindroid.fragment.SelectTagsFragment_"
 		android:id="@+id/listcontent"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"

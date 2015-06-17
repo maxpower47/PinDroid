@@ -27,11 +27,9 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -62,6 +60,7 @@ import com.pindroid.action.IntentHelper;
 import com.pindroid.authenticator.AuthenticatorActivity_;
 import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.event.BookmarkDeletedEvent;
+import com.pindroid.event.DrawerTagsChangedEvent;
 import com.pindroid.fragment.BookmarkBrowser;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment;
 import com.pindroid.fragment.BrowseBookmarkFeedFragment_;
@@ -136,8 +135,6 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
             getSupportActionBar().setHomeButtonEnabled(true);
         }
 
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(prefListner);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
@@ -202,12 +199,6 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
-    }
-
-    @Override
-    public void onDestroy() {
-        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(prefListner);
-        super.onDestroy();
     }
 
 	private void _initMenu() {
@@ -558,7 +549,6 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
                     viewFrag.refresh();
                 } else replaceLeftFragment(frag, true);
             }
-
         }
 	}
 
@@ -795,13 +785,9 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
         }
     }
 
-    final SharedPreferences.OnSharedPreferenceChangeListener prefListner = new SharedPreferences.OnSharedPreferenceChangeListener(){
-        public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-            if(key.equals(getApplicationContext().getResources().getString(R.string.pref_drawertags_key))) {
-                getSupportLoaderManager().restartLoader(0, null, Main.this);
-            }
-        }
-    };
+    public void onEvent(DrawerTagsChangedEvent event) {
+        getSupportLoaderManager().restartLoader(0, null, Main.this);
+    }
 
     public boolean isMyself() {
         for(Account account : mAccountManager.getAccountsByType(Constants.ACCOUNT_TYPE)){

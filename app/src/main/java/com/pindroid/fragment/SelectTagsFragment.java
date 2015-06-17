@@ -28,10 +28,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.SparseBooleanArray;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.pindroid.R;
@@ -40,11 +36,18 @@ import com.pindroid.platform.TagManager;
 import com.pindroid.providers.TagContent.Tag;
 import com.pindroid.util.SettingsHelper;
 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
+
 import java.util.HashSet;
 import java.util.Set;
 
 import de.greenrobot.event.EventBus;
 
+@EFragment
+@OptionsMenu(R.menu.select_tags_menu)
 public class SelectTagsFragment extends ListFragment
 	implements LoaderManager.LoaderCallbacks<Cursor>  {
 
@@ -54,7 +57,6 @@ public class SelectTagsFragment extends ListFragment
 	private String username = null;
 	
 	private OnTagsSelectedListener tagsSelectedListener;
-	private OnItemClickListener clickListener;
 	
 	public interface OnTagsSelectedListener {
 		void onTagsSelected(Set<String> tags);
@@ -69,7 +71,7 @@ public class SelectTagsFragment extends ListFragment
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
+        EventBus.getDefault().registerSticky(this);
     }
 
     @Override
@@ -78,12 +80,8 @@ public class SelectTagsFragment extends ListFragment
         EventBus.getDefault().unregister(this);
     }
 	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState){
-		super.onActivityCreated(savedInstanceState);
-
-        setHasOptionsMenu(true);
-
+	@AfterViews
+	public void init(){
 		mAdapter = new SimpleCursorAdapter(this.getActivity(),
                 android.R.layout.simple_list_item_multiple_choice, null,
 				new String[] {Tag.Name}, new int[] {android.R.id.text1}, 0);
@@ -98,62 +96,35 @@ public class SelectTagsFragment extends ListFragment
 
 		lv.setItemsCanFocus(false);
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
-
 	}
 
     public void onEvent(AccountChangedEvent event) {
         this.username = event.getNewAccount();
-        refresh();
+        try{
+            getLoaderManager().restartLoader(0, null, this);
+        } catch(Exception e){}
     }
 
-	public String getAccount(){
-		return username;
-	}
-	
-	public void refresh(){
-		try{
-			getLoaderManager().restartLoader(0, null, this);
-		} catch(Exception e){}
-	}
+    @OptionsItem(R.id.menu_selecttags_ok)
+    void menuOk() {
+        Set<String> tags = new HashSet<>();
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.select_tags_menu, menu);
-    }
+        SparseBooleanArray checked = getListView().getCheckedItemPositions();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.menu_selecttags_ok:
+        for(int i = 0; i < getListAdapter().getCount(); i++) {
+            if(checked.get(i)) {
+                Cursor c = (Cursor) getListAdapter().getItem(i);
+                String n = c.getString(c.getColumnIndex(Tag.Name));
 
-                Set<String> tags = new HashSet<>();
-
-                SparseBooleanArray checked = getListView().getCheckedItemPositions();
-
-                for(int i = 0; i < getListAdapter().getCount(); i++) {
-                    if(checked.get(i)) {
-                        Cursor c = (Cursor) getListAdapter().getItem(i);
-                        String n = c.getString(c.getColumnIndex(Tag.Name));
-
-                        tags.add(n);
-                    }
-                }
-
-                tagsSelectedListener.onTagsSelected(tags);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+                tags.add(n);
+            }
         }
+
+        tagsSelectedListener.onTagsSelected(tags);
     }
 	
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		if(username != null) {
-			return TagManager.GetTags(username, sortfield, this.getActivity());
-		}
-		else return null;
+        return TagManager.GetTags(username, sortfield, this.getActivity());
 	}
 	
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
