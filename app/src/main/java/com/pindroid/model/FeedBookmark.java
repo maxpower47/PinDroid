@@ -62,7 +62,7 @@ public class FeedBookmark {
 	}
 
 	public String getTagString() {
-		return TextUtils.join(", ", tags);
+		return TextUtils.join(" ", tags);
 	}
 
 	public void setTags(List<String> tags) {
