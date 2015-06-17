@@ -13,7 +13,7 @@ public abstract class RecyclerAdapter<T, V extends View> extends RecyclerView.Ad
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return items != null ? items.size() : 0;
     }
 
     @Override

@@ -169,10 +169,8 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
         accountSelected = (TextView) accountSpinnerView.findViewById(R.id.account_selected);
 
         if(AccountHelper.getAccountCount(this) > 0){
-            if(username == null || username.equals("")) {
+            if(EventBus.getDefault().getStickyEvent(AccountChangedEvent.class) == null) {
                 EventBus.getDefault().postSticky(new AccountChangedEvent(AccountHelper.getFirstAccount(this).name));
-            } else {
-                EventBus.getDefault().postSticky(new AccountChangedEvent(username));
             }
         }
 
@@ -512,35 +510,32 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
     }
 
 	public void onRecentSelected() {
-		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment_();
-		frag.setQuery(username, null, "recent");
-		
-		clearBackStack();
+		BrowseBookmarkFeedFragment frag = BrowseBookmarkFeedFragment_.builder()
+                .feed("recent")
+                .build();
 
+		clearBackStack();
 		replaceLeftFragment(frag, false);
-		
 		clearDrawer(7);
 	}
 	
 	public void onPopularSelected() {
-		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment_();
-		frag.setQuery(username, null, "popular");
+        BrowseBookmarkFeedFragment frag = BrowseBookmarkFeedFragment_.builder()
+                .feed("popular")
+                .build();
 		
 		clearBackStack();
-
 		replaceLeftFragment(frag, false);
-		
 		clearDrawer(6);
 	}
 	
 	public void onMyNetworkSelected() {
-		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment_();
-		frag.setQuery(username, null, "network");
+        BrowseBookmarkFeedFragment frag = BrowseBookmarkFeedFragment_.builder()
+                .feed("network")
+                .build();
 		
 		clearBackStack();
-
 		replaceLeftFragment(frag, false);
-		
 		clearDrawer(8);
 	}
 
@@ -744,14 +739,15 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
 			frag = new BrowseBookmarksFragment_();
 		} else frag = new BrowseBookmarkFeedFragment_();
 		
-		((BookmarkBrowser)frag).setQuery(username, tag, user);
+		((BookmarkBrowser)frag).setTag(tag, user);
 
 		replaceLeftFragment(frag, true);
 	}
 
 	public void onAccountSelected(String account) {
-		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment_();
-		frag.setQuery(username, null, account);
+        BrowseBookmarkFeedFragment frag = BrowseBookmarkFeedFragment_.builder()
+                .feed(account)
+                .build();
 
 		replaceLeftFragment(frag, true);
 	}
@@ -886,8 +882,10 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
 	}
 
 	public void onGlobalTagSearch(String query) {
-		BrowseBookmarkFeedFragment frag = new BrowseBookmarkFeedFragment_();
-		frag.setQuery(username, query, "global");
+        BrowseBookmarkFeedFragment frag = BrowseBookmarkFeedFragment_.builder()
+                .tagname(query)
+                .feed("global")
+                .build();
 
 		replaceLeftFragment(frag, true);
 	}

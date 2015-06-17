@@ -22,5 +22,5 @@
 package com.pindroid.fragment;
 
 public interface BookmarkBrowser {
-	void setQuery(String username, String query, String feed);
+	void setTag(String query, String user);
 }

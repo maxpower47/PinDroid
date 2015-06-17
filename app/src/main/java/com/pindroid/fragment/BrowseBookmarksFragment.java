@@ -65,7 +65,7 @@ import de.greenrobot.event.EventBus;
 @EFragment(R.layout.browse_bookmark_fragment)
 @OptionsMenu(R.menu.browse_bookmark_menu)
 public class BrowseBookmarksFragment extends Fragment
-	implements LoaderManager.LoaderCallbacks<Cursor> {
+	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser {
 
     @ViewById(android.R.id.list) RecyclerView listView;
 	@ViewById(R.id.floating_add_button) FloatingActionButton actionButton;
@@ -76,9 +76,9 @@ public class BrowseBookmarksFragment extends Fragment
 
     private String sortfield = Bookmark.Time + " DESC";
 
-	String username;
+    String username;
 	@FragmentArg String tagname;
-	@FragmentArg boolean unread = false;
+	@FragmentArg boolean unread;
 	@FragmentArg String query;
 	
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
@@ -94,7 +94,7 @@ public class BrowseBookmarksFragment extends Fragment
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		setRetainInstance(false);
+		setRetainInstance(true);
 	}
 
     @Override
@@ -107,6 +107,10 @@ public class BrowseBookmarksFragment extends Fragment
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+    }
+
+    public void setTag(String tag, String user) {
+        this.tagname = tag;
     }
 	
 	@AfterViews

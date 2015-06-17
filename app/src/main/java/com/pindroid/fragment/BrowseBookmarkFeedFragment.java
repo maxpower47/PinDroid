@@ -56,6 +56,7 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.ViewById;
 
@@ -69,9 +70,9 @@ public class BrowseBookmarkFeedFragment extends Fragment
 	
 	@Bean BookmarkFeedAdapter adapter;
 
-    @InstanceState String username = null;
-	@InstanceState String tagname = null;
-	@InstanceState String feed = null;
+    String username;
+	@FragmentArg String tagname;
+	@FragmentArg String feed;
 	
 	FeedBookmark lastSelected = null;
     @ViewById(android.R.id.list) RecyclerView listView;
@@ -83,13 +84,13 @@ public class BrowseBookmarkFeedFragment extends Fragment
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		setRetainInstance(false);
+		setRetainInstance(true);
 	}
 
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
+        EventBus.getDefault().registerSticky(this);
     }
 
     @Override
@@ -100,7 +101,6 @@ public class BrowseBookmarkFeedFragment extends Fragment
 	
 	@AfterViews
 	public void init(){
-
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         listView.setLayoutManager(mLayoutManager);
 		
@@ -115,22 +115,20 @@ public class BrowseBookmarkFeedFragment extends Fragment
             }
         });
 
-		if(username != null) {
-            multiStateView.setViewState(MultiStateView.ViewState.LOADING);
-	    	getLoaderManager().initLoader(0, null, this);
+
+        getLoaderManager().initLoader(0, null, this);
 
 
-			//lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        //lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 /*
-			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-				public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-					menu.setHeaderTitle("Actions");
-					MenuInflater inflater = getActivity().getMenuInflater();
-					
-					inflater.inflate(R.menu.browse_bookmark_context_menu_other, menu);
-				}
-			});*/
-		}
+        lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+                menu.setHeaderTitle("Actions");
+                MenuInflater inflater = getActivity().getMenuInflater();
+
+                inflater.inflate(R.menu.browse_bookmark_context_menu_other, menu);
+            }
+        });*/
 	}
 
     public void onEvent(FeedBookmarkSelectedEvent event) {
@@ -156,12 +154,10 @@ public class BrowseBookmarkFeedFragment extends Fragment
 
     public void onEvent(AccountChangedEvent event) {
         this.username = event.getNewAccount();
-
         refresh();
     }
 
-	public void setQuery(String username, String tagname, String feed){
-		this.username = username;
+	public void setTag(String tagname, String feed){
 		this.tagname = tagname;
 		this.feed = feed;
 	}
@@ -236,6 +232,7 @@ public class BrowseBookmarkFeedFragment extends Fragment
 	}
 
 	public Loader<List<FeedBookmark>> onCreateLoader(int id, Bundle args) {
+        multiStateView.setViewState(MultiStateView.ViewState.LOADING);
 		if(Intent.ACTION_SEARCH.equals(getActivity().getIntent().getAction())) {
 			String query = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
 			return new LoaderDrone(getActivity(), username, query, feed, AccountHelper.getAccount(username, getActivity()));
