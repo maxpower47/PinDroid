@@ -34,10 +34,10 @@ These are some of the known issues in the current build of !PinDroid.  Feel free
 
 ## Screenshots ##
 
-| ![Screenshot](http://i.imgur.com/8Zcr2z1l.png) | http://i.imgur.com/RU2K2rSl.png |
+![Screenshot](http://i.imgur.com/8Zcr2z1l.png)  ![Screenshot](http://i.imgur.com/RU2K2rSl.png)
 
-|| http://i.imgur.com/RBCoxicl.png || http://i.imgur.com/HqtmkHUl.png ||
+![Screenshot](http://i.imgur.com/RBCoxicl.png)  ![Screenshot](http://i.imgur.com/HqtmkHUl.png)
 
-|| http://i.imgur.com/pgcpb1Dl.png || http://i.imgur.com/8kh0qa6l.png ||
+![Screenshot](http://i.imgur.com/pgcpb1Dl.png)  ![Screenshot](http://i.imgur.com/8kh0qa6l.png)
 
-|| http://i.imgur.com/v9tkqZ3l.jpg ||
+![Screenshot](http://i.imgur.com/v9tkqZ3l.jpg) 
