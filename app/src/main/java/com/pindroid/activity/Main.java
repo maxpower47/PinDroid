@@ -47,12 +47,10 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.HeaderViewListAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -94,23 +92,23 @@ import com.pindroid.ui.AccountSpinner;
 import com.pindroid.ui.AccountSpinner_;
 import com.pindroid.ui.NsMenuAdapter;
 import com.pindroid.ui.NsMenuItemModel;
-import com.pindroid.ui.ResizeAnimation;
 import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OptionsItem;
+import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 import de.greenrobot.event.EventBus;
 
 @EActivity(R.layout.main)
+@OptionsMenu(R.menu.base_menu)
 public class Main extends AppCompatActivity implements OnBookmarkSelectedListener,
 		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnSearchActionListener, LoaderManager.LoaderCallbacks<Cursor> {
 	
@@ -136,22 +134,6 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
 
         if(getSupportActionBar() != null) {
             getSupportActionBar().setHomeButtonEnabled(true);
-        }
-
-        Intent intent = getIntent();
-
-        if(Intent.ACTION_SEARCH.equals(intent.getAction()) && !intent.hasExtra("MainSearchResults")){
-            if(intent.hasExtra("username"))
-                EventBus.getDefault().postSticky(new AccountChangedEvent(intent.getStringExtra("username")));
-
-            if(intent.hasExtra(SearchManager.QUERY)){
-                //Intent i = new Intent(this, MainSearchResults.class);
-                //i.putExtras(intent.getExtras());
-                //startActivity(i);
-                //finish();
-            } else {
-                onSearchRequested();
-            }
         }
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(prefListner);
@@ -395,18 +377,14 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
     public boolean onOptionsItemSelected(MenuItem item) {
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-          return true;
-        }
-	    switch (item.getItemId()) {
-		    case R.id.menu_search:
-		    	onSearchRequested();
-		    	return true;
-		    default:
-		        return super.onOptionsItemSelected(item);
-	    }
+        return mDrawerToggle.onOptionsItemSelected(item);
     }
-	
+
+    @OptionsItem(R.id.menu_search)
+    void onSearch() {
+        onSearchRequested();
+    }
+
     /* Called whenever we call invalidateOptionsMenu() */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -620,7 +598,6 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
         }
 
         EventBus.getDefault().post(new BookmarkDeletedEvent(b));
-
         BookmarkManager.LazyDelete(b, username, this);
 	}
 
@@ -714,37 +691,7 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
 		return bookmark;
 	}
 
-    public void searchHandler(View v) {
-        onSearchRequested();
-    }
-
-    public void setupSearch(Menu menu){
-        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
-        MenuItem searchItem = menu.findItem(R.id.menu_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setSubmitButtonEnabled(false);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            public boolean onQueryTextSubmit(String query) {
-                startSearch(query);
-                return true;
-            }
-
-            public boolean onQueryTextChange(final String s) {
-                return false;
-            }
-        });
-    }
-	
-	protected void startSearch(final String query) {
-		MainSearchResultsFragment frag = new MainSearchResultsFragment();
-		frag.setQuery(query);
-		replaceLeftFragment(frag, true);
-	}
-	
-	@Override
+    @Override
 	public void setTitle(CharSequence title){
 		super.setTitle(title);
 		mTitle = title;
@@ -767,12 +714,26 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
     
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.base_menu, menu);
-	    
-	    setupSearch(menu);
-	    
-	    return true;
+        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+        MenuItem searchItem = menu.findItem(R.id.menu_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(false);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            public boolean onQueryTextSubmit(String query) {
+                MainSearchResultsFragment frag = new MainSearchResultsFragment();
+                frag.setQuery(query);
+                replaceLeftFragment(frag, true);
+                return true;
+            }
+
+            public boolean onQueryTextChange(final String s) {
+                return false;
+            }
+        });
+        return true;
 	}
 
 	public void onBookmarkSearch(String query) {
