@@ -13,7 +13,7 @@ PinDroid is in the [Play Store](https://market.android.com/details?id=com.pindro
   * Add, view, edit, and delete bookmarks
   * Bookmark titles, tags, and notes are searchable from both the global search and from within the app
   * Home screen widget for quick access to several activities
-  * Code is licensed under the GPL v3 and is available on [https://github.com/maxpower47/PinDroid Github]
+  * Code is licensed under the GPL v3
 
 ## Translations ##
   * English
@@ -26,11 +26,11 @@ PinDroid is in the [Play Store](https://market.android.com/details?id=com.pindro
 
 ## Known Issues ##
 
-These are some of the known issues in the current build of !PinDroid.  Feel free to open an issue if you encounter a bug/issue not listed here, or have an idea for an enhancement.
+These are some of the known issues in the current build of PinDroid.  Feel free to open an issue if you encounter a bug/issue not listed here, or have an idea for an enhancement.
 
-  * Certain features from !DeliciousDroid have not been ported yet due to limitations in Pinboard's API, including contact syncing and viewing network bookmark lists.
-  * HTC Sense 4+ (Jelly Bean) devices have a bug that causes them to only display one share target per app in the stock HTC apps (Internet, Messages, etc).  As a workaround, there is a [https://play.google.com/store/apps/details?id=com.pindroid.readlater standalone app] to add the share target and forward it to the main !PinDroid app.  Note that the main !PinDroid app must be installed for this to work.
-  * !PinDroid can be moved to an sd card, however this will cause you to have to re-login every time you reboot your device.  Doing this may also cause widgets to not work in some cases.
+  * Certain features from DeliciousDroid have not been ported yet due to limitations in Pinboard's API, including contact syncing and viewing network bookmark lists.
+  * HTC Sense 4+ (Jelly Bean) devices have a bug that causes them to only display one share target per app in the stock HTC apps (Internet, Messages, etc).  As a workaround, there is a [standalone app](https://play.google.com/store/apps/details?id=com.pindroid.readlater) to add the share target and forward it to the main PinDroid app.  Note that the main PinDroid app must be installed for this to work.
+  * PinDroid can be moved to an sd card, however this will cause you to have to re-login every time you reboot your device.  Doing this may also cause widgets to not work in some cases.
 
 ## Screenshots ##
 
