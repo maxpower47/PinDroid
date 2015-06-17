@@ -7,6 +7,9 @@ import android.content.Context;
 import com.pindroid.Constants;
 import com.pindroid.client.AuthenticationException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AccountHelper {
 
     public static Account getAccount(String username, Context context){
@@ -49,4 +52,15 @@ public class AccountHelper {
 
 		return username + ":" + authtoken;
 	}
+
+    public static List<String> getAccountNames(Context context){
+
+        List<String> accountNames = new ArrayList<>();
+
+        for(Account account : AccountManager.get(context).getAccountsByType(Constants.ACCOUNT_TYPE)) {
+            accountNames.add(account.name);
+        }
+
+        return accountNames;
+    }
 }

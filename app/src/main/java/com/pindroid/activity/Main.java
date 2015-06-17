@@ -90,12 +90,18 @@ import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.providers.NoteContent.Note;
 import com.pindroid.providers.TagContent;
+import com.pindroid.ui.AccountSpinner;
+import com.pindroid.ui.AccountSpinner_;
 import com.pindroid.ui.NsMenuAdapter;
 import com.pindroid.ui.NsMenuItemModel;
 import com.pindroid.ui.ResizeAnimation;
 import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,20 +110,17 @@ import java.util.Set;
 
 import de.greenrobot.event.EventBus;
 
+@EActivity(R.layout.main)
 public class Main extends AppCompatActivity implements OnBookmarkSelectedListener,
 		OnTagSelectedListener, OnNoteSelectedListener, OnBookmarkActionListener, OnSearchActionListener, LoaderManager.LoaderCallbacks<Cursor> {
 	
-	private ListView mDrawerList;
-	private LinearLayout mDrawerWrapper;
-	private DrawerLayout mDrawerLayout;
+	@ViewById(R.id.left_drawer_list) ListView mDrawerList;
+	@ViewById(R.id.left_drawer) LinearLayout mDrawerWrapper;
+	@ViewById(R.id.drawer_layout) DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    LinearLayout accountSpinnerView;
-    ImageView accountSpinnerButton;
-    boolean accountSpinnerOpen = false;
-    LinearLayout accountList;
-    TextView accountSelected;
+    AccountSpinner accountSpinnerView;
     String username;
 
     protected AccountManager mAccountManager;
@@ -126,9 +129,8 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
 
     private Cursor tagData = null;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
+	@AfterViews
+	public void init(){
 
         mAccountManager = AccountManager.get(this);
 
@@ -152,21 +154,13 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
             }
         }
 
-		setContentView(R.layout.main);
-
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(prefListner);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-		
-		mDrawerList = (ListView) findViewById(R.id.left_drawer_list);
-		mDrawerWrapper = (LinearLayout) findViewById(R.id.left_drawer);
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
 		mTitle = mDrawerTitle = getTitle();
-        accountSpinnerView = (LinearLayout) getLayoutInflater().inflate(R.layout.menu_spinner, null);
-        accountSpinnerButton = (ImageView) accountSpinnerView.findViewById(R.id.account_button);
-        accountList = (LinearLayout) accountSpinnerView.findViewById(R.id.account_list);
-        accountSelected = (TextView) accountSpinnerView.findViewById(R.id.account_selected);
+        accountSpinnerView = AccountSpinner_.build(this);
 
         if(AccountHelper.getAccountCount(this) > 0){
             if(EventBus.getDefault().getStickyEvent(AccountChangedEvent.class) == null) {
@@ -200,10 +194,8 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-		
-		if (savedInstanceState == null) {
-            onMyBookmarksSelected(null);
-        }
+
+        onMyBookmarksSelected(null);
 
         processIntent(getIntent());
 	}
@@ -217,7 +209,11 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
     @Override
     public void onResume() {
         super.onResume();
-        init();
+
+        if(AccountHelper.getAccountCount(this) < 1) {
+            Intent i = new Intent(this, AuthenticatorActivity_.class);
+            startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_INIT);
+        }
     }
 
     @Override
@@ -232,13 +228,6 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
         super.onDestroy();
     }
 
-    private void init(){
-        if(AccountHelper.getAccountCount(this) < 1) {
-            Intent i = new Intent(this, AuthenticatorActivity_.class);
-            startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_INIT);
-        }
-    }
-	
 	private void _initMenu() {
 		// Set up menu
 		NsMenuAdapter mAdapter = new NsMenuAdapter(this);
@@ -550,45 +539,7 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
             setSubtitle(event.getNewAccount());
         }
 
-        // reset account picker
-        if(accountSpinnerOpen) {
-            toggleAccountSpinner(false);
-        }
-
         clearDrawer(1);
-
-        accountSelected.setText(event.getNewAccount());
-
-        accountList.removeAllViews();
-
-        final List<String> accounts = getAccountNames();
-        accounts.remove(event.getNewAccount());
-
-        if(accounts.size() > 0) {
-
-            accountSpinnerButton.setVisibility(View.VISIBLE);
-
-            for (String account : accounts) {
-                View accountView = getLayoutInflater().inflate(R.layout.account_list_view, null);
-                ((TextView) accountView.findViewById(R.id.account_title)).setText(account);
-
-                accountView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        EventBus.getDefault().postSticky(new AccountChangedEvent(((TextView) v.findViewById(R.id.account_title)).getText().toString()));
-                    }
-                });
-
-                accountList.addView(accountView);
-            }
-
-            accountSpinnerView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    toggleAccountSpinner(true);
-                }
-            });
-        }
 
         // reset tags in drawer
         getSupportLoaderManager().restartLoader(0, null, this);
@@ -598,27 +549,6 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
             ((NsMenuAdapter)((HeaderViewListAdapter)mDrawerList.getAdapter()).getWrappedAdapter()).notifyDataSetChanged();
 		}
 	}
-
-    private void toggleAccountSpinner(Boolean animate) {
-        accountSpinnerButton.setImageResource(accountSpinnerOpen ? R.drawable.ic_arrow_drop_down : R.drawable.ic_arrow_drop_up);
-
-        if(animate) {
-            ResizeAnimation animation;
-
-            if (accountSpinnerOpen) {
-                animation = new ResizeAnimation(accountList, accountList.getChildCount() * (int) getResources().getDimension(R.dimen.account_list_height), 0, true, getResources().getDisplayMetrics());
-            } else {
-                animation = new ResizeAnimation(accountList, 0, accountList.getChildCount() * (int) getResources().getDimension(R.dimen.account_list_height), true, getResources().getDisplayMetrics());
-            }
-
-            animation.setDuration(200);
-            accountList.startAnimation(animation);
-        } else {
-            accountList.getLayoutParams().height = accountSpinnerOpen ? 0 : accountList.getChildCount() * (int) getResources().getDimension(R.dimen.account_list_height);
-        }
-
-        accountSpinnerOpen = !accountSpinnerOpen;
-    }
 
 	public void onBookmarkSelected(Bookmark b, BookmarkViewType viewType){
 		
@@ -834,17 +764,6 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
         // Pass any configuration change to the drawer toggles
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
-     
-    private List<String> getAccountNames(){
-    	
-    	List<String> accountNames = new ArrayList<>();
-    	
-    	for(Account account : AccountManager.get(this).getAccountsByType(Constants.ACCOUNT_TYPE)) {
-    		accountNames.add(account.name);
-    	}
-    	
-    	return accountNames;
-    }
     
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -931,7 +850,6 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
 
         return false;
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){

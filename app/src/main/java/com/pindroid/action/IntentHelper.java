@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import com.pindroid.Constants;
 import com.pindroid.activity.Main;
+import com.pindroid.activity.Main_;
 
 public class IntentHelper {
 	
@@ -20,7 +21,7 @@ public class IntentHelper {
 	}
 	
 	public static Intent AddBookmark(String url, String account, Context context) {
-		Intent addBookmark = new Intent(context, Main.class);
+		Intent addBookmark = new Intent(context, Main_.class);
 		addBookmark.setAction(Intent.ACTION_SEND);
 		if(url != null)
 			addBookmark.putExtra(Intent.EXTRA_TEXT, url);
@@ -36,7 +37,7 @@ public class IntentHelper {
 	}
 	
 	public static Intent ViewBookmarks(String tag, String account, String feed, Context context) {
-		Intent i = new Intent(context, Main.class);
+		Intent i = new Intent(context, Main_.class);
 		i.setAction(Intent.ACTION_VIEW);
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
@@ -56,7 +57,7 @@ public class IntentHelper {
 	}
 	
 	public static Intent ViewUnread(String account, Context context) {
-		Intent i = new Intent(context, Main.class);
+		Intent i = new Intent(context, Main_.class);
 		i.setAction(Intent.ACTION_VIEW);
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
@@ -70,7 +71,7 @@ public class IntentHelper {
 	}
 	
 	public static Intent ViewNotes(String account, Context context) {
-		Intent i = new Intent(context, Main.class);
+		Intent i = new Intent(context, Main_.class);
 		i.setAction(Intent.ACTION_VIEW);
 		i.addCategory(Intent.CATEGORY_DEFAULT);
 		Uri.Builder data = new Uri.Builder();
@@ -83,7 +84,7 @@ public class IntentHelper {
 	}
 	
 	public static Intent WidgetSearch(String account, Context context){
-		Intent i = new Intent(context, Main.class);
+		Intent i = new Intent(context, Main_.class);
 		i.setAction(Intent.ACTION_SEARCH);
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
