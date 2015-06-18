@@ -37,17 +37,8 @@ public class Constants {
     public static final String CONTENT_SCHEME = "content";
     
     public static final String EXTRA_BOOKMARK = "com.pindroid.Bookmark";
-    public static final String EXTRA_DESCRIPTION = "com.pindroid.bookmark.Description";
-    public static final String EXTRA_NOTES = "com.pindroid.bookmark.Notes";
-    public static final String EXTRA_TAGS = "com.pindroid.bookmark.Tags";
     public static final String EXTRA_PRIVATE = "com.pindroid.bookmark.Private";
-    public static final String EXTRA_TOREAD = "com.pindroid.bookmark.ToRead";
-    public static final String EXTRA_ERROR = "com.pindroid.bookmark.Error";
-    public static final String EXTRA_TIME = "com.pindroid.bookmark.Time";
-    public static final String EXTRA_UPDATE = "com.pindroid.bookmark.Update";
-    public static final String EXTRA_VIEWTYPE = "com.pindroid.bookmark.ViewType";
     public static final String EXTRA_INTERNAL = "com.pindroid.Internal";
-    public static final String EXTRA_READVIEW = "com.pindroid.ReadView";
     
     public static final String ACTION_READLATER = "com.pindroid.action.ReadLater";
     
@@ -61,7 +52,6 @@ public class Constants {
     public static final int BOOKMARK_PAGE_SIZE = 500;
     
     public static final String ACTION_SEARCH_SUGGESTION_VIEW = "com.pindroid.intent.action.SearchSuggestionView";
-    public static final String ACTION_SEARCH_SUGGESTION_EDIT = "com.pindroid.intent.action.SearchSuggestionEdit";
     
     public static final int REQUEST_CODE_ACCOUNT_CHANGE = 1;
     public static final int REQUEST_CODE_ACCOUNT_INIT = 2;
@@ -70,14 +60,9 @@ public class Constants {
      * Authtoken type string.
      */
     public static final String AUTHTOKEN_TYPE = "com.pindroid";
-    
-    public static final String PREFS_AUTH_TYPE = "authentication_type";
-    public static final String AUTH_TYPE_PINBOARD = "pinboard";
-    
+
     public static final String PREFS_SECRET_TOKEN = "secret_token";
-    
-    public static final String TEXT_EXTRACTOR_URL = "http://viewtext.org/api/text?url=";
-    
+
     public static final String GPL_URL = "http://www.gnu.org/licenses/gpl-3.0.txt";
     public static final String ABOUT_URL = "http://code.google.com/p/pindroid";
     public static final String MANUAL_URL = "http://code.google.com/p/pindroid/wiki/Manual";
