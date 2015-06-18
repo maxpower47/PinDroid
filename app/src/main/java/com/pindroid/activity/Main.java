@@ -34,7 +34,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.app.ShareCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -93,7 +92,6 @@ import com.pindroid.ui.NsMenuAdapter;
 import com.pindroid.ui.NsMenuItemModel;
 import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
-import com.pindroid.util.StringUtils;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -293,10 +291,6 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
 			} else if(lastPath.equals("notes")){
 					onMyNotesSelected();
 			}
-		} else if(Intent.ACTION_SEND.equals(action)){
-			Bookmark b = loadBookmarkFromShareIntent();
-			b = findExistingBookmark(b);
-			onBookmarkAdd(b);
 		} else if(Constants.ACTION_SEARCH_SUGGESTION_VIEW.equals(action)){
 			if(path.contains("bookmarks") && TextUtils.isDigitsOnly(lastPath) && intent.hasExtra(SearchManager.USER_QUERY)) {
 				try {
@@ -647,38 +641,6 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
                 .build();
 
 		replaceLeftFragment(frag, true);
-	}
-	
-	private Bookmark loadBookmarkFromShareIntent() {
-		Bookmark bookmark = new Bookmark();
-		
-		ShareCompat.IntentReader reader = ShareCompat.IntentReader.from(this);
-		
-		if(reader != null){
-			if(reader.getText() != null){
-				String url = StringUtils.getUrl(reader.getText().toString());
-				bookmark.setUrl(url);
-			}
-			
-			if(reader.getSubject() != null)
-				bookmark.setDescription(reader.getSubject());
-		}
-		
-		bookmark.setToRead(SettingsHelper.getToReadDefault(this));
-		bookmark.setShared(!SettingsHelper.getPrivateDefault(this));
-		
-		return bookmark;
-	}
-	
-	private Bookmark findExistingBookmark(Bookmark bookmark) {
-
-		try{
-			Bookmark old = BookmarkManager.GetByUrl(bookmark.getUrl(), username, this);
-			bookmark = old.copy();
-		} catch(Exception e) {
-		}
-
-		return bookmark;
 	}
 
     @Override

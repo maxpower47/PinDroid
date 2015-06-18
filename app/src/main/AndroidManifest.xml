@@ -68,12 +68,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/main_searchable" />
@@ -245,7 +239,12 @@
 
         <activity
             android:name=".activity.AddBookmark_"
-            android:label="@string/title_activity_add_bookmark" >
+            android:label="@string/titleMain" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
         </activity>
     </application>
 

@@ -199,8 +199,14 @@ public class AddBookmarkFragment extends Fragment {
             }
 
 			getTagSuggestions(bookmark.getUrl());
+
+            if(bookmark.getId() == 0) {
+                getActivity().setTitle(R.string.add_bookmark_add_title);
+            } else {
+                getActivity().setTitle(R.string.add_bookmark_edit_title);
+            }
 			
-			getActivity().setTitle(R.string.add_bookmark_edit_title);
+
 		} else {
 			if(!this.isHidden()){
 				mEditUrl.requestFocus();
