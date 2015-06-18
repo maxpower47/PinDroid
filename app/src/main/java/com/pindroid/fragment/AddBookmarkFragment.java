@@ -160,6 +160,8 @@ public class AddBookmarkFragment extends Fragment {
 		if(oldB != null) {
             oldBookmark = oldB.copy();
         }
+
+        refreshView();
 	}
 
     public void onEvent(AccountChangedEvent event) {
