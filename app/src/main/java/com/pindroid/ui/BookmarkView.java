@@ -1,20 +1,26 @@
 package com.pindroid.ui;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pindroid.R;
+import com.pindroid.listadapter.SwipableView;
 import com.pindroid.providers.BookmarkContent;
 
 import org.androidannotations.annotations.EViewGroup;
+import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.ViewById;
 
 @EViewGroup(R.layout.bookmark_view)
-public class BookmarkView extends LinearLayout {
+public class BookmarkView extends LinearLayout implements SwipableView {
 
+    @ViewById(R.id.bookmark_view_container) View containerView;
     @ViewById(R.id.bookmark_description) TextView descriptionView;
     @ViewById(R.id.bookmark_tags) TextView tagsView;
     @ViewById(R.id.bookmark_unread) ImageView unreadView;
@@ -55,5 +61,10 @@ public class BookmarkView extends LinearLayout {
                 syncedView.setVisibility(View.INVISIBLE);
                 break;
         }
+    }
+
+    @Override
+    public View getSwipableViewContainter() {
+        return containerView;
     }
 }

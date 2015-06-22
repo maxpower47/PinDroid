@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
+import com.pindroid.listadapter.StableListItem;
 import com.pindroid.model.FeedBookmark;
 import com.pindroid.providers.TagContent.Tag;
 
@@ -38,7 +39,7 @@ import android.provider.BaseColumns;
 
 public class BookmarkContent {
 
-	public static class Bookmark implements BaseColumns, Parcelable {
+	public static class Bookmark implements BaseColumns, Parcelable, StableListItem {
 
 		public static final Uri CONTENT_URI = Uri.parse("content://" + BookmarkContentProvider.AUTHORITY + "/bookmark");
 		public static final Uri UNREAD_CONTENT_URI = Uri.parse("content://" + BookmarkContentProvider.AUTHORITY + "/unreadcount");
@@ -165,6 +166,10 @@ public class BookmarkContent {
         
         public void setToRead(boolean toread) {
         	mRead = toread;
+        }
+
+        public void toggleToRead() {
+            mRead = !mRead;
         }
         
         public String getAccount(){

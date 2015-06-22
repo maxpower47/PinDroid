@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-public abstract class RecyclerCursorAdapter<T, V extends View> extends RecyclerView.Adapter<ViewWrapper<V>> {
+public abstract class RecyclerCursorAdapter<T extends StableListItem, V extends View & SwipableView> extends RecyclerView.Adapter<ViewWrapper<V>> {
 
     private Cursor mCursor;
 
@@ -25,6 +25,7 @@ public abstract class RecyclerCursorAdapter<T, V extends View> extends RecyclerV
         if (mCursor != null) {
             mCursor.registerDataSetObserver(mDataSetObserver);
         }
+        setHasStableIds(true);
     }
 
     public Cursor getCursor() {
@@ -54,12 +55,7 @@ public abstract class RecyclerCursorAdapter<T, V extends View> extends RecyclerV
         return null;
     }
 
-    @Override
-    public void setHasStableIds(boolean hasStableIds) {
-        super.setHasStableIds(true);
-    }
-
-    public abstract void onBindViewHolder(V viewHolder, Cursor cursor);
+    public abstract void onBindViewHolder(V viewHolder, Cursor cursor, ViewWrapper wrapper);
 
     @Override
     public void onBindViewHolder(ViewWrapper<V> viewHolder, int position) {
@@ -69,7 +65,7 @@ public abstract class RecyclerCursorAdapter<T, V extends View> extends RecyclerV
         if (!mCursor.moveToPosition(position)) {
             throw new IllegalStateException("couldn't move cursor to position " + position);
         }
-        onBindViewHolder(viewHolder.getView(), mCursor);
+        onBindViewHolder(viewHolder.getView(), mCursor, viewHolder);
     }
 
     @Override

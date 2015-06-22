@@ -3,7 +3,9 @@ package com.pindroid.listadapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-public class ViewWrapper<V extends View> extends RecyclerView.ViewHolder {
+import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractSwipeableItemViewHolder;
+
+public class ViewWrapper<V extends View & SwipableView> extends AbstractSwipeableItemViewHolder {
 
     private final V view;
 
@@ -14,5 +16,10 @@ public class ViewWrapper<V extends View> extends RecyclerView.ViewHolder {
 
     public V getView() {
         return view;
+    }
+
+    @Override
+    public View getSwipeableContainerView() {
+        return view.getSwipableViewContainter();
     }
 }

@@ -25,7 +25,6 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -33,9 +32,14 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
+import com.h6ah4i.android.widget.advrecyclerview.animator.SwipeDismissItemAnimator;
+import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager;
+import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchActionGuardManager;
 import com.kennyc.view.MultiStateView;
 import com.pindroid.Constants.BookmarkViewType;
 import com.pindroid.R;
@@ -68,11 +72,14 @@ public class BrowseBookmarksFragment extends Fragment
 	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser {
 
     @ViewById(android.R.id.list) RecyclerView listView;
-	@ViewById(R.id.floating_add_button) FloatingActionButton actionButton;
     @ViewById(R.id.bookmark_refresh) SwipeRefreshLayout refreshLayout;
     @ViewById(R.id.bookmark_multistate) MultiStateView multiStateView;
 	
 	@Bean BookmarkAdapter mAdapter;
+
+    RecyclerViewSwipeManager mSwipeManager;
+    RecyclerView.Adapter mWrappedAdapter;
+    private RecyclerViewTouchActionGuardManager mRecyclerViewTouchActionGuardManager;
 
     private String sortfield = Bookmark.Time + " DESC";
 
@@ -88,6 +95,7 @@ public class BrowseBookmarksFragment extends Fragment
 		void onBookmarkAdd(Bookmark b);
 		void onBookmarkShare(Bookmark b);
 		void onBookmarkMark(Bookmark b);
+        void onBookmarkMarkRead(Bookmark b);
 		void onBookmarkDelete(Bookmark b);
 	}
 	
@@ -119,32 +127,50 @@ public class BrowseBookmarksFragment extends Fragment
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         listView.setLayoutManager(mLayoutManager);
 
-		listView.setAdapter(mAdapter);
+        mAdapter.setEventListener(new BookmarkAdapter.EventListener() {
+            @Override
+            public void onBookmarkDeleted(Bookmark bookmark) {
+                bookmarkSelectedListener.onBookmarkDelete(bookmark);
+            }
+
+            @Override
+            public void onBookmarkMarked(Bookmark bookmark) {
+                bookmarkSelectedListener.onBookmarkMark(bookmark);
+            }
+        });
+
+        mRecyclerViewTouchActionGuardManager = new RecyclerViewTouchActionGuardManager();
+        mRecyclerViewTouchActionGuardManager.setInterceptVerticalScrollingWhileAnimationRunning(true);
+        mRecyclerViewTouchActionGuardManager.setEnabled(true);
+
+
+        mSwipeManager = new RecyclerViewSwipeManager();
+        mWrappedAdapter = mSwipeManager.createWrappedAdapter((mAdapter));
+
+        final GeneralItemAnimator animator = new SwipeDismissItemAnimator();
+        animator.setSupportsChangeAnimations(false);
+
+		listView.setAdapter(mWrappedAdapter);
+        listView.setItemAnimator(animator);
 
         listView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).build());
 
-		if(username != null) {				
-	
+        mRecyclerViewTouchActionGuardManager.attachRecyclerView(listView);
+        mSwipeManager.attachRecyclerView(listView);
+
+        animator.setDebug(true);
+
+		if(username != null) {
 	    	getLoaderManager().initLoader(0, null, this);
-
-			/* Add Context-Menu listener to the ListView. */
-			/*listView.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-				public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-					menu.setHeaderTitle("Actions");
-					MenuInflater inflater = getActivity().getMenuInflater();
-
-					inflater.inflate(R.menu.browse_bookmark_context_menu_self, menu);
-				}
-			});*/
-
-            refreshLayout.setColorSchemeResources(R.color.pindroid_blue);
-            refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    ContentResolver.requestSync(AccountHelper.getAccount(username, getActivity()), BookmarkContentProvider.AUTHORITY, new Bundle());
-                }
-            });
 		}
+
+        refreshLayout.setColorSchemeResources(R.color.pindroid_blue);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ContentResolver.requestSync(AccountHelper.getAccount(username, getActivity()), BookmarkContentProvider.AUTHORITY, new Bundle());
+            }
+        });
 	}
 
     @Click(R.id.floating_add_button)
@@ -218,40 +244,7 @@ public class BrowseBookmarksFragment extends Fragment
 			}
 		}
 	}
-/*
-	@Override
-	public boolean onContextItemSelected(MenuItem aItem) {
-		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem.getMenuInfo();
-		final Cursor c = mAdapter.getItemAtPosition(menuInfo.position);
-		Bookmark b = BookmarkManager.CursorToBookmark(c);
-		
-		switch (aItem.getItemId()) {
-			case R.id.menu_bookmark_context_open:
-				openBookmarkInBrowser(b);
-				return true;
-			case R.id.menu_bookmark_context_view:				
-				viewBookmark(b);
-				return true;
-			case R.id.menu_bookmark_context_edit:
-				bookmarkSelectedListener.onBookmarkSelected(b, BookmarkViewType.EDIT);
-				return true;
-			case R.id.menu_bookmark_context_delete:
-				bookmarkSelectedListener.onBookmarkDelete(b);
-				return true;
-			case R.id.menu_bookmark_context_share:
-				Log.d("share", "browse");
-				bookmarkSelectedListener.onBookmarkShare(b);
-				return true;
-			case R.id.menu_bookmark_context_read:
-				readBookmark(b);
-				return true;
-			case R.id.menu_bookmark_context_markread:
-				markBookmark(b);
-				return true;
-		}
-		return false;
-	}
-	*/
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 

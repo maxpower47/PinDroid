@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <color android:color="@color/pindroid_blue"/>
+    </item>
+    <item android:left="16dp">
+        <bitmap
+            android:src="@drawable/ic_swipe_unread"
+            android:gravity="left|center_vertical"/>
+    </item>
+</layer-list>

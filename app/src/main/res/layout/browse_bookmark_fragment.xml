@@ -41,6 +41,7 @@
                 android:id="@id/android:list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clipChildren="false"
                 tools:listitem="@layout/bookmark_view"
                 android:scrollbars="vertical"/>
         </android.support.v4.widget.SwipeRefreshLayout>

@@ -3,6 +3,7 @@ package com.pindroid.model;
 import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
+import com.pindroid.listadapter.StableListItem;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.providers.TagContent;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class FeedBookmark {
+public class FeedBookmark implements StableListItem {
 
 	@SerializedName("u") private String url;
 	@SerializedName("d") private String description;
@@ -22,6 +23,10 @@ public class FeedBookmark {
 	public Bookmark toBookmark() {
 		return new Bookmark(this);
 	}
+
+    public int getId() {
+        return 0;
+    }
 
 	public String getUrl() {
 		return url;

@@ -43,6 +43,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -566,11 +567,18 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
 	}
 
 	public void onBookmarkMark(Bookmark b) {
-		if(b != null && isMyself() && b.getToRead()) {
-    		b.setToRead(false);
+		if(b != null && isMyself()) {
+    		b.toggleToRead();
 			BookmarkManager.UpdateBookmark(b, username, this);
     	}
 	}
+
+    public void onBookmarkMarkRead(Bookmark b) {
+        if(b != null && isMyself() && b.getToRead()) {
+            b.setToRead(false);
+            BookmarkManager.UpdateBookmark(b, username, this);
+        }
+    }
 
 	public void onBookmarkDelete(Bookmark b) {
         FragmentManager fragmentManager = getSupportFragmentManager();

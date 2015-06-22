@@ -337,7 +337,7 @@ public class ViewBookmarkFragment extends Fragment {
 				showInWebView(Constants.INSTAPAPER_URL + bookmark.getUrl());
 				
 				if(isMyself() && bookmark.getToRead() && SettingsHelper.getMarkAsRead(getActivity()))
-		    		bookmarkSelectedListener.onBookmarkMark(bookmark);
+		    		bookmarkSelectedListener.onBookmarkMarkRead(bookmark);
 			} else if(viewType == BookmarkViewType.WEB){
 				showInWebView(bookmark.getUrl());
 			}

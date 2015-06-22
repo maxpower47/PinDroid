@@ -2,10 +2,12 @@ package com.pindroid.listadapter;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.view.ContextMenu;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager;
+import com.h6ah4i.android.widget.advrecyclerview.swipeable.SwipeableItemAdapter;
+import com.pindroid.R;
 import com.pindroid.event.BookmarkSelectedEvent;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent;
@@ -18,9 +20,16 @@ import org.androidannotations.annotations.RootContext;
 import de.greenrobot.event.EventBus;
 
 @EBean
-public class BookmarkAdapter extends RecyclerCursorAdapter<BookmarkContent.Bookmark, BookmarkView> {
+public class BookmarkAdapter extends RecyclerCursorAdapter<BookmarkContent.Bookmark, BookmarkView>
+        implements SwipeableItemAdapter<ViewWrapper<BookmarkView>> {
 
     @RootContext Context context;
+    private EventListener listener;
+
+    public interface EventListener {
+        void onBookmarkDeleted(BookmarkContent.Bookmark bookmark);
+        void onBookmarkMarked(BookmarkContent.Bookmark bookmark);
+    }
 
     public BookmarkAdapter(Context context) {
         super(context, null);
@@ -32,26 +41,83 @@ public class BookmarkAdapter extends RecyclerCursorAdapter<BookmarkContent.Bookm
     }
 
     @Override
-    public void onBindViewHolder(BookmarkView view, Cursor c) {
+    public void onBindViewHolder(BookmarkView view, Cursor c, ViewWrapper wrapper) {
         final BookmarkContent.Bookmark bookmark = BookmarkManager.CursorToBookmark(c);
         view.bind(bookmark);
 
-        view.setOnClickListener(new View.OnClickListener() {
+        view.getSwipableViewContainter().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EventBus.getDefault().post(new BookmarkSelectedEvent(bookmark));
             }
         });
 
+        view.getSwipableViewContainter().setBackgroundResource(R.drawable.bg_item_swiping_neutral);
 
-        view.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-            @Override
-            public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-                contextMenu.setHeaderTitle("Actions");
-                //MenuInflater inflater = context.getMenuInflater();
+        wrapper.setMaxRightSwipeAmount(0.25f);
+        wrapper.setMaxLeftSwipeAmount(-0.5f);
+    }
 
-                //inflater.inflate(R.menu.browse_bookmark_context_menu_self, contextMenu);
-            }
-        });
+    @Override
+    public int onGetSwipeReactionType(ViewWrapper<BookmarkView> bookmarkView, int i, int i1, int i2) {
+        return RecyclerViewSwipeManager.REACTION_CAN_SWIPE_BOTH;
+    }
+
+    @Override
+    public void onSetSwipeBackground(ViewWrapper<BookmarkView> holder, int position, int type) {
+        switch (type) {
+            case RecyclerViewSwipeManager.DRAWABLE_SWIPE_NEUTRAL_BACKGROUND:
+                break;
+            case RecyclerViewSwipeManager.DRAWABLE_SWIPE_LEFT_BACKGROUND:
+                holder.itemView.setBackgroundResource(R.drawable.bg_item_swiping_left);
+                break;
+            case RecyclerViewSwipeManager.DRAWABLE_SWIPE_RIGHT_BACKGROUND:
+                if(BookmarkManager.CursorToBookmark(getItemAtPosition(position)).getToRead()) {
+                    holder.itemView.setBackgroundResource(R.drawable.bg_item_swiping_right_read);
+                } else {
+                    holder.itemView.setBackgroundResource(R.drawable.bg_item_swiping_right_unread);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public int onSwipeItem(ViewWrapper<BookmarkView> bookmarkView, int position, int result) {
+        switch (result) {
+            case RecyclerViewSwipeManager.RESULT_SWIPED_RIGHT:
+                return RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_DEFAULT;
+            case RecyclerViewSwipeManager.RESULT_SWIPED_LEFT:
+                return RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_REMOVE_ITEM;
+            case RecyclerViewSwipeManager.RESULT_CANCELED:
+            default:
+                return RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_DEFAULT;
+        }
+    }
+
+    @Override
+    public void onPerformAfterSwipeReaction(ViewWrapper<BookmarkView> bookmarkView, int position, int result, int reaction) {
+
+        switch (result) {
+            case RecyclerViewSwipeManager.RESULT_SWIPED_RIGHT:
+                notifyItemChanged(position);
+
+                if (listener != null) {
+                    listener.onBookmarkMarked(BookmarkManager.CursorToBookmark(getItemAtPosition(position)));
+                }
+                break;
+            case RecyclerViewSwipeManager.RESULT_SWIPED_LEFT:
+                notifyItemRemoved(position);
+
+                if (listener != null) {
+                    listener.onBookmarkDeleted(BookmarkManager.CursorToBookmark(getItemAtPosition(position)));
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void setEventListener(EventListener listener) {
+        this.listener = listener;
     }
 }

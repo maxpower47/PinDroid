@@ -7,13 +7,22 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class RecyclerAdapter<T, V extends View> extends RecyclerView.Adapter<ViewWrapper<V>> {
+public abstract class RecyclerAdapter<T extends StableListItem, V extends View & SwipableView> extends RecyclerView.Adapter<ViewWrapper<V>> {
 
     protected List<T> items = new ArrayList<>();
+
+    public RecyclerAdapter() {
+        setHasStableIds(true);
+    }
 
     @Override
     public int getItemCount() {
         return items != null ? items.size() : 0;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return items.get(position).getId();
     }
 
     @Override
