@@ -33,7 +33,9 @@ import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.FilterQueryProvider;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,11 +76,11 @@ import de.greenrobot.event.EventBus;
 @OptionsMenu(R.menu.add_bookmark_menu)
 public class AddBookmarkFragment extends Fragment {
 	
-	@ViewById(R.id.add_edit_url) MaterialEditText mEditUrl;
-    @ViewById(R.id.add_edit_description) MaterialEditText mEditDescription;
+	@ViewById(R.id.add_edit_url) EditText mEditUrl;
+    @ViewById(R.id.add_edit_description) EditText mEditDescription;
     @ViewById(R.id.add_description_progress) ProgressBar mDescriptionProgress;
-    @ViewById(R.id.add_edit_notes) MaterialEditText mEditNotes;
-    @ViewById(R.id.add_edit_tags) MaterialMultiAutoCompleteTextView mEditTags;
+    @ViewById(R.id.add_edit_notes) EditText mEditNotes;
+    @ViewById(R.id.add_edit_tags) MultiAutoCompleteTextView mEditTags;
     @ViewById(R.id.add_recommended_tags) TextView mRecommendedTags;
     @ViewById(R.id.add_popular_tags) TextView mPopularTags;
     @ViewById(R.id.add_edit_private) CompoundButton mPrivate;
