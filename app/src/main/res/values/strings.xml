@@ -217,6 +217,8 @@
     <string name="pref_cat_save_title">Save settings</string>
     <string name="pref_cat_reading_title">Reading options</string>
     <string name="pref_cat_help_title">Help</string>
+    <string name="pref_cat_version_title">Version</string>
+    <string name="pref_cat_version_key">pref_key_cat_version</string>
     <string name="pref_accountsettings_title">Account settings</string>
     <string name="pref_accountsettings_key">pref_accountsettings</string>
     <string name="pref_accountsettings_summary">Manage your Pinboard account on this device.</string>
@@ -319,5 +321,10 @@
 
     <string name="title_activity_add_bookmark">AddBookmark</string>
     <string name="action_settings">Settings</string>
+
+    <string name="about_url">https://github.com/maxpower47/PinDroid</string>
+    <string name="help_url">https://github.com/maxpower47/PinDroid/wiki</string>
+    <string name="donate_url">https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=EUS2Z3WVWK6ZU</string>
+    <string name="license_url">http://www.gnu.org/licenses/gpl-3.0.txt</string>
 
 </resources>

@@ -27,7 +27,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <fragment android:name="com.pindroid.fragment.SettingsFragment"
+    <fragment android:name="com.pindroid.fragment.SettingsFragment_"
         android:id="@+id/settings_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

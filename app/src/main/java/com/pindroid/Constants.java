@@ -63,11 +63,6 @@ public class Constants {
 
     public static final String PREFS_SECRET_TOKEN = "secret_token";
 
-    public static final String GPL_URL = "http://www.gnu.org/licenses/gpl-3.0.txt";
-    public static final String ABOUT_URL = "https://github.com/maxpower47/PinDroid";
-    public static final String MANUAL_URL = "https://github.com/maxpower47/PinDroid/wiki";
-    public static final String DONATION_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EUS2Z3WVWK6ZU";
-
     public static final String INSTAPAPER_URL = "http://www.instapaper.com/text?u=";
     
     public enum BookmarkViewType {VIEW, READ, WEB, EDIT}

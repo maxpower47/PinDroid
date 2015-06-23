@@ -22,61 +22,42 @@
 package com.pindroid.fragment;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.net.Uri;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
-
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.provider.Settings;
 import android.widget.Toast;
 
-import com.pindroid.Constants;
+import com.pindroid.BuildConfig;
 import com.pindroid.R;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.util.SyncUtils;
 
+import org.androidannotations.annotations.AfterPreferences;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.PreferenceByKey;
+import org.androidannotations.annotations.PreferenceChange;
+import org.androidannotations.annotations.PreferenceScreen;
+import org.androidannotations.annotations.res.StringRes;
+
+@EFragment
+@PreferenceScreen(R.xml.preferences)
 public class SettingsFragment extends PreferenceFragment {
+    @StringRes(R.string.syncing_toast) String syncingToast;
 
-    private Context mContext;
-    private Resources res;
+    @PreferenceByKey(R.string.pref_forcesync_key) Preference forceSyncPref;
+    @PreferenceByKey(R.string.pref_accountsettings_key) Preference accountSettingsPref;
+    @PreferenceByKey(R.string.pref_cat_version_key) PreferenceCategory versionPrefCat;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        addPreferencesFromResource(R.xml.preferences);
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        mContext = getActivity();
-        res = getResources();
-
-        Preference synctimePref = findPreference("pref_synctime");
-        synctimePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object value) {
-                long time = Long.parseLong((String)value);
-
-                SyncUtils.removePeriodicSync(BookmarkContentProvider.AUTHORITY, Bundle.EMPTY, mContext);
-
-                if(time != 0) {
-                    SyncUtils.addPeriodicSync(BookmarkContentProvider.AUTHORITY, Bundle.EMPTY, time, mContext);
-                }
-
-                return true;
-            }
-        });
-
-        Preference syncPref = findPreference("pref_forcesync");
-        syncPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+    @AfterPreferences
+    public void init() {
+        forceSyncPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
-                Toast.makeText(mContext, res.getString(R.string.syncing_toast), Toast.LENGTH_LONG).show();
-                SyncUtils.clearSyncMarkers(mContext);
+                Toast.makeText(getActivity(), syncingToast, Toast.LENGTH_LONG).show();
+                SyncUtils.clearSyncMarkers(getActivity());
 
                 Bundle extras = new Bundle();
                 extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
@@ -87,59 +68,35 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
-        Preference accountPref = findPreference("pref_accountsettings");
-        accountPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        accountSettingsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 Intent i = new Intent(Settings.ACTION_SYNC_SETTINGS);
                 i.putExtra(Settings.EXTRA_AUTHORITIES, new String[] {BookmarkContentProvider.AUTHORITY});
 
-                mContext.startActivity(i);
-                return true;
-            }
-        });
-
-        Preference licensePref = findPreference("pref_license");
-        licensePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                Uri link = Uri.parse(Constants.GPL_URL);
-                Intent i = new Intent(Intent.ACTION_VIEW, link);
-
                 startActivity(i);
                 return true;
             }
         });
 
-        Preference helpPref = findPreference("pref_help");
-        helpPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                Uri link = Uri.parse(Constants.MANUAL_URL);
-                Intent i = new Intent(Intent.ACTION_VIEW, link);
+        try {
+            String versionName = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName;
 
-                startActivity(i);
-                return true;
-            }
-        });
+            Preference versionPref = new Preference(getActivity());
+            versionPref.setTitle("Version " + versionName + (BuildConfig.DEBUG ? " - DEBUG" : ""));
+            versionPrefCat.addPreference(versionPref);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
-        Preference aboutPref = findPreference("pref_about");
-        aboutPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                Uri link = Uri.parse(Constants.ABOUT_URL);
-                Intent i = new Intent(Intent.ACTION_VIEW, link);
+    @PreferenceChange(R.string.pref_synctime_key)
+    void synctimeChange(Object value) {
+        long time = Long.parseLong((String) value);
 
-                startActivity(i);
-                return true;
-            }
-        });
+        SyncUtils.removePeriodicSync(BookmarkContentProvider.AUTHORITY, Bundle.EMPTY, getActivity());
 
-        Preference donatePref = findPreference("pref_donate");
-        donatePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                Uri link = Uri.parse(Constants.DONATION_URL);
-                Intent i = new Intent(Intent.ACTION_VIEW, link);
-
-                startActivity(i);
-                return true;
-            }
-        });
+        if (time != 0) {
+            SyncUtils.addPeriodicSync(BookmarkContentProvider.AUTHORITY, Bundle.EMPTY, time, getActivity());
+        }
     }
 }

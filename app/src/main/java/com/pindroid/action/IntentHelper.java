@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.pindroid.Constants;
-import com.pindroid.activity.Main;
 import com.pindroid.activity.Main_;
 
 public class IntentHelper {
