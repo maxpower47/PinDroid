@@ -161,8 +161,7 @@
   <string name="pref_help_title">Ohje</string>
   <string name="pref_help_summary">Ohjeita PinDroid:in käyttämiseen</string>
   <string name="pref_about_title">Tietoja</string>
-  <string name="pref_about_key">pref_about</string>
-  <string name="pref_about_summary">Tietoja PinDroid:sta</string>
+    <string name="pref_about_summary">Tietoja PinDroid:sta</string>
   <string name="pref_donate_title">Lahjoita rahaa</string>
   <string name="pref_donate_summary">Tue PinDroid:a</string>
   <string name="perm_read_bookmarks_label">Read PinDroid bookmarks</string>

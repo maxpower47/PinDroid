@@ -120,4 +120,11 @@
         <item>main_menu_recent</item>
         <item>main_menu_network</item>
     </string-array>
+    <string-array name="widget_screen_titles">
+        <item>Bookmarks</item>
+        <item>Unread</item>
+        <item>Notes</item>
+        <item>Add Bookmark</item>
+        <item>Search</item>
+    </string-array>
 </resources>

@@ -96,6 +96,7 @@ import com.pindroid.util.SettingsHelper;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
@@ -768,14 +769,19 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
         return false;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(resultCode == Activity.RESULT_CANCELED && requestCode != Constants.REQUEST_CODE_ACCOUNT_CHANGE){
-            finish();
-        } else if(resultCode == Activity.RESULT_OK && requestCode == Constants.REQUEST_CODE_ACCOUNT_CHANGE){
-            EventBus.getDefault().postSticky(new AccountChangedEvent(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)));
-        } else if(resultCode == Activity.RESULT_OK && requestCode == Constants.REQUEST_CODE_ACCOUNT_INIT){
+    @OnActivityResult(Constants.REQUEST_CODE_ACCOUNT_CHANGE)
+    void onResult(int result, @OnActivityResult.Extra(value = AccountManager.KEY_ACCOUNT_NAME) String account) {
+        if(result == Activity.RESULT_OK) {
+            EventBus.getDefault().postSticky(new AccountChangedEvent(account));
+        }
+    }
+
+    @OnActivityResult(Constants.REQUEST_CODE_ACCOUNT_INIT)
+    void onResult(int result) {
+        if(result == Activity.RESULT_OK) {
             EventBus.getDefault().postSticky(new AccountChangedEvent(AccountHelper.getFirstAccount(this).name));
+        } else {
+            finish();
         }
     }
 }

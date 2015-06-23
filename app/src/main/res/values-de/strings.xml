@@ -127,8 +127,7 @@
   <string name="pref_synctime_title">Synchronis. Frequenz</string>
   <string name="pref_synctime_summary">Wie oft sollen die Lesezeichen synchronisiert werden?</string>
   <string name="pref_view_bookmark_default_action_title">Lesezeichen Aktion</string>
-  <string name="pref_view_bookmark_default_action_key">pref_view_bookmark_default_action</string>
-  <string name="pref_view_bookmark_default_action_summary">Standardaktion für Lesezeichen.</string>
+    <string name="pref_view_bookmark_default_action_summary">Standardaktion für Lesezeichen.</string>
   <string name="pref_searchicons_title">Such Icons anzeigen</string>
   <string name="pref_searchicons_summary">Icons in Suchvorschlägen anzeigen.</string>
   <string name="pref_save_private_default_title">Privat als Standard</string>

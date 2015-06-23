@@ -30,34 +30,28 @@ import com.pindroid.fragment.BrowseTagsFragment_;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.FragmentById;
 import org.androidannotations.annotations.OnActivityResult;
-import org.androidannotations.annotations.ViewById;
 
 @EActivity(R.layout.browse_tags)
 public class ChooseTagShortcut extends AppCompatActivity implements BrowseTagsFragment.OnTagSelectedListener {
 
 	private String username = "";
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        getSupportActionBar().setTitle(R.string.shortcut_activity_title);
+	@AfterViews
+	public void init() {
+        setTitle(R.string.shortcut_activity_title);
 
 		Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
 		startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
     }
 
-	public void onTagSelected(String tag) {		
+	public void onTagSelected(String tag) {
 		final Intent shortcutIntent = IntentHelper.ViewBookmarks(tag, username, null, this);
         final ShortcutIconResource iconResource = Intent.ShortcutIconResource.fromContext(this, R.drawable.ic_shortcut);
         final Intent intent = new Intent();
@@ -69,9 +63,8 @@ public class ChooseTagShortcut extends AppCompatActivity implements BrowseTagsFr
 	}
 
 	@OnActivityResult(Constants.REQUEST_CODE_ACCOUNT_CHANGE)
-	protected void onChooseAccount(Intent data){
-		username = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-
+	protected void onChooseAccount(Intent data, @OnActivityResult.Extra(value = AccountManager.KEY_ACCOUNT_NAME) String username){
+        this.username = username;
         BrowseTagsFragment frag = BrowseTagsFragment_.builder()
                 .username(username)
                 .build();

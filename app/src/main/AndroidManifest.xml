@@ -118,7 +118,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.LargeWidgetConfigure"
+            android:name=".activity.LargeWidgetConfigure_"
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.Dialog" >
             <intent-filter>
