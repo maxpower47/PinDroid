@@ -52,7 +52,7 @@ public class ChooseTagShortcut extends AppCompatActivity implements BrowseTagsFr
     }
 
 	public void onTagSelected(String tag) {
-		final Intent shortcutIntent = IntentHelper.ViewBookmarks(tag, username, null, this);
+		final Intent shortcutIntent = IntentHelper.ViewBookmarks(tag, username, this);
         final ShortcutIconResource iconResource = Intent.ShortcutIconResource.fromContext(this, R.drawable.ic_shortcut);
         final Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);

@@ -64,7 +64,7 @@ public class ScreenShortcut extends AppCompatActivity {
         switch (position){
             default:
             case 0:
-                shortcutIntent = IntentHelper.ViewBookmarks(null, username, null, this);
+                shortcutIntent = IntentHelper.ViewBookmarks(null, username, this);
                 break;
             case 1:
                 shortcutIntent = IntentHelper.ViewUnread(username, this);
@@ -73,7 +73,7 @@ public class ScreenShortcut extends AppCompatActivity {
                 shortcutIntent = IntentHelper.ViewNotes(username, this);
                 break;
             case 3:
-                shortcutIntent = IntentHelper.AddBookmark(null, username, this);
+                shortcutIntent = IntentHelper.AddBookmark(username, this);
                 break;
             case 4:
                 shortcutIntent = IntentHelper.WidgetSearch(username, this);

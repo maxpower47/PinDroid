@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.pindroid.Constants;
+import com.pindroid.activity.AddBookmark_;
 import com.pindroid.activity.Main_;
 
 public class IntentHelper {
@@ -19,26 +20,26 @@ public class IntentHelper {
     	return sendIntent;
 	}
 	
-	public static Intent AddBookmark(String url, String account, Context context) {
-		Intent addBookmark = new Intent(context, Main_.class);
-		addBookmark.setAction(Intent.ACTION_SEND);
-		if(url != null)
-			addBookmark.putExtra(Intent.EXTRA_TEXT, url);
-		
-		addBookmark.putExtra(Constants.EXTRA_INTERNAL, true);
+	public static Intent AddBookmark(String account, Context context) {
+		Intent addBookmark = AddBookmark_.intent(context)
+                .action(Intent.ACTION_VIEW)
+                .username(account)
+                .get();
+
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
 		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
 		data.appendEncodedPath("bookmarks");
 		addBookmark.setData(data.build());
-		
+
 		return addBookmark;
 	}
 	
-	public static Intent ViewBookmarks(String tag, String account, String feed, Context context) {
-		Intent i = new Intent(context, Main_.class);
-		i.setAction(Intent.ACTION_VIEW);
-		i.addCategory(Intent.CATEGORY_DEFAULT);
+	public static Intent ViewBookmarks(String tag, String account, Context context) {
+		Intent i = Main_.intent(context)
+                .action(Intent.ACTION_VIEW)
+                .get();
+
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
 		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
@@ -47,18 +48,16 @@ public class IntentHelper {
 		if(tag != null && !tag.equals(""))
 			data.appendQueryParameter("tagname", tag);
 		
-		if(feed != null && !feed.equals(""))
-			data.appendQueryParameter("feed", feed);
-		
 		i.setData(data.build());
 		
 		return i;
 	}
 	
 	public static Intent ViewUnread(String account, Context context) {
-		Intent i = new Intent(context, Main_.class);
-		i.setAction(Intent.ACTION_VIEW);
-		i.addCategory(Intent.CATEGORY_DEFAULT);
+        Intent i = Main_.intent(context)
+                .action(Intent.ACTION_VIEW)
+                .get();
+
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
 		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
@@ -70,9 +69,10 @@ public class IntentHelper {
 	}
 	
 	public static Intent ViewNotes(String account, Context context) {
-		Intent i = new Intent(context, Main_.class);
-		i.setAction(Intent.ACTION_VIEW);
-		i.addCategory(Intent.CATEGORY_DEFAULT);
+        Intent i = Main_.intent(context)
+                .action(Intent.ACTION_VIEW)
+                .get();
+
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
 		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
@@ -83,8 +83,10 @@ public class IntentHelper {
 	}
 	
 	public static Intent WidgetSearch(String account, Context context){
-		Intent i = new Intent(context, Main_.class);
-		i.setAction(Intent.ACTION_SEARCH);
+        Intent i = Main_.intent(context)
+                .action(Intent.ACTION_SEARCH)
+                .get();
+
 		Uri.Builder data = new Uri.Builder();
 		data.scheme(Constants.CONTENT_SCHEME);
 		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
