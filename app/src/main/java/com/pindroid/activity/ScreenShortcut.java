@@ -75,9 +75,6 @@ public class ScreenShortcut extends AppCompatActivity {
             case 3:
                 shortcutIntent = IntentHelper.AddBookmark(username, this);
                 break;
-            case 4:
-                shortcutIntent = IntentHelper.WidgetSearch(username, this);
-                break;
         }
 
         final ShortcutIconResource iconResource = ShortcutIconResource.fromContext(this, R.drawable.ic_main);

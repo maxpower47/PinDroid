@@ -81,20 +81,6 @@ public class IntentHelper {
 		
 		return i;
 	}
-	
-	public static Intent WidgetSearch(String account, Context context){
-        Intent i = Main_.intent(context)
-                .action(Intent.ACTION_SEARCH)
-                .get();
-
-		Uri.Builder data = new Uri.Builder();
-		data.scheme(Constants.CONTENT_SCHEME);
-		data.encodedAuthority((account != null ? account + "@" : "") + Constants.INTENT_URI);
-		data.appendEncodedPath("search");
-		i.setData(data.build());
-		
-		return i;
-	}
 
     public static Intent OpenInBrowser(String url){
         Uri link = Uri.parse(url);
