@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.pindroid.Constants;
 import com.pindroid.R;
+import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.fragment.AddBookmarkFragment;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
@@ -19,6 +20,9 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.FragmentById;
+import org.androidannotations.annotations.OnActivityResult;
+
+import de.greenrobot.event.EventBus;
 
 @EActivity(R.layout.activity_add_bookmark)
 public class AddBookmark extends AppCompatActivity implements AddBookmarkFragment.OnBookmarkSaveListener {
@@ -93,18 +97,14 @@ public class AddBookmark extends AppCompatActivity implements AddBookmarkFragmen
         finish();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if (requestCode != Constants.REQUEST_CODE_ACCOUNT_CHANGE) {
-            finish();
+    @OnActivityResult(Constants.REQUEST_CODE_ACCOUNT_CHANGE)
+    void onResult(int resultCode, @OnActivityResult.Extra(value = AccountManager.KEY_ACCOUNT_NAME) String username) {
+        if (resultCode == Activity.RESULT_OK) {
+            EventBus.getDefault().post(new AccountChangedEvent(username));
+            getSupportActionBar().setSubtitle(username);
+            handleIntent();
         } else {
-            if (resultCode == Activity.RESULT_CANCELED) {
-                finish();
-            } else if (resultCode == Activity.RESULT_OK) {
-                username = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                getSupportActionBar().setSubtitle(username);
-                handleIntent();
-            }
+            finish();
         }
     }
 }
