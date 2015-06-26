@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.pindroid.Constants;
 import com.pindroid.R;
@@ -38,10 +37,25 @@ public class AddBookmark extends AppCompatActivity implements AddBookmarkFragmen
         if(username == null || "".equals(username)) {
             requestAccount();
         } else {
-            getSupportActionBar().setSubtitle(username);
-            addBookmarkFragment.setUsername(username);
+            EventBus.getDefault().postSticky(new AccountChangedEvent(username));
             addBookmarkFragment.loadBookmark(bookmark, oldBookmark);
         }
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        EventBus.getDefault().registerSticky(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    public void onEvent(AccountChangedEvent event) {
+        getSupportActionBar().setSubtitle(event.getNewAccount());
     }
 
     private void handleIntent(){
@@ -100,8 +114,7 @@ public class AddBookmark extends AppCompatActivity implements AddBookmarkFragmen
     @OnActivityResult(Constants.REQUEST_CODE_ACCOUNT_CHANGE)
     void onResult(int resultCode, @OnActivityResult.Extra(value = AccountManager.KEY_ACCOUNT_NAME) String username) {
         if (resultCode == Activity.RESULT_OK) {
-            EventBus.getDefault().post(new AccountChangedEvent(username));
-            getSupportActionBar().setSubtitle(username);
+            EventBus.getDefault().postSticky(new AccountChangedEvent(username));
             handleIntent();
         } else {
             finish();
