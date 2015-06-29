@@ -96,6 +96,7 @@ import com.pindroid.util.SettingsHelper;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
@@ -125,6 +126,8 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
     private NsMenuItemModel unreadItem;
 
     private Cursor tagData = null;
+
+    @InstanceState boolean savedState;
 
 	@AfterViews
 	public void init(){
@@ -174,7 +177,10 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        onMyBookmarksSelected(null);
+        if(!savedState) {
+            savedState = true;
+            onMyBookmarksSelected(null);
+        }
 
         processIntent(getIntent());
 	}

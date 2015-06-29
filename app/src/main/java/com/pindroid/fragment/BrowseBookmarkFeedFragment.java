@@ -117,18 +117,6 @@ public class BrowseBookmarkFeedFragment extends Fragment
 
 
         getLoaderManager().initLoader(0, null, this);
-
-
-        //lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-/*
-        lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-                menu.setHeaderTitle("Actions");
-                MenuInflater inflater = getActivity().getMenuInflater();
-
-                inflater.inflate(R.menu.browse_bookmark_context_menu_other, menu);
-            }
-        });*/
 	}
 
     public void onEvent(FeedBookmarkSelectedEvent event) {
@@ -153,8 +141,10 @@ public class BrowseBookmarkFeedFragment extends Fragment
     }
 
     public void onEvent(AccountChangedEvent event) {
-        this.username = event.getNewAccount();
-        refresh();
+        if(!event.getNewAccount().equals(username)) {
+            this.username = event.getNewAccount();
+            refresh();
+        }
     }
 
 	public void setTag(String tagname, String feed){
@@ -188,31 +178,6 @@ public class BrowseBookmarkFeedFragment extends Fragment
 				getActivity().setTitle(getString(R.string.browse_user_bookmarks_title, feed));
 			}
 		}
-	}
-	
-	@Override
-	public boolean onContextItemSelected(MenuItem aItem) {
-		AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) aItem.getMenuInfo();
-		final FeedBookmark feedBookmark = adapter.getItemAtPosition(menuInfo.position);
-		
-		switch (aItem.getItemId()) {
-			case R.id.menu_bookmark_context_open:
-				openBookmarkInBrowser(feedBookmark.toBookmark());
-				return true;
-			case R.id.menu_bookmark_context_view:				
-				viewBookmark(feedBookmark.toBookmark());
-				return true;
-			case R.id.menu_bookmark_context_add:				
-				addBookmark(feedBookmark.toBookmark());
-				return true;
-			case R.id.menu_bookmark_context_read:
-				readBookmark(feedBookmark.toBookmark());
-				return true;
-			case R.id.menu_bookmark_context_share:
-				bookmarkSelectedListener.onBookmarkShare(feedBookmark.toBookmark());
-				return true;
-		}
-		return false;
 	}
 		
 	private void openBookmarkInBrowser(Bookmark b) {
