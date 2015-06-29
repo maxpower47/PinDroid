@@ -317,7 +317,7 @@
     <string name="title_activity_add_bookmark">AddBookmark</string>
     <string name="action_settings">Settings</string>
 
-    <string name="about_url" translatable="false">https://github.com/maxpower47/PinDroid</string>
+    <string name="about_url" translatable="false">http://maxpower47.github.io/PinDroid/</string>
     <string name="help_url" translatable="false">https://github.com/maxpower47/PinDroid/wiki</string>
     <string name="donate_url" translatable="false">https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=EUS2Z3WVWK6ZU</string>
     <string name="license_url" translatable="false">http://www.gnu.org/licenses/gpl-3.0.txt</string>
