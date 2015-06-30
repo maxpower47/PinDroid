@@ -11,7 +11,7 @@ import com.pindroid.R;
 import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.fragment.AddBookmarkFragment;
 import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.model.Bookmark;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
 

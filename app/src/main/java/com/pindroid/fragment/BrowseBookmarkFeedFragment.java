@@ -35,8 +35,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MenuItem;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.kennyc.view.MultiStateView;
 import com.pindroid.Constants;
@@ -48,7 +46,7 @@ import com.pindroid.event.FeedBookmarkSelectedEvent;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.listadapter.BookmarkFeedAdapter;
 import com.pindroid.model.FeedBookmark;
-import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.model.Bookmark;
 import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
@@ -57,7 +55,6 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
-import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.List;

@@ -21,7 +21,7 @@
 
 package com.pindroid.listadapter;
 
-import com.pindroid.providers.TagContent.Tag;
+import com.pindroid.model.Tag;
 
 import android.content.Context;
 import android.database.Cursor;

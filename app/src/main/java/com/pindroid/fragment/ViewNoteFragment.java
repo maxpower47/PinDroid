@@ -28,7 +28,7 @@ import android.widget.TextView;
 import com.pindroid.R;
 import com.pindroid.platform.NoteManager;
 import com.pindroid.providers.ContentNotFoundException;
-import com.pindroid.providers.NoteContent.Note;
+import com.pindroid.model.Note;
 
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;

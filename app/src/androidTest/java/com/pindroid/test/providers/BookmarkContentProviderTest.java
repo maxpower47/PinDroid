@@ -24,9 +24,8 @@ package com.pindroid.test.providers;
 import java.util.Date;
 
 import com.pindroid.Constants;
-import com.pindroid.providers.BookmarkContent;
 import com.pindroid.providers.BookmarkContentProvider;
-import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.model.Bookmark;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -90,14 +89,14 @@ public class BookmarkContentProviderTest extends ProviderTestCase2<BookmarkConte
         // Insert subtest 1.
         // Inserts a row using the new note instance.
         // No assertion will be done. The insert() method either works or throws an Exception
-        Uri rowUri = mMockResolver.insert(BookmarkContent.Bookmark.CONTENT_URI, values);
+        Uri rowUri = mMockResolver.insert(Bookmark.CONTENT_URI, values);
 
         // Parses the returned URI to get the note ID of the new note. The ID is used in subtest 2.
         long noteId = ContentUris.parseId(rowUri);
 
         // Does a full query on the table. Since insertData() hasn't yet been called, the
         // table should only contain the record just inserted.
-        Cursor cursor = mMockResolver.query(BookmarkContent.Bookmark.CONTENT_URI, null, null, null, null);
+        Cursor cursor = mMockResolver.query(Bookmark.CONTENT_URI, null, null, null, null);
 
         // Asserts that there should be only 1 record.
         assertEquals(1, cursor.getCount());
@@ -106,18 +105,18 @@ public class BookmarkContentProviderTest extends ProviderTestCase2<BookmarkConte
         assertTrue(cursor.moveToFirst());
 
         // Since no projection was used, get the column indexes of the returned columns
-        int descriptionIndex = cursor.getColumnIndex(BookmarkContent.Bookmark.Description);
-        int urlIndex = cursor.getColumnIndex(BookmarkContent.Bookmark.Url);
-        int noteIndex = cursor.getColumnIndex(BookmarkContent.Bookmark.Notes);
-        int tagsIndex = cursor.getColumnIndex(BookmarkContent.Bookmark.Tags);
-        int hashIndex = cursor.getColumnIndex(BookmarkContent.Bookmark.Hash);
-        int metaIndex = cursor.getColumnIndex(BookmarkContent.Bookmark.Meta);
-        int timeIndex = cursor.getColumnIndex(BookmarkContent.Bookmark.Time);
-        int accountIndex = cursor.getColumnIndex(BookmarkContent.Bookmark.Account);
-        int toreadIndex = cursor.getColumnIndex(BookmarkContent.Bookmark.ToRead);
-        int sharedIndex = cursor.getColumnIndex(BookmarkContent.Bookmark.Shared);
-        int syncedIndex = cursor.getColumnIndex(BookmarkContent.Bookmark.Synced);
-        int deletedIndex = cursor.getColumnIndex(BookmarkContent.Bookmark.Deleted);
+        int descriptionIndex = cursor.getColumnIndex(Bookmark.Description);
+        int urlIndex = cursor.getColumnIndex(Bookmark.Url);
+        int noteIndex = cursor.getColumnIndex(Bookmark.Notes);
+        int tagsIndex = cursor.getColumnIndex(Bookmark.Tags);
+        int hashIndex = cursor.getColumnIndex(Bookmark.Hash);
+        int metaIndex = cursor.getColumnIndex(Bookmark.Meta);
+        int timeIndex = cursor.getColumnIndex(Bookmark.Time);
+        int accountIndex = cursor.getColumnIndex(Bookmark.Account);
+        int toreadIndex = cursor.getColumnIndex(Bookmark.ToRead);
+        int sharedIndex = cursor.getColumnIndex(Bookmark.Shared);
+        int syncedIndex = cursor.getColumnIndex(Bookmark.Synced);
+        int deletedIndex = cursor.getColumnIndex(Bookmark.Deleted);
 
         // Tests each column in the returned cursor against the data that was inserted, comparing
         // the field in the NoteInfo object to the data at the column index in the cursor.
@@ -141,12 +140,12 @@ public class BookmarkContentProviderTest extends ProviderTestCase2<BookmarkConte
         ContentValues values2 = values;
 
         // Adds the note ID retrieved in subtest 1 to the ContentValues object.
-        values.put(BookmarkContent.Bookmark._ID, (int) noteId);
+        values.put(Bookmark._ID, (int) noteId);
 
         // Tries to insert this record into the table. This should fail and drop into the
         // catch block. If it succeeds, issue a failure message.
         try {
-            rowUri = mMockResolver.insert(BookmarkContent.Bookmark.CONTENT_URI, values);
+            rowUri = mMockResolver.insert(Bookmark.CONTENT_URI, values);
             fail("Expected insert failure for existing record but insert succeeded.");
         } catch (Exception e) {
           // succeeded, so do nothing.

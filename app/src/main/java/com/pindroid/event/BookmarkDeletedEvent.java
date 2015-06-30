@@ -1,15 +1,15 @@
 package com.pindroid.event;
 
-import com.pindroid.providers.BookmarkContent;
+import com.pindroid.model.Bookmark;
 
 public class BookmarkDeletedEvent {
-    private final BookmarkContent.Bookmark bookmark;
+    private final Bookmark bookmark;
 
-    public BookmarkDeletedEvent(BookmarkContent.Bookmark bookmark) {
+    public BookmarkDeletedEvent(Bookmark bookmark) {
         this.bookmark = bookmark;
     }
 
-    public BookmarkContent.Bookmark getBookmark() {
+    public Bookmark getBookmark() {
         return bookmark;
     }
 }

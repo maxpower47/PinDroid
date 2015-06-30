@@ -33,7 +33,7 @@ import android.widget.ListView;
 import com.pindroid.R;
 import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.platform.TagManager;
-import com.pindroid.providers.TagContent.Tag;
+import com.pindroid.model.Tag;
 import com.pindroid.util.SettingsHelper;
 
 import org.androidannotations.annotations.AfterViews;

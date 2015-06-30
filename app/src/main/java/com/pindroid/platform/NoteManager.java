@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.pindroid.providers.ContentNotFoundException;
-import com.pindroid.providers.NoteContent.Note;
+import com.pindroid.model.Note;
 
 import android.content.ContentUris;
 import android.content.ContentValues;

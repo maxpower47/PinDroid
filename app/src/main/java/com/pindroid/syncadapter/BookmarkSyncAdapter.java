@@ -43,8 +43,8 @@ import com.pindroid.event.SyncCompleteEvent;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.NoteManager;
 import com.pindroid.platform.TagManager;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.providers.NoteContent.Note;
+import com.pindroid.model.Bookmark;
+import com.pindroid.model.Note;
 import com.pindroid.util.AccountHelper;
 
 import java.io.IOException;

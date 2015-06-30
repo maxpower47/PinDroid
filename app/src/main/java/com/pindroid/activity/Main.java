@@ -43,7 +43,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -83,10 +82,10 @@ import com.pindroid.fragment.ViewNoteFragment_;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.NoteManager;
 import com.pindroid.platform.TagManager;
-import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.model.Bookmark;
 import com.pindroid.providers.ContentNotFoundException;
-import com.pindroid.providers.NoteContent.Note;
-import com.pindroid.providers.TagContent;
+import com.pindroid.model.Note;
+import com.pindroid.model.Tag;
 import com.pindroid.ui.AccountSpinner;
 import com.pindroid.ui.AccountSpinner_;
 import com.pindroid.ui.NsMenuAdapter;
@@ -738,7 +737,7 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
 	}
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return TagManager.GetTags(username, TagContent.Tag.Name + " ASC", this);
+        return TagManager.GetTags(username, Tag.Name + " ASC", this);
     }
 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {

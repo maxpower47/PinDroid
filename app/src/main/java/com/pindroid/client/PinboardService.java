@@ -2,8 +2,8 @@ package com.pindroid.client;
 
 import com.pindroid.model.NoteList;
 import com.pindroid.model.TagSuggestions;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.providers.NoteContent.Note;
+import com.pindroid.model.Bookmark;
+import com.pindroid.model.Note;
 
 import java.util.List;
 import java.util.Map;

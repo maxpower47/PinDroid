@@ -29,7 +29,7 @@ import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
-import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.model.Bookmark;
 import com.pindroid.util.AccountHelper;
 
 import android.database.Cursor;

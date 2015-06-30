@@ -10,7 +10,7 @@ import com.h6ah4i.android.widget.advrecyclerview.swipeable.SwipeableItemAdapter;
 import com.pindroid.R;
 import com.pindroid.event.BookmarkSelectedEvent;
 import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.BookmarkContent;
+import com.pindroid.model.Bookmark;
 import com.pindroid.ui.BookmarkView;
 import com.pindroid.ui.BookmarkView_;
 
@@ -20,15 +20,15 @@ import org.androidannotations.annotations.RootContext;
 import de.greenrobot.event.EventBus;
 
 @EBean
-public class BookmarkAdapter extends RecyclerCursorAdapter<BookmarkContent.Bookmark, BookmarkView>
+public class BookmarkAdapter extends RecyclerCursorAdapter<Bookmark, BookmarkView>
         implements SwipeableItemAdapter<ViewWrapper<BookmarkView>> {
 
     @RootContext Context context;
     private EventListener listener;
 
     public interface EventListener {
-        void onBookmarkDeleted(BookmarkContent.Bookmark bookmark);
-        void onBookmarkMarked(BookmarkContent.Bookmark bookmark);
+        void onBookmarkDeleted(Bookmark bookmark);
+        void onBookmarkMarked(Bookmark bookmark);
     }
 
     public BookmarkAdapter(Context context) {
@@ -42,7 +42,7 @@ public class BookmarkAdapter extends RecyclerCursorAdapter<BookmarkContent.Bookm
 
     @Override
     public void onBindViewHolder(BookmarkView view, Cursor c, ViewWrapper wrapper) {
-        final BookmarkContent.Bookmark bookmark = BookmarkManager.CursorToBookmark(c);
+        final Bookmark bookmark = BookmarkManager.CursorToBookmark(c);
         view.bind(bookmark);
 
         view.getSwipableViewContainter().setOnClickListener(new View.OnClickListener() {

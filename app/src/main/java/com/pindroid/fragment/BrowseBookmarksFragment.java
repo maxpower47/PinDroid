@@ -32,7 +32,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -49,7 +48,7 @@ import com.pindroid.event.BookmarkSelectedEvent;
 import com.pindroid.event.SyncCompleteEvent;
 import com.pindroid.listadapter.BookmarkAdapter;
 import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.model.Bookmark;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
@@ -60,7 +59,6 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
-import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 

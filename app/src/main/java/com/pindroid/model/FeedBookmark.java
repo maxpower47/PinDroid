@@ -4,8 +4,6 @@ import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
 import com.pindroid.listadapter.StableListItem;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.providers.TagContent;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,13 +50,13 @@ public class FeedBookmark implements StableListItem {
 		this.notes = notes;
 	}
 
-	public List<TagContent.Tag> getTags() {
-		List<TagContent.Tag> result = new ArrayList<>();
+	public List<Tag> getTags() {
+		List<Tag> result = new ArrayList<>();
 
 		if(tags != null){
 			for(String s : tags) {
 				if(!s.equals("")) {
-					result.add(new TagContent.Tag(s));
+					result.add(new Tag(s));
 				}
 			}
 		}

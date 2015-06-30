@@ -43,7 +43,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.pindroid.R;
-import com.pindroid.providers.TagContent.Tag;
+import com.pindroid.model.Tag;
 
 import java.util.Arrays;
 import java.util.Iterator;

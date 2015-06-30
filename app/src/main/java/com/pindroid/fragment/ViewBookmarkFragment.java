@@ -51,7 +51,7 @@ import com.pindroid.action.IntentHelper;
 import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.fragment.BrowseBookmarksFragment.OnBookmarkSelectedListener;
 import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.model.Bookmark;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.ui.AccountSpan;

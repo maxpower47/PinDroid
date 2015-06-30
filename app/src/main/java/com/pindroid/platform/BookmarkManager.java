@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.pindroid.providers.ContentNotFoundException;
-import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.model.Bookmark;
 import com.pindroid.util.Md5Hash;
 
 import android.content.ContentUris;

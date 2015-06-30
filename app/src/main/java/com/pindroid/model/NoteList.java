@@ -1,7 +1,5 @@
 package com.pindroid.model;
 
-import com.pindroid.providers.NoteContent.Note;
-
 import java.util.ArrayList;
 import java.util.List;
 

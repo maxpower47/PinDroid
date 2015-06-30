@@ -25,7 +25,7 @@ import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.client.NetworkUtilities;
 import com.pindroid.platform.BookmarkManager;
-import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.model.Bookmark;
 
 import android.app.IntentService;
 import android.content.Intent;

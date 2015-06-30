@@ -52,9 +52,9 @@ import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.application.PindroidApplication;
 import com.pindroid.event.AccountChangedEvent;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.providers.NoteContent.Note;
-import com.pindroid.providers.TagContent.Tag;
+import com.pindroid.model.Bookmark;
+import com.pindroid.model.Note;
+import com.pindroid.model.Tag;
 import com.pindroid.util.SyncUtils;
 
 import de.greenrobot.event.EventBus;
@@ -232,7 +232,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		db = dbHelper.getWritableDatabase();
 		long rowId = db.insert(BOOKMARK_TABLE_NAME, "", values);
 		if(rowId > 0) {
-			Uri rowUri = ContentUris.appendId(BookmarkContent.Bookmark.CONTENT_URI.buildUpon(), rowId).build();
+			Uri rowUri = ContentUris.appendId(Bookmark.CONTENT_URI.buildUpon(), rowId).build();
 			getContext().getContentResolver().notifyChange(rowUri, null, true);
 			return rowUri;
 		}
@@ -243,7 +243,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		db = dbHelper.getWritableDatabase();
 		long rowId = db.insert(TAG_TABLE_NAME, "", values);
 		if(rowId > 0) {
-			Uri rowUri = ContentUris.appendId(TagContent.Tag.CONTENT_URI.buildUpon(), rowId).build();
+			Uri rowUri = ContentUris.appendId(Tag.CONTENT_URI.buildUpon(), rowId).build();
 			getContext().getContentResolver().notifyChange(rowUri, null);
 			return rowUri;
 		}
@@ -254,7 +254,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		db = dbHelper.getWritableDatabase();
 		long rowId = db.insert(NOTE_TABLE_NAME, "", values);
 		if(rowId > 0) {
-			Uri rowUri = ContentUris.appendId(NoteContent.Note.CONTENT_URI.buildUpon(), rowId).build();
+			Uri rowUri = ContentUris.appendId(Note.CONTENT_URI.buildUpon(), rowId).build();
 			getContext().getContentResolver().notifyChange(rowUri, null);
 			return rowUri;
 		}

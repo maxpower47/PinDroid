@@ -48,14 +48,12 @@ import com.pindroid.listadapter.TagAutoCompleteCursorAdapter;
 import com.pindroid.model.TagSuggestions;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
-import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.providers.TagContent.Tag;
+import com.pindroid.model.Bookmark;
+import com.pindroid.model.Tag;
 import com.pindroid.ui.TagSpan;
 import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.SpaceTokenizer;
-import com.rengwuxian.materialedittext.MaterialEditText;
-import com.rengwuxian.materialedittext.MaterialMultiAutoCompleteTextView;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EFragment;

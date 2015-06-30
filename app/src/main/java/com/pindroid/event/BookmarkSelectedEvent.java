@@ -1,15 +1,15 @@
 package com.pindroid.event;
 
-import com.pindroid.providers.BookmarkContent;
+import com.pindroid.model.Bookmark;
 
 public class BookmarkSelectedEvent {
-    private final BookmarkContent.Bookmark bookmark;
+    private final Bookmark bookmark;
 
-    public BookmarkSelectedEvent(BookmarkContent.Bookmark bookmark) {
+    public BookmarkSelectedEvent(Bookmark bookmark) {
         this.bookmark = bookmark;
     }
 
-    public BookmarkContent.Bookmark getBookmark() {
+    public Bookmark getBookmark() {
         return bookmark;
     }
 }
