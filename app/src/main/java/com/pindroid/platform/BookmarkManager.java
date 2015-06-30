@@ -66,62 +66,6 @@ public class BookmarkManager {
 		
 		return new CursorLoader(context, Bookmark.CONTENT_URI, projection, selection, selectionargs, sortorder);
 	}
-
-    public static List<Bookmark> GetBookmarkArray(String username, String tagname, boolean unread, String sortorder, Context context){
-        final String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Hash,
-                Bookmark.Meta, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced, Bookmark.Deleted,
-                Bookmark.Account, Bookmark.Time};
-        String selection = null;
-        String[] selectionargs = new String[]{username, "% " + tagname + " %",
-                "% " + tagname, tagname + " %", tagname};
-
-        if(tagname != null && !"".equals(tagname)) {
-            selection = Bookmark.Account + "=? AND " +
-                    "(" + Bookmark.Tags + " LIKE ? OR " +
-                    Bookmark.Tags + " LIKE ? OR " +
-                    Bookmark.Tags + " LIKE ? OR " +
-                    Bookmark.Tags + " = ?)";
-
-        } else {
-            selectionargs = new String[]{username};
-            selection = Bookmark.Account + "=?";
-        }
-        if(unread) {
-            selection += " AND " + Bookmark.ToRead + "=1";
-        }
-        selection += " AND " + Bookmark.Deleted + "=0";
-
-        Cursor c = context.getContentResolver().query(Bookmark.CONTENT_URI, projection, selection, selectionargs, sortorder);
-
-        List<Bookmark> bookmarkList = new ArrayList<>();
-
-        if(c.moveToFirst()){
-            int idColumn = c.getColumnIndex(Bookmark._ID);
-            int urlColumn = c.getColumnIndex(Bookmark.Url);
-            int descriptionColumn = c.getColumnIndex(Bookmark.Description);
-            int tagsColumn = c.getColumnIndex(Bookmark.Tags);
-            int metaColumn = c.getColumnIndex(Bookmark.Meta);
-            int readColumn = c.getColumnIndex(Bookmark.ToRead);
-            int shareColumn = c.getColumnIndex(Bookmark.Shared);
-            int notesColumn = c.getColumnIndex(Bookmark.Notes);
-            int hashColumn = c.getColumnIndex(Bookmark.Hash);
-
-            do {
-
-                Bookmark b = new Bookmark(c.getInt(idColumn), "", c.getString(urlColumn),
-                        c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn), c.getString(hashColumn),
-                        c.getString(metaColumn), new Date(), c.getInt(readColumn) != 0,
-                        c.getInt(shareColumn) != 0, 0, false);
-
-                bookmarkList.add(b);
-
-            } while(c.moveToNext());
-
-        }
-        c.close();
-
-        return bookmarkList;
-    }
 	
 	public static ArrayList<Bookmark> GetLocalBookmarks(String username, Context context){
 		ArrayList<Bookmark> bookmarkList = new ArrayList<>();
@@ -138,25 +82,8 @@ public class BookmarkManager {
 		Cursor c = context.getContentResolver().query(bookmarks, projection, selection, selectionargs, null);				
 
 		if(c.moveToFirst()){
-			int idColumn = c.getColumnIndex(Bookmark._ID);
-			int urlColumn = c.getColumnIndex(Bookmark.Url);
-			int descriptionColumn = c.getColumnIndex(Bookmark.Description);
-			int tagsColumn = c.getColumnIndex(Bookmark.Tags);
-			int metaColumn = c.getColumnIndex(Bookmark.Meta);
-			int readColumn = c.getColumnIndex(Bookmark.ToRead);
-			int shareColumn = c.getColumnIndex(Bookmark.Shared);
-			int notesColumn = c.getColumnIndex(Bookmark.Notes);
-			int hashColumn = c.getColumnIndex(Bookmark.Hash);
-
 			do {
-
-				Bookmark b = new Bookmark(c.getInt(idColumn), "", c.getString(urlColumn), 
-						c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn), c.getString(hashColumn), 
-						c.getString(metaColumn), new Date(), c.getInt(readColumn) != 0,
-                        c.getInt(shareColumn) != 0, 0, false);
-
-				bookmarkList.add(b);
-
+				bookmarkList.add(new Bookmark(c));
 			} while(c.moveToNext());
 
 		}
@@ -170,8 +97,6 @@ public class BookmarkManager {
 				Bookmark.Meta, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced, Bookmark.Deleted};
 		String selection = null;
 		String[] selectionargs = new String[]{username};
-		
-		selectionargs = new String[]{username};
 		selection = Bookmark.Account + "=? AND " + Bookmark.Synced + "=0 AND " + Bookmark.Deleted + "=1";
 		
 		Uri bookmarks = Bookmark.CONTENT_URI;
@@ -179,25 +104,8 @@ public class BookmarkManager {
 		Cursor c = context.getContentResolver().query(bookmarks, projection, selection, selectionargs, null);				
 
 		if(c.moveToFirst()){
-			int idColumn = c.getColumnIndex(Bookmark._ID);
-			int urlColumn = c.getColumnIndex(Bookmark.Url);
-			int descriptionColumn = c.getColumnIndex(Bookmark.Description);
-			int tagsColumn = c.getColumnIndex(Bookmark.Tags);
-			int metaColumn = c.getColumnIndex(Bookmark.Meta);
-			int readColumn = c.getColumnIndex(Bookmark.ToRead);
-			int shareColumn = c.getColumnIndex(Bookmark.Shared);
-			int notesColumn = c.getColumnIndex(Bookmark.Notes);
-			int hashColumn = c.getColumnIndex(Bookmark.Hash);
-
 			do {
-
-				Bookmark b = new Bookmark(c.getInt(idColumn), "", c.getString(urlColumn), 
-						c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn), c.getString(hashColumn), 
-						c.getString(metaColumn), new Date(), c.getInt(readColumn) != 0,
-                        c.getInt(shareColumn) != 0, 0, true);
-
-				bookmarkList.add(b);
-
+				bookmarkList.add(new Bookmark(c));
 			} while(c.moveToNext());
 
 		}
@@ -214,38 +122,15 @@ public class BookmarkManager {
 		Cursor c = context.getContentResolver().query(uri, projection, selection, null, null);				
 		
 		if(c.moveToFirst()){
-			final int accountColumn = c.getColumnIndex(Bookmark.Account);
-			final int urlColumn = c.getColumnIndex(Bookmark.Url);
-			final int descriptionColumn = c.getColumnIndex(Bookmark.Description);
-			final int notesColumn = c.getColumnIndex(Bookmark.Notes);
-			final int tagsColumn = c.getColumnIndex(Bookmark.Tags);
-			final int hashColumn = c.getColumnIndex(Bookmark.Hash);
-			final int metaColumn = c.getColumnIndex(Bookmark.Meta);
-			final int timeColumn = c.getColumnIndex(Bookmark.Time);
-			final int readColumn = c.getColumnIndex(Bookmark.ToRead);
-			final int shareColumn = c.getColumnIndex(Bookmark.Shared);
-			final int syncedColumn = c.getColumnIndex(Bookmark.Synced);
-			final int deletedColumn = c.getColumnIndex(Bookmark.Deleted);
-			
-			final boolean read = c.getInt(readColumn) != 0;
-			final boolean share = c.getInt(shareColumn) != 0;
-			final int synced = c.getInt(syncedColumn);
-			final boolean deleted = c.getInt(deletedColumn) != 0;
-
-			Bookmark b = new Bookmark(id, c.getString(accountColumn), c.getString(urlColumn), 
-				c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn),
-				c.getString(hashColumn), c.getString(metaColumn), new Date(c.getLong(timeColumn)), read, share, synced, deleted);
-			
+			Bookmark b = new Bookmark(c);
 			c.close();
-			
 			return b;
 		} else {
 			c.close();
 			throw new ContentNotFoundException();
 		}
 	}
-	
-	// TODO normalize url (remove trailing slash)
+
 	public static Bookmark GetByUrl(String url, String username, Context context) throws ContentNotFoundException {		
 		final String[] projection = new String[] {Bookmark._ID, Bookmark.Account, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Time, Bookmark.Tags, Bookmark.Hash, Bookmark.Meta, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced, Bookmark.Deleted};
 		String selection = Bookmark.Url + "=? AND " + Bookmark.Account + "=? AND " + Bookmark.Deleted + "=0";
@@ -254,31 +139,8 @@ public class BookmarkManager {
 		Cursor c = context.getContentResolver().query(Bookmark.CONTENT_URI, projection, selection, selectionargs, null);				
 		
 		if(c.moveToFirst()){
-			final int idColumn = c.getColumnIndex(Bookmark._ID);
-			final int accountColumn = c.getColumnIndex(Bookmark.Account);
-			final int urlColumn = c.getColumnIndex(Bookmark.Url);
-			final int descriptionColumn = c.getColumnIndex(Bookmark.Description);
-			final int notesColumn = c.getColumnIndex(Bookmark.Notes);
-			final int tagsColumn = c.getColumnIndex(Bookmark.Tags);
-			final int hashColumn = c.getColumnIndex(Bookmark.Hash);
-			final int metaColumn = c.getColumnIndex(Bookmark.Meta);
-			final int timeColumn = c.getColumnIndex(Bookmark.Time);
-			final int readColumn = c.getColumnIndex(Bookmark.ToRead);
-			final int shareColumn = c.getColumnIndex(Bookmark.Shared);
-			final int syncedColumn = c.getColumnIndex(Bookmark.Synced);
-			final int deletedColumn = c.getColumnIndex(Bookmark.Deleted);
-			
-			final boolean read = c.getInt(readColumn) != 0;
-			final boolean share = c.getInt(shareColumn) != 0;
-			final int synced = c.getInt(syncedColumn);
-			final boolean deleted = c.getInt(deletedColumn) != 0;
-
-			Bookmark b = new Bookmark(c.getInt(idColumn), c.getString(accountColumn), c.getString(urlColumn), 
-				c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn),
-				c.getString(hashColumn), c.getString(metaColumn), new Date(c.getLong(timeColumn)), read, share, synced, deleted);
-			
+			Bookmark b = new Bookmark(c);
 			c.close();
-			
 			return b;
 		} else {
 			c.close();
@@ -294,31 +156,8 @@ public class BookmarkManager {
 		Cursor c = context.getContentResolver().query(Bookmark.CONTENT_URI, projection, selection, selectionargs, null);				
 		
 		if(c.moveToFirst()){
-			final int idColumn = c.getColumnIndex(Bookmark._ID);
-			final int accountColumn = c.getColumnIndex(Bookmark.Account);
-			final int urlColumn = c.getColumnIndex(Bookmark.Url);
-			final int descriptionColumn = c.getColumnIndex(Bookmark.Description);
-			final int notesColumn = c.getColumnIndex(Bookmark.Notes);
-			final int tagsColumn = c.getColumnIndex(Bookmark.Tags);
-			final int hashColumn = c.getColumnIndex(Bookmark.Hash);
-			final int metaColumn = c.getColumnIndex(Bookmark.Meta);
-			final int timeColumn = c.getColumnIndex(Bookmark.Time);
-			final int readColumn = c.getColumnIndex(Bookmark.ToRead);
-			final int shareColumn = c.getColumnIndex(Bookmark.Shared);
-			final int syncedColumn = c.getColumnIndex(Bookmark.Synced);
-			final int deletedColumn = c.getColumnIndex(Bookmark.Deleted);
-			
-			final boolean read = c.getInt(readColumn) != 0;
-			final boolean share = c.getInt(shareColumn) != 0;
-			final int synced = c.getInt(syncedColumn);
-			final boolean deleted = c.getInt(deletedColumn) != 0;
-
-			Bookmark b = new Bookmark(c.getInt(idColumn), c.getString(accountColumn), c.getString(urlColumn), 
-				c.getString(descriptionColumn), c.getString(notesColumn), c.getString(tagsColumn),
-				c.getString(hashColumn), c.getString(metaColumn), new Date(c.getLong(timeColumn)), read, share, synced, deleted);
-			
+			Bookmark b = new Bookmark(c);
 			c.close();
-			
 			return b;
 		} else {
 			c.close();
@@ -327,28 +166,14 @@ public class BookmarkManager {
 	}
 	
 	public static void AddBookmark(Bookmark bookmark, String account, Context context) {
-		final String url = bookmark.getUrl();
-		
-		String hash = "";
 		if(bookmark.getHash() == null || "".equals(bookmark.getHash())){
-			hash = Md5Hash.md5(url);
-		} else hash = bookmark.getHash();
-		
-		final ContentValues values = new ContentValues();
-		values.put(Bookmark.Description, bookmark.getDescription());
-		values.put(Bookmark.Url, url);
-		values.put(Bookmark.Notes, bookmark.getNotes());
-		values.put(Bookmark.Tags, bookmark.getTagString());
-		values.put(Bookmark.Hash, hash);
-		values.put(Bookmark.Meta, bookmark.getMeta());
-		values.put(Bookmark.Time, bookmark.getTime().getTime());
-		values.put(Bookmark.Account, account);
-		values.put(Bookmark.ToRead, bookmark.getToRead() ? 1 : 0);
-		values.put(Bookmark.Shared, bookmark.getShared() ? 1 : 0);
-		values.put(Bookmark.Synced, 0);
-		values.put(Bookmark.Deleted, 0);
-		
-		context.getContentResolver().insert(Bookmark.CONTENT_URI, values);
+			bookmark.setHash(Md5Hash.md5(bookmark.getUrl()));
+		}
+        bookmark.setAccount(account);
+        bookmark.setSynced(0);
+        bookmark.setDeleted(false);
+
+		context.getContentResolver().insert(Bookmark.CONTENT_URI, bookmark.toContentValues());
 	}
 	
 	public static void BulkInsert(ArrayList<Bookmark> list, String account, Context context) {
@@ -357,65 +182,40 @@ public class BookmarkManager {
 		
 		for(int i = 0; i < bookmarksize; i++){
 			Bookmark b = list.get(i);
-			
-			ContentValues values = new ContentValues();
-			values.put(Bookmark.Description, b.getDescription());
-			values.put(Bookmark.Url, b.getUrl());
-			values.put(Bookmark.Notes, b.getNotes());
-			values.put(Bookmark.Tags, b.getTagString());
-			values.put(Bookmark.Hash, b.getHash());
-			values.put(Bookmark.Meta, b.getMeta());
-			values.put(Bookmark.Time, b.getTime().getTime());
-			values.put(Bookmark.Account, account);
-			values.put(Bookmark.ToRead, b.getToRead() ? 1 : 0);
-			values.put(Bookmark.Shared, b.getShared() ? 1 : 0);
-			values.put(Bookmark.Synced, 1);
-			values.put(Bookmark.Deleted, false);
-			
-			bcv[i] = values;
+            b.setAccount(account);
+            b.setSynced(1);
+            b.setDeleted(false);
+			bcv[i] = b.toContentValues();
 		}
 		
 		context.getContentResolver().bulkInsert(Bookmark.CONTENT_URI, bcv);
 	}
 	
 	public static void UpdateBookmark(Bookmark bookmark, String account, Context context){
-		final String url = bookmark.getUrl();
-		
+
 		String hash = "";
 		if(bookmark.getHash() == null || "".equals(bookmark.getHash())){
-			hash = Md5Hash.md5(url);
+			hash = Md5Hash.md5(bookmark.getUrl());
 		} else hash = bookmark.getHash();
 		
 		final String selection = Bookmark.Hash + "=? AND " + Bookmark.Account + "=?";
 		final String[] selectionargs = new String[]{hash, account};
-		
-		final ContentValues values = new ContentValues();
-		values.put(Bookmark.Description, bookmark.getDescription());
-		values.put(Bookmark.Url, url);
-		values.put(Bookmark.Notes, bookmark.getNotes());
-		values.put(Bookmark.Tags, bookmark.getTagString());
-		values.put(Bookmark.Meta, bookmark.getMeta());
-		
-		if(bookmark.getTime().getTime() > 0)
-			values.put(Bookmark.Time, bookmark.getTime().getTime());
-		
-		values.put(Bookmark.ToRead, bookmark.getToRead() ? 1 : 0);
-		values.put(Bookmark.Shared, bookmark.getShared() ? 1 : 0);
-		values.put(Bookmark.Synced, 0);
-		values.put(Bookmark.Deleted, false);
-		
-		Uri uri = Bookmark.CONTENT_URI.buildUpon().appendPath(Integer.toString(bookmark.getId())).build();	
-		context.getContentResolver().update(uri, values, selection, selectionargs);
+
+        bookmark.setSynced(0);
+        bookmark.setDeleted(false);
+
+		Uri uri = Bookmark.CONTENT_URI.buildUpon().appendPath(Integer.toString(bookmark.getId())).build();
+		context.getContentResolver().update(uri, bookmark.toContentValues(), selection, selectionargs);
 	}
-	
+
 	public static void SetSynced(Bookmark bookmark, int synced, String account, Context context){
 		final String url = bookmark.getUrl();
-		
+
 		String hash = "";
 		if(bookmark.getHash() == null || "".equals(bookmark.getHash())){
 			hash = Md5Hash.md5(url);
 		} else hash = bookmark.getHash();
-		
+
 		final String selection = Bookmark.Hash + "=? AND " + Bookmark.Account + "=?";
 		final String[] selectionargs = new String[]{hash, account};
 		
@@ -554,7 +354,7 @@ public class BookmarkManager {
 		
 		selection += " AND " + Bookmark.Deleted + "=0";
 		
-		return new CursorLoader(context, Bookmark.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), sortorder);
+		return new CursorLoader(context, Bookmark.CONTENT_URI, projection, selection, selectionlist.toArray(new String[selectionlist.size()]), sortorder);
 	}
 	
 	public static int GetUnreadCount(String username, Context context){
@@ -571,36 +371,5 @@ public class BookmarkManager {
 		
 		c.close();
 		return count;
-	}
-	
-	public static Bookmark CursorToBookmark(Cursor c) {
-		Bookmark b = new Bookmark();
-		b.setId(c.getInt(c.getColumnIndex(Bookmark._ID)));
-		b.setDescription(c.getString(c.getColumnIndex(Bookmark.Description)));
-		b.setUrl(c.getString(c.getColumnIndex(Bookmark.Url)));
-		b.setHash(c.getString(c.getColumnIndex(Bookmark.Hash)));
-		b.setMeta(c.getString(c.getColumnIndex(Bookmark.Meta)));
-		b.setTagString(c.getString(c.getColumnIndex(Bookmark.Tags)));
-		b.setToRead(c.getInt(c.getColumnIndex(Bookmark.ToRead)) == 1);
-		
-		if(c.getColumnIndex(Bookmark.Account) != -1)
-			b.setAccount(c.getString(c.getColumnIndex(Bookmark.Account)));
-		
-		if(c.getColumnIndex(Bookmark.Notes) != -1)
-			b.setNotes(c.getString(c.getColumnIndex(Bookmark.Notes)));
-		
-		if(c.getColumnIndex(Bookmark.Time) != -1)
-			b.setTime(new Date(c.getLong(c.getColumnIndex(Bookmark.Time))));
-		
-		if(c.getColumnIndex(Bookmark.Shared) != -1)
-			b.setShared(c.getInt(c.getColumnIndex(Bookmark.Shared)) == 1);
-		
-		if(c.getColumnIndex(Bookmark.Synced) != -1)
-			b.setSynced(c.getInt(c.getColumnIndex(Bookmark.Synced)));
-		
-		if(c.getColumnIndex(Bookmark.Deleted) != -1)
-			b.setDeleted(c.getInt(c.getColumnIndex(Bookmark.Deleted)) == 1);
-		
-		return b;
 	}
 }

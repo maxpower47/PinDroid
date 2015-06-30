@@ -6,6 +6,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.pindroid.BuildConfig;
 import com.pindroid.Constants;
 import com.pindroid.event.AuthenticationEvent;
 
@@ -34,7 +35,7 @@ public class PinboardClient {
 	private static final String ROOT = "https://api.pinboard.in";
 
 	private static final String[] DATE_FORMATS = new String[] {
-			"yyyy-MM-dd'T'HH:mm:ss'Z'",
+			"yyyy-MM-dd'T'HH:mm:ssZ",
 			"yyyy-MM-dd HH:mm:ss"
 	};
 
@@ -68,7 +69,7 @@ public class PinboardClient {
 					public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 						for (String format : DATE_FORMATS) {
 							try {
-								return new SimpleDateFormat(format, Locale.US).parse(json.getAsString());
+								return new SimpleDateFormat(format, Locale.US).parse(json.getAsString().replace("Z", "+0000"));
 							} catch (ParseException e) {
 							}
 						}
@@ -110,7 +111,7 @@ public class PinboardClient {
 						return cause;
 					}
 				})
-				.setLogLevel(RestAdapter.LogLevel.FULL)
+				.setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.BASIC)
 				.build();
 
 		REST_CLIENT = prodAdapter.create(PinboardService.class);

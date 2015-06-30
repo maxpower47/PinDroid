@@ -21,6 +21,8 @@
 
 package com.pindroid.model;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -185,10 +187,6 @@ public class Bookmark implements BaseColumns, Parcelable, StableListItem {
         mSynced = synced;
     }
 
-    public boolean getDeleted() {
-        return mDeleted;
-    }
-
     public void setDeleted(boolean deleted) {
         mDeleted = deleted;
     }
@@ -237,6 +235,34 @@ public class Bookmark implements BaseColumns, Parcelable, StableListItem {
         mTags = feedBookmark.getTagString();
         mTime = feedBookmark.getTime();
         mAccount = feedBookmark.getAccount();
+    }
+
+    public Bookmark(Cursor c) {
+        mId = c.getInt(c.getColumnIndex(_ID));
+        mDescription = c.getString(c.getColumnIndex(Description));
+        mUrl = c.getString(c.getColumnIndex(Url));
+        mHash = c.getString(c.getColumnIndex(Hash));
+        mMeta = c.getString(c.getColumnIndex(Meta));
+        mTags = c.getString(c.getColumnIndex(Tags));
+        mRead = c.getInt(c.getColumnIndex(ToRead)) == 1;
+
+        if(c.getColumnIndex(Account) != -1)
+            mAccount = c.getString(c.getColumnIndex(Account));
+
+        if(c.getColumnIndex(Notes) != -1)
+            mNotes = c.getString(c.getColumnIndex(Notes));
+
+        if(c.getColumnIndex(Time) != -1)
+            mTime = new Date(c.getLong(c.getColumnIndex(Time)));
+
+        if(c.getColumnIndex(Shared) != -1)
+            mShared = c.getInt(c.getColumnIndex(Shared)) == 1;
+
+        if(c.getColumnIndex(Synced) != -1)
+            mSynced = c.getInt(c.getColumnIndex(Synced));
+
+        if(c.getColumnIndex(Deleted) != -1)
+            mDeleted = c.getInt(c.getColumnIndex(Deleted)) == 1;
     }
 
     public Bookmark copy() {
@@ -353,5 +379,29 @@ public class Bookmark implements BaseColumns, Parcelable, StableListItem {
         }
 
         return result;
+    }
+
+    public ContentValues toContentValues() {
+        final ContentValues values = new ContentValues();
+        values.put(Bookmark.Description, mDescription);
+        values.put(Bookmark.Url, mUrl);
+        values.put(Bookmark.Notes, mNotes);
+        values.put(Bookmark.Tags, mTags);
+        values.put(Bookmark.Meta, mMeta);
+        values.put(Bookmark.Account, mAccount);
+        values.put(Bookmark.ToRead, mRead ? 1 : 0);
+        values.put(Bookmark.Shared, mShared ? 1 : 0);
+        values.put(Bookmark.Synced, mSynced);
+        values.put(Bookmark.Deleted, mDeleted ? 1 : 0);
+
+        if(mHash != null) {
+            values.put(Bookmark.Hash, mHash);
+        }
+
+        if(mTime != null && mTime.getTime() > 0) {
+            values.put(Bookmark.Time, mTime.getTime());
+        }
+
+        return values;
     }
 }

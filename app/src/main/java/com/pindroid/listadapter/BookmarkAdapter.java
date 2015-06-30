@@ -42,7 +42,7 @@ public class BookmarkAdapter extends RecyclerCursorAdapter<Bookmark, BookmarkVie
 
     @Override
     public void onBindViewHolder(BookmarkView view, Cursor c, ViewWrapper wrapper) {
-        final Bookmark bookmark = BookmarkManager.CursorToBookmark(c);
+        final Bookmark bookmark = new Bookmark(c);
         view.bind(bookmark);
 
         view.getSwipableViewContainter().setOnClickListener(new View.OnClickListener() {
@@ -72,7 +72,7 @@ public class BookmarkAdapter extends RecyclerCursorAdapter<Bookmark, BookmarkVie
                 holder.itemView.setBackgroundResource(R.drawable.bg_item_swiping_left);
                 break;
             case RecyclerViewSwipeManager.DRAWABLE_SWIPE_RIGHT_BACKGROUND:
-                if(BookmarkManager.CursorToBookmark(getItemAtPosition(position)).getToRead()) {
+                if(new Bookmark(getItemAtPosition(position)).getToRead()) {
                     holder.itemView.setBackgroundResource(R.drawable.bg_item_swiping_right_read);
                 } else {
                     holder.itemView.setBackgroundResource(R.drawable.bg_item_swiping_right_unread);
@@ -102,14 +102,14 @@ public class BookmarkAdapter extends RecyclerCursorAdapter<Bookmark, BookmarkVie
                 notifyItemChanged(position);
 
                 if (listener != null) {
-                    listener.onBookmarkMarked(BookmarkManager.CursorToBookmark(getItemAtPosition(position)));
+                    listener.onBookmarkMarked(new Bookmark(getItemAtPosition(position)));
                 }
                 break;
             case RecyclerViewSwipeManager.RESULT_SWIPED_LEFT:
                 notifyItemRemoved(position);
 
                 if (listener != null) {
-                    listener.onBookmarkDeleted(BookmarkManager.CursorToBookmark(getItemAtPosition(position)));
+                    listener.onBookmarkDeleted(new Bookmark(getItemAtPosition(position)));
                 }
                 break;
             default:
