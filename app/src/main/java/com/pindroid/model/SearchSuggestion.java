@@ -19,11 +19,9 @@
  * USA
  */
 
-package com.pindroid.providers;
+package com.pindroid.model;
 
-import java.util.Comparator;
-
-public class SearchSuggestionContent {
+public class SearchSuggestion {
 
 	private final String text1;
 	private final String text2;
@@ -56,7 +54,7 @@ public class SearchSuggestionContent {
 		return intentAction;
 	}
 	
-	public SearchSuggestionContent(String t1, String t2, int i2, String data, String action) {
+	public SearchSuggestion(String t1, String t2, int i2, String data, String action) {
 		text1 = t1;
 		text2 = t2;
 		icon2 = i2;
@@ -64,19 +62,12 @@ public class SearchSuggestionContent {
 		intentAction = action;
 	}
 	
-	public SearchSuggestionContent(String t1, String t2, String t2u, int i2, String data, String action) {
+	public SearchSuggestion(String t1, String t2, String t2u, int i2, String data, String action) {
 		text1 = t1;
 		text2 = t2;
 		text2Url = t2u;
 		icon2 = i2;
 		intentData = data;
 		intentAction = action;
-	}
-	
-	public static class Comparer implements Comparator<SearchSuggestionContent> {
-
-		public int compare(SearchSuggestionContent a, SearchSuggestionContent b) {
-			return a.text1.compareToIgnoreCase(b.text1);
-		}
 	}
 }

@@ -49,16 +49,8 @@ public class Tag implements BaseColumns {
         return mTagName;
     }
 
-    public void setTagName(String tag) {
-        mTagName = tag;
-    }
-
     public int getCount() {
         return mCount;
-    }
-
-    public void setTagCount(int count) {
-        mCount = count;
     }
 
     public String getType() {

@@ -54,6 +54,7 @@ import com.pindroid.application.PindroidApplication;
 import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.model.Bookmark;
 import com.pindroid.model.Note;
+import com.pindroid.model.SearchSuggestion;
 import com.pindroid.model.Tag;
 import com.pindroid.util.SyncUtils;
 
@@ -371,15 +372,15 @@ public class BookmarkContentProvider extends ContentProvider {
 	private Cursor getSearchSuggestions(String query, boolean accountSpecific) {
 		Log.d("getSearchSuggestions", query);
 		
-		Map<String, SearchSuggestionContent> tagSuggestions = new TreeMap<>();
-		Map<String, SearchSuggestionContent> bookmarkSuggestions = new TreeMap<>();
-		Map<String, SearchSuggestionContent> noteSuggestions = new TreeMap<>();
+		Map<String, SearchSuggestion> tagSuggestions = new TreeMap<>();
+		Map<String, SearchSuggestion> bookmarkSuggestions = new TreeMap<>();
+		Map<String, SearchSuggestion> noteSuggestions = new TreeMap<>();
 			
 		tagSuggestions = getTagSearchSuggestions(query, accountSpecific);
 		bookmarkSuggestions = getBookmarkSearchSuggestions(query, accountSpecific);
 		noteSuggestions = getNoteSearchSuggestions(query, accountSpecific);
 	
-		SortedMap<String, SearchSuggestionContent> s = new TreeMap<>();
+		SortedMap<String, SearchSuggestion> s = new TreeMap<>();
 		s.putAll(tagSuggestions);
 		s.putAll(bookmarkSuggestions);
 		s.putAll(noteSuggestions);
@@ -387,10 +388,10 @@ public class BookmarkContentProvider extends ContentProvider {
 		return getSearchCursor(s);
 	}
 	
-	private Map<String, SearchSuggestionContent> getBookmarkSearchSuggestions(String query, boolean accountSpecific) {
+	private Map<String, SearchSuggestion> getBookmarkSearchSuggestions(String query, boolean accountSpecific) {
 		String[] bookmarks = query.split(" ");
 		
-		Map<String, SearchSuggestionContent> suggestions = new TreeMap<>();
+		Map<String, SearchSuggestion> suggestions = new TreeMap<>();
 				
 		// Title/description/notes search suggestions
 		SQLiteQueryBuilder bookmarkqb = new SQLiteQueryBuilder();	
@@ -450,7 +451,7 @@ public class BookmarkContentProvider extends ContentProvider {
 					url = null;
 				}
 				
-				suggestions.put(title + "_bookmark_" + account, new SearchSuggestionContent(title, 
+				suggestions.put(title + "_bookmark_" + account, new SearchSuggestion(title,
 					line2, url, R.drawable.main_menu_bookmark,	data.toString(), action));
 				
 			} while(c.moveToNext());	
@@ -460,14 +461,14 @@ public class BookmarkContentProvider extends ContentProvider {
 		return suggestions;
 	}
 	
-	private Map<String, SearchSuggestionContent> getTagSearchSuggestions(String query, boolean accountSpecific) {
+	private Map<String, SearchSuggestion> getTagSearchSuggestions(String query, boolean accountSpecific) {
 		Log.d("getTagSearchSuggestions", query);
 		
 		Resources res = getContext().getResources();
 		
 		String[] tags = query.split(" ");
 		
-		Map<String, SearchSuggestionContent> suggestions = new TreeMap<>();
+		Map<String, SearchSuggestion> suggestions = new TreeMap<>();
 		
 		// Tag search suggestions
 		SQLiteQueryBuilder tagqb = new SQLiteQueryBuilder();	
@@ -515,7 +516,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				if(!accountSpecific && accountCount > 1)
 					tagCount = account;
 				
-				suggestions.put(name + "_tag_" + account, new SearchSuggestionContent(name, 
+				suggestions.put(name + "_tag_" + account, new SearchSuggestion(name,
 					tagCount, R.drawable.main_menu_tag, data.build().toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
 				
 			} while(c.moveToNext());	
@@ -525,10 +526,10 @@ public class BookmarkContentProvider extends ContentProvider {
 		return suggestions;
 	}
 	
-	private Map<String, SearchSuggestionContent> getNoteSearchSuggestions(String query, boolean accountSpecific) {
+	private Map<String, SearchSuggestion> getNoteSearchSuggestions(String query, boolean accountSpecific) {
 		String[] notes = query.split(" ");
 		
-		Map<String, SearchSuggestionContent> suggestions = new TreeMap<>();
+		Map<String, SearchSuggestion> suggestions = new TreeMap<>();
 		
 		// Tag search suggestions
 		SQLiteQueryBuilder noteqb = new SQLiteQueryBuilder();	
@@ -579,7 +580,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				if(!accountSpecific && accountCount > 1)
 					text = account;
 				
-				suggestions.put(title + "_note_" + account, new SearchSuggestionContent(title, 
+				suggestions.put(title + "_note_" + account, new SearchSuggestion(title,
 					text, R.drawable.main_menu_note, data.toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
 				
 			} while(c.moveToNext());	
@@ -589,7 +590,7 @@ public class BookmarkContentProvider extends ContentProvider {
 		return suggestions;
 	}
 	
-	private Cursor getSearchCursor(Map<String, SearchSuggestionContent> list) {
+	private Cursor getSearchCursor(Map<String, SearchSuggestion> list) {
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this.getContext());
     	Boolean icons = settings.getBoolean("pref_searchicons", true);
 
@@ -603,7 +604,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	
 			int i = 0;
 			
-			for(SearchSuggestionContent s : list.values()) {
+			for(SearchSuggestion s : list.values()) {
 				mc.addRow(new Object[]{ i++, s.getText1(), s.getText2(), s.getText2Url(), s.getIntentData(), s.getIntentAction(),
 					s.getIcon2() });
 			}
@@ -614,7 +615,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	
 			int i = 0;
 			
-			for(SearchSuggestionContent s : list.values()) {
+			for(SearchSuggestion s : list.values()) {
 				mc.addRow(new Object[]{ i++, s.getText1(), s.getText2(), s.getText2Url(), s.getIntentData(), s.getIntentAction() });
 			}
     	}

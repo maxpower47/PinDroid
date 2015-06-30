@@ -44,20 +44,28 @@ public class Note implements BaseColumns {
     public static final String Hash = "HASH";
     public static final String Pid = "PID";
 
-    @SerializedName("title")
-    private String mTitle;
-    @SerializedName("text")
-    private String mText;
-    @SerializedName("hash")
-    private String mHash;
-    @SerializedName("id")
-    private String mPid;
     private int mId = 0;
     private String mAccount = null;
-    @SerializedName("created_at")
-    private Date mAdded;
-    @SerializedName("updated_at")
-    private Date mUpdated;
+    @SerializedName("title") private String mTitle;
+    @SerializedName("text") private String mText;
+    @SerializedName("hash") private String mHash;
+    @SerializedName("id") private String mPid;
+    @SerializedName("created_at") private Date mAdded;
+    @SerializedName("updated_at") private Date mUpdated;
+
+    public Note() {
+    }
+
+    public Note(int id, String title, String text, String account, String hash, String pid, Date added, Date updated) {
+        mId = id;
+        mTitle = title;
+        mText = text;
+        mAccount = account;
+        mHash = hash;
+        mPid = pid;
+        mAdded = added;
+        mUpdated = updated;
+    }
 
     public int getId() {
         return mId;
@@ -87,16 +95,8 @@ public class Note implements BaseColumns {
         return mHash;
     }
 
-    public void setHash(String hash) {
-        mHash = hash;
-    }
-
     public String getPid() {
         return mPid;
-    }
-
-    public void setPid(String pid) {
-        mPid = pid;
     }
 
     public String getAccount() {
@@ -111,30 +111,8 @@ public class Note implements BaseColumns {
         return mAdded;
     }
 
-    public void setAdded(Date added) {
-        mAdded = added;
-    }
-
     public Date getUpdated() {
         return mUpdated;
-    }
-
-    public void setUpdated(Date updated) {
-        mUpdated = updated;
-    }
-
-    public Note() {
-    }
-
-    public Note(int id, String title, String text, String account, String hash, String pid, Date added, Date updated) {
-        mId = id;
-        mTitle = title;
-        mText = text;
-        mAccount = account;
-        mHash = hash;
-        mPid = pid;
-        mAdded = added;
-        mUpdated = updated;
     }
 
     public Note copy() {
@@ -147,15 +125,5 @@ public class Note implements BaseColumns {
         n.mAdded = this.mAdded;
         n.mUpdated = this.mUpdated;
         return n;
-    }
-
-    public void clear() {
-        mTitle = null;
-        mId = 0;
-        mText = null;
-        mHash = null;
-        mPid = null;
-        mAdded = null;
-        mUpdated = null;
     }
 }

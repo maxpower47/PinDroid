@@ -60,24 +60,15 @@ public class Bookmark implements BaseColumns, Parcelable, StableListItem {
 
     private int mId = 0;
     private String mAccount = null;
-    @SerializedName("href")
-    private String mUrl = null;
-    @SerializedName("description")
-    private String mDescription = null;
-    @SerializedName("extended")
-    private String mNotes = null;
-    @SerializedName("tags")
-    private String mTags = null;
-    @SerializedName("hash")
-    private String mHash = null;
-    @SerializedName("meta")
-    private String mMeta = null;
-    @SerializedName("shared")
-    private Boolean mShared = true;
-    @SerializedName("toread")
-    private Boolean mRead = false;
-    @SerializedName("time")
-    private Date mTime;
+    @SerializedName("href") private String mUrl = null;
+    @SerializedName("description") private String mDescription = null;
+    @SerializedName("extended") private String mNotes = null;
+    @SerializedName("tags") private String mTags = null;
+    @SerializedName("hash") private String mHash = null;
+    @SerializedName("meta") private String mMeta = null;
+    @SerializedName("shared") private Boolean mShared = true;
+    @SerializedName("toread") private Boolean mRead = false;
+    @SerializedName("time") private Date mTime;
     private int mSynced = 0;
     private boolean mDeleted = false;
 
@@ -271,22 +262,6 @@ public class Bookmark implements BaseColumns, Parcelable, StableListItem {
         b.mDescription = this.mDescription;
         b.mUrl = this.mUrl;
         return b;
-    }
-
-    public void clear() {
-        this.mAccount = null;
-        this.mDescription = null;
-        this.mHash = null;
-        this.mId = 0;
-        this.mMeta = null;
-        this.mNotes = null;
-        this.mRead = false;
-        this.mShared = true;
-        this.mTags = null;
-        this.mTime = null;
-        this.mUrl = null;
-        this.mSynced = 0;
-        this.mDeleted = false;
     }
 
     public int describeContents() {

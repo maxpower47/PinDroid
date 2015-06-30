@@ -15,16 +15,8 @@ public class TagSuggestions {
 	public List<String> getPopular() {
 		return popular;
 	}
-
-	public void setPopular(List<String> popular) {
-		this.popular = popular;
-	}
-
+    
 	public List<String> getRecommended() {
 		return recommended;
-	}
-
-	public void setRecommended(List<String> recommended) {
-		this.recommended = recommended;
 	}
 }
