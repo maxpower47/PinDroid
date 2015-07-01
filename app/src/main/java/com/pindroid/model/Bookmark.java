@@ -87,6 +87,10 @@ public class Bookmark implements BaseColumns, Parcelable, StableListItem {
     }
 
     public void setUrl(String url) {
+        if(!url.startsWith("http")){
+            url = "http://" + url;
+        }
+
         mUrl = url;
     }
 

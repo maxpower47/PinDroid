@@ -29,7 +29,6 @@ public class AddBookmark extends AppCompatActivity implements AddBookmarkFragmen
     @FragmentById(R.id.addbookmark_fragment) AddBookmarkFragment addBookmarkFragment;
 	@Extra("username") String username;
 	@Extra("bookmark") Bookmark bookmark;
-	@Extra("oldBookmark") Bookmark oldBookmark;
 
     @AfterViews
     protected void init() {
@@ -38,7 +37,9 @@ public class AddBookmark extends AppCompatActivity implements AddBookmarkFragmen
             requestAccount();
         } else {
             EventBus.getDefault().postSticky(new AccountChangedEvent(username));
-            addBookmarkFragment.loadBookmark(bookmark, oldBookmark);
+            if(bookmark != null) {
+                addBookmarkFragment.loadBookmark(bookmark);
+            }
         }
     }
 
@@ -61,7 +62,7 @@ public class AddBookmark extends AppCompatActivity implements AddBookmarkFragmen
     private void handleIntent(){
         if(Intent.ACTION_SEND.equals(getIntent().getAction())){
             bookmark = findExistingBookmark(loadBookmarkFromShareIntent());
-            addBookmarkFragment.loadBookmark(bookmark, oldBookmark);
+            addBookmarkFragment.loadBookmark(bookmark);
         }
     }
 
@@ -107,7 +108,7 @@ public class AddBookmark extends AppCompatActivity implements AddBookmarkFragmen
     }
 
     @Override
-    public void onBookmarkCancel(Bookmark b) {
+    public void onBookmarkCancel() {
         finish();
     }
 
