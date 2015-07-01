@@ -24,7 +24,6 @@ package com.pindroid.fragment;
 import android.accounts.Account;
 import android.app.Activity;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
 import android.text.Html;
@@ -55,6 +54,7 @@ import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.SpaceTokenizer;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FocusChange;
@@ -100,29 +100,12 @@ public class AddBookmarkFragment extends Fragment {
 		void onBookmarkCancel(Bookmark b);
 	}
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState){
-        super.onActivityCreated(savedInstanceState);
-
-        firstRun = savedInstanceState == null;
+    @AfterViews
+    public void init(){
+        //firstRun = savedInstanceState == null;
 
 		mRecommendedTags.setMovementMethod(LinkMovementMethod.getInstance());
 		mPopularTags.setMovementMethod(LinkMovementMethod.getInstance());
-		
-		if(username != null){
-			CursorAdapter autoCompleteAdapter = new TagAutoCompleteCursorAdapter(getActivity(), R.layout.autocomplete_view, null, 
-					new String[]{Tag.Name, Tag.Count}, new int[]{R.id.autocomplete_name, R.id.autocomplete_count}, 0);
-
-			autoCompleteAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-	            public Cursor runQuery(CharSequence constraint) {
-	            	return TagManager.GetTagsAsCursor((constraint != null ? constraint.toString() : ""), 
-	            			username, Tag.Count + " DESC, " + Tag.Name + " ASC", getActivity());
-	            }
-	        });
-
-            mEditTags.setAdapter(autoCompleteAdapter);
-            mEditTags.setTokenizer(new SpaceTokenizer());
-		}
 	}
 
     @FocusChange(R.id.add_edit_url)
@@ -166,11 +149,22 @@ public class AddBookmarkFragment extends Fragment {
 
     public void onEvent(AccountChangedEvent event) {
         this.username = event.getNewAccount();
-    }
 
-	public void setUsername(String username){
-		this.username = username;
-	}
+        if(username != null){
+            CursorAdapter autoCompleteAdapter = new TagAutoCompleteCursorAdapter(getActivity(), R.layout.autocomplete_view, null,
+                    new String[]{Tag.Name, Tag.Count}, new int[]{R.id.autocomplete_name, R.id.autocomplete_count}, 0);
+
+            autoCompleteAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+                public Cursor runQuery(CharSequence constraint) {
+                    return TagManager.GetTagsAsCursor((constraint != null ? constraint.toString() : ""),
+                            username, Tag.Count + " DESC, " + Tag.Name + " ASC", getActivity());
+                }
+            });
+
+            mEditTags.setAdapter(autoCompleteAdapter);
+            mEditTags.setTokenizer(new SpaceTokenizer());
+        }
+    }
 
 	public void refreshView(){
 		if(bookmark != null){
