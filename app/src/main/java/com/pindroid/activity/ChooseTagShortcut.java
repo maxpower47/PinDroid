@@ -26,6 +26,7 @@ import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 import com.pindroid.fragment.BrowseTagsFragment;
 import com.pindroid.fragment.BrowseTagsFragment_;
+import com.pindroid.util.AccountHelper;
 
 import android.accounts.AccountManager;
 import android.content.Intent;
@@ -47,8 +48,12 @@ public class ChooseTagShortcut extends AppCompatActivity implements BrowseTagsFr
 	public void init() {
         setTitle(R.string.shortcut_activity_title);
 
-		Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
-		startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+        if(!AccountHelper.isSingleAccount(this)) {
+            Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+            startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+        } else {
+            onChooseAccount(AccountHelper.getFirstAccount(this).name);
+        }
     }
 
 	public void onTagSelected(String tag) {
@@ -63,7 +68,7 @@ public class ChooseTagShortcut extends AppCompatActivity implements BrowseTagsFr
 	}
 
 	@OnActivityResult(Constants.REQUEST_CODE_ACCOUNT_CHANGE)
-	protected void onChooseAccount(Intent data, @OnActivityResult.Extra(value = AccountManager.KEY_ACCOUNT_NAME) String username){
+	protected void onChooseAccount(@OnActivityResult.Extra(value = AccountManager.KEY_ACCOUNT_NAME) String username){
         this.username = username;
         BrowseTagsFragment frag = BrowseTagsFragment_.builder()
                 .username(username)

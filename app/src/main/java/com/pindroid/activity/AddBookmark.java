@@ -12,6 +12,7 @@ import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.fragment.AddBookmarkFragment;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.model.Bookmark;
+import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
 
@@ -34,7 +35,13 @@ public class AddBookmark extends AppCompatActivity implements AddBookmarkFragmen
     protected void init() {
 
         if(username == null || "".equals(username)) {
-            requestAccount();
+            if(!AccountHelper.isSingleAccount(this)) {
+                Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+            } else {
+                onResult(Activity.RESULT_OK, AccountHelper.getFirstAccount(this).name);
+            }
         } else {
             EventBus.getDefault().postSticky(new AccountChangedEvent(username));
             if(bookmark != null) {
@@ -94,12 +101,6 @@ public class AddBookmark extends AppCompatActivity implements AddBookmarkFragmen
         }
 
         return bookmark;
-    }
-
-    protected void requestAccount() {
-        Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
     }
 
     @Override

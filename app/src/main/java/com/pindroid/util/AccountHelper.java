@@ -63,4 +63,8 @@ public class AccountHelper {
 
         return accountNames;
     }
+
+    public static boolean isSingleAccount(Context context) {
+        return AccountManager.get(context).getAccountsByType(Constants.ACCOUNT_TYPE).length == 1;
+    }
 }

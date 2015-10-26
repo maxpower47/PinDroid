@@ -25,11 +25,13 @@ import java.util.Date;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.model.Bookmark;
 import com.pindroid.service.SaveBookmarkService;
+import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
 
@@ -38,6 +40,10 @@ import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
 import android.widget.Toast;
 
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
+
+@EActivity
 public class SaveReadLaterBookmark extends Activity {
 	private static final String TAG = "SaveReadLaterBookmark";
     private String username;
@@ -45,28 +51,20 @@ public class SaveReadLaterBookmark extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		requestAccount();
+
+        if(!AccountHelper.isSingleAccount(this)) {
+            Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+        } else {
+            onChooseAccount(AccountHelper.getFirstAccount(this).name);
+        }
 	}
 
-	protected void requestAccount() {
-        Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
-    }
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		if (requestCode != Constants.REQUEST_CODE_ACCOUNT_CHANGE) {
-			Log.e(TAG, "Unsupported request code: " + requestCode);
-			finish();
-		} else {
-			if (resultCode == Activity.RESULT_CANCELED) {
-				finish();
-			} else if (resultCode == Activity.RESULT_OK) {
-				username = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-				handleIntent();
-			}
-		}
+    @OnActivityResult(Constants.REQUEST_CODE_ACCOUNT_CHANGE)
+	protected void onChooseAccount(@OnActivityResult.Extra(value = AccountManager.KEY_ACCOUNT_NAME) String username){
+		this.username = username;
+        handleIntent();
 	}
 
 	private void handleIntent(){

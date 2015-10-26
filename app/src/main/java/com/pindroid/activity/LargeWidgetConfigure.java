@@ -30,6 +30,7 @@ import android.content.SharedPreferences;
 
 import com.pindroid.Constants;
 import com.pindroid.R;
+import com.pindroid.util.AccountHelper;
 import com.pindroid.widget.SearchWidgetProvider;
 
 import org.androidannotations.annotations.AfterInject;
@@ -60,8 +61,12 @@ public class LargeWidgetConfigure extends ListActivity {
             finish();
         }
 
-        Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
-        startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+        if(!AccountHelper.isSingleAccount(this)) {
+            Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+            startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+        } else {
+            onResult(AccountHelper.getFirstAccount(this).name);
+        }
     }
 	
     // Write the prefix to the SharedPreferences object for this widget

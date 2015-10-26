@@ -31,6 +31,7 @@ import android.widget.ListView;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
+import com.pindroid.util.AccountHelper;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -51,8 +52,12 @@ public class ScreenShortcut extends AppCompatActivity {
     void init() {
         setTitle(R.string.small_widget_configuration_description);
 
-        Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
-        startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+        if(!AccountHelper.isSingleAccount(this)) {
+            Intent i = AccountManager.newChooseAccountIntent(null, null, new String[]{Constants.ACCOUNT_TYPE}, false, null, null, null, null);
+            startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_CHANGE);
+        } else {
+            onChooseAccount(AccountHelper.getFirstAccount(this).name);
+        }
 
         listView.setAdapter(new ArrayAdapter<>(this, R.layout.widget_configure_view, titles));
     }
