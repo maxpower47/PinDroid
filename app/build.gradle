@@ -73,4 +73,5 @@ dependencies {
     compile "commons-io:commons-io:2.4"
     compile 'com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:0.8.5'
     compile 'com.workday:postman:1.1'
+    compile 'com.tasomaniac:integrationpreference:0.1'
 }

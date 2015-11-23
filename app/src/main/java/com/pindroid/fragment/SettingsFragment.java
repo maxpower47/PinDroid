@@ -35,6 +35,7 @@ import com.pindroid.BuildConfig;
 import com.pindroid.R;
 import com.pindroid.providers.BookmarkContentProvider;
 import com.pindroid.util.SyncUtils;
+import com.tasomaniac.android.widget.IntegrationPreference;
 
 import org.androidannotations.annotations.AfterPreferences;
 import org.androidannotations.annotations.EFragment;
@@ -51,6 +52,7 @@ public class SettingsFragment extends PreferenceFragment {
     @PreferenceByKey(R.string.pref_forcesync_key) Preference forceSyncPref;
     @PreferenceByKey(R.string.pref_accountsettings_key) Preference accountSettingsPref;
     @PreferenceByKey(R.string.pref_cat_version_key) PreferenceCategory versionPrefCat;
+    @PreferenceByKey(R.string.pref_dashclock_key) IntegrationPreference dashclockPref;
 
     @AfterPreferences
     public void init() {
@@ -98,5 +100,17 @@ public class SettingsFragment extends PreferenceFragment {
         if (time != 0) {
             SyncUtils.addPeriodicSync(BookmarkContentProvider.AUTHORITY, Bundle.EMPTY, time, getActivity());
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        dashclockPref.resume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        dashclockPref.pause();
     }
 }

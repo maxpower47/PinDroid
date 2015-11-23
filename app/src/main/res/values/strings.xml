@@ -292,6 +292,10 @@
     <string name="perm_read_bookmarks_description">Grants the ability to read the PinDroid bookmark store</string>
     <string name="perm_write_bookmarks_label">Write PinDroid bookmarks</string>
     <string name="perm_write_bookmarks_description">Grants the ability to write to the PinDroid bookmark store</string>
+    <string name="pref_dashclock_key" translatable="false">pref_dashclock</string>
+    <string name="pref_dashclock_title">DashClock Integration</string>
+    <string name="pref_dashclock_summary_off">Set up DashClock integration</string>
+    <string name="pref_dashclock_summary_on">Install DashClock</string>
 
     <!-- Image alt text, for accessibility -->
     <string name="alt_action_search_btn">Search</string>

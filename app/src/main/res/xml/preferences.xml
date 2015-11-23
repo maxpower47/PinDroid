@@ -60,6 +60,17 @@
             android:summary="@string/pref_drawertags_summary">
             <intent android:targetClass="com.pindroid.activity.SelectTags_" android:targetPackage="com.pindroid" android:action="android.intent.action.PICK"/>
         </Preference>
+        <com.tasomaniac.android.widget.IntegrationPreference
+            android:key="@string/pref_dashclock_key"
+            android:persistent="false"
+            android:defaultValue="true"
+            android:title="@string/pref_dashclock_title"
+            android:summaryOff="@string/pref_dashclock_summary_off"
+            android:summaryOn="@string/pref_dashclock_summary_on">
+            <intent
+                android:targetClass="com.google.android.apps.dashclock.configuration.ConfigurationActivity"
+                android:targetPackage="net.nurik.roman.dashclock"/>
+        </com.tasomaniac.android.widget.IntegrationPreference>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_cat_sync_title">
