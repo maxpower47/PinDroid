@@ -457,9 +457,7 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
                 .build();
 
 		clearBackStack();
-
 		replaceLeftFragment(frag, false);
-		
 		clearDrawer(3);
 	}
 
@@ -523,7 +521,7 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
 	public void onBookmarkSelected(Bookmark b, BookmarkViewType viewType){
 		
 		if(BookmarkViewType.EDIT.equals(viewType)){
-            onBookmarkAdd(b, b);
+            onBookmarkAdd(b);
 		} else if(BookmarkViewType.WEB.equals(viewType) && SettingsHelper.getUseBrowser(this)) {
             startActivity(IntentHelper.OpenInBrowser(b.getUrl()));
         } else {
@@ -553,15 +551,10 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
         }
 	}
 
-	public void onBookmarkAdd(Bookmark b) {
-        onBookmarkAdd(b, null);
-	}
-
-    public void onBookmarkAdd(Bookmark b, Bookmark oldBookmark) {
+    public void onBookmarkAdd(Bookmark b) {
         AddBookmark_.intent(this)
-            .extra("bookmark", b)
-            .extra("username", username)
-            .extra("oldBookmark", oldBookmark)
+            .bookmark(b)
+            .username(username)
             .start();
     }
 
