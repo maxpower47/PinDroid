@@ -315,13 +315,13 @@ public class BrowseBookmarksFragment extends Fragment
 	    mAdapter.changeCursor(data);
         if(mAdapter.getItemCount() < 1) {
             if(unread) {
-                multiStateView.setViewForState(R.layout.unread_empty, MultiStateView.ViewState.EMPTY);
+                multiStateView.setViewForState(R.layout.unread_empty, MultiStateView.VIEW_STATE_EMPTY);
             } else {
-                multiStateView.setViewForState(R.layout.bookmark_empty, MultiStateView.ViewState.EMPTY);
+                multiStateView.setViewForState(R.layout.bookmark_empty, MultiStateView.VIEW_STATE_EMPTY);
             }
-            multiStateView.setViewState(MultiStateView.ViewState.EMPTY);
+            multiStateView.setViewState(MultiStateView.VIEW_STATE_EMPTY);
         } else {
-            multiStateView.setViewState(MultiStateView.ViewState.CONTENT);
+            multiStateView.setViewState(MultiStateView.VIEW_STATE_CONTENT);
         }
 	}
 	

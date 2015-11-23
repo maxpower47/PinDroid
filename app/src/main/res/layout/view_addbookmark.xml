@@ -53,8 +53,8 @@
                 android:background="@null"
                 android:inputType="textUri|textNoSuggestions"
                 android:singleLine="true"
-                app:floatingLabel="highlight"
-                app:hideUnderline="true"/>
+                app:met_floatingLabel="highlight"
+                app:met_hideUnderline="true"/>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -77,8 +77,8 @@
                     android:layout_weight="1"
                     android:hint="@string/add_title_description"
                     android:inputType="text"
-                    app:floatingLabel="highlight"
-                    app:hideUnderline="true" />
+                    app:met_floatingLabel="highlight"
+                    app:met_hideUnderline="true" />
                 <ProgressBar
                     android:id="@+id/add_description_progress"
                     style="@style/Widget.AppCompat.ProgressBar"
@@ -106,8 +106,8 @@
                 android:background="@null"
                 android:inputType="textCapSentences|textMultiLine"
                 android:minLines="@integer/add_bookmark_note_lines"
-                app:floatingLabel="highlight"
-                app:hideUnderline="true"/>
+                app:met_floatingLabel="highlight"
+                app:met_hideUnderline="true"/>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -128,8 +128,8 @@
                 android:textSize="20sp"
                 android:inputType="text"
                 android:completionThreshold="1"
-                app:floatingLabel="highlight"
-                app:hideUnderline="true"/>
+                app:met_floatingLabel="highlight"
+                app:met_hideUnderline="true"/>
 
             <ImageView
                 android:layout_width="match_parent"

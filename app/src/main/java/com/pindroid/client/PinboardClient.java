@@ -1,5 +1,7 @@
 package com.pindroid.client;
 
+import android.net.Uri;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -10,12 +12,7 @@ import com.pindroid.BuildConfig;
 import com.pindroid.Constants;
 import com.pindroid.event.AuthenticationEvent;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-
 import java.lang.reflect.Type;
-import java.net.URI;
-import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -95,11 +92,8 @@ public class PinboardClient {
 						Response r = cause.getResponse();
 						if (Constants.HTTP_STATUS_UNAUTHORIZED == r.getStatus()) {
 
-							for(NameValuePair n : URLEncodedUtils.parse(URI.create(r.getUrl()), Charset.defaultCharset().name())) {
-								if("auth_token".equals(n.getName())) {
-									EventBus.getDefault().post(new AuthenticationEvent(n.getValue()));
-								}
-							}
+                            Uri uri = Uri.parse(r.getUrl());
+                            EventBus.getDefault().post(new AuthenticationEvent(uri.getQueryParameter("auth_token")));
 
 							return new AuthenticationException();
 						} else if (Constants.HTTP_STATUS_TOO_MANY_REQUESTS == r.getStatus()) {

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.h6ah4i.android.widget.advrecyclerview.swipeable.LegacySwipeableItemAdapter;
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager;
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.SwipeableItemAdapter;
 import com.pindroid.R;
@@ -21,7 +22,7 @@ import de.greenrobot.event.EventBus;
 
 @EBean
 public class BookmarkAdapter extends RecyclerCursorAdapter<Bookmark, BookmarkView>
-        implements SwipeableItemAdapter<ViewWrapper<BookmarkView>> {
+        implements LegacySwipeableItemAdapter<ViewWrapper<BookmarkView>> {
 
     @RootContext Context context;
     private EventListener listener;

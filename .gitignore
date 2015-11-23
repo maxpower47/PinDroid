@@ -5,3 +5,4 @@
 /app/build
 /app/*.apk
 /app/manifest-merger-release-report.txt
+/*.keystore

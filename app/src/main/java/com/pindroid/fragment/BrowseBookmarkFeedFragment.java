@@ -194,7 +194,7 @@ public class BrowseBookmarkFeedFragment extends Fragment
 	}
 
 	public Loader<List<FeedBookmark>> onCreateLoader(int id, Bundle args) {
-        multiStateView.setViewState(MultiStateView.ViewState.LOADING);
+        multiStateView.setViewState(MultiStateView.VIEW_STATE_LOADING);
 		if(Intent.ACTION_SEARCH.equals(getActivity().getIntent().getAction())) {
 			String query = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
 			return new LoaderDrone(getActivity(), username, query, feed, AccountHelper.getAccount(username, getActivity()));
@@ -206,7 +206,7 @@ public class BrowseBookmarkFeedFragment extends Fragment
 	public void onLoadFinished(Loader<List<FeedBookmark>> loader, List<FeedBookmark> data) {
 	    adapter.setFeedBookmarks(data);
         refreshLayout.setRefreshing(false);
-        multiStateView.setViewState(MultiStateView.ViewState.CONTENT);
+        multiStateView.setViewState(MultiStateView.VIEW_STATE_CONTENT);
 	}
 	
 	public void onLoaderReset(Loader<List<FeedBookmark>> loader) {

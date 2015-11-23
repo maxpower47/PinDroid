@@ -14,7 +14,8 @@ public class PindroidApplication extends Application {
 
 	@Override
 	public void onCreate() {
-		EventBus.getDefault().register(this);
+        super.onCreate();
+        EventBus.getDefault().register(this);
 	}
 
 	public void onEvent(AuthenticationEvent authenticationEvent) {
