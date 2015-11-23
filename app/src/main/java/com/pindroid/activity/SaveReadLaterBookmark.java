@@ -25,8 +25,6 @@ import java.util.Date;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.model.Bookmark;
