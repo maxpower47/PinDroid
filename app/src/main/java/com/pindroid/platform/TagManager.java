@@ -59,13 +59,7 @@ public class TagManager {
 	}
 	
 	public static void AddTag(Tag tag, String account, Context context){
-		final ContentValues values = new ContentValues();
-		
-		values.put(Tag.Name, tag.getTagName());
-		values.put(Tag.Count, tag.getCount());
-		values.put(Tag.Account, account);
-	
-		context.getContentResolver().insert(Tag.CONTENT_URI, values);
+		context.getContentResolver().insert(Tag.CONTENT_URI, tag.toContentValues());
 	}
 	
 	public static void BulkInsert(Map<String, Long> list, String account, Context context) {

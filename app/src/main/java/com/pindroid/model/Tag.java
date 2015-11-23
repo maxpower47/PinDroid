@@ -21,10 +21,14 @@
 
 package com.pindroid.model;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
 import com.pindroid.providers.BookmarkContentProvider;
+
+import java.util.Date;
 
 public class Tag implements BaseColumns {
     public static final Uri CONTENT_URI = Uri.parse("content://" +
@@ -40,6 +44,7 @@ public class Tag implements BaseColumns {
     private int mCount = 0;
     private int mId = 0;
     private String mType = null;
+    private String mAccount;
 
     public int getId() {
         return mId;
@@ -55,6 +60,10 @@ public class Tag implements BaseColumns {
 
     public String getType() {
         return mType;
+    }
+
+    public String getAccount() {
+        return mAccount;
     }
 
     public void setType(String type) {
@@ -73,9 +82,27 @@ public class Tag implements BaseColumns {
         mTagName = tagName;
     }
 
+    public Tag(String tagName, String account) {
+        mTagName = tagName;
+        mAccount = account;
+    }
+
     public Tag(String tagName, int count) {
         mTagName = tagName;
         mCount = count;
+    }
+
+    public Tag(Cursor c) {
+        mId = c.getInt(c.getColumnIndex(_ID));
+
+        if(c.getColumnIndex(Name) != -1)
+            mTagName = c.getString(c.getColumnIndex(Name));
+
+        if(c.getColumnIndex(Count) != -1)
+            mCount = c.getInt(c.getColumnIndex(Count));
+
+        if(c.getColumnIndex(Account) != -1)
+            mAccount = c.getString(c.getColumnIndex(Account));
     }
 
     public Tag copy() {
@@ -85,5 +112,15 @@ public class Tag implements BaseColumns {
         t.mTagName = this.mTagName;
         t.mType = this.mType;
         return t;
+    }
+
+    public ContentValues toContentValues() {
+        final ContentValues values = new ContentValues();
+
+        values.put(Tag.Name, mTagName);
+        values.put(Tag.Count, mCount);
+        values.put(Tag.Account, mAccount);
+
+        return  values;
     }
 }

@@ -98,8 +98,7 @@ public class BrowseNotesFragment extends ListFragment
 		lv.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Cursor c = (Cursor) lv.getItemAtPosition(position);
-                Note n = NoteManager.CursorToNote(c);
-
+                Note n = new Note(c);
                 viewNote(n);
             }
         });

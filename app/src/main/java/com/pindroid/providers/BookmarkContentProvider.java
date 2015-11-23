@@ -32,7 +32,6 @@ import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.UriMatcher;
 import android.content.res.Resources;
@@ -40,7 +39,6 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -50,24 +48,17 @@ import android.util.Log;
 
 import com.pindroid.Constants;
 import com.pindroid.R;
-import com.pindroid.application.PindroidApplication;
 import com.pindroid.event.AccountChangedEvent;
 import com.pindroid.model.Bookmark;
 import com.pindroid.model.Note;
 import com.pindroid.model.SearchSuggestion;
 import com.pindroid.model.Tag;
-import com.pindroid.util.SyncUtils;
 
 import de.greenrobot.event.EventBus;
 
 public class BookmarkContentProvider extends ContentProvider {
-	
-	private static PindroidApplication app;
-	
-	private SQLiteDatabase db;
+
 	private DatabaseHelper dbHelper;
-	private static final String DATABASE_NAME = "PinboardBookmarks.db";
-	private static final int DATABASE_VERSION = 27;
 	private static final String BOOKMARK_TABLE_NAME = "bookmark";
 	private static final String TAG_TABLE_NAME = "tag";
 	private static final String NOTE_TABLE_NAME = "note";
@@ -90,85 +81,6 @@ public class BookmarkContentProvider extends ContentProvider {
 	private static final UriMatcher sURIMatcher = buildUriMatcher();
 	
 	public static final String AUTHORITY = "com.pindroid.providers.BookmarkContentProvider";
-	
-	public static class DatabaseHelper extends SQLiteOpenHelper {
-		
-		DatabaseHelper(Context context) {
-			super(context, DATABASE_NAME, null, DATABASE_VERSION);
-			app = (PindroidApplication)context;
-		}
-
-		@Override
-		public void onCreate(SQLiteDatabase sqlDb) {
-
-			sqlDb.execSQL("Create table " + BOOKMARK_TABLE_NAME + 
-					" (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-					"ACCOUNT TEXT, " +
-					"DESCRIPTION TEXT COLLATE NOCASE, " +
-					"URL TEXT COLLATE NOCASE, " +
-					"NOTES TEXT, " +
-					"TAGS TEXT, " +
-					"HASH TEXT, " +
-					"META TEXT, " +
-					"TIME INTEGER, " +
-					"TOREAD INTEGER, " +
-					"SHARED INTEGER, " +
-					"DELETED INTEGER, " +
-					"SYNCED INTEGER);");
-			
-			sqlDb.execSQL("CREATE INDEX " + BOOKMARK_TABLE_NAME + 
-					"_ACCOUNT ON " + BOOKMARK_TABLE_NAME + " " +
-					"(ACCOUNT)");
-			
-			sqlDb.execSQL("CREATE INDEX " + BOOKMARK_TABLE_NAME + 
-					"_TAGS ON " + BOOKMARK_TABLE_NAME + " " +
-					"(TAGS)");
-			
-			sqlDb.execSQL("CREATE INDEX " + BOOKMARK_TABLE_NAME + 
-					"_HASH ON " + BOOKMARK_TABLE_NAME + " " +
-					"(HASH)");
-			
-			sqlDb.execSQL("Create table " + TAG_TABLE_NAME + 
-					" (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-					"ACCOUNT TEXT, " +
-					"NAME TEXT COLLATE NOCASE, " +
-					"COUNT INTEGER);");
-			
-			sqlDb.execSQL("CREATE INDEX " + TAG_TABLE_NAME + 
-					"_ACCOUNT ON " + TAG_TABLE_NAME + " " +
-					"(ACCOUNT)");
-			
-			sqlDb.execSQL("Create table " + NOTE_TABLE_NAME + 
-					" (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-					"ACCOUNT TEXT, " +
-					"TITLE TEXT COLLATE NOCASE, " +
-					"TEXT TEXT, " +
-					"ADDED INTEGER, " +
-					"UPDATED INTEGER, " +
-					"HASH TEXT, " +
-					"PID TEXT);");
-			
-			sqlDb.execSQL("CREATE INDEX " + NOTE_TABLE_NAME + 
-					"_ACCOUNT ON " + NOTE_TABLE_NAME + " " +
-					"(ACCOUNT)");
-			
-		}
-
-		@Override
-		public void onUpgrade(SQLiteDatabase sqlDb, int oldVersion, int newVersion) {
-			sqlDb.execSQL("DROP INDEX IF EXISTS " + BOOKMARK_TABLE_NAME + "_ACCOUNT");
-			sqlDb.execSQL("DROP INDEX IF EXISTS " + BOOKMARK_TABLE_NAME + "_TAGS");
-			sqlDb.execSQL("DROP INDEX IF EXISTS " + BOOKMARK_TABLE_NAME + "_HASH");
-			sqlDb.execSQL("DROP INDEX IF EXISTS " + TAG_TABLE_NAME + "_ACCOUNT");
-			sqlDb.execSQL("DROP INDEX IF EXISTS " + NOTE_TABLE_NAME + "_ACCOUNT");
-			sqlDb.execSQL("DROP TABLE IF EXISTS " + BOOKMARK_TABLE_NAME);
-			sqlDb.execSQL("DROP TABLE IF EXISTS " + TAG_TABLE_NAME);
-			sqlDb.execSQL("DROP TABLE IF EXISTS " + NOTE_TABLE_NAME);	
-			onCreate(sqlDb);
-			
-			SyncUtils.clearSyncMarkers(app);
-		}
-	}
 	
 	@Override
 	public int delete(Uri uri, String where, String[] whereArgs) {
@@ -230,7 +142,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	}
 	
 	private Uri insertBookmark(Uri uri, ContentValues values){
-		db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 		long rowId = db.insert(BOOKMARK_TABLE_NAME, "", values);
 		if(rowId > 0) {
 			Uri rowUri = ContentUris.appendId(Bookmark.CONTENT_URI.buildUpon(), rowId).build();
@@ -241,7 +153,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	}
 
 	private Uri insertTag(Uri uri, ContentValues values){
-		db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 		long rowId = db.insert(TAG_TABLE_NAME, "", values);
 		if(rowId > 0) {
 			Uri rowUri = ContentUris.appendId(Tag.CONTENT_URI.buildUpon(), rowId).build();
@@ -252,7 +164,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	}
 	
 	private Uri insertNote(Uri uri, ContentValues values){
-		db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 		long rowId = db.insert(NOTE_TABLE_NAME, "", values);
 		if(rowId > 0) {
 			Uri rowUri = ContentUris.appendId(Note.CONTENT_URI.buildUpon(), rowId).build();
@@ -264,10 +176,8 @@ public class BookmarkContentProvider extends ContentProvider {
 	
 	@Override
 	public boolean onCreate() {
-
 		dbHelper = new DatabaseHelper(getContext());
-		
-		return !(dbHelper == null);
+		return true;
 	}
 
 	@Override
@@ -307,7 +217,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	}
 	
 	private int getAccountCount() {
-		return AccountManager.get(app).getAccountsByType(Constants.ACCOUNT_TYPE).length;
+		return AccountManager.get(getContext()).getAccountsByType(Constants.ACCOUNT_TYPE).length;
 	}
 	
 	private Cursor getBookmark(Uri uri, String[] projection, String selection,	String[] selectionArgs, String sortOrder) {
@@ -372,14 +282,10 @@ public class BookmarkContentProvider extends ContentProvider {
 	private Cursor getSearchSuggestions(String query, boolean accountSpecific) {
 		Log.d("getSearchSuggestions", query);
 		
-		Map<String, SearchSuggestion> tagSuggestions = new TreeMap<>();
-		Map<String, SearchSuggestion> bookmarkSuggestions = new TreeMap<>();
-		Map<String, SearchSuggestion> noteSuggestions = new TreeMap<>();
-			
-		tagSuggestions = getTagSearchSuggestions(query, accountSpecific);
-		bookmarkSuggestions = getBookmarkSearchSuggestions(query, accountSpecific);
-		noteSuggestions = getNoteSearchSuggestions(query, accountSpecific);
-	
+		Map<String, SearchSuggestion> tagSuggestions = getTagSearchSuggestions(query, accountSpecific);
+		Map<String, SearchSuggestion> bookmarkSuggestions = getBookmarkSearchSuggestions(query, accountSpecific);
+		Map<String, SearchSuggestion> noteSuggestions = getNoteSearchSuggestions(query, accountSpecific);
+
 		SortedMap<String, SearchSuggestion> s = new TreeMap<>();
 		s.putAll(tagSuggestions);
 		s.putAll(bookmarkSuggestions);
@@ -420,39 +326,30 @@ public class BookmarkContentProvider extends ContentProvider {
 		Cursor c = getBookmarks(Bookmark.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), null, SuggestionLimit);
 		
 		if(c.moveToFirst()){
-			int descColumn = c.getColumnIndex(Bookmark.Description);
-			int idColumn = c.getColumnIndex(BaseColumns._ID);
-			int urlColumn = c.getColumnIndex(Bookmark.Url);
-			int accountColumn = c.getColumnIndex(Bookmark.Account);
-			
+            Bookmark b = new Bookmark(c);
 			int accountCount = getAccountCount();
 
 			do {
-				String account = c.getString(accountColumn);
+				String account = b.getAccount();
 		    	
 				Uri data;
 		    	Uri.Builder builder = new Uri.Builder();
-		    	
-		    	String action = Constants.ACTION_SEARCH_SUGGESTION_VIEW;
-		    	
-
 	    		builder.scheme(Constants.CONTENT_SCHEME);
 	    		builder.encodedAuthority(account + "@" + Constants.INTENT_URI);
 	    		builder.appendEncodedPath("bookmarks");
-	    		builder.appendEncodedPath(c.getString(idColumn));
+	    		builder.appendEncodedPath(Integer.toString(b.getId()));
 	    		data = builder.build();
-				
-				String title = c.getString(descColumn);
-				String line2 = c.getString(urlColumn);
-				String url = line2;
+
+				String line2 = b.getUrl();
+				String url = b.getUrl();
 				
 				if(!accountSpecific && accountCount > 1) {
 					line2 = account;
 					url = null;
 				}
 				
-				suggestions.put(title + "_bookmark_" + account, new SearchSuggestion(title,
-					line2, url, R.drawable.main_menu_bookmark,	data.toString(), action));
+				suggestions.put(b.getDescription() + "_bookmark_" + account, new SearchSuggestion(b.getDescription(),
+					line2, url, R.drawable.main_menu_bookmark,	data.toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
 				
 			} while(c.moveToNext());	
 		}
@@ -494,16 +391,13 @@ public class BookmarkContentProvider extends ContentProvider {
 		Cursor c = getTags(Tag.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), null, SuggestionLimit);
 		
 		if(c.moveToFirst()){
-			int nameColumn = c.getColumnIndex(Tag.Name);
-			int countColumn = c.getColumnIndex(Tag.Count);
-			int accountColumn = c.getColumnIndex(Tag.Account);
+			Tag t = new Tag(c);
 			
 			int accountCount = getAccountCount();
 
 			do {
-				String account = c.getString(accountColumn);
-				int count = c.getInt(countColumn);
-				String name = c.getString(nameColumn);
+				String account = t.getAccount();
+				String name = t.getTagName();
 				
 				Uri.Builder data = new Uri.Builder();
 				data.scheme(Constants.CONTENT_SCHEME);
@@ -511,7 +405,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				data.appendEncodedPath("bookmarks");
 				data.appendQueryParameter("tagname", name);
 				
-				String tagCount = Integer.toString(count) + " " + res.getString(R.string.bookmark_count);
+				String tagCount = Integer.toString(t.getCount()) + " " + res.getString(R.string.bookmark_count);
 				
 				if(!accountSpecific && accountCount > 1)
 					tagCount = account;
@@ -557,30 +451,25 @@ public class BookmarkContentProvider extends ContentProvider {
 		Cursor c = getNotes(Tag.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), null, SuggestionLimit);
 		
 		if(c.moveToFirst()){
-			int titleColumn = c.getColumnIndex(Note.Title);
-			int textColumn = c.getColumnIndex(Note.Text);
-			int idColumn = c.getColumnIndex(BaseColumns._ID);
-			int accountColumn = c.getColumnIndex(Tag.Account);
-			
+            Note n = new Note(c);
 			int accountCount = getAccountCount();
 
 			do {
-				String title = c.getString(titleColumn);
-				String text = c.getString(textColumn);
-				String account = c.getString(accountColumn);
+				String text = n.getText();
+				String account = n.getAccount();
 				
 				Uri data;
 				Uri.Builder builder = new Uri.Builder();
 				builder.scheme(Constants.CONTENT_SCHEME);
 				builder.encodedAuthority(account + "@" + Constants.INTENT_URI);
 				builder.appendEncodedPath("notes");
-				builder.appendEncodedPath(c.getString(idColumn));
+				builder.appendEncodedPath(Integer.toString(n.getId()));
 	    		data = builder.build();
 				
 				if(!accountSpecific && accountCount > 1)
 					text = account;
 				
-				suggestions.put(title + "_note_" + account, new SearchSuggestion(title,
+				suggestions.put(n.getTitle() + "_note_" + account, new SearchSuggestion(n.getTitle(),
 					text, R.drawable.main_menu_note, data.toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
 				
 			} while(c.moveToNext());	
@@ -677,7 +566,7 @@ public class BookmarkContentProvider extends ContentProvider {
 	}
 	
 	private int bulkLoad(String table, ContentValues[] values){
-		db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 		int inserted = 0;
 		
 		db.beginTransaction();

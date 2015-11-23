@@ -48,27 +48,15 @@ public class NoteManager {
 	}
 	
 	public static Note GetById(int id, Context context) throws ContentNotFoundException {		
-		final String[] projection = new String[] {Note.Account, Note.Title, Note.Text, Note.Pid, Note.Hash, Note.Added, Note.Updated};
+		final String[] projection = new String[] {BaseColumns._ID, Note.Account, Note.Title, Note.Text, Note.Pid, Note.Hash, Note.Added, Note.Updated};
 		
 		Uri uri = ContentUris.appendId(Note.CONTENT_URI.buildUpon(), id).build();
 		
 		Cursor c = context.getContentResolver().query(uri, projection, null, null, null);				
 		
 		if(c.moveToFirst()){
-			final int accountColumn = c.getColumnIndex(Note.Account);
-			final int titleColumn = c.getColumnIndex(Note.Title);
-			final int textColumn = c.getColumnIndex(Note.Text);
-			final int pidColumn = c.getColumnIndex(Note.Pid);
-			final int hashColumn = c.getColumnIndex(Note.Hash);
-			final int addedColumn = c.getColumnIndex(Note.Added);
-			final int updatedColumn = c.getColumnIndex(Note.Updated);
-
-			Note n = new Note(id, c.getString(titleColumn), c.getString(textColumn), 
-				c.getString(accountColumn), c.getString(hashColumn), c.getString(pidColumn),
-				new Date(c.getLong(addedColumn)), new Date(c.getLong(updatedColumn)));
-			
+			Note n = new Note(c);
 			c.close();
-			
 			return n;
 		} else {
 			c.close();
@@ -82,18 +70,7 @@ public class NoteManager {
 		
 		for(int i = 0; i < notesize; i++){	
 			Note n = list.get(i);
-			
-			ContentValues values = new ContentValues();
-			
-			values.put(Note.Title, n.getTitle());
-			values.put(Note.Text, n.getText());
-			values.put(Note.Account, account);
-			values.put(Note.Hash, n.getHash());
-			values.put(Note.Pid, n.getPid());
-			values.put(Note.Added, n.getAdded().getTime());
-			values.put(Note.Updated, n.getUpdated().getTime());
-			
-			ncv[i] = values;
+			ncv[i] = n.toContentValues();
 		}
 		
 		context.getContentResolver().bulkInsert(Note.CONTENT_URI, ncv);
@@ -108,46 +85,13 @@ public class NoteManager {
 	}
 	
 	public static void AddNote(Note note, String account, Context context){
-		final ContentValues values = new ContentValues();
-		
-		values.put(Note.Title, note.getTitle());
-		values.put(Note.Hash, note.getHash());
-		values.put(Note.Text, note.getText());
-		values.put(Note.Pid, note.getPid());
-		values.put(Note.Added, note.getAdded().getTime());
-		values.put(Note.Updated, note.getUpdated().getTime());
-		values.put(Note.Account, note.getAccount());
-	
-		context.getContentResolver().insert(Note.CONTENT_URI, values);
+		context.getContentResolver().insert(Note.CONTENT_URI, note.toContentValues());
 	}
 	
 	public static void UpdateNote(Note note, String account, Context context){
-		
 		final String selection = Note.Pid + "=? AND " + Note.Account + "=?";
 		final String[] selectionargs = new String[]{note.getPid(), account};
-		
-		final ContentValues values = new ContentValues();
-		values.put(Note.Title, note.getTitle());
-		values.put(Note.Hash, note.getHash());
-		values.put(Note.Text, note.getText());
-		values.put(Note.Pid, note.getPid());
-		values.put(Note.Added, note.getAdded().getTime());
-		values.put(Note.Updated, note.getUpdated().getTime());
-		values.put(Note.Account, note.getAccount());
-		
-		context.getContentResolver().update(Note.CONTENT_URI, values, selection, selectionargs);
-	}
-	
-	public static Note CursorToNote(Cursor c) {
-		Note n = new Note();
-		n.setId(c.getInt(c.getColumnIndex(BaseColumns._ID)));
-		n.setTitle(c.getString(c.getColumnIndex(Note.Title)));
-		n.setText(c.getString(c.getColumnIndex(Note.Text)));
-
-		if(c.getColumnIndex(Note.Account) != -1)
-			n.setAccount(c.getString(c.getColumnIndex(Note.Account)));
-		
-		return n;
+		context.getContentResolver().update(Note.CONTENT_URI, note.toContentValues(), selection, selectionargs);
 	}
 	
 	public static CursorLoader SearchNotes(String query, String username, Context context) {

@@ -21,6 +21,8 @@
 
 package com.pindroid.model;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -115,6 +117,31 @@ public class Note implements BaseColumns {
         return mUpdated;
     }
 
+    public Note(Cursor c) {
+        mId = c.getInt(c.getColumnIndex(_ID));
+
+        if(c.getColumnIndex(Title) != -1)
+            mTitle = c.getString(c.getColumnIndex(Title));
+
+        if(c.getColumnIndex(Text) != -1)
+            mText = c.getString(c.getColumnIndex(Text));
+
+        if(c.getColumnIndex(Account) != -1)
+            mAccount = c.getString(c.getColumnIndex(Account));
+
+        if(c.getColumnIndex(Added) != -1)
+            mAdded = new Date(c.getLong(c.getColumnIndex(Added)));
+
+        if(c.getColumnIndex(Updated) != -1)
+            mUpdated = new Date(c.getLong(c.getColumnIndex(Updated)));
+
+        if(c.getColumnIndex(Hash) != -1)
+            mHash = c.getString(c.getColumnIndex(Hash));
+
+        if(c.getColumnIndex(Pid) != -1)
+            mPid = c.getString(c.getColumnIndex(Pid));
+    }
+
     public Note copy() {
         Note n = new Note();
         n.mTitle = this.mTitle;
@@ -125,5 +152,19 @@ public class Note implements BaseColumns {
         n.mAdded = this.mAdded;
         n.mUpdated = this.mUpdated;
         return n;
+    }
+
+    public ContentValues toContentValues() {
+        ContentValues values = new ContentValues();
+
+        values.put(Note.Title, mTitle);
+        values.put(Note.Text, mText);
+        values.put(Note.Account, mAccount);
+        values.put(Note.Hash, mHash);
+        values.put(Note.Pid, mPid);
+        values.put(Note.Added, mAdded.getTime());
+        values.put(Note.Updated, mUpdated.getTime());
+
+        return values;
     }
 }

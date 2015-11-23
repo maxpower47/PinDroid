@@ -127,7 +127,7 @@ public class Bookmark implements BaseColumns, Parcelable, StableListItem {
         if (mTags != null) {
             for (String s : mTags.split(" ")) {
                 if (!s.equals(""))
-                    result.add(new Tag(s));
+                    result.add(new Tag(s, mAccount));
             }
         }
 
@@ -246,12 +246,24 @@ public class Bookmark implements BaseColumns, Parcelable, StableListItem {
 
     public Bookmark(Cursor c) {
         mId = c.getInt(c.getColumnIndex(_ID));
-        mDescription = c.getString(c.getColumnIndex(Description));
-        mUrl = c.getString(c.getColumnIndex(Url));
-        mHash = c.getString(c.getColumnIndex(Hash));
-        mMeta = c.getString(c.getColumnIndex(Meta));
-        mTags = c.getString(c.getColumnIndex(Tags));
-        mRead = c.getInt(c.getColumnIndex(ToRead)) == 1;
+
+        if(c.getColumnIndex(Description) != -1)
+            mDescription = c.getString(c.getColumnIndex(Description));
+
+        if(c.getColumnIndex(Url) != -1)
+            mUrl = c.getString(c.getColumnIndex(Url));
+
+        if(c.getColumnIndex(Hash) != -1)
+            mHash = c.getString(c.getColumnIndex(Hash));
+
+        if(c.getColumnIndex(Meta) != -1)
+            mMeta = c.getString(c.getColumnIndex(Meta));
+
+        if(c.getColumnIndex(Tags) != -1)
+            mTags = c.getString(c.getColumnIndex(Tags));
+
+        if(c.getColumnIndex(ToRead) != -1)
+            mRead = c.getInt(c.getColumnIndex(ToRead)) == 1;
 
         if(c.getColumnIndex(Account) != -1)
             mAccount = c.getString(c.getColumnIndex(Account));
