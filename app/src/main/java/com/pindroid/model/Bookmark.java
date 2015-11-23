@@ -31,6 +31,8 @@ import android.provider.BaseColumns;
 import com.google.gson.annotations.SerializedName;
 import com.pindroid.listadapter.StableListItem;
 import com.pindroid.providers.BookmarkContentProvider;
+import com.workday.postman.Postman;
+import com.workday.postman.annotations.Parceled;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Parceled
 public class Bookmark implements BaseColumns, Parcelable, StableListItem {
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + BookmarkContentProvider.AUTHORITY + "/bookmark");
@@ -60,19 +63,19 @@ public class Bookmark implements BaseColumns, Parcelable, StableListItem {
     public static final String Synced = "SYNCED";
     public static final String Deleted = "DELETED";
 
-    private int mId = 0;
-    private String mAccount = null;
-    @SerializedName("href") private String mUrl = null;
-    @SerializedName("description") private String mDescription = null;
-    @SerializedName("extended") private String mNotes = null;
-    @SerializedName("tags") private String mTags = null;
-    @SerializedName("hash") private String mHash = null;
-    @SerializedName("meta") private String mMeta = null;
-    @SerializedName("shared") private Boolean mShared = true;
-    @SerializedName("toread") private Boolean mRead = false;
-    @SerializedName("time") private Date mTime;
-    private int mSynced = 0;
-    private boolean mDeleted = false;
+    int mId = 0;
+    String mAccount = null;
+    @SerializedName("href") String mUrl = null;
+    @SerializedName("description") String mDescription = null;
+    @SerializedName("extended") String mNotes = null;
+    @SerializedName("tags") String mTags = null;
+    @SerializedName("hash") String mHash = null;
+    @SerializedName("meta") String mMeta = null;
+    @SerializedName("shared") Boolean mShared = true;
+    @SerializedName("toread") Boolean mRead = false;
+    @SerializedName("time") Date mTime;
+    int mSynced = 0;
+    boolean mDeleted = false;
 
     public int getId() {
         return mId;
@@ -299,47 +302,10 @@ public class Bookmark implements BaseColumns, Parcelable, StableListItem {
     }
 
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mId);
-        dest.writeString(mAccount);
-        dest.writeString(mUrl);
-        dest.writeString(mDescription);
-        dest.writeString(mNotes);
-        dest.writeString(mTags);
-        dest.writeString(mHash);
-        dest.writeString(mMeta);
-        dest.writeLong(mTime == null ? 0 : mTime.getTime());
-        dest.writeInt(mSynced);
-        dest.writeByte((byte) (mShared ? 1 : 0));
-        dest.writeByte((byte) (mRead ? 1 : 0));
-        dest.writeByte((byte) (mDeleted ? 1 : 0));
+        Postman.writeToParcel(this, dest);
     }
 
-    public static final Parcelable.Creator<Bookmark> CREATOR
-            = new Parcelable.Creator<Bookmark>() {
-        public Bookmark createFromParcel(Parcel in) {
-            return new Bookmark(in);
-        }
-
-        public Bookmark[] newArray(int size) {
-            return new Bookmark[size];
-        }
-    };
-
-    private Bookmark(Parcel in) {
-        mId = in.readInt();
-        mAccount = in.readString();
-        mUrl = in.readString();
-        mDescription = in.readString();
-        mNotes = in.readString();
-        mTags = in.readString();
-        mHash = in.readString();
-        mMeta = in.readString();
-        mTime = new Date(in.readLong());
-        mSynced = in.readInt();
-        mShared = in.readByte() == 1;
-        mRead = in.readByte() == 1;
-        mDeleted = in.readByte() == 1;
-    }
+    public static final Parcelable.Creator<Bookmark> CREATOR = Postman.getCreator(Bookmark.class);
 
     @Override
     public int hashCode() {
