@@ -255,7 +255,7 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
             while (tagData.moveToNext()) {
 
                 if(tags.size() == 0 || tags.contains(tagData.getString(1))) {
-                    NsMenuItemModel mItem = new NsMenuItemModel(tagData.getString(1), R.drawable.main_menu_tag, false, tagData.getInt(2));
+                    NsMenuItemModel mItem = new NsMenuItemModel(tagData.getString(1), R.drawable.ic_label_gray_24dp, false, tagData.getInt(2));
                     mAdapter.addItem(mItem);
                     res++;
                 }

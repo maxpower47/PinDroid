@@ -46,11 +46,11 @@ public class BookmarkView extends LinearLayout implements SwipableView {
         switch (bookmark.getSynced()) {
 
             case 1:
-                syncedView.setImageResource(R.drawable.sync);
+                syncedView.setImageResource(R.drawable.ic_sync_green_24dp);
                 syncedView.setVisibility(View.VISIBLE);
                 break;
             case -1:
-                syncedView.setImageResource(R.drawable.sync_fail);
+                syncedView.setImageResource(R.drawable.ic_sync_problem_red_24dp);
                 syncedView.setVisibility(View.VISIBLE);
                 break;
             default:

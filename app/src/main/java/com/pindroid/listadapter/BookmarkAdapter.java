@@ -1,7 +1,10 @@
 package com.pindroid.listadapter;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -53,7 +56,13 @@ public class BookmarkAdapter extends RecyclerCursorAdapter<Bookmark, BookmarkVie
             }
         });
 
-        view.getSwipableViewContainter().setBackgroundResource(R.drawable.bg_item_swiping_neutral);
+        // crappy workaround for setting the item background on older devices
+        TypedArray a = context.getTheme().obtainStyledAttributes(new int[] { android.R.attr.selectableItemBackground });
+        Drawable d = a.getDrawable(0);
+        a.recycle();
+        LayerDrawable ld = new LayerDrawable(new Drawable[] {
+                context.getResources().getDrawable(R.drawable.list_background), d });
+        view.getSwipableViewContainter().setBackground(ld);
 
         wrapper.setMaxRightSwipeAmount(0.25f);
         wrapper.setMaxLeftSwipeAmount(-0.5f);

@@ -51,7 +51,8 @@
                     android:id="@+id/view_bookmark_title_icon"
                     android:layout_width="@dimen/view_bookmark_icon_size"
                     android:layout_height="@dimen/view_bookmark_icon_size"
-                    android:src="@drawable/ic_bookmark"/>
+                    app:srcCompat="@drawable/ic_bookmark_black_24dp"
+                    android:tint="@color/icon_dark_gray"/>
                 <TextView
                     android:id="@+id/view_bookmark_title"
                     android:layout_height="wrap_content"
@@ -73,7 +74,8 @@
                 <ImageView
                     android:layout_width="@dimen/view_bookmark_icon_size"
                     android:layout_height="@dimen/view_bookmark_icon_size"
-                    android:src="@drawable/ic_link"/>
+                    app:srcCompat="@drawable/ic_link_black_24dp"
+                    android:tint="@color/icon_dark_gray"/>
                 <TextView
                     android:id="@+id/view_bookmark_url"
                     android:layout_width="wrap_content"
@@ -94,7 +96,8 @@
                 <ImageView
                     android:layout_width="@dimen/view_bookmark_icon_size"
                     android:layout_height="@dimen/view_bookmark_icon_size"
-                    android:src="@drawable/ic_content"/>
+                    app:srcCompat="@drawable/ic_content_black_24dp"
+                    android:tint="@color/icon_dark_gray"/>
                 <TextView
                     android:id="@+id/view_bookmark_notes"
                     android:layout_width="wrap_content"
@@ -114,7 +117,8 @@
                 <ImageView
                     android:layout_width="@dimen/view_bookmark_icon_size"
                     android:layout_height="@dimen/view_bookmark_icon_size"
-                    android:src="@drawable/ic_tag"/>
+                    app:srcCompat="@drawable/ic_label_black_24dp"
+                    android:tint="@color/icon_dark_gray"/>
                 <com.pindroid.ui.TagView
                     android:id="@+id/view_bookmark_tags"
                     android:layout_width="wrap_content"
@@ -137,7 +141,8 @@
                 <ImageView
                     android:layout_width="@dimen/view_bookmark_icon_size"
                     android:layout_height="@dimen/view_bookmark_icon_size"
-                    android:src="@drawable/ic_time"/>
+                    app:srcCompat="@drawable/ic_access_time_black_24dp"
+                    android:tint="@color/icon_dark_gray"/>
                 <TextView
                     android:id="@+id/view_bookmark_time"
                     android:layout_width="wrap_content"
@@ -157,7 +162,8 @@
                 <ImageView
                     android:layout_width="@dimen/view_bookmark_icon_size"
                     android:layout_height="@dimen/view_bookmark_icon_size"
-                    android:src="@drawable/ic_account"/>
+                    app:srcCompat="@drawable/ic_account_circle_black_24dp"
+                    android:tint="@color/icon_dark_gray"/>
                 <TextView
                     android:id="@+id/view_bookmark_account"
                     android:layout_width="wrap_content"

@@ -26,7 +26,7 @@
     <item 
 		android:id="@+id/menu_search" 
 		android:title="@string/menu_search_title" 
-		android:icon="@drawable/ic_menu_search"
+		android:icon="@drawable/ic_search_white_24dp"
 		pindroid:showAsAction="ifRoom"
 		pindroid:actionViewClass="android.support.v7.widget.SearchView"
 		android:orderInCategory="2" />

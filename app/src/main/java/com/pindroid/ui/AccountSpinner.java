@@ -87,7 +87,7 @@ public class AccountSpinner extends LinearLayout {
     }
 
     public void toggle(boolean animate) {
-        accountSpinnerButton.setImageResource(accountSpinnerOpen ? R.drawable.ic_arrow_drop_down : R.drawable.ic_arrow_drop_up);
+        accountSpinnerButton.setImageResource(accountSpinnerOpen ? R.drawable.ic_arrow_drop_down_black_24dp : R.drawable.ic_arrow_drop_up_black_24dp);
 
         if(animate) {
             ResizeAnimation animation;

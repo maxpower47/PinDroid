@@ -57,6 +57,6 @@
             android:layout_margin="@dimen/fab_compat_margin"
             app:borderWidth="0dp"
             app:layout_behavior="com.pindroid.ui.ScrollAwareFABBehavior"
-            android:src="@drawable/ic_menu_add"/>
+            app:srcCompat="@drawable/ic_add_white_24dp"/>
     </android.support.design.widget.CoordinatorLayout>
 </com.kennyc.view.MultiStateView>
