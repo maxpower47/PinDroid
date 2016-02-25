@@ -7,6 +7,7 @@ import android.app.Application;
 import com.pindroid.Constants;
 import com.pindroid.event.AuthenticationEvent;
 import com.pindroid.util.AccountHelper;
+import com.pindroid.PindroidEventBusIndex;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -16,6 +17,7 @@ public class PindroidApplication extends Application {
 	@Override
 	public void onCreate() {
         super.onCreate();
+        EventBus.builder().addIndex(new PindroidEventBusIndex()).installDefaultEventBus();
         EventBus.getDefault().register(this);
 	}
 
