@@ -14,7 +14,7 @@ import org.androidannotations.annotations.RootContext;
 
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 
 @EBean
 public class BookmarkFeedAdapter extends RecyclerAdapter<FeedBookmark, BookmarkFeedView> {

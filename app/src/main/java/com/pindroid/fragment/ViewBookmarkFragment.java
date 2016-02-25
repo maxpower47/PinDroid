@@ -62,7 +62,8 @@ import com.pindroid.util.SettingsHelper;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 @EFragment(R.layout.view_bookmark_fragment)
 public class ViewBookmarkFragment extends Fragment {
@@ -236,7 +237,8 @@ public class ViewBookmarkFragment extends Fragment {
 		}
 	}
 
-    public void onEvent(AccountChangedEvent event) {
+    @Subscribe
+    public void onAccountChanged(AccountChangedEvent event) {
         refresh();
     }
 

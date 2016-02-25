@@ -59,7 +59,8 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 @EFragment(R.layout.browse_bookmark_feed_fragment)
 public class BrowseBookmarkFeedFragment extends Fragment
@@ -87,7 +88,7 @@ public class BrowseBookmarkFeedFragment extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().registerSticky(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -116,7 +117,8 @@ public class BrowseBookmarkFeedFragment extends Fragment
         getLoaderManager().initLoader(0, null, this);
 	}
 
-    public void onEvent(FeedBookmarkSelectedEvent event) {
+    @Subscribe
+    public void onBookmarkSelected(FeedBookmarkSelectedEvent event) {
         lastSelected = event.getBookmark();
 
         String defaultAction = SettingsHelper.getDefaultAction(getActivity());
@@ -137,7 +139,8 @@ public class BrowseBookmarkFeedFragment extends Fragment
         }
     }
 
-    public void onEvent(AccountChangedEvent event) {
+    @Subscribe(sticky = true)
+    public void onAccountChanged(AccountChangedEvent event) {
         if(!event.getNewAccount().equals(username)) {
             this.username = event.getNewAccount();
             refresh();

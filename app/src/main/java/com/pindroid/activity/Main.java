@@ -104,7 +104,8 @@ import org.androidannotations.annotations.ViewById;
 import java.util.Locale;
 import java.util.Set;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 @EActivity(R.layout.main)
 @OptionsMenu(R.menu.base_menu)
@@ -187,7 +188,7 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().registerSticky(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -500,7 +501,8 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
         getSupportActionBar().setSubtitle(subtitle);
     }
 
-	public void onEvent(AccountChangedEvent event){
+    @Subscribe(sticky = true)
+	public void onAccountChanged(AccountChangedEvent event){
         username = event.getNewAccount();
 
         if(AccountHelper.getAccountCount(this) > 1) {
@@ -754,7 +756,8 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
         }
     }
 
-    public void onEvent(DrawerTagsChangedEvent event) {
+    @Subscribe
+    public void onDrawerTagsChanged(DrawerTagsChangedEvent event) {
         getSupportLoaderManager().restartLoader(0, null, Main.this);
     }
 

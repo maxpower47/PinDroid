@@ -62,7 +62,9 @@ import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 @EFragment(R.layout.browse_bookmark_fragment)
 @OptionsMenu(R.menu.browse_bookmark_menu)
@@ -106,7 +108,7 @@ public class BrowseBookmarksFragment extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().registerSticky(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -176,11 +178,13 @@ public class BrowseBookmarksFragment extends Fragment
         bookmarkSelectedListener.onBookmarkAdd(null);
     }
 
-    public void onEventMainThread(SyncCompleteEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSyncComplete(SyncCompleteEvent event) {
         refreshLayout.setRefreshing(false);
     }
 
-    public void onEventMainThread(final BookmarkDeletedEvent event) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onBookmarkDeleted(final BookmarkDeletedEvent event) {
         Snackbar.make(listView, R.string.snackbar_deleted, Snackbar.LENGTH_LONG)
                 .setActionTextColor(getResources().getColorStateList(R.color.snackbar_button))
                 .setAction(R.string.snackbar_undo, new View.OnClickListener() {
@@ -192,7 +196,8 @@ public class BrowseBookmarksFragment extends Fragment
                 .show();
     }
 
-    public void onEvent(BookmarkSelectedEvent event) {
+    @Subscribe
+    public void onBookmarkSelected(BookmarkSelectedEvent event) {
         String defaultAction = SettingsHelper.getDefaultAction(getActivity());
 
         switch (defaultAction) {
@@ -211,7 +216,8 @@ public class BrowseBookmarksFragment extends Fragment
         }
     }
 
-    public void onEvent(AccountChangedEvent event) {
+    @Subscribe(sticky = true)
+    public void onAccountChanged(AccountChangedEvent event) {
         this.username = event.getNewAccount();
         refresh();
     }

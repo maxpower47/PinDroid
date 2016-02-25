@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 import retrofit.ErrorHandler;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;

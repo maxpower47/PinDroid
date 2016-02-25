@@ -32,13 +32,13 @@ import com.pindroid.platform.BookmarkManager;
 import com.pindroid.platform.TagManager;
 import com.pindroid.ui.AddBookmarkView;
 
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 @EFragment(R.layout.add_bookmark_fragment)
 @OptionsMenu(R.menu.add_bookmark_menu)
@@ -60,7 +60,7 @@ public class AddBookmarkFragment extends Fragment {
 	public void onStart(){
 		super.onStart();
         updateTitle();
-        EventBus.getDefault().registerSticky(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -75,7 +75,8 @@ public class AddBookmarkFragment extends Fragment {
         updateTitle();
 	}
 
-    public void onEvent(AccountChangedEvent event) {
+    @Subscribe(sticky = true)
+    public void onAccountChanged(AccountChangedEvent event) {
         this.username = event.getNewAccount();
     }
 

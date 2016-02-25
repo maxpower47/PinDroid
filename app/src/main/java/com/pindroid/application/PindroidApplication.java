@@ -8,7 +8,8 @@ import com.pindroid.Constants;
 import com.pindroid.event.AuthenticationEvent;
 import com.pindroid.util.AccountHelper;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class PindroidApplication extends Application {
 
@@ -18,7 +19,8 @@ public class PindroidApplication extends Application {
         EventBus.getDefault().register(this);
 	}
 
-	public void onEvent(AuthenticationEvent authenticationEvent) {
+    @Subscribe
+	public void onAuthentication(AuthenticationEvent authenticationEvent) {
 		final AccountManager am = AccountManager.get(this);
 
 		Account account = AccountHelper.getAccount(authenticationEvent.getAccount(), this);

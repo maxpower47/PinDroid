@@ -18,7 +18,7 @@ import com.pindroid.ui.BookmarkView_;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 
 @EBean
 public class BookmarkAdapter extends RecyclerCursorAdapter<Bookmark, BookmarkView>

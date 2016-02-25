@@ -1,3 +1,24 @@
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+
 package com.pindroid.activity;
 
 import android.accounts.AccountManager;
@@ -22,7 +43,8 @@ import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.FragmentById;
 import org.androidannotations.annotations.OnActivityResult;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 @EActivity(R.layout.activity_add_bookmark)
 public class AddBookmark extends AppCompatActivity implements AddBookmarkFragment.OnBookmarkSaveListener {
@@ -53,7 +75,7 @@ public class AddBookmark extends AppCompatActivity implements AddBookmarkFragmen
     @Override
     public void onStart(){
         super.onStart();
-        EventBus.getDefault().registerSticky(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -62,7 +84,8 @@ public class AddBookmark extends AppCompatActivity implements AddBookmarkFragmen
         EventBus.getDefault().unregister(this);
     }
 
-    public void onEvent(AccountChangedEvent event) {
+    @Subscribe(sticky = true)
+    public void onAccountChanged(AccountChangedEvent event) {
         getSupportActionBar().setSubtitle(event.getNewAccount());
     }
 

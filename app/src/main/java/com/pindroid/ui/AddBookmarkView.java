@@ -46,7 +46,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 @EViewGroup(R.layout.view_addbookmark)
 public class AddBookmarkView extends LinearLayout {
@@ -260,7 +261,8 @@ public class AddBookmarkView extends LinearLayout {
         }
     }
 
-    public void onEvent(AccountChangedEvent event) {
+    @Subscribe(sticky = true)
+    public void onAccountChanged(AccountChangedEvent event) {
         username = event.getNewAccount();
 
         if(mEditTags.getAdapter() != null) {

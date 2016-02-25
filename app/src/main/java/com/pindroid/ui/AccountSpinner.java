@@ -16,7 +16,8 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 @EViewGroup(R.layout.account_spinner)
 public class AccountSpinner extends LinearLayout {
@@ -33,7 +34,7 @@ public class AccountSpinner extends LinearLayout {
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        EventBus.getDefault().registerSticky(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -42,7 +43,8 @@ public class AccountSpinner extends LinearLayout {
         EventBus.getDefault().unregister(this);
     }
 
-    public void onEvent(AccountChangedEvent event) {
+    @Subscribe(sticky = true)
+    public void onAccountChanged(AccountChangedEvent event) {
         accountSelected.setText(event.getNewAccount());
         accountList.removeAllViews();
 

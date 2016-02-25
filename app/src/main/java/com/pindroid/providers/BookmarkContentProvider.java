@@ -54,7 +54,7 @@ import com.pindroid.model.Note;
 import com.pindroid.model.SearchSuggestion;
 import com.pindroid.model.Tag;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 
 public class BookmarkContentProvider extends ContentProvider {
 

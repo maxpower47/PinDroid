@@ -41,7 +41,8 @@ import com.pindroid.model.Tag;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 @EFragment
 public class BrowseTagsFragment extends ListFragment
@@ -104,7 +105,8 @@ public class BrowseTagsFragment extends ListFragment
 		return username;
 	}
 
-    public void onEvent(AccountChangedEvent event) {
+    @Subscribe
+    public void onAccountChanged(AccountChangedEvent event) {
         this.username = event.getNewAccount();
         refresh();
     }

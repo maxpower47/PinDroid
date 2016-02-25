@@ -44,7 +44,8 @@ import org.androidannotations.annotations.OptionsMenu;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 @EFragment
 @OptionsMenu(R.menu.select_tags_menu)
@@ -71,7 +72,7 @@ public class SelectTagsFragment extends ListFragment
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().registerSticky(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -98,7 +99,8 @@ public class SelectTagsFragment extends ListFragment
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 	}
 
-    public void onEvent(AccountChangedEvent event) {
+    @Subscribe(sticky = true)
+    public void onAccountChanged(AccountChangedEvent event) {
         this.username = event.getNewAccount();
         try{
             getLoaderManager().restartLoader(0, null, this);

@@ -3,7 +3,7 @@ apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "22.0.1"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.pindroid"
@@ -55,18 +55,18 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:23.1.1'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:support-v13:23.1.1'
-    compile 'com.android.support:design:23.1.1'
-    compile 'com.android.support:recyclerview-v7:23.1.1'
+    compile 'com.android.support:support-v4:23.2.0'
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:support-v13:23.2.0'
+    compile 'com.android.support:design:23.2.0'
+    compile 'com.android.support:recyclerview-v7:23.2.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     apt "org.androidannotations:androidannotations:3.3.2"
     compile "org.androidannotations:androidannotations-api:3.3.2"
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.yqritc:recyclerview-flexibledivider:1.2.4'
     compile 'com.kennyc:multistateview:1.1'
     compile 'com.github.dmytrodanylyk.circular-progress-button:library:1.1.3'

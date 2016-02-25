@@ -26,17 +26,14 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.pindroid.R;
-import com.pindroid.application.PindroidApplication;
 import com.pindroid.event.DrawerTagsChangedEvent;
 import com.pindroid.fragment.SelectTagsFragment;
 
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.FragmentById;
 
 import java.util.Set;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 
 @EActivity(R.layout.select_tags)
 public class SelectTags extends AppCompatActivity implements SelectTagsFragment.OnTagsSelectedListener {

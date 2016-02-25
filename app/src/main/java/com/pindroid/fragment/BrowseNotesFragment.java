@@ -40,7 +40,8 @@ import com.pindroid.model.Note;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 @EFragment
 public class BrowseNotesFragment extends ListFragment
@@ -67,7 +68,7 @@ public class BrowseNotesFragment extends ListFragment
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().registerSticky(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -110,7 +111,8 @@ public class BrowseNotesFragment extends ListFragment
 		noteSelectedListener.onNoteView(n);
 	}
 
-    public void onEvent(AccountChangedEvent event) {
+    @Subscribe(sticky = true)
+    public void onAccountChanged(AccountChangedEvent event) {
         this.username = event.getNewAccount();
         refresh();
     }
