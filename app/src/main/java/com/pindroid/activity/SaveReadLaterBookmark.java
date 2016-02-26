@@ -31,6 +31,7 @@ import com.pindroid.R;
 import com.pindroid.application.PindroidApplication;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 import com.pindroid.service.SaveBookmarkService;
+import com.pindroid.util.AccountHelper;
 import com.pindroid.util.SettingsHelper;
 import com.pindroid.util.StringUtils;
 
@@ -49,7 +50,12 @@ public class SaveReadLaterBookmark extends Activity {
 
 		app = (PindroidApplication)getApplicationContext();
 
-		requestAccount();
+        if(AccountHelper.getAccountCount(this) == 1) {
+            app.setUsername(AccountHelper.getFirstAccount(this).name);
+            handleIntent();
+        } else {
+            requestAccount();
+        }
 	}
 
 	protected void requestAccount() {
