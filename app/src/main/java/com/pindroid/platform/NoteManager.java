@@ -70,6 +70,7 @@ public class NoteManager {
 		
 		for(int i = 0; i < notesize; i++){	
 			Note n = list.get(i);
+            n.setAccount(account);
 			ncv[i] = n.toContentValues();
 		}
 		
