@@ -34,7 +34,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:contentDescription="@string/alt_login_background"
-        android:src="@drawable/login_background" />
+        app:srcCompat="@drawable/login_background" />
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
