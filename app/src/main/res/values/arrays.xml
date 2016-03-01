@@ -107,7 +107,7 @@
     <string-array name="main_menu_my_icons">
         <item>ic_bookmark_blue_24dp</item>
         <item>ic_bookmark_border_blue_24dp</item>
-        <item>main_menu_note</item>
+        <item>ic_note_brown_24dp</item>
         <item>ic_settings_black_24dp</item>
     </string-array>
     <string-array name="main_menu_feeds">

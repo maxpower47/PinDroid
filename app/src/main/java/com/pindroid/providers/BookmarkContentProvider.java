@@ -470,7 +470,7 @@ public class BookmarkContentProvider extends ContentProvider {
 					text = account;
 				
 				suggestions.put(n.getTitle() + "_note_" + account, new SearchSuggestion(n.getTitle(),
-					text, R.drawable.main_menu_note, data.toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
+					text, R.drawable.ic_note_brown_24dp, data.toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
 				
 			} while(c.moveToNext());	
 		}

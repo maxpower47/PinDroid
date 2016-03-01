@@ -1,13 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generator: Adobe Illustrator 16.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="48px" height="48px" viewBox="0 0 48 48" enable-background="new 0 0 48 48" xml:space="preserve">
-<path fill="none" d="M0,0h48v48H0V0z"/>
-<path fill="#757575" d="M34,6H14c-2.21,0-3.98,1.79-3.98,4L10,42l14-6l14,6V10C38,7.79,36.21,6,34,6z M34,36l-10-4.35L14,36V10h20
-	V36z M29.566,17.656h-0.928V15.8c0-2.561-2.078-4.638-4.638-4.638c-2.561,0-4.639,2.078-4.639,4.638v1.855h-0.927
-	c-1.025,0-1.855,0.83-1.855,1.855v9.277c0,1.023,0.831,1.854,1.855,1.854h11.132c1.023,0,1.855-0.83,1.855-1.854v-9.277
-	C31.422,18.486,30.59,17.656,29.566,17.656z M24,26.005c-1.025,0-1.855-0.832-1.855-1.855c0-1.025,0.83-1.855,1.855-1.855
-	c1.025,0,1.855,0.83,1.855,1.855C25.855,25.173,25.025,26.005,24,26.005z M26.877,17.656h-5.752V15.8
-	c0-1.586,1.289-2.875,2.876-2.875c1.585,0,2.876,1.289,2.876,2.875V17.656z"/>
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   enable-background="new 0 0 48 48"
+   xml:space="preserve">
+    <metadata
+     id="metadata11">
+        <rdf:RDF>
+            <cc:Work rdf:about="">
+                <dc:format>image/svg+xml</dc:format>
+                <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+                <dc:title/>
+            </cc:Work>
+        </rdf:RDF>
+    </metadata>
+    <defs id="defs9" />
+    <path d="m 0,-24 48,0 0,48 -48,0 0,-48 z" id="path3" style="fill:none" />
+    <path d="M 17,3 7,3 C 5.895,3 5.01,3.895 5.01,5 L 5,21 12,18 19,21 19,5 C 19,3.895 18.105,3 17,3 Z M 17,18 12,15.825 7,18 7,5 17,5 17,18 Z m -2.217,-9.172 -0.464,0 0,-0.928 C 14.319,6.6195 13.28,5.581 12,5.581 10.7195,5.581 9.6805,6.62 9.6805,7.9 l 0,0.9275 -0.4635,0 c -0.5125,0 -0.9275,0.415 -0.9275,0.9275 l 0,4.6385 c 0,0.5115 0.4155,0.927 0.9275,0.927 l 5.566,0 c 0.5115,0 0.9275,-0.415 0.9275,-0.927 l 0,-4.6385 C 15.711,9.243 15.295,8.828 14.783,8.828 Z M 12,13.0025 c -0.5125,0 -0.9275,-0.416 -0.9275,-0.9275 0,-0.5125 0.415,-0.9275 0.9275,-0.9275 0.5125,0 0.9275,0.415 0.9275,0.9275 0,0.5115 -0.415,0.9275 -0.9275,0.9275 z m 1.4385,-4.1745 -2.876,0 0,-0.928 c 0,-0.793 0.6445,-1.4375 1.438,-1.4375 0.7925,0 1.438,0.6445 1.438,1.4375 l 0,0.928 z"
+     id="path5"
+     style="fill:#000000;fill-opacity:1" />
 </svg>
