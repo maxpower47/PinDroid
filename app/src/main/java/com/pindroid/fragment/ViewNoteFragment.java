@@ -55,7 +55,6 @@ public class ViewNoteFragment extends Fragment {
     @Override
     public void onStart(){
     	super.onStart();
-    	
     	loadNote();
     }
     

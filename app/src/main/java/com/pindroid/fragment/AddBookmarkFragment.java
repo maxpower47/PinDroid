@@ -22,6 +22,7 @@
 package com.pindroid.fragment;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
 import com.pindroid.R;
@@ -45,10 +46,7 @@ import org.greenrobot.eventbus.Subscribe;
 public class AddBookmarkFragment extends Fragment {
 	
 	@ViewById(R.id.add_bookmark_view) AddBookmarkView addBookmarkView;
-
     private Bookmark oldBookmark;
-	private String username = null;
-
 	private OnBookmarkSaveListener bookmarkSaveListener;
 	
 	public interface OnBookmarkSaveListener {
@@ -60,25 +58,13 @@ public class AddBookmarkFragment extends Fragment {
 	public void onStart(){
 		super.onStart();
         updateTitle();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
     }
 	
-	public void loadBookmark(Bookmark b){
+	public void loadBookmark(@NonNull Bookmark b){
 		oldBookmark = b;
         addBookmarkView.bind(oldBookmark);
         updateTitle();
 	}
-
-    @Subscribe(sticky = true)
-    public void onAccountChanged(AccountChangedEvent event) {
-        this.username = event.getNewAccount();
-    }
 
 	private void updateTitle(){
 		if(oldBookmark != null && oldBookmark.getId() != 0){

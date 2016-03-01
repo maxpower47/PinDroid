@@ -86,7 +86,7 @@ public class ViewBookmarkFragment extends Fragment {
 	private OnBookmarkActionListener bookmarkActionListener;
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
 	
-	private final ContentObserver observer = new MyObserver(new Handler());
+	private final ContentObserver observer = new BookmarkObserver(new Handler());
 	
 	private static final String STATE_VIEWTYPE = "viewType";
 	private static final String STATE_BOOKMARK = "bookmark";
@@ -387,8 +387,8 @@ public class ViewBookmarkFragment extends Fragment {
 		}
 	}
 	
-	class MyObserver extends ContentObserver {		
-		public MyObserver(Handler handler) {
+	class BookmarkObserver extends ContentObserver {
+		public BookmarkObserver(Handler handler) {
 			super(handler);
 		}
 
