@@ -48,6 +48,6 @@ public class SaveBookmarkService extends IntentService {
 			bookmark.setDescription(getResources().getString(R.string.add_bookmark_default_title));
 		}
 		
-		BookmarkManager.AddBookmark(bookmark, bookmark.getAccount(), this);
+		BookmarkManager.AddBookmark(bookmark, this);
 	}
 }

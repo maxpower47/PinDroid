@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.pindroid.model.Tag;
 import com.pindroid.providers.ContentNotFoundException;
 import com.pindroid.model.Bookmark;
 import com.pindroid.util.Md5Hash;
@@ -165,11 +166,11 @@ public class BookmarkManager {
 		}
 	}
 	
-	public static void AddBookmark(Bookmark bookmark, String account, Context context) {
+	public static void AddBookmark(Bookmark bookmark, Context context) {
 		if(bookmark.getHash() == null || "".equals(bookmark.getHash())){
 			bookmark.setHash(Md5Hash.md5(bookmark.getUrl()));
 		}
-        bookmark.setAccount(account);
+        bookmark.setAccount(bookmark.getAccount());
         bookmark.setSynced(0);
         bookmark.setDeleted(false);
 
@@ -191,7 +192,7 @@ public class BookmarkManager {
 		context.getContentResolver().bulkInsert(Bookmark.CONTENT_URI, bcv);
 	}
 	
-	public static void UpdateBookmark(Bookmark bookmark, String account, Context context){
+	public static void UpdateBookmark(Bookmark bookmark, Context context){
 
 		String hash = "";
 		if(bookmark.getHash() == null || "".equals(bookmark.getHash())){
@@ -199,7 +200,7 @@ public class BookmarkManager {
 		} else hash = bookmark.getHash();
 		
 		final String selection = Bookmark.Hash + "=? AND " + Bookmark.Account + "=?";
-		final String[] selectionargs = new String[]{hash, account};
+		final String[] selectionargs = new String[]{hash, bookmark.getAccount()};
 
         bookmark.setSynced(0);
         bookmark.setDeleted(false);
@@ -372,4 +373,22 @@ public class BookmarkManager {
 		c.close();
 		return count;
 	}
+
+    public static void AddOrUpdateBookmark(Bookmark newBookmark, Bookmark oldBookmark, Context context) {
+        if(oldBookmark != null && oldBookmark.getId() != 0){
+            BookmarkManager.UpdateBookmark(newBookmark, context);
+
+            for(Tag t : oldBookmark.getTags()){
+                if(!newBookmark.getTags().contains(t)) {
+                    TagManager.UpleteTag(t, context);
+                }
+            }
+        } else {
+            BookmarkManager.AddBookmark(newBookmark, context);
+        }
+
+        for(Tag t : newBookmark.getTags()){
+            TagManager.UpsertTag(t, context);
+        }
+    }
 }

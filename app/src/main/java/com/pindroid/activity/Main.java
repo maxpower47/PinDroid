@@ -570,14 +570,14 @@ public class Main extends AppCompatActivity implements OnBookmarkSelectedListene
 	public void onBookmarkMark(Bookmark b) {
 		if(b != null && isMyself()) {
     		b.toggleToRead();
-			BookmarkManager.UpdateBookmark(b, username, this);
+			BookmarkManager.UpdateBookmark(b, this);
     	}
 	}
 
     public void onBookmarkMarkRead(Bookmark b) {
         if(b != null && isMyself() && b.getToRead()) {
             b.setToRead(false);
-            BookmarkManager.UpdateBookmark(b, username, this);
+            BookmarkManager.UpdateBookmark(b, this);
         }
     }
 

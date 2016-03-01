@@ -58,7 +58,7 @@ public class TagManager {
 		return context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, sortorder);
 	}
 	
-	public static void AddTag(Tag tag, String account, Context context){
+	public static void AddTag(Tag tag, Context context){
 		context.getContentResolver().insert(Tag.CONTENT_URI, tag.toContentValues());
 	}
 	
@@ -78,10 +78,10 @@ public class TagManager {
 		context.getContentResolver().bulkInsert(Tag.CONTENT_URI, cvList.toArray(new ContentValues[list.size()]));
 	}
 	
-	public static void UpsertTag(Tag tag, String account, Context context){
+	public static void UpsertTag(Tag tag, Context context){
 		final String[] projection = new String[] {Tag.Name, Tag.Count};
 		final String selection = Tag.Name + "=? AND " +	Tag.Account + "=?";
-		final String[] selectionargs = new String[]{tag.getTagName(), account};
+		final String[] selectionargs = new String[]{tag.getTagName(), tag.getAccount()};
 		
 		final Cursor c = context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, null);
 		
@@ -90,18 +90,18 @@ public class TagManager {
 			final int count = c.getInt(countColumn);
 			
 			tag.setCount(count + 1);
-			UpdateTag(tag, account, context);
+			UpdateTag(tag, context);
 		} else {
 			tag.setCount(1);
-			AddTag(tag, account, context);
+			AddTag(tag, context);
 		}
 		c.close();
 	}
 	
-	public static void UpdateTag(Tag tag, String account, Context context){
+	public static void UpdateTag(Tag tag, Context context){
 		
 		final String selection = Tag.Name + "=? AND " +	Tag.Account + "=?";
-		final String[] selectionargs = new String[]{tag.getTagName(), account};
+		final String[] selectionargs = new String[]{tag.getTagName(), tag.getAccount()};
 		
 		final ContentValues values = new ContentValues();
 		values.put(Tag.Count, tag.getCount());
@@ -109,10 +109,10 @@ public class TagManager {
 		context.getContentResolver().update(Tag.CONTENT_URI, values, selection, selectionargs);
 	}
 	
-	public static void UpleteTag(Tag tag, String account, Context context){
+	public static void UpleteTag(Tag tag, Context context){
 		final String[] projection = new String[] {Tag.Name, Tag.Count};
 		final String selection = Tag.Name + "=? AND " +	Tag.Account + "=?";
-		final String[] selectionargs = new String[]{tag.getTagName(), account};
+		final String[] selectionargs = new String[]{tag.getTagName(), tag.getAccount()};
 
 		final Cursor c = context.getContentResolver().query(Tag.CONTENT_URI, projection, selection, selectionargs, null);
 		
@@ -122,9 +122,9 @@ public class TagManager {
 			
 			if(count > 1){
 				tag.setCount(count - 1);
-				UpdateTag(tag, account, context);
+				UpdateTag(tag, context);
 			} else {
-				DeleteTag(tag, account, context);
+				DeleteTag(tag, tag.getAccount(), context);
 			}
 		}
 		c.close();

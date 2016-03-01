@@ -46,7 +46,7 @@ public class AddBookmarkFragment extends Fragment {
 	
 	@ViewById(R.id.add_bookmark_view) AddBookmarkView addBookmarkView;
 
-    private Bookmark bookmark;
+    private Bookmark oldBookmark;
 	private String username = null;
 
 	private OnBookmarkSaveListener bookmarkSaveListener;
@@ -70,8 +70,8 @@ public class AddBookmarkFragment extends Fragment {
     }
 	
 	public void loadBookmark(Bookmark b){
-		bookmark = b;
-        addBookmarkView.bind(bookmark);
+		oldBookmark = b;
+        addBookmarkView.bind(oldBookmark);
         updateTitle();
 	}
 
@@ -81,12 +81,8 @@ public class AddBookmarkFragment extends Fragment {
     }
 
 	private void updateTitle(){
-		if(bookmark != null){
-            if(bookmark.getId() == 0) {
-                getActivity().setTitle(R.string.add_bookmark_add_title);
-            } else {
-                getActivity().setTitle(R.string.add_bookmark_edit_title);
-            }
+		if(oldBookmark != null && oldBookmark.getId() != 0){
+            getActivity().setTitle(R.string.add_bookmark_edit_title);
 		} else {
 			getActivity().setTitle(R.string.add_bookmark_add_title);
 		}
@@ -94,26 +90,9 @@ public class AddBookmarkFragment extends Fragment {
 
     @OptionsItem(R.id.menu_addbookmark_save)
     void saveBookmark() {
-
-        Bookmark b = addBookmarkView.getBookmark();
-
-        if(bookmark != null && bookmark.getId() != 0){
-            BookmarkManager.UpdateBookmark(b, username, getActivity());
-
-            for(Tag t : bookmark.getTags()){
-                if(!b.getTags().contains(t)) {
-                    TagManager.UpleteTag(t, username, getActivity());
-                }
-            }
-        } else {
-            BookmarkManager.AddBookmark(b, username, getActivity());
-        }
-
-        for(Tag t : b.getTags()){
-            TagManager.UpsertTag(t, username, getActivity());
-        }
-
-        bookmarkSaveListener.onBookmarkSave(b);
+        Bookmark newBookmark = addBookmarkView.getBookmark();
+        BookmarkManager.AddOrUpdateBookmark(newBookmark, oldBookmark, getContext());
+        bookmarkSaveListener.onBookmarkSave(newBookmark);
     }
 
     @OptionsItem(R.id.menu_addbookmark_cancel)
