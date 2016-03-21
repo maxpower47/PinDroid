@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -9,26 +7,29 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="svg2"
+   x="0"
+   y="0"
+   width="48"
+   height="48"
    version="1.1"
+   id="svg2"
    inkscape:version="0.91 r13725"
-   xml:space="preserve"
-   width="500"
-   height="500"
-   viewBox="0 0 500 500"
-   sodipodi:docname="ic_main_read_later.svg"
-   inkscape:export-filename="C:\Users\MSchmidt\StudioProjects\PinDroid\app\src\main\res\drawable-hdpi\ic_main_read_later.png"
-   inkscape:export-xdpi="12.96"
-   inkscape:export-ydpi="12.96"><metadata
-     id="metadata8"><rdf:RDF><cc:Work
-         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
-     id="defs6"><clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath16"><path
-         d="M 0,400 400,400 400,0 0,0 0,400 Z"
-         id="path18"
-         inkscape:connector-curvature="0" /></clipPath></defs><sodipodi:namedview
+   sodipodi:docname="icon.svg"
+   inkscape:export-filename="C:\Users\MSchmidt\Downloads\download (4)\icons\icon.png"
+   inkscape:export-xdpi="108"
+   inkscape:export-ydpi="108">
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
@@ -37,33 +38,131 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1061"
-     inkscape:window-height="555"
-     id="namedview4"
+     inkscape:window-width="732"
+     inkscape:window-height="480"
+     id="namedview41"
      showgrid="false"
-     inkscape:zoom="0.472"
-     inkscape:cx="250"
-     inkscape:cy="250"
-     inkscape:window-x="2024"
-     inkscape:window-y="49"
+     inkscape:zoom="4.9166667"
+     inkscape:cx="22.097321"
+     inkscape:cy="24"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g14" /><g
-     id="g10"
-     inkscape:groupmode="layer"
-     inkscape:label="ic_main"
-     transform="matrix(1.25,0,0,-1.25,0,500)"><g
-       id="g12"><g
-         id="g14"
-         clip-path="url(#clipPath16)"><g
-           id="g20"
-           transform="translate(19.9902,269.5601)"><path
-             d="m 0,0 c -6.37,23.74 2.61,39.28 26.37,45.64 l 229.05,61.32 c 23.76,6.36 39.309,-2.61 45.67,-26.35 l 58.93,-219.731 c 6.37,-23.739 -2.61,-39.279 -26.371,-45.639 L 104.6,-246.08 c -23.76,-6.36 -39.31,2.61 -45.67,26.35 L 0,0 Z"
-             style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#0066ff;stroke-opacity:1;stroke-width:12.8;stroke-miterlimit:4;stroke-dasharray:none"
-             id="path22"
-             inkscape:connector-curvature="0" /></g><g
-           id="g24"
-           transform="translate(233.8994,176.7197)"><path
-             d="M 0,0 60.101,-82.22 -14.96,-13.38 -57,-51 c -16.919,18.91 1.11,23.341 10.011,42.45 l -71.45,78.48 -14.3,-10.32 -15.58,6.55 84.04,75.2 3.65,-19.08 -11.04,-10.5 L 0.36,31.96 c 21.43,9.26 24.77,24.57 41.68,5.66 L 0,0 Z"
-             style="fill:#0066ff;fill-opacity:1;fill-rule:evenodd;stroke:none"
-             id="path26"
-             inkscape:connector-curvature="0" /></g></g></g></g></svg>
+     inkscape:current-layer="g20" />
+  <defs
+     id="defs4">
+    <linearGradient
+       x1="17.76052"
+       y1="12.27587"
+       x2="57.01315"
+       y2="62.49781"
+       gradientUnits="userSpaceOnUse"
+       id="color-1">
+      <stop
+         offset="0.3"
+         stop-color="#000000"
+         stop-opacity="0.05"
+         id="stop7" />
+      <stop
+         offset="1"
+         stop-color="#000000"
+         stop-opacity="0"
+         id="stop9" />
+    </linearGradient>
+    <filter
+       id="dropshadow">
+      <feColorMatrix
+         type="matrix"
+         values="0 0 0 0 .05  0 0 0 0 .15  0 0 0 0 .1  0 0 0 .8 0"
+         id="feColorMatrix12" />
+      <feOffset
+         dx="0"
+         dy="1"
+         id="feOffset14" />
+      <feGaussianBlur
+         stdDeviation="1"
+         id="feGaussianBlur16"
+         result="result1" />
+      <feComposite
+         in="SourceGraphic"
+         id="feComposite18"
+         in2="result1" />
+    </filter>
+  </defs>
+  <g
+     fill="none"
+     stroke="none"
+     stroke-width="none"
+     stroke-linecap="butt"
+     stroke-linejoin="miter"
+     stroke-miterlimit="none"
+     stroke-dasharray=""
+     stroke-dashoffset="0"
+     font-family="none"
+     font-weight="normal"
+     font-size="none"
+     text-anchor="start"
+     mix-blend-mode="normal"
+     id="g20">
+    <g
+       id="g22"
+       fill="#000000"
+       stroke="none"
+       stroke-width="1"
+       stroke-miterlimit="4"
+       font-family="'Open Sans', sans-serif"
+       font-size="14">
+      <g
+         id="g10">
+        <g
+           id="g12">
+          <g
+             id="g24" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="g27"
+       fill="#000000"
+       stroke="none"
+       stroke-width="1"
+       stroke-miterlimit="4"
+       font-family="'Open Sans', sans-serif"
+       font-size="14">
+      <g
+         id="g29">
+        <g
+           id="g31">
+          <g
+             id="g33" />
+        </g>
+      </g>
+    </g>
+    <path
+       d="M4,24c0,-11.04569 8.95431,-20 20,-20c11.04569,0 20,8.95431 20,20c0,11.04569 -8.95431,20 -20,20c-11.04569,0 -20,-8.95431 -20,-20z"
+       fill="#ffffff"
+       stroke-width="1"
+       stroke-miterlimit="10"
+       font-family="sans-serif"
+       font-size="12"
+       filter="url(#dropshadow)"
+       id="path35" />
+    <path
+       d="M23.95176,35.72407c0,0 -0.34576,-3.68226 -0.34576,-3.68226l-5.84548,-5.84548c0.01213,-2.38353 1.54698,-1.56261 3.3702,-2.34062l0.00001,0.00001l-0.0303,-8.49346l-1.65117,-1.65117l-0.67285,-1.43522c0,0 1.52605,1.52605 1.52605,1.52605l0.00001,0l-1.52606,-1.52606l10.58899,0.01229l0.00001,0.00001l0,-0.00001l14.44886,14.44886c-1.01074,7.38567 -6.05375,13.48704 -12.83728,16.01234l-7.02524,-7.02524z"
+       fill="url(#color-1)"
+       stroke-width="1"
+       stroke-miterlimit="10"
+       font-family="sans-serif"
+       font-size="12"
+       id="path37" />
+    <path
+       d="M24.94222,26.20499l-0.99047,9.51914l-0.89408,-9.52178l-5.29715,-0.00601c0.01213,-2.38353 1.54698,-1.56261 3.3702,-2.34062l-0.03557,-9.96942l-1.6459,-0.17523l-0.67285,-1.43522l10.58899,0.0123l-0.94712,1.56318l-1.43015,0.04183l-0.00847,10.09944c2.07582,0.69654 3.27247,-0.16459 3.25971,2.21837z"
+       fill="#0066ff"
+       stroke="none"
+       stroke-width="0"
+       stroke-miterlimit="4"
+       font-family="'Open Sans', sans-serif"
+       font-size="14"
+       id="path39" />
+  </g>
+</svg>

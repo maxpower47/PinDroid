@@ -51,7 +51,7 @@
         android:name=".application.PindroidApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/ic_main"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/label"
         android:requiredAccountType="com.pindroid"
         android:theme="@style/PinDroid"
