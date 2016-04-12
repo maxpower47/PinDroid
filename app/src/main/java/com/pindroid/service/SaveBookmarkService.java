@@ -30,6 +30,8 @@ import com.pindroid.model.Bookmark;
 import android.app.IntentService;
 import android.content.Intent;
 
+import org.parceler.Parcels;
+
 public class SaveBookmarkService extends IntentService {
 	
 	public SaveBookmarkService() {
@@ -38,8 +40,8 @@ public class SaveBookmarkService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Bookmark bookmark = intent.getParcelableExtra(Constants.EXTRA_BOOKMARK);
-		
+		Bookmark bookmark = Parcels.unwrap(intent.getParcelableExtra(Constants.EXTRA_BOOKMARK));
+
 		if(bookmark.getDescription() == null || bookmark.getDescription().equals("")) {
     		bookmark.setDescription(NetworkUtilities.getWebpageTitle(bookmark.getUrl()));
 		}

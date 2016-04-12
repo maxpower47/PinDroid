@@ -60,6 +60,7 @@ import com.pindroid.ui.TagView;
 import com.pindroid.util.SettingsHelper;
 
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.ViewById;
 
 import org.greenrobot.eventbus.EventBus;
@@ -80,8 +81,11 @@ public class ViewBookmarkFragment extends Fragment {
 	@ViewById(R.id.view_bookmark_title_icon) ImageView bookmarkIcon;
 	@ViewById(R.id.web_view) WebView mWebContent;
 
-	private Bookmark bookmark;
-	private BookmarkViewType viewType;
+    @InstanceState
+	Bookmark bookmark;
+
+    @InstanceState
+	BookmarkViewType viewType;
 
 	private OnBookmarkActionListener bookmarkActionListener;
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
@@ -107,8 +111,6 @@ public class ViewBookmarkFragment extends Fragment {
 		mTags.setColorGenerator(ColorGenerator.DEFAULT);
 
 		if (savedInstanceState != null) {
-	        viewType = (BookmarkViewType)savedInstanceState.getSerializable(STATE_VIEWTYPE);
-	        bookmark = savedInstanceState.getParcelable(STATE_BOOKMARK);
 	        mWebContent.restoreState(savedInstanceState);
 	    } 
 		
@@ -163,8 +165,6 @@ public class ViewBookmarkFragment extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
-	    savedInstanceState.putSerializable(STATE_VIEWTYPE, viewType);
-	    savedInstanceState.putParcelable(STATE_BOOKMARK, bookmark);
 	    
 	    if(mWebContent != null){
 	    	mWebContent.saveState(savedInstanceState);

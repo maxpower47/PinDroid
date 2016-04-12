@@ -24,15 +24,12 @@ package com.pindroid.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.provider.BaseColumns;
 
 import com.google.gson.annotations.SerializedName;
 import com.pindroid.listadapter.StableListItem;
 import com.pindroid.providers.BookmarkContentProvider;
-import com.workday.postman.Postman;
-import com.workday.postman.annotations.Parceled;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,8 +37,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Parceled
-public class Bookmark implements BaseColumns, Parcelable, StableListItem {
+@Parcel
+public class Bookmark implements BaseColumns, StableListItem {
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + BookmarkContentProvider.AUTHORITY + "/bookmark");
     public static final Uri UNREAD_CONTENT_URI = Uri.parse("content://" + BookmarkContentProvider.AUTHORITY + "/unreadcount");
@@ -308,16 +305,6 @@ public class Bookmark implements BaseColumns, Parcelable, StableListItem {
         b.mUrl = this.mUrl;
         return b;
     }
-
-    public int describeContents() {
-        return 0;
-    }
-
-    public void writeToParcel(Parcel dest, int flags) {
-        Postman.writeToParcel(this, dest);
-    }
-
-    public static final Parcelable.Creator<Bookmark> CREATOR = Postman.getCreator(Bookmark.class);
 
     @Override
     public int hashCode() {

@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.OnActivityResult;
+import org.parceler.Parcels;
 
 @EActivity
 public class SaveReadLaterBookmark extends Activity {
@@ -104,7 +105,7 @@ public class SaveReadLaterBookmark extends Activity {
 
 	private void pushBookmarkToService(Bookmark bookmark) {
 		Intent intent = new Intent(this, SaveBookmarkService.class);
-		intent.putExtra(Constants.EXTRA_BOOKMARK, bookmark);
+		intent.putExtra(Constants.EXTRA_BOOKMARK, Parcels.wrap(bookmark));
 		startService(intent);
 	}
 }

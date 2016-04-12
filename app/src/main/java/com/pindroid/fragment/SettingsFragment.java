@@ -41,6 +41,7 @@ import org.androidannotations.annotations.AfterPreferences;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.PreferenceByKey;
 import org.androidannotations.annotations.PreferenceChange;
+import org.androidannotations.annotations.PreferenceClick;
 import org.androidannotations.annotations.PreferenceScreen;
 import org.androidannotations.annotations.res.StringRes;
 
@@ -49,37 +50,11 @@ import org.androidannotations.annotations.res.StringRes;
 public class SettingsFragment extends PreferenceFragment {
     @StringRes(R.string.syncing_toast) String syncingToast;
 
-    @PreferenceByKey(R.string.pref_forcesync_key) Preference forceSyncPref;
-    @PreferenceByKey(R.string.pref_accountsettings_key) Preference accountSettingsPref;
     @PreferenceByKey(R.string.pref_cat_version_key) PreferenceCategory versionPrefCat;
     @PreferenceByKey(R.string.pref_dashclock_key) IntegrationPreference dashclockPref;
 
     @AfterPreferences
     public void init() {
-        forceSyncPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                Toast.makeText(getActivity(), syncingToast, Toast.LENGTH_LONG).show();
-                SyncUtils.clearSyncMarkers(getActivity());
-
-                Bundle extras = new Bundle();
-                extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-
-                ContentResolver.requestSync(null, BookmarkContentProvider.AUTHORITY, extras);
-
-                return true;
-            }
-        });
-
-        accountSettingsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                Intent i = new Intent(Settings.ACTION_SYNC_SETTINGS);
-                i.putExtra(Settings.EXTRA_AUTHORITIES, new String[] {BookmarkContentProvider.AUTHORITY});
-
-                startActivity(i);
-                return true;
-            }
-        });
-
         try {
             String versionName = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName;
 
@@ -89,6 +64,25 @@ public class SettingsFragment extends PreferenceFragment {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    @PreferenceClick(R.string.pref_forcesync_key)
+    void forceSync() {
+        Toast.makeText(getActivity(), syncingToast, Toast.LENGTH_LONG).show();
+        SyncUtils.clearSyncMarkers(getActivity());
+
+        Bundle extras = new Bundle();
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+
+        ContentResolver.requestSync(null, BookmarkContentProvider.AUTHORITY, extras);
+    }
+
+    @PreferenceClick(R.string.pref_accountsettings_key)
+    void openAccountSettings() {
+        Intent i = new Intent(Settings.ACTION_SYNC_SETTINGS);
+        i.putExtra(Settings.EXTRA_AUTHORITIES, new String[] {BookmarkContentProvider.AUTHORITY});
+
+        startActivity(i);
     }
 
     @PreferenceChange(R.string.pref_synctime_key)
