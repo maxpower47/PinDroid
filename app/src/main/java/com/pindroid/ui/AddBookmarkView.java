@@ -181,7 +181,7 @@ public class AddBookmarkView extends LinearLayout {
                 url = "http://" + url;
             }
 
-            updateTagSuggestions(PinboardClient.get().getTagSuggestions(AccountHelper.getAuthToken(getContext(), account), url));
+            updateTagSuggestions(PinboardClient.get().getTagSuggestions(AccountHelper.getAuthToken(getContext(), account), url).execute().body());
         } catch (Exception e) {
             e.printStackTrace();
         }

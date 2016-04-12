@@ -35,6 +35,8 @@ import com.pindroid.client.PinboardAuthToken;
 import com.pindroid.client.PinboardClient;
 import com.pindroid.util.NetworkUtil;
 
+import java.io.IOException;
+
 /**
  * This class is an implementation of AbstractAccountAuthenticator for
  * authenticating accounts in the com.pindroid domain.
@@ -156,7 +158,12 @@ class Authenticator extends AbstractAccountAuthenticator {
      * Validates user's password on the server
      */
     private PinboardAuthToken onlineConfirmPassword(Account account, String password) throws AuthenticationException {
-    	return PinboardClient.get().authenticate(NetworkUtil.encodeCredentialsForBasicAuthorization(account.name, password));
+        try {
+            return PinboardClient.get().authenticate(NetworkUtil.encodeCredentialsForBasicAuthorization(account.name, password)).execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

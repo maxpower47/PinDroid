@@ -242,22 +242,22 @@ public class BrowseBookmarkFeedFragment extends Fragment
 			   switch (feed) {
 				   case "network":
 					   String token = AccountManager.get(getContext()).getUserData(account, Constants.PREFS_SECRET_TOKEN);
-					   results = PinboardFeedClient.get().getNetworkRecent(token, user);
+					   results = PinboardFeedClient.get().getNetworkRecent(token, user).execute().body();
 					   break;
 				   case "recent":
-					   results = PinboardFeedClient.get().getRecent();
+					   results = PinboardFeedClient.get().getRecent().execute().body();
 					   break;
 				   case "popular":
-					   results = PinboardFeedClient.get().getPopular();
+					   results = PinboardFeedClient.get().getPopular().execute().body();
 					   break;
 				   case "global":
-					   results = PinboardFeedClient.get().searchGlobalTags(tag);
+					   results = PinboardFeedClient.get().searchGlobalTags(tag).execute().body();
 					   break;
 				   default:
 					   if(tag != null && !"".equals(tag)) {
-						   results = PinboardFeedClient.get().getUserRecent(feed, tag);
+						   results = PinboardFeedClient.get().getUserRecent(feed, tag).execute().body();
 					   } else {
-						   results = PinboardFeedClient.get().getUserRecent(feed);
+						   results = PinboardFeedClient.get().getUserRecent(feed).execute().body();
 					   }
 					   break;
 			   }

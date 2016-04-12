@@ -57,6 +57,8 @@ import org.androidannotations.annotations.TextChange;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.IOException;
+
 /**
  * Activity which displays login screen to the user.
  */
@@ -264,9 +266,11 @@ public class AuthenticatorActivity extends AppCompatActivity {
     void authenticate() {
         //onAuthenticationResult(PinboardApi.pinboardAuthenticate(mUsername, mPassword));
         try {
-            onAuthenticationResult(PinboardClient.get().authenticate(NetworkUtil.encodeCredentialsForBasicAuthorization(mUsername, mPassword)));
+            onAuthenticationResult(PinboardClient.get().authenticate(NetworkUtil.encodeCredentialsForBasicAuthorization(mUsername, mPassword)).execute().body());
         } catch (AuthenticationException e) {
             onAuthenticationError();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

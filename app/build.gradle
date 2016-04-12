@@ -68,7 +68,9 @@ dependencies {
     apt "org.androidannotations:androidannotations:4.0.0"
     compile "org.androidannotations:androidannotations-api:4.0.0"
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'com.squareup.retrofit2:retrofit:2.0.1'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.1'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
     compile 'com.yqritc:recyclerview-flexibledivider:1.2.9'
