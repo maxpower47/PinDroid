@@ -38,7 +38,7 @@ import android.text.TextUtils;
 
 public class BookmarkManager {
 	
-	public static CursorLoader GetBookmarks(String username, String tagname, boolean unread, String sortorder, Context context){
+	public static CursorLoader GetBookmarks(String username, String tagname, boolean unread, boolean untagged, String sortorder, Context context){
 		final String[] projection = new String[] {Bookmark._ID, Bookmark.Url, Bookmark.Description, Bookmark.Notes, Bookmark.Hash,
 				Bookmark.Meta, Bookmark.Tags, Bookmark.ToRead, Bookmark.Shared, Bookmark.Synced, Bookmark.Deleted,
 				Bookmark.Account, Bookmark.Time};
@@ -59,6 +59,9 @@ public class BookmarkManager {
 		}
 		if(unread) {
 			selection += " AND " + Bookmark.ToRead + "=1";
+		}
+		if(untagged) {
+			selection += " AND " + nullOrEmpty(Bookmark.Tags);
 		}
 		selection += " AND " + Bookmark.Deleted + "=0";
 		
@@ -493,6 +496,26 @@ public class BookmarkManager {
 		
 		final int count = c.getCount();
 		
+		c.close();
+		return count;
+	}
+
+	public static String nullOrEmpty(String columnName) {
+		return "(" + columnName + " IS NULL OR " + columnName + " = '' )";
+	}
+
+	public static int GetUntaggedCount(String username, Context context){
+		if(username == null || username.equals(""))
+			return 0;
+
+		final String[] projection = new String[] {Bookmark._ID};
+		final String selection = Bookmark.Account + "=? AND " + nullOrEmpty(Bookmark.Tags);
+		final String[] selectionargs = new String[]{username};
+
+		final Cursor c = context.getContentResolver().query(Bookmark.CONTENT_URI, projection, selection, selectionargs, null);
+
+		final int count = c.getCount();
+
 		c.close();
 		return count;
 	}
