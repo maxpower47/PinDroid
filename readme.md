@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/maxpower47/PinDroid.svg?branch=master)](https://travis-ci.org/maxpower47/PinDroid)
+
 PinDroid is an Android client app for the [Pinboard](http://pinboard.in ) social bookmarking service.  PinDroid is a port of [DeliciousDroid](http://code.google.com/p/deliciousdroid/).
 
 ## Installation ##
