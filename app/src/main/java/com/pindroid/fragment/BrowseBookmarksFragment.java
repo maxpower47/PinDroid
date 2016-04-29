@@ -79,7 +79,7 @@ public class BrowseBookmarksFragment extends ListFragment
 	private static final String STATE_USERNAME = "username";
 	private static final String STATE_TAGNAME = "tagname";
 	
-	private OnBookmarkSelectedListener bookmarkSelectedListener;;
+	private OnBookmarkSelectedListener bookmarkSelectedListener;
 
 	public interface OnBookmarkSelectedListener {
 		public void onBookmarkSelected(Bookmark b, BookmarkViewType type);
