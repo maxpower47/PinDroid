@@ -298,7 +298,7 @@ public class AuthenticatorActivity extends ActionBarActivity {
                 return PinboardApi.pinboardAuthenticate(mUsername, mPassword);
             } catch (Exception ex) {
                 Log.e(TAG, "UserLoginTask.doInBackground: failed to authenticate");
-                Log.i(TAG, ex.toString());
+                Log.e(TAG, "", ex);
                 return null;
             }
         }

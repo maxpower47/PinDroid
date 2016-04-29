@@ -179,42 +179,40 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		NsMenuAdapter mAdapter = new NsMenuAdapter(this);
 
 		String[] myMenuItems = getResources().getStringArray(R.array.main_menu_my);
-		String[] feedMenuItems = getResources().getStringArray(R.array.main_menu_feeds);
-
 		String[] myMenuItemsIcon = getResources().getStringArray(R.array.main_menu_my_icons);
+
+		String[] feedMenuItems = getResources().getStringArray(R.array.main_menu_feeds);
         String[] feedsMenuItemsIcon = getResources().getStringArray(R.array.main_menu_feeds_icons);
 
-		int res = 0;
-		for (String item : myMenuItems) {
+		for (int res = 0; res < myMenuItems.length; res++) {
 
-			int id_title = getResources().getIdentifier(item, "string", this.getPackageName());
+			int id_title = getResources().getIdentifier(myMenuItems[res], "string", this.getPackageName());
 			int id_icon = getResources().getIdentifier(myMenuItemsIcon[res], "drawable", this.getPackageName());
 
 			NsMenuItemModel mItem = new NsMenuItemModel(id_title, id_icon);
 			if (res == 1) {
 				unreadItem = mItem;
 				mItem.counter = BookmarkManager.GetUnreadCount(app.getUsername(), this);
+			} else if (res == 2) {
+				mItem.counter = BookmarkManager.GetUntaggedCount(app.getUsername(), this);
 			}
 			mAdapter.addItem(mItem);
-			res++;
 		}
 		
 		mAdapter.addHeader(R.string.main_menu_feeds_header);
 
-        res = 0;
-		for (String item : feedMenuItems) {
+		for (int res = 0; res < feedMenuItems.length; res++) {
 
-			int id_title = getResources().getIdentifier(item, "string", this.getPackageName());
+			int id_title = getResources().getIdentifier(feedMenuItems[res], "string", this.getPackageName());
 			int id_icon = getResources().getIdentifier(feedsMenuItemsIcon[res], "drawable", this.getPackageName());
 
 			NsMenuItemModel mItem = new NsMenuItemModel(id_title, id_icon);
 			mAdapter.addItem(mItem);
-			res++;
 		}
 
         mAdapter.addHeader(R.string.main_menu_tags_header);
 
-        res = 0;
+        int res = 0;
 
         if(tagData != null) {
             Set<String> tags = SettingsHelper.getDrawerTags(this);
@@ -304,7 +302,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if(position <= 8) {
+            if(position <= 9) {
                 switch(position){
                     case 1:
                         onMyBookmarksSelected(null);
@@ -312,19 +310,22 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
                     case 2:
                         onMyUnreadSelected();
                         break;
-                    case 3:
+					case 3:
+						onMyUntaggedSelected();
+						break;
+                    case 4:
                         onMyNotesSelected();
                         break;
-                    case 4:
+                    case 5:
                         onSettingsSelected();
                         break;
-                    case 6:
+                    case 7:
                         onPopularSelected();
                         break;
-                    case 7:
+                    case 8:
                         onRecentSelected();
                         break;
-                    case 8:
+                    case 9:
                         onMyNetworkSelected();
                         break;
                 }
@@ -415,7 +416,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		clearBackStack();
 
 		replaceLeftFragment(frag, false);
-		
+
 		clearDrawer(1);
 	}
 
@@ -429,6 +430,17 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		
 		clearDrawer(2);
 	}
+
+	public void onMyUntaggedSelected() {
+		BrowseBookmarksFragment frag = new BrowseBookmarksFragment();
+		frag.setQuery(app.getUsername(), null, "untagged");
+
+		clearBackStack();
+
+		replaceLeftFragment(frag, false);
+
+		clearDrawer(3);
+	}
 	
 	public void onMyNotesSelected() {
 		BrowseNotesFragment frag = new BrowseNotesFragment();
@@ -438,11 +450,11 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
 		replaceLeftFragment(frag, false);
 		
-		clearDrawer(3);
+		clearDrawer(4);
 	}
 
     public void onSettingsSelected() {
-        clearDrawer(4);
+        clearDrawer(5);
         Intent prefs = new Intent(this, Settings.class);
         startActivity(prefs);
     }
@@ -455,7 +467,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
 		replaceLeftFragment(frag, false);
 		
-		clearDrawer(7);
+		clearDrawer(8);
 	}
 	
 	public void onPopularSelected() {
@@ -466,7 +478,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
 		replaceLeftFragment(frag, false);
 		
-		clearDrawer(6);
+		clearDrawer(7);
 	}
 	
 	public void onMyNetworkSelected() {
@@ -477,7 +489,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 
 		replaceLeftFragment(frag, false);
 		
-		clearDrawer(8);
+		clearDrawer(9);
 	}
 	
 	@Override

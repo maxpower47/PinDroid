@@ -24,10 +24,12 @@ package com.pindroid.fragment;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -62,9 +64,14 @@ public class BrowseBookmarksFragment extends ListFragment
 	
 	private String sortfield = Bookmark.Time + " DESC";
 
+	@Nullable
 	private String username = null;
+
+	@Nullable
 	private String tagname = null;
+
 	private boolean unread = false;
+	private boolean untagged = false;
 	private String query = null;
 	
 	ListView lv;
@@ -72,7 +79,7 @@ public class BrowseBookmarksFragment extends ListFragment
 	private static final String STATE_USERNAME = "username";
 	private static final String STATE_TAGNAME = "tagname";
 	
-	private OnBookmarkSelectedListener bookmarkSelectedListener;
+	private OnBookmarkSelectedListener bookmarkSelectedListener;;
 
 	public interface OnBookmarkSelectedListener {
 		public void onBookmarkSelected(Bookmark b, BookmarkViewType type);
@@ -160,10 +167,11 @@ public class BrowseBookmarksFragment extends ListFragment
 		}
 	}
 	
-	public void setQuery(String username, String tagname, String feed){
+	public void setQuery(String username, String tagname, @Nullable String feed) {
 		this.username = username;
 		this.tagname = tagname;
-		this.unread = (feed != null && feed.equals("unread"));
+		this.unread = "unread".equals(feed);
+		this.untagged = "untagged".equals(feed);
 	}
 	
 	public void setSearchQuery(String query, String username, String tagname, boolean unread){
@@ -187,16 +195,21 @@ public class BrowseBookmarksFragment extends ListFragment
 	public void onResume(){
 		super.onResume();
 
-		if(query != null) {
-			if(unread) {
+		if (query != null) {
+			if (unread) {
 				getActivity().setTitle(getString(R.string.unread_search_results_title, query));
-			} else getActivity().setTitle(getString(R.string.bookmark_search_results_title, query));
+			} else {
+				getActivity().setTitle(getString(R.string.bookmark_search_results_title, query));
+			}
+			// TODO untagged search result
 		} else {
-			if(unread && tagname != null && tagname != "") {
+			if (unread && !TextUtils.isEmpty(tagname)) {
 				getActivity().setTitle(getString(R.string.browse_my_unread_bookmarks_tagged_title, tagname));
-			} else if(unread && (tagname == null || tagname.equals(""))) {
+			} else if (unread && TextUtils.isEmpty(tagname)) {
 				getActivity().setTitle(getString(R.string.browse_my_unread_bookmarks_title));
-			} else if(tagname != null && tagname != "") {
+			} else if (untagged && TextUtils.isEmpty(tagname)) {
+				getActivity().setTitle(getString(R.string.browse_my_untagged_bookmarks_title));
+			} else if (!TextUtils.isEmpty(tagname)) {
 				getActivity().setTitle(getString(R.string.browse_my_bookmarks_tagged_title, tagname));
 			} else {
 				getActivity().setTitle(getString(R.string.browse_my_bookmarks_title));
@@ -311,10 +324,10 @@ public class BrowseBookmarksFragment extends ListFragment
     
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-		if(query != null) {    		
+		if (query != null) {
 			return BookmarkManager.SearchBookmarks(query, tagname, unread, username, getActivity());
 		} else {
-			return BookmarkManager.GetBookmarks(username, tagname, unread, sortfield, getActivity());
+			return BookmarkManager.GetBookmarks(username, tagname, unread, untagged, sortfield, getActivity());
 		}
 	}
 	
