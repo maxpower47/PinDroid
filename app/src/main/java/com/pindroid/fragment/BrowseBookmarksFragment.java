@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -32,6 +33,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -86,6 +88,7 @@ public class BrowseBookmarksFragment extends Fragment
     String username;
 	@FragmentArg String tagname;
 	@FragmentArg boolean unread;
+    @FragmentArg boolean untagged;
 	@FragmentArg String query;
 	
 	private OnBookmarkSelectedListener bookmarkSelectedListener;
@@ -232,16 +235,21 @@ public class BrowseBookmarksFragment extends Fragment
 	public void onResume(){
 		super.onResume();
 
-		if(query != null) {
-			if(unread) {
+		if (query != null) {
+			if (unread) {
 				getActivity().setTitle(getString(R.string.unread_search_results_title, query));
-			} else getActivity().setTitle(getString(R.string.bookmark_search_results_title, query));
+			} else {
+				getActivity().setTitle(getString(R.string.bookmark_search_results_title, query));
+			}
+			// TODO untagged search result
 		} else {
-			if(unread && tagname != null && !"".equals(tagname)) {
+			if (unread && !TextUtils.isEmpty(tagname)) {
 				getActivity().setTitle(getString(R.string.browse_my_unread_bookmarks_tagged_title, tagname));
-			} else if(unread && (tagname == null || tagname.equals(""))) {
+			} else if (unread && TextUtils.isEmpty(tagname)) {
 				getActivity().setTitle(getString(R.string.browse_my_unread_bookmarks_title));
-			} else if(tagname != null && !"".equals(tagname)) {
+			} else if (untagged && TextUtils.isEmpty(tagname)) {
+				getActivity().setTitle(getString(R.string.browse_my_untagged_bookmarks_title));
+			} else if (!TextUtils.isEmpty(tagname)) {
 				getActivity().setTitle(getString(R.string.browse_my_bookmarks_tagged_title, tagname));
 			} else {
 				getActivity().setTitle(getString(R.string.browse_my_bookmarks_title));
@@ -310,10 +318,10 @@ public class BrowseBookmarksFragment extends Fragment
     
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-		if(query != null) {
+		if (query != null) {
 			return BookmarkManager.SearchBookmarks(query, tagname, unread, username, getActivity());
 		} else {
-			return BookmarkManager.GetBookmarks(username, tagname, unread, sortfield, getActivity());
+			return BookmarkManager.GetBookmarks(username, tagname, unread, untagged, sortfield, getActivity());
 		}
 	}
 	

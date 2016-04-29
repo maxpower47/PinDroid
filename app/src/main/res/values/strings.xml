@@ -63,6 +63,7 @@
     <string name="main_menu_my_header">My Pinboard</string>
     <string name="main_menu_my_bookmarks">Bookmarks</string>
     <string name="main_menu_my_unread_bookmarks">Unread</string>
+    <string name="main_menu_my_untagged">Untagged</string>
     <string name="main_menu_my_tags">Tags</string>
     <string name="main_menu_my_notes">Notes</string>
     <string name="main_menu_settings">Settings</string>
@@ -80,6 +81,7 @@
     <!-- BrowseBookmarks -->
     <string name="browse_my_bookmarks_title">Bookmarks</string>
     <string name="browse_my_unread_bookmarks_title">Unread Bookmarks</string>
+    <string name="browse_my_untagged_bookmarks_title">Untagged Bookmarks</string>
     <string name="browse_my_bookmarks_tagged_title">%1$s</string>
     <string name="browse_my_unread_bookmarks_tagged_title">Unread %1$s</string>
     <string name="browse_recent_bookmarks_title">Recent Bookmarks</string>
@@ -304,6 +306,7 @@
     <string name="alt_bookmark_view_unread">Unread</string>
     <string name="alt_widget_main">PinDroid</string>
     <string name="alt_widget_my_bookmarks">My Bookmarks</string>
+    <string name="alt_widget_untagged_bookmarks">Untagged Bookmarks</string>
     <string name="alt_widget_unread_bookmarks">Unread Bookmarks</string>
     <string name="alt_widget_unread_bookmark_count">Unread Bookmark Count</string>
     <string name="alt_widget_my_tags">My Tags</string>

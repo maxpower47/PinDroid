@@ -9,8 +9,8 @@ android {
         applicationId "com.pindroid"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 63
-        versionName "3.1.0"
+        versionCode 65
+        versionName "3.2.0"
         testApplicationId "com.pindroid.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
         vectorDrawables.useSupportLibrary = true
