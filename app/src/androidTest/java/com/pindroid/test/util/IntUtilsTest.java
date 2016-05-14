@@ -23,14 +23,13 @@ package com.pindroid.test.util;
 
 import com.pindroid.util.IntUtils;
 
-import android.test.AndroidTestCase;
+import org.junit.Test;
 
-public class IntUtilsTest extends AndroidTestCase  {
+import static org.junit.Assert.assertEquals;
 
-	public IntUtilsTest(){
-		super();
-	}
-	
+public class IntUtilsTest {
+
+	@Test
 	public void testIntParsing(){
 		assertEquals(1, IntUtils.parseUInt("1"));
 		assertEquals(1, IntUtils.parseUInt("01"));

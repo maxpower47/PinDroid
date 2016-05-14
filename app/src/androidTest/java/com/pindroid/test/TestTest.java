@@ -21,17 +21,14 @@
 
 package com.pindroid.test;
 
-import android.test.AndroidTestCase;
+import org.junit.Test;
 
-public class TestTest extends AndroidTestCase {
+import static org.hamcrest.MatcherAssert.assertThat;
 
-	
-	public TestTest(){
-		super();
-	}
-	
+public class TestTest {
+
+	@Test
 	public void testSample(){
-		
-		assertTrue("blah", true);
+		assertThat("blah", true);
 	}
 }

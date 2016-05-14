@@ -23,12 +23,10 @@ package com.pindroid.activity;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -86,8 +84,6 @@ public abstract class FragmentBaseActivity extends ActionBarActivity {
 		if(AccountHelper.getAccountCount(this) < 1) {		
 			Intent i = new Intent(this, AuthenticatorActivity.class);
 			startActivityForResult(i, Constants.REQUEST_CODE_ACCOUNT_INIT);
-			
-			return;
 		}
 	}
 	
