@@ -34,4 +34,12 @@ dependencies {
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     compile 'com.melnykov:floatingactionbutton:1.0.5'
     compile 'com.iangclifton.android:floatlabel:1.0.1'
+
+    testCompile 'org.assertj:assertj-core:1.7.1'
+
+    testCompile 'org.robolectric:robolectric:3.0'
+    testCompile 'org.robolectric:shadows-support-v4:3.0'
+    testCompile 'org.robolectric:shadows-httpclient:3.0'
+
+    testCompile 'com.artemzin.assert-parcelable:assert-parcelable:1.0.1'
 }
