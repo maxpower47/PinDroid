@@ -21,25 +21,24 @@
 
 package com.pindroid.test.xml;
 
+import com.pindroid.client.PinboardApiResult;
+import com.pindroid.xml.SaxResultParser;
+
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 
-import com.pindroid.client.PinboardApiResult;
-import com.pindroid.xml.SaxResultParser;
+import static org.junit.Assert.assertEquals;
 
-import android.test.AndroidTestCase;
-
-public class SaxResultParserTest extends AndroidTestCase  {
+public class SaxResultParserTest {
 	
 	private String doneTest = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><result code=\"done\" />";
 	private String errorTest = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><result code=\"something went wrong\" />";
 
-	public SaxResultParserTest(){
-		super();
-	}
-	
+	@Test
 	public void testResultDoneParsing() throws ParseException{
 
 		InputStream is = new ByteArrayInputStream( doneTest.getBytes() );
@@ -57,7 +56,8 @@ public class SaxResultParserTest extends AndroidTestCase  {
 			e.printStackTrace();
 		}
 	}
-	
+
+	@Test
 	public void testResultErrorParsing() throws ParseException{
 
 		InputStream is = new ByteArrayInputStream( errorTest.getBytes() );

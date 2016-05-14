@@ -21,18 +21,18 @@
 
 package com.pindroid.test.util;
 
-import java.util.Date;
-
 import com.pindroid.util.DateParser;
 
-import android.test.AndroidTestCase;
+import org.junit.Test;
 
-public class DateUtilsTest extends AndroidTestCase  {
+import java.util.Date;
 
-	public DateUtilsTest(){
-		super();
-	}
-	
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+public class DateUtilsTest {
+
+	@Test
 	public void testDateParsing(){
 
 		try {
@@ -55,7 +55,8 @@ public class DateUtilsTest extends AndroidTestCase  {
 		} catch (Exception e) {
 		}
 	}
-	
+
+	@Test
 	public void testDateTimeParsing(){
 
 		try {

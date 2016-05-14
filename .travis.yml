@@ -55,4 +55,4 @@ before_script:
   # unlock screen:
   - adb shell input keyevent 82
 script:
-  - ./gradlew connectedAndroidTest
+  - ./gradlew test connectedAndroidTest

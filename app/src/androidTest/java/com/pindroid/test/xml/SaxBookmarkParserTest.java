@@ -21,18 +21,20 @@
 
 package com.pindroid.test.xml;
 
+import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.xml.SaxBookmarkParser;
+
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-import com.pindroid.providers.BookmarkContent.Bookmark;
-import com.pindroid.xml.SaxBookmarkParser;
+import static org.junit.Assert.assertEquals;
 
-import android.test.AndroidTestCase;
-
-public class SaxBookmarkParserTest extends AndroidTestCase  {
+public class SaxBookmarkParserTest {
 	
 	private String singleBookmarkTest = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
         "<posts user=\"user\">" + 
@@ -50,10 +52,7 @@ public class SaxBookmarkParserTest extends AndroidTestCase  {
 		  "<post href=\"http://cybernetnews.com/pinboard-android/\" time=\"2013-01-31T21:29:30Z\" description=\"PinDroid: Pinboard for Android\" extended=\"\" tag=\"pindroid pinboard\" hash=\"a84f543a510d8218f16824cf059d33a8\" meta=\"e3f30dc2166dbf73cf1636095fd8bcb6\"    />" +
 		"</posts>";
 
-	public SaxBookmarkParserTest(){
-		super();
-	}
-	
+	@Test
 	public void testSingleBookmarkParsing() throws ParseException{
 
 		InputStream is = new ByteArrayInputStream(singleBookmarkTest.getBytes());
@@ -79,7 +78,8 @@ public class SaxBookmarkParserTest extends AndroidTestCase  {
 			e.printStackTrace();
 		}
 	}
-	
+
+	@Test
 	public void testMultipleBookmarkParsing() throws ParseException{
 
 		InputStream is = new ByteArrayInputStream(multipleBookmarkTest.getBytes());

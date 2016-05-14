@@ -29,16 +29,15 @@ import java.text.ParseException;
 import com.pindroid.client.Update;
 import com.pindroid.xml.SaxUpdateParser;
 
-import android.test.AndroidTestCase;
+import org.junit.Test;
 
-public class SaxUpdateParserTest extends AndroidTestCase  {
+import static org.junit.Assert.assertEquals;
+
+public class SaxUpdateParserTest {
 	
 	private String updateTest = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><update time=\"2011-03-24T19:02:07Z\" />";
 
-	public SaxUpdateParserTest(){
-		super();
-	}
-	
+	@Test
 	public void testUpdateParsing() throws ParseException{
 
 		InputStream is = new ByteArrayInputStream(updateTest.getBytes());

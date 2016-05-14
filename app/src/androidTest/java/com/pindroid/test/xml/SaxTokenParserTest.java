@@ -29,16 +29,15 @@ import java.text.ParseException;
 import com.pindroid.client.PinboardAuthToken;
 import com.pindroid.xml.SaxTokenParser;
 
-import android.test.AndroidTestCase;
+import org.junit.Test;
 
-public class SaxTokenParserTest extends AndroidTestCase  {
+import static org.junit.Assert.assertEquals;
+
+public class SaxTokenParserTest {
 	
 	private String tokenTest = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><result>XOG86E7JIYMI</result>";
 
-	public SaxTokenParserTest(){
-		super();
-	}
-	
+	@Test
 	public void testUpdateParsing() throws ParseException{
 
 		InputStream is = new ByteArrayInputStream(tokenTest.getBytes());
