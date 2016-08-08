@@ -1,0 +1,58 @@
+language: android
+
+notifications:
+  email: false
+
+sudo: false
+
+
+jdk:
+  - oraclejdk7
+
+
+env:
+  global:
+    - ADB_INSTALL_TIMEOUT=8 # default is 2 minutes and sometimes is not enough
+    - ANDROID_ABI=armeabi-v7a # x86 is not supported yet :(
+    - BUILD_TOOLS_VERSION=21.1.2
+    - COMPILE_SDK_VERSION=21
+  matrix:
+    - ANDROID_TARGET_VERSION=15
+    - ANDROID_TARGET_VERSION=16
+    - ANDROID_TARGET_VERSION=19
+    - ANDROID_TARGET_VERSION=21
+
+
+android:
+  components:
+    - platform-tools
+    - tools
+
+    - build-tools-$BUILD_TOOLS_VERSION
+
+    - android-$COMPILE_SDK_VERSION
+
+    - extra-android-m2repository
+
+    - sys-img-$ANDROID_ABI-android-$ANDROID_TARGET_VERSION
+
+
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+# Create emulator configuration and start it
+before_install:
+  # reply 'no' to 'Create custom emulator configuration?'
+  - echo no | android create avd --force --name test --target "android-$ANDROID_TARGET_VERSION" --abi $ANDROID_ABI
+  - emulator -avd test -no-skin -no-audio -no-window &
+
+before_script:
+  - android-wait-for-emulator
+  # unlock screen:
+  - adb shell input keyevent 82
+script:
+  - ./gradlew test connectedAndroidTest

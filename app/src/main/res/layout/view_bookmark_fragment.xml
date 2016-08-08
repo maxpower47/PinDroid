@@ -83,7 +83,7 @@
                     android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
                     android:textSize="@dimen/view_bookmark_body_text"
                     android:autoLink="web"
-                    android:textIsSelectable="false"
+                    android:textIsSelectable="true"
                     tools:text="http://www.example.com"/>
             </LinearLayout>
             <LinearLayout
@@ -126,7 +126,7 @@
                     android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
                     android:textSize="@dimen/view_bookmark_tag_text"
                     android:textColor="#FFFFFF"
-                    android:textIsSelectable="false"
+                    android:textIsSelectable="true"
                     app:tagCornerRadius="6dp"
                     tools:text="test tag another test2"/>
             </LinearLayout>
@@ -149,7 +149,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/view_bookmark_body_text"
                     android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
-                    android:textIsSelectable="false"
+                    android:textIsSelectable="true"
                     tools:text="Mon Jan 19 08:15:22 EST 2015"/>
             </LinearLayout>
             <LinearLayout
@@ -170,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/view_bookmark_body_text"
                     android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
-                    android:textIsSelectable="false"
+                    android:textIsSelectable="true"
                     tools:text="exampleaccount"/>
             </LinearLayout>
 		</LinearLayout>

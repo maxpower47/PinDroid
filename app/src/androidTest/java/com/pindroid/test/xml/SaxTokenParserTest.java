@@ -19,16 +19,40 @@
  * USA
  */
 
-package com.pindroid.test;
+package com.pindroid.test.xml;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
+
+import com.pindroid.client.PinboardAuthToken;
+import com.pindroid.xml.SaxTokenParser;
 
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
-public class TestTest {
+public class SaxTokenParserTest {
+	
+	private String tokenTest = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><result>XOG86E7JIYMI</result>";
 
 	@Test
-	public void testSample(){
-		assertThat("blah", true);
+	public void testUpdateParsing() throws ParseException{
+
+		InputStream is = new ByteArrayInputStream(tokenTest.getBytes());
+		
+		SaxTokenParser parser = new SaxTokenParser(is);
+		
+		PinboardAuthToken r = parser.parse();
+			
+		assertEquals("XOG86E7JIYMI", r.getToken());
+		
+		try {
+			is.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

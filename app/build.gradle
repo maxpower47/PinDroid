@@ -12,7 +12,7 @@ android {
         versionCode 65
         versionName "3.2.0"
         testApplicationId "com.pindroid.test"
-        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -81,4 +81,21 @@ dependencies {
     compile 'com.tasomaniac:integrationpreference:0.2'
     compile 'org.parceler:parceler-api:1.0.4'
     apt 'org.parceler:parceler:1.0.4'
+
+    androidTestCompile 'com.android.support.test:runner:0.4.1'
+    androidTestCompile 'com.android.support.test:rules:0.4.1'
+
+    testCompile 'org.assertj:assertj-core:1.7.1'
+
+    testCompile 'org.robolectric:robolectric:3.0'
+    testCompile 'org.robolectric:shadows-support-v4:3.0'
+    testCompile 'org.robolectric:shadows-httpclient:3.0'
+
+    testCompile 'com.artemzin.assert-parcelable:assert-parcelable:1.0.1'
+}
+
+
+configurations.all {
+    // Workaround for http://stackoverflow.com/questions/28641445/dependency-conflict-error-in-my-android-app-which-has-android-tests
+    resolutionStrategy.force 'com.android.support:support-annotations:21.0.3'
 }
