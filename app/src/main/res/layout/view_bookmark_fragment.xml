@@ -76,7 +76,7 @@
                     android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
                     android:textSize="@dimen/view_bookmark_body_text"
                     android:autoLink="web"
-                    android:textIsSelectable="false"/>
+                    android:textIsSelectable="true"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/view_bookmark_notes_section"
@@ -115,7 +115,7 @@
                     android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
                     android:textSize="@dimen/view_bookmark_tag_text"
                     android:lineSpacingExtra="4dp"
-                    android:textIsSelectable="false"/>
+                    android:textIsSelectable="true"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/view_bookmark_time_section"
@@ -134,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/view_bookmark_body_text"
                     android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
-                    android:textIsSelectable="false"  />
+                    android:textIsSelectable="true"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/view_bookmark_account_section"
@@ -153,7 +153,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/view_bookmark_body_text"
                     android:layout_marginLeft="@dimen/view_bookmark_body_margin_left"
-                    android:textIsSelectable="false"  />
+                    android:textIsSelectable="true"/>
             </LinearLayout>
 		</LinearLayout>
 	</ScrollView>
