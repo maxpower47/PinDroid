@@ -40,7 +40,7 @@ public interface PinboardService {
     Call<NoteList> getNotes(@Query("auth_token") String authToken) throws AuthenticationException;
 
 	@GET("v1/notes/{id}")
-    Call<Note> getNote(@Query("auth_token") String authToken, @Path("id") String id) throws AuthenticationException;
+    Call<Note> getNote(@Path("id") String id, @Query("auth_token") String authToken) throws AuthenticationException;
 
 	@GET("v1/user/secret")
     Call<PinboardAuthToken> getSecretToken(@Query("auth_token") String authToken) throws AuthenticationException;

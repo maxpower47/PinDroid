@@ -162,7 +162,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
 		NoteManager.TruncateNotes(mAccount.name, mContext);
 		
 		for(Note n : noteList){
-			Note t = PinboardClient.get().getNote(AccountHelper.getAuthToken(mContext, mAccount), n.getPid()).execute().body();
+			Note t = PinboardClient.get().getNote(n.getPid(), AccountHelper.getAuthToken(mContext, mAccount)).execute().body();
 			n.setText(t.getText());
 		}
 		
