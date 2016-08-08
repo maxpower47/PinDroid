@@ -38,8 +38,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -103,10 +105,22 @@ public class AuthenticatorActivity extends ActionBarActivity {
         mConfirmCredentials = intent.getBooleanExtra(PARAM_CONFIRMCREDENTIALS, false);
 
         setContentView(R.layout.login_activity);
-      
+
+        mMessage = (TextView) findViewById(R.id.message);
         mUsernameEdit = (EditText) findViewById(R.id.username_edit);
         mPasswordEdit = (EditText) findViewById(R.id.password_edit);
-        mMessage = (TextView) findViewById(R.id.message);
+
+        mPasswordEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    startLogin();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
 
         if (!TextUtils.isEmpty(mUsername)){
         	mUsernameEdit.setText(mUsername);
@@ -115,17 +129,22 @@ public class AuthenticatorActivity extends ActionBarActivity {
     }
 
     /**
-     * Handles onClick event on the Submit button. Sends username/password to
-     * the server for authentication.
-     * 
+     * Handles onClick event on the Submit button.
      * @param view The Submit button for which this method is invoked
      */
     public void handleLogin(View view) {
+        startLogin();
+    }
+
+    /**
+     * Sends username/password to the server for authentication.
+     */
+    public void startLogin() {
         if (mRequestNewAccount) {
             mUsername = mUsernameEdit.getText().toString().trim();
         }
         mPassword = mPasswordEdit.getText().toString();
-        
+
         if (TextUtils.isEmpty(mUsername) || TextUtils.isEmpty(mPassword)) {
             mMessage.setText(getMessage());
         } else {
