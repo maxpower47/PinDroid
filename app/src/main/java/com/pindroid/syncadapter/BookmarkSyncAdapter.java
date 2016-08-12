@@ -34,8 +34,10 @@ import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -55,8 +57,10 @@ import com.pindroid.providers.TagContent.Tag;
  * SyncAdapter implementation for syncing bookmarks.
  */
 public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
+
+	public static final String SYNC_FINISHED_ACTION = "sync_finished";
+
     private static final String TAG = "BookmarkSyncAdapter";
-    
 
     private final Context mContext;
     private Account mAccount;
@@ -107,6 +111,7 @@ public class BookmarkSyncAdapter extends AbstractThreadedSyncAdapter {
             Log.e(TAG, "PinboardException", e);
 		} finally {
         	Log.d(TAG, "Finished Sync");
+			LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(SYNC_FINISHED_ACTION));
         }
     }
     
