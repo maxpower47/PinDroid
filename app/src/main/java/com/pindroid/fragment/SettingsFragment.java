@@ -75,14 +75,7 @@ public class SettingsFragment extends PreferenceFragment {
         Preference syncPref = findPreference("pref_forcesync");
         syncPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
-                Toast.makeText(mContext, res.getString(R.string.syncing_toast), Toast.LENGTH_LONG).show();
-                SyncUtils.clearSyncMarkers(mContext);
-
-                Bundle extras = new Bundle();
-                extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-
-                ContentResolver.requestSync(null, BookmarkContentProvider.AUTHORITY, extras);
-
+                SyncUtils.requestSync(getActivity());
                 return true;
             }
         });

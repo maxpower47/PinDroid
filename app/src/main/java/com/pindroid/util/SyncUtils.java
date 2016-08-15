@@ -26,8 +26,12 @@ import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.pindroid.Constants;
+import com.pindroid.R;
+import com.pindroid.providers.BookmarkContentProvider;
 
 public class SyncUtils {
 
@@ -50,10 +54,19 @@ public class SyncUtils {
 		}
     }
     
-    public static void clearSyncMarkers(Context context){
+    public static void clearSyncMarkers(Context context) {
 		Account[] accounts = AccountManager.get(context).getAccountsByType(Constants.ACCOUNT_TYPE);
 		for(Account a : accounts){
 			AccountManager.get(context).setUserData(a, Constants.SYNC_MARKER_KEY, "0");
 		}
     }
+
+	public static void requestSync(@NonNull Context context) {
+		Toast.makeText(context, context.getString(R.string.syncing_toast), Toast.LENGTH_LONG).show();
+		clearSyncMarkers(context);
+
+		Bundle extras = new Bundle();
+		extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+		ContentResolver.requestSync(null, BookmarkContentProvider.AUTHORITY, extras);
+	}
 }

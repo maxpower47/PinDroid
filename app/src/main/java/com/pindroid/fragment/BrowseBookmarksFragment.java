@@ -22,13 +22,20 @@
 package com.pindroid.fragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -52,12 +59,17 @@ import com.pindroid.R;
 import com.pindroid.listadapter.BookmarkViewBinder;
 import com.pindroid.platform.BookmarkManager;
 import com.pindroid.providers.BookmarkContent.Bookmark;
+import com.pindroid.syncadapter.BookmarkSyncAdapter;
 import com.pindroid.util.SettingsHelper;
+import com.pindroid.util.SyncUtils;
+
+import java.lang.ref.WeakReference;
 
 public class BrowseBookmarksFragment extends ListFragment 
-	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser, PindroidFragment {
+	implements LoaderManager.LoaderCallbacks<Cursor>, BookmarkBrowser, PindroidFragment, SwipeRefreshLayout.OnRefreshListener {
 
     private ListView listView;
+	private SwipeRefreshLayout swipeRefreshLayout;
     private FloatingActionButton actionButton;
 	
 	private SimpleCursorAdapter mAdapter;
@@ -100,7 +112,9 @@ public class BrowseBookmarksFragment extends ListFragment
 		super.onActivityCreated(savedInstanceState);
 
         listView = (ListView) getView().findViewById(android.R.id.list);
-        actionButton = (FloatingActionButton) getView().findViewById(R.id.add_button);
+		swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipe_refresh);
+		swipeRefreshLayout.setOnRefreshListener(this);
+		actionButton = (FloatingActionButton) getView().findViewById(R.id.add_button);
 
         actionButton.attachToListView(listView);
 		
@@ -351,6 +365,42 @@ public class BrowseBookmarksFragment extends ListFragment
 			bookmarkSelectedListener = (OnBookmarkSelectedListener) activity;
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString() + " must implement OnBookmarkSelectedListener");
+		}
+	}
+
+	@Override
+	public void onRefresh() {
+		swipeRefreshLayout.setRefreshing(true);
+		SyncFinishedBroadcastReceiver.registerCallback(this);
+		SyncUtils.requestSync(getActivity());
+	}
+
+	/*
+		Callback for bookmarks sync status
+	 */
+	private static class SyncFinishedBroadcastReceiver extends BroadcastReceiver {
+
+		@NonNull
+		private final WeakReference<BrowseBookmarksFragment> fragmentRef;
+
+		private SyncFinishedBroadcastReceiver(@NonNull BrowseBookmarksFragment fragment) {
+			fragmentRef = new WeakReference<>(fragment);
+		}
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
+			BrowseBookmarksFragment fragment = fragmentRef.get();
+			if (fragment != null) {
+				fragment.swipeRefreshLayout.setRefreshing(false);
+			}
+		}
+
+		static void registerCallback(@NonNull BrowseBookmarksFragment fragment) {
+			IntentFilter filter = new IntentFilter(BookmarkSyncAdapter.SYNC_FINISHED_ACTION);
+			LocalBroadcastManager
+					.getInstance(fragment.getActivity())
+					.registerReceiver(new SyncFinishedBroadcastReceiver(fragment), filter);
 		}
 	}
 }
