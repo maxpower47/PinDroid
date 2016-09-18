@@ -208,28 +208,51 @@ public class BrowseBookmarksFragment extends ListFragment
 	@Override
 	public void onResume(){
 		super.onResume();
-
-		if (query != null) {
-			if (unread) {
-				getActivity().setTitle(getString(R.string.unread_search_results_title, query));
-			} else {
-				getActivity().setTitle(getString(R.string.bookmark_search_results_title, query));
-			}
-			// TODO untagged search result
-		} else {
-			if (unread && !TextUtils.isEmpty(tagname)) {
-				getActivity().setTitle(getString(R.string.browse_my_unread_bookmarks_tagged_title, tagname));
-			} else if (unread && TextUtils.isEmpty(tagname)) {
-				getActivity().setTitle(getString(R.string.browse_my_unread_bookmarks_title));
-			} else if (untagged && TextUtils.isEmpty(tagname)) {
-				getActivity().setTitle(getString(R.string.browse_my_untagged_bookmarks_title));
-			} else if (!TextUtils.isEmpty(tagname)) {
-				getActivity().setTitle(getString(R.string.browse_my_bookmarks_tagged_title, tagname));
-			} else {
-				getActivity().setTitle(getString(R.string.browse_my_bookmarks_title));
-			}
-		}
+        updateTitle();
 	}
+
+    /**
+     * Update title for {@link Activity} which contains this fragment.<br/>
+     * Title also tells the number of bookmarks that this fragment is showing.
+     */
+    private void updateTitle() {
+        int numOfBookmarks = mAdapter.getCount();
+        String title = getTitle();
+        if (!TextUtils.isEmpty(title)) {
+            if (numOfBookmarks != 0) {
+                title = getString(R.string.browse_my_bookmarks_title_count, title, numOfBookmarks);
+            }
+            getActivity().setTitle(title);
+        }
+    }
+
+    /**
+     * Pick appropriate title for what this fragment shows
+     */
+    private String getTitle() {
+        String title = null;
+        if (query != null) {
+            if (unread) {
+                title = getString(R.string.unread_search_results_title, query);
+            } else {
+                title = getString(R.string.bookmark_search_results_title, query);
+            }
+            // TODO untagged search result
+        } else {
+            if (unread && !TextUtils.isEmpty(tagname)) {
+                title = getString(R.string.browse_my_unread_bookmarks_tagged_title, tagname);
+            } else if (unread && TextUtils.isEmpty(tagname)) {
+                title = getString(R.string.browse_my_unread_bookmarks_title);
+            } else if (untagged && TextUtils.isEmpty(tagname)) {
+                title = getString(R.string.browse_my_untagged_bookmarks_title);
+            } else if (!TextUtils.isEmpty(tagname)) {
+                title = getString(R.string.browse_my_bookmarks_tagged_title, tagname);
+            } else {
+                title = getString(R.string.browse_my_bookmarks_title);
+            }
+        }
+        return title;
+    }
 	
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -347,10 +370,12 @@ public class BrowseBookmarksFragment extends ListFragment
 	
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 	    mAdapter.swapCursor(data);
+        updateTitle();
 	}
 	
 	public void onLoaderReset(Loader<Cursor> loader) {
 	    mAdapter.swapCursor(null);
+        updateTitle();
 	}
 
     @Override

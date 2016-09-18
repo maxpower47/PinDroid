@@ -483,7 +483,23 @@ public class BookmarkManager {
 		
 		return new CursorLoader(context, Bookmark.CONTENT_URI, projection, selection, selectionlist.toArray(new String[]{}), sortorder);
 	}
-	
+
+	public static int GetAllBookmarksCount(String username, Context context){
+		if(username == null || username.equals(""))
+			return 0;
+
+		final String[] projection = new String[] {Bookmark._ID};
+		final String selection = Bookmark.Account + "=?";
+		final String[] selectionargs = new String[]{username};
+
+		final Cursor c = context.getContentResolver().query(Bookmark.CONTENT_URI, projection, selection, selectionargs, null);
+
+		final int count = c.getCount();
+
+		c.close();
+		return count;
+	}
+
 	public static int GetUnreadCount(String username, Context context){
 		if(username == null || username.equals(""))
 			return 0;

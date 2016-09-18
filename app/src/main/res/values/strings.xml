@@ -79,6 +79,7 @@
     <string name="main_search_results_title">Search Results</string>
 
     <!-- BrowseBookmarks -->
+    <string name="browse_my_bookmarks_title_count">%1$s (%2$d)</string>
     <string name="browse_my_bookmarks_title">Bookmarks</string>
     <string name="browse_my_unread_bookmarks_title">Unread Bookmarks</string>
     <string name="browse_my_untagged_bookmarks_title">Untagged Bookmarks</string>
