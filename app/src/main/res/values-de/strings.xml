@@ -34,18 +34,32 @@
         Bitte das Passwort noch einmal eingeben.</string>
   <string name="login_activity_loginfail_text_pwmissing">Passwort für dieses Konto eingeben.</string>
   <string name="titleMain">Pinboard</string>
+
+  <!-- Main -->
+  <string name="main_menu_my_header">Mein Pinboard</string>
   <string name="main_menu_my_bookmarks">Meine Lesezeichen</string>
   <string name="main_menu_my_unread_bookmarks">Meine Ungelesenen</string>
+  <string name="main_menu_my_untagged">Ohne Tags</string>
   <string name="main_menu_my_tags">Meine Tags</string>
-  <string name="main_menu_network_bookmarks">Netzwerk-Bookmarks</string>
-  <string name="main_menu_recent_bookmarks">Neue Lesezeichen</string>
+  <string name="main_menu_my_notes">Notizen</string>
+  <string name="main_menu_settings">Einstellungen</string>
+  <string name="main_menu_feeds_header">Feeds</string>
+  <string name="main_menu_network_bookmarks">Netzwerk-Lesezeichen</string>
+  <string name="main_menu_recent_bookmarks">Neueste Lesezeichen</string>
+  <string name="main_menu_popular_bookmarks">Populäre Lesezeichen</string>
+  <string name="main_menu_tags_header">Tags</string>
+  <string name="drawer_open">Öffne Drawer</string>
+  <string name="drawer_close">Schließe Drawer</string>  
+
+  <!-- MainSearchResults -->
   <string name="main_search_results_title">Suchergebnisse</string>
+
   <string name="browse_my_bookmarks_title">Meine Lesezeichen</string>
   <string name="browse_my_unread_bookmarks_title">Meine ungelesenen Lesezeichen</string>
   <string name="browse_my_bookmarks_tagged_title">Meine Lesezeichen markiert mit Tag %1$s</string>
   <string name="browse_my_unread_bookmarks_tagged_title">Meine ungelesenen Lesezeichen markiert mit %1$s</string>
   <string name="browse_recent_bookmarks_title">Neue Lesezeichen</string>
-  <string name="browse_network_bookmarks_title">Netzwerk-Bookmarks</string>
+  <string name="browse_network_bookmarks_title">Netzwerk-Lesezeichen</string>
   <string name="browse_user_bookmarks_title">Lesezeichen für %1$s</string>
   <string name="browse_user_bookmarks_tagged_title">Lesezeichen für %1$s markiert mit %2$s</string>
   <string name="bookmark_context_open">Im Browser öffnen</string>
@@ -82,7 +96,7 @@
   <string name="add_title_recommended_tags">Empfohlene Tags</string>
   <string name="add_title_popular_tags">Beliebte Tags</string>
   <string name="add_title_private">Privat?</string>
-  <string name="add_title_toread">Noch zu lesen?</string>
+  <string name="add_title_toread">Ungelesen?</string>
   <string name="add_bookmark_invalid_url">Fehler: Leere oder ungültige URL</string>
   <string name="add_bookmark_blank_url">Fehler: Leere URL</string>
   <string name="main_search_label">Pinboard</string>
@@ -124,21 +138,63 @@
   <string name="pref_cat_help_title">Hilfe</string>
   <string name="pref_accountsettings_title">Account-Einstellungen</string>
   <string name="pref_accountsettings_summary">Pinboard Account auf diesem Gerät verwalten.</string>
-  <string name="pref_synctime_title">Synchronis. Frequenz</string>
+  <string name="pref_synctime_title">Sync-Frequenz</string>
   <string name="pref_synctime_summary">Wie oft sollen die Lesezeichen synchronisiert werden?</string>
   <string name="pref_view_bookmark_default_action_title">Lesezeichen Aktion</string>
   <string name="pref_view_bookmark_default_action_key">pref_view_bookmark_default_action</string>
   <string name="pref_view_bookmark_default_action_summary">Standardaktion für Lesezeichen.</string>
-  <string name="pref_searchicons_title">Such Icons anzeigen</string>
+  <string name="pref_usebrowser_title">Öffne Links in Browser</string>
+  <string name="pref_usebrowser_key">pref_usebrowser</string>
+  <string name="pref_usebrowser_summary">Öffne Links im Browser.</string>
+  <string name="pref_usebrowser_summary_off">Benutze internen Browser, wenn möglich.</string>
+  <string name="pref_usebrowser_summary_on">Links immer im externen Browser öffnen.</string>
+  <string name="pref_usebrowser_switch_off">Nein</string>
+  <string name="pref_usebrowser_switch_on">Ja</string>
+  <string name="pref_searchicons_title">Such-Icons anzeigen</string>
+  <string name="pref_searchicons_key">pref_searchicons</string>
   <string name="pref_searchicons_summary">Icons in Suchvorschlägen anzeigen.</string>
+  <string name="pref_searchicons_summary_off">Zeige keine Icons in Suchvorschlägen an.</string>
+  <string name="pref_searchicons_summary_on">Icons in Suchvorschlägen anzeigen.</string>
+  <string name="pref_searchicons_switch_off">Nein</string>
+  <string name="pref_searchicons_switch_on">Ja</string>
   <string name="pref_save_private_default_title">Privat als Standard</string>
+  <string name="pref_save_private_default_key">pref_save_private_default</string>
   <string name="pref_save_private_default_summary">Setze neue Lesezeichen standardmäßig auf privat.</string>
+  <string name="pref_save_private_default_summary_off">Setze neue Lesezeichen standardmäßig auf öffentlich.</string>
+  <string name="pref_save_private_default_summary_on">Setze neue Lesezeichen standardmäßig auf privat.</string>
+  <string name="pref_save_private_default_switch_off">Nein</string>
+  <string name="pref_save_private_default_switch_on">Ja</string>
   <string name="pref_save_toread_default_title">Ungelesen als Standard</string>
+  <string name="pref_save_toread_default_key">pref_save_toread_default</string>
   <string name="pref_save_toread_default_summary">Setze neue Lesezeichen standardmäßig auf ungelesen.</string>
+  <string name="pref_save_toread_default_summary_off">Setze neue Lesezeichen standardmäßig auf gelesen.</string>
+  <string name="pref_save_toread_default_summary_on">Setze neue Lesezeichen standardmäßig auf ungelesen.</string>
+  <string name="pref_save_toread_default_switch_off">Nein</string>
+  <string name="pref_save_toread_default_switch_on">Ja</string>
   <string name="pref_markasread_title">Als gelesen markieren</string>
+  <string name="pref_markasread_key">pref_markasread</string>
   <string name="pref_markasread_summary">Markiere ungelesene Lesezeichen nach dem Öffnen als gelesen.</string>
+  <string name="pref_markasread_summary_off">Lasse ungelesene Lesezeichen nach dem Öffnen als ungelesen markiert.</string>
+  <string name="pref_markasread_summary_on">Markiere ungelesene Lesezeichen nach dem Öffnen als gelesen.</string>
+  <string name="pref_markasread_switch_off">Nein</string>
+  <string name="pref_markasread_switch_on">Ja</string>
+  <string name="pref_drawertags_title">Drawer Tags</string>
+  <string name="pref_drawertags_key">pref_drawertags</string>
+  <string name="pref_drawertags_summary">Wähle Tags welche im Drawer angezeigt werden.</string>
   <string name="pref_forcesync_title">Jetzt synchronisieren</string>
   <string name="pref_forcesync_summary">Beginne mit der Synchronisierung der Lesezeichen.</string>
+  <string name="pref_reading_background_title">Hintergrund</string>
+  <string name="pref_reading_background_key">pref_reading_background</string>
+  <string name="pref_reading_background_summary">Hintergrundfarbe im Lesemodus</string>
+  <string name="pref_reading_font_title">Schriftart</string>
+  <string name="pref_reading_font_key">pref_reading_font</string>
+  <string name="pref_reading_font_summary">Schriftart im Lesemodus</string>
+  <string name="pref_reading_fontsize_title">Schriftgröße</string>
+  <string name="pref_reading_fontsize_key">pref_reading_fontsize</string>
+  <string name="pref_reading_fontsize_summary">Schriftgröße im Lesemodus</string>
+  <string name="pref_reading_margins_title">Margin size</string>
+  <string name="pref_reading_margins_key">pref_reading_margins</string>
+  <string name="pref_reading_margins_summary">Rahmengröße im Lesemodus</string>
   <string name="pref_license_title">Lizenz</string>
   <string name="pref_license_summary">Lizenziert unter der GPL v3</string>
   <string name="pref_help_title">Hilfe</string>
@@ -147,5 +203,4 @@
   <string name="pref_about_summary">Über PinDroid</string>
   <string name="pref_donate_title">Spenden</string>
   <string name="pref_donate_summary">Unterstütze PinDroid</string>
-
 </resources>
