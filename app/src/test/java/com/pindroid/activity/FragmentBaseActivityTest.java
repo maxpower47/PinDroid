@@ -5,14 +5,17 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
+import com.pindroid.BuildConfig;
 import com.pindroid.Constants;
-import com.pindroid.PinDroidRunner;
+import com.pindroid.application.PindroidApplication;
 import com.pindroid.authenticator.AuthenticatorActivity;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowAccountManager;
 import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.util.ActivityController;
@@ -21,7 +24,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.robolectric.Robolectric.buildActivity;
 import static org.robolectric.Shadows.shadowOf;
 
-@RunWith(PinDroidRunner.class)
+@RunWith(RobolectricTestRunner.class)
+@Config(constants=BuildConfig.class, sdk=23)
 public class FragmentBaseActivityTest {
 
     private ActivityController<TestActivity> controller;
@@ -57,7 +61,7 @@ public class FragmentBaseActivityTest {
         final AccountManager am = ShadowAccountManager.get(RuntimeEnvironment.application);
         final Account account = new Account(name, Constants.ACCOUNT_TYPE);
         am.addAccountExplicitly(account, "password", null);
-        PinDroidRunner.app().setUsername(name);
+        ((PindroidApplication) RuntimeEnvironment.application).setUsername(name);
     }
 
     public static class TestActivity extends FragmentBaseActivity {

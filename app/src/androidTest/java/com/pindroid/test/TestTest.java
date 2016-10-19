@@ -26,6 +26,9 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TestTest {
+	public TestTest(){
+
+	}
 
 	@Test
 	public void testSample(){
