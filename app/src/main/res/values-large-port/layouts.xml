@@ -22,6 +22,6 @@
  */
  -->
 <resources>
-    <item name="main_content" type="layout">@layout/main_content_twopane_vert</item>
-    <bool name="has_two_panes">true</bool>
+    <item name="main_content" type="layout">@layout/main_content_onepane</item>
+    <bool name="has_two_panes">false</bool>
 </resources>
