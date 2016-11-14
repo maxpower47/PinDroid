@@ -190,11 +190,19 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 			int id_icon = getResources().getIdentifier(myMenuItemsIcon[res], "drawable", this.getPackageName());
 
 			NsMenuItemModel mItem = new NsMenuItemModel(id_title, id_icon);
-			if (res == 1) {
-				unreadItem = mItem;
-				mItem.counter = BookmarkManager.GetUnreadCount(app.getUsername(), this);
-			} else if (res == 2) {
-				mItem.counter = BookmarkManager.GetUntaggedCount(app.getUsername(), this);
+			switch (res) {
+				case 0:
+					mItem.counter = BookmarkManager.GetAllBookmarksCount(app.getUsername(), this);
+					break;
+				case 1:
+					unreadItem = mItem;
+					mItem.counter = BookmarkManager.GetUnreadCount(app.getUsername(), this);
+					break;
+				case 2:
+					mItem.counter = BookmarkManager.GetUntaggedCount(app.getUsername(), this);
+					break;
+				default:
+					break;
 			}
 			mAdapter.addItem(mItem);
 		}
