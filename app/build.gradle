@@ -10,6 +10,7 @@ android {
         targetSdkVersion 25
         versionCode 65
         versionName "3.2.0"
+        vectorDrawables.useSupportLibrary = true
         testApplicationId "com.pindroid.test"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         jackOptions {

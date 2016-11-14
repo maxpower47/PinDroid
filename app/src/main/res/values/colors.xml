@@ -34,6 +34,8 @@
     <color name="statusbar_background">@color/pindroid_blue_dark</color>
     <color name="actionbar_text">#FFF</color>
     <color name="actionbar_divider">#555</color>
+
+    <color name="icon_dark_gray">#75FFFFFF</color>
     
     <color name="bookmark_list_default_bg">#373737</color>
 	<color name="bookmark_list_activated_bg">#455082</color>

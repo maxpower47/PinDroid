@@ -106,11 +106,11 @@
         <item>main_menu_settings</item>
     </string-array>
     <string-array name="main_menu_my_icons">
-        <item>main_menu_bookmark</item>
-        <item>main_menu_unread</item>
-        <item>main_menu_untagged</item>
-        <item>main_menu_note</item>
-        <item>main_menu_settings</item>
+        <item>ic_bookmark_blue_24dp</item>
+        <item>ic_bookmark_border_blue_24dp</item>
+        <item>ic_label_border_blue_24dp</item>
+        <item>ic_note_brown_24dp</item>
+        <item>ic_settings_black_24dp</item>
     </string-array>
     <string-array name="main_menu_feeds">
         <item>main_menu_popular_bookmarks</item>
@@ -118,8 +118,8 @@
         <item>main_menu_network_bookmarks</item>
     </string-array>
     <string-array name="main_menu_feeds_icons">
-        <item>main_menu_popular</item>
-        <item>main_menu_recent</item>
-        <item>main_menu_network</item>
+        <item>ic_whatshot_red_24dp</item>
+        <item>ic_access_time_green_24dp</item>
+        <item>ic_people_purple_24dp</item>
     </string-array>
 </resources>

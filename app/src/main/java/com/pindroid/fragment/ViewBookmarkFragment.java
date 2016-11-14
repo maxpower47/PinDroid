@@ -316,13 +316,13 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 					mUsername.setText(bookmark.getAccount());
 
 					if(bookmark.getToRead() && bookmark.getShared()) {
-                        bookmarkIcon.setImageResource(R.drawable.ic_unread);
+                        bookmarkIcon.setImageResource(R.drawable.ic_bookmark_border_black_24dp);
                     } else if(!bookmark.getToRead() && bookmark.getShared()) {
-                        bookmarkIcon.setImageResource(R.drawable.ic_bookmark);
+                        bookmarkIcon.setImageResource(R.drawable.ic_bookmark_black_24dp);
                     } else if (bookmark.getToRead() && !bookmark.getShared()) {
-                        bookmarkIcon.setImageResource(R.drawable.ic_unread_private);
+                        bookmarkIcon.setImageResource(R.drawable.ic_bookmark_private_border_black_24dp);
                     } else if (!bookmark.getToRead() && !bookmark.getShared()) {
-                        bookmarkIcon.setImageResource(R.drawable.ic_bookmark_private);
+                        bookmarkIcon.setImageResource(R.drawable.ic_bookmark_private_black_24dp);
                     }
 
 

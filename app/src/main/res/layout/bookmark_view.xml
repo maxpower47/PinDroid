@@ -22,6 +22,7 @@
  */
  -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:orientation="horizontal"
 	android:layout_height="@dimen/bookmark_list_view_height"
 	android:layout_width="fill_parent"
@@ -70,7 +71,8 @@
             android:layout_height="16dip"
             android:id="@+id/bookmark_private"
             android:contentDescription="@string/alt_bookmark_list_private"
-            android:src="@drawable/padlock"
+            app:srcCompat="@drawable/ic_lock_black_24dp"
+            android:tint="#FFFFBB33"
             android:visibility="invisible"/>
         <ImageView
             android:layout_width="16dip"
@@ -78,14 +80,15 @@
             android:layout_marginTop="5dp"
             android:contentDescription="@string/bookmark_unsynced_alt"
             android:id="@+id/bookmark_synced"
-            android:src="@drawable/sync"
+            app:srcCompat="@drawable/ic_sync_green_24dp"
             android:visibility="invisible" />
         <ImageView
             android:layout_width="16dip"
             android:layout_height="16dip"
             android:layout_marginTop="5dp"
             android:id="@+id/bookmark_unread"
-            android:src="@drawable/unread"
+            app:srcCompat="@drawable/ic_bookmark_border_black_24dp"
+            android:tint="@color/pindroid_blue"
             android:visibility="invisible" />
     </LinearLayout>
 </LinearLayout>

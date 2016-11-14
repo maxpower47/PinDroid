@@ -26,7 +26,7 @@
 	<item 
 		android:id="@+id/menu_selecttags_ok"
         android:title="Ok"
-		android:icon="@drawable/ic_check"
+        android:icon="@drawable/ic_check_white_24dp"
 		pindroid:showAsAction="always"
 		android:orderInCategory="1" />
 </menu>

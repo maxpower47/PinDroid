@@ -228,7 +228,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
             while (tagData.moveToNext()) {
 
                 if(tags.size() == 0 || tags.contains(tagData.getString(1))) {
-                    NsMenuItemModel mItem = new NsMenuItemModel(tagData.getString(1), R.drawable.main_menu_tag, false, tagData.getInt(2));
+                    NsMenuItemModel mItem = new NsMenuItemModel(tagData.getString(1), R.drawable.ic_label_gray_24dp, false, tagData.getInt(2));
                     mAdapter.addItem(mItem);
                     res++;
                 }
@@ -566,7 +566,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	}
 
     private void toggleAccountSpinner(Boolean animate) {
-        accountSpinnerButton.setImageResource(accountSpinnerOpen ? R.drawable.ic_arrow_drop_down : R.drawable.ic_arrow_drop_up);
+        accountSpinnerButton.setImageResource(accountSpinnerOpen ? R.drawable.ic_arrow_drop_down_black_24dp  : R.drawable.ic_arrow_drop_up_black_24dp);
 
         if(animate) {
             ResizeAnimation animation;

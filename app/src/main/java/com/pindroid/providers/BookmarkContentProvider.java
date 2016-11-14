@@ -452,7 +452,7 @@ public class BookmarkContentProvider extends ContentProvider {
 				}
 				
 				suggestions.put(title + "_bookmark_" + account, new SearchSuggestionContent(title, 
-					line2, url, R.drawable.main_menu_bookmark,	data.toString(), action));
+					line2, url, R.drawable.ic_bookmark_blue_24dp,	data.toString(), action));
 				
 			} while(c.moveToNext());	
 		}
@@ -517,7 +517,7 @@ public class BookmarkContentProvider extends ContentProvider {
 					tagCount = account;
 				
 				suggestions.put(name + "_tag_" + account, new SearchSuggestionContent(name, 
-					tagCount, R.drawable.main_menu_tag, data.build().toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
+					tagCount, R.drawable.ic_label_gray_24dp, data.build().toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
 				
 			} while(c.moveToNext());	
 		}
@@ -583,7 +583,7 @@ public class BookmarkContentProvider extends ContentProvider {
 					text = account;
 				
 				suggestions.put(title + "_note_" + account, new SearchSuggestionContent(title, 
-					text, R.drawable.main_menu_note, data.toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
+					text, R.drawable.ic_note_brown_24dp, data.toString(), Constants.ACTION_SEARCH_SUGGESTION_VIEW));
 				
 			} while(c.moveToNext());	
 		}
