@@ -95,6 +95,7 @@
         <activity
             android:name=".activity.SaveReadLaterBookmark"
             android:label="@string/share_menu_read_later"
+            android:icon="@drawable/ic_main_read_later"
             android:theme="@android:style/Theme.NoDisplay" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
