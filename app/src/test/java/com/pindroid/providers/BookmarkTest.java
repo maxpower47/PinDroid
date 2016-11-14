@@ -1,16 +1,19 @@
 package com.pindroid.providers;
 
-import com.pindroid.PinDroidRunner;
+import com.pindroid.BuildConfig;
 import com.pindroid.providers.BookmarkContent.Bookmark;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.util.Date;
 
 import static com.artemzin.assert_parcelable.AssertParcelable.assertThatObjectParcelable;
 
-@RunWith(PinDroidRunner.class)
+@RunWith(RobolectricTestRunner.class)
+@Config(constants=BuildConfig.class, sdk=23)
 public class BookmarkTest {
     @Test
     public void bookmark_isParcelable() {
