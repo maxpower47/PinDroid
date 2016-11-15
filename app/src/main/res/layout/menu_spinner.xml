@@ -29,10 +29,10 @@
     android:orientation="vertical"
     android:paddingBottom="8dp">
     <LinearLayout
+        android:id="@+id/drawer_spinner"
         android:layout_width="match_parent"
         android:layout_height="144dp"
-        android:gravity="bottom"
-        android:background="@drawable/drawer_spinner">
+        android:gravity="bottom">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="64dp"

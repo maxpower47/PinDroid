@@ -28,6 +28,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 
 import com.pindroid.Constants;
@@ -40,7 +41,7 @@ import com.pindroid.fragment.SelectTagsFragment;
 import java.util.List;
 import java.util.Set;
 
-public class SelectTags extends ActionBarActivity implements SelectTagsFragment.OnTagsSelectedListener {
+public class SelectTags extends AppCompatActivity implements SelectTagsFragment.OnTagsSelectedListener {
 
 	SelectTagsFragment frag;
 

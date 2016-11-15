@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,7 +38,7 @@ import com.pindroid.Constants;
 import com.pindroid.R;
 import com.pindroid.action.IntentHelper;
 
-public class ScreenShortcut extends ActionBarActivity {
+public class ScreenShortcut extends AppCompatActivity {
 
 	private String username = "";
     private ListView listView;

@@ -36,6 +36,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -54,7 +55,7 @@ import com.pindroid.util.SyncUtils;
 /**
  * Activity which displays login screen to the user.
  */
-public class AuthenticatorActivity extends ActionBarActivity {
+public class AuthenticatorActivity extends AppCompatActivity {
     public static final String PARAM_CONFIRMCREDENTIALS = "confirmCredentials";
     public static final String PARAM_PASSWORD = "password";
     public static final String PARAM_USERNAME = "username";

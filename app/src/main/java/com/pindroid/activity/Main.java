@@ -33,9 +33,12 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -100,6 +103,7 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 	private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     LinearLayout accountSpinnerView;
+    LinearLayout drawerSpinnerView;
     ImageView accountSpinnerButton;
     boolean accountSpinnerOpen = false;
     LinearLayout accountList;
@@ -124,9 +128,13 @@ public class Main extends FragmentBaseActivity implements OnBookmarkSelectedList
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mTitle = mDrawerTitle = getTitle();
         accountSpinnerView = (LinearLayout) getLayoutInflater().inflate(R.layout.menu_spinner, null);
+        drawerSpinnerView = (LinearLayout) accountSpinnerView.findViewById(R.id.drawer_spinner);
         accountSpinnerButton = (ImageView) accountSpinnerView.findViewById(R.id.account_button);
         accountList = (LinearLayout) accountSpinnerView.findViewById(R.id.account_list);
         accountSelected = (TextView) accountSpinnerView.findViewById(R.id.account_selected);
+
+        Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.drawer_spinner, getTheme());
+        drawerSpinnerView.setBackground(drawable);
 
         if(AccountHelper.getAccountCount(this) > 0){
             if(app.getUsername() == null || app.getUsername().equals("")) {

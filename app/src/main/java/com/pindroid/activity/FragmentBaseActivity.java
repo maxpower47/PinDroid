@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +42,7 @@ import com.pindroid.application.PindroidApplication;
 import com.pindroid.authenticator.AuthenticatorActivity;
 import com.pindroid.util.AccountHelper;
 
-public abstract class FragmentBaseActivity extends ActionBarActivity {
+public abstract class FragmentBaseActivity extends AppCompatActivity {
 	
 	protected AccountManager mAccountManager;
 	
