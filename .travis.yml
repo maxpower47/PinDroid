@@ -14,8 +14,8 @@ env:
   global:
     - ADB_INSTALL_TIMEOUT=10 # default is 2 minutes and sometimes is not enough
     - ANDROID_ABI=armeabi-v7a # x86 is not supported yet :(
-    - BUILD_TOOLS_VERSION=24.0.3
-    - COMPILE_SDK_VERSION=24
+    - BUILD_TOOLS_VERSION=25.0.0
+    - COMPILE_SDK_VERSION=25
     - GRADLE_OPTS="-Xmx2048m -Xms512m"
   matrix:
     - ANDROID_TARGET_VERSION=15
