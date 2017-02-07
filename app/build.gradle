@@ -8,8 +8,8 @@ android {
         applicationId "com.pindroid"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 68
-        versionName "3.3.1"
+        versionCode 69
+        versionName "3.3.2"
         vectorDrawables.useSupportLibrary = true
         testApplicationId "com.pindroid.test"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
