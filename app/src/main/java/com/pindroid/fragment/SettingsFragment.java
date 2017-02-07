@@ -113,6 +113,17 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
+        Preference privacyPref = findPreference("pref_privacy");
+        privacyPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                Uri link = Uri.parse(Constants.PRIVACY_URL);
+                Intent i = new Intent(Intent.ACTION_VIEW, link);
+
+                startActivity(i);
+                return true;
+            }
+        });
+
         Preference aboutPref = findPreference("pref_about");
         aboutPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
