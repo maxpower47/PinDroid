@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+ -->
+<resources>
+    <string-array name="pref_view_bookmark_default_action_entries">
+        <item>Öppna i webbläsare</item>
+        <item>Se detaljer</item>
+        <item>Redigera</item>
+        <item>Läs</item>
+    </string-array>
+    <string-array name="pref_view_bookmark_default_action_values">
+        <item>browser</item>
+        <item>view</item>
+        <item>edit</item>
+        <item>read</item>
+    </string-array> 
+    <string-array name="pref_reading_background_entries">
+        <item>Ljus</item>
+        <item>Mörk</item>
+        <item>Sepia</item>
+    </string-array>
+    <string-array name="pref_reading_background_values">
+        <item>lightmode</item>
+        <item>darkmode</item>
+        <item>sepiamode</item>
+    </string-array>
+    <string-array name="pref_reading_font_entries">
+        <item>Georgia</item>
+        <item>Verdana</item>
+        <item>Helvetica</item>
+        <item>Proxima Nova</item>
+        <item>Tisa</item>
+    </string-array>
+    <string-array name="pref_reading_font_values">
+        <item>georgiamode</item>
+        <item>verdanamode</item>
+        <item>helveticamode</item>
+        <item>proximamode</item>
+        <item>tisamode</item>
+    </string-array>
+    <string-array name="pref_reading_fontsize_entries">
+        <item>Liten</item>
+        <item>Normal</item>
+        <item>Stor</item>
+    </string-array>
+    <string-array name="pref_reading_fontsize_values">
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="pref_reading_margins_entries">
+        <item>Smal</item>
+        <item>Normal</item>
+        <item>Bred</item>
+    </string-array>
+    <string-array name="pref_reading_margins_values">
+        <item>narrowmode</item>
+        <item>medwidthmode</item>
+        <item>widemode</item>
+    </string-array>
+    <string-array name="pref_synctime_entries">
+        <item>5 min</item>
+        <item>15 min</item>
+        <item>30 min</item>
+        <item>1 timme</item>
+        <item>3 timme</item>
+        <item>6 timme</item>
+        <item>12 timmar</item>
+        <item>Automatisk</item>
+    </string-array>
+    <string-array name="pref_synctime_values">
+        <item>5</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>720</item>
+        <item>0</item>
+    </string-array>
+    <string-array name="main_menu_my">
+        <item>main_menu_my_bookmarks</item>
+        <item>main_menu_my_unread_bookmarks</item>
+        <item>main_menu_my_untagged</item>
+        <item>main_menu_my_notes</item>
+        <item>main_menu_settings</item>
+    </string-array>
+    <string-array name="main_menu_my_icons">
+        <item>ic_bookmark_blue_24dp</item>
+        <item>ic_bookmark_border_blue_24dp</item>
+        <item>ic_label_border_blue_24dp</item>
+        <item>ic_note_brown_24dp</item>
+        <item>ic_settings_black_24dp</item>
+    </string-array>
+    <string-array name="main_menu_feeds">
+        <item>main_menu_popular_bookmarks</item>
+        <item>main_menu_recent_bookmarks</item>
+        <item>main_menu_network_bookmarks</item>
+    </string-array>
+    <string-array name="main_menu_feeds_icons">
+        <item>ic_whatshot_red_24dp</item>
+        <item>ic_access_time_green_24dp</item>
+        <item>ic_people_purple_24dp</item>
+    </string-array>
+</resources>

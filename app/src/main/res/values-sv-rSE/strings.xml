@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * PinDroid - http://code.google.com/p/PinDroid/
+ *
+ * Copyright (C) 2010 Matt Schmidt
+ *
+ * PinDroid is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * PinDroid is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinDroid; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+ * USA
+ */
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- Label for this package -->
+    <string name="label">PinDroid</string>
+    <string name="pindroid">PinDroid</string>
+
+    <!-- Title string for Login activity -->
+    <string name="ui_activity_title">Logga in</string>
+    <!-- Message shown in progress dialog while app connects to the server -->
+    <string name="ui_activity_authenticating">Autentiserar</string>
+
+    <!-- AuthenticatorActivity -->
+    <!-- Label above username EditText -->
+    <string name="login_activity_username_label">Användarnamn</string>
+    <!-- Label above password EditText -->
+    <string name="login_activity_password_label">Lösenord</string>
+    <!-- Button to sign in after entering username and password -->
+    <string name="login_activity_ok_button">Logga in</string>
+
+    <!-- Message shown in dialog if the username or password is invalid. -->
+    <string name="login_activity_loginfail_text_both">Användarnamnet eller lösenordet är inte giltigt.Ett Pinboard-konto
+        krävs. Var vänlig försök igen. </string>
+    <!-- Message shown in dialog if the password is invalid -->
+    <string name="login_activity_loginfail_text_pwonly">Du har skrivit fel lösenord eller så har inställningarna för ditt.
+        konto ändrats. Var vänlig skriv in lösenordet på nytt.</string>
+    <!-- Message shown in dialog to prompt the user for their password -->
+    <string name="login_activity_loginfail_text_pwmissing">Skriv in lösenordet för ditt Pinboard-konto.</string>
+    <!-- Message shown if the provided account doesn't support the current activity. -->
+    <string name="login_main_text">Logga in till ditt Pinboard-konto</string>
+    <string name="login_bottom_text">Har du inget Pinboard-konto?  Registrera dig på http://pinboard.in/signup</string>
+    <string name="titleMain">Pinboard</string>
+
+    <!-- Share menus -->
+    <string name="share_menu_add_bookmark">Pinboard - Lägg till bokmärke</string>
+    <string name="share_menu_read_later">Pinboard - Läs senare</string>
+    <string name="login_no_account">No Pinboard Account Setup</string>
+    <string name="save_later_saved">Bokmärke sparat</string>
+
+    <!-- Main -->
+    <string name="main_menu_my_header">Mitt Pinboard</string>
+    <string name="main_menu_my_bookmarks">Bokmärken</string>
+    <string name="main_menu_my_unread_bookmarks">Olästa</string>
+    <string name="main_menu_my_untagged">Saknar etiketter</string>
+    <string name="main_menu_my_tags">Etiketter</string>
+    <string name="main_menu_my_notes">Anteckningar</string>
+    <string name="main_menu_settings">Inställningar</string>
+    <string name="main_menu_feeds_header">Feeds</string>
+    <string name="main_menu_network_bookmarks">Nätverk</string>
+    <string name="main_menu_recent_bookmarks">Senaste</string>
+    <string name="main_menu_popular_bookmarks">Populära</string>
+    <string name="main_menu_tags_header">Etiketter</string>
+    <string name="drawer_open">Öppna sidomenyn</string>
+    <string name="drawer_close">Stäng sidomenyn</string>
+
+    <!-- MainSearchResults -->
+    <string name="main_search_results_title">Sökresultat</string>
+
+    <!-- BrowseBookmarks -->
+    <string name="browse_my_bookmarks_title_count">%1$s (%2$d)</string>
+    <string name="browse_my_bookmarks_title">Bokmärken</string>
+    <string name="browse_my_unread_bookmarks_title">Olästa bokmärken</string>
+    <string name="browse_my_untagged_bookmarks_title">Bokmärken utan etiketter</string>
+    <string name="browse_my_bookmarks_tagged_title">%1$s</string>
+    <string name="browse_my_unread_bookmarks_tagged_title">Olästa %1$s</string>
+    <string name="browse_recent_bookmarks_title">Senaste bokmärken</string>
+    <string name="browse_popular_bookmarks_title">Populära bokmärken</string>
+    <string name="browse_network_bookmarks_title">Bokmärken i nätverket</string>
+    <string name="browse_user_bookmarks_title">Bokmärken för %1$s</string>
+    <string name="browse_user_bookmarks_tagged_title">Bokmärken för %1$s med etiketterna %2$s</string>
+    <string name="bookmark_context_open">Öppna i webbläsare</string>
+    <string name="bookmark_context_view">Visa detaljer</string>
+    <string name="bookmark_context_read">Läs</string>
+    <string name="bookmark_context_markread">Markera som läst</string>
+    <string name="bookmark_context_edit">Redigera</string>
+    <string name="bookmark_context_delete">Radera</string>
+    <string name="bookmark_context_share">Dela</string>
+    <string name="bookmark_context_add">Lägg till</string>
+    <string name="share_chooser_title">Dela länk</string>
+    <string name="bookmark_sort_date_asc">Datum (äldsta först)</string>
+    <string name="bookmark_sort_date_desc">Datum (nyaste först)</string>
+    <string name="bookmark_sort_description_asc">Beskrivning (A-Z)</string>
+    <string name="bookmark_sort_description_desc">Beskrivning (Z-A)</string>
+    <string name="bookmark_sort_url_asc">Url (A-Z)</string>
+    <string name="bookmark_sort_url_desc">Url (Z-A)</string>
+    <string name="menu_addbookmark_title">Lägg till bokmärke</string>
+    <string name="menu_sort_bookmark_title">Sorta bokmärken</string>
+    <string name="menu_sort_tag_title">Sortera etiketter</string>
+    <string name="menu_search_title">Sök</string>
+    <string name="menu_settings_title">Inställningar</string>
+    <string name="menu_choose_account_title">Byt konto</string>
+    <string name="bookmark_unsynced_alt">Indikator för Osynkad</string>
+    <string name="bookmark_unread_alt">Indikator för Oläst</string>
+
+    <!-- BrowseTags -->
+    <string name="browse_my_tags_title">Mina etiketter</string>
+    <string name="tag_sort_name_asc">Namn (A-Z)</string>
+    <string name="tag_sort_name_desc">Namn (Z-A)</string>
+    <string name="tag_sort_count_asc">Antal (Minst först)</string>
+    <string name="tag_sort_count_desc">Antal (Flest först)</string>
+
+    <!-- SelectTags -->
+    <string name="select_tags_activity_title">Välj etiketter</string>
+
+    <!-- BrowseNotes -->
+    <string name="browse_my_notes_title">Anteckningar</string>
+
+    <!-- AddBookmark -->
+    <string name="add_bookmark_add_title">Lägg till bokmärke</string>
+    <string name="add_bookmark_edit_title">Redigera bokmärke</string>
+    <string name="add_bookmark_default_title">[ingen titel]</string>
+    <string name="add_button_save">Spara</string>
+    <string name="add_button_cancel">Avbryt</string>
+    <string name="add_title_url">URL</string>
+    <string name="add_title_description">Beskrivning</string>
+    <string name="add_title_notes">Anteckningar</string>
+    <string name="add_title_tags">Etiketter</string>
+    <string name="add_title_recommended_tags">Rekommenderade etiketter</string>
+    <string name="add_title_popular_tags">Populära etiketter</string>
+    <string name="add_title_private">Privat?</string>
+    <string name="add_title_toread">Att läsa?</string>
+    <string name="add_bookmark_invalid_url">Error: Tom eller ogiltig URL</string>
+    <string name="add_bookmark_blank_url">Error: Tom URL</string>
+
+    <!-- Searching -->
+    <string name="main_search_label">Pinboard</string>
+    <string name="main_search_hint">Etikett, titel, anteckning</string>
+    <string name="main_search_description">Etikett, titel, anteckning</string>
+    <string name="tag_search_label">Pinboard-etiketter</string>
+    <string name="tag_search_hint">Etiketter</string>
+    <string name="bookmark_search_label">Pinboard-bokmärken</string>
+    <string name="bookmark_search_hint">Etikett, titel, anteckning</string>
+    <string name="note_search_label">Pinboard-anteckningar</string>
+    <string name="note_search_hint">Anteckningar</string>
+    <string name="search_results_bookmark">Sökresultat bokmärken</string>
+    <string name="search_results_tag">Sökresultat etiketter</string>
+    <string name="search_results_note">Sökresultat anteckningar</string>
+    <string name="search_results_global_tag">Globalt sökresultat för etiketter</string>
+    <string name="bookmark_search_results_title">Sökresultat bokmärken med sökning \"%1$s\"</string>
+    <string name="unread_search_results_title">Sökresultat för olästa med sökning \"%1$s\"</string>
+    <string name="tag_search_results_title">Sökresultat för etiketter med sökning \"%1$s\"</string>
+    <string name="note_search_results_title">Sökresultat för anteckningar med sökning \"%1$s\"</string>
+    <string name="search_results_global_tag_title">Globalt sökresultat för etiketter med sökning \"%1$s\"</string>
+    <string name="bookmark_count">bokmärken</string>
+
+    <!-- Content Provider -->
+    <string name="bookmark_content_provider_label">Bokmärken</string>
+    <string name="sync_receiver_label">PinDroid bokmärkessynk</string>
+    <string name="syncing_toast">Synkroniserar…</string>
+
+    <!-- Shortcuts -->
+    <string name="shortcut_activity_label">PinDroid genväg</string>
+    <string name="shortcut_activity_title">Välj etikett</string>
+    <string name="tag_shortcut_activity_label">PinDroid-etikett</string>
+
+    <!-- ViewBookmark -->
+    <string name="view_bookmark_title">Visa bokmärkesdetaljer</string>
+    <string name="view_bookmark_notes_title">Anteckningar</string>
+    <string name="view_bookmark_tags_title">Etiketter</string>
+    <string name="view_bookmark_time_title">Sparad</string>
+    <string name="view_bookmark_account_title">Av</string>
+    <string name="menu_view_title">Visa</string>
+    <string name="menu_view_read_title">Läs</string>
+    <string name="menu_view_details_title">Detaljer</string>
+    <string name="menu_view_openbookmark_title">Webb</string>
+    <string name="menu_view_editbookmark_title">Redigera</string>
+    <string name="menu_view_deletebookmark_title">Radera</string>
+    <string name="menu_view_sendbookmark_title">Dela</string>
+
+    <!-- ViewNote -->
+    <string name="view_note_title">Visa detaljer för anteckning</string>
+    <string name="view_note_account_title">Av</string>
+
+    <!-- Widget -->
+    <string name="search_widget_label">PinDroid Stor</string>
+    <string name="small_widget_label">PinDroid Liten</string>
+    <string name="small_widget_button_default">oläst</string>
+    <string name="small_widget_configuration_description">Anpassa</string>
+    <string name="small_widget_my_bookmarks">Bokmärken</string>
+    <string name="small_widget_my_unread">Olästa</string>
+    <string name="small_widger_my_untagged">Saknar etiketter</string>
+    <string name="small_widget_my_notes">Anteckningar</string>"
+    <string name="small_widget_add_bookmark">Lägg till bokmärke</string>
+    <string name="small_widget_search_bookmarks">Sök</string>
+
+    <!-- Preferences -->
+    <string name="preferences_title">PinDroid Inställningar</string>
+    <string name="account_preferences_cat_title">Allmänna inställningar</string>
+    <string name="account_preferences_key">account_settings</string>
+    <string name="account_preferences_title">Kontoinställningar</string>
+    <string name="account_preferences_summary">Inställningar för synk och aviseringar.</string>
+    <string name="pref_cat_general_title">Allmänna inställningar</string>
+    <string name="pref_cat_sync_title">Synkinställningar</string>
+    <string name="pref_cat_save_title">Spara inställningar</string>
+    <string name="pref_cat_reading_title">Läsalternativ</string>
+    <string name="pref_cat_help_title">Hjälp</string>
+    <string name="pref_accountsettings_title">Kontoinställningar</string>
+    <string name="pref_accountsettings_key">pref_accountsettings</string>
+    <string name="pref_accountsettings_summary">Hantera ditt Pinboard-konto på den här enheten.</string>
+    <string name="pref_synctime_title">Synkfrekvens</string>
+    <string name="pref_synctime_key">pref_synctime</string>
+    <string name="pref_synctime_summary">Hur ofta ska bokmärken synkroniseras?</string>
+    <string name="pref_view_bookmark_default_action_title">Åtgärder för bokmärken</string>
+    <string name="pref_view_bookmark_default_action_key">pref_view_bookmark_default_action</string>
+    <string name="pref_view_bookmark_default_action_summary">Förinställd  åtgärd för bokmärken.</string>
+    <string name="pref_usebrowser_title">Öppna länkar i webbläsaren</string>
+    <string name="pref_usebrowser_key">pref_usebrowser</string>
+    <string name="pref_usebrowser_summary">Öppna alltid länkar i enhetens webbläsare.</string>
+    <string name="pref_usebrowser_summary_off">Använd interna webbläsaren om möjligt.</string>
+    <string name="pref_usebrowser_summary_on">Öppna alltid länkar i enhetens webbläsare.</string>
+    <string name="pref_usebrowser_switch_off">Nej</string>
+    <string name="pref_usebrowser_switch_on">Ja</string>
+    <string name="pref_searchicons_title">Visa sökikoner</string>
+    <string name="pref_searchicons_key">pref_searchicons</string>
+    <string name="pref_searchicons_summary">Visa ikoner i sökförslagen.</string>
+    <string name="pref_searchicons_summary_off">Visa inte ikoner i sökförslagen.</string>
+    <string name="pref_searchicons_summary_on">Visa ikoner i sökförslagen.</string>
+    <string name="pref_searchicons_switch_off">Nej</string>
+    <string name="pref_searchicons_switch_on">Ja</string>
+    <string name="pref_save_private_default_title">Privat som standard</string>
+    <string name="pref_save_private_default_key">pref_save_private_default</string>
+    <string name="pref_save_private_default_summary">Lägg till nya bokmärken som privata som standard.</string>
+    <string name="pref_save_private_default_summary_off">Lägg till nya bokmärken som offentliga som standard.</string>
+    <string name="pref_save_private_default_summary_on">Lägg till nya bokmärken som privata som standard.</string>
+    <string name="pref_save_private_default_switch_off">Nej</string>
+    <string name="pref_save_private_default_switch_on">Ja</string>
+    <string name="pref_save_toread_default_title">Olästa som standard</string>
+    <string name="pref_save_toread_default_key">pref_save_toread_default</string>
+    <string name="pref_save_toread_default_summary">Lägg till nya bokmärken som olästa som standard.</string>
+    <string name="pref_save_toread_default_summary_off">Lägg till nya bokmärken som lästa som standard.</string>
+    <string name="pref_save_toread_default_summary_on">Lägg till nya bokmärken som olästa som standard.</string>
+    <string name="pref_save_toread_default_switch_off">Nej</string>
+    <string name="pref_save_toread_default_switch_on">Ja</string>
+    <string name="pref_markasread_title">Markera som läst</string>
+    <string name="pref_markasread_key">pref_markasread</string>
+    <string name="pref_markasread_summary">Markera olästa bokmärken som lästa under tiden du läser dem.</string>
+    <string name="pref_markasread_summary_off">Lämna olästa bokmärken som olästa.</string>
+    <string name="pref_markasread_summary_on">Markera olästa bokmärken som lästa under tiden du läser dem.</string>
+    <string name="pref_markasread_switch_off">Nej</string>
+    <string name="pref_markasread_switch_on">Ja</string>
+    <string name="pref_drawertags_title">Sidomenyetiketter</string>
+    <string name="pref_drawertags_key">pref_drawertags</string>
+    <string name="pref_drawertags_summary">Välj vilka etiketter du vill visa i sidomenyn.</string>
+    <string name="pref_forcesync_title">Synkronisera nu</string>
+    <string name="pref_forcesync_key">pref_forcesync</string>
+    <string name="pref_forcesync_summary">Påbörja en bokmärkessynk.</string>
+    <string name="pref_reading_background_title">Bakgrund</string>
+    <string name="pref_reading_background_key">pref_reading_background</string>
+    <string name="pref_reading_background_summary">Bakgrundsfärg i läsvyn</string>
+    <string name="pref_reading_font_title">Typsnitt</string>
+    <string name="pref_reading_font_key">pref_reading_font</string>
+    <string name="pref_reading_font_summary">Typsnitt för läsvyn</string>
+    <string name="pref_reading_fontsize_title">Typsnittsstorlek</string>
+    <string name="pref_reading_fontsize_key">pref_reading_fontsize</string>
+    <string name="pref_reading_fontsize_summary">Typsnittsstorlek för läsvyn</string>
+    <string name="pref_reading_margins_title">Marginaler</string>
+    <string name="pref_reading_margins_key">pref_reading_margins</string>
+    <string name="pref_reading_margins_summary">Marginalbredd för läsvyn</string>
+    <string name="pref_license_title">Licens</string>
+    <string name="pref_license_key">pref_license</string>
+    <string name="pref_license_summary">Licensierad under GPL v3</string>
+    <string name="pref_help_title">Hjälp</string>
+    <string name="pref_help_key">pref_help</string>
+    <string name="pref_help_summary">Hjälp för hur du använder PinDroid</string>
+    <string name="pref_privacy_title">Integritetspolicy</string>
+    <string name="pref_privacy_key">pref_privacy</string>
+    <string name="pref_privacy_summary">Visa integritetspolicy</string>
+    <string name="pref_about_title">Om</string>
+    <string name="pref_about_key">pref_about</string>
+    <string name="pref_about_summary">Om PinDroid</string>
+    <string name="pref_donate_title">Donera</string>
+    <string name="pref_donate_key">pref_donate</string>
+    <string name="pref_donate_summary">Stöd PinDroid</string>
+    <string name="perm_read_bookmarks_label">Läs bokmärken från PinDroid</string>
+    <string name="perm_read_bookmarks_description">Beviljar rätten att läsa bokmärkessamlingen hos PinDroid</string>
+    <string name="perm_write_bookmarks_label">Skriv bokmärken till PinDroid</string>
+    <string name="perm_write_bookmarks_description">Beviljar rätten att skriva till Pindroids bokmärkessamling</string>
+
+    <!-- Image alt text, for accessibility -->
+    <string name="alt_action_search_btn">Sök</string>
+    <string name="alt_bookmark_list_private">Privat</string>
+    <string name="alt_bookmark_view_private">Privat</string>
+    <string name="alt_bookmark_view_unread">Olästa</string>
+    <string name="alt_widget_main">PinDroid</string>
+    <string name="alt_widget_my_bookmarks">Mina bokmärken</string>
+    <string name="alt_widget_untagged_bookmarks">Bokmärken utan etiketter</string>
+    <string name="alt_widget_unread_bookmarks">Olästa bokmärken</string>
+    <string name="alt_widget_unread_bookmark_count">Antal olästa bokmärken</string>
+    <string name="alt_widget_my_tags">Mina etiketter</string>
+    <string name="alt_widget_my_notes">Mina anteckningar</string>
+    <string name="alt_widget_add_bookmark">Lägg till bokmärke</string>
+    <string name="alt_widget_search">Sök</string>
+    <string name="alt_widget_divider">Divider</string>
+    <string name="dashclock_extension_title">PinDroid</string>
+    <string name="dashclock_extension_description">Visar antal olästa bokmärken i PinDroid.</string>
+    <string name="dashclock_update_status">%1$s olästa</string>
+    <string name="dashclock_update_expanded_title">%1$s olästa</string>
+
+    <string name="title_activity_add_bookmark">LäggtillBokmärke</string>
+    <string name="action_settings">Inställningar</string>
+
+</resources>
