@@ -62,6 +62,8 @@ import com.pindroid.ui.AccountSpan;
 import com.pindroid.ui.TagSpan;
 import com.pindroid.util.SettingsHelper;
 
+import static android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+
 public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	
 	private ScrollView mBookmarkView;
@@ -180,14 +182,26 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 	    	mWebContent.saveState(savedInstanceState);
 	    }
 	}
-    
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		this.getActivity().getWindow().addFlags(FLAG_KEEP_SCREEN_ON);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		this.getActivity().getWindow().clearFlags(FLAG_KEEP_SCREEN_ON);
+	}
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 	    inflater.inflate(R.menu.view_menu, menu);
 	    
 	    if(bookmark != null){
-	    	MenuItem shareItem = menu.findItem(R.id.menu_view_sendbookmark);
+	   	 	MenuItem shareItem = menu.findItem(R.id.menu_view_sendbookmark);
 	    	ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
 			shareActionProvider.setShareIntent(IntentHelper.SendBookmark(bookmark.getUrl(), bookmark.getDescription()));
 	    }
