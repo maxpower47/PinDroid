@@ -78,7 +78,7 @@ public class PinboardApi {
     private static final String SCHEME = "https";
     private static final String PINBOARD_AUTHORITY = "api.pinboard.in";
     private static final int PORT = 443;
-    
+
     private static final AuthScope SCOPE = new AuthScope(PINBOARD_AUTHORITY, PORT);
 
     /**
@@ -104,7 +104,7 @@ public class PinboardApi {
         HttpGet request = new HttpGet(String.valueOf(uri));
 
         DefaultHttpClient client = (DefaultHttpClient)HttpClientFactory.getThreadSafeClient();
-        
+
         CredentialsProvider provider = client.getCredentialsProvider();
         Credentials credentials = new UsernamePasswordCredentials(username, password);
         provider.setCredentials(SCOPE, credentials);

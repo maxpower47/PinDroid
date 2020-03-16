@@ -28,10 +28,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.support.v4.app.ListFragment;
-import android.view.LayoutInflater;
+import androidx.fragment.app.ListFragment;
+
 import android.view.View;
-import android.view.ViewGroup;
 
 public class MainSearchResultsFragment extends ListFragment {
 	

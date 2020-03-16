@@ -3,7 +3,7 @@ package com.pindroid.activity;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.pindroid.BuildConfig;
 import com.pindroid.Constants;
