@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   x="0"
+   y="0"
+   width="48"
+   height="48"
+   version="1.1"
+   id="svg46"
+   sodipodi:docname="ic_main_api26_3.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <metadata
+     id="metadata50">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1080"
+     id="namedview48"
+     showgrid="false"
+     inkscape:zoom="9.3372008"
+     inkscape:cx="15.44657"
+     inkscape:cy="28.192554"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g44" />
+  <defs
+     id="defs24">
+    <linearGradient
+       x1="17.76052"
+       y1="12.27587"
+       x2="57.01315"
+       y2="62.49781"
+       gradientUnits="userSpaceOnUse"
+       id="color-1">
+      <stop
+         offset="0.3"
+         stop-color="#000000"
+         stop-opacity="0.15"
+         id="stop10" />
+      <stop
+         offset="1"
+         stop-color="#000000"
+         stop-opacity="0"
+         id="stop12" />
+    </linearGradient>
+    <filter
+       id="dropshadow">
+      <feColorMatrix
+         type="matrix"
+         values="0 0 0 0 .05  0 0 0 0 .15  0 0 0 0 .1  0 0 0 .8 0"
+         id="feColorMatrix15" />
+      <feOffset
+         dx="0"
+         dy="1"
+         id="feOffset17" />
+      <feGaussianBlur
+         stdDeviation="1"
+         id="feGaussianBlur19"
+         result="result1" />
+      <feComposite
+         in="SourceGraphic"
+         in2="result1"
+         id="feComposite21" />
+    </filter>
+    <linearGradient
+       x1="17.760521"
+       y1="12.27587"
+       x2="57.013149"
+       y2="62.49781"
+       gradientUnits="userSpaceOnUse"
+       id="color-1-7"
+       xlink:href="#color-1">
+      <stop
+         offset="0.3"
+         stop-color="#000000"
+         stop-opacity="0.15"
+         id="stop10-1" />
+      <stop
+         offset="1"
+         stop-color="#000000"
+         stop-opacity="0"
+         id="stop12-8" />
+    </linearGradient>
+  </defs>
+  <g
+     fill="none"
+     stroke="none"
+     stroke-width="none"
+     stroke-linecap="butt"
+     stroke-linejoin="miter"
+     stroke-miterlimit="none"
+     stroke-dasharray="none"
+     stroke-dashoffset="0"
+     font-family="none"
+     font-weight="normal"
+     font-size="none"
+     text-anchor="start"
+     mix-blend-mode="normal"
+     id="g44"
+     style="display:inline">
+    <g
+       id="svg2"
+       fill="#000000"
+       stroke="none"
+       stroke-width="1"
+       stroke-miterlimit="4"
+       font-family="'Open Sans', sans-serif"
+       font-size="14px"
+       style="display:inline">
+      <g
+         id="g10">
+        <g
+           id="g12">
+          <g
+             id="g24" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="g36"
+       fill="#000000"
+       stroke="none"
+       stroke-width="1"
+       stroke-miterlimit="4"
+       font-family="'Open Sans', sans-serif"
+       font-size="14px"
+       style="display:inline">
+      <g
+         id="g34">
+        <g
+           id="g32">
+          <g
+             id="g30" />
+        </g>
+      </g>
+    </g>
+    <rect
+       style="display:inline;fill:#0064fe;fill-opacity:1;stroke:#0064fe;stroke-opacity:1"
+       id="rect913"
+       width="108.06236"
+       height="89.320129"
+       x="-29.987574"
+       y="-19.920317" />
+    <path
+       d="M 23.95176,35.72407 23.606,32.04181 17.76052,26.19633 c 0.01213,-2.38353 1.54698,-1.56261 3.3702,-2.34062 l 10e-6,1e-5 -0.0303,-8.49346 -1.65117,-1.65117 -0.67285,-1.43522 1.52605,1.52605 h 10e-6 l -1.52606,-1.52606 10.58899,0.01229 10e-6,10e-6 v -10e-6 l 44.329335,44.329335 c -1.01074,7.38567 -10.658984,8.56051 -17.442514,11.08581 L 23.95175,35.72411 Z"
+       fill="url(#color-1)"
+       stroke-width="1"
+       stroke-miterlimit="10"
+       font-family="sans-serif"
+       font-size="12px"
+       id="path40-7"
+       style="display:inline;fill:url(#color-1-7);fill-opacity:1"
+       sodipodi:nodetypes="cccccccccccccccccc" />
+    <path
+       d="m 24.94222,26.20499 -0.99047,9.51914 -0.89408,-9.52178 -5.29715,-0.006 c 0.01213,-2.38353 1.54698,-1.56261 3.3702,-2.34062 l -0.03557,-9.96942 -1.6459,-0.17523 -0.67285,-1.43522 10.58899,0.0123 -0.94712,1.56318 -1.43015,0.04183 -0.0085,10.09944 c 2.07582,0.69654 3.27247,-0.16459 3.25971,2.21837 z"
+       fill="#ffffff"
+       stroke="none"
+       stroke-width="0"
+       stroke-miterlimit="4"
+       font-family="'Open Sans', sans-serif"
+       font-size="14px"
+       id="path42"
+       style="display:inline" />
+  </g>
+</svg>
