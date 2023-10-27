@@ -27,7 +27,7 @@ import com.pindroid.providers.TagContent.Tag;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.support.v4.content.CursorLoader;
+import androidx.loader.content.CursorLoader;
 import android.database.Cursor;
 import android.text.TextUtils;
 

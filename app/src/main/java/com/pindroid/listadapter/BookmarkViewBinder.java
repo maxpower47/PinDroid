@@ -26,7 +26,7 @@ import com.pindroid.R;
 import android.database.Cursor;
 import android.view.View;
 import android.widget.ImageView;
-import android.support.v4.widget.SimpleCursorAdapter;
+import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 public class BookmarkViewBinder implements SimpleCursorAdapter.ViewBinder {

@@ -23,7 +23,6 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.pindroid"
     android:installLocation="auto" >
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -31,7 +30,6 @@
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
@@ -56,11 +54,13 @@
         android:requiredAccountType="com.pindroid"
         android:theme="@style/PinDroid"
         tools:replace="android:theme, android:label, android:icon">
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
         <activity
             android:name=".activity.Main"
             android:label="@string/titleMain"
             android:theme="@style/PinDroidNoActionBar"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -83,7 +83,8 @@
         </activity>
         <activity
             android:name=".activity.GlobalSearchRecieverActivity"
-            android:theme="@android:style/Theme.NoDisplay" >
+            android:theme="@android:style/Theme.NoDisplay"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -96,7 +97,8 @@
             android:name=".activity.SaveReadLaterBookmark"
             android:label="@string/share_menu_read_later"
             android:icon="@drawable/ic_main_read_later"
-            android:theme="@android:style/Theme.NoDisplay" >
+            android:theme="@android:style/Theme.NoDisplay"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -108,7 +110,8 @@
         <activity
             android:name=".activity.StandaloneSaveReadLaterBookmark"
             android:label="@string/share_menu_read_later"
-            android:theme="@android:style/Theme.NoDisplay" >
+            android:theme="@android:style/Theme.NoDisplay"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.pindroid.action.ReadLater" />
 
@@ -120,7 +123,8 @@
         <activity
             android:name=".activity.Settings"
             android:label="@string/preferences_title"
-            android:parentActivityName=".activity.Main" >
+            android:parentActivityName=".activity.Main"
+            android:exported="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.Main" />
@@ -134,7 +138,8 @@
         <activity
             android:name=".activity.LargeWidgetConfigure"
             android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.Dialog" >
+            android:theme="@android:style/Theme.Dialog"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -142,7 +147,8 @@
         <activity
             android:name=".activity.ChooseTagShortcut"
             android:icon="@drawable/ic_shortcut"
-            android:label="@string/tag_shortcut_activity_label" >
+            android:label="@string/tag_shortcut_activity_label"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -151,7 +157,8 @@
         <activity
             android:name=".activity.ScreenShortcut"
             android:icon="@drawable/ic_main"
-            android:label="@string/shortcut_activity_label" >
+            android:label="@string/shortcut_activity_label"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -236,7 +243,8 @@
             android:name=".dashclock.PinDroidExtension"
             android:icon="@drawable/ic_pindroid_dashclock"
             android:label="@string/dashclock_extension_title"
-            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA" >
+            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.apps.dashclock.Extension" />
             </intent-filter>

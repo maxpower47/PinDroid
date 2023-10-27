@@ -198,7 +198,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_horizontal">
-                    <android.support.v7.widget.SwitchCompat
+                    <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/add_edit_private"
                         android:text="@string/add_title_private"
                         android:layout_width="wrap_content"
@@ -212,7 +212,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_horizontal">
-                    <android.support.v7.widget.SwitchCompat
+                    <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/add_edit_toread"
                         android:text="@string/add_title_toread"
                         android:layout_width="wrap_content"
