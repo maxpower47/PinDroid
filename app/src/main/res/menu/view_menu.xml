@@ -67,6 +67,6 @@
         android:title="@string/menu_view_sendbookmark_title"
         pindroid:showAsAction="never"
         android:icon="@drawable/ic_share_white_24dp"
-        pindroid:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+        pindroid:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"
         android:orderInCategory="15" />
 </menu>

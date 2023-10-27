@@ -37,7 +37,7 @@ import com.pindroid.util.StringUtils;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ShareCompat;
+import androidx.core.app.ShareCompat;
 import android.widget.Toast;
 
 public class SaveReadLaterBookmark extends Activity {
