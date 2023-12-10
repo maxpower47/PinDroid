@@ -21,7 +21,7 @@
  * USA
  */
  -->
-<android.support.v4.widget.DrawerLayout
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
@@ -36,7 +36,7 @@
 
     <!-- We use a Toolbar so that our drawer can be displayed
          in front of the action bar -->
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/main_toolbar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -49,4 +49,4 @@
     </LinearLayout>
     <!-- The navigation drawer -->
     <include layout="@layout/main_drawer" />
-</android.support.v4.widget.DrawerLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
