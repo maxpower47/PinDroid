@@ -24,6 +24,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
@@ -38,7 +39,8 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:weightSum="1">
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -52,7 +54,7 @@
             android:id="@+id/username_edit"
             android:singleLine="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/min_touchable_height"
             android:minWidth="320dp"
             android:maxWidth="320dp"
             android:padding="10dp"
@@ -65,7 +67,7 @@
             android:id="@+id/password_edit"
             android:singleLine="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/min_touchable_height"
             android:minWidth="320dp"
             android:maxWidth="320dp"
             android:layout_marginBottom="16dp"
@@ -94,13 +96,16 @@
             android:text="@string/login_activity_ok_button"
             android:textColor="#FFFFFF"
             android:onClick="handleLogin" />
+
         <TextView
             android:id="@+id/message_bottom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textIsSelectable="false"
-            android:text="@string/login_bottom_text"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/min_touchable_height"
+            android:layout_weight="0.05"
             android:autoLink="web"
-            android:textColor="#FFFFFF" />
+            android:text="@string/login_bottom_text"
+            android:textColor="#FFFFFF"
+            android:textIsSelectable="false"
+            android:textSize="18sp" />
     </LinearLayout>
 </RelativeLayout>

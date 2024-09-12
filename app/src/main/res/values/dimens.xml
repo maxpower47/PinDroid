@@ -29,10 +29,12 @@
     <dimen name="add_switch_margin_right">0dp</dimen>
     <dimen name="action_bar_width">265dp</dimen>
 
-    <dimen name="add_bookmark_padding">16dp</dimen>
-    <dimen name="add_bookmark_section_padding">12dp</dimen>
+    <dimen name="add_bookmark_padding">2dp</dimen>
+    <dimen name="add_bookmark_section_padding">2dp</dimen>
     <integer name="add_bookmark_note_lines">2</integer>
     <dimen name="add_bookmark_form_padding">0dp</dimen>
+    <dimen name="min_touchable_height">48dp</dimen>
+
 
     <dimen name="account_list_height">64dp</dimen>
 

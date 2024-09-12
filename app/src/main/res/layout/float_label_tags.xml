@@ -38,7 +38,7 @@
     <MultiAutoCompleteTextView
         android:id="@id/edit_text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/min_touchable_height"
         android:background="@null"
         android:inputType="text"
         android:completionThreshold="1" />
