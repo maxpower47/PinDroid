@@ -25,6 +25,7 @@ import java.util.Date;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
@@ -378,7 +379,20 @@ public class ViewBookmarkFragment extends Fragment implements PindroidFragment {
 
 		CookieSyncManager.getInstance().sync();
 
-		mWebContent.setWebViewClient(new WebViewClient(){ });
+		mWebContent.setWebViewClient(new WebViewClient(){
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				if (url.startsWith("http://") || url.startsWith("https://")) {
+					return false;
+				}
+				try {
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+				} catch (Exception e) {
+					// no app can handle this scheme, leave the reader as is
+				}
+				return true;
+			}
+		});
 
 		mWebContent.loadUrl(url);
     }
